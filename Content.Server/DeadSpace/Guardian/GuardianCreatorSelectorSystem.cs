@@ -190,7 +190,6 @@ public sealed class GuardianCreatorSelectorSystem : EntitySystem
             return false;
         }
 
-        // A guardian and the Smoking Carp martial art cannot be combined.
         if (HasComp<SmokingCarpComponent>(target))
             return false;
 

@@ -1,0 +1,36 @@
+- type: constructionGraph
+  id: ClothingHeadHelmetSecurityFlashlight
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: securityHelmetFlashlight
+          steps:
+            - tag: SecurityHelmet
+              name: construction-graph-tag-security-helmet
+              icon:
+                sprite: Clothing/Head/Helmets/security.rsi
+                state: icon
+            - tag: Seclite
+              name: construction-graph-tag-seclite
+              icon:
+                sprite: Objects/Tools/seclite.rsi
+                state: seclite
+            - tag: Zipties
+              name: construction-graph-tag-zipties
+              icon:
+                sprite: Objects/Misc/zipties.rsi
+                state: cuff
+            - tag: Zipties
+              name: construction-graph-tag-zipties
+              icon:
+                sprite: Objects/Misc/zipties.rsi
+                state: cuff
+            - tag: Zipties
+              name: construction-graph-tag-zipties
+              icon:
+                sprite: Objects/Misc/zipties.rsi
+                state: cuff
+              doAfter: 5
+    - node: securityHelmetFlashlight
+      entity: ClothingHeadHelmetSecurityFlashlight
