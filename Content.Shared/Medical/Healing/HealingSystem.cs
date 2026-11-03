@@ -20,11 +20,14 @@ using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.Tag;
+using Robust.Shared.Prototypes; // DS-14
 
 namespace Content.Shared.Medical.Healing;
 
 public sealed class HealingSystem : EntitySystem
 {
+    private static readonly ProtoId<TagPrototype> TourniquetTag = "Tourniquet"; // DS-14
+
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
@@ -67,7 +70,7 @@ public sealed class HealingSystem : EntitySystem
         TryComp<BloodstreamComponent>(target, out var bloodstream);
 
         // DS14-start: a tourniquet closes one bleeding source completely.
-        var tourniquet = args.Used is { } used && _tags.HasTag(used, "Tourniquet");
+        var tourniquet = args.Used is { } used && _tags.HasTag(used, TourniquetTag);
         if (tourniquet)
         {
             var stopped = _limbs.StopOneBleed(target.Owner);
@@ -204,7 +207,7 @@ public sealed class HealingSystem : EntitySystem
         }
 
         // DS14-start
-        if (_tags.HasTag(healing.Owner, "Tourniquet") && _limbs.CanStopOneBleed(target.Owner))
+        if (_tags.HasTag(healing.Owner, TourniquetTag) && _limbs.CanStopOneBleed(target.Owner))
             return true;
         // DS14-end
 
