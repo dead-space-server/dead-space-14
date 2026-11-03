@@ -25,6 +25,8 @@
           - Organ
   - type: ActivatableUI
     key: enum.MicroscopeUiKey.Key
+    inHandsOnly: true
+    requireActiveHand: false
   - type: UserInterface
     interfaces:
       enum.MicroscopeUiKey.Key:
