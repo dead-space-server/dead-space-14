@@ -20,7 +20,9 @@ using Content.Server.DeadSpace.MartialArts.CQC.Components;
 using Content.Shared.DeadSpace.MartialArts.CQC;
 using Content.Shared.Actions;
 using Content.Shared.DeadSpace.Actions;
-using Content.Shared.StatusEffectNew;
+using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Eye.Blinding.Systems;
+using Content.Shared.StatusEffect;
 using Content.Shared.DeadSpace.MartialArts.CQC.Components;
 using Content.Server.Physics.Controllers;
 using Content.Shared.GameTicking;
@@ -29,7 +31,6 @@ namespace Content.Server.DeadSpace.MartialArts.CQC;
 
 public sealed class CQCSystem : CQCSharedSystem
 {
-    private static readonly EntProtoId MutedEffect = "StatusEffectCQCMuted";
 
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly StaminaSystem _stamina = default!;
@@ -54,7 +55,7 @@ public sealed class CQCSystem : CQCSharedSystem
         base.Initialize();
 
         SubscribeLocalEvent<CQCComponent, CQCPowerPunchEvent>(OnPowerPunchAction);
-        SubscribeLocalEvent<CQCComponent, CQCMuteEvent>(OnMutePunchAction);
+        SubscribeLocalEvent<CQCComponent, CQCEyeAttackEvent>(OnEyeAttackAction);
         SubscribeLocalEvent<CQCComponent, CQCRelaxEvent>(OnRelaxAction);
         SubscribeLocalEvent<CQCComponent, MeleeHitEvent>(OnMeleeHitEvent);
         SubscribeLocalEvent<CQCComponent, CQCConcentrationEvent>(CQCConcentration);
@@ -79,12 +80,12 @@ public sealed class CQCSystem : CQCSharedSystem
         args.Handled = true;
     }
 
-    private void OnMutePunchAction(Entity<CQCComponent> ent, ref CQCMuteEvent args)
+    private void OnEyeAttackAction(Entity<CQCComponent> ent, ref CQCEyeAttackEvent args)
     {
         if (args.Handled)
             return;
 
-        SelectCombo(ent, CQCList.MuteAttack);
+        SelectCombo(ent, CQCList.EyeAttack);
 
         args.Handled = true;
     }
@@ -135,10 +136,11 @@ public sealed class CQCSystem : CQCSharedSystem
                 OnPowerPunch(ent, hitEntity, ent.Comp.Params.MaxPushDistance, ent.Comp.Params.PushStrength);
                 break;
 
-            case CQCList.MuteAttack:
-                _statusEffects.TrySetStatusEffectDuration(hitEntity, MutedEffect, ent.Comp.Params.ParalyzeTimeMuteAtack);
-                DamageHit(hitEntity, ent.Comp.Params.DamageTypeForMuteAtack, ent.Comp.Params.HitDamageForMuteAtack, ent.Comp.Params.IgnoreResist, out _);
-                _stamina.TakeStaminaDamage(hitEntity, ent.Comp.Params.StaminaDamageMuteAtack);
+            case CQCList.EyeAttack:
+                _statusEffects.TryAddStatusEffect<TemporaryBlindnessComponent>(hitEntity,
+                    TemporaryBlindnessSystem.BlindingStatusEffect, ent.Comp.Params.BlindnessTimeEyeAttack, true);
+                DamageHit(hitEntity, ent.Comp.Params.DamageTypeForEyeAttack, ent.Comp.Params.HitDamageForEyeAttack, ent.Comp.Params.IgnoreResist, out _);
+                _stamina.TakeStaminaDamage(hitEntity, ent.Comp.Params.StaminaDamageEyeAttack);
                 break;
         }
         ent.Comp.SelectedCombo = null;

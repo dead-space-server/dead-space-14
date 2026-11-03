@@ -48,6 +48,45 @@
       - id: ChemistryBottleDermaline
 
 - type: entity
+  id: ClothingBeltHolsterBlueShield
+  parent: [ClothingBeltBase, ClothingSlotBase, ClothingBeltStorageBase]
+  name: кобура Офицера "Синий Щит"
+  description: Специальная кобура под два револьвера КР-19, благодаря открытой конструкции данная кобура позволяет быстро достать сразу два револьвера. Сама кобура создана из очень крепких материалов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/holster_blueshield.rsi
+    state: icon
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/holster_blueshield.rsi
+    slots: [ belt ]
+  - type: Storage
+    grid:
+    - 0,0,2,1
+    whitelist:
+      tags:
+      - WeaponRevolverBlueShieldKR19
+  - type: ItemMapper
+    mapLayers:
+      icon_1:
+        minCount: 1
+        whitelist:
+          tags:
+          - WeaponRevolverBlueShieldKR19
+      icon_2:
+        minCount: 2
+        whitelist:
+          tags:
+          - WeaponRevolverBlueShieldKR19
+  - type: HolsterDraw
+    actionProto: ActionHolsterDrawBlueShield
+    weaponProto: WeaponRevolverBlueShieldKR19
+  - type: Appearance
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot {}
+      storagebase: !type:Container {}
+
+- type: entity
   id: ClothingBeltMilitaryWebbingRedSwordCentComFilled
   parent: ClothingBeltMilitaryWebbingBlueShieldFilled
   name: РПС офицера "Красный Меч"

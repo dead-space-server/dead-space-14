@@ -28,6 +28,9 @@
     sprite: _DeadSpace/Clothing/Head/Helmets/blueshieldhelmet.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Head/Helmets/blueshieldhelmet.rsi
+  - type: Tag
+    tags:
+    - BlueShieldHatUpdateArmor
 
 - type: entity
   parent: [ClothingHeadHelmetHardsuitSecurityRed]

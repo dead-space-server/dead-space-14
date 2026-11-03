@@ -1,0 +1,25 @@
+
+- type: entity
+  parent: [BaseWeaponRevolver, BaseMajorContraband]
+  id: WeaponRevolverBlueShieldKR19
+  name: КР-19 
+  description: Револьвер военного класса для самых элитных Офицеров "Синий Щит", благодаря узору на рукоятке крепко держится в руке, а родной .45 магнум с лёгкостью разберётся с любым противником! Благодаря балансировке револьвера его легко можно крутить на пальце.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Pistols/kr19.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Pistols/kr19.rsi
+  - type: Item
+    storedOffset: 0,-3
+  - type: Gun
+    fireRate: 2
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/mateba.ogg
+  - type: EmitEmoteOnUse
+    emote: SpinGun
+  - type: UseDelay
+    delay: 5
+  - type: Akimbo
+  - type: Tag
+    tags:
+    - WeaponRevolverBlueShieldKR19

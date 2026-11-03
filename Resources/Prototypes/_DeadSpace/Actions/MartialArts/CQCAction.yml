@@ -14,19 +14,19 @@
     event: !type:CQCPowerPunchEvent {}
 
 - type: entity
-  id: ActionMutedCQCAttack
-  name: Удар поддых
-  description: Точный удар поддых, который перекрывает дыхательные пути и мешает координации противника.
+  id: ActionEyePunchCQCAttack
+  name: Удар по глазам
+  description: Точный удар пальцами по глазам противника, ослепляет его на 2 секунды и дезориентирует.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
     icon:
       sprite: _DeadSpace/Actions/cqc_actions.rsi
-      state: mute
+      state: eye_punch
     priority: -6
-    useDelay: 2
+    useDelay: 8
   - type: InstantAction
-    event: !type:CQCMuteEvent {}
+    event: !type:CQCEyeAttackEvent {}
 
 - type: entity
   id: ActionCQCStepPunch
