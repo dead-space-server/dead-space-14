@@ -17,6 +17,7 @@
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: SubFloorHide
+    viewLayer: Atmos #DS-14
   - type: CollideOnAnchor
   - type: Anchorable
   - type: Rotatable

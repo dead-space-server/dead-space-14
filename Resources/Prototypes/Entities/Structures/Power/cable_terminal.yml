@@ -33,6 +33,7 @@
       layer: 1
     - type: Appearance
     - type: SubFloorHide
+      viewLayer: Cable #DS-14
       blockAmbience: false
       blockInteractions: false
     - type: Construction

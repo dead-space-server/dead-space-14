@@ -34,7 +34,7 @@ public abstract class SharedTrayScannerSystem : EntitySystem
 
     private void OnUserGetVis(Entity<TrayScannerUserComponent> ent, ref GetVisMaskEvent args)
     {
-        args.VisibilityMask |= (int)VisibilityFlags.Subfloor;
+        args.VisibilityMask |= (int)SubfloorVisibility.All; //DS-14
     }
 
     private void OnEquip(EntityUid user)

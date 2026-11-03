@@ -1,3 +1,4 @@
+using Content.Shared.Eye; //DS-14
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.SubFloor
@@ -50,5 +51,38 @@ namespace Content.Shared.SubFloor
         /// </summary>
         [DataField]
         public int? OriginalDrawDepth;
+
+        //DS-14 start
+        [DataField]
+        public SubfloorViewLayer ViewLayer = SubfloorViewLayer.None;
+        //DS-14 end
     }
+
+    //DS-14 start
+    public enum SubfloorViewLayer : byte
+    {
+        None,
+        Cable,
+        Atmos,
+        Disposal,
+    }
+
+    public static class SubfloorViewLayers
+    {
+        public static VisibilityFlags ToFlag(SubfloorViewLayer layer)
+        {
+            switch (layer)
+            {
+                case SubfloorViewLayer.Cable:
+                    return VisibilityFlags.SubfloorCable;
+                case SubfloorViewLayer.Atmos:
+                    return VisibilityFlags.SubfloorAtmos;
+                case SubfloorViewLayer.Disposal:
+                    return VisibilityFlags.SubfloorDisposal;
+                default:
+                    return VisibilityFlags.Subfloor;
+            }
+        }
+    }
+    //DS-14 end
 }
