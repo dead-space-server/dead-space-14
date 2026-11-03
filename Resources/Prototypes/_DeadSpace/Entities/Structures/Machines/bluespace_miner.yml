@@ -28,8 +28,13 @@
   - type: OreSilo
   - type: Machine
     board: BluespaceMinerMachineCircuitboard
-  - type: ApcPowerReceiver
-    powerLoad: 100000
+  - type: NodeContainer
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+  - type: PowerConsumer
+    drawRate: 100000
   - type: Fixtures
     fixtures:
       fix1:

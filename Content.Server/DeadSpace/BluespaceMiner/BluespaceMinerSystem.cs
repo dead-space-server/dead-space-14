@@ -1,6 +1,7 @@
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Materials;
 using Content.Server.Atmos.Piping.Components;
+using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.DeadSpace.BluespaceMiner;
@@ -42,7 +43,11 @@ public sealed class BluespaceMinerSystem : EntitySystem
     {
         var comp = ent.Comp;
 
-        if (!_power.IsPowered(ent))
+        var powered = _power.IsPowered(ent);
+        if (powered && _spawn.TryGetComponent<PowerConsumerComponent>(ent, out var consumer))
+            powered = consumer.ReceivedPower > consumer.DrawRate * 0.9f;
+
+        if (!powered)
         {
             SetStatus(ent, BluespaceMinerStatus.Unpowered);
             return;
