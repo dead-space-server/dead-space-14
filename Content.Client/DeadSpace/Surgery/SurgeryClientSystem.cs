@@ -14,8 +14,12 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Chemistry.Events;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
+using Content.Shared.Popups;
 using Content.Shared.Movement.Components;
+using Content.Shared.Rotation;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Standing;
 using Content.Shared.Item.ItemToggle;
@@ -61,6 +65,8 @@ public sealed class SurgeryClientSystem : EntitySystem
     [Dependency] private readonly SurgeryNearbySystem _nearby = default!;
     [Dependency] private readonly LimbImplantSystem _implants = default!;
     [Dependency] private readonly ItemToggleSystem _toggle = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     private const float NearDistance = 2.5f;
     private const float BodyTexels = 32f;
@@ -129,6 +135,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         SubscribeLocalEvent<ContentEyeComponent, GetEyeOffsetEvent>(OnEye);
         SubscribeLocalEvent<LimbBodyComponent, CanDragEvent>(OnCanDrag, after: [typeof(SharedBodySystem)]);
         SubscribeLocalEvent<LimbBodyComponent, InteractUsingEvent>(OnUse);
+        SubscribeLocalEvent<LimbBodyComponent, TargetBeforeInjectEvent>(OnBeforeInject);
         SubscribeLocalEvent<SurgerySiteComponent, AfterAutoHandleStateEvent>(OnSite);
         SubscribeLocalEvent<SurgerySiteComponent, ComponentShutdown>(OnSiteGone);
         SubscribeLocalEvent<SurgeryProneComponent, ComponentStartup>(OnProne);
@@ -410,6 +417,18 @@ public sealed class SurgeryClientSystem : EntitySystem
             return;
         }
 
+        if (LimbCoverRules.Worn(patient.Value, (LimbZone) _board!.Zone, EntityManager, _inventory))
+        {
+            if (down && !_down)
+                _popup.PopupEntity(Loc.GetString("surgery-clothes"), patient.Value, user);
+            _verb = SurgeryVerbKind.Inspect;
+            _sear.Clear();
+            _glue.Clear();
+            _down = down;
+            ShowGuide(patient.Value);
+            return;
+        }
+
         if (down && !_down && Lodging(user))
             Send(1f, 0, false, SurgeryVerbKind.Insert);
 
@@ -440,6 +459,15 @@ public sealed class SurgeryClientSystem : EntitySystem
             return;
 
         args.Handled = false;
+    }
+
+    private void OnBeforeInject(Entity<LimbBodyComponent> ent, ref TargetBeforeInjectEvent args)
+    {
+        if (_patient != ent.Owner || _step != SurgeryVerbKind.Inject)
+            return;
+
+        args.OverrideMessage = "";
+        args.Cancel();
     }
 
     private void OnUse(Entity<LimbBodyComponent> ent, ref InteractUsingEvent args)
@@ -1408,13 +1436,34 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (!TryComp<SpriteComponent>(uid, out var sprite))
             return pos + local;
 
-        return pos + sprite.Offset + sprite.Rotation.RotateVec(local * sprite.Scale);
+        var shifted = sprite.Offset + BodyAngle(uid, sprite).RotateVec(local * sprite.Scale);
+        return pos + FrameAngle(uid, sprite).RotateVec(shifted);
     }
 
     private Vector2 ToLocal(EntityUid uid, SpriteComponent sprite, Vector2 world)
     {
-        var rel = (-sprite.Rotation).RotateVec(world - _transform.GetWorldPosition(uid) - sprite.Offset);
+        var shifted = (-FrameAngle(uid, sprite)).RotateVec(world - _transform.GetWorldPosition(uid)) - sprite.Offset;
+        var rel = (-BodyAngle(uid, sprite)).RotateVec(shifted);
         return new Vector2(rel.X / MathF.Max(0.05f, sprite.Scale.X), rel.Y / MathF.Max(0.05f, sprite.Scale.Y));
+    }
+
+    private Angle BodyAngle(EntityUid uid, SpriteComponent sprite)
+    {
+        if (sprite.Rotation.Theta != 0)
+            return sprite.Rotation;
+
+        if (_standing.IsDown(uid) && TryComp<RotationVisualsComponent>(uid, out var visuals))
+            return visuals.HorizontalRotation;
+
+        return Angle.Zero;
+    }
+
+    private Angle FrameAngle(EntityUid uid, SpriteComponent sprite)
+    {
+        if (!sprite.NoRotation)
+            return _transform.GetWorldRotation(uid);
+
+        return -_eye.CurrentEye.Rotation;
     }
 
     private void Aim(EntityUid user)
@@ -2272,7 +2321,7 @@ public sealed class SurgeryClientSystem : EntitySystem
             return "none";
 
         var count = layers.Count;
-        if (count == 0 || PartHidden(part))
+        if (count == 0)
             return "none";
 
         var kinds = new byte[count];
@@ -2284,6 +2333,9 @@ public sealed class SurgeryClientSystem : EntitySystem
             integrity[i] = layers[i].Integrity;
             retracted[i] = layers[i].Retracted ? (byte) 1 : (byte) 0;
         }
+
+        if (PartHidden(part))
+            return SurgeryProcedure.Wound(LinePrefix, kinds, integrity, retracted, 1f);
 
         var ribs = !across && MarkOf(zone, back, out var mark) && mark.Prefix.Length > 0 && mark.Ribs;
         return SurgeryProcedure.Wound(Prefix(zone, across, back), kinds, integrity, retracted, 1f, ribs);
@@ -2456,8 +2508,21 @@ public sealed class SurgeryClientSystem : EntitySystem
 
     private string WoundState(float amount)
     {
-        if (_board == null || PartHidden(_board.Part))
+        if (_board == null)
             return "none";
+
+        if (PartHidden(_board.Part))
+        {
+            var skin = _board.StepLayer;
+            if (skin != 255
+                && skin < _board.LayerKinds.Length
+                && skin < _board.Retracted.Length
+                && (SurgeryLayerKind) _board.LayerKinds[skin] == SurgeryLayerKind.Skin
+                && _board.Retracted[skin] == 0)
+                return CutLook(LinePrefix, amount);
+
+            return SurgeryProcedure.Wound(LinePrefix, _board.LayerKinds, _board.Integrity, _board.Retracted, amount);
+        }
 
         var zone = (LimbZone) _board.Zone;
         var back = _patient != null && Prone(_patient.Value);

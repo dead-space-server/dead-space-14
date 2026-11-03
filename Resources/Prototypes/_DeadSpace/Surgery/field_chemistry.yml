@@ -33,7 +33,9 @@
     Medicine:
       effects:
       - !type:LimbMend
-        bone: 0.5
+        crack: 13
+        fracture: 23
+        rate: 0.5
         text: reagent-effect-guidebook-calcigen
       - !type:HealthChange
         conditions:
@@ -43,6 +45,31 @@
         damage:
           types:
             Blunt: 1
+
+- type: reagent
+  id: Osteogen
+  name: reagent-name-osteogen
+  group: Medicine
+  desc: reagent-desc-osteogen
+  physicalDesc: reagent-physical-desc-chalky
+  flavor: chalky
+  color: "#f2d2a2"
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:LimbMend
+        crack: 5
+        fracture: 9
+        rate: 0.5
+        text: reagent-effect-guidebook-osteogen
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Osteogen
+          min: 20
+        damage:
+          types:
+            Blunt: 1.5
 
 - type: reagent
   id: Ferrolysin
@@ -208,4 +235,19 @@
         maxVol: 30
         reagents:
         - ReagentId: Myoregen
+          Quantity: 30
+
+- type: entity
+  id: ChemistryBottleOsteogen
+  suffix: osteogen
+  parent: [BaseChemistryBottleFilled, BaseSyndicateContraband]
+  components:
+  - type: Label
+    currentLabel: reagent-name-osteogen
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Osteogen
           Quantity: 30

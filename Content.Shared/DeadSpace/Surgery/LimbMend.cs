@@ -17,6 +17,15 @@ public sealed partial class LimbMend : EntityEffectBase<LimbMend>
     public float Bone;
 
     [DataField]
+    public float Crack;
+
+    [DataField]
+    public float Fracture;
+
+    [DataField]
+    public float Rate = 0.5f;
+
+    [DataField]
     public float Shard;
 
     [DataField]
@@ -26,7 +35,7 @@ public sealed partial class LimbMend : EntityEffectBase<LimbMend>
     public LocId Text = "reagent-effect-guidebook-limb-mend";
 
     public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
-        => Loc.GetString(Text, ("chance", Probability));
+        => Loc.GetString(Text, ("chance", Probability), ("crack", Crack), ("fracture", Fracture));
 }
 
 public sealed partial class LimbMendSystem : EntityEffectSystem<LimbBodyComponent, LimbMend>
@@ -42,6 +51,8 @@ public sealed partial class LimbMendSystem : EntityEffectSystem<LimbBodyComponen
 
         var effect = args.Effect;
         var scale = args.Scale;
+        if (effect.Crack > 0f || effect.Fracture > 0f)
+            KnitBone(entity, effect, scale);
         var shardDone = false;
         foreach (var zone in Enum.GetValues<LimbZone>())
         {
@@ -64,7 +75,7 @@ public sealed partial class LimbMendSystem : EntityEffectSystem<LimbBodyComponen
                 touched = true;
             }
 
-            if (effect.Bone > 0f && state.Bone > 0f)
+            if (effect.Crack <= 0f && effect.Fracture <= 0f && effect.Bone > 0f && state.Bone > 0f)
             {
                 edit.Bone = -effect.Bone * scale;
                 touched = true;
@@ -87,5 +98,43 @@ public sealed partial class LimbMendSystem : EntityEffectSystem<LimbBodyComponen
             if (touched)
                 _limbs.ApplyEdit(entity, zone, edit);
         }
+    }
+
+    private void KnitBone(Entity<LimbBodyComponent> entity, LimbMend effect, float scale)
+    {
+        entity.Comp.BoneMend += scale * effect.Rate;
+        var fracture = -1;
+        var crack = -1;
+        foreach (var zone in Enum.GetValues<LimbZone>())
+        {
+            if (!LimbWoundRules.IsBody(zone))
+                continue;
+
+            var index = LimbWoundRules.Index(zone);
+            if ((uint) index >= (uint) entity.Comp.Zones.Count || entity.Comp.Zones[index].Severed)
+                continue;
+
+            var bone = entity.Comp.Zones[index].Bone;
+            if (fracture < 0 && bone >= LimbWoundRules.BreakBone)
+                fracture = index;
+            else if (crack < 0 && bone >= LimbWoundRules.StrainBone)
+                crack = index;
+        }
+
+        if (fracture >= 0)
+        {
+            if (entity.Comp.BoneMend < effect.Fracture)
+                return;
+
+            entity.Comp.BoneMend -= effect.Fracture;
+            _limbs.ApplyEdit(entity, (LimbZone) fracture, new LimbEdit { SetBone = true, Bone = 0f });
+            return;
+        }
+
+        if (crack < 0 || entity.Comp.BoneMend < effect.Crack)
+            return;
+
+        entity.Comp.BoneMend -= effect.Crack;
+        _limbs.ApplyEdit(entity, (LimbZone) crack, new LimbEdit { SetBone = true, Bone = 0f });
     }
 }

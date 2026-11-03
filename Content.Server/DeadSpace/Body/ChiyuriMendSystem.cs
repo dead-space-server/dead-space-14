@@ -32,25 +32,26 @@ public sealed class ChiyuriMendSystem : EntityEffectSystem<LimbBodyComponent, Ch
         {
             entity.Comp.Chiyuri -= effect.Dose;
             MendOne(entity);
+            MendOrgan(entity);
             RegrowOne(entity, effect.Regrow);
         }
     }
 
     private void MendOne(Entity<LimbBodyComponent> entity)
     {
-        if (Fix(entity, state => state.Embedded, new LimbEdit { ClearEmbedded = true }))
+        if (Fix(entity, state => state.Embedded, Full(new LimbEdit { ClearEmbedded = true })))
             return;
 
-        if (Fix(entity, state => state.Bone >= LimbWoundRules.StrainBone, new LimbEdit { SetBone = true, Bone = 0f }))
+        if (Fix(entity, state => state.Bone >= LimbWoundRules.StrainBone, Full(new LimbEdit { SetBone = true, Bone = 0f })))
             return;
 
-        if (Fix(entity, state => state.Bleed > LimbWoundRules.TickBleed, new LimbEdit { SetBleed = true, Bleed = 0f }))
+        if (Fix(entity, state => state.Bleed > LimbWoundRules.TickBleed, Full(new LimbEdit { SetBleed = true, Bleed = 0f })))
             return;
 
-        if (Fix(entity, state => state.Flesh > 0f, new LimbEdit { SetFlesh = true, Flesh = 0f }))
+        if (Fix(entity, state => state.Flesh > 0f, Full(new LimbEdit { SetFlesh = true, Flesh = 0f })))
             return;
 
-        if (Fix(entity, state => state.SkinBare || state.Skin > 0f, new LimbEdit { Skin = -1000f, ClearSkinBare = true }))
+        if (Fix(entity, state => state.SkinBare || state.Skin > 0f, Full(new LimbEdit { Skin = -1000f, ClearSkinBare = true })))
             return;
 
         foreach (var zone in Enum.GetValues<LimbZone>())
@@ -63,17 +64,28 @@ public sealed class ChiyuriMendSystem : EntityEffectSystem<LimbBodyComponent, Ch
                 continue;
 
             var state = entity.Comp.Zones[index];
-            if (state.Severed || !state.Atrophied)
+            if (state.Severed)
+                continue;
+
+            var cap = LimbWoundRules.HealthFor(zone, entity.Comp);
+            if (!state.Atrophied && state.Health >= cap)
                 continue;
 
             _limbs.ApplyEdit(entity, zone, new LimbEdit
             {
                 ClearAtrophy = true,
                 SetHealth = true,
-                Health = LimbWoundRules.HealthFor(zone, entity.Comp) * 0.1f,
+                Health = cap,
             });
             return;
         }
+    }
+
+    private static LimbEdit Full(LimbEdit edit)
+    {
+        edit.SetHealth = true;
+        edit.Health = 10000f;
+        return edit;
     }
 
     private bool Fix(Entity<LimbBodyComponent> entity, Func<LimbZoneState, bool> match, LimbEdit edit)
@@ -96,6 +108,33 @@ public sealed class ChiyuriMendSystem : EntityEffectSystem<LimbBodyComponent, Ch
         }
 
         return false;
+    }
+
+    private void MendOrgan(Entity<LimbBodyComponent> entity)
+    {
+        foreach (var organ in Enum.GetValues<LimbOrgan>())
+        {
+            var bit = (LimbOrganMask) (1 << (int) organ);
+            if ((entity.Comp.Present & bit) == 0)
+                continue;
+
+            var index = (int) organ;
+            if ((uint) index >= (uint) entity.Comp.Organs.Count)
+                continue;
+
+            var state = entity.Comp.Organs[index];
+            if (state.Missing || state.Damage <= 0f && !state.Ruptured)
+                continue;
+
+            _limbs.ApplyOrganEdit(entity, organ, new LimbOrganEdit
+            {
+                SetDamage = true,
+                Damage = 0f,
+                SetRuptured = true,
+                Ruptured = false,
+            });
+            return;
+        }
     }
 
     private void RegrowOne(Entity<LimbBodyComponent> entity, float fraction)

@@ -613,6 +613,79 @@
     layer: Skin
     undo: Incise
 
+# Brain
+
+- type: surgeryPart
+  id: ImplantBrain
+  zone: Head
+  anatomy: Head
+  operation: TakeImplantBrain
+  put: PutImplantBrain
+  implant: Brain
+  sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+  state: implanter0
+  wound: false
+  order: 20
+  ax: 13
+  ay: 4.5
+  bx: 18
+  by: 4.5
+
+- type: surgeryOperation
+  id: PutImplantBrain
+  name: surgery-op-put-implant-brain
+  zone: Head
+  implant: Brain
+  implantPut: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    implant: Brain
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantBrain
+  name: surgery-op-take-implant-brain
+  zone: Head
+  implant: Brain
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    implant: Brain
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
 # Slime core
 
 - type: surgeryPart

@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Body.Components;
+using Content.Shared.Changeling.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -96,6 +97,9 @@ public sealed class SurgeryGraftSystem : EntitySystem
             && SurgerySpeciesPrototype.IsMachine(_prototype, flesh.Species))
             return;
 
+        if (HasComp<ChangelingIdentityComponent>(ent))
+            return;
+
         if (!TryComp<HumanoidAppearanceComponent>(ent, out var look)
             || flesh.Unstable
             || HasComp<UncloningComponent>(ent)
@@ -109,6 +113,9 @@ public sealed class SurgeryGraftSystem : EntitySystem
 
     private void OnGrafted(Entity<LimbBodyComponent> ent, ref LimbGraftedEvent args)
     {
+        if (HasComp<ChangelingIdentityComponent>(ent))
+            return;
+
         if (TryComp<LimbFleshComponent>(args.Part, out var flesh) && flesh.Species.Length > 0 && !SameDna(ent, flesh))
             Begin(ent, flesh.Species, args.Zone, null, null);
     }

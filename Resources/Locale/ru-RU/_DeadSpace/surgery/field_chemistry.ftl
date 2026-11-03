@@ -15,10 +15,15 @@ reagent-effect-guidebook-hemostatin = { $chance ->
         [1] Останавливает
        *[other] с шансом { NATURALPERCENT($chance, 2) } останавливает
     } внутреннее кровотечение в конечностях
-reagent-effect-guidebook-calcigen = { $chance ->
-        [1] Сращивает
-       *[other] с шансом { NATURALPERCENT($chance, 2) } сращивает
-    } переломы, закрытые и открытые
+reagent-name-osteogen = остеоген
+reagent-desc-osteogen = Боевая взвесь Cybersun. Сращивает трещину за 5 усвоенных единиц и перелом за 9. В большой дозе ломит кости сильнее кальцегена.
+reagent-effect-guidebook-calcigen = Сращивает трещину за { $crack } усвоенных единиц и перелом за { $fracture }
+reagent-effect-guidebook-osteogen = Сращивает трещину за { $crack } усвоенных единиц и перелом за { $fracture }
+ent-ChemistryBottleOsteogen = { ent-BaseChemistryBottleFilled }
+    .suffix = Остеоген
+    .desc = { ent-BaseChemistryBottleFilled.desc }
+uplink-osteogen-name = Остеоген
+uplink-osteogen-desc = 30 единиц. Трещина срастается за 5 усвоенных единиц, перелом за 9. Быстрее кальцегена.
 reagent-effect-guidebook-ferrolysin = { $chance ->
         [1] Растворяет
        *[other] с шансом { NATURALPERCENT($chance, 2) } растворяет

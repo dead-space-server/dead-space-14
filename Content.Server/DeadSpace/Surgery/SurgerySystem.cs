@@ -21,6 +21,7 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Inventory;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Events;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Item;
@@ -90,6 +91,7 @@ public sealed class SurgerySystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<LimbBodyComponent, InteractUsingEvent>(OnUse);
+        SubscribeLocalEvent<LimbBodyComponent, TargetBeforeInjectEvent>(OnBeforeInject);
         SubscribeLocalEvent<LimbBodyComponent, SurgeryStepDoAfterEvent>(OnStepDoAfter);
         SubscribeLocalEvent<SurgeryFocusComponent, PlayerDetachedEvent>(OnFocusDetach);
         SubscribeNetworkEvent<SurgeryCutMessage>(OnCut);
@@ -175,6 +177,18 @@ public sealed class SurgerySystem : EntitySystem
 
         args.Handled = true;
         Send(ent.Owner, args.User, site, null, string.Empty, true);
+    }
+
+    private void OnBeforeInject(Entity<LimbBodyComponent> ent, ref TargetBeforeInjectEvent args)
+    {
+        if (!TryComp<SurgerySiteComponent>(ent, out var site) || site.Done || site.Layers.Count == 0)
+            return;
+
+        if (StepNow(ent, site) is not { Verb: SurgeryVerbKind.Inject } || !_infection.CanCure(args.UsedInjector))
+            return;
+
+        args.OverrideMessage = "";
+        args.Cancel();
     }
 
     private void OnUse(Entity<LimbBodyComponent> ent, ref InteractUsingEvent args)
@@ -503,10 +517,6 @@ public sealed class SurgerySystem : EntitySystem
             verb = SurgeryVerbKind.Insert;
             organ = (byte) spare;
         }
-        else if (HasComp<BodyPartComponent>(used) && ZoneSevered(patient, site.Zone) && TryPartZone(used, out var partZone) && partZone == site.Zone)
-        {
-            verb = SurgeryVerbKind.Seat;
-        }
         else if (HasComp<LimbImplantComponent>(used) && UndoVerb(patient, site) == (byte) SurgeryVerbKind.Insert)
         {
             if (TryUndo(patient, site, SurgeryVerbKind.Insert, used))
@@ -518,7 +528,7 @@ public sealed class SurgerySystem : EntitySystem
             return false;
         }
 
-        if (verb is SurgeryVerbKind.Bandage or SurgeryVerbKind.Graft)
+        if (verb is SurgeryVerbKind.Bandage or SurgeryVerbKind.Graft or SurgeryVerbKind.Inject)
         {
             Send(patient, user, site, used, string.Empty, true);
             return true;
@@ -580,6 +590,12 @@ public sealed class SurgerySystem : EntitySystem
             return;
         }
 
+        if (Covered(patient.Value, site.Zone))
+        {
+            Send(patient.Value, user, site, held, "surgery-clothes", false);
+            return;
+        }
+
         if (verb == SurgeryVerbKind.Insert
             && held is { } spareItem
             && HasComp<OrganComponent>(spareItem)
@@ -620,6 +636,18 @@ public sealed class SurgerySystem : EntitySystem
             return;
         }
 
+        if (verb == SurgeryVerbKind.Cauterize
+            && Operation(patient.Value, site, out var open)
+            && site.Step > 0
+            && site.Step < open.Steps.Count
+            && open.Steps[site.Step].Verb != SurgeryVerbKind.Cauterize)
+        {
+            if (message.Progress >= 0.95f)
+                Abort(patient.Value, site);
+            Send(patient.Value, user, site, held, string.Empty, false);
+            return;
+        }
+
         if (Tooth(site) && verb == SurgeryVerbKind.Insert)
         {
             if (TeethInsert(patient.Value, site) && _teeth.TryLodge(patient.Value, held))
@@ -632,12 +660,6 @@ public sealed class SurgerySystem : EntitySystem
             else
                 Send(patient.Value, user, site, held, "surgery-wrong-hand", false);
 
-            return;
-        }
-
-        if (Covered(patient.Value, site.Zone) && verb is SurgeryVerbKind.Incise or SurgeryVerbKind.Chop or SurgeryVerbKind.SawBone or SurgeryVerbKind.Amputate or SurgeryVerbKind.Drill)
-        {
-            Send(patient.Value, user, site, held, "surgery-clothes", false);
             return;
         }
 
@@ -847,6 +869,28 @@ public sealed class SurgerySystem : EntitySystem
 
         _infection.Contaminate(user, patient.Value, site, verb, advance || result.Finished);
 
+        var implantStep = result.PlaceImplant || result.RemoveImplant;
+        if (implantStep && advance)
+        {
+            if (result.PlaceImplant)
+            {
+                if (held == null || !_implants.TryInsert(patient.Value, implantSlot, held.Value))
+                {
+                    advance = false;
+                    result.PlaceImplant = false;
+                    result.Rejected = true;
+                    result.Key = "surgery-implant-fit";
+                }
+            }
+            else if (implantSlot.Length == 0 || !_implants.TryExtract(patient.Value, implantSlot, out _))
+            {
+                advance = false;
+                result.RemoveImplant = false;
+                result.Rejected = true;
+                result.Key = "surgery-implant-gone";
+            }
+        }
+
         if (advance && stepVerb == verb)
         {
             if (stepVerb == SurgeryVerbKind.Clamp)
@@ -957,34 +1001,7 @@ public sealed class SurgerySystem : EntitySystem
         else if (verb == SurgeryVerbKind.Extract)
             result.RemoveOrgan = false;
 
-        if (result.PlaceImplant || result.RemoveImplant)
-        {
-            if (implantSlot.Length == 0)
-            {
-                result.PlaceImplant = false;
-                result.RemoveImplant = false;
-                result.Rejected = true;
-                result.Key = "surgery-implant-gone";
-            }
-            else if (result.PlaceImplant)
-            {
-                if (held == null || !_implants.TryInsert(patient.Value, implantSlot, held.Value))
-                {
-                    result.PlaceImplant = false;
-                    result.Rejected = true;
-                    result.Key = "surgery-implant-fit";
-                    advance = false;
-                }
-            }
-            else if (result.RemoveImplant && !_implants.TryExtract(patient.Value, implantSlot, out _))
-            {
-                result.RemoveImplant = false;
-                result.Rejected = true;
-                result.Key = "surgery-implant-gone";
-                advance = false;
-            }
-        }
-        else
+        if (!implantStep)
         {
             var lodging = verb == SurgeryVerbKind.Insert && held != null && !HasComp<OrganComponent>(held.Value) && !HasComp<LimbImplantComponent>(held.Value);
             if (lodging && _cavity.Blocked(held!.Value))
@@ -1444,11 +1461,31 @@ public sealed class SurgerySystem : EntitySystem
         if (!WoundOpen(site) || !Operation(patient, site, out var operation))
             return 255;
 
+        if (site.Step > 0 && site.Step < operation.Steps.Count)
+            return (byte) SurgeryVerbKind.Cauterize;
+
         var step = NextClose(operation, site);
-        if (step == null || site.Step < operation.Steps.Count && step.Verb != SurgeryVerbKind.Cauterize)
+        if (step == null)
             return 255;
 
         return (byte) step.Verb;
+    }
+
+    private void Abort(EntityUid patient, SurgerySiteComponent site)
+    {
+        for (var i = 0; i < site.Layers.Count; i++)
+        {
+            var layer = site.Layers[i];
+            layer.Integrity = 1f;
+            layer.Retracted = false;
+            site.Layers[i] = layer;
+        }
+
+        site.Step = 0;
+        site.CloseStep = 0;
+        site.Clamped = false;
+        site.Chosen = 255;
+        Finish(patient, site);
     }
 
     private byte UndoVerb(EntityUid patient, SurgerySiteComponent site)
@@ -1731,13 +1768,8 @@ public sealed class SurgerySystem : EntitySystem
             return LayerIndex(site, operation.Steps[step].Layer);
 
         var closing = step >= operation.Steps.Count ? NextClose(operation, site) : null;
-        if (closing == null && verb == SurgeryVerbKind.Cauterize)
-            closing = NextClose(operation, site);
         if (closing != null && closing.Verb == verb)
             return LayerIndex(site, closing.Layer);
-
-        if (verb == SurgeryVerbKind.Seat && step >= operation.Steps.Count && ZoneSevered(patient, site.Zone))
-            return LayerIndex(site, SurgeryLayerKind.Skin);
 
         if (verb == SurgeryVerbKind.Extract && OrganLeft(patient, site))
             return SurgeryProcedure.Index(site.Layers, SurgeryLayerKind.Cavity);
@@ -2235,14 +2267,7 @@ public sealed class SurgerySystem : EntitySystem
 
     private bool Covered(EntityUid body, LimbZone zone)
     {
-        var slots = _inventory.GetSlotEnumerator(body);
-        while (slots.NextItem(out var item))
-        {
-            if (TryComp<LimbCoverComponent>(item, out var cover) && !cover.OnlyWhenBlocking && cover.Covers(zone))
-                return true;
-        }
-
-        return false;
+        return LimbCoverRules.Worn(body, zone, EntityManager, _inventory);
     }
 
     private bool Asleep(EntityUid uid)

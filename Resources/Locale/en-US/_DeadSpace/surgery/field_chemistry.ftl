@@ -15,10 +15,15 @@ reagent-effect-guidebook-hemostatin = { $chance ->
         [1] Stops
        *[other] has a { NATURALPERCENT($chance, 2) } chance to stop
     } internal bleeding in limbs
-reagent-effect-guidebook-calcigen = { $chance ->
-        [1] Knits
-       *[other] has a { NATURALPERCENT($chance, 2) } chance to knit
-    } closed and open fractures
+reagent-name-osteogen = osteogen
+reagent-desc-osteogen = A Cybersun combat slurry. Knits a crack in 5 metabolized units and a fracture in 9. Large doses ache harder than calcigen.
+reagent-effect-guidebook-calcigen = Knits a crack for { $crack } metabolized units and a fracture for { $fracture }
+reagent-effect-guidebook-osteogen = Knits a crack for { $crack } metabolized units and a fracture for { $fracture }
+ent-ChemistryBottleOsteogen = { ent-BaseChemistryBottleFilled }
+    .suffix = Osteogen
+    .desc = { ent-BaseChemistryBottleFilled.desc }
+uplink-osteogen-name = Osteogen
+uplink-osteogen-desc = 30 units. A crack knits in 5 metabolized units, a fracture in 9. Faster than calcigen.
 reagent-effect-guidebook-ferrolysin = { $chance ->
         [1] Dissolves
        *[other] has a { NATURALPERCENT($chance, 2) } chance to dissolve

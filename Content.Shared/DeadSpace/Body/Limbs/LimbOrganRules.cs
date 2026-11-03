@@ -149,7 +149,7 @@ public static class LimbOrganRules
         var blood = 0f;
         var air = 0f;
         var poison = 0f;
-        if (Ruptured(organs, LimbOrgan.Heart))
+        if (Bleeding(organs, LimbOrgan.Heart))
             blood += HeartBleed;
         if (Ruptured(organs, LimbOrgan.Brain))
             air += BrainAir;
@@ -165,10 +165,9 @@ public static class LimbOrganRules
         if (Ruptured(organs, LimbOrgan.Stomach))
             poison += StomachPoison;
         if (Ruptured(organs, LimbOrgan.Intestines))
-        {
-            blood += IntestineBleed;
             poison += IntestinePoison;
-        }
+        if (Bleeding(organs, LimbOrgan.Intestines))
+            blood += IntestineBleed;
 
         return new OrganFailure(blood, air, poison);
     }
@@ -188,6 +187,12 @@ public static class LimbOrganRules
     {
         var index = (int) organ;
         return index < organs.Length && organs[index].Ruptured;
+    }
+
+    private static bool Bleeding(ReadOnlySpan<LimbOrganState> organs, LimbOrgan organ)
+    {
+        var index = (int) organ;
+        return index < organs.Length && organs[index].Ruptured && !organs[index].BleedStopped;
     }
 }
 

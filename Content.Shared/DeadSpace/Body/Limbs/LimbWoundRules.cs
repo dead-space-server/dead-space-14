@@ -55,7 +55,7 @@ public static class LimbWoundRules
     public const float BandageBleedFactor = 0.2f;
     public const float BleedPerFlesh = 0.02f;
     public const float TickBleed = 0.01f;
-    public const float BleedLocal = 0.35f;
+    public const float BleedLocal = 0.245f;
     public const float BleedShare = 0.1f;
     public const float BleedAtrophy = 0.5f;
     public const float StumpBleed = 12f;
@@ -82,7 +82,7 @@ public static class LimbWoundRules
     public const float PelletRicochet = 0.7f;
     public const float HeavyPoint = 25f;
 
-    public const float AimFireRate = 0.85f;
+    public const float AimFireRate = 0.55f;
     public const float AimSpread = 0.35f;
 
     public const float HandAttackRate = 0.75f;

@@ -5,11 +5,14 @@ using Content.Shared.DeadSpace.Body.Limbs;
 using Robust.Shared.Player;
 using Content.Shared.DeadSpace.Psychiatry;
 using Content.Shared.StatusEffectNew;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Body;
 
 public sealed class LimbHearingSystem : EntitySystem
 {
+    private static readonly EntProtoId DeafEffect = "StatusEffectDeaf";
+
     [Dependency] private readonly StatusEffectsSystem _status = default!;
 
     private float _accumulator;
@@ -62,6 +65,10 @@ public sealed class LimbHearingSystem : EntitySystem
         limbs.EarsGone = gone;
         limbs.Ears = 0f;
         Dirty(uid, limbs);
+        if (gone)
+            _status.TrySetStatusEffectDuration(uid, DeafEffect);
+        else
+            _status.TryRemoveStatusEffect(uid, DeafEffect);
     }
 
     public override void Update(float frameTime)

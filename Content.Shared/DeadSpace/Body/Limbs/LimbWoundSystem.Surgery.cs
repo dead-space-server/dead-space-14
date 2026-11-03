@@ -135,6 +135,77 @@ public sealed partial class LimbWoundSystem
         return true;
     }
 
+    public void ClearInsides(EntityUid body, LimbBodyComponent? limbs = null)
+    {
+        if (!Resolve(body, ref limbs, false))
+            return;
+
+        EnsureZones(limbs);
+        EnsureOrgans(limbs);
+        var zones = CollectionsMarshal.AsSpan(limbs.Zones);
+        var count = Math.Min(zones.Length, LimbWoundRules.BodyZoneCount);
+        for (var i = 0; i < count; i++)
+        {
+            if (zones[i].Severed)
+                continue;
+
+            ApplyEdit(body, (LimbZone) i, new LimbEdit
+            {
+                SetHealth = true,
+                Health = LimbWoundRules.HealthFor((LimbZone) i, limbs),
+                SetBone = true,
+                Bone = 0f,
+                SetFlesh = true,
+                Flesh = 0f,
+                SetBleed = true,
+                Bleed = 0f,
+                Skin = -1000f,
+                ClearAtrophy = true,
+                ClearEmbedded = true,
+                ClearSkinBare = true,
+            });
+        }
+
+        for (var i = 0; i < limbs.Organs.Count && i < LimbOrganRules.Count; i++)
+        {
+            var state = limbs.Organs[i];
+            state.Damage = 0f;
+            state.Ruptured = false;
+            state.Missing = false;
+            state.BleedStopped = false;
+            limbs.Organs[i] = state;
+        }
+
+        limbs.Present = LimbOrganMask.Standard;
+        if (TryComp<HumanoidAppearanceComponent>(body, out var look)
+            && _proto.TryIndex<LimbSpeciesPrototype>(look.Species, out var profile))
+            limbs.Present = LimbSpeciesRules.Mask(profile.Organs);
+
+        limbs.EarsGone = false;
+        limbs.Ears = 0f;
+        limbs.EyesGone = 0;
+        limbs.Mouth = 0f;
+        limbs.EyeBurn = 0f;
+        Dirty(body, limbs);
+        RefreshActive(body, limbs);
+    }
+
+    public bool HasPart(EntityUid body, LimbZone zone)
+    {
+        var type = PartType(zone);
+        if (type == null || !TryComp<BodyComponent>(body, out var bodyComp))
+            return false;
+
+        var symmetry = Symmetry(zone);
+        foreach (var part in _body.GetBodyChildrenOfType(body, type.Value, bodyComp))
+        {
+            if (symmetry == BodyPartSymmetry.None || part.Component.Symmetry == symmetry)
+                return true;
+        }
+
+        return false;
+    }
+
     public bool TryRegrowZone(EntityUid body, LimbZone zone, float healthFraction = 0.08f)
     {
         if (_net.IsClient || !LimbWoundRules.CanSever(zone) || !TryComp<LimbBodyComponent>(body, out var limbs))
@@ -257,6 +328,7 @@ public sealed partial class LimbWoundSystem
         if (!attached)
             return false;
 
+        _implants.Restore(body, part);
         if (!TryComp<LimbBodyComponent>(body, out var limbs))
             return true;
 

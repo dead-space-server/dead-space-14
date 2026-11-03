@@ -102,14 +102,7 @@ public sealed class SurgeryXrayTableSystem : EntitySystem
             || !Enum.TryParse<LimbZone>(found.Zone, out var zone))
             return false;
 
-        var slots = _inventory.GetSlotEnumerator(body);
-        while (slots.NextItem(out var item))
-        {
-            if (TryComp<LimbCoverComponent>(item, out var cover) && !cover.OnlyWhenBlocking && cover.Covers(zone))
-                return true;
-        }
-
-        return false;
+        return LimbCoverRules.Worn(body, zone, EntityManager, _inventory);
     }
 
     private void OnPrint(Entity<SurgeryXrayTableComponent> ent, ref SurgeryXrayTablePrintMessage args)

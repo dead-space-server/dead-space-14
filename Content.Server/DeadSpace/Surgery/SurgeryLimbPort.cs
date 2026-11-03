@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Changeling.Systems;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
@@ -40,6 +41,42 @@ public sealed class SurgeryLimbPort : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<BodyComponent, Content.Shared.Rejuvenate.RejuvenateEvent>(OnRejuvenate);
+        SubscribeLocalEvent<RegenerativeStasisExitedEvent>(OnStasis);
+    }
+
+    private void OnStasis(ref RegenerativeStasisExitedEvent args)
+    {
+        var uid = args.Target;
+        if (!TryComp<LimbBodyComponent>(uid, out _))
+            return;
+
+        foreach (var zone in new[]
+                 {
+                     LimbZone.ArmLeft, LimbZone.ArmRight, LimbZone.LegLeft, LimbZone.LegRight,
+                     LimbZone.HandLeft, LimbZone.HandRight, LimbZone.FootLeft, LimbZone.FootRight,
+                 })
+            Grow(uid, zone);
+
+        _limbs.ClearInsides(uid);
+        RemComp<SurgeryInfectionComponent>(uid);
+        RemComp<SurgeryRejectionComponent>(uid);
+        _restock.Add(uid);
+    }
+
+    private void Grow(EntityUid uid, LimbZone zone)
+    {
+        if (TryComp<LimbBodyComponent>(uid, out var limbs) && !_limbs.HasPart(uid, zone))
+        {
+            var index = LimbWoundRules.Index(zone);
+            if ((uint) index < (uint) limbs.Zones.Count)
+            {
+                var state = limbs.Zones[index];
+                state.Severed = true;
+                limbs.Zones[index] = state;
+            }
+        }
+
+        _limbs.TryRegrowZone(uid, zone, 1f);
     }
 
     private void OnRejuvenate(EntityUid uid, BodyComponent body, Content.Shared.Rejuvenate.RejuvenateEvent args)

@@ -285,6 +285,9 @@ public sealed partial class InjectorSystem : EntitySystem
         if (!ev.Cancelled)
             return false;
 
+        if (ev.OverrideMessage == "")
+            return true;
+
         var userMessage = ev.OverrideMessage ?? Loc.GetString("injector-component-blocked-user");
         var otherMessage = Loc.GetString("injector-component-blocked-other", ("target", target), ("user", user));
         _popup.PopupPredicted(userMessage, otherMessage, target, user, PopupType.SmallCaution);

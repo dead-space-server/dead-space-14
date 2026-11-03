@@ -40,7 +40,7 @@ public static class SurgeryProcedure
     public static bool Advances(SurgeryVerbKind verb, in SurgeryLayerState layer, in SurgeryResult result)
     {
         if (verb == SurgeryVerbKind.Extract)
-            return result.RemoveOrgan;
+            return result.RemoveOrgan || result.RemoveImplant;
 
         if (verb == SurgeryVerbKind.Amputate)
             return result.Sever;

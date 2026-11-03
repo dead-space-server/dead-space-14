@@ -17,6 +17,18 @@ public sealed partial class LimbFleshComponent : Component
     [DataField, AutoNetworkedField]
     public string Species = "";
 
+    [DataField, AutoNetworkedField]
+    public float Wound = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float Burn = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float LiquidSever;
+
+    [DataField, AutoNetworkedField]
+    public string DamageSet = "";
+
     [DataField]
     public string Dna = "";
 

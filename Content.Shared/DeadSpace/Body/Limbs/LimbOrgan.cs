@@ -45,5 +45,8 @@ public partial struct LimbOrganState
     public bool Ruptured;
 
     [DataField]
+    public bool BleedStopped;
+
+    [DataField]
     public bool Missing;
 }

@@ -25,6 +25,8 @@ public sealed partial class LimbBodyComponent : Component
 
     public float Chiyuri;
 
+    public float BoneMend;
+
     [DataField, AutoNetworkedField]
     public List<LimbZoneState> Zones = LimbZoneState.CreateAll();
 

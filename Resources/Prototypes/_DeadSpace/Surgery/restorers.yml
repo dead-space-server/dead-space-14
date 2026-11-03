@@ -310,9 +310,50 @@
   productEntity: LimbRestorerImplanterSyndicate
   icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
   cost:
+    Telecrystal: 7
+  categories:
+  - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkLimbRestorerImplantNuke
+  name: uplink-limb-restorer-implant-name
+  description: uplink-limb-restorer-implant-desc
+  productEntity: LimbRestorerImplanterSyndicate
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
+  cost:
     Telecrystal: 12
   categories:
   - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkLimbRestorerImplantLone
+  name: uplink-limb-restorer-implant-name
+  description: uplink-limb-restorer-implant-desc
+  productEntity: LimbRestorerImplanterSyndicate
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
+  cost:
+    Telecrystal: 10
+  categories:
+  - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
 
 - type: listing
   id: TraitorUltraUplinkLimbRestorerImplant

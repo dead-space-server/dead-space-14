@@ -22,7 +22,6 @@
   - type: SurgeryXrayTable
   - type: ActivatableUI
     key: enum.SurgeryXrayTableUiKey.Key
-    verbOnly: true
     verbText: surgery-xray-open
     verbPriority: 1000
     verbIcon: /Textures/Interface/VerbIcons/examine.svg.192dpi.png

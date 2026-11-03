@@ -67,3 +67,6 @@
         - !type:ReagentCondition
           reagent: Chiyurizine
           min: 1
+      - !type:ChiyuriMend
+        dose: 15
+        rate: 0.5

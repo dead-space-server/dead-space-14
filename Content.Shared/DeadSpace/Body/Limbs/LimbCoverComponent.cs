@@ -82,4 +82,55 @@ public static class LimbCoverRules
 
         return false;
     }
+
+    public static bool Worn(EntityUid body, LimbZone zone, IEntityManager entities, InventorySystem inventory)
+    {
+        var slots = inventory.GetSlotEnumerator(body);
+        while (slots.NextItem(out var item, out var slot))
+        {
+            if (entities.TryGetComponent(item, out LimbCoverComponent? cover))
+            {
+                if (!cover.OnlyWhenBlocking && cover.Covers(zone))
+                    return true;
+
+                continue;
+            }
+
+            if (SlotCovers(slot.SlotFlags, zone))
+                return true;
+        }
+
+        return false;
+    }
+
+    public static bool SlotCovers(SlotFlags flags, LimbZone zone)
+    {
+        if ((flags & (SlotFlags.HEAD | SlotFlags.MASK)) != 0
+            && zone is LimbZone.Head or LimbZone.Eyes or LimbZone.Mouth)
+            return true;
+
+        if ((flags & SlotFlags.EYES) != 0 && zone == LimbZone.Eyes)
+            return true;
+
+        if ((flags & SlotFlags.GLOVES) != 0 && zone is LimbZone.HandLeft or LimbZone.HandRight)
+            return true;
+
+        if ((flags & (SlotFlags.FEET | SlotFlags.SOCKS)) != 0 && zone is LimbZone.FootLeft or LimbZone.FootRight)
+            return true;
+
+        if ((flags & (SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING)) != 0
+            && zone is LimbZone.Torso or LimbZone.Groin or LimbZone.ArmLeft or LimbZone.ArmRight or LimbZone.LegLeft or LimbZone.LegRight)
+            return true;
+
+        if ((flags & SlotFlags.LEGS) != 0 && zone is LimbZone.Groin or LimbZone.LegLeft or LimbZone.LegRight)
+            return true;
+
+        if ((flags & SlotFlags.UNDERWEART) != 0 && zone == LimbZone.Torso)
+            return true;
+
+        if ((flags & SlotFlags.UNDERWEARB) != 0 && zone == LimbZone.Groin)
+            return true;
+
+        return false;
+    }
 }
