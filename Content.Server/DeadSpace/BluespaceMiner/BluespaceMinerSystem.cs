@@ -1,5 +1,4 @@
 using Content.Server.Atmos.EntitySystems;
-using Content.Server.Materials;
 using Content.Server.Atmos.Piping.Components;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
@@ -23,7 +22,6 @@ namespace Content.Server.DeadSpace.BluespaceMiner;
 public sealed class BluespaceMinerSystem : EntitySystem
 {
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
     [Dependency] private readonly PowerReceiverSystem _power = default!;
     [Dependency] private readonly AppearanceSystem _appearance = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -81,18 +79,6 @@ public sealed class BluespaceMinerSystem : EntitySystem
             return;
 
         var material = PickMaterial(comp);
-        var amount = comp.SheetsPerSecond * comp.MaterialPerSheet;
-
-        // копим добычу во внутреннем хранилище, а когда наберётся пачка —
-        // материализуем её рядом с машиной с блюспейс-эффектом
-        if (!_materialStorage.TryChangeMaterialAmount(ent, material, amount))
-            return;
-
-        var batchAmount = comp.SheetsPerBatch * comp.MaterialPerSheet;
-        if (comp.SheetsPerBatch <= 0 || _materialStorage.GetMaterialAmount(ent, material) < batchAmount)
-            return;
-
-        _materialStorage.TryChangeMaterialAmount(ent, material, -batchAmount);
         SpawnBatch(ent, comp, material, comp.SheetsPerBatch);
     }
 

@@ -48,13 +48,15 @@ public sealed partial class BluespaceMinerComponent : Component
     [DataField]
     public Dictionary<ProtoId<MaterialPrototype>, float> MaterialWeights = new()
     {
-        { "Glass", 23f },
-        { "Steel", 23f },
-        { "Plastic", 23f },
-        { "Silver", 13.5f },
-        { "Gold", 7f },
+        { "Glass", 20f },
+        { "Steel", 20f },
+        { "Plastic", 18f },
+        { "Silver", 13f },
+        { "Gold", 8f },
+        { "Uranium", 6f },
         { "Diamond", 4f },
-        { "Uranium", 5.5f },
+        { "Magmite", 3f },
+        { "BluespaceCrystal", 3f },
     };
 
     /// <summary>Какой газ выделяется при работе.</summary>
@@ -73,7 +75,7 @@ public sealed partial class BluespaceMinerComponent : Component
     [ViewVariables]
     public float Accumulator;
 
-    /// <summary>Сколько листов материализуется одной пачкой с блюспейс-эффектом.</summary>
+    /// <summary>Сколько штук материализуется одной пачкой (штучно, без стака).</summary>
     [DataField]
-    public int SheetsPerBatch = 20;
+    public int SheetsPerBatch = 1;
 }
