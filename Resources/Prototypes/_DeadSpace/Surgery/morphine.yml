@@ -15,8 +15,8 @@
         time: 3
         type: Update
       - !type:MovementSpeedModifier
-        walkSpeedModifier: 0.75
-        sprintSpeedModifier: 0.75
+        walkSpeedModifier: 0.5
+        sprintSpeedModifier: 0.5
       - !type:PopupMessage
         type: Local
         visualType: Small
@@ -43,29 +43,6 @@
       amount: 1
   products:
     Morphine: 2
-
-- type: entity
-  parent: ChemicalMedipen
-  id: MorphineMedipen
-  name: morphine auto-injector
-  description: A single-dose morphine syrette. Enough to numb a patient for a short operation.
-  components:
-  - type: Sprite
-    sprite: Objects/Specific/Medical/medipen.rsi
-    layers:
-    - state: morphen
-      map: ["enum.SolutionContainerLayers.Fill"]
-  - type: SolutionContainerVisuals
-    maxFillLevels: 1
-    changeColor: false
-    emptySpriteName: morphen_empty
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 10
-        reagents:
-        - ReagentId: Morphine
-          Quantity: 10
 
 - type: entity
   id: ChemistryBottleMorphine

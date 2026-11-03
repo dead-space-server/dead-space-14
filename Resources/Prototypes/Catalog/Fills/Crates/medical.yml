@@ -78,8 +78,6 @@
         - id: ClothingMaskSterile
         - id: SurgeryMarker # DS14
         - id: SurgeryBoneGel # DS14
-        - id: MorphineMedipen # DS14
-          amount: 2 # DS14
         - id: SurgeryOrganCooler # DS14
         - id: SurgerySlimeGel # DS14
         - id: SurgeryDionaSap # DS14

@@ -37,7 +37,6 @@
     - id: SurgeryFieldClamp
     - id: SurgeryBoneGel
     - id: Gauze
-    - id: MorphineMedipen
 
 - type: entity
   parent: BaseStorageItem
