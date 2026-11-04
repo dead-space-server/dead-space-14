@@ -20,6 +20,9 @@ public sealed class LimbDollView : Control
 
     private RSI? _sheet;
 
+    private Texture? _backTexture;
+    private readonly string _backTexturePath = "doll_view";
+
     public LimbDollView()
     {
         MouseFilter = MouseFilterMode.Stop;
@@ -28,6 +31,8 @@ public sealed class LimbDollView : Control
         HorizontalExpand = false;
         VerticalExpand = false;
         OnKeyBindDown += OnClick;
+
+        OnThemeUpdated();
     }
 
     private static Vector2 Plate => new Vector2(LimbDollLayout.Width, LimbDollLayout.Height) * Scale;
@@ -61,7 +66,10 @@ public sealed class LimbDollView : Control
         var full = PixelSize;
         var margin = full * 0.18f;
         var inner = UIBox2.FromDimensions(margin, full - margin * 2f);
-        Blit(handle, LimbDollLayout.Block, UIBox2.FromDimensions(Vector2.Zero, full), Color.White);
+
+        if (_backTexture != null)
+            handle.DrawTextureRect(_backTexture, UIBox2.FromDimensions(Vector2.Zero, full));
+
         foreach (var icon in LimbDollLayout.Icons)
             Blit(handle, icon.Body, inner, Color.White);
 
@@ -83,5 +91,12 @@ public sealed class LimbDollView : Control
     private RSI Sheet()
     {
         return _sheet ??= IoCManager.Resolve<IResourceCache>().GetResource<RSIResource>(LimbDollLayout.Texture).RSI;
+    }
+
+    protected override void OnThemeUpdated()
+    {
+        base.OnThemeUpdated();
+
+        _backTexture = Theme.ResolveTextureOrNull(_backTexturePath)?.Texture;
     }
 }
