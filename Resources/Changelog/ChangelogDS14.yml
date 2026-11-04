@@ -9541,3 +9541,16 @@ Entries:
   changes:
   - type: Add
     message: бс майнер теперь потребляет СВ провода
+- id: 919
+  author: MTF97
+  time: '2026-11-04T08:01:56.465693+00:00'
+  pr: 2634
+  changes:
+  - type: Add
+    message: Портреты ОСО, Магистрата и Джона Синди
+  - type: Tweak
+    message: Некоторые спрайты офисной формы
+  - type: Tweak
+    message: Спрайт ручного флажка НТ
+  - type: Tweak
+    message: Некоторые спрайты ЦК >
