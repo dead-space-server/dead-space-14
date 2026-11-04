@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
+using Content.Server.Materials;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Damage;
@@ -24,7 +25,7 @@ public sealed class OrganPrinterSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedMaterialStorageSystem _material = default!;
+    [Dependency] private readonly MaterialStorageSystem _material = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -38,6 +39,7 @@ public sealed class OrganPrinterSystem : EntitySystem
         SubscribeLocalEvent<OrganPrinterComponent, BeforeActivatableUIOpenEvent>(OnBeforeUiOpen);
         SubscribeLocalEvent<OrganPrinterComponent, MaterialAmountChangedEvent>(OnMaterialAmountChanged);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterPrintRequestMessage>(OnPrintRequest);
+        SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterEjectMessage>(OnEject);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterGameFailedMessage>(OnGameFailed);
     }
 
@@ -125,6 +127,37 @@ public sealed class OrganPrinterSystem : EntitySystem
         _appearance.SetData(ent.Owner, OrganPrinterVisuals.Working, true);
 
         _popup.PopupEntity(Loc.GetString("organ-printer-started"), ent.Owner, args.Actor);
+        UpdateUi(ent);
+    }
+
+    private void OnEject(Entity<OrganPrinterComponent> ent, ref OrganPrinterEjectMessage args)
+    {
+        if (!args.Actor.Valid)
+            return;
+
+        if (!this.IsPowered(ent.Owner, EntityManager))
+        {
+            _popup.PopupEntity(Loc.GetString("organ-printer-no-power"), ent.Owner, args.Actor);
+            return;
+        }
+
+        if (ent.Comp.PrintingProduct != null)
+        {
+            _popup.PopupEntity(Loc.GetString("organ-printer-busy"), ent.Owner, args.Actor);
+            return;
+        }
+
+        var amount = _material.GetMaterialAmount(ent.Owner, ent.Comp.Material);
+        if (amount <= 0)
+        {
+            _popup.PopupEntity(Loc.GetString("organ-printer-eject-empty"), ent.Owner, args.Actor);
+            return;
+        }
+
+        if (!_material.TryChangeMaterialAmount(ent.Owner, ent.Comp.Material, -amount))
+            return;
+
+        _material.SpawnMultipleFromMaterial(amount, ent.Comp.Material, _transform.GetMoverCoordinates(ent.Owner));
         UpdateUi(ent);
     }
 

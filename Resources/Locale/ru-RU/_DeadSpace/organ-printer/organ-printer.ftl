@@ -41,3 +41,5 @@ organ-printer-group-shark = Акулы
 organ-printer-group-demon = Демоны
 organ-printer-group-vox = Воксы
 organ-printer-group-arachnid = Арахниды
+organ-printer-eject-button = Извлечь биомассу
+organ-printer-eject-empty = Внутри нет биомассы.

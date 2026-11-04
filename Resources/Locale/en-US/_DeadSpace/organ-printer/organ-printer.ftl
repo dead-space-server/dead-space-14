@@ -41,3 +41,5 @@ organ-printer-group-shark = Sharks
 organ-printer-group-demon = Demons
 organ-printer-group-vox = Voxes
 organ-printer-group-arachnid = Arachnids
+organ-printer-eject-button = Eject biomass
+organ-printer-eject-empty = No biomass inside.

@@ -25,6 +25,8 @@ public sealed class OrganPrinterBoundUserInterface : BoundUserInterface
             SendMessage(new OrganPrinterPrintRequestMessage(product, quality, waste));
         _window.OnGameFailed += fastMode =>
             SendMessage(new OrganPrinterGameFailedMessage(fastMode));
+        _window.OnEjectPressed += () =>
+            SendMessage(new OrganPrinterEjectMessage());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

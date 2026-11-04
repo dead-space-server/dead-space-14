@@ -89,12 +89,19 @@
                             <Label Name="BiomassLabel" />
                             <Label Name="CostLabel" />
                         </BoxContainer>
-                        <Button Name="PrintButton"
-                                Text="{Loc organ-printer-print-button}"
-                                StyleClasses="ButtonBig"
-                                MinWidth="170"
-                                VerticalAlignment="Center"
-                                Disabled="True" />
+                        <BoxContainer Orientation="Vertical"
+                                      VerticalAlignment="Center"
+                                      SeparationOverride="4">
+                            <Button Name="PrintButton"
+                                    Text="{Loc organ-printer-print-button}"
+                                    StyleClasses="ButtonBig"
+                                    MinWidth="170"
+                                    Disabled="True" />
+                            <Button Name="EjectButton"
+                                    Text="{Loc organ-printer-eject-button}"
+                                    StyleClasses="ButtonBig"
+                                    MinWidth="170" />
+                        </BoxContainer>
                     </BoxContainer>
                 </PanelContainer>
             </BoxContainer>

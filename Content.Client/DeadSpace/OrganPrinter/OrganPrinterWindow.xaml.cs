@@ -21,6 +21,7 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
 
     public event Action<EntProtoId, int, int>? OnPrintPressed;
     public event Action<bool>? OnGameFailed;
+    public event Action? OnEjectPressed;
 
     private readonly SplicingGameControl _game = new();
 
@@ -62,6 +63,8 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
         GameFineButton.OnPressed += _ => StartGame(false);
         GameAbortButton.OnPressed += _ => CloseGame();
         GameDoneButton.OnPressed += _ => CloseGame();
+
+        EjectButton.OnPressed += _ => OnEjectPressed?.Invoke();
 
         _game.OnStatsChanged += (coverage, integrity, waste) =>
         {

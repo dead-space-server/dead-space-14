@@ -54,6 +54,14 @@ public sealed class OrganPrinterPrintRequestMessage : BoundUserInterfaceMessage
 }
 
 /// <summary>
+/// Запрос на извлечение всей биомассы из хранилища принтера.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class OrganPrinterEjectMessage : BoundUserInterfaceMessage
+{
+}
+
+/// <summary>
 /// Сообщение о провале мини-игры: принтер повреждается. Быстрая печать бьёт сильнее.
 /// </summary>
 [Serializable, NetSerializable]
