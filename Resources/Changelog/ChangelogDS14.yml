@@ -9589,3 +9589,24 @@ Entries:
     message: Хирургия
   - type: Add
     message: Фрагментированный урон
+- id: 923
+  author: BlueDogDoc
+  time: '2026-11-04T18:39:39.347082+00:00'
+  pr: 2651
+  changes:
+  - type: Fix
+    message: Петарды и их бигбум
+  - type: Fix
+    message: Урон по конечностям понижен
+  - type: Fix
+    message: ЭС супер живучий
+  - type: Fix
+    message: Мед пила в техфабе
+  - type: Fix
+    message: Скафы типа ЕВА защищают конечности
+  - type: Fix
+    message: МЩ можно вживлять КПБ
+  - type: Fix
+    message: Магнитки не горят
+  - type: Fix
+    message: Сандевистан не критстанит
