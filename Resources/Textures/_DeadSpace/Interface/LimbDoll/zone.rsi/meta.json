@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "taken from tgstation at commit https://github.com/tgstation/tgstation/commit/50689f89a40e5e7a2732a0c5fb38c787b69f7d28",
+  "copyright": "taken from tgstation at commit https://github.com/tgstation/tgstation/commit/50689f89a40e5e7a2732a0c5fb38c787b69f7d28. Modified by golubok_epta for SS14 Dead Space.",
   "size": {
     "x": 32,
     "y": 32

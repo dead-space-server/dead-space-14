@@ -1,7 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
-using Robust.Shared.Maths;
 
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
@@ -37,7 +36,6 @@ public static class LimbDollLayout
     public const float Width = 32f;
     public const float Height = 32f;
     public const string Texture = "/Textures/_DeadSpace/Interface/LimbDoll/zone.rsi";
-    public const string Block = "block";
 
     public const string ClearShort = "limb-doll-short-clear";
     public const string EmptyName = "limb-doll-empty";
