@@ -120,6 +120,9 @@
     state: sheath
   - type: Clothing
     sprite: _DeadSpace/Clothing/Belt/radic_sheath.rsi
+    slots:
+    - Belt
+    - suitStorage
   - type: ItemSlots
     slots:
       item:
@@ -138,3 +141,5 @@
           tags:
           - Radiance
   - type: Appearance
+  - type: Item
+    size: Ginormous

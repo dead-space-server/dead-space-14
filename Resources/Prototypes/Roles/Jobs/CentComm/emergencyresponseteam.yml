@@ -28,17 +28,17 @@
     jumpsuit: ClothingUniformJumpsuitERTChaplain
     back: ClothingBackpackERTChaplain
     mask: ClothingMaskGasERT
-    eyes: ClothingEyesHudAdvanced
+    eyes: ClothingEyesHudERTGamma
     neck: ClothingNeckStoleChaplain
     ears: ClothingHeadsetAltAERT
     gloves: ClothingHandsGlovesCombat
     outerClothing: ClothingOuterHardsuitERTChaplain
-    suitstorage: HolyCrossbow
+    suitstorage: RadianceSheathFilled
     shoes: ADTClothingShoesBootsMagERT
-    id: ERTChaplainIDCard
-    belt: RadianceSheathFilled
-    pocket1: DoubleEmergencyOxygenTankFilled
-    pocket2: Bible
+    id: ERTChaplainPDA
+    belt: ClothingBeltQuiver
+    pocket1: Bible
+    pocket2: DoubleEmergencyOxygenTankFilled
   storage:
     back:
     - WeaponDisabler
@@ -49,13 +49,29 @@
     - Candle
     - Candle
     - Candle
-    - DrinkWaterBottleFull
-    - DrinkWaterBottleFull
+    - BeakerCMOWater
+    - MedkitCombatFilled
+    - InjectorCaseERTFilled
     - PresentQuiver
     - PresentQuiver
     - PresentQuiver
     - PresentQuiver
     - PresentQuiver
     - Censer
+    - HolyCrossbow
     belt: []
 # DS14-end
+
+- type: entity
+  parent: BeakerCMO
+  id: BeakerCMOWater
+  suffix: с водой
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 200
+        canReact: true
+        reagents:
+        - ReagentId: Water
+          Quantity: 200
