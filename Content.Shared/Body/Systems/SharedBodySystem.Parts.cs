@@ -108,7 +108,7 @@ public partial class SharedBodySystem
                 {
                     //DS-14 start
                     var oldBody = childPart.Body;
-                    if (oldBody is { } old && old != bodyUid)
+                    if (oldBody is { } old && old != bodyUid && !TerminatingOrDeleted(old))
                         RemovePart(old, (containedUid, childPart), container.ID);
                     //DS-14 end
                     RecursiveBodyUpdate((containedUid, childPart), bodyUid);
