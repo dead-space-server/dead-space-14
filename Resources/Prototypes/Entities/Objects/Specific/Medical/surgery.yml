@@ -274,7 +274,7 @@
     precision: 0.9
     slip: 0.08
     wobble: 12
-    sawHits: 3 # DS14
+    sawHits: 6 # DS14
     verbs:
     - SawBone
     - Amputate
@@ -304,7 +304,7 @@
     precision: 0.45
     slip: 0.4
     wobble: 30
-    sawHits: 4 # DS14
+    sawHits: 6 # DS14
     verbs:
     - SawBone
     - Amputate

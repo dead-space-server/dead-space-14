@@ -14,7 +14,7 @@
   - type: Storage
     maxItemSize: Small
     grid:
-    - 0,0,4,2
+    - 0,0,4,1
   - type: Tag
     tags:
     - Medkit
@@ -46,7 +46,9 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Medical/organ_cooler.rsi
-    state: icon
+    layers:
+      - map: [ base ]
+        state: icon
   - type: Item
     size: Large
     sprite: Objects/Specific/Medical/firstaidkits.rsi
@@ -65,6 +67,13 @@
   - type: EmitSoundOnDrop
     sound:
       path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_drop.ogg
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StorageVisuals.Open:
+        base:
+          True: { state: icon-open }
+          False: { state: icon }
 
 - type: entity
   parent: BaseStorageItem

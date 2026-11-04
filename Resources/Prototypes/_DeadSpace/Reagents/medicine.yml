@@ -69,4 +69,4 @@
           min: 1
       - !type:ChiyuriMend
         dose: 15
-        rate: 0.5
+        rate: 1

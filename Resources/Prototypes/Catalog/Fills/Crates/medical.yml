@@ -73,7 +73,7 @@
         - id: Retractor
         - id: Cautery
         - id: Drill
-        - id: Saw
+        - id: SurgerySaw # DS14
         - id: Hemostat
         - id: ClothingMaskSterile
         - id: SurgeryMarker # DS14

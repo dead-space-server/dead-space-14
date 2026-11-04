@@ -28,3 +28,8 @@
     Plastic: 250
     Plasma: 100
     Silver: 50
+
+- type: latheRecipe
+  parent: BaseSurgicalRecipe
+  id: SurgerySaw
+  result: SurgerySaw

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Edited by Blue Dog Doc. Original: Created by EmoGarbage404 (github) and modified by Potato1234x (github) for Space Station 14, resprite by semkagamez (discord) for Space Station 14 server Мёртвый Космос",
+  "copyright": "Sprite by amaliz (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -9,6 +9,17 @@
   "states": [
     {
       "name": "icon"
+    },
+    {
+      "name": "icon-open"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
     }
   ]
 }
