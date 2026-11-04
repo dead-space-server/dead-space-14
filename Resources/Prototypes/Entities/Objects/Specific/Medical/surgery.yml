@@ -77,6 +77,14 @@
   parent: BaseToolSurgery
   description: A surgical tool used to make incisions into flesh.
   components:
+  - type: SurgeryTool
+    quality: Incision
+    incisionSound:
+      path: /Audio/Weapons/bladeslice.ogg
+    extractSound:
+      path: /Audio/Effects/Fluids/blood2.ogg
+    insertSound:
+      path: /Audio/Effects/Fluids/blood1.ogg
   - type: Sharp
     butcherDelayModifier: 1.5 # Butchering with a scalpel, regardless of the type, will take 50% longer
   - type: Tool
@@ -182,6 +190,14 @@
   parent: Retractor
   description: A surgical tool used to compress blood vessels to prevent bleeding.
   components:
+  - type: SurgeryTool
+    quality: Extraction
+    incisionSound:
+      path: /Audio/Weapons/bladeslice.ogg
+    extractSound:
+      path: /Audio/Effects/Fluids/blood2.ogg
+    insertSound:
+      path: /Audio/Effects/Fluids/blood1.ogg
   - type: Sprite
     state: hemostat
   - type: Item

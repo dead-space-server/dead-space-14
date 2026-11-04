@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Content.Server.Body.Components;
 using Content.Server.DeadSpace.Hooligan.Objectives; // DS14
+using Content.Shared.DeadSpace.OrganDamage; // DS14
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
@@ -289,17 +290,25 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
                 // TODO: We should have to do this with metabolism. ReagentEffect struct needs refactoring and so does metabolism!
                 void ApplyEffect(EntityEffect effect)
                 {
-                    switch (effect)
+                    OrganDamageContext.CurrentReagent = proto.LocalizedName;
+                    try
                     {
-                        case ModifyLungGas:
-                            _entityEffects.ApplyEffect(ent, effect, scale);
-                            break;
-                        case AdjustReagent:
-                            _entityEffects.ApplyEffect(soln.Value, effect, scale);
-                            break;
-                        default:
-                            _entityEffects.ApplyEffect(actualEntity, effect, scale);
-                            break;
+                        switch (effect)
+                        {
+                            case ModifyLungGas:
+                                _entityEffects.ApplyEffect(ent, effect, scale);
+                                break;
+                            case AdjustReagent:
+                                _entityEffects.ApplyEffect(soln.Value, effect, scale);
+                                break;
+                            default:
+                                _entityEffects.ApplyEffect(actualEntity, effect, scale);
+                                break;
+                        }
+                    }
+                    finally
+                    {
+                        OrganDamageContext.CurrentReagent = null;
                     }
                 }
             }
