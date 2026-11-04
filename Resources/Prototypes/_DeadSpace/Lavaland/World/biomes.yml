@@ -124,34 +124,6 @@
     - WallRockBasalt
 
   - !type:BiomeEntityLayer
-    threshold: 0.9994
-    minimumDistance: 120
-    noise:
-      seed: 66
-      noiseType: OpenSimplex2
-      frequency: 0.014
-    allowedTiles:
-    - FloorBasalt
-    - FloorLavalandAsh
-    - FloorLavalandPaleGrass
-    entities:
-    - LavalandMadMinerSpawner
-
-  - !type:BiomeEntityLayer
-    threshold: 0.9993
-    minimumDistance: 90
-    noise:
-      seed: 67
-      noiseType: OpenSimplex2
-      frequency: 0.014
-    allowedTiles:
-    - FloorBasalt
-    - FloorLavalandAsh
-    - FloorLavalandPaleGrass
-    entities:
-    - LavalandEliteTumor
-
-  - !type:BiomeEntityLayer
     threshold: 0.997
     minimumDistance: 35
     noise:

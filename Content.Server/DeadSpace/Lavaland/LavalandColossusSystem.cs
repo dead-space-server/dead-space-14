@@ -209,7 +209,8 @@ public sealed class LavalandColossusSystem : EntitySystem
             {
                 Popup(uid, "lavaland-colossus-speech-die");
                 QueueSpiral(colossus, now + colossus.DoubleSpiralWindup, false, 8);
-                QueueSpiral(colossus, now + colossus.DoubleSpiralWindup, true, 8);
+                // One step apart: from the same start the two spirals met twice, a bolt hidden in a bolt.
+                QueueSpiral(colossus, now + colossus.DoubleSpiralWindup, true, 9);
                 colossus.BusyUntil = now + colossus.DoubleSpiralWindup +
                                      TimeSpan.FromSeconds(colossus.SpiralStepDelay.TotalSeconds * colossus.SpiralShots);
             }
@@ -681,7 +682,7 @@ public sealed class LavalandColossusSystem : EntitySystem
 
     private bool IsDead(EntityUid uid)
     {
-        return TryComp<MobStateComponent>(uid, out var mob) && mob.CurrentState == MobState.Dead;
+        return !TryComp<MobStateComponent>(uid, out var mob) || mob.CurrentState == MobState.Dead;
     }
 
     private void Popup(EntityUid uid, string message)

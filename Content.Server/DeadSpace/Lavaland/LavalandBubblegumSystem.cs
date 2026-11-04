@@ -2244,7 +2244,7 @@ public sealed class LavalandBubblegumSystem : EntitySystem
 
     private bool IsDead(EntityUid uid)
     {
-        return TryComp(uid, out MobStateComponent? mobState) && mobState.CurrentState == MobState.Dead;
+        return !TryComp(uid, out MobStateComponent? mobState) || mobState.CurrentState == MobState.Dead;
     }
 
     private static Vector2i StepTowards(Vector2i from, Vector2i to)

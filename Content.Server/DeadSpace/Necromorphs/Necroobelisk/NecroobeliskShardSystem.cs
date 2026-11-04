@@ -43,6 +43,15 @@ public sealed class NecroobeliskShardSystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+        if (_nextAffect.Count > 64)
+        {
+            foreach (var (mob, next) in _nextAffect.ToArray())
+            {
+                if (next < now || TerminatingOrDeleted(mob))
+                    _nextAffect.Remove(mob);
+            }
+        }
+
         var query = EntityQueryEnumerator<NecroobeliskShardComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var shard, out var xform))
         {
@@ -58,12 +67,29 @@ public sealed class NecroobeliskShardSystem : EntitySystem
                 continue;
             }
 
-            Pulse(shard, _transform.GetMapCoordinates(uid, xform));
+            Pulse(shard, _transform.GetMapCoordinates(uid, xform), now);
         }
     }
 
+    /// <summary>
+    /// When each mob may next lose sanity to a shard: several shards close together do not add up, a mob in reach of
+    /// any number of them is hit as by one.
+    /// </summary>
+    private readonly Dictionary<EntityUid, TimeSpan> _nextAffect = new();
+
+    /// <summary>Whether the mob is due another hit now (marking it), or a shard already got it this round.</summary>
+    private bool TryClaim(EntityUid mob, NecroobeliskShardComponent shard, TimeSpan now)
+    {
+        if (_nextAffect.TryGetValue(mob, out var next) && now < next)
+            return false;
+
+        // A little under the interval: the same shard's next pulse is never refused.
+        _nextAffect[mob] = now + shard.CheckInterval * 0.9;
+        return true;
+    }
+
     /// <summary>As the obelisk does: everyone in range loses sanity, and the mad are taken by the infection.</summary>
-    private void Pulse(NecroobeliskShardComponent shard, MapCoordinates at)
+    private void Pulse(NecroobeliskShardComponent shard, MapCoordinates at, TimeSpan now)
     {
         _inRange.Clear();
         _lookup.GetEntitiesInRange(at, shard.Range, _inRange);
@@ -81,6 +107,17 @@ public sealed class NecroobeliskShardSystem : EntitySystem
         {
             if (HasComp<ImmunNecroobeliskComponent>(mob) || !TryComp<SanityComponent>(mob, out var sanity))
                 continue;
+
+            // Already hit by another shard nearby this round: stays in its overlay, loses nothing more.
+            if (!TryClaim(mob, shard, now))
+            {
+                if (sanity.SanityLevel > 0)
+                {
+                    EnsureComp<SanityOverlayComponent>(mob);
+                    shard.MobsInRange.Add(mob);
+                }
+                continue;
+            }
 
             _sanity.TryAddSanityLvl(mob, -shard.SanityDamage, sanity);
             if (sanity.SanityLevel > 0)

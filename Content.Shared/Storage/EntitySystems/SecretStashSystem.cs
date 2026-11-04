@@ -33,6 +33,8 @@ public sealed class SecretStashSystem : EntitySystem
     [Dependency] private readonly ToolOpenableSystem _toolOpenableSystem = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
+    [Dependency] private readonly Robust.Shared.Network.INetManager _net = default!; // DS14
+    [Dependency] private readonly SharedTransformSystem _transform = default!; // DS14
 
     public override void Initialize()
     {
@@ -44,7 +46,28 @@ public sealed class SecretStashSystem : EntitySystem
         SubscribeLocalEvent<SecretStashComponent, FullyEatenEvent>(OnFullyEaten);
         SubscribeLocalEvent<SecretStashComponent, InteractHandEvent>(OnInteractHand);
         SubscribeLocalEvent<SecretStashComponent, GetVerbsEvent<InteractionVerb>>(OnGetVerb);
+        SubscribeLocalEvent<SecretStashComponent, EntityTerminatingEvent>(OnTerminating); // DS14
     }
+
+    // DS14-start
+    /// <summary>
+    /// Deleted outright - used up in a craft (two plushies sewn into slippers), say - the stash drops what it hid where
+    /// it was, at the feet of whoever held it, instead of taking it along. A nuke disk deleted so was respawned at a
+    /// random spot on the station.
+    /// </summary>
+    private void OnTerminating(Entity<SecretStashComponent> entity, ref EntityTerminatingEvent args)
+    {
+        if (_net.IsClient || entity.Comp.ItemContainer.ContainedEntities.Count == 0)
+            return;
+
+        // The whole map going (round end): nowhere to drop it.
+        var coordinates = _transform.GetMoverCoordinates(entity);
+        if (TerminatingOrDeleted(coordinates.EntityId) || TerminatingOrDeleted(Transform(entity).MapUid))
+            return;
+
+        DropContentsAndAlert(entity, coordinates);
+    }
+    // DS14-end
 
     private void OnInit(Entity<SecretStashComponent> entity, ref ComponentInit args)
     {

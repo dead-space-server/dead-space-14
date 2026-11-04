@@ -339,13 +339,15 @@
     state: boiled
   - type: Item
     size: Normal
-  - type: Perishable
-    rotAfter: 120 # rot after 2 minutes
-    molsPerSecondPerUnitMass: 0
-    forceRotProgression: true
-  - type: RotInto
-    entity: FoodHivelordRemainsInert
-    stage: 1
+  # DS14-start: the remains do not rot away into inert ones
+  # - type: Perishable
+  #   rotAfter: 120 # rot after 2 minutes
+  #   molsPerSecondPerUnitMass: 0
+  #   forceRotProgression: true
+  # - type: RotInto
+  #   entity: FoodHivelordRemainsInert
+  #   stage: 1
+  # DS14-end
   - type: StaticPrice
     price: 5000
   - type: Tag

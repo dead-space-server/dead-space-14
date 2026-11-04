@@ -19,6 +19,7 @@
     whitelist:
       components:
         - MobState
+        - Celestial
     damage:
       types:
         Blunt: 25

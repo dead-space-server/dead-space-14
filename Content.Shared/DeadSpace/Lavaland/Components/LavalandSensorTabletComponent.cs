@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Robust.Shared.GameStates;
+using Content.Shared.DeadSpace.Lavaland;
 
 namespace Content.Shared.DeadSpace.Lavaland.Components;
 
@@ -33,4 +34,37 @@ public sealed partial class LavalandSensorTabletComponent : Component
 
     /// <summary>Version of the outpost plan last sent to the UI of this tablet; -1 sends it again.</summary>
     public int SentBaseVersion = -1;
+
+    /// <summary>
+    /// The lead salvager's tablet: shows the layer chosen on it (surface or caves) wherever it is. An ordinary one
+    /// shows only the layer it is on.
+    /// </summary>
+    [DataField] public bool CanSwitchLayer;
+
+    /// <summary>The layer chosen on a tablet that can switch: the chromite caves instead of the surface.</summary>
+    [ViewVariables] public bool ViewCaves;
+
+    /// <summary>The item slot the sonar cartridge goes into.</summary>
+    [DataField] public string SonarSlot = "sonar_cartridge";
+
+    /// <summary>Between two sonar pings.</summary>
+    [DataField] public TimeSpan SonarCooldown = TimeSpan.FromSeconds(3);
+
+    /// <summary>A sonar ping farther than this (tiles) is the most blurred.</summary>
+    [DataField] public float SonarFuzzRange = 250f;
+
+    /// <summary>The sonar catches mini-bosses only this close (tiles).</summary>
+    [DataField] public float SonarMinibossRange = 60f;
+
+    public TimeSpan NextSonar;
+    public LavalandSonarPing? LastPing;
+    public int PingCounter;
+}
+
+/// <summary>A cartridge for the lavaland tablet's sonar: each ping spends one charge.</summary>
+[RegisterComponent]
+public sealed partial class LavalandSonarCartridgeComponent : Component
+{
+    [DataField] public int Charges = 10;
+    [DataField] public int MaxCharges = 10;
 }

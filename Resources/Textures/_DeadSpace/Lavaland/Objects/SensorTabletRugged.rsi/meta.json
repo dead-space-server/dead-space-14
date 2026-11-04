@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from BeeStation via Scrubby, source icons/obj/modular_tablet.dmi, state tablet-rugged, commit 7a191baf90d5abb3457e18ea552971f5b1584e14",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "tablet"
+    }
+  ]
+}

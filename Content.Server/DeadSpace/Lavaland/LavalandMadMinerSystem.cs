@@ -124,10 +124,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (xform.MapUid is not { } mapUid || xform.GridUid != mapUid)
             return false;
 
-        var box = Box2.CenteredAround(_transform.GetWorldPosition(xform), new Vector2(OtherGridExclusion * 2f));
+        var position = _transform.GetWorldPosition(xform);
+        var box = Box2.CenteredAround(position, new Vector2(OtherGridExclusion * 2f));
+        var circle = new Circle(position, OtherGridExclusion);
         foreach (var other in _mapManager.FindGridsIntersecting(xform.MapID, box))
         {
-            if (other.Owner != mapUid)
+            // The grid's bounds reach far past its tiles (a large outpost): only its real tiles nearby count.
+            if (other.Owner != mapUid && _map.GetTilesIntersecting(other.Owner, other, circle).Any())
                 return true;
         }
 
@@ -313,7 +316,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             foreach (var player in nearby)
             {
                 if (TryComp<PhysicsComponent>(player, out var victimBody))
-                    _physics.SetLinearVelocity(player, body.LinearVelocity, body: victimBody);
+                    _physics.SetLinearVelocity(player, ClampSpeed(body.LinearVelocity, MaxHookedSpeed), body: victimBody);
             }
         }
     }
@@ -709,7 +712,8 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                 ? dragBody.LinearVelocity : Vector2.Zero;
             foreach (var (target, visual) in miner.HookTargets.ToArray())
             {
-                if (!Exists(target) || IsDead(target) || Transform(target).MapID != Transform(uid).MapID)
+                if (!Exists(target) || IsDead(target) || Transform(target).MapID != Transform(uid).MapID ||
+                    !CanHook(uid, target, miner.HookMaxLength + HookSlack))
                 {
                     RemoveHookTarget(miner, target);
                     continue;
@@ -721,13 +725,14 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                     TryComp<PhysicsComponent>(target, out var body))
                 {
                     var correction = origin + offset - _transform.GetWorldPosition(target);
-                    _physics.SetLinearVelocity(target, velocity + correction * 10f, body: body);
+                    _physics.SetLinearVelocity(target, ClampSpeed(velocity + correction * 10f, MaxHookedSpeed), body: body);
                 }
             }
             return;
         }
 
-        if (TryComp<PhysicsComponent>(uid, out var minerPhysics))
+        // Mid-blink (the retreat of a hook) the dash drives it; set here, the two fought over its velocity.
+        if (!HasComp<ActiveBlinkDashComponent>(uid) && TryComp<PhysicsComponent>(uid, out var minerPhysics))
         {
             var velocity = Vector2.Zero;
             if (miner.HookAttacker is { Valid: true } attacker && Exists(attacker) &&
@@ -752,6 +757,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             if (now < miner.HookPullStarts)
                 continue;
 
+            // A rock between them: the chain catches on it and lets go, never drags anyone through.
+            if (!CanHook(uid, target, miner.HookMaxLength + HookSlack))
+            {
+                RemoveHookTarget(miner, target);
+                continue;
+            }
+
             ConstrainHookDistance(uid, target, miner.HookMaxLength);
             var direction = _transform.GetWorldPosition(uid) - _transform.GetWorldPosition(target);
             var distance = direction.Length();
@@ -775,6 +787,21 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                 _physics.SetLinearVelocity(target, Vector2.Normalize(direction) * pullSpeed, body: physics);
             }
         }
+    }
+
+    /// <summary>Slack (tiles) over the chain's length within which the miner still sees whom it holds.</summary>
+    private const float HookSlack = 2f;
+
+    /// <summary>
+    /// The most a hooked player is ever moved at (tiles a second): faster, the physics let them through thin rock and
+    /// on past the miner when let go.
+    /// </summary>
+    private const float MaxHookedSpeed = 12f;
+
+    private static Vector2 ClampSpeed(Vector2 velocity, float max)
+    {
+        var length = velocity.Length();
+        return length > max ? velocity / length * max : velocity;
     }
 
     private void ConstrainHookDistance(EntityUid miner, EntityUid target, float maxLength)
@@ -819,6 +846,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (miner.HookTargets.Remove(target, out var visual) && Exists(visual))
             QueueDel(visual);
         RemCompDeferred<LavalandMadMinerHookedComponent>(target);
+
+        // Let go, nobody keeps flying on with the drag's speed (a throw after this sets its own).
+        if (!TerminatingOrDeleted(target) && TryComp<PhysicsComponent>(target, out var body) &&
+            body.LinearVelocity.LengthSquared() > MaxHookedSpeed * MaxHookedSpeed)
+        {
+            _physics.SetLinearVelocity(target, Vector2.Zero, body: body);
+        }
     }
 
     private void ClearHooks(EntityUid uid, LavalandMadMinerComponent miner)
@@ -1145,5 +1179,5 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         }
     }
 
-    private bool IsDead(EntityUid uid) => TryComp<MobStateComponent>(uid, out var mob) && mob.CurrentState == MobState.Dead;
+    private bool IsDead(EntityUid uid) => !TryComp<MobStateComponent>(uid, out var mob) || mob.CurrentState == MobState.Dead;
 }

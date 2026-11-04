@@ -207,7 +207,7 @@
     color: "#c0485a"
   - type: LavalandEliteTumor
     arenaRadius: 10
-    leashTime: 10
+    leashTime: 2
     activateSound: /Audio/Effects/demon_consume.ogg
     elites:
     - MobLavalandBroodmother
@@ -333,6 +333,7 @@
     - prototype: LavalandNecropolisChest
     - prototype: LavalandEliteTrophyBroodmother
   - type: LavalandBroodmother
+    tentacleVisual: EffectLavalandBroodmotherTentacleSpawn
     tentacleDamage:
       types:
         Blunt: 30
@@ -341,6 +342,36 @@
     childrenPerSpawn: 2
     rageDuration: 6.5
     rageSpeed: 2
+
+- type: entity
+  parent: BaseEffectGoliathTentacleSpawn
+  id: EffectLavalandBroodmotherTentacleSpawn
+  categories: [ HideSpawnMenu ]
+  name: щупальце
+  components:
+  - type: Sprite
+    state: goliath_tentacle_spawn
+  - type: SpawnOnDespawn
+    prototype: EffectLavalandBroodmotherTentacle
+
+- type: entity
+  id: EffectLavalandBroodmotherTentacle
+  categories: [ HideSpawnMenu ]
+  name: щупальце
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: Mobs/Aliens/Asteroid/goliath.rsi
+    layers:
+    - state: goliath_tentacle_wiggle
+  - type: TimedDespawn
+    lifetime: 0.4
+  - type: SpawnOnDespawn
+    prototype: EffectGoliathTentacleRetract
 
 - type: entity
   parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
