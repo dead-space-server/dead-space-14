@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by Blue Dog Doc for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "arm_l"
+    },
+    {
+      "name": "arm_r"
+    },
+    {
+      "name": "foot_l"
+    },
+    {
+      "name": "foot_r"
+    },
+    {
+      "name": "groin"
+    },
+    {
+      "name": "hand_l"
+    },
+    {
+      "name": "hand_r"
+    },
+    {
+      "name": "head"
+    },
+    {
+      "name": "leg_l"
+    },
+    {
+      "name": "leg_r"
+    },
+    {
+      "name": "torso"
+    }
+  ]
+}

@@ -2,7 +2,10 @@ using Content.Client.ContextMenu.UI;
 using Content.Client.Gameplay;
 using Content.Client.Interactable.Components;
 using Content.Client.Viewport;
+using Content.Shared.Atmos.Components;
 using Content.Shared.CCVar;
+using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -26,6 +29,7 @@ public sealed class InteractionOutlineSystem : EntitySystem
     [Dependency] private readonly IStateManager _stateManager = default!;
     [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!; // DS14
 
     private EntityQuery<InteractionOutlineComponent> _outlineQuery;
     private EntityQuery<SpriteComponent> _spriteQuery;
@@ -150,6 +154,23 @@ public sealed class InteractionOutlineSystem : EntitySystem
             {
                 entityToClick = screen.GetClickedEntity(mousePosWorld);
             }
+
+            // DS14-start
+            if (localSession.AttachedEntity is { } tankUser
+                && _hands.TryGetActiveItem(tankUser, out var held)
+                && HasComp<GasTankComponent>(held)
+                && vp is ScalingViewport tankView)
+            {
+                foreach (var under in screen.GetClickableEntities(mousePosWorld, tankView.Eye))
+                {
+                    if (!HasComp<SurgeryTankMountComponent>(under))
+                        continue;
+
+                    entityToClick = under;
+                    break;
+                }
+            }
+            // DS14-end
         }
         else if (_uiManager.CurrentlyHovered is EntityMenuElement element)
         {

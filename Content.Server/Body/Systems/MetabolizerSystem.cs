@@ -229,6 +229,9 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
                 if (ent.Comp1.RemoveEmpty)
                 {
                     // DS14-start
+                    if (reagent.Prototype.StartsWith("GraftCells"))
+                        continue;
+
                     var removed = solution.RemoveReagent(reagent, FixedPoint2.New(1));
                     solutionChanged |= removed > FixedPoint2.Zero;
                     // DS14-end

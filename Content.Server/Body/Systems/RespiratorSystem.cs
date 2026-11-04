@@ -21,6 +21,7 @@ using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects.Body;
 using Content.Shared.EntityEffects.Effects.Damage;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Rejuvenate; //DS-14
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -53,6 +54,7 @@ public sealed class RespiratorSystem : EntitySystem
         UpdatesAfter.Add(typeof(MetabolizerSystem));
         SubscribeLocalEvent<RespiratorComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<RespiratorComponent, ApplyMetabolicMultiplierEvent>(OnApplyMetabolicMultiplier);
+        SubscribeLocalEvent<RespiratorComponent, RejuvenateEvent>(OnRejuvenate); //DS-14
 
         // BodyComp stuff
         SubscribeLocalEvent<BodyComponent, InhaledGasEvent>(OnGasInhaled);
@@ -442,6 +444,19 @@ public sealed class RespiratorSystem : EntitySystem
     {
         ent.Comp.UpdateIntervalMultiplier = args.Multiplier;
     }
+
+    //DS-14 start
+    private void OnRejuvenate(Entity<RespiratorComponent> ent, ref RejuvenateEvent args)
+    {
+        ent.Comp.Saturation = ent.Comp.MaxSaturation;
+        if (ent.Comp.SuffocationCycles > 0)
+        {
+            var ev = new StopSuffocatingEvent();
+            RaiseLocalEvent(ent, ref ev);
+        }
+        ent.Comp.SuffocationCycles = 0;
+    }
+    //DS-14 end
 
     private void OnGasInhaled(Entity<BodyComponent> entity, ref InhaledGasEvent args)
     {

@@ -1,0 +1,59 @@
+limb-doll-title = Прицел
+limb-doll-empty = Часть не выбрана
+limb-doll-short-clear = Сброс
+limb-analyzer-zone-damage = Урон части:
+limb-doll-clear-ring = Сбросить цель
+limb-doll-lost = Нет части: { $part }
+limb-doll-short-head = Голова
+limb-doll-short-eyes = Глаза
+limb-doll-short-mouth = Рот
+limb-doll-short-torso = Грудь
+limb-doll-short-groin = Пах
+limb-doll-short-arm-left = Л. рука
+limb-doll-short-arm-right = П. рука
+limb-doll-short-hand-left = Л. кисть
+limb-doll-short-hand-right = П. кисть
+limb-doll-short-leg-left = Л. нога
+limb-doll-short-leg-right = П. нога
+limb-doll-short-foot-left = Л. стопа
+limb-doll-short-foot-right = П. стопа
+
+limb-target-eyes = Целиться в глаза
+limb-target-mouth = Целиться в рот
+limb-target-head = Целиться в голову
+limb-target-torso = Целиться в грудь
+limb-target-groin = Целиться в пах
+limb-harvest-groin = Пах так не отрезать.
+limb-target-arm-left = Целиться в левую руку
+limb-target-arm-right = Целиться в правую руку
+limb-target-hand-left = Целиться в левую кисть
+limb-target-hand-right = Целиться в правую кисть
+limb-target-leg-left = Целиться в левую ногу
+limb-target-leg-right = Целиться в правую ногу
+limb-target-foot-left = Целиться в левую стопу
+limb-target-foot-right = Целиться в правую стопу
+limb-aim-on = Прицельная стрельба
+limb-aim-off = Обычная стрельба
+limb-fresh = Ещё свежее.
+limb-fresh-cold = Холод держит свежесть.
+limb-fresh-spent = [color=#7a9a3a]Сгнило.[/color]
+limb-grasp-burn = Руки не держат.
+limb-harvest-pick = Сначала выберите часть на кукле.
+limb-harvest-torso = Грудь так не отрезать.
+limb-harvest-gone = Этой части уже нет.
+limb-harvest-armored = Сквозь скафандр не прорезать, сначала снимите его.
+limb-harvest-start = { CAPITALIZE($user) } { $zone ->
+        [Eyes] выкалывает глаза
+        [Mouth] вырезает рот
+        [Head] отрезает голову
+        [ArmLeft] отрезает левую руку
+        [ArmRight] отрезает правую руку
+        [HandLeft] отрезает левую кисть
+        [HandRight] отрезает правую кисть
+        [LegLeft] отрезает левую ногу
+        [LegRight] отрезает правую ногу
+        [FootLeft] отрезает левую стопу
+        [FootRight] отрезает правую стопу
+       *[other] отрезает часть тела
+    } у { $target }!
+limb-examine-zone = { $zone }: плоть { $flesh }, кость { $bone }, огонь { $fire }

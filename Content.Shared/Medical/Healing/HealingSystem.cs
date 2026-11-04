@@ -18,11 +18,16 @@ using Content.Shared.Stacks;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
+using Content.Shared.DeadSpace.Body.Limbs;
+using Content.Shared.Tag;
+using Robust.Shared.Prototypes; // DS-14
 
 namespace Content.Shared.Medical.Healing;
 
 public sealed class HealingSystem : EntitySystem
 {
+    private static readonly ProtoId<TagPrototype> TourniquetTag = "Tourniquet"; // DS-14
+
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
@@ -34,6 +39,8 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private readonly BlindableSystem _blindableSystem= default!; // DS14
+    [Dependency] private readonly LimbWoundSystem _limbs = default!; // DS14
+    [Dependency] private readonly TagSystem _tags = default!; // DS14
 
     public override void Initialize()
     {
@@ -62,8 +69,27 @@ public sealed class HealingSystem : EntitySystem
 
         TryComp<BloodstreamComponent>(target, out var bloodstream);
 
-        // Heal some bloodloss damage.
-        if (healing.BloodlossModifier != 0 && bloodstream != null)
+        // DS14-start: a tourniquet closes one bleeding source completely.
+        var tourniquet = args.Used is { } used && _tags.HasTag(used, TourniquetTag);
+        if (tourniquet)
+        {
+            var stopped = _limbs.StopOneBleed(target.Owner);
+            if (!stopped && bloodstream != null && bloodstream.BleedAmount > 0)
+            {
+                _bloodstreamSystem.TryModifyBleedAmount((target.Owner, bloodstream), -bloodstream.BleedAmount);
+                stopped = bloodstream.BleedAmount <= 0;
+            }
+
+            if (stopped)
+            {
+                var popup = (args.User == target.Owner)
+                    ? Loc.GetString("medical-item-stop-bleeding-self")
+                    : Loc.GetString("medical-item-stop-bleeding", ("target", Identity.Entity(target.Owner, EntityManager)));
+                _popupSystem.PopupClient(popup, target, args.User);
+            }
+        }
+        else if (healing.BloodlossModifier != 0 && bloodstream != null)
+        // DS14-end
         {
             var isBleeding = bloodstream.BleedAmount > 0;
             _bloodstreamSystem.TryModifyBleedAmount((target.Owner, bloodstream), healing.BloodlossModifier);
@@ -179,6 +205,11 @@ public sealed class HealingSystem : EntitySystem
                 return true;
             }
         }
+
+        // DS14-start
+        if (_tags.HasTag(healing.Owner, TourniquetTag) && _limbs.CanStopOneBleed(target.Owner))
+            return true;
+        // DS14-end
 
         return false;
     }

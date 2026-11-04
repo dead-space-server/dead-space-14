@@ -131,6 +131,14 @@ public sealed class EyeBlinkSystem : EntitySystem
         if (!_blinkData.TryGetValue(ent, out var data))
             return;
 
+        if (args.NewMobState == MobState.Critical && HasComp<SleepingComponent>(ent))
+        {
+            data.IsClosed = true;
+            if (TryComp<SpriteComponent>(ent, out var closed))
+                SetBlinkVisible(ent, !HasSkipMarkings(closed), closed);
+            return;
+        }
+
         if (args.NewMobState is MobState.Dead or MobState.Critical)
         {
             data.IsClosed = false;
@@ -159,8 +167,7 @@ public sealed class EyeBlinkSystem : EntitySystem
 
         data.IsClosed = true;
 
-        if (TryComp<MobStateComponent>(uid, out var mobState) &&
-            mobState.CurrentState is MobState.Dead or MobState.Critical)
+        if (TryComp<MobStateComponent>(uid, out var mobState) && mobState.CurrentState == MobState.Dead)
         {
             SetBlinkVisible(uid, false);
             return;
@@ -226,8 +233,14 @@ public sealed class EyeBlinkSystem : EntitySystem
                 continue;
             }
 
-            if (TryComp<MobStateComponent>(uid, out var mobState) &&
-                mobState.CurrentState is MobState.Dead or MobState.Critical)
+            if (TryComp<MobStateComponent>(uid, out var mobState) && mobState.CurrentState == MobState.Dead)
+            {
+                data.IsClosed = false;
+                sprite.LayerSetVisible(layerIndex, false);
+                continue;
+            }
+
+            if (mobState != null && mobState.CurrentState == MobState.Critical && !HasComp<SleepingComponent>(uid))
             {
                 data.IsClosed = false;
                 sprite.LayerSetVisible(layerIndex, false);

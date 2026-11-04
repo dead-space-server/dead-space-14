@@ -95,6 +95,15 @@
     coolingCoefficient: 0.05
   - type: FireProtection
     reduction: 0.8 # atmos firesuit offers best protection, hardsuits are a little vulnerable
+  # DS14
+  - type: LimbCover
+    stopsFire: true
+    zones:
+    - Torso
+    - ArmLeft
+    - ArmRight
+    - LegLeft
+    - LegRight
   - type: Armor
     modifiers:
       coefficients:

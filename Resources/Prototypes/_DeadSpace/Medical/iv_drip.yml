@@ -32,7 +32,7 @@
     maxAttachRange: 1.6
     maxNeedleRange: 2.25
     transferIntervalSeconds: 1
-    slowTransfer: 0.5
+    slowTransfer: 0.25
     mediumTransfer: 1.5
     fastTransfer: 3
     yankSpillFraction: 0.25

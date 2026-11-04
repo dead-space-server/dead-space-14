@@ -327,11 +327,9 @@
 
 - type: entity
   id: MindShieldImplanter
-  name: mindshield implanter
-  parent: BaseImplantOnlyImplanter
-  components:
-  - type: Implanter
-    implant: MindShieldImplant
+  name: mindshield implant
+  description: Installed in the brain by surgery. # DS14
+  parent: MindShieldImplant # DS14
 
 # Centcomm implanters
 

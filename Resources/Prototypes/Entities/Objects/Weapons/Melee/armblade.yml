@@ -29,6 +29,8 @@
   - type: Prying
     speedModifier: 1.5 # Jaws of life speed
     pryPowered: true
+  - type: LimbCut
+    factor: 4
   #DS14-Start
   - type: EmitSoundOnPickup
     sound:

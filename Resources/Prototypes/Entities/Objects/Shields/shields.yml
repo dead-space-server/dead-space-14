@@ -114,6 +114,13 @@
           Piercing: 5
           Heat: 5
     #DS14-Start
+    - type: LimbCover
+      zones:
+      - Head
+      - Torso
+      - ArmLeft
+      - ArmRight
+      onlyWhenBlocking: true
     - type: ShieldDash
       damage:
         types:
@@ -175,6 +182,14 @@
           Piercing: 20
           Heat: 5
     #DS14-Start
+    - type: LimbCover
+      zones:
+      - Head
+      - Torso
+      - ArmLeft
+      - ArmRight
+      onlyWhenBlocking: true
+      ricochet: true
     - type: ShieldDash
       damage:
         types:

@@ -1,0 +1,537 @@
+- type: reagent
+  id: DionaSap
+  name: reagent-name-diona-sap
+  desc: reagent-desc-diona-sap
+  physicalDesc: reagent-physical-desc-sticky
+  flavor: sweet
+  color: "#c4a35a"
+  boilingPoint: 400
+  meltingPoint: 280
+
+- type: entity
+  parent: BaseItem
+  id: SurgeryDionaSap
+  name: diona sap
+  description: Thick sap for sealing bark cuts.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/diona_sap.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Fun/glue.rsi
+    size: Small
+  - type: Tag
+    tags:
+    - SurgeryTool
+  - type: SurgeryTool
+    precision: 0.8
+    slip: 0.08
+    wobble: 12
+    verbs:
+    - SealSap
+    plantVerbs:
+    - SealSap
+  - type: SurgeryDionaSap
+    uses: 5
+  - type: StaticPrice
+    price: 20
+
+- type: entity
+  parent: BaseItem
+  id: SurgeryHatchet
+  name: surgical hatchet
+  description: A light sterile hatchet with a wrapped grip. Splits diona bark along the seam and takes off a limb.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/surgical_hatchet.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Tools/Hydroponics/hatchet.rsi
+    size: Small
+  - type: Tag
+    tags:
+    - SurgeryTool
+  - type: SurgeryTool
+    precision: 0.85
+    slip: 0.12
+    wobble: 14
+    sawHits: 2
+    plantVerbs:
+    - Chop
+    - Amputate
+  - type: Sharp
+  - type: MeleeWeapon
+    wideAnimationRotation: 135
+    swingLeft: true
+    damage:
+      types:
+        Slash: 7
+  - type: StaticPrice
+    price: 35
+
+- type: surgeryHint
+  id: Chop
+  name: surgery-hint-plant-chop
+  color: "#8b5a2b"
+  icons:
+  - sprite: _DeadSpace/Objects/Medical/surgical_hatchet.rsi
+    state: icon
+
+- type: surgeryHint
+  id: SealSap
+  name: surgery-hint-plant-bind
+  color: "#c4a35a"
+  icons:
+  - sprite: _DeadSpace/Objects/Medical/diona_sap.rsi
+    state: icon
+
+- type: surgeryHint
+  id: PlantSever
+  name: surgery-hint-plant-sever
+  color: "#8b5a2b"
+  icons:
+  - sprite: _DeadSpace/Objects/Medical/surgical_hatchet.rsi
+    state: icon
+
+- type: surgeryHint
+  id: PlantNerve
+  name: surgery-hint-plant-nerve
+  color: "#6b8f3a"
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/medical.rsi
+    state: gauze
+
+- type: surgeryMiss
+  id: Chop
+  damage:
+    types:
+      Blunt: 12
+
+- type: surgeryMiss
+  id: SealSap
+  damage:
+    types:
+      Blunt: 4
+
+- type: surgeryGameRoll
+  id: Chop
+  games:
+  - Chop
+
+- type: surgeryGameRoll
+  id: SealSap
+  games:
+  - Hold
+  - Steady
+
+- type: surgeryOperation
+  id: OpenTorsoPlant
+  side: Front
+  plant: true
+  order: 0
+  icon:
+    sprite: _DeadSpace/Objects/Medical/surgical_hatchet.rsi
+    state: icon
+  refill: true
+  zone: Torso
+  name: surgery-op-open-plant
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
+  id: TakeBrainPlant
+  side: Front
+  plant: true
+  zone: Head
+  name: surgery-op-take-brain
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    organ: Brain
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
+  id: PutBrainPlant
+  side: Front
+  plant: true
+  zone: Head
+  name: surgery-op-put-brain
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    organ: Brain
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryPart
+  id: BrainPlant
+  zone: Head
+  anatomy: Plant
+  operation: TakeBrainPlant
+  put: PutBrainPlant
+  organ: Brain
+  sprite: /Textures/Mobs/Species/Diona/organs.rsi
+  state: brain
+  order: 0
+  ax: 13
+  ay: 4.5
+  bx: 18
+  by: 4.5
+
+- type: surgeryOperation
+  id: MendNerve
+  side: Front
+  plant: true
+  name: surgery-op-mend-nerve
+  when: Damaged
+  limb: true
+  order: 2
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/medical.rsi
+    state: gauze
+  zones:
+  - Head
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  - verb: Bandage
+    layer: Skin
+    game: Hold
+    hint: PlantNerve
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
+  id: PatchBladder
+  side: Front
+  plant: true
+  zone: Torso
+  name: surgery-op-patch-bladder
+  when: Damaged
+  order: 3
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/medical.rsi
+    state: gauze
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  - verb: Clamp
+    layer: Cavity
+    game: Clamp
+  - verb: Bandage
+    layer: Cavity
+    game: Hold
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
+  id: EaseAnchor
+  side: Front
+  plant: true
+  name: surgery-op-ease-anchor
+  when: Damaged
+  limb: true
+  order: 4
+  icon:
+    sprite: Objects/Specific/Medical/Surgery/scissors.rsi
+    state: retractor
+  zones:
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+  - verb: Bandage
+    layer: Skin
+    game: Hold
+    hint: PlantNerve
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
+  id: PullShardPlant
+  side: Front
+  plant: true
+  name: surgery-op-pull-shard-plant
+  when: Shard
+  limb: true
+  order: 2
+  icon:
+    sprite: Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+  - verb: PullEmbedded
+    layer: Skin
+    game: Dots
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryHint
+  id: PlantGraft
+  name: surgery-hint-plant-graft
+  color: "#a0784a"
+  icons:
+  - sprite: /Textures/Objects/Materials/materials.rsi
+    state: wood
+
+- type: surgeryOperation
+  id: GraftBark
+  side: Front
+  plant: true
+  name: surgery-op-graft-plant
+  when: Skin
+  limb: true
+  order: 4
+  icon:
+    sprite: /Textures/Objects/Materials/materials.rsi
+    state: wood
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Graft
+    layer: Skin
+    game: Hold
+    hint: PlantGraft
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+
+- type: surgeryOperation
+  id: CureInfectionPlant
+  side: Front
+  plant: true
+  name: surgery-op-cure
+  when: Infection
+  order: -1
+  icon:
+    sprite: /Textures/Objects/Specific/Chemistry/syringe.rsi
+    state: syringe_base0
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+  - verb: Inject
+    layer: Skin
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
+  id: AmputatePlant
+  side: Front
+  plant: true
+  name: surgery-op-amputate-plant
+  limb: true
+  order: 5
+  icon:
+    sprite: _DeadSpace/Objects/Medical/surgical_hatchet.rsi
+    state: icon
+  across: true
+  whole: true
+  zones:
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+  - verb: Amputate
+    layer: Skin
+    game: Chop
+    hint: PlantSever
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+
+- type: surgeryOperation
+  id: AmputateHeadPlant
+  side: Front
+  plant: true
+  name: surgery-op-amputate-head-plant
+  order: 10
+  icon:
+    sprite: _DeadSpace/Objects/Medical/surgical_hatchet.rsi
+    state: icon
+  zone: Head
+  across: true
+  whole: true
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+  - verb: Amputate
+    layer: Skin
+    game: Chop
+    hint: PlantSever
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+
+- type: surgeryOperation
+  id: AttachLimbPlant
+  side: Front
+  plant: true
+  name: surgery-op-attach
+  limb: true
+  order: 6
+  icon:
+    sprite: /Textures/Mobs/Species/Diona/parts.rsi
+    state: r_arm
+  across: true
+  stump: true
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Seat
+    layer: Skin
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgerySound
+  id: Chop
+  sound:
+    collection: MetalThud
+    params:
+      volume: -2
+      variation: 0.1
+
+- type: surgerySound
+  id: SealSap
+  sound:
+    path: /Audio/Effects/Fluids/splat.ogg
+    params:
+      volume: -6

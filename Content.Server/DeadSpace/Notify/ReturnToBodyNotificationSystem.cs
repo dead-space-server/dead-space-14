@@ -53,7 +53,7 @@ public sealed class ReturnToBodyNotificationSystem : EntitySystem
         Notify(ent.Owner);
     }
 
-    private void Notify(EntityUid target)
+    public void Notify(EntityUid target)
     {
         if (!_mind.TryGetMind(target, out _, out var mind) ||
             mind.CurrentEntity == target ||

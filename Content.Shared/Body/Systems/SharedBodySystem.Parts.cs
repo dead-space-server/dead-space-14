@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.Body.Components;
+using Content.Shared.DeadSpace.Body.Limbs; //DS-14
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
@@ -104,7 +105,18 @@ public partial class SharedBodySystem
             foreach (var containedUid in container.ContainedEntities)
             {
                 if (TryComp(containedUid, out BodyPartComponent? childPart))
+                {
+                    //DS-14 start
+                    var oldBody = childPart.Body;
+                    if (oldBody is { } old && old != bodyUid && !TerminatingOrDeleted(old))
+                        RemovePart(old, (containedUid, childPart), container.ID);
+                    //DS-14 end
                     RecursiveBodyUpdate((containedUid, childPart), bodyUid);
+                    //DS-14 start
+                    if (bodyUid is { } added && oldBody != added)
+                        AddPart(added, (containedUid, childPart), container.ID);
+                    //DS-14 end
+                }
             }
         }
     }
@@ -486,6 +498,13 @@ public partial class SharedBodySystem
         walkSpeed /= body.RequiredLegs;
         sprintSpeed /= body.RequiredLegs;
         acceleration /= body.RequiredLegs;
+        //DS-14 start
+        if (body.LegEntities.Count == 0 && LimbTuning.Enabled && HasComp<LimbBodyComponent>(bodyId))
+        {
+            Movement.ChangeBaseSpeed(bodyId, LimbTuning.CrawlSpeed, LimbTuning.CrawlSpeed, LimbTuning.CrawlAcceleration, movement);
+            return;
+        }
+        //DS-14 end
         Movement.ChangeBaseSpeed(bodyId, walkSpeed, sprintSpeed, acceleration, movement);
     }
 

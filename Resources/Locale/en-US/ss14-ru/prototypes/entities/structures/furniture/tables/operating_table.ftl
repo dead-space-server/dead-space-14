@@ -1,2 +1,2 @@
-ent-OperatingTable = operating table
-    .desc = Special medical table for surgery. This one just seems to be a useless prop, though.
+ent-OperatingTable = x-ray table
+    .desc = A fixed X-ray. Strap the patient in and open the exam. The machine itself does not irradiate.

@@ -102,7 +102,6 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
         SubscribeLocalEvent<CascadeSpikeComponent, CascadeSpikeDoAfterEvent>(OnCascadeDoAfter);
         SubscribeLocalEvent<AdminCurePatchComponent, AfterInteractEvent>(OnAdminPatchInteract);
         SubscribeLocalEvent<AdminCurePatchComponent, AdminCurePatchDoAfterEvent>(OnAdminPatchDoAfter);
-        SubscribeLocalEvent<ExpandICChatRecipientsEvent>(OnChatRecipients);
         SubscribeLocalEvent<RegenerativeStasisExitedEvent>(OnStasisExited);
     }
 
@@ -157,26 +156,6 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
             return;
 
         _blinding.AdjustEyeDamage((args.Target, blindable), -blindable.EyeDamage);
-    }
-
-    private void OnChatRecipients(ExpandICChatRecipientsEvent ev)
-    {
-        List<ICommonSession>? drop = null;
-        foreach (var (session, _) in ev.Recipients)
-        {
-            if (session.AttachedEntity is not { } listener || listener == ev.Source)
-                continue;
-            if (!_newStatus.HasEffectComp<DeafStatusEffectComponent>(listener))
-                continue;
-            drop ??= new List<ICommonSession>();
-            drop.Add(session);
-        }
-
-        if (drop == null)
-            return;
-
-        foreach (var session in drop)
-            ev.Recipients.Remove(session);
     }
 
     private void OnShockInteract(Entity<ShockTherapyComponent> ent, ref AfterInteractEvent args)

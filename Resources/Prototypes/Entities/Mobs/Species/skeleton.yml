@@ -24,8 +24,8 @@
   - type: Damageable
     damageContainer: Skeletal # DS14
     damageModifierSet: Skeleton # If we get non-Holy metaphysical damage types in the future, the Skeleton set might need to be adjusted to provide immunity to them (depends on what exactly the new types are)
-  - type: DamageVisuals
-    damageOverlayGroups:
+  - type: LimbWoundVisuals
+    groups:
       Brute:
         sprite: Mobs/Effects/brute_damage.rsi
         color: "#555555AA"

@@ -62,7 +62,7 @@
   name: uplink-sandevistan-misanthropy-name
   description: uplink-sandevistan-misanthropy-desc
   icon: { sprite: _DeadSpace/Actions/implants_actions.rsi, state: sandevistan }
-  productEntity: SandevistanImplantCase
+  productEntity: SandevistanLoneImplanter
   cost:
     Telecrystal: 15
   categories:
@@ -76,6 +76,46 @@
     stock: 1
     highPopulationStock: 1
     highPopulationThreshold: 110
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMantisBladesLone
+  name: uplink-mantisblades-name
+  description: uplink-mantisblades-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Melee/mantis_blades.rsi, state: icon }
+  productEntity: MantisBladesLoneImplanter
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMonowireLone
+  name: uplink-monowire-name
+  description: uplink-monowire-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Melee/monowire.rsi, state: icon }
+  productEntity: MonowireLoneImplanter
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
   - !type:BuyerWhitelistCondition
     blacklist:
       components:

@@ -1,6 +1,7 @@
 using Content.Shared.Armor;
 using Content.Shared.Atmos;
 using Content.Shared.Clothing.Components;
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.Inventory;
 
 namespace Content.Shared.Clothing.EntitySystems;
@@ -20,6 +21,12 @@ public sealed class FireProtectionSystem : EntitySystem
 
     private void OnGetProtection(Entity<FireProtectionComponent> ent, ref InventoryRelayedEvent<GetFireProtectionEvent> args)
     {
+        // DS14-start
+        if (TryComp<LimbBodyComponent>(args.Owner, out var body) && body.ArmorZone is { } zone
+            && !LimbCoverRules.Covers(ent, zone, EntityManager))
+            return;
+        // DS14-end
+
         args.Args.Reduce(ent.Comp.Reduction);
     }
 

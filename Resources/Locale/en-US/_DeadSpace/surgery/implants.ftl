@@ -1,0 +1,47 @@
+ent-LimbImplantHudBase = ocular implant
+    .desc = A surgical ocular implant.
+ent-LimbImplantMedicalHud = ocular medical HUD implant
+    .desc = A surgical ocular implant. Installed in the eyes, it grants a toggleable medical overlay.
+ent-LimbImplantSecurityHud = ocular security HUD implant
+    .desc = A surgical ocular implant. Installed in the eyes, it shows jobs, records, mindshields and contraband.
+ent-LimbImplantDiagnosticHud = ocular diagnostic HUD implant
+    .desc = A surgical ocular implant. Installed in the eyes, it shows the integrity of machines and borgs and access reader settings.
+ent-LimbImplantCommandHud = ocular administration HUD implant
+    .desc = A surgical ocular implant. Installed in the eyes, it shows jobs, personnel records and medical status.
+ent-LimbImplantNutritionHud = ocular nutrition HUD implant
+    .desc = A surgical ocular implant. Installed in the eyes, it shows how hungry and thirsty people are.
+ent-LimbImplantSyndicateHud = ocular syndicate HUD implant
+    .desc = A surgical ocular implant. Installed in the eyes, it marks syndicate agents and shows security data.
+ent-LimbImplantFlashShield = ocular flash shield implant
+    .desc = A surgical ocular implant. Installed in the eyes, it darkens on command against flashes and welding light.
+
+ent-LimbImplantArmBlade = arm blade implant
+    .desc = A surgical implant for an arm. Once installed, the arm can extend a retractable blade.
+
+ent-ActionLimbImplantHudBase = ocular implant
+    .desc = Toggle the ocular implant.
+ent-ActionLimbImplantMedicalHud = medical HUD
+    .desc = Toggle the ocular medical overlay.
+ent-ActionLimbImplantSecurityHud = security HUD
+    .desc = Toggle the ocular security overlay.
+ent-ActionLimbImplantDiagnosticHud = diagnostic HUD
+    .desc = Toggle the ocular diagnostic overlay.
+ent-ActionLimbImplantCommandHud = administration HUD
+    .desc = Toggle the ocular administration overlay.
+ent-ActionLimbImplantNutritionHud = nutrition HUD
+    .desc = Toggle the ocular hunger and thirst overlay.
+ent-ActionLimbImplantSyndicateHud = syndicate HUD
+    .desc = Toggle the ocular syndicate overlay.
+ent-ActionLimbImplantFlashShield = flash shield
+    .desc = Darken or clear the ocular filter.
+ent-ActionLimbImplantWeldShield = welding shield
+    .desc = Darken or clear the welding filter.
+ent-ActionLimbImplantChemicalHud = chemical scanner
+    .desc = Toggle the ocular chemical analysis.
+ent-LimbImplantWeldShield = ocular welding shield implant
+    .desc = A surgical ocular implant. It darkens on command against welding light, like engineering goggles.
+ent-LimbImplantChemicalHud = ocular chemical scanner implant
+    .desc = A surgical ocular implant. It shows the chemical composition of solutions, like chemical goggles.
+
+ent-ActionLimbImplantArmBlade = arm blade
+    .desc = Extend or retract the blade in this arm.

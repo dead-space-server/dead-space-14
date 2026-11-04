@@ -1,0 +1,125 @@
+- type: entity
+  parent: BaseItem
+  id: SurgeryXrayShard
+  name: x-ray shard
+  suffix: Admin
+  description: A test foreign object for a radiograph.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/Shards/shard.rsi
+    state: shard1
+  - type: Item
+    size: Tiny
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillCrack
+  name: crack pill
+  suffix: Admin, X-ray
+  description: After swallowing, every bone is cracked.
+  components:
+  - type: Pill
+    pillType: 1
+  - type: Sprite
+    state: pill1
+  - type: SurgeryXrayMarkPill
+    kind: Crack
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillClosedFracture
+  name: closed fracture pill
+  suffix: Admin, X-ray
+  description: After swallowing, every bone has a closed fracture.
+  components:
+  - type: Pill
+    pillType: 2
+  - type: Sprite
+    state: pill2
+  - type: SurgeryXrayMarkPill
+    kind: ClosedFracture
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillOpenFracture
+  name: open fracture pill
+  suffix: Admin, X-ray
+  description: After swallowing, every bone has an open fracture.
+  components:
+  - type: Pill
+    pillType: 3
+  - type: Sprite
+    state: pill3
+  - type: SurgeryXrayMarkPill
+    kind: OpenFracture
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillBleed
+  name: internal bleeding pill
+  suffix: Admin, X-ray
+  description: After swallowing, every body part bleeds internally.
+  components:
+  - type: Pill
+    pillType: 4
+  - type: Sprite
+    state: pill4
+  - type: SurgeryXrayMarkPill
+    kind: Bleed
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillRupture
+  name: organ rupture pill
+  suffix: Admin, X-ray
+  description: After swallowing, the brain, eyes, heart, lungs, stomach, liver, and kidneys rupture.
+  components:
+  - type: Pill
+    pillType: 5
+  - type: Sprite
+    state: pill5
+  - type: SurgeryXrayMarkPill
+    kind: Rupture
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillEmbedded
+  name: shrapnel pill
+  suffix: Admin, X-ray
+  description: After swallowing, a fragment lodges in every body part.
+  components:
+  - type: Pill
+    pillType: 6
+  - type: Sprite
+    state: pill6
+  - type: SurgeryXrayMarkPill
+    kind: Embedded
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillForeign
+  name: foreign object pill
+  suffix: Admin, X-ray
+  description: After swallowing, objects appear in the head, abdomen, and chest.
+  components:
+  - type: Pill
+    pillType: 7
+  - type: Sprite
+    state: pill7
+  - type: SurgeryXrayMarkPill
+    kind: Foreign
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillInfection
+  name: infection pill
+  suffix: Admin, X-ray
+  description: After swallowing, a random body part becomes infected. After a few minutes the infection turns to rot.
+  components:
+  - type: Pill
+    pillType: 8
+  - type: Sprite
+    state: pill8
+  - type: SurgeryXrayMarkPill
+    kind: Infection

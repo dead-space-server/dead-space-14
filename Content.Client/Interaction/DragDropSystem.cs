@@ -246,6 +246,8 @@ public sealed class DragDropSystem : SharedDragDropSystem
 
             // pop up drag shadow under mouse
             var mousePos = _eyeManager.PixelToMap(screenPos);
+            if (mousePos.MapId == MapId.Nullspace) //DS-14
+                return; //DS-14
             _dragShadow = EntityManager.SpawnEntity("dragshadow", mousePos);
             var dragSprite = Comp<SpriteComponent>(_dragShadow.Value);
             _sprite.CopySprite((_draggedEntity.Value, draggedSprite), (_dragShadow.Value, dragSprite));
@@ -559,6 +561,8 @@ public sealed class DragDropSystem : SharedDragDropSystem
         if (Exists(_dragShadow))
         {
             var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
+            if (mousePos.MapId == MapId.Nullspace || Transform(_dragShadow.Value).MapID != mousePos.MapId) //DS-14
+                return; //DS-14
             _transformSystem.SetWorldPosition(_dragShadow.Value, mousePos.Position);
         }
     }

@@ -154,8 +154,19 @@ public sealed partial class SimpleRadialMenu : RadialMenu
             _ => null
         };
 
-        if(imageControl != null)
+        if (imageControl != null)
             button.AddChild(imageControl);
+        // DS14-start
+        else if (!string.IsNullOrEmpty(model.ToolTip))
+        {
+            button.AddChild(new Label
+            {
+                Text = model.ToolTip,
+                HorizontalAlignment = HAlignment.Center,
+                VerticalAlignment = VAlignment.Center,
+            });
+        }
+        // DS14-end
 
         if (model is RadialMenuActionOptionBase actionOption)
         {

@@ -12,6 +12,7 @@
                 <Label Name="WindowTitle"
                        HorizontalExpand="True" VAlign="Center" StyleClasses="FancyWindowTitle" ClipText="true" />
                 <TextureButton Name="HelpButton" StyleClasses="windowHelpButton" VerticalAlignment="Center" Disabled="True" Visible="False" Access="Public" />
+                <TextureButton Name="WindowPrintButton" Visible="False" Access="Public" VerticalAlignment="Center" Margin="0 0 4 0" />
                 <TextureButton Name="CloseButton" StyleClasses="windowCloseButton"
                                VerticalAlignment="Center" />
             </BoxContainer>

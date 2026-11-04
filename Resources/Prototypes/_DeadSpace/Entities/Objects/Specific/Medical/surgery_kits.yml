@@ -1,0 +1,102 @@
+- type: entity
+  parent: BaseStorageItem
+  id: SurgeryFieldKit
+  name: field surgery kit
+  description: A rugged pouch for field surgery tools. Fits in a backpack.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/field_kit.rsi
+    state: icon
+  - type: Item
+    size: Large
+    sprite: Objects/Specific/Medical/firstaidkits.rsi
+    heldPrefix: firstaid
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,4,1
+  - type: Tag
+    tags:
+    - Medkit
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_drop.ogg
+
+- type: entity
+  parent: SurgeryFieldKit
+  id: SurgeryFieldKitFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: SurgeryMarker
+    - id: SurgeryFieldStapler
+    - id: SurgeryFieldClamp
+    - id: SurgeryBoneGel
+    - id: Gauze
+
+- type: entity
+  parent: BaseStorageItem
+  id: SurgeryOrganCooler
+  name: organ cooler
+  description: A small insulated box with a cooling pack. Organs inside do not rot. A brain still dies in it; only a man-machine interface keeps a brain alive.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/organ_cooler.rsi
+    layers:
+      - map: [ base ]
+        state: icon
+  - type: Item
+    size: Large
+    sprite: Objects/Specific/Medical/firstaidkits.rsi
+    heldPrefix: firstaid
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1
+    whitelist:
+      components:
+      - Organ
+  - type: AntiRottingContainer
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_drop.ogg
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StorageVisuals.Open:
+        base:
+          True: { state: icon-open }
+          False: { state: icon }
+
+- type: entity
+  parent: BaseStorageItem
+  id: FieldChemistryBox
+  name: field chemistry box
+  description: Four bottles for internal injuries without surgery - hemostatin, calcigen, ferrolysin and myoregen.
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Objects/Storage/boxes.rsi
+      state: box
+    - sprite: _DeadSpace/Objects/Medical/field_kit.rsi
+      state: chem
+  - type: Item
+    size: Normal
+    sprite: Objects/Storage/boxes.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1
+  - type: StorageFill
+    contents:
+    - id: ChemistryBottleHemostatin
+    - id: ChemistryBottleCalcigen
+    - id: ChemistryBottleFerrolysin
+    - id: ChemistryBottleMyoregen
