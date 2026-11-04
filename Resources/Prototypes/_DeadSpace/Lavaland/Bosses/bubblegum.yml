@@ -406,7 +406,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      2500: Dead
+      3000: Dead
   # The boss HUD shows its health; no health bar over it through a medical visor.
   - type: Damageable
     damageContainer: Biological

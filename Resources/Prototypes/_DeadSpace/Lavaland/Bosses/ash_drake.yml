@@ -338,7 +338,7 @@
     analyzable: false
   - type: LavalandBoss
     bossName: пепельный дракон
-    maxHealth: 2500
+    maxHealth: 3000
     music: /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
     deathSound: /Audio/_DeadSpace/Lavaland/AshDrake/demon_dies.ogg
     deathRewards:
