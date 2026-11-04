@@ -160,3 +160,21 @@
   components:
   - type: Sprite
     state: security_centcomm
+
+- type: entity
+  parent: SignSecurity
+  id: SignSecurityCentComm
+  name: знак "Оружейная"
+  description: Знак, изображающий, что здесь находится оружейная. Поговаривают, что наган прячут именно тут!
+  components:
+  - type: Sprite
+    state: armory
+
+- type: entity
+  parent: SignSecurity
+  id: SignSecurityCentComm
+  name: знак "Охрана"
+  description: Знак, обозначающий, что здесь находится охрана. Видать, что охранники ненавидят свою работу, раз повесили табличку!
+  components:
+  - type: Sprite
+    state: security

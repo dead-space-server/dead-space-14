@@ -39,12 +39,12 @@
 
 - type: entity
   parent: BaseComputerCircuitboardTaipan
-  id: TerminalCircuitboardTaipan
+  id: TerminalCircuitboard
   name: компьютерный терминал (консольная плата)
   description: Консольная плата для компьютерного терминала.
   components:
   - type: ComputerBoard
-    prototype: ComputerTaipanTerminal
+    prototype: ComputerTerminal
 
 - type: entity
   parent: BaseComputerCircuitboardTaipan

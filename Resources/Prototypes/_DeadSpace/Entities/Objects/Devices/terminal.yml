@@ -1,18 +1,18 @@
 - type: entity
   parent: BaseComputer
-  id: ComputerTaipanTerminal
+  id: ComputerTerminal
   name: терминал
-  description: Компьютер с установленной на него системой SyndiOS. Честно говоря, он не выглядит новым.
+  description: Компьютер с установленной на него системой TempOS. Честно говоря, он не выглядит новым.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
+    sprite: Structures/Machines/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
     - map: ["computerLayerKeyboard"]
       state: generic_keyboard
     - map: ["computerLayerScreen"]
-      state: rdcomp
+      state: generic
     - map: ["computerLayerKeys"]
       state: generic_keys
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
@@ -22,7 +22,7 @@
   - type: ActivatableUI
     key: enum.TerminalUiKey.Key
   - type: Computer
-    board: TerminalCircuitboardTaipan
+    board: TerminalCircuitboard
   - type: UserInterface
     interfaces:
       enum.TerminalUiKey.Key:

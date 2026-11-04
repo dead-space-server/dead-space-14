@@ -97,6 +97,10 @@
       - PosterContrabandExoChomp
       - PosterMeow
       - PosterDiesLiberatis
+      # DS-14-start
+      - PosterWantedSyndiOne
+      - PosterWantedSyndiSecond
+      # DS-14-end
     chance: 1
 
 - type: entity
