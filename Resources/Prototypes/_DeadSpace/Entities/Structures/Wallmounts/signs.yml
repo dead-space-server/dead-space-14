@@ -163,7 +163,7 @@
 
 - type: entity
   parent: SignSecurity
-  id: SignSecurityCentComm
+  id: SignSyndicateArmory
   name: знак "Оружейная"
   description: Знак, изображающий, что здесь находится оружейная. Поговаривают, что наган прячут именно тут!
   components:
@@ -172,7 +172,7 @@
 
 - type: entity
   parent: SignSecurity
-  id: SignSecurityCentComm
+  id: SignSyndicateSecurity
   name: знак "Охрана"
   description: Знак, обозначающий, что здесь находится охрана. Видать, что охранники ненавидят свою работу, раз повесили табличку!
   components:

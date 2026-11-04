@@ -33,7 +33,6 @@ public sealed class TerminalBoundUserInterface : BoundUserInterface
             _history = FormattedMessage.EscapeText($"Welcome to {terminal.OsName}\n");
             if (!string.IsNullOrWhiteSpace(terminal.Motd))
                 _history += FormattedMessage.EscapeText($"{terminal.Motd.TrimEnd()}\n");
-            _history += FormattedMessage.EscapeText($" * Documentation: https://tos-service.online/tempos/docs.html\n * Support:       https://tos-service.online/tempos/\n");
             _history += FormattedMessage.EscapeText($"\nSystem information\nMemory usage: {Random.Shared.Next(5, 10)}%\nIPv4 address for eth0: {terminal.IpAdress}\n\n");
             _history += terminal.Prompt;
         }

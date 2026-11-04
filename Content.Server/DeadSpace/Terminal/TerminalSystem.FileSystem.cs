@@ -81,7 +81,7 @@ public sealed partial class TerminalSystem
         var version = space > 0 ? osName[(space + 1)..] : string.Empty;
 
         File("/etc/hostname", $"TEMPUser{comp.UserIndex}\n");
-        File("/etc/motd", $"Unauthorized access is prohibited.\nTempOS by TOS Service: https://tos-service.online/tempos/\n");
+        File("/etc/motd", $"Unauthorized access is prohibited.\n");
         File("/etc/os-release", $"NAME=\"{name}\"\nVERSION=\"{version}\"\nPRETTY_NAME=\"{osName}\"\nHOME_URL=\"https://tos-service.online/tempos/\"\nDOCUMENTATION_URL=\"https://tos-service.online/tempos/docs.html\"\n");
         File("/etc/passwd", $"root:x:0:0:root:/root:/bin/tsh\n{DefaultUser}:x:1000:1000:{DefaultUser}:/home/{DefaultUser}:/bin/tsh\n");
         File("/etc/group", $"root:x:0:\n{DefaultUser}:x:1000:\n");
