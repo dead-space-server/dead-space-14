@@ -648,6 +648,25 @@ public sealed class LimbWoundRulesTest
             Assert.That(LimbWoundRules.TryBlastSever(6f, false, 0f, LimbZone.HandLeft), Is.False);
             Assert.That(LimbWoundRules.TryBlastSever(0.2f, false, 0f, LimbZone.Head), Is.False);
             Assert.That(LimbWoundRules.TryBlastSever(0.2f, false, 0f, LimbZone.Torso), Is.False);
+            Assert.That(LimbWoundRules.TryBlastSever(0.2f, false, 0f, LimbZone.ArmLeft, 0.05f), Is.False);
+            Assert.That(LimbWoundRules.TryBlastSever(0.2f, false, 0f, LimbZone.ArmLeft, LimbWoundRules.BlastSeverDamage), Is.True);
+        });
+    }
+
+    [Test]
+    public void HealingBringsBackAnAtrophiedChestButNotADeadArm()
+    {
+        var chest = new LimbZoneState { Health = 0f, Atrophied = true };
+        var arm = new LimbZoneState { Health = 0f, Atrophied = true };
+        LimbWoundRules.Mend(ref chest, 20f, 110f, LimbWoundRules.Revives(LimbZone.Torso));
+        LimbWoundRules.Mend(ref arm, 20f, 55f, LimbWoundRules.Revives(LimbZone.ArmLeft));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(chest.Health, Is.EqualTo(20f));
+            Assert.That(chest.Atrophied, Is.False);
+            Assert.That(arm.Health, Is.EqualTo(0f));
+            Assert.That(arm.Atrophied, Is.True);
         });
     }
 

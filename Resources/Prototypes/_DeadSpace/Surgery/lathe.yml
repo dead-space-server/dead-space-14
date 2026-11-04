@@ -2,6 +2,7 @@
   id: DeadSpaceSurgeryStatic
   recipes:
   - SurgeryMarker
+  - SurgerySaw
   - SurgeryHatchet
   - SurgeryFieldStapler
   - SurgeryFieldClamp

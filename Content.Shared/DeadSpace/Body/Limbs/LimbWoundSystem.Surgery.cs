@@ -265,22 +265,10 @@ public sealed partial class LimbWoundSystem
         state.Scar = 0;
         state.Health = LimbWoundRules.HealthFor(zone, limbs) * Math.Clamp(healthFraction, 0.05f, 0.1f);
 
-        if (LimbWoundRules.TryCarried(zone, out var child))
-        {
-            var childIndex = LimbWoundRules.Index(child);
-            if ((uint) childIndex < (uint) zones.Length && zones[childIndex].Severed)
-            {
-                zones[childIndex].Severed = false;
-                zones[childIndex].Health = state.Health;
-                zones[childIndex].Flesh = 0f;
-                zones[childIndex].Bone = 0f;
-                zones[childIndex].Bleed = 0f;
-                zones[childIndex].Atrophied = false;
-                ShowZone(body, child);
-            }
-        }
-
         ShowZone(body, zone);
+        if (LimbWoundRules.TryCarried(zone, out var child))
+            TryRegrowZone(body, child, healthFraction);
+
         Dirty(body, limbs);
         ApplyLife(body, limbs);
         _movement.RefreshMovementSpeedModifiers(body);

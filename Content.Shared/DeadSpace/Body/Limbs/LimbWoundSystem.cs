@@ -593,7 +593,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (Heals(healing.Damage, "Heat") || Heals(healing.Damage, "Caustic"))
             LimbWoundRules.Ointment(ref state, LimbWoundRules.OintmentDose);
 
-        LimbWoundRules.Mend(ref state, HealAmount(healing.Damage), LimbWoundRules.HealthFor(zone, ent.Comp));
+        LimbWoundRules.Mend(ref state, HealAmount(healing.Damage), LimbWoundRules.HealthFor(zone, ent.Comp), LimbWoundRules.Revives(zone));
 
         Dirty(ent);
         _movement.RefreshMovementSpeedModifiers(ent);
@@ -733,7 +733,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var changed = false;
         if (!args.DamageIncreased && !aimedHeal)
         {
-            changed = SpreadHeal(zones, args.DamageDelta);
+            changed = SpreadHeal(zones, args.DamageDelta, limbs);
         }
         else if (!fromStrike && args.DamageIncreased && HeatOf(args.DamageDelta) > 0f && AnyFire(limbs))
         {
@@ -779,7 +779,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return delta.DamageDict.TryGetValue("Heat", out var value) && value > 0 ? value.Float() : 0f;
     }
 
-    private bool SpreadHeal(Span<LimbZoneState> zones, DamageSpecifier delta)
+    private bool SpreadHeal(Span<LimbZoneState> zones, DamageSpecifier delta, LimbBodyComponent limbs)
     {
         var count = Math.Min(zones.Length, LimbWoundRules.BodyZoneCount);
         var changed = false;
@@ -807,12 +807,20 @@ public sealed partial class LimbWoundSystem : EntitySystem
                     continue;
 
                 SetField(ref zones[i], field, values[i]);
+                if (field != AirField)
+                {
+                    var zone = (LimbZone) i;
+                    LimbWoundRules.Mend(ref zones[i], have - values[i], LimbWoundRules.HealthFor(zone, limbs), LimbWoundRules.Revives(zone));
+                }
+
                 changed = true;
             }
         }
 
         return changed;
     }
+
+    private const int AirField = 6;
 
     private int Field(string type)
     {
@@ -832,7 +840,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var slot = found == null ? 0 : found.DamageTypes.IndexOf(type);
         var field = 0;
         if (found != null && found.ID == "Airloss")
-            field = slot == 0 ? 6 : 5;
+            field = slot == 0 ? AirField : 5;
         else if (found != null && found.ID == "Burn")
             field = type == "Caustic" ? 4 : 3;
         else if (found != null && found.ID == "Toxin")
@@ -1118,7 +1126,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (TryComp<GunComponent>(args.Data.Gun, out var gun) && gun.ShootCoordinates is { } coords)
             aimPoint = _transform.ToMapCoordinates(coords).Position;
         var aimed = ZoneForShot(aiming, aim, args.Target, from, hit, aimPoint);
-        var zone = Present(limbs, Place(aimed, distance, ready, Cover(args.Target, shooter, aimed).Slip));
+        var zone = limbs.FireOriginTime == _timing.CurTime && limbs.FireOrigin is { } rolled
+            ? rolled
+            : Present(limbs, Place(aimed, distance, ready, Cover(args.Target, shooter, aimed).Slip));
         limbs.ArmorZone = zone;
         var incoming = ent.Comp.IgnoreResistances ? new DamageSpecifier(ent.Comp.Damage) : Resist(args.Target, ent.Comp.Damage, shooter);
         limbs.ArmorZone = null;
@@ -1591,7 +1601,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
                     changed = true;
                 }
 
-                if (!LimbWoundRules.TryBlastSever(args.Distance, BlastBlocked(ent, (LimbZone) i), _random.NextFloat(), (LimbZone) i))
+                var zoneDamage = heat[i] + pierce[i] + blunt[i] + slash[i] + caustic[i] + other[i];
+                if (!LimbWoundRules.TryBlastSever(args.Distance, BlastBlocked(ent, (LimbZone) i), _random.NextFloat(), (LimbZone) i, zoneDamage))
                     continue;
 
                 DropZone(ent.Owner, ent.Comp, (LimbZone) i);
@@ -2286,7 +2297,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
     private LimbStrike BuildStrike(EntityUid target, EntityUid user, LimbZone zone, DamageSpecifier damage, bool projectile, float distance = 0f, EntityUid? tool = null, float? catalogPierce = null, bool throughArmor = false, LimbZone? called = null)
     {
         var slash = Amount(damage, "Slash");
-        var pierce = catalogPierce ?? Amount(damage, "Piercing");
+        var landed = Amount(damage, "Piercing");
+        var pierce = catalogPierce ?? landed;
         var blunt = Amount(damage, "Blunt");
         var heat = Amount(damage, "Heat");
         var caustic = Amount(damage, "Caustic");
@@ -2294,12 +2306,12 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var amount = mark switch
         {
             LimbMark.Edge => slash,
-            LimbMark.Point => pierce,
+            LimbMark.Point => landed,
             LimbMark.Heat => heat,
             LimbMark.Liquid => caustic,
             _ => blunt,
         };
-        var harm = slash + pierce + blunt + heat + caustic;
+        var harm = slash + landed + blunt + heat + caustic;
         var liquid = 0f;
         var wound = 1f;
         var burn = 1f;
@@ -2514,7 +2526,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private bool Flammable(EntityUid item)
     {
-        if (HasComp<Content.Shared.Armor.ArmorComponent>(item) || HasComp<Content.Shared.Clothing.Components.FireProtectionComponent>(item))
+        if (HasComp<Content.Shared.Armor.ArmorComponent>(item) || HasComp<Content.Shared.Clothing.Components.FireProtectionComponent>(item) || HasComp<Content.Shared.Clothing.MagbootsComponent>(item))
             return false;
 
         return !TryComp<LimbCoverComponent>(item, out var cover) || !cover.StopsFire;

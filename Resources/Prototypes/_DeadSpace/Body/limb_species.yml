@@ -98,7 +98,8 @@
   - Core
   - Heart
   ownImplants: true
-  implants: []
+  implants:
+  - id: Positronic
 
 - type: limbSpecies
   id: SlimePerson

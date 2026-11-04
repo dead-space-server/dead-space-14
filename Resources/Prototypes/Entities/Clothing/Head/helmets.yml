@@ -168,6 +168,13 @@
         Blunt: 0.95
         Slash: 0.95
         Piercing: 0.95
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: HideLayerClothing
     layers:
       Hair: HEAD
@@ -257,6 +264,12 @@
   - type: NinjaAppearanceItem
     itemType: Helmet
   - type: NinjaSuitItem
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   #DS14-end
   - type: Tag
     tags:
@@ -357,6 +370,13 @@
     coolingCoefficient: 0.8
   - type: FireProtection
     reduction: 0.15 # not fully sealed so less protection
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: IdentityBlocker
   - type: Tag
     tags:
@@ -402,6 +422,13 @@
   - type: PressureProtection
     highPressureMultiplier: 0.25
     lowPressureMultiplier: 1000
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: IdentityBlocker
   - type: Tag
     tags:

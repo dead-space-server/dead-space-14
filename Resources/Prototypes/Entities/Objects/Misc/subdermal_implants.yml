@@ -420,6 +420,7 @@
    - type: LimbImplant
      slots:
      - Brain
+     - Positronic
      implantComponents:
      - type: MindShield
    # DS14-end
