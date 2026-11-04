@@ -227,7 +227,6 @@ namespace Content.Server.Guardian
             }
 
             // DS14-start
-            // A guardian and the Smoking Carp martial art cannot be combined.
             if (HasComp<SmokingCarpComponent>(target))
                 return;
             // DS14-end
@@ -245,7 +244,7 @@ namespace Content.Server.Guardian
             if (args.Handled || args.Args.Target == null)
                 return;
 
-            if (args.Cancelled || component.Deleted || component.Used || !_handsSystem.IsHolding(args.Args.User, uid, out _) || HasComp<GuardianHostComponent>(args.Args.Target) || HasComp<SmokingCarpComponent>(args.Args.Target))
+            if (args.Cancelled || component.Deleted || component.Used || !_handsSystem.IsHolding(args.Args.User, uid, out _) || HasComp<GuardianHostComponent>(args.Args.Target) || HasComp<SmokingCarpComponent>(args.Args.Target)) // DS14
                 return;
 
             var hostXform = Transform(args.Args.Target.Value);
