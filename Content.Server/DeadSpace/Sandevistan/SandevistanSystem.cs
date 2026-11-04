@@ -546,15 +546,9 @@ public sealed class SandevistanSystem : EntitySystem
 
     private bool ShouldStop(EntityUid uid, ActiveSandevistanComponent active)
     {
-        if (active.SourceImplant is not { } implant ||
+        return active.SourceImplant is not { } implant ||
             Deleted(implant) ||
-            !TryComp<SubdermalImplantComponent>(implant, out var subdermal) ||
-            subdermal.ImplantedEntity != uid)
-        {
-            return true;
-        }
-
-        return false;
+            HostOf(implant) != uid;
     }
 
     private void StopSandevistan(EntityUid uid)
@@ -662,11 +656,8 @@ public sealed class SandevistanSystem : EntitySystem
         var cooldownEnd = curTime + cooldown;
         implantComp.NextReadyTime = cooldownEnd;
 
-        if (!TryComp<SubdermalImplantComponent>(implant, out var subdermal) ||
-            subdermal.Action is not { } action)
-        {
+        if ((CompOrNull<LimbImplantComponent>(implant)?.Action ?? CompOrNull<SubdermalImplantComponent>(implant)?.Action) is not { } action)
             return;
-        }
 
         _actions.SetToggled(action, false);
 

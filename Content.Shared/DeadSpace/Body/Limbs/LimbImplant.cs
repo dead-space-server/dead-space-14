@@ -40,6 +40,7 @@ public static class LimbImplantSlots
     public const string Kidneys = "Kidneys";
     public const string Intestines = "Intestines";
     public const string Core = "Core";
+    public const string Positronic = "Positronic";
 
     public static string ContainerId(string slot) => Prefix + slot;
 
@@ -58,7 +59,7 @@ public static class LimbImplantSlots
             LegRight => LimbZone.LegRight,
             FootLeft => LimbZone.FootLeft,
             FootRight => LimbZone.FootRight,
-            Core => LimbZone.Torso,
+            Core or Positronic => LimbZone.Torso,
             _ => null,
         };
     }

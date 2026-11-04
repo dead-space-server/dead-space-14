@@ -21,6 +21,36 @@ namespace Content.IntegrationTests.Tests.DeadSpace.Limbs;
 public sealed class LimbWoundTest
 {
     [Test]
+    public async Task RegrowingAnArmAndALegBringsBackTheHandAndFoot()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            var body = server.EntMan.System<SharedBodySystem>();
+            Assert.That(wounds.Amputate(human, LimbZone.ArmLeft), Is.True);
+            Assert.That(wounds.Amputate(human, LimbZone.LegRight), Is.True);
+            Assert.That(wounds.TryRegrowZone(human, LimbZone.ArmLeft, 0.3f), Is.True);
+            Assert.That(wounds.TryRegrowZone(human, LimbZone.LegRight, 0.3f), Is.True);
+
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            Assert.Multiple(() =>
+            {
+                Assert.That(body.GetBodyChildrenOfType(human, BodyPartType.Hand).Count(), Is.EqualTo(2));
+                Assert.That(body.GetBodyChildrenOfType(human, BodyPartType.Foot).Count(), Is.EqualTo(2));
+                Assert.That(limbs.Zones[(int) LimbZone.HandLeft].Severed, Is.False);
+                Assert.That(limbs.Zones[(int) LimbZone.FootRight].Severed, Is.False);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task HumanSpawnsWithLimbState()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -233,7 +263,7 @@ public sealed class LimbWoundTest
             Assert.Multiple(() =>
             {
                 Assert.That(server.EntMan.GetComponent<DamageableComponent>(dead).TotalDamage, Is.EqualTo(FixedPoint2.Zero));
-                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(14)));
+                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(10)));
                 Assert.That(wounds.BleedTotal(dead), Is.EqualTo(0f));
             });
         });

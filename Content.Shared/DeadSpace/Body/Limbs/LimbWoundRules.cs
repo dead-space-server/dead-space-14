@@ -49,6 +49,7 @@ public static class LimbWoundRules
     public const float CloseSeverRange = 1f;
     public const float BlastSeverFar = 5f;
     public const float BlastSeverNearChance = 0.9f;
+    public const float BlastSeverDamage = 30f;
     public const int PelletSeverCount = 4;
     public const float PelletWindow = 0.4f;
     public const float ClothingBurn = 3f;
@@ -163,9 +164,9 @@ public static class LimbWoundRules
         return BlastSeverNearChance * (1f - (distance - CloseSeverRange) / span);
     }
 
-    public static bool TryBlastSever(float distance, bool armored, float roll, LimbZone zone)
+    public static bool TryBlastSever(float distance, bool armored, float roll, LimbZone zone, float damage = BlastSeverDamage)
     {
-        if (armored || !CanSever(zone) || zone == LimbZone.Head)
+        if (armored || damage < BlastSeverDamage || !CanSever(zone) || zone == LimbZone.Head)
             return false;
 
         return roll < BlastSeverChance(distance);
@@ -400,12 +401,19 @@ public static class LimbWoundRules
         return best;
     }
 
-    public static void Mend(ref LimbZoneState state, float amount, float cap)
+    public static void Mend(ref LimbZoneState state, float amount, float cap, bool revive = false)
     {
-        if (amount <= 0f || state.Severed || state.Atrophied)
+        if (amount <= 0f || state.Severed || state.Atrophied && !revive)
             return;
 
         state.Health = MathF.Min(cap, state.Health + amount);
+        if (revive && state.Health > 0f)
+            state.Atrophied = false;
+    }
+
+    public static bool Revives(LimbZone zone)
+    {
+        return zone is LimbZone.Torso or LimbZone.Groin;
     }
 
     public static bool DrainBleed(Span<LimbZoneState> zones, float torsoPool = TorsoHealth)

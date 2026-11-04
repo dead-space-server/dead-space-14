@@ -11,7 +11,7 @@ public sealed partial class CCVars
         CVarDef.Create("limb.enabled", true, CVar.SERVER | CVar.REPLICATED);
 
     public static readonly CVarDef<float> LimbStubArmor =
-        CVarDef.Create("limb.stub_armor", 0.7f, CVar.SERVER | CVar.REPLICATED);
+        CVarDef.Create("limb.stub_armor", 0.5f, CVar.SERVER | CVar.REPLICATED);
 
     public static readonly CVarDef<float> LimbBurnFirst =
         CVarDef.Create("limb.burn_first", LimbWoundRules.BurnFirst, CVar.SERVER | CVar.REPLICATED);

@@ -221,6 +221,21 @@
     slots:
     - Tail
   # DS14-start
+  - type: LimbCover
+    stopsFire: true
+    blast: true
+    sever: true
+    zones:
+    - Torso
+    - Groin
+    - ArmLeft
+    - ArmRight
+    - HandLeft
+    - HandRight
+    - LegLeft
+    - LegRight
+    - FootLeft
+    - FootRight
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/armor_rustle/plate_armor_pickup.ogg

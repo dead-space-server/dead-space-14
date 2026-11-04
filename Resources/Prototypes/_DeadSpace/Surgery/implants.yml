@@ -752,3 +752,82 @@
     game: Glue
     hint: SlimeStir
     undo: Incise
+
+# IPC positronic brain
+
+- type: surgeryPart
+  id: ImplantPositronic
+  zone: Torso
+  anatomy: MachineTorso
+  machine: true
+  operation: TakeImplantPositronic
+  put: PutImplantPositronic
+  implant: Positronic
+  sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+  state: implanter0
+  wound: false
+  order: 20
+  ax: 14
+  ay: 16
+  bx: 17
+  by: 19
+
+- type: surgeryOperation
+  id: PutImplantPositronic
+  name: surgery-op-put-implant-positronic
+  machine: true
+  sterile: false
+  side: Front
+  zone: Torso
+  implant: Positronic
+  implantPut: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    implant: Positronic
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantPositronic
+  name: surgery-op-take-implant-positronic
+  machine: true
+  sterile: false
+  side: Front
+  zone: Torso
+  implant: Positronic
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Extract
+    layer: Cavity
+    hint: MachinePry
+    undo: Insert
+    implant: Positronic
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
