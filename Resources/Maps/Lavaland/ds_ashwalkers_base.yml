@@ -4,8 +4,8 @@ meta:
   engineVersion: 276.0.0
   forkId: ""
   forkVersion: ""
-  time: 11/04/2026 05:09:13
-  entityCount: 1003
+  time: 11/04/2026 12:10:25
+  entityCount: 1025
 maps: []
 grids:
 - 1
@@ -86,7 +86,6 @@ entities:
     - type: SpreaderGrid
     - type: Shuttle
       dampingModifier: 0.25
-    - type: ImplicitRoof
     - type: GridPathfinding
     - type: Gravity
       gravityShakeSound: !type:SoundPathSpecifier
@@ -296,6 +295,33 @@ entities:
           decals:
             131: 6.872835,-8.775887
             132: 6.779085,-8.760262
+        - node:
+            color: '#61000061'
+            id: splatter
+          decals:
+            133: 6.6051893,2.7363548
+            134: 6.6051893,2.6426048
+            135: 5.8864393,3.2363548
+            136: 6.0739393,3.2676048
+            137: 6.2458143,3.2363548
+            138: 6.2614393,3.5957298
+            139: 6.6051893,3.5332298
+            140: 6.5583143,3.7051048
+            141: 6.9489393,3.9707298
+            142: 7.2145643,3.8144798
+            143: 7.0895643,3.3301048
+            144: 6.9333143,3.4238548
+            145: 6.6520643,3.3301048
+            146: 6.5895643,3.1738548
+            147: 6.1989393,3.1582298
+            148: 6.5583143,3.3144798
+            149: 6.5270643,3.4394798
+            150: 6.5270643,3.8769798
+            151: 6.7301893,3.9238548
+            152: 7.3239393,3.7519798
+            153: 7.2770643,3.7363548
+            154: 7.1676893,3.7676048
+            155: 6.9489393,3.7051048
         - node:
             color: '#64000699'
             id: splatter
@@ -511,6 +537,17 @@ entities:
     - type: Action
       originalIconColor: '#FFFFFFFF'
       container: 852
+- proto: ActionToggleLight
+  entities:
+  - uid: 150
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 874
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 874
 - proto: AirlockAssemblyMiningGlass
   entities:
   - uid: 119
@@ -1366,12 +1403,31 @@ entities:
       parent: 1
     - type: Physics
       canCollide: False
+- proto: ClothingEyesGlassesSunglasses
+  entities:
+  - uid: 1015
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 7.9489393,3.5488548
+      parent: 1
+    - type: Physics
+      canCollide: False
 - proto: ClothingHandsGlovesBoneBracersAshWalker
   entities:
   - uid: 816
     components:
     - type: Transform
       pos: -4.7112126,8.519409
+      parent: 1
+    - type: Physics
+      canCollide: False
+- proto: ClothingHeadHatHardhatArmored
+  entities:
+  - uid: 1021
+    components:
+    - type: Transform
+      pos: 5.9489393,2.3926048
       parent: 1
     - type: Physics
       canCollide: False
@@ -1419,6 +1475,16 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -9.433208,-0.44274592
+      parent: 1
+    - type: Physics
+      canCollide: False
+- proto: ClothingUniformJumpsuitRecruitNT
+  entities:
+  - uid: 1020
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 6.3239393,5.017605
       parent: 1
     - type: Physics
       canCollide: False
@@ -1556,11 +1622,6 @@ entities:
     components:
     - type: Transform
       pos: 17.5,-1.5
-      parent: 1
-  - uid: 693
-    components:
-    - type: Transform
-      pos: 14.5,-7.5
       parent: 1
 - proto: DaggerBone
   entities:
@@ -2469,20 +2530,69 @@ entities:
   - uid: 874
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 12.725208,0.2584021
+      pos: 13.361759,0.0581913
       parent: 1
+    - type: HandheldLight
+      toggleActionEntity: 150
+    - type: ContainerContainer
+      containers:
+        cell_slot: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: null
+        actions: !type:Container
+          showEnts: False
+          occludes: True
+          ents:
+          - 150
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
 - proto: FloodlightBroken
   entities:
   - uid: 869
     components:
     - type: Transform
-      pos: 12.502006,0.9325658
+      rot: 2.8591580390930176 rad
+      pos: 12.7069435,-1.8006442
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.2,-0.5
+            - 0.2,-0.5
+            - 0.2,0.5
+            - -0.2,0.5
+          mask:
+          - HighImpassable
+          layer: []
+          density: 50
+          hard: True
+          restitution: 0
+          friction: 0.4
+        throw-fixture:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.2,-0.5
+            - 0.2,-0.5
+            - 0.2,0.5
+            - -0.2,0.5
+          mask:
+          - Impassable
+          - HighImpassable
+          - BulletImpassable
+          layer: []
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
     - type: Physics
-      canCollide: False
+      bodyStatus: InAir
+
 - proto: FloorLavaEntity
   entities:
   - uid: 24
@@ -2780,6 +2890,22 @@ entities:
     - type: Transform
       pos: 4.3325167,6.265163
       parent: 1
+- proto: FoodMeatHuman
+  entities:
+  - uid: 1024
+    components:
+    - type: Transform
+      pos: 7.3708143,4.611355
+      parent: 1
+    - type: Physics
+      canCollide: False
+  - uid: 1025
+    components:
+    - type: Transform
+      pos: 6.8864393,3.7363548
+      parent: 1
+    - type: Physics
+      canCollide: False
 - proto: Girder
   entities:
   - uid: 111
@@ -2836,6 +2962,8 @@ entities:
       rot: 1.150498867034912 rad
       pos: 7.347931,-5.646552
       parent: 1
+    - type: Physics
+      canCollide: False
     - type: RadarConsole
       followEntity: False
 - proto: HatchetBoneAshWalker
@@ -2896,6 +3024,15 @@ entities:
       rot: 3.141592653589793 rad
       pos: 10.552216,6.6169934
       parent: 1
+- proto: LavalandLegionSkull
+  entities:
+  - uid: 1013
+    components:
+    - type: Transform
+      pos: 3.3787386,-15.2765465
+      parent: 1
+    - type: Physics
+      canCollide: False
 - proto: LavalandSilverPickaxe
   entities:
   - uid: 844
@@ -2925,6 +3062,38 @@ entities:
       parent: 1
     - type: Physics
       canCollide: False
+- proto: MarkerDimLightSource
+  entities:
+  - uid: 54
+    components:
+    - type: Transform
+      pos: -5.4471855,8.290509
+      parent: 1
+  - uid: 195
+    components:
+    - type: Transform
+      pos: -5.751873,9.720197
+      parent: 1
+  - uid: 1006
+    components:
+    - type: Transform
+      pos: 16.371021,0.5474274
+      parent: 1
+  - uid: 1007
+    components:
+    - type: Transform
+      pos: 17.660084,-0.46038508
+      parent: 1
+  - uid: 1008
+    components:
+    - type: Transform
+      pos: 9.718017,-8.713571
+      parent: 1
+  - uid: 1009
+    components:
+    - type: Transform
+      pos: 6.928954,-9.416696
+      parent: 1
 - proto: MarkerLightSourceOrange
   entities:
   - uid: 796
@@ -3128,6 +3297,53 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 2.5,-9.5
       parent: 1
+- proto: OrganHumanBrain
+  entities:
+  - uid: 1016
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 6.3395643,3.8613548
+      parent: 1
+- proto: OrganHumanHeart
+  entities:
+  - uid: 1023
+    components:
+    - type: Transform
+      pos: 7.5426893,3.8769798
+      parent: 1
+    - type: Physics
+      canCollide: False
+- proto: OrganHumanKidneys
+  entities:
+  - uid: 1018
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 6.8083143,4.56448
+      parent: 1
+    - type: Physics
+      canCollide: False
+- proto: OrganHumanLiver
+  entities:
+  - uid: 1017
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 7.9020643,4.486355
+      parent: 1
+    - type: Physics
+      canCollide: False
+- proto: OrganHumanStomach
+  entities:
+  - uid: 1019
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 7.1208143,3.1738548
+      parent: 1
+    - type: Physics
+      canCollide: False
 - proto: OxygenTankFilled
   entities:
   - uid: 850
@@ -3193,6 +3409,15 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 10.644173,-6.0538483
+      parent: 1
+    - type: Physics
+      canCollide: False
+- proto: Pickaxe
+  entities:
+  - uid: 1022
+    components:
+    - type: Transform
+      pos: 9.480189,3.6582298
       parent: 1
     - type: Physics
       canCollide: False
@@ -3438,6 +3663,18 @@ entities:
     - type: Transform
       pos: 5.398596,-4.171689
       parent: 1
+- proto: SignKiddiePlaque
+  entities:
+  - uid: 1010
+    components:
+    - type: MetaData
+      desc: Старая табличка, которая была нагло украдена с информационной стены одного из шахтёрских аванпостов. Вероятно табличка привлекла воришек словом "Лаваленд"..
+      name: Осторожно! Местные жители Лаваленда!
+    - type: Transform
+      pos: 1.5,-12.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
 - proto: SignNTMine
   entities:
   - uid: 661
@@ -3447,12 +3684,28 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+  - uid: 1012
+    components:
+    - type: Transform
+      pos: -1.5,-11.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
 - proto: SignSomethingOld2
   entities:
   - uid: 292
     components:
     - type: Transform
       pos: 9.5,-2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+- proto: SignSurvival
+  entities:
+  - uid: 1011
+    components:
+    - type: Transform
+      pos: 5.5,-9.5
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -3487,6 +3740,14 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 6.5,3.5
+      parent: 1
+- proto: SpawnMobWatcherLavaland
+  entities:
+  - uid: 1005
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 15.5,-12.5
       parent: 1
 - proto: SubstationWallBasic
   entities:
@@ -3762,14 +4023,6 @@ entities:
           restitution: 0
           friction: 0.4
 
-- proto: UnfinishedMachineFrame
-  entities:
-  - uid: 873
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 14.5,-7.5
-      parent: 1
 - proto: UnholyHalberd
   entities:
   - uid: 709
@@ -4589,6 +4842,21 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 11.5,-6.5
       parent: 1
+  - uid: 208
+    components:
+    - type: Transform
+      pos: -12.5,0.5
+      parent: 1
+  - uid: 245
+    components:
+    - type: Transform
+      pos: 9.5,-13.5
+      parent: 1
+  - uid: 272
+    components:
+    - type: Transform
+      pos: -4.5,-11.5
+      parent: 1
   - uid: 403
     components:
     - type: Transform
@@ -4598,6 +4866,41 @@ entities:
     components:
     - type: Transform
       pos: 10.5,-10.5
+      parent: 1
+  - uid: 462
+    components:
+    - type: Transform
+      pos: -11.5,-12.5
+      parent: 1
+  - uid: 529
+    components:
+    - type: Transform
+      pos: -1.5,-11.5
+      parent: 1
+  - uid: 586
+    components:
+    - type: Transform
+      pos: 16.5,-9.5
+      parent: 1
+  - uid: 598
+    components:
+    - type: Transform
+      pos: 0.5,16.5
+      parent: 1
+  - uid: 693
+    components:
+    - type: Transform
+      pos: 17.5,-9.5
+      parent: 1
+  - uid: 873
+    components:
+    - type: Transform
+      pos: 17.5,6.5
+      parent: 1
+  - uid: 1004
+    components:
+    - type: Transform
+      pos: 13.5,11.5
       parent: 1
 - proto: WallMiningDiagonal
   entities:
@@ -4733,11 +5036,6 @@ entities:
     components:
     - type: Transform
       pos: -12.5,-0.5
-      parent: 1
-  - uid: 54
-    components:
-    - type: Transform
-      pos: -12.5,0.5
       parent: 1
   - uid: 57
     components:
@@ -4969,11 +5267,6 @@ entities:
     - type: Transform
       pos: 9.5,-12.5
       parent: 1
-  - uid: 150
-    components:
-    - type: Transform
-      pos: 9.5,-13.5
-      parent: 1
   - uid: 151
     components:
     - type: Transform
@@ -5094,11 +5387,6 @@ entities:
     - type: Transform
       pos: -7.5,-11.5
       parent: 1
-  - uid: 195
-    components:
-    - type: Transform
-      pos: -4.5,-11.5
-      parent: 1
   - uid: 196
     components:
     - type: Transform
@@ -5153,11 +5441,6 @@ entities:
     components:
     - type: Transform
       pos: -9.5,-11.5
-      parent: 1
-  - uid: 208
-    components:
-    - type: Transform
-      pos: -11.5,-12.5
       parent: 1
   - uid: 209
     components:
@@ -5259,11 +5542,6 @@ entities:
     - type: Transform
       pos: -2.5,-11.5
       parent: 1
-  - uid: 245
-    components:
-    - type: Transform
-      pos: -1.5,-11.5
-      parent: 1
   - uid: 251
     components:
     - type: Transform
@@ -5353,11 +5631,6 @@ entities:
     components:
     - type: Transform
       pos: 16.5,-10.5
-      parent: 1
-  - uid: 272
-    components:
-    - type: Transform
-      pos: 16.5,-9.5
       parent: 1
   - uid: 273
     components:
@@ -5674,11 +5947,6 @@ entities:
     - type: Transform
       pos: 0.5,17.5
       parent: 1
-  - uid: 462
-    components:
-    - type: Transform
-      pos: 0.5,16.5
-      parent: 1
   - uid: 463
     components:
     - type: Transform
@@ -5758,11 +6026,6 @@ entities:
     components:
     - type: Transform
       pos: 17.5,-8.5
-      parent: 1
-  - uid: 529
-    components:
-    - type: Transform
-      pos: 17.5,-9.5
       parent: 1
   - uid: 530
     components:
@@ -6029,11 +6292,6 @@ entities:
     - type: Transform
       pos: 17.5,5.5
       parent: 1
-  - uid: 586
-    components:
-    - type: Transform
-      pos: 17.5,6.5
-      parent: 1
   - uid: 587
     components:
     - type: Transform
@@ -6083,11 +6341,6 @@ entities:
     components:
     - type: Transform
       pos: 12.5,10.5
-      parent: 1
-  - uid: 598
-    components:
-    - type: Transform
-      pos: 13.5,11.5
       parent: 1
   - uid: 599
     components:
@@ -6311,6 +6564,13 @@ entities:
       parent: 1
     - type: Physics
       canCollide: False
+- proto: WoodenSign
+  entities:
+  - uid: 1014
+    components:
+    - type: Transform
+      pos: 3.3579054,-15.568214
+      parent: 1
 - proto: WoodenSignRight
   entities:
   - uid: 367
