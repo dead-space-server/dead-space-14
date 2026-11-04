@@ -222,6 +222,11 @@ namespace Content.Server.Construction
                                 _container.EmptyContainer(storage.Container);
                             }
 
+                            // DS14-start: and what was hidden in it (a nuke disk in a plushie sewn into slippers)
+                            if (TryComp<Content.Shared.Storage.Components.SecretStashComponent>(entity, out var stash))
+                                _container.EmptyContainer(stash.ItemContainer);
+                            // DS14-end
+
                             if (string.IsNullOrEmpty(arbitraryStep.Store))
                             {
                                 if (!_container.Insert(entity, container))
