@@ -103,6 +103,7 @@ public sealed class SurgerySystem : EntitySystem
         SubscribeNetworkEvent<SurgeryCancelMessage>(OnCancel);
         SubscribeNetworkEvent<SurgeryPickMessage>(OnPick);
         SubscribeNetworkEvent<SurgeryFocusMessage>(OnFocus);
+        SubscribeLocalEvent<SurgerySiteComponent, LimbSeveredEvent>(OnSevered);
     }
 
     public override void Update(float frameTime)
@@ -779,6 +780,8 @@ public sealed class SurgerySystem : EntitySystem
 
         if (verb == SurgeryVerbKind.Retract && !rejoin)
             Reveal(site);
+        if (rejoin && !layer.Retracted)
+            SurgeryProcedure.Conceal(site.Layers, index);
         if (verb == SurgeryVerbKind.MendBone && layer.Kind == SurgeryLayerKind.Bone && !layer.Retracted && layer.Integrity >= 0.85f)
             SurgeryProcedure.Conceal(site.Layers, index);
         if (verb == SurgeryVerbKind.Cauterize && reported >= 0.95f)
@@ -817,6 +820,17 @@ public sealed class SurgerySystem : EntitySystem
             result.Finished = false;
             result.PlaceOrgan = false;
             result.PlaceImplant = false;
+            result.Rejected = true;
+            result.Key = "surgery-wrong-hand";
+        }
+
+        if (verb == SurgeryVerbKind.Seat && (advance || result.Attach)
+            && ZoneSevered(patient.Value, site.Zone)
+            && (held == null || !_limbs.PartFits(site.Zone, held.Value)))
+        {
+            advance = false;
+            result.Attach = false;
+            result.Finished = false;
             result.Rejected = true;
             result.Key = "surgery-wrong-hand";
         }
@@ -1215,6 +1229,39 @@ public sealed class SurgerySystem : EntitySystem
 
         Del(item);
         return true;
+    }
+
+    private void OnSevered(Entity<SurgerySiteComponent> ent, ref LimbSeveredEvent args)
+    {
+        var site = ent.Comp;
+        var gone = new HashSet<LimbZone> { args.Zone };
+        if (LimbWoundRules.TryCarried(args.Zone, out var child))
+            gone.Add(child);
+        if (args.Zone == LimbZone.Head)
+        {
+            gone.Add(LimbZone.Eyes);
+            gone.Add(LimbZone.Mouth);
+        }
+
+        var current = KeptKey(site.Zone, site.Part, site.Back);
+        var changed = false;
+        foreach (var key in site.Kept.Keys.ToList())
+        {
+            if (key == current || !gone.Contains(SurgeryWounds.ZoneOf(key)))
+                continue;
+
+            site.Kept.Remove(key);
+            changed = true;
+        }
+
+        if (site.Zone != args.Zone && gone.Contains(site.Zone) && !site.Done)
+        {
+            CloseSite(site);
+            changed = true;
+        }
+
+        if (changed)
+            Dirty(ent);
     }
 
     private bool ZoneSevered(EntityUid patient, LimbZone zone)
@@ -1633,7 +1680,9 @@ public sealed class SurgerySystem : EntitySystem
                 break;
             case SurgeryVerbKind.Retract:
                 layer.Retracted = false;
-                break;
+                site.Layers[index] = layer;
+                SurgeryProcedure.Conceal(site.Layers, index);
+                return;
             case SurgeryVerbKind.Cauterize:
             case SurgeryVerbKind.SealSap:
                 layer.Integrity = 0.4f;

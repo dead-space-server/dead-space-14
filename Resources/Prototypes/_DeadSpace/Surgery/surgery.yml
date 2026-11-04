@@ -887,16 +887,16 @@
   name: surgery-hint-saw
   color: "#e8902a"
   icons:
-  - sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
-    state: saw
+  - sprite: /Textures/_DeadSpace/Objects/Medical/surgery_saw.rsi
+    state: icon
 
 - type: surgeryHint
   id: Amputate
   name: surgery-hint-amputate
   color: "#e8902a"
   icons:
-  - sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
-    state: saw
+  - sprite: /Textures/_DeadSpace/Objects/Medical/surgery_saw.rsi
+    state: icon
 
 - type: surgeryHint
   id: Drill
@@ -1924,8 +1924,8 @@
   limb: true
   order: 5
   icon:
-    sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
-    state: saw
+    sprite: /Textures/_DeadSpace/Objects/Medical/surgery_saw.rsi
+    state: icon
   across: true
   whole: true
   zones:
@@ -1969,8 +1969,8 @@
   name: surgery-op-amputate
   order: 10
   icon:
-    sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
-    state: saw
+    sprite: /Textures/_DeadSpace/Objects/Medical/surgery_saw.rsi
+    state: icon
   zone: Head
   across: true
   whole: true
@@ -2186,8 +2186,8 @@
   across: true
   order: 0
   icon:
-    sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
-    state: saw
+    sprite: /Textures/_DeadSpace/Objects/Medical/surgery_saw.rsi
+    state: icon
   steps:
   - verb: Incise
     layer: Skin

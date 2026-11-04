@@ -269,13 +269,15 @@ public sealed class SurgeryGuideOverlay : Overlay
     private void Triangles(DrawingHandleWorld handle, Vector2 dir, Vector2 side, Color ink)
     {
         var length = (End - Start).Length();
-        var near = Inward ? 0.02f : Math.Clamp(length * 0.25f, 0.02f, 0.08f);
-        var far = Math.Clamp(length * 0.7f, Inward ? 0.08f : near, 0.2f);
+        var rows = length < 0.15f ? 1 : 2;
         var size = Math.Clamp(length * 0.45f, 0.035f, 0.075f);
+        if (rows > 1)
+            size = MathF.Min(size, length / (rows + 1f) * 0.75f);
+        var near = Inward ? 0.02f : MathF.Max(Math.Clamp(length * 0.25f, 0.02f, 0.08f), size + 0.01f);
+        var far = MathF.Max(Math.Clamp(length * 0.7f, Inward ? 0.08f : near, 0.2f), near);
         var left = Math.Clamp(Left, near, far);
         var right = Math.Clamp(Right, near, far);
         var aim = Inward ? -1f : 1f;
-        var rows = length < 0.15f ? 1 : 3;
         for (var i = 1; i <= rows; i++)
         {
             var at = Start + (End - Start) * (i / (rows + 1f));

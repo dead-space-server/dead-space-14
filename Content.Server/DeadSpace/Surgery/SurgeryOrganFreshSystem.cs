@@ -3,8 +3,10 @@
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
+using Content.Shared.Body.Part;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Humanoid;
 using Content.Shared.Traits.Assorted;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -20,6 +22,7 @@ public sealed class SurgeryOrganFreshSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly LimbWoundSystem _limbs = default!;
     [Dependency] private readonly SurgeryGraftSystem _graft = default!;
+    [Dependency] private readonly SurgeryOrganSystem _organs = default!;
 
     private float _accumulator;
 
@@ -32,6 +35,7 @@ public sealed class SurgeryOrganFreshSystem : EntitySystem
 
     private void OnRemoved(Entity<OrganComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
+        Lost(ent, args.OldBody, args.OldPart);
         if (TerminatingOrDeleted(ent))
             return;
 
@@ -50,6 +54,43 @@ public sealed class SurgeryOrganFreshSystem : EntitySystem
         fresh.Left = MathF.Max(0f, fresh.Total - gone);
         fresh.Spent = fresh.Left <= 0f;
         Dirty(ent, fresh);
+    }
+
+    private void Lost(EntityUid organ, EntityUid body, EntityUid part)
+    {
+        if (HasComp<SurgeryKeepOrganComponent>(organ)
+            || TerminatingOrDeleted(body)
+            || CompOrNull<BodyPartComponent>(part)?.Body != body
+            || !TryComp<LimbBodyComponent>(body, out var limbs))
+            return;
+
+        var machine = TryComp<HumanoidAppearanceComponent>(body, out var look)
+                      && SurgerySpeciesPrototype.IsMachine(_prototype, look.Species.Id);
+        foreach (var kind in Enum.GetValues<LimbOrgan>())
+        {
+            var index = (int) kind;
+            if ((limbs.Present & (LimbOrganMask) (1 << index)) == 0
+                || !SurgeryOrganKindComponent.Matches(EntityManager, organ, kind.ToString(), machine))
+                continue;
+
+            if ((uint) index < (uint) limbs.Organs.Count && limbs.Organs[index].Missing)
+                return;
+
+            _limbs.ApplyOrganEdit(body, kind, new LimbOrganEdit
+            {
+                SetMissing = true,
+                Missing = true,
+                EyesGone = kind == LimbOrgan.Eyes ? 2 - limbs.EyesGone : 0,
+            });
+            _organs.Refresh(body);
+            if (_limbs.IsVital(body, kind))
+            {
+                _limbs.ApplyEdit(body, LimbOrganHomes.Home(kind), new LimbEdit { SetHealth = true, Health = 0f });
+                _limbs.KillByLimbs(body);
+            }
+
+            return;
+        }
     }
 
     private void OnAdded(Entity<OrganComponent> ent, ref OrganAddedToBodyEvent args)

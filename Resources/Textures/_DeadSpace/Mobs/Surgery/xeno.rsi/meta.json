@@ -195,6 +195,12 @@
     },
     {
       "name": "back_cut4"
+    },
+    {
+      "name": "torso_organs_l"
+    },
+    {
+      "name": "torso_organs_r"
     }
   ]
 }

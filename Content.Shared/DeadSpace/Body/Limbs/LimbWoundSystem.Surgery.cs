@@ -288,6 +288,16 @@ public sealed partial class LimbWoundSystem
         return true;
     }
 
+    public bool PartFits(LimbZone zone, EntityUid part)
+    {
+        var type = PartType(zone);
+        var symmetry = Symmetry(zone);
+        return type != null
+               && TryComp<BodyPartComponent>(part, out var partComp)
+               && partComp.PartType == type
+               && (symmetry == BodyPartSymmetry.None || partComp.Symmetry == symmetry);
+    }
+
     public bool TryReattach(EntityUid body, LimbZone zone, EntityUid part, bool crude)
     {
         if (_net.IsClient || !LimbWoundRules.CanSever(zone))

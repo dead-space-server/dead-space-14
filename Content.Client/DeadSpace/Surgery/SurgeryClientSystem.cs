@@ -36,6 +36,7 @@ using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Input;
+using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 
@@ -46,6 +47,7 @@ public sealed class SurgeryClientSystem : EntitySystem
     private const string WoundPrefix = "surgery-wound-";
     private const string PenTag = "Pen";
     private const string LinePrefix = "line";
+    private const float WorldClickGuard = 1.5f;
     private static readonly ResPath Rsi = new("/Textures/_DeadSpace/Mobs/Surgery/human_male.rsi");
     private static readonly ResPath LineRsi = new("/Textures/_DeadSpace/Mobs/Surgery/line.rsi");
 
@@ -87,7 +89,7 @@ public sealed class SurgeryClientSystem : EntitySystem
 
     private SurgeryBoardMessage? _board;
     private EntityUid? _patient;
-    public EntityUid? Operating => _board != null ? _patient : null;
+    public EntityUid? Operating => _board != null ? _patient : _picking ?? _menuFor?.Patient;
     private EntityUid? _picking;
     private EntityUid? _stay;
     private Control? _headMenu;
@@ -125,6 +127,7 @@ public sealed class SurgeryClientSystem : EntitySystem
     private readonly List<(EntityUid Body, LimbZone Zone, Vector2 Local, Vector2 Dir)> _nicks = new();
     private readonly List<(float Along, float Left)> _sear = new();
     private readonly List<(int Crack, Vector2 Local, bool Done)> _glue = new();
+    private readonly Dictionary<(EntityUid Patient, byte Zone, string Part, byte Layer, bool Closing), (float Left, float Right)> _spreads = new();
     private float _sawPhase;
     private float _searRadius;
     private const float SearTime = 0.7f;
@@ -151,6 +154,21 @@ public sealed class SurgeryClientSystem : EntitySystem
             if (_patient != null)
                 PlaceMap(_patient.Value);
         };
+        CommandBinds.Builder
+            .BindBefore(EngineKeyFunctions.Use, new PointerInputCmdHandler(OnWorldClick, true, true), typeof(SharedInteractionSystem))
+            .Register<SurgeryClientSystem>();
+    }
+
+    private bool OnWorldClick(in PointerInputCmdHandler.PointerInputCmdArgs args)
+    {
+        if (args.State != BoundKeyState.Down
+            || _board == null || _patient is not { } patient || _tool == null || args.EntityUid == patient || !Exists(patient)
+            || _players.LocalEntity is not { } user || !_hands.TryGetActiveItem(user, out var held) || held != _tool)
+            return false;
+
+        var mouse = _transform.ToMapCoordinates(args.Coordinates);
+        return mouse.MapId == Transform(patient).MapID
+               && (mouse.Position - _transform.GetWorldPosition(patient)).LengthSquared() < WorldClickGuard * WorldClickGuard;
     }
 
     private void OnProne(Entity<SurgeryProneComponent> ent, ref ComponentStartup args)
@@ -327,6 +345,7 @@ public sealed class SurgeryClientSystem : EntitySystem
     public override void Shutdown()
     {
         base.Shutdown();
+        CommandBinds.Unregister<SurgeryClientSystem>();
         _overlays.RemoveOverlay(_guide);
         EndView();
     }
@@ -413,6 +432,7 @@ public sealed class SurgeryClientSystem : EntitySystem
             if (game != previousGame || _verb != previousVerb)
                 ArmGame();
             _game = game;
+            RecallSpread();
             if (_game is not (SurgeryGameKind.Sear or SurgeryGameKind.Inject or SurgeryGameKind.Dots or SurgeryGameKind.Steady))
                 _sear.Clear();
             if (_game != SurgeryGameKind.Glue)
@@ -570,6 +590,7 @@ public sealed class SurgeryClientSystem : EntitySystem
                 }
 
                 _layer = message.StepLayer != 255 ? message.StepLayer : _layer;
+                RecallSpread();
                 if (!_armed)
                     Paint(patient.Value, OpenAmount(message));
             }
@@ -630,6 +651,7 @@ public sealed class SurgeryClientSystem : EntitySystem
             _zoomed = true;
         }
 
+        RecallSpread();
         Paint(patient.Value, _frontier);
     }
 
@@ -1360,6 +1382,7 @@ public sealed class SurgeryClientSystem : EntitySystem
             else
                 _left = MathF.Max(_left, pulled);
             _didPull = true;
+            KeepSpread();
         }
 
         if (down || !_down)
@@ -1387,9 +1410,36 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (!done || !closing && LayerHeld())
             return;
 
+        if (SpreadKey() is { } key)
+            _spreads.Remove(key);
         _left = 0f;
         _right = 0f;
         Send(1f, 0, false);
+    }
+
+    private (EntityUid, byte, string, byte, bool)? SpreadKey()
+    {
+        if (_board == null || _patient is not { } patient || _verb != SurgeryVerbKind.Retract
+            || !MarkOf((LimbZone) _board.Zone, Prone(patient), out var mark) || !mark.Halves)
+            return null;
+
+        return (patient, _board.Zone, _board.Part, _layer, Closing());
+    }
+
+    private void KeepSpread()
+    {
+        if (SpreadKey() is { } key)
+            _spreads[key] = (_left, _right);
+    }
+
+    private void RecallSpread()
+    {
+        if (_left > 0f || _right > 0f || SpreadKey() is not { } key || !_spreads.TryGetValue(key, out var kept))
+            return;
+
+        _left = kept.Left;
+        _right = kept.Right;
+        _didPull = true;
     }
 
     private bool Closing()
@@ -2417,6 +2467,25 @@ public sealed class SurgeryClientSystem : EntitySystem
             else if (closing)
                 state = CutLook(mark.Prefix, 1f);
         }
+        else if (MarkOf((LimbZone) board.Zone, _patient != null && Prone(_patient.Value), out var ribMark)
+                 && ribMark is { Halves: true, Ribs: true }
+                 && (state == ribMark.Prefix + "_ribs" || state == ribMark.Prefix + "_organs")
+                 && _game == SurgeryGameKind.Spread
+                 && _didPull
+                 && RsiHas(WoundRsi(patient), ribMark.Prefix + "_organs_l"))
+        {
+            var closing = Closing();
+            var left = closing ? _left <= 0f || _left > 0.06f : _left > 0.08f;
+            var right = closing ? _right <= 0f || _right > 0.06f : _right > 0.08f;
+            if (left && !right)
+                state = ribMark.Prefix + "_organs_l";
+            else if (right && !left)
+                state = ribMark.Prefix + "_organs_r";
+            else if (left && right)
+                state = ribMark.Prefix + "_organs";
+            else
+                state = ribMark.Prefix + "_ribs";
+        }
 
         ShowWound(patient, (LimbZone) board.Zone, board.Part, board.Across != 0, state);
     }
@@ -2506,7 +2575,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         {
             var across = AcrossOf(wound.Part, wound.Queued);
             var state = WoundOf(wound.Zone, wound.Part, wound.Back, wound.Layers, across, prone);
-            ShowWound(uid, sprite, wound.Zone, wound.Part, across, state, prone, shown);
+            ShowWound(uid, sprite, wound.Zone, wound.Part, wound.Back, across, state, prone, shown);
         }
 
         HideWounds(uid, sprite, shown);
@@ -2517,16 +2586,18 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (!TryComp<SpriteComponent>(uid, out var sprite))
             return;
 
-        ShowWound(uid, sprite, zone, part, across, state, side ?? Prone(uid), null);
+        var prone = side ?? Prone(uid);
+        ShowWound(uid, sprite, zone, part, prone, across, state, prone, null);
     }
 
-    private void ShowWound(EntityUid uid, SpriteComponent sprite, LimbZone zone, string part, bool across, string state, bool prone, HashSet<string>? shown)
+    private void ShowWound(EntityUid uid, SpriteComponent sprite, LimbZone zone, string part, bool back, bool across, string state, bool prone, HashSet<string>? shown)
     {
         var visible = WoundsOn(uid) && state != "none";
         var line = visible && state.StartsWith(LinePrefix + "_");
         var art = visible && !line;
-        var artKey = WoundPrefix + zone;
-        var lineKey = WoundPrefix + "line-" + zone;
+        var key = SurgeryWounds.Key(zone, part, back);
+        var artKey = WoundPrefix + key;
+        var lineKey = WoundPrefix + "line-" + key;
         SetWoundLayer(uid, sprite, artKey, WoundRsi(uid), art ? state : null);
         SetWoundLayer(uid, sprite, lineKey, LineRsi, line ? state[(LinePrefix.Length + 1)..] : null);
         if (art)
@@ -2647,6 +2718,11 @@ public sealed class SurgeryClientSystem : EntitySystem
         }
 
         sprite.LayerSetVisible(layer, state != null);
+    }
+
+    private bool RsiHas(ResPath rsi, string state)
+    {
+        return _cache.GetResource<RSIResource>(rsi).RSI.TryGetState(state, out _);
     }
 
     private Vector2 RsiSize(ResPath rsi)

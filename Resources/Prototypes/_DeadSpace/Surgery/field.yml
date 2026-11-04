@@ -106,8 +106,8 @@
   whole: true
   order: 5
   icon:
-    sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
-    state: saw
+    sprite: /Textures/_DeadSpace/Objects/Medical/surgery_saw.rsi
+    state: icon
   zones:
   - ArmLeft
   - ArmRight

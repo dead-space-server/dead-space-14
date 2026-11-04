@@ -10,6 +10,7 @@ namespace Content.Client.DeadSpace.Surgery;
 public static class SurgeryWoundPainter
 {
     public const int Size = 32;
+    private const int NarrowPixels = 6;
 
     private readonly record struct Palette(Rgba32 Cut, Rgba32 Tip, Rgba32 Gape, Rgba32 Lip, Rgba32 Rim, Rgba32 Pit, bool Dotted);
 
@@ -88,13 +89,21 @@ public static class SurgeryWoundPainter
         var image = new Image<Rgba32>(Size, Size);
         var horizontal = MathF.Abs(b.X - a.X) > MathF.Abs(b.Y - a.Y);
         var side = horizontal ? (0, 1) : (1, 0);
+        var line = Trace(a, b);
+        var inward = horizontal ? (0, -1) : ((a.X + b.X) * 0.5f >= Size * 0.5f ? (-1, 0) : (1, 0));
         switch (state)
         {
+            case "open" when line.Count <= NarrowPixels:
+                Narrow(image, line, inward, palette.Gape, palette.Lip, palette.Rim);
+                break;
+            case "deep" when line.Count <= NarrowPixels:
+                Narrow(image, line, inward, palette.Pit, palette.Gape, palette.Lip);
+                break;
             case "open":
-                Body(image, Trace(a, b), side, palette.Gape, palette.Lip, palette.Rim);
+                Body(image, line, side, palette.Gape, palette.Lip, palette.Rim);
                 break;
             case "deep":
-                Body(image, Trace(a, b), side, palette.Pit, palette.Gape, palette.Lip);
+                Body(image, line, side, palette.Pit, palette.Gape, palette.Lip);
                 break;
             default:
                 var fraction = state.Length > 3 && int.TryParse(state[3..], out var stage) ? stage / 4f : 1f;
@@ -127,6 +136,18 @@ public static class SurgeryWoundPainter
 
         for (var i = 1; i < points.Count - 1; i++)
             Put(image, points[i].X, points[i].Y, core);
+    }
+
+    private static void Narrow(Image<Rgba32> image, List<(int X, int Y)> points, (int X, int Y) inward, Rgba32 core, Rgba32 lip, Rgba32 tip)
+    {
+        for (var i = 0; i < points.Count; i++)
+        {
+            var (x, y) = points[i];
+            var end = i == 0 || i == points.Count - 1;
+            Put(image, x, y, end ? tip : core);
+            if (!end)
+                Put(image, x + inward.X, y + inward.Y, lip);
+        }
     }
 
     private static void Put(Image<Rgba32> image, int x, int y, Rgba32 color)

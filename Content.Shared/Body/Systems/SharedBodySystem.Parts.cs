@@ -105,7 +105,18 @@ public partial class SharedBodySystem
             foreach (var containedUid in container.ContainedEntities)
             {
                 if (TryComp(containedUid, out BodyPartComponent? childPart))
+                {
+                    //DS-14 start
+                    var oldBody = childPart.Body;
+                    if (oldBody is { } old && old != bodyUid)
+                        RemovePart(old, (containedUid, childPart), container.ID);
+                    //DS-14 end
                     RecursiveBodyUpdate((containedUid, childPart), bodyUid);
+                    //DS-14 start
+                    if (bodyUid is { } added && oldBody != added)
+                        AddPart(added, (containedUid, childPart), container.ID);
+                    //DS-14 end
+                }
             }
         }
     }

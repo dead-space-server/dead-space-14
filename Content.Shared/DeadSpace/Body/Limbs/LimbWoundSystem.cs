@@ -141,7 +141,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         SubscribeLocalEvent<LimbBodyComponent, DamageModifyEvent>(OnDeadLimbHit);
         SubscribeLocalEvent<LimbBodyComponent, BeforeMeleeDamageEvent>(OnBeforeMelee, after: [typeof(ParrySystem)]);
         SubscribeLocalEvent<MeleeWeaponComponent, GetMeleeAttackRateEvent>(OnMeleeRate);
+        SubscribeLocalEvent<LimbBodyComponent, GetMeleeDamageEvent>(OnFistDamage);
         SubscribeLocalEvent<GunComponent, GunRefreshModifiersEvent>(OnGunModifiers);
+        SubscribeLocalEvent<GunComponent, GotEquippedHandEvent>((uid, _, _) => _guns.RefreshModifiers(uid));
+        SubscribeLocalEvent<GunComponent, GotUnequippedHandEvent>((uid, _, _) => _guns.RefreshModifiers(uid));
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectile);
         SubscribeLocalEvent<HitscanBasicDamageComponent, HitscanDamageDealtEvent>(OnHitscan);
         SubscribeAllEvent<LimbAimSetEvent>(OnAimSet);
@@ -966,6 +969,37 @@ public sealed partial class LimbWoundSystem : EntitySystem
                    || LimbWoundRules.SlowHands(zones[LimbWoundRules.Index(LimbZone.ArmRight)], zones[LimbWoundRules.Index(LimbZone.HandRight)], adrenaline);
         if (slow)
             args.Multipliers *= LimbWoundRules.HandAttackRate;
+    }
+
+    private void OnFistDamage(Entity<LimbBodyComponent> ent, ref GetMeleeDamageEvent args)
+    {
+        if (args.Weapon != ent.Owner
+            || !TryComp<HandsComponent>(ent, out var hands)
+            || !_hands.TryGetHand((ent, hands), hands.ActiveHandId, out var found)
+            || found.Value.Location is not (HandLocation.Left or HandLocation.Right)
+            || !TryComp<MeleeWeaponComponent>(ent, out var own)
+            || !TryComp<HumanoidAppearanceComponent>(ent, out var look))
+            return;
+
+        var symmetry = found.Value.Location == HandLocation.Left ? BodyPartSymmetry.Left : BodyPartSymmetry.Right;
+        foreach (var part in _body.GetBodyChildrenOfType(ent, BodyPartType.Hand))
+        {
+            if (part.Component.Symmetry != symmetry)
+                continue;
+
+            if (!TryComp<LimbFleshComponent>(part.Id, out var flesh)
+                || flesh.Species.Length == 0
+                || flesh.Species == look.Species.Id
+                || !_proto.TryIndex<SpeciesPrototype>(flesh.Species, out var species)
+                || !_proto.TryIndex(species.Prototype, out var mob)
+                || !mob.TryGetComponent<MeleeWeaponComponent>(out var donor, EntityManager.ComponentFactory))
+                return;
+
+            var baseTotal = own.Damage.GetTotal().Float();
+            var scale = baseTotal > 0f ? args.Damage.GetTotal().Float() / baseTotal : 1f;
+            args.Damage = new DamageSpecifier(donor.Damage) * scale;
+            return;
+        }
     }
 
     private void OnGunModifiers(Entity<GunComponent> ent, ref GunRefreshModifiersEvent args)
