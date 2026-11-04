@@ -9571,3 +9571,12 @@ Entries:
     message: Респрайт Бубльгума by golukok_epta
   - type: Fix
     message: Много багов лавы
+- id: 921
+  author: pe4enkakris
+  time: '2026-11-04T13:47:58.219004+00:00'
+  pr: 2641
+  changes:
+  - type: Add
+    message: Создание шлема СБ с фонариком
+  - type: Tweak
+    message: Курящий Карп нельзя применить если есть голопаразит и наоборот.
