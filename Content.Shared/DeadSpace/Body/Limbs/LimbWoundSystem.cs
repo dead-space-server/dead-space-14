@@ -1909,7 +1909,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var mark = strike.BehindArmor && strike.Mark == LimbMark.Point ? LimbMark.Blunt : strike.Mark;
         ApplyRibs(uid, strike, mark);
         if (strike.Zone is not (LimbZone.Eyes or LimbZone.Mouth)
-            && LimbOrganRules.TryTarget(strike.Zone, mark, out var organ)
+            && LimbOrganRules.TryTarget(strike.Zone, mark, out var organ, strike.Projectile)
             && (limbs.Present & (LimbOrganMask) (1 << (int) organ)) != 0
             && _random.NextFloat() < LimbWoundRules.SlipChance(LimbOrganRules.OrganSize(organ), strike.Distance, ready))
             return;
@@ -1917,7 +1917,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var organs = CollectionsMarshal.AsSpan(limbs.Organs);
         var brain = (int) LimbOrgan.Brain;
         var brainWas = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
-        var hit = LimbOrganRules.Apply(organs, strike.Zone, mark, strike.Amount * strike.RoundOrgan, strike.WoundMultiplier, limbs.Present);
+        var hit = LimbOrganRules.Apply(organs, strike.Zone, mark, strike.Amount * strike.RoundOrgan, strike.WoundMultiplier, limbs.Present, strike.Projectile);
         if (!brainWas && (uint) brain < (uint) organs.Length && organs[brain].Ruptured)
         {
             var rupture = new LimbBrainRuptureEvent();
@@ -1941,7 +1941,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             if (row.Hook != LimbHooks.Rib || !LimbCatalog.Fits(row, strike.Zone, mark, strike.Projectile))
                 continue;
 
-            CrackRibs(uid, scaled * row.Factor, mark);
+            CrackRibs(uid, scaled * row.Factor, mark, strike.Projectile);
         }
     }
 
@@ -2192,7 +2192,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         Dirty(uid, limbs);
     }
 
-    private void CrackRibs(EntityUid uid, float amount, LimbMark mark)
+    private void CrackRibs(EntityUid uid, float amount, LimbMark mark, bool projectile)
     {
         if (amount <= 0f || !TryComp<LimbBodyComponent>(uid, out var limbs))
             return;
@@ -2200,7 +2200,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         EnsureZones(limbs);
         ref var torso = ref CollectionsMarshal.AsSpan(limbs.Zones)[LimbWoundRules.Index(LimbZone.Torso)];
         torso.Bone += amount;
-        if (torso.Bone >= LimbWoundRules.BreakBone && torso.Flesh >= LimbWoundRules.StrainFlesh && mark is LimbMark.Point or LimbMark.Edge)
+        if (!projectile && torso.Bone >= LimbWoundRules.BreakBone && torso.Flesh >= LimbWoundRules.StrainFlesh && mark is LimbMark.Point or LimbMark.Edge)
             MarkWhistle(uid);
 
         Dirty(uid, limbs);

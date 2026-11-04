@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Content.Shared.DeadSpace.Body.Limbs;
 using NUnit.Framework;
 
@@ -10,7 +11,7 @@ public sealed class LimbCatalogTest
     [Test]
     public void AChestStabIsAHeartRowAndACritHook()
     {
-        var hooks = Hooks(LimbZone.Torso, LimbMark.Point, projectile: true);
+        var hooks = Hooks(LimbZone.Torso, LimbMark.Point, projectile: false);
 
         Assert.Multiple(() =>
         {
@@ -18,6 +19,24 @@ public sealed class LimbCatalogTest
             Assert.That(hooks, Does.Contain(LimbHooks.Crit));
             Assert.That(hooks, Does.Not.Contain(LimbHooks.Air));
             Assert.That(hooks, Does.Not.Contain(LimbHooks.Blind));
+        });
+    }
+
+    [Test]
+    public void AChestShotMissesTheHeartAndLungs()
+    {
+        var organs = LimbOrganRules.CreateAll().ToArray();
+        foreach (var mark in new[] { LimbMark.Point, LimbMark.Edge, LimbMark.Blunt })
+            LimbOrganRules.Apply(organs, LimbZone.Torso, mark, 200f, 1f, projectile: true);
+
+        var shot = Hooks(LimbZone.Torso, LimbMark.Point, projectile: true);
+        Assert.Multiple(() =>
+        {
+            Assert.That(organs[(int) LimbOrgan.Heart].Damage, Is.EqualTo(0f));
+            Assert.That(organs[(int) LimbOrgan.Lungs].Damage, Is.EqualTo(0f));
+            Assert.That(shot, Does.Not.Contain(LimbHooks.Crit));
+            Assert.That(shot, Does.Not.Contain(LimbHooks.Whistle));
+            Assert.That(Hooks(LimbZone.Torso, LimbMark.Edge, projectile: true), Does.Not.Contain(LimbHooks.Air));
         });
     }
 
