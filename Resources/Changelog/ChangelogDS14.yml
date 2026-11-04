@@ -9580,3 +9580,12 @@ Entries:
     message: Создание шлема СБ с фонариком
   - type: Tweak
     message: Курящий Карп нельзя применить если есть голопаразит и наоборот.
+- id: 922
+  author: BlueDogDoc
+  time: '2026-11-04T14:48:02.451054+00:00'
+  pr: 2625
+  changes:
+  - type: Add
+    message: Хирургия
+  - type: Add
+    message: Фрагментированный урон
