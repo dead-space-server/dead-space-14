@@ -65,7 +65,7 @@ public sealed class NinjaStealMoneyObjectiveSystem : EntitySystem
             return;
         }
 
-        args.Progress = Math.Clamp(comp.CurrentCount / comp.TargetCount, 0f, 1f);
+        args.Progress = Math.Clamp((float) comp.CurrentCount / comp.TargetCount, 0f, 1f);
     }
 
     private EntityUid? GetObjectiveStation(MindComponent mind)
@@ -82,8 +82,13 @@ public sealed class NinjaStealMoneyObjectiveSystem : EntitySystem
             }
         }
 
-        var stations = _station.GetStations();
-        return stations.Count == 1 ? stations[0] : null;
+        foreach (var station in _station.GetStations())
+        {
+            if (HasComp<StationBankAccountComponent>(station))
+                return station;
+        }
+
+        return null;
     }
 
     public void AddMoneyCount(NinjaStealMoneyConditionComponent comp, int toAdd)
