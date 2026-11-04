@@ -13,6 +13,7 @@ sandbox-window-toggle-lights-button = Переключить освещение
 sandbox-window-toggle-fov-button = Переключить FOV
 sandbox-window-toggle-shadows-button = Переключить тени
 sandbox-window-toggle-subfloor-button = Переключить пол
+sandbox-window-toggle-device-links-button = Отображать связи устройств
 sandbox-window-toggle-disposal-button = Показать сеть труб
 sandbox-window-toggle-cable-button = Показать проводку
 sandbox-window-toggle-atmos-button = Показать сеть атмоса

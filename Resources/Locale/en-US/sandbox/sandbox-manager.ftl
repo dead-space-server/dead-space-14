@@ -15,6 +15,7 @@ sandbox-window-toggle-lights-button = Toggle Lights
 sandbox-window-toggle-fov-button = Toggle FOV
 sandbox-window-toggle-shadows-button = Toggle Shadows
 sandbox-window-toggle-subfloor-button = Toggle Subfloor
+sandbox-window-toggle-device-links-button = Show device links
 sandbox-window-toggle-disposal-button = Show pipe network
 sandbox-window-toggle-cable-button = Show wiring
 sandbox-window-toggle-atmos-button = Show atmos network
