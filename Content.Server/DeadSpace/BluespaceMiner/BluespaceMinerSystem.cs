@@ -1,33 +1,22 @@
 using Content.Server.Atmos.EntitySystems;
-using Content.Server.Materials;
 using Content.Server.Atmos.Piping.Components;
-using Content.Server.Power.EntitySystems;
+using Content.Server.Power.Components;
 using Content.Shared.Atmos;
 using Content.Shared.DeadSpace.BluespaceMiner;
 using Content.Shared.Examine;
 using Content.Shared.Materials;
 using Content.Shared.Stacks;
-using Robust.Server.GameObjects;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.BluespaceMiner;
 
-/// <summary>
-/// Логика блюспейс-майнера: добывает материалы при соблюдении условий
-/// среды (20-80 K, 100-150 кПа) и выделяет горячий углекислый газ.
-/// Добытые ресурсы материализуются рядом с машиной с блюспейс-эффектом.
-/// </summary>
 public sealed class BluespaceMinerSystem : EntitySystem
 {
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
-    [Dependency] private readonly PowerReceiverSystem _power = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly EntityManager _spawn = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
     public override void Initialize()
@@ -42,7 +31,7 @@ public sealed class BluespaceMinerSystem : EntitySystem
     {
         var comp = ent.Comp;
 
-        if (!_power.IsPowered(ent))
+        if (!IsPowered(ent))
         {
             SetStatus(ent, BluespaceMinerStatus.Unpowered);
             return;
@@ -57,15 +46,12 @@ public sealed class BluespaceMinerSystem : EntitySystem
 
         SetStatus(ent, BluespaceMinerStatus.Ok);
 
-        // выделяем горячий газ пропорционально времени
-        var moles = comp.GasMolesPerSecond * args.dt;
-        ReleaseGas(comp, environment, moles);
-
-        // добыча материала — пачками раз в секунду
+        var interval = MathF.Max(comp.CycleInterval, 0.1f);
         comp.Accumulator += args.dt;
-        while (comp.Accumulator >= 1f)
+        while (comp.Accumulator >= interval)
         {
-            comp.Accumulator -= 1f;
+            comp.Accumulator -= interval;
+            ReleaseGas(comp, environment, comp.GasMolesPerSecond * interval);
             MineOnce(ent, comp);
         }
     }
@@ -76,55 +62,40 @@ public sealed class BluespaceMinerSystem : EntitySystem
             return;
 
         var material = PickMaterial(comp);
-        var amount = comp.SheetsPerSecond * comp.MaterialPerSheet;
-
-        // копим добычу во внутреннем хранилище, а когда наберётся пачка —
-        // материализуем её рядом с машиной с блюспейс-эффектом
-        if (!_materialStorage.TryChangeMaterialAmount(ent, material, amount))
-            return;
-
-        var batchAmount = comp.SheetsPerBatch * comp.MaterialPerSheet;
-        if (comp.SheetsPerBatch <= 0 || _materialStorage.GetMaterialAmount(ent, material) < batchAmount)
-            return;
-
-        _materialStorage.TryChangeMaterialAmount(ent, material, -batchAmount);
-        SpawnBatch(ent, comp, material, comp.SheetsPerBatch);
+        SpawnBatch(ent, material, comp.SheetsPerBatch);
     }
 
-    private void SpawnBatch(Entity<BluespaceMinerComponent> ent, BluespaceMinerComponent comp,
-        ProtoId<MaterialPrototype> material, int sheets)
+    private void SpawnBatch(Entity<BluespaceMinerComponent> ent, ProtoId<MaterialPrototype> material, int sheets)
     {
-        var materialProto = _proto.Index<MaterialPrototype>(material);
+        var materialProto = _proto.Index(material);
         if (materialProto.StackEntity is not { } stackProto)
             return;
 
         var xform = Transform(ent);
-        var coords = xform.Coordinates.Offset(_random.NextVector2(-0.4f, 0.4f));
+        var coords = xform.Coordinates.Offset(_random.NextVector2(-ent.Comp.TeleportRange, ent.Comp.TeleportRange));
 
-        var stack = _spawn.SpawnEntity(stackProto, coords);
+        var stack = Spawn(stackProto, coords);
         _stack.SetCount(stack, sheets);
-        _spawn.SpawnEntity("EffectBluespaceMinerTeleport", coords);
+        Spawn("EffectBluespaceMinerTeleport", coords);
     }
 
     private ProtoId<MaterialPrototype> PickMaterial(BluespaceMinerComponent comp)
     {
         var total = 0f;
-        foreach (var (_, weight) in comp.MaterialWeights)
+        foreach (var weight in comp.MaterialWeights.Values)
             total += weight;
 
         var roll = _random.NextFloat() * total;
+        ProtoId<MaterialPrototype> last = default;
         foreach (var (material, weight) in comp.MaterialWeights)
         {
+            last = material;
             roll -= weight;
             if (roll <= 0f)
                 return material;
         }
 
-        // страховка от ошибок округления
-        foreach (var (material, _) in comp.MaterialWeights)
-            return material;
-
-        throw new InvalidOperationException("BluespaceMiner has no materials configured");
+        return last;
     }
 
     private void ReleaseGas(BluespaceMinerComponent comp, GasMixture environment, float moles)
@@ -132,15 +103,16 @@ public sealed class BluespaceMinerSystem : EntitySystem
         if (moles <= 0f)
             return;
 
-        // добавляем газ с температурой comp.GasTemperature:
-        // пересчитываем температуру смеси как средневзвешенную по молям
-        var totalMoles = environment.TotalMoles;
-        var newTemp = totalMoles > 0f
-            ? (environment.Temperature * totalMoles + comp.GasTemperature * moles) / (totalMoles + moles)
-            : comp.GasTemperature;
+        var giver = new GasMixture { Temperature = comp.GasTemperature };
+        giver.AdjustMoles(comp.ReleasedGas, moles);
+        _atmosphere.Merge(environment, giver);
+    }
 
-        environment.AdjustMoles(comp.ReleasedGas, moles);
-        environment.Temperature = newTemp;
+    private bool IsPowered(EntityUid uid)
+    {
+        return TryComp<PowerConsumerComponent>(uid, out var consumer)
+            && consumer.DrawRate > 0f
+            && consumer.ReceivedPower >= consumer.DrawRate * 0.9f;
     }
 
     private bool ConditionsMet(BluespaceMinerComponent comp, float temperature, float pressure)
@@ -160,13 +132,10 @@ public sealed class BluespaceMinerSystem : EntitySystem
     {
         var comp = ent.Comp;
 
-        if (!_power.IsPowered(ent))
-        {
-            args.PushMarkup(Loc.GetString("bluespace-miner-examine-unpowered"));
+        if (!IsPowered(ent))
             return;
-        }
 
-        var environment = _atmosphere.GetContainingMixture((ent, Transform(ent)), true, true);
+        var environment = _atmosphere.GetContainingMixture((ent, Transform(ent)), true);
         if (environment == null)
         {
             args.PushMarkup(Loc.GetString("bluespace-miner-examine-pressure-low"));

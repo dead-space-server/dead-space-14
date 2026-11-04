@@ -1,6 +1,6 @@
 - type: entity
   id: BluespaceMiner
-  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  parent: [ BaseMachine, ConstructibleMachine ]
   name: bluespace miner
   description: A machine of unknown design that extracts various materials from bluespace. It requires an extremely cold, pressurized environment and produces large amounts of hot carbon dioxide.
   components:
@@ -10,26 +10,29 @@
     layers:
     - state: miner
       map: [ "base" ]
-    - state: miner-blue
-      map: [ "enum.BluespaceMinerVisuals.Status" ]
+    - state: miner-red
+      map: [ "status" ]
   - type: GenericVisualizer
     visuals:
       enum.BluespaceMinerVisuals.Status:
-        enum.BluespaceMinerVisuals.Status:
-          0: { state: miner-blue } # Ok
-          1: { state: miner-red } # BadConditions
-          2: { state: miner-red } # Unpowered
+        status:
+          Ok: { state: miner-blue }
+          BadConditions: { state: miner-red }
+          Unpowered: { state: miner-red }
   - type: Appearance
   - type: AtmosDevice
   - type: BluespaceMiner
-  - type: MaterialStorage
-    ignoreColor: true
-    storageLimit: 2000000
-  - type: OreSilo
   - type: Machine
     board: BluespaceMinerMachineCircuitboard
-  - type: ApcPowerReceiver
-    powerLoad: 100000
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+  - type: PowerConsumer
+    voltage: Medium
+    drawRate: 100000
   - type: Fixtures
     fixtures:
       fix1:
@@ -41,4 +44,3 @@
         - MachineMask
         layer:
         - MachineLayer
-  - type: WiresVisuals
