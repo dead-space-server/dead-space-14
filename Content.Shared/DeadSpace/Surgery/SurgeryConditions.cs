@@ -8,6 +8,7 @@ public static class SurgeryConditions
 {
     public const float OrganCrackMin = 5f;
     public const float TraumaMin = 50f;
+    public const float WornBelow = 0.95f;
 
     public static readonly string[] Order =
     {
@@ -22,12 +23,13 @@ public static class SurgeryConditions
         "Bruised",
         "Lacerated",
         "Punctured",
+        "Worn",
         "Scaffold",
         "Skin",
         "Damaged",
     };
 
-    public static bool Has(string when, in LimbZoneState state, bool hasBone, bool infected, bool organCrack = false)
+    public static bool Has(string when, in LimbZoneState state, bool hasBone, bool infected, bool organCrack = false, float pool = 0f)
     {
         return when switch
         {
@@ -41,13 +43,19 @@ public static class SurgeryConditions
             "Fracture" => hasBone && !state.Severed && state.Bone >= LimbWoundRules.BreakBone,
             "OrganCrack" => organCrack && !state.Severed,
             "Bruised" => !state.Severed && state.HitBlunt > TraumaMin,
-            "Lacerated" => !state.Severed && state.HitSlash > TraumaMin,
-            "Punctured" => !state.Severed && state.HitPierce > TraumaMin,
+            "Lacerated" => !state.Severed && (state.HitSlash > TraumaMin || OpenWound(state) && state.HitSlash >= state.HitPierce),
+            "Punctured" => !state.Severed && (state.HitPierce > TraumaMin || OpenWound(state) && state.HitPierce > state.HitSlash),
+            "Worn" => pool > 0f && !state.Severed && !state.Atrophied && state.Health < pool * WornBelow,
             "Scaffold" => !hasBone && !state.Severed && state.Flesh >= LimbWoundRules.StrainFlesh,
             "Skin" => !state.Severed && (state.SkinBare || state.Skin >= LimbWoundRules.BurnSecond),
             "Damaged" => !state.Severed && (state.Atrophied || state.Flesh >= LimbWoundRules.StrainFlesh || state.Bone >= LimbWoundRules.StrainBone || state.Skin >= LimbWoundRules.BurnFirst || state.Bleed >= 0.5f),
             _ => false,
         };
+    }
+
+    private static bool OpenWound(in LimbZoneState state)
+    {
+        return state.Flesh >= LimbWoundRules.StrainFlesh;
     }
 
     public static bool OrganCracked(IReadOnlyList<LimbOrganState> organs, LimbZone zone)

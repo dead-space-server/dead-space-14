@@ -80,6 +80,8 @@ public sealed partial class LimbBodyComponent : Component
 
     public DamageSpecifier? PendingRefund;
 
+    public TimeSpan MendedAt;
+
     public LimbZone? LedgerZone;
 
     public LimbZone? ArmorZone;

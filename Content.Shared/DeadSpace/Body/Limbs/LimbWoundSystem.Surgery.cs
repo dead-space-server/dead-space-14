@@ -2,6 +2,8 @@
 
 using System.Numerics;
 using System.Runtime.InteropServices;
+using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
@@ -46,10 +48,10 @@ public sealed partial class LimbWoundSystem
             ? Math.Clamp(edit.Health, 0f, cap)
             : Math.Clamp(state.Health + edit.Health, 0f, cap);
 
-        if (edit.ClearAtrophy && state.Health > 0f)
-            state.Atrophied = false;
         if (edit.SetAtrophy)
             state.Atrophied = true;
+        else if (state.Health > 0f)
+            state.Atrophied = false;
         if (edit.SetEmbedded)
             state.Embedded = edit.Embedded;
         if (edit.ClearEmbedded)
@@ -58,6 +60,9 @@ public sealed partial class LimbWoundSystem
             state.SkinBare = false;
         if (edit.ClearSevered)
             state.Severed = false;
+
+        if (!state.Severed && !state.Atrophied && state.Health >= cap - 0.05f)
+            ClearStrikeLedger(body, limbs, ref state);
 
         if (zone == LimbZone.Torso)
         {
@@ -74,6 +79,35 @@ public sealed partial class LimbWoundSystem
         _movement.RefreshMovementSpeedModifiers(body);
         RefreshActive(body, limbs);
         return true;
+    }
+
+    private void ClearStrikeLedger(EntityUid body, LimbBodyComponent limbs, ref LimbZoneState state)
+    {
+        if (_net.IsClient)
+            return;
+
+        var heal = new DamageSpecifier();
+        Take(heal, "Blunt", ref state.HitBlunt);
+        Take(heal, "Slash", ref state.HitSlash);
+        Take(heal, "Piercing", ref state.HitPierce);
+        Take(heal, "Heat", ref state.HitHeat);
+        Take(heal, "Caustic", ref state.HitCaustic);
+        Take(heal, "Bloodloss", ref state.HitBlood);
+        if (heal.DamageDict.Count == 0)
+            return;
+
+        limbs.LedgerSilence++;
+        _damage.TryChangeDamage(body, heal, ignoreResistances: true, interruptsDoAfters: false, ignoreGlobalModifiers: true);
+        limbs.LedgerSilence--;
+    }
+
+    private static void Take(DamageSpecifier heal, string type, ref float have)
+    {
+        if (have <= 0.01f)
+            return;
+
+        heal.DamageDict[type] = FixedPoint2.New(-have);
+        have = 0f;
     }
 
     public bool ApplyOrganEdit(EntityUid body, LimbOrgan organ, in LimbOrganEdit edit)

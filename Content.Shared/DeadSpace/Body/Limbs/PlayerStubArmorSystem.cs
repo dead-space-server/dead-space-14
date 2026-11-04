@@ -12,7 +12,7 @@ public sealed class PlayerStubArmorSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
 
-    private float _coefficient = 0.5f;
+    private float _coefficient = 0.65f;
 
     public override void Initialize()
     {

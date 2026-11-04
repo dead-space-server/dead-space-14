@@ -19,7 +19,8 @@ public readonly record struct LimbRow(
     string Hook,
     float Factor = 1f,
     LimbOrgan Organ = default,
-    bool ProjectileOnly = false);
+    bool ProjectileOnly = false,
+    bool MeleeOnly = false);
 
 public static class LimbCatalog
 {
@@ -37,17 +38,17 @@ public static class LimbCatalog
         new(LimbZone.Eyes, LimbMark.Heat, LimbHooks.Organ, 0.45f, LimbOrgan.Eyes),
         new(LimbZone.Eyes, LimbMark.Liquid, LimbHooks.Organ, 0.45f, LimbOrgan.Eyes),
         new(LimbZone.Mouth, LimbMark.Liquid, LimbHooks.Organ, 1f, LimbOrgan.Liver),
-        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Organ, 1f, LimbOrgan.Heart),
-        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Organ, 0.8f, LimbOrgan.Lungs),
-        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Crit),
-        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Whistle),
+        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Organ, 1f, LimbOrgan.Heart, MeleeOnly: true),
+        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Organ, 0.8f, LimbOrgan.Lungs, MeleeOnly: true),
+        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Crit, MeleeOnly: true),
+        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Whistle, MeleeOnly: true),
         new(LimbZone.Torso, LimbMark.Point, LimbHooks.Rib, 0.45f),
-        new(LimbZone.Torso, LimbMark.Edge, LimbHooks.Organ, 0.8f, LimbOrgan.Lungs),
-        new(LimbZone.Torso, LimbMark.Edge, LimbHooks.Air),
+        new(LimbZone.Torso, LimbMark.Edge, LimbHooks.Organ, 0.8f, LimbOrgan.Lungs, MeleeOnly: true),
+        new(LimbZone.Torso, LimbMark.Edge, LimbHooks.Air, MeleeOnly: true),
         new(LimbZone.Torso, LimbMark.Edge, LimbHooks.Rib, 0.25f),
         new(LimbZone.Torso, LimbMark.Blunt, LimbHooks.Organ, 0.85f, LimbOrgan.Kidneys),
         new(LimbZone.Torso, LimbMark.Blunt, LimbHooks.Organ, 0.4f, LimbOrgan.Stomach),
-        new(LimbZone.Torso, LimbMark.Blunt, LimbHooks.Organ, 0.6f, LimbOrgan.Lungs),
+        new(LimbZone.Torso, LimbMark.Blunt, LimbHooks.Organ, 0.6f, LimbOrgan.Lungs, MeleeOnly: true),
         new(LimbZone.Torso, LimbMark.Blunt, LimbHooks.Organ, 1f, LimbOrgan.Core),
         new(LimbZone.Torso, LimbMark.Point, LimbHooks.Organ, 1f, LimbOrgan.Core),
         new(LimbZone.Torso, LimbMark.Liquid, LimbHooks.Organ, 0.5f, LimbOrgan.Core),
@@ -63,6 +64,9 @@ public static class LimbCatalog
             return false;
 
         if (row.Mark is { } wantedMark && wantedMark != mark)
+            return false;
+
+        if (row.MeleeOnly && projectile)
             return false;
 
         return !row.ProjectileOnly || projectile;

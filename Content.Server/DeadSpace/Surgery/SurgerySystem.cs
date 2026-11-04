@@ -2195,7 +2195,7 @@ public sealed class SurgerySystem : EntitySystem
         var cracked = SurgeryConditions.OrganCracked(limbs.Organs, zone);
         foreach (var when in SurgeryConditions.Order)
         {
-            if (!SurgeryConditions.Has(when, state, bone, infected, cracked))
+            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs)))
                 continue;
 
             string? fallback = null;
@@ -2259,7 +2259,7 @@ public sealed class SurgerySystem : EntitySystem
 
         if (operation.When.Length > 0 && operation.When != "Severed"
             && !SurgeryConditions.Has(operation.When, limbs.Zones[index], HasLayer(patient, zone, SurgeryLayerKind.Bone), Infected(patient, zone),
-                SurgeryConditions.OrganCracked(limbs.Organs, zone)))
+                SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs)))
             return false;
 
         if (operation.Implant.Length > 0 && !ImplantMenuFits(patient, operation))

@@ -45,9 +45,9 @@ public static class LimbOrganRules
         return list;
     }
 
-    public static bool TryTarget(LimbZone zone, LimbMark mark, out LimbOrgan organ)
+    public static bool TryTarget(LimbZone zone, LimbMark mark, out LimbOrgan organ, bool projectile = false)
     {
-        var plan = Plan(zone, mark);
+        var plan = Plan(zone, mark, projectile);
         if (plan.Count == 0)
         {
             organ = default;
@@ -58,12 +58,12 @@ public static class LimbOrganRules
         return true;
     }
 
-    public static OrganPlan Plan(LimbZone zone, LimbMark mark)
+    public static OrganPlan Plan(LimbZone zone, LimbMark mark, bool projectile = false)
     {
         OrganPlan plan = default;
         foreach (var row in LimbCatalog.Rows)
         {
-            if (row.Hook != LimbHooks.Organ || !LimbCatalog.Fits(row, zone, mark, projectile: true))
+            if (row.Hook != LimbHooks.Organ || !LimbCatalog.Fits(row, zone, mark, projectile))
                 continue;
 
             if (plan.Count == 0)
@@ -75,7 +75,7 @@ public static class LimbOrganRules
         return plan;
     }
 
-    public static OrganHit Apply(Span<LimbOrganState> organs, LimbZone zone, LimbMark mark, float amount, float woundMultiplier, LimbOrganMask present = LimbOrganMask.Standard)
+    public static OrganHit Apply(Span<LimbOrganState> organs, LimbZone zone, LimbMark mark, float amount, float woundMultiplier, LimbOrganMask present = LimbOrganMask.Standard, bool projectile = false)
     {
         if (amount <= 0f)
             return OrganHit.None;
@@ -88,7 +88,7 @@ public static class LimbOrganRules
         var scaled = amount * woundMultiplier;
         foreach (var row in LimbCatalog.Rows)
         {
-            if (row.Hook != LimbHooks.Organ || !LimbCatalog.Fits(row, zone, mark, projectile: true))
+            if (row.Hook != LimbHooks.Organ || !LimbCatalog.Fits(row, zone, mark, projectile))
                 continue;
 
             if ((present & (LimbOrganMask) (1 << (int) row.Organ)) == 0)

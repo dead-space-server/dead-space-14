@@ -66,8 +66,28 @@ public sealed class SurgeryCutTest
         Assert.Multiple(() =>
         {
             Assert.That(result.Finished, Is.True);
-            Assert.That(result.Flesh, Is.LessThan(0f));
+            Assert.That(result.Flesh, Is.EqualTo(-40f));
             Assert.That(result.Key, Is.EqualTo("surgery-slime-gel"));
+        });
+    }
+
+    [Test]
+    public void AnOpenWoundOffersOneMendByItsKind()
+    {
+        var shot = new LimbZoneState { Flesh = LimbWoundRules.StrainFlesh, HitPierce = 12f, HitSlash = 3f };
+        var healed = new LimbZoneState { Flesh = LimbWoundRules.StrainFlesh };
+        var closed = new LimbZoneState { Flesh = 5f, HitSlash = 10f };
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(SurgeryConditions.Has("Punctured", shot, true, false), Is.True);
+            Assert.That(SurgeryConditions.Has("Lacerated", shot, true, false), Is.False);
+            Assert.That(SurgeryConditions.Has("Lacerated", healed, true, false), Is.True);
+            Assert.That(SurgeryConditions.Has("Punctured", healed, true, false), Is.False);
+            Assert.That(SurgeryConditions.Has("Lacerated", closed, true, false), Is.False);
+            Assert.That(SurgeryConditions.Has("Worn", new LimbZoneState { Health = 8f }, true, false, pool: 55f), Is.True);
+            Assert.That(SurgeryConditions.Has("Worn", new LimbZoneState { Health = 55f }, true, false, pool: 55f), Is.False);
+            Assert.That(SurgeryConditions.Has("Worn", new LimbZoneState { Health = 8f, Atrophied = true }, true, false, pool: 55f), Is.False);
         });
     }
 

@@ -2099,7 +2099,7 @@ public sealed class SurgeryClientSystem : EntitySystem
             return false;
 
         var infected = TryComp<SurgeryInfectionComponent>(patient, out var infection) && infection.Rots(zone);
-        return SurgeryConditions.Has(when, limbs.Zones[index], HasBone(patient, zone), infected, SurgeryConditions.OrganCracked(limbs.Organs, zone));
+        return SurgeryConditions.Has(when, limbs.Zones[index], HasBone(patient, zone), infected, SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs));
     }
 
     private bool HasBone(EntityUid patient, LimbZone zone)

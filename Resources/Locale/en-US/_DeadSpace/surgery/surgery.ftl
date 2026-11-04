@@ -125,6 +125,7 @@ surgery-op-mend-bruise = Hematoma drainage
 surgery-slot-locked = There is no tail to hold it.
 surgery-op-mend-cuts = Laceration suture
 surgery-op-mend-punctures = Puncture wound care
+surgery-op-mend-tissue = Tissue restoration
 surgery-op-mend-organs = Organ crack suture
 surgery-organ-mend-done = The organ cracks are sutured.
 surgery-organ-mend-torn = The cracks are sutured, but a torn organ cannot be sewn back. It needs a transplant.

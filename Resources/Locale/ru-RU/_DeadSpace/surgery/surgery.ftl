@@ -125,6 +125,7 @@ surgery-op-mend-bruise = Дренирование гематом
 surgery-slot-locked = Без хвоста это не закрепить.
 surgery-op-mend-cuts = Ушивание резаных ран
 surgery-op-mend-punctures = Обработка колотых ран
+surgery-op-mend-tissue = Восстановление тканей
 surgery-op-mend-organs = Ушивание трещин органов
 surgery-organ-mend-done = Трещины органов ушиты.
 surgery-organ-mend-torn = Трещины ушиты, но разорванный орган не сшить. Нужна пересадка.

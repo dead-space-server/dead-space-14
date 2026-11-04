@@ -421,6 +421,7 @@
      slots:
      - Brain
      - Positronic
+     - Core
      implantComponents:
      - type: MindShield
    # DS14-end

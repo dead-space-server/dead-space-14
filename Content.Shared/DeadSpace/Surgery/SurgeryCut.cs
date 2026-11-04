@@ -274,8 +274,7 @@ public static class SurgeryCut
     {
         if (request.Kind is SurgeryLayerKind.Skin)
         {
-            var flesh = MathF.Max(0f, request.CurrentFlesh - LimbWoundRules.StrainFlesh);
-            result.Flesh = -flesh * progress;
+            result.Flesh = -MathF.Max(0f, request.CurrentFlesh) * progress;
             result.Gel = progress > 0.7f;
             result.Finished = progress > 0.85f;
             if (result.Finished)
