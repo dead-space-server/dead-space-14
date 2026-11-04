@@ -19,6 +19,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Auras; // DS14
+using Content.Server.DeadSpace.MartialArts.SmokingCarp.Components; // DS14
 
 namespace Content.Server.Guardian
 {
@@ -225,6 +226,12 @@ namespace Content.Server.Guardian
                 return;
             }
 
+            // DS14-start
+            // A guardian and the Smoking Carp martial art cannot be combined.
+            if (HasComp<SmokingCarpComponent>(target))
+                return;
+            // DS14-end
+
             _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.InjectionDelay, new GuardianCreatorDoAfterEvent(), injector, target: target, used: injector)
             {
                 BreakOnMove = true,
@@ -238,7 +245,7 @@ namespace Content.Server.Guardian
             if (args.Handled || args.Args.Target == null)
                 return;
 
-            if (args.Cancelled || component.Deleted || component.Used || !_handsSystem.IsHolding(args.Args.User, uid, out _) || HasComp<GuardianHostComponent>(args.Args.Target))
+            if (args.Cancelled || component.Deleted || component.Used || !_handsSystem.IsHolding(args.Args.User, uid, out _) || HasComp<GuardianHostComponent>(args.Args.Target) || HasComp<SmokingCarpComponent>(args.Args.Target))
                 return;
 
             var hostXform = Transform(args.Args.Target.Value);

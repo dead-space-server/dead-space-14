@@ -1,3 +1,4 @@
+using Content.Server.DeadSpace.MartialArts.SmokingCarp.Components;
 using Content.Server.Guardian;
 using Content.Server.Popups;
 using Content.Shared.DeadSpace.Guardian;
@@ -188,6 +189,9 @@ public sealed class GuardianCreatorSelectorSystem : EntitySystem
 
             return false;
         }
+
+        if (HasComp<SmokingCarpComponent>(target))
+            return false;
 
         return true;
     }
