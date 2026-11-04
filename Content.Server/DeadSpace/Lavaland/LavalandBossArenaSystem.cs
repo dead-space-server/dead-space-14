@@ -2078,6 +2078,8 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
     {
         return Exists(uid) &&
                !HasComp<GhostComponent>(uid) &&
+               // A skeleton's dropped skull holds its player but is no creature to fight.
+               HasComp<MobStateComponent>(uid) &&
                !_container.IsEntityOrParentInContainer(uid) && // DS14
                !IsDead(uid) &&
                IsEntityInsideInnerArena(uid, arena);

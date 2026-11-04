@@ -310,6 +310,13 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
             return;
         args.Handled = true;
 
+        // A memento mori draws on the holder's life: there is none to spare for calling a soul.
+        if (HasComp<LavalandMementoBoundComponent>(args.User))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-soulscythe-memento"), args.User, args.User);
+            return;
+        }
+
         ent.Comp.Awakening = true;
         ent.Comp.Master = args.User;
         EntityManager.AddComponents(ent, ent.Comp.AwakenComponents, false);

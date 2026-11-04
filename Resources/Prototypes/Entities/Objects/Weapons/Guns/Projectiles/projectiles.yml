@@ -482,6 +482,7 @@
     whitelist:
       components:
         - MobState
+        - Celestial # DS14: the Celestial counts its own death, without a MobState
     damage:
       types:
         Blunt: 18
@@ -505,6 +506,7 @@
     whitelist:
       components:
         - MobState
+        - Celestial # DS14
     damage:
       types:
         Blunt: 1
@@ -1105,6 +1107,7 @@
     whitelist:
       components:
         - MobState
+        - Celestial # DS14
     damage:
       types:
         Blunt: 80

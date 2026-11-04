@@ -34,6 +34,7 @@ lavaland-soulscythe-possessed = В косе живёт душа.
 lavaland-soulscythe-dormant = Коса спит. Используйте её в руке, чтобы пробудить.
 lavaland-soulscythe-blood = Кровь: { $blood }.
 lavaland-soulscythe-awakening = Вы поднимаете косу... Ждите, пока в неё вселится душа.
+lavaland-soulscythe-memento = Мементо мори уже пьёт вашу жизнь - коса не дозовётся души.
 lavaland-soulscythe-glows = Коса начинает светиться!
 lavaland-soulscythe-role-name = Коса душ
 lavaland-soulscythe-role-description = Вы — душа, заточённая в древней косе. Двигайтесь сами, расходуя кровь, и набирайте её ударами.
