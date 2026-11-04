@@ -34,7 +34,7 @@ public sealed partial class BlobCoreComponent : Component
                 DamageDict = new Dictionary<string, FixedPoint2>
                 {
                     { "Heat", 15 },
-                    { "Structural", 150 },
+                    { "Structural", 100 },
                 }
             }
         },
@@ -43,10 +43,8 @@ public sealed partial class BlobCoreComponent : Component
             {
                 DamageDict = new Dictionary<string, FixedPoint2>
                 {
-                    { "Blunt", 8 },
-                    { "Slash", 8 },
-                    { "Piercing", 8 },
-                    { "Structural", 150 },
+                    { "Blunt", 20 },
+                    { "Structural", 200 },
                 }
             }
         },
@@ -56,7 +54,7 @@ public sealed partial class BlobCoreComponent : Component
                 DamageDict = new Dictionary<string, FixedPoint2>
                 {
                     { "Heat", 5 },
-                    { "Structural", 150 },
+                    { "Structural", 100 },
                 }
             }
         },
@@ -65,7 +63,7 @@ public sealed partial class BlobCoreComponent : Component
             {
                 DamageDict = new Dictionary<string, FixedPoint2>
                 {
-                    { "Structural", 150 },
+                    { "Structural", 100 },
                     { "Heat", 20 },
                 },
             }
@@ -75,7 +73,7 @@ public sealed partial class BlobCoreComponent : Component
             {
                 DamageDict = new Dictionary<string, FixedPoint2>
                 {
-                    { "Structural", 150 },
+                    { "Structural", 100 },
                     { "Poison", 15 },
                 }
             }
@@ -211,6 +209,25 @@ public sealed partial class BlobCoreComponent : Component
     
     [DataField("actionSwapBlobCore")]
     public EntityUid? ActionSwapBlobCore = null;
+
+    [DataField("actionPlantBlobMine")]
+    public EntityUid? ActionPlantBlobMine = null;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("mineBlobCost")]
+    public FixedPoint2 MineBlobCost = 25;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("mineBlobTile")]
+    public string MineBlobTile = "BlobMineTile";
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("explosionDirection")]
+    public BlobExplosionDirection ExplosionDirection = BlobExplosionDirection.Horizontal;
+}
+
+[Serializable, NetSerializable]
+public enum BlobExplosionDirection : byte
+{
+    Horizontal,
+    Vertical,
 }
 
 [Serializable, NetSerializable]

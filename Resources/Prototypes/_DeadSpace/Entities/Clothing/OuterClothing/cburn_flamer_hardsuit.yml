@@ -1,0 +1,44 @@
+# DS14: скафандр и шлем огнемётчика РХБЗЗ (на основе стандартного комплекта РХБЗЗ)
+- type: entity
+  parent: ClothingHeadHelmetCBURN
+  id: ClothingHeadHelmetCBURNFlamer
+  name: шлем огнемётчика РХБЗЗ
+  description: Устойчивый к давлению и огнеупорный шлем огнемётчика отряда РХБЗЗ.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/cburn_flamer.rsi
+    layers:
+    - state: icon
+    - state: icon-unshaded
+      shader: unshaded
+    - state: light-overlay
+      visible: false
+      shader: unshaded
+      map: [ "light" ]
+  - type: Clothing
+    clothingVisuals:
+      head:
+      - state: equipped-head
+      - state: equipped-head-unshaded
+        shader: unshaded
+      head-vox:
+      - state: equipped-head-vox
+      - state: equipped-head-unshaded-vox
+        shader: unshaded
+      head-reptilian:
+      - state: equipped-head-reptilian
+      - state: equipped-head-unshaded-reptilian
+        shader: unshaded
+
+- type: entity
+  parent: ClothingOuterHardsuitCBURN
+  id: ClothingOuterHardsuitCBURNFlamer
+  name: скафандр огнемётчика РХБЗЗ
+  description: Лёгкий, но прочный экзокостюм, модифицированный для огнемётчиков отряда РХБЗЗ.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/cburn_flamer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/cburn_flamer.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetCBURNFlamer

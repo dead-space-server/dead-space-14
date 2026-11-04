@@ -134,6 +134,9 @@
   id: JobCBURNAgent
 
 - type: playTimeTracker
+  id: JobCBURNFlamer
+
+- type: playTimeTracker
   id: JobSCSTAgent
 
 - type: playTimeTracker

@@ -151,6 +151,8 @@ ghost-role-information-scnt-leader-name = Лидер ОПНУ
 ghost-role-information-sindy-agent-sup-description = Агент синдиката, прилетевший на станцию для снабжения революции.
 ghost-role-information-cburn-agent-name = РХБЗЗ Оперативник
 ghost-role-information-cburn-agent-description = Высококвалифицированный оперативник, способный справиться с любыми угрозами.
+ghost-role-information-cburn-flamer-name = РХБЗЗ Огнеметчик
+ghost-role-information-cburn-flamer-description = Специалист РХБЗЗ по выжиганию биологических угроз огнемётом.
 ghost-role-information-scst-agent-name = Оперативник ОППУ
 ghost-role-information-scnt-agent-name = Оперативник ОПНУ
 ghost-role-information-centcom-official-description = Инспектируйте станцию, пишите служебные характеристики на руководителей, орудуйте факсом.ghost-role-information-centcom-official-description = Выполняйте обязанности, связанные с Центком, такие как инспекция станции, составление служебных характеристик на руководителей и работа с факсом.

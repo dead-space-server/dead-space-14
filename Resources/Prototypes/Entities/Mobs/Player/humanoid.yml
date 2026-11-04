@@ -830,6 +830,44 @@
       prototypes: [ CBURNAgentGear ]
     - type: GhostRoleNotifys # DS14
       groupPrototype: CBURNGroup
+
+- type: entity
+  id: RandomHumanoidSpawnerCBURNFlamer
+  parent: RandomHumanoidSpawnerCBURNAgent
+  name: CBURN Flamer
+  components:
+    - type: Sprite
+      sprite: Markers/jobs.rsi
+      state: cburn
+    - type: RandomMetadata
+      nameSegments:
+      - NamesFirstERT
+      - NamesLastERT
+      nameFormat: name-format-ert
+    - type: RandomHumanoidSpawner
+      settings: CBURNFlamer
+
+- type: randomHumanoidSettings
+  id: CBURNFlamer
+  parent: EventHumanoidERTZombieImmune
+  components:
+    - type: GhostRole
+      name: ghost-role-information-cburn-flamer-name
+      description: ghost-role-information-cburn-flamer-description
+      rules: ghost-role-information-nonantagonist-rules
+      category: ghost-role-information-centcomm-category # DS14
+      raffle:
+        settings: short
+      job: CBURNFlamer
+    - type: RandomMetadata
+      nameSegments:
+      - NamesFirstERT
+      - NamesLastERT
+      nameFormat: name-format-ert
+    - type: Loadout
+      prototypes: [ CBURNFlamerGear ]
+    - type: GhostRoleNotifys # DS14
+      groupPrototype: CBURNGroup
       
 ## SCST Agent
 - type: entity

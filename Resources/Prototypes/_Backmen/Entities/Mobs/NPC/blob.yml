@@ -22,10 +22,8 @@
       - state: green
       - sprite: _Backmen/Mobs/Aliens/blob.rsi
         state: blob_nuke_overlay
-  #DS14-start
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys
     groupPrototype: Blob
-  #DS14-end
 
 - type: entity
   id: MobBlobPod
@@ -48,6 +46,8 @@
   - type: Damageable
     damageContainer: Blob
     damageModifierSet: BlobMob
+  - type: ExplosionResistance
+    damageCoefficient: 0
   - type: Clothing
     quickEquip: false
     sprite: _Backmen/Mobs/Aliens/blob.rsi
@@ -124,12 +124,10 @@
     drawdepth: Mobs
     sprite: _Backmen/Mobs/Aliens/blob.rsi
     state: blobpod
-  # DS14-start
   - type: NightVision
     animation: true
     color: "#D4C15A11"
     transitionSpeed: 100
-  # DS14-end
 
 - type: entity
   id: MobBlobBlobbernaut
@@ -142,6 +140,8 @@
   - type: Damageable
     damageContainer: Blob
     damageModifierSet: BlobMob
+  - type: ExplosionResistance
+    damageCoefficient: 0
   - type: Tag
     tags:
       - BlobMob
@@ -215,7 +215,6 @@
       - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
         state: nautdamage
         shader: unshaded
-  # DS14-start
   - type: Language
     knownLanguages: 
     - BlobLanguage
@@ -226,7 +225,6 @@
     transitionSpeed: 100
   - type: GhostRoleNotifys 
     groupPrototype: BlobGroup
-  # DS14-end
 
 - type: entity
   id: BaseBlob
@@ -238,7 +236,7 @@
       - Wall
   components:
   - type: ZombieImmune
-  - type: StatusEffects # DS14 - PressureImmunity is provided by the new status effect system.
+  - type: StatusEffects
     allowed:
     - Stun
     - KnockedDown
@@ -283,17 +281,15 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
-        Heat: 3 # DS14-value
+        Heat: 3
   - type: BlobTile
     tileType: Normal
-  ## ds-14-start
   - type: NpcFactionMember
     factions:
       - Blob
-  ## ds-14-end
   - type: Destructible
     thresholds:
       - trigger:
@@ -319,15 +315,13 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
-        Heat: 3 # DS14-value
-  ## ds-14-start
+        Heat: 3
   - type: NpcFactionMember
     factions:
       - Blob
-  ## ds-14-end
   - type: Destructible
     thresholds:
     - trigger:
@@ -377,10 +371,8 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  #DS14-start
   - type: GhostRoleNotifys 
     groupPrototype: Blob
-  #DS14-end
 
 - type: entity
   parent: BaseBlob
@@ -391,10 +383,10 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
-        Heat: 3 # DS14-value
+        Heat: 3
   - type: BlobTile
     tileType: Factory
   - type: Destructible
@@ -423,10 +415,10 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
-        Heat: 3 # DS14-value
+        Heat: 3
   - type: BlobTile
     tileType: Resource
   - type: Destructible
@@ -456,10 +448,10 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
-        Heat: 3 # DS14-value
+        Heat: 3
   - type: BlobTile
     tileType: Node
   - type: Destructible
@@ -488,14 +480,12 @@
   description: The basis of defensive positions has not only a strength of 6 times, this tile is also capable of withstanding various gases in order to become an atmospheric technician to protect the core, for example, from plasma that the enemy can set on fire.
   categories: [ HideSpawnMenu ]
   components:
-  # DS14-start
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
         Heat: 3
-  # DS14-end
   - type: BlobTile
     tileType: Strong
   - type: Airtight
@@ -523,14 +513,12 @@
   description: Upgrading a fortified cell in which they pay less strength for the ability to reflect only energy projectiles and lasers with a 90% chance.
   categories: [ HideSpawnMenu ]
   components:
-    # DS14-start
     - type: Temperature
     - type: Flammable
-      fireSpread: true
+      fireSpread: false
       damage:
         types:
           Heat: 3
-    # DS14-end
     - type: Damageable
       damageContainer: Blob
       damageModifierSet: BlobReflective
@@ -631,11 +619,26 @@
   - type: Tag
     tags:
       - BypassInteractionRangeChecks
-  # DS14-start
   - type: Language
-    knownLanguages: 
+    knownLanguages:
     - BlobLanguage
     selectedLanguage: BlobLanguage
-  - type: GhostRoleNotifys 
-    groupPrototype: Blob  
-  # DS14-end
+  - type: GhostRoleNotifys
+    groupPrototype: Blob
+
+- type: entity
+  parent: CollideFloorTrap
+  id: BlobMineTile
+  name: blob-mine-tile-name
+  description: blob-mine-tile-desc
+  components:
+  - type: Sprite
+    sprite: _Backmen/Mobs/Aliens/blob.rsi
+    state: blob
+    drawdepth: FloorObjects
+    color: "#9C7A0066"
+  - type: TriggerOnCollide
+    fixtureID: floortrap
+  - type: BlobMine
+  - type: Visibility
+    layer: 2

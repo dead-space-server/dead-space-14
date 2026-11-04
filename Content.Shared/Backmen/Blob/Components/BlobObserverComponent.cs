@@ -111,3 +111,8 @@ public sealed partial class BlobSwapChemActionEvent : InstantActionEvent
 
 }
 
+public sealed partial class BlobPlantMineActionEvent : WorldTargetActionEvent
+{
+
+}
+

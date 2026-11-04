@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by 𝘽𝙚𝙡𝙖𝙮#7441. Vox states by Flareguy for SS14, resprite by pyfya (discord) for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "icon-unshaded"
+    },
+    {
+      "name": "icon-flash"
+    },
+    {
+      "name": "light-overlay"
+    },
+    {
+      "name": "equipped-head",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-vox",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-unshaded-vox",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-reptilian",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-unshaded-reptilian",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-unshaded-vulpkanin",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-vulpkanin",
+      "directions": 4
+    }
+  ]
+}
