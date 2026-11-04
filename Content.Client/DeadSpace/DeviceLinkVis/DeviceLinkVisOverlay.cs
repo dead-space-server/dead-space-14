@@ -1,12 +1,10 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
-using Content.Shared.DeadSpace.DeviceLinkVis;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
-using Robust.Shared.Maths;
 
 namespace Content.Client.DeadSpace.DeviceLinkVis;
 
