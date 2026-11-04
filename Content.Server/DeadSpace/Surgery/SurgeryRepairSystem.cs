@@ -13,6 +13,7 @@ public sealed class SurgeryRepairSystem : EntitySystem
 {
     private const string Effect = "MachineRepair";
     private const string OrganMend = "OrganMend";
+    private const string TissueMend = "TissueMend";
     private const string Rules = "Default";
 
     private static readonly Dictionary<string, string[]> ZoneHeals = new()
@@ -26,6 +27,8 @@ public sealed class SurgeryRepairSystem : EntitySystem
     };
 
     private static readonly string[] OrganMendHeals = { "Piercing", "Slash" };
+
+    private static readonly HashSet<string> ClosesWound = new() { "CutMend", "PunctureMend", "FractureOpenMend" };
 
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -56,10 +59,25 @@ public sealed class SurgeryRepairSystem : EntitySystem
             return;
         }
 
+        if (!args.Handled && args.Effect == TissueMend && LimbWoundRules.IsBody(ent.Comp.Zone))
+        {
+            args.Handled = true;
+            _limbs.ApplyEdit(ent, ent.Comp.Zone, new LimbEdit
+            {
+                SetHealth = true,
+                Health = LimbWoundRules.HealthFor(ent.Comp.Zone, CompOrNull<LimbBodyComponent>(ent)),
+                SetFlesh = true,
+                Flesh = 0f,
+            });
+            return;
+        }
+
         if (!args.Handled && ZoneHeals.TryGetValue(args.Effect, out var types))
         {
             args.Handled = true;
             HealZone(ent, ent.Comp.Zone, types);
+            if (ClosesWound.Contains(args.Effect) && LimbWoundRules.IsBody(ent.Comp.Zone))
+                _limbs.ApplyEdit(ent, ent.Comp.Zone, new LimbEdit { SetFlesh = true, Flesh = 0f });
             return;
         }
 

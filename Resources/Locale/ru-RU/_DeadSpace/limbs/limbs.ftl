@@ -57,3 +57,4 @@ limb-harvest-start = { CAPITALIZE($user) } { $zone ->
        *[other] отрезает часть тела
     } у { $target }!
 limb-examine-zone = { $zone }: плоть { $flesh }, кость { $bone }, огонь { $fire }
+limb-stand-no-legs = Вы не можете встать

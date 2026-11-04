@@ -11,6 +11,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -45,6 +46,164 @@ public sealed class LimbWoundTest
                 Assert.That(limbs.Zones[(int) LimbZone.HandLeft].Severed, Is.False);
                 Assert.That(limbs.Zones[(int) LimbZone.FootRight].Severed, Is.False);
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RestoringADeadLimbsHealthBringsItBack()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            var pool = LimbWoundRules.HealthFor(LimbZone.LegLeft, server.EntMan.GetComponent<LimbBodyComponent>(human));
+            wounds.ApplyEdit(human, LimbZone.LegLeft, new LimbEdit { SetHealth = true, Health = 0f, SetAtrophy = true });
+            wounds.ApplyEdit(human, LimbZone.LegLeft, new LimbEdit { SetHealth = true, Health = pool });
+
+            var leg = server.EntMan.GetComponent<LimbBodyComponent>(human).Zones[(int) LimbZone.LegLeft];
+            Assert.That(leg.Health, Is.EqualTo(pool));
+            Assert.That(leg.Atrophied, Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task MedicineHealsTheCutLegEvenWhenTheTickAlsoBurns()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            var damage = server.EntMan.System<DamageableSystem>();
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            var pool = LimbWoundRules.HealthFor(LimbZone.LegLeft, limbs);
+            wounds.ApplyEdit(human, LimbZone.LegLeft, new LimbEdit { SetHealth = true, Health = 20f });
+            var cut = new DamageSpecifier();
+            cut.DamageDict["Slash"] = FixedPoint2.New(20);
+            damage.ChangeDamage(human, cut);
+            var dose = new DamageSpecifier();
+            dose.DamageDict["Slash"] = FixedPoint2.New(-20);
+            dose.DamageDict["Heat"] = FixedPoint2.New(0.2);
+            damage.ChangeDamage(human, dose);
+
+            Assert.That(limbs.Zones[(int) LimbZone.LegLeft].Health, Is.EqualTo(pool));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AFullLimbDropsItsRecordedDamage()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            var damage = server.EntMan.System<DamageableSystem>();
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            var pool = LimbWoundRules.HealthFor(LimbZone.LegLeft, limbs);
+            var hit = new DamageSpecifier();
+            hit.DamageDict["Slash"] = FixedPoint2.New(20);
+            limbs.LedgerZone = LimbZone.LegLeft;
+            damage.ChangeDamage(human, hit);
+            Assert.That(limbs.Zones[(int) LimbZone.LegLeft].HitSlash, Is.GreaterThan(0f));
+
+            wounds.ApplyEdit(human, LimbZone.LegLeft, new LimbEdit { SetHealth = true, Health = pool });
+            Assert.That(limbs.Zones[(int) LimbZone.LegLeft].HitSlash, Is.EqualTo(0f));
+            Assert.That(server.EntMan.GetComponent<DamageableComponent>(human).TotalDamage, Is.EqualTo(FixedPoint2.Zero));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AHealthyBodyCanStillMendAWornLeg()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            var damage = server.EntMan.System<DamageableSystem>();
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            var pool = LimbWoundRules.HealthFor(LimbZone.LegLeft, limbs);
+            wounds.ApplyEdit(human, LimbZone.LegLeft, new LimbEdit { SetHealth = true, Health = pool * 0.15f });
+
+            var pack = new DamageSpecifier();
+            pack.DamageDict["Blunt"] = FixedPoint2.New(-15);
+            Assert.That(server.EntMan.GetComponent<DamageableComponent>(human).TotalDamage, Is.EqualTo(FixedPoint2.Zero));
+            Assert.That(wounds.CanMend(human, pack), Is.True);
+
+            var hit = new DamageSpecifier();
+            hit.DamageDict["Blunt"] = FixedPoint2.New(5);
+            damage.ChangeDamage(human, hit);
+            damage.ChangeDamage(human, pack);
+
+            Assert.That(limbs.Zones[(int) LimbZone.LegLeft].Health, Is.EqualTo(pool));
+            Assert.That(wounds.CanMend(human, pack), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase("MobHuman")]
+    [TestCase("MobSlimePerson")]
+    [TestCase("MobIPC")]
+    public async Task RoundstartMindShieldFindsTheBrain(string mob)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var body = server.EntMan.SpawnEntity(mob, new MapCoordinates(Vector2.Zero, map.MapId));
+            Assert.That(server.EntMan.System<Content.Shared.Implants.SharedSubdermalImplantSystem>().AddImplant(body, "MindShieldImplant"), Is.Not.Null);
+            Assert.That(server.EntMan.HasComponent<Content.Shared.Mindshield.Components.MindShieldComponent>(body), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task NoLegsBlocksStandingUpFromKnockdown()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            var attempt = new StandUpAttemptEvent(true);
+            server.EntMan.EventBus.RaiseLocalEvent(human, ref attempt);
+            Assert.That(attempt.Cancelled, Is.False);
+
+            Assert.That(wounds.Amputate(human, LimbZone.LegLeft), Is.True);
+            Assert.That(wounds.Amputate(human, LimbZone.LegRight), Is.True);
+            attempt = new StandUpAttemptEvent(true);
+            server.EntMan.EventBus.RaiseLocalEvent(human, ref attempt);
+            Assert.That(attempt.Cancelled, Is.True);
+            Assert.That(attempt.Autostand, Is.False);
         });
 
         await pair.CleanReturnAsync();
@@ -263,7 +422,7 @@ public sealed class LimbWoundTest
             Assert.Multiple(() =>
             {
                 Assert.That(server.EntMan.GetComponent<DamageableComponent>(dead).TotalDamage, Is.EqualTo(FixedPoint2.Zero));
-                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(10)));
+                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(13)));
                 Assert.That(wounds.BleedTotal(dead), Is.EqualTo(0f));
             });
         });

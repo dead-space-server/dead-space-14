@@ -57,3 +57,4 @@ limb-harvest-start = { CAPITALIZE(THE($user)) } is { $zone ->
        *[other] cutting off a body part
     } of { THE($target) }!
 limb-examine-zone = { $zone }: flesh { $flesh }, bone { $bone }, fire { $fire }
+limb-stand-no-legs = You can't stand up

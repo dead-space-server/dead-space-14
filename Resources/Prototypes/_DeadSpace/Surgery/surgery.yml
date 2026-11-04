@@ -1884,6 +1884,41 @@
     undo: Incise
 
 - type: surgeryOperation
+  id: MendTissue
+  side: Front
+  name: surgery-op-mend-tissue
+  when: Worn
+  order: 4
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: retractor
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Stanch
+    layer: Cavity
+    effect: TissueMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
   id: FixOpenFracture
   side: Front
   name: surgery-op-open-fracture

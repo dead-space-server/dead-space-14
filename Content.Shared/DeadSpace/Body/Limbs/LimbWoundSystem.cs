@@ -49,6 +49,7 @@ using Content.Shared.Projectiles;
 using Content.Shared.Speech;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Throwing;
 using Content.Shared.Traits.Assorted;
@@ -130,6 +131,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         SubscribeLocalEvent<LimbBodyComponent, RefreshMovementSpeedModifiersEvent>(OnMove);
         SubscribeLocalEvent<LimbBodyComponent, StandAttemptEvent>(OnStand);
         SubscribeLocalEvent<LimbBodyComponent, StoodEvent>(OnStood);
+        SubscribeLocalEvent<LimbBodyComponent, StandUpAttemptEvent>(OnStandUp);
         SubscribeLocalEvent<LimbBodyComponent, HealingDoAfterEvent>(OnHeal, before: [typeof(HealingSystem)]);
         SubscribeLocalEvent<LimbBodyComponent, BeforeStaminaDamageEvent>(OnStamina);
         SubscribeLocalEvent<LimbBodyComponent, IgnitedEvent>(OnIgnited);
@@ -537,6 +539,16 @@ public sealed partial class LimbWoundSystem : EntitySystem
         args.Cancel();
     }
 
+    private void OnStandUp(Entity<LimbBodyComponent> ent, ref StandUpAttemptEvent args)
+    {
+        if (args.Cancelled || !LimbTuning.Enabled || MissingLegs(ent.Comp) < 2)
+            return;
+
+        args.Cancelled = true;
+        args.Autostand = false;
+        args.Message = (Loc.GetString("limb-stand-no-legs"), PopupType.SmallCaution);
+    }
+
     private void OnStood(EntityUid uid, LimbBodyComponent limbs, StoodEvent args)
     {
         if (!LimbTuning.Enabled || _net.IsClient || MissingLegs(limbs) < 2)
@@ -593,7 +605,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (Heals(healing.Damage, "Heat") || Heals(healing.Damage, "Caustic"))
             LimbWoundRules.Ointment(ref state, LimbWoundRules.OintmentDose);
 
+        var before = state.Health;
         LimbWoundRules.Mend(ref state, HealAmount(healing.Damage), LimbWoundRules.HealthFor(zone, ent.Comp), LimbWoundRules.Revives(zone));
+        if (state.Health > before)
+            ent.Comp.MendedAt = _timing.CurTime;
 
         Dirty(ent);
         _movement.RefreshMovementSpeedModifiers(ent);
@@ -731,11 +746,17 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var fromStrike = limbs.StrikeOpen;
         limbs.StrikeOpen = false;
         var changed = false;
-        if (!args.DamageIncreased && !aimedHeal)
+        var healed = false;
+        foreach (var value in args.DamageDelta.DamageDict.Values)
         {
-            changed = SpreadHeal(zones, args.DamageDelta, limbs);
+            if (value < 0)
+                healed = true;
         }
-        else if (!fromStrike && args.DamageIncreased && HeatOf(args.DamageDelta) > 0f && AnyFire(limbs))
+
+        if (healed && !aimedHeal)
+            changed = SpreadHeal(zones, args.DamageDelta, limbs);
+
+        if (args.DamageIncreased && !fromStrike && HeatOf(args.DamageDelta) > 0f && AnyFire(limbs) && !healed)
         {
             LimbWoundRules.Scorch(zones, HeatOf(args.DamageDelta) * limbs.Burn);
             changed = true;
@@ -748,27 +769,21 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 Note(ref state, type, value.Float());
             }
         }
-        else
+        else if (args.DamageIncreased || aimedHeal)
         {
             ref var state = ref zones[LimbWoundRules.Index(zone)];
             foreach (var (type, value) in args.DamageDelta.DamageDict)
             {
-                if (value == 0)
-                    continue;
-
-                if (args.DamageIncreased && value < 0)
-                    continue;
-
-                if (!args.DamageIncreased && value > 0)
+                if (value <= 0)
                     continue;
 
                 Note(ref state, type, value.Float());
                 changed = true;
             }
-
-            if (!args.DamageIncreased)
-                ClampHits(ref state);
         }
+
+        if (healed && args.Damageable.TotalDamage <= FixedPoint2.New(0.5))
+            changed |= RestoreZones(limbs);
 
         if (changed)
             Dirty(uid, limbs);
@@ -807,17 +822,48 @@ public sealed partial class LimbWoundSystem : EntitySystem
                     continue;
 
                 SetField(ref zones[i], field, values[i]);
-                if (field != AirField)
-                {
-                    var zone = (LimbZone) i;
-                    LimbWoundRules.Mend(ref zones[i], have - values[i], LimbWoundRules.HealthFor(zone, limbs), LimbWoundRules.Revives(zone));
-                }
+                changed = true;
+            }
 
+            if (field != AirField)
+            {
+                MendDeficits(zones, -value.Float(), limbs);
                 changed = true;
             }
         }
 
         return changed;
+    }
+
+    private static void MendDeficits(Span<LimbZoneState> zones, float amount, LimbBodyComponent limbs)
+    {
+        if (amount <= 0f)
+            return;
+
+        var count = Math.Min(zones.Length, LimbWoundRules.BodyZoneCount);
+        var deficit = new float[count];
+        var total = 0f;
+        for (var i = 0; i < count; i++)
+        {
+            var zone = (LimbZone) i;
+            if (zones[i].Severed || zones[i].Atrophied && !LimbWoundRules.Revives(zone))
+                continue;
+
+            deficit[i] = MathF.Max(0f, LimbWoundRules.HealthFor(zone, limbs) - zones[i].Health);
+            total += deficit[i];
+        }
+
+        if (total <= 0f)
+            return;
+
+        for (var i = 0; i < count; i++)
+        {
+            if (deficit[i] <= 0f)
+                continue;
+
+            var zone = (LimbZone) i;
+            LimbWoundRules.Mend(ref zones[i], amount * deficit[i] / total, LimbWoundRules.HealthFor(zone, limbs), LimbWoundRules.Revives(zone));
+        }
     }
 
     private const int AirField = 6;
@@ -2562,6 +2608,54 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         return total;
+    }
+
+    public bool MendedNow(EntityUid body)
+    {
+        return TryComp<LimbBodyComponent>(body, out var limbs) && limbs.MendedAt == _timing.CurTime;
+    }
+
+    public bool CanMend(EntityUid body, DamageSpecifier heal)
+    {
+        if (!LimbTuning.Enabled || HealAmount(heal) <= 0f || !TryComp<LimbBodyComponent>(body, out var limbs))
+            return false;
+
+        EnsureZones(limbs);
+        var count = Math.Min(limbs.Zones.Count, LimbWoundRules.BodyZoneCount);
+        for (var i = 0; i < count; i++)
+        {
+            var zone = (LimbZone) i;
+            var state = limbs.Zones[i];
+            if (state.Severed || state.Atrophied && !LimbWoundRules.Revives(zone))
+                continue;
+
+            if (state.Health < LimbWoundRules.HealthFor(zone, limbs) - 0.5f)
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool RestoreZones(LimbBodyComponent limbs)
+    {
+        EnsureZones(limbs);
+        var zones = CollectionsMarshal.AsSpan(limbs.Zones);
+        var count = Math.Min(zones.Length, LimbWoundRules.BodyZoneCount);
+        var changed = false;
+        for (var i = 0; i < count; i++)
+        {
+            var zone = (LimbZone) i;
+            var pool = LimbWoundRules.HealthFor(zone, limbs);
+            if (zones[i].Health >= pool && !zones[i].Atrophied
+                || zones[i].Health <= 0f && !LimbWoundRules.Revives(zone))
+                continue;
+
+            var before = zones[i].Health;
+            LimbWoundRules.Mend(ref zones[i], pool, pool, LimbWoundRules.Revives(zone));
+            changed |= zones[i].Health != before;
+        }
+
+        return changed;
     }
 
     private static void ApplySmallToHead(Span<LimbZoneState> zones, LimbStrike strike)
