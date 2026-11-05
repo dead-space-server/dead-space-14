@@ -35,9 +35,15 @@ public sealed class SurgeryDeadHandSystem : EntitySystem
                 var blocked = held is { } item && TryComp<VirtualItemComponent>(item, out var virt) && virt.BlockingEntity == uid;
                 if (dead && !blocked)
                 {
-                    if (held != null)
-                        _hands.TryDrop((uid, hands), handId, checkActionBlocker: false);
-                    _virtual.TrySpawnVirtualItemInHand(uid, uid, out _, false, handId, true);
+                    // Если предмет выбросить не удалось (например, его держат наручники),
+                    // спавнить виртуальный предмет в занятую руку нельзя: он выпадет на пол
+                    // и будет спавниться заново каждую секунду.
+                    if (held != null && !_hands.TryDrop((uid, hands), handId, checkActionBlocker: false))
+                        continue;
+
+                    _hands.TryGetHeldItem((uid, hands), handId, out held);
+                    if (held == null)
+                        _virtual.TrySpawnVirtualItemInHand(uid, uid, out _, false, handId, true);
                 }
                 else if (!dead && blocked && TryComp<VirtualItemComponent>(held, out var stale))
                 {

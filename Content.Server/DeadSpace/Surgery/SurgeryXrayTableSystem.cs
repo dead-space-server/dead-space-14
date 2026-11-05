@@ -47,6 +47,13 @@ public sealed class SurgeryXrayTableSystem : EntitySystem
         SubscribeLocalEvent<SurgeryXrayTableComponent, SurgeryXrayTableStartMessage>(OnStart);
         SubscribeLocalEvent<SurgeryXrayTableComponent, StrappedEvent>(OnStrapped);
         SubscribeLocalEvent<SurgeryXrayTableComponent, UnstrappedEvent>(OnUnstrapped);
+        SubscribeLocalEvent<SurgeryXrayTableComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    private void OnShutdown(Entity<SurgeryXrayTableComponent> ent, ref ComponentShutdown args)
+    {
+        _next.Remove(ent.Owner);
+        _printed.Remove(ent.Owner);
     }
 
     public override void Update(float frameTime)

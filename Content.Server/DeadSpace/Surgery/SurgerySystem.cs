@@ -14,6 +14,8 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.CCVar;
+using Content.Shared.Players.RateLimiting;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction;
@@ -82,15 +84,22 @@ public sealed class SurgerySystem : EntitySystem
     [Dependency] private readonly SharedStackSystem _stack = default!;
 
     [Dependency] private readonly IComponentFactory _factory = default!;
+    [Dependency] private readonly SharedPlayerRateLimitManager _rateLimit = default!;
 
     private const string HealthRules = "Default";
     private const string FloorPlace = "Floor";
     private const string PenTag = "Pen";
+    private const string RateLimitKey = "Surgery";
+    private const int MaxPartLength = 64;
+    private const int MaxKept = 8;
+    private const byte MaxSlips = 12;
     private static readonly SurgeryStep SkinBack = new() { Verb = SurgeryVerbKind.Retract, Layer = SurgeryLayerKind.Skin, Hint = "RetractClose" };
 
     public override void Initialize()
     {
         base.Initialize();
+        _rateLimit.Register(RateLimitKey,
+            new RateLimitRegistration(CCVars.SurgeryRateLimitPeriod, CCVars.SurgeryRateLimitCount, null));
         SubscribeLocalEvent<LimbBodyComponent, InteractUsingEvent>(OnUse);
         SubscribeLocalEvent<LimbBodyComponent, TargetBeforeInjectEvent>(OnBeforeInject);
         SubscribeLocalEvent<LimbBodyComponent, InjectorUseAttemptEvent>(OnInjectorUse);
@@ -316,6 +325,9 @@ public sealed class SurgerySystem : EntitySystem
 
     private void OnPick(SurgeryPickMessage message, EntitySessionEventArgs args)
     {
+        if (Flooded(args))
+            return;
+
         if (args.SenderSession.AttachedEntity is not { } user
             || !TryGetEntity(message.Patient, out var patient)
             || !TryComp<SurgerySiteComponent>(patient, out var site)
@@ -329,6 +341,9 @@ public sealed class SurgerySystem : EntitySystem
 
     private void OnFocus(SurgeryFocusMessage message, EntitySessionEventArgs args)
     {
+        if (Flooded(args))
+            return;
+
         if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
@@ -371,6 +386,9 @@ public sealed class SurgerySystem : EntitySystem
 
     private void OnCancel(SurgeryCancelMessage message, EntitySessionEventArgs args)
     {
+        if (Flooded(args))
+            return;
+
         if (args.SenderSession.AttachedEntity is not { } user
             || !TryComp<SurgeryBusyComponent>(user, out var busy))
             return;
@@ -390,8 +408,16 @@ public sealed class SurgerySystem : EntitySystem
         return (uint) index < (uint) limbs.Zones.Count && limbs.Zones[index].Embedded;
     }
 
+    private bool Flooded(EntitySessionEventArgs args)
+    {
+        return _rateLimit.CountAction(args.SenderSession, RateLimitKey) != RateLimitStatus.Allowed;
+    }
+
     private void OnZone(SurgeryZoneMessage message, EntitySessionEventArgs args)
     {
+        if (Flooded(args))
+            return;
+
         if (args.SenderSession.AttachedEntity is not { } user
             || !TryGetEntity(message.Patient, out var patient)
             || !CanOperate(patient.Value)
@@ -401,6 +427,12 @@ public sealed class SurgerySystem : EntitySystem
 
         var zone = (LimbZone) message.Zone;
         if (!LimbWoundRules.IsBody(zone) && zone != LimbZone.Eyes)
+            return;
+
+        // Часть приходит сырой строкой от клиента: только валидные прототипы,
+        // иначе мусор навсегда осядет в site.Part и site.Kept (сетевой словарь).
+        if (message.Part.Length > 0
+            && (message.Part.Length > MaxPartLength || !_prototype.TryIndex<SurgeryPartPrototype>(message.Part, out _)))
             return;
 
         var askedOperation = message.Part.Length > 0 ? PartOperation(patient.Value, message.Part) : message.Operation.Length > 0 ? message.Operation : null;
@@ -490,6 +522,9 @@ public sealed class SurgerySystem : EntitySystem
 
     private void OnCut(SurgeryCutMessage message, EntitySessionEventArgs args)
     {
+        if (Flooded(args))
+            return;
+
         if (args.SenderSession.AttachedEntity is { } user)
             Cut(user, message);
     }
@@ -896,8 +931,9 @@ public sealed class SurgerySystem : EntitySystem
         if (verb == SurgeryVerbKind.SealSap && result.Finished)
             SpendSap(held);
 
-        if (message.Slips > 0 && operation is { ID: "MendNerve" })
-            _status.TryUpdateStatusEffectDuration(patient.Value, SleepingSystem.StatusEffectForcedSleeping, TimeSpan.FromSeconds(12 + message.Slips * 4));
+        var slips = Math.Min(message.Slips, MaxSlips);
+        if (slips > 0 && operation is { ID: "MendNerve" })
+            _status.TryUpdateStatusEffectDuration(patient.Value, SleepingSystem.StatusEffectForcedSleeping, TimeSpan.FromSeconds(12 + slips * 4));
 
         if (verb == SurgeryVerbKind.Cauterize && !result.Rejected && message.Progress >= 0.85f)
             SpendWelder(held);
@@ -1022,7 +1058,7 @@ public sealed class SurgerySystem : EntitySystem
                 site.Cut += cost;
             }
 
-            loss += message.Slips * costs.Slip + (flinched ? costs.Flinch : 0f);
+            loss += slips * costs.Slip + (flinched ? costs.Flinch : 0f);
             var gain = 0f;
             var keep = Machine(patient.Value) ? 0f : costs.Keep;
             if ((advance || closedStep) && costs.Restore.Contains(verb))
@@ -1743,7 +1779,11 @@ public sealed class SurgerySystem : EntitySystem
 
     private static void Keep(SurgerySiteComponent site)
     {
-        site.Kept[KeptKey(site.Zone, site.Part, site.Back)] = new SurgeryKept
+        var key = KeptKey(site.Zone, site.Part, site.Back);
+        if (!site.Kept.ContainsKey(key) && site.Kept.Count >= MaxKept)
+            return;
+
+        site.Kept[key] = new SurgeryKept
         {
             Zone = site.Zone,
             Part = site.Part,
