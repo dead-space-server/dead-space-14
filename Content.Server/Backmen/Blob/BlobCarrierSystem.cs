@@ -24,8 +24,10 @@ public sealed class BlobCarrierSystem : SharedBlobCarrierSystem
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly GibbingSystem _gibbing = default!;
     [Dependency] private readonly ActionsSystem _action = default!;
+    // DS14-start
     [Dependency] private readonly BlobAntagRollbackSystem _rollback = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    // DS14-end
     [Dependency] private readonly NPCSystem _npc = default!;
 
     public override void Initialize()
@@ -97,9 +99,11 @@ public sealed class BlobCarrierSystem : SharedBlobCarrierSystem
             if (!TryComp<BlobCoreComponent>(core, out var blobCoreComponent))
                 return;
 
-            _blobCoreSystem.CreateBlobObserver(core, userId, blobCoreComponent);
+            _blobCoreSystem.CreateBlobObserver(core, userId, blobCoreComponent); // DS14
+            // DS14-start
             _rollback.MovePreservedBodyToNullspace(userId);
             return;
+            // DS14-end
         }
         else
         {

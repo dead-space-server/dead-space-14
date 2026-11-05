@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Server.Administration.Managers;
+using Content.Server.Administration.Managers; // DS14
 using Content.Server.AlertLevel;
 using Content.Server.Backmen.Blob.Rule;
 using Content.Server.Backmen.GameTicking.Rules.Components;
@@ -15,7 +15,7 @@ using Content.Server.RoundEnd;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Backmen.Blob.Components;
-using Content.Shared.Administration;
+using Content.Shared.Administration; // DS14
 using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.DeadSpace.ERT.Prototypes;
@@ -34,21 +34,22 @@ namespace Content.Server.Backmen.GameTicking.Rules;
 
 public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
+    [Dependency] private readonly IAdminManager _admin = default!; // DS14
     [Dependency] private readonly RoundEndSystem _roundEndSystem = default!;
-    [Dependency] private readonly NukeCodeSendQueueSystem _nukeCodeQueue = default!;
+    // [Dependency] private readonly ChatSystem _chatSystem = default!; // DS14: announcements use RuleStation.
+    [Dependency] private readonly NukeCodeSendQueueSystem _nukeCodeQueue = default!; // DS14
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly ObjectivesSystem _objectivesSystem = default!;
     [Dependency] private readonly CargoSystem _cargoSystem = default!;
     [Dependency] private readonly AlertLevelSystem _alertLevel = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!;
+    [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!; // DS14
     [Dependency] private readonly IServerDbManager _db = default!;
     private static readonly ProtoId<ErtTeamPrototype> ErtTeam = "CburnSierra";
     private static readonly ProtoId<CargoAccountPrototype> Account = "Security";
     private const int AdditionalSupport = 70000;
-    private const int BlobVictoryTiles = 1400;
+    private const int BlobVictoryTiles = 1400; // DS14
     private bool _helpSended = false;
 
     public override void Initialize()
@@ -94,16 +95,20 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
                 continue;
             }
 
+            // DS14-start
             if (!CheckBlobInStation(ent, out var stationUid))
                 continue;
+            // DS14-end
 
-            if (component.Stage != BlobStage.TheEnd && comp.BlobTiles.Count >= 50)
+            if (component.Stage != BlobStage.TheEnd && comp.BlobTiles.Count >= 50) // DS14
             {
                 if (_roundEndSystem.ExpectedCountdownEnd != null)
                 {
-                    _roundEndSystem.CancelRoundEndCountdown(forceRecall: true, announcementSource: stationUid);
+                    _roundEndSystem.CancelRoundEndCountdown(forceRecall: true, announcementSource: stationUid); // DS14
+                    // DS14-start
                     RuleStation.Announce(stationUid.Value, Loc.GetString("blob-alert-recall-shuttle"),
                         Name(stationUid.Value),
+                        // DS14-end
                         false,
                         null,
                         Color.Red);
@@ -114,6 +119,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
         }
     }
 
+    // DS14-start
     protected override void AppendAdminStatus(EntityUid uid,
         BlobRuleComponent component,
         GameRuleComponent gameRule,
@@ -164,6 +170,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
 
         args.AddSection(Loc.GetString("game-rule-admin-status-blob-title"), lines);
     }
+    // DS14-end
 
     private bool CheckBlobInStation(EntityUid blobCore, [NotNullWhen(true)] out EntityUid? stationUid)
     {
@@ -200,7 +207,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
                 if (!TryComp<StationBankAccountComponent>(stationUid, out var stationAccount))
                     return;
 
-                var addMoneyAfterWarDeclared = _ertResponseSystem.GetErtPrice(ErtTeam) + AdditionalSupport;
+                var addMoneyAfterWarDeclared = _ertResponseSystem.GetErtPrice(ErtTeam) + AdditionalSupport; // DS14
 
                 _cargoSystem.UpdateBankAccount(
                                     (stationUid, stationAccount),
@@ -214,10 +221,12 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
             case BlobStage.Begin when blobCore.Comp.BlobTiles.Count >= 500:
                 {
                     blobRuleComp.Stage = BlobStage.Critical;
+                    // DS14-Start: queue automatic nuke-code dispatches for admin review.
                     _nukeCodeQueue.TryQueueAutomaticRequest(
                         stationUid,
                         NukeCodeSendReasonIds.BlobCriticalMass,
                         out _);
+                    // DS14-End
 
                     if (_alertLevel.GetLevel(stationUid) != "enigma" && _alertLevel.GetLevel(stationUid) != "delta" && _alertLevel.GetLevel(stationUid) != "epsilon")
                         _alertLevel.SetLevel(stationUid, "sierra", true, true, true, true);
@@ -230,9 +239,10 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
                     }, broadcast: true);
                     return;
                 }
-            case BlobStage.Critical when blobCore.Comp.BlobTiles.Count >= BlobVictoryTiles:
+            case BlobStage.Critical when blobCore.Comp.BlobTiles.Count >= BlobVictoryTiles: // DS14
                 {
                     blobRuleComp.Stage = BlobStage.TheEnd;
+                    // DS14: Record the victory without forcibly ending the round.
 
                     RaiseLocalEvent(stationUid, new BlobChangeLevelEvent
                     {
@@ -241,7 +251,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
                         Level = blobRuleComp.Stage
                     }, broadcast: true);
 
-                    if (!HasActiveRoundAdmin())
+                    if (!HasActiveRoundAdmin()) // DS14
                         _roundEndSystem.EndRound();
 
                     return;
@@ -249,6 +259,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
         }
     }
 
+    // DS14-start
     private bool HasActiveRoundAdmin()
     {
         foreach (var admin in _admin.ActiveAdmins)
@@ -259,6 +270,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
 
         return false;
     }
+    // DS14-end
 
     protected override void AppendRoundEndText(EntityUid uid, BlobRuleComponent blob, GameRuleComponent gameRule,
         ref RoundEndTextAppendEvent ev)
@@ -270,6 +282,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
 
         ev.AddLine(result);
 
+        // DS14 Статистика для дашборда
         var winner = blob.Stage == BlobStage.TheEnd
             ? BiStatWinner.Antagonist
             : BiStatWinner.Crew;
@@ -287,6 +300,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
         });
     }
 
+    // DS14-start
     protected override void AppendRoundEndDiscordText(EntityUid uid,
         BlobRuleComponent blob,
         GameRuleComponent gameRule,
@@ -364,4 +378,5 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
             ? data.UserName
             : null;
     }
+    // DS14-end
 }
