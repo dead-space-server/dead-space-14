@@ -169,7 +169,8 @@ public sealed class BlobTileSystem : SharedBlobTileSystem
             }
         }
 
-        _audioSystem.PlayPvs(BlastSound, tile, AudioParams.Default.WithVolume(3f));
+        if (!BlobSilence.BeforeAnnouncement(EntityManager))
+            _audioSystem.PlayPvs(BlastSound, tile, AudioParams.Default.WithVolume(3f));
     }
 
     private bool IsBlobFriendly(EntityUid uid)

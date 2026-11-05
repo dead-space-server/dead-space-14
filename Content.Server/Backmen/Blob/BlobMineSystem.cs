@@ -54,7 +54,8 @@ public sealed class BlobMineSystem : EntitySystem
             _flammable.Ignite(user, ent.Owner, flammable);
         }
 
-        _audio.PlayPvs(DetonateSound, ent);
+        if (!BlobSilence.BeforeAnnouncement(EntityManager))
+            _audio.PlayPvs(DetonateSound, ent);
         QueueDel(ent.Owner);
     }
 
