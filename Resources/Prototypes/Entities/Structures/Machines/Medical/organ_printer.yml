@@ -162,9 +162,6 @@
     - product: OrganAnimalLiver
       cost: 25
       group: Demon
-    - product: OrganAnimalLiver
-      cost: 25
-      group: Felinid
     - product: OrganVoxLiver
       cost: 25
       group: Vox
@@ -204,40 +201,6 @@
       group: Vox
     - product: OrganArachnidKidneys
       cost: 20
-      group: Arachnid
-    # мозг
-    - product: OrganHumanBrain
-      cost: 50
-      group: Humanoid
-    - product: OrganHumanBrain
-      cost: 50
-      group: Feline
-    - product: OrganHumanBrain
-      cost: 50
-      group: Canine
-    - product: OrganHumanBrain
-      cost: 50
-      group: Reptilian
-    - product: OrganHumanBrain
-      cost: 50
-      group: Moth
-    - product: OrganHumanBrain
-      cost: 50
-      group: Kobolt
-    - product: OrganHumanBrain
-      cost: 50
-      group: Shark
-    - product: OrganHumanBrain
-      cost: 50
-      group: Demon
-    - product: OrganHumanBrain
-      cost: 50
-      group: Felinid
-    - product: OrganVoxBrain
-      cost: 50
-      group: Vox
-    - product: OrganHumanBrain
-      cost: 50
       group: Arachnid
     # глаза
     - product: OrganHumanEyes
