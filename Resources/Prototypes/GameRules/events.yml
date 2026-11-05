@@ -51,7 +51,7 @@
     - id: ParadoxCloneSpawn
     - id: SleeperAgents
     - id: ZombieOutbreak
-    - id: XenoborgOutbreak # DS14
+    - id: Xenoborgs # DS14
     - id: SpiderTerrorOutbreak # DS14
     - id: LoneOpsSpawn
     - id: GeistMidroundSpawn # DS14
