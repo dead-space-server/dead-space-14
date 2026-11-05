@@ -2645,17 +2645,51 @@ public sealed partial class LimbWoundSystem : EntitySystem
         for (var i = 0; i < count; i++)
         {
             var zone = (LimbZone) i;
-            var pool = LimbWoundRules.HealthFor(zone, limbs);
-            if (zones[i].Health >= pool && !zones[i].Atrophied
-                || zones[i].Health <= 0f && !LimbWoundRules.Revives(zone))
+            ref var state = ref zones[i];
+            if (state.Severed || state.Health <= 0f && !LimbWoundRules.Revives(zone))
                 continue;
 
-            var before = zones[i].Health;
-            LimbWoundRules.Mend(ref zones[i], pool, pool, LimbWoundRules.Revives(zone));
-            changed |= zones[i].Health != before;
+            var pool = LimbWoundRules.HealthFor(zone, limbs);
+            var before = state.Health;
+            if (state.Health < pool || state.Atrophied)
+                LimbWoundRules.Mend(ref state, pool, pool, LimbWoundRules.Revives(zone));
+            changed |= state.Health != before;
+
+            changed |= ClearWounds(ref state);
         }
 
         return changed;
+    }
+
+    private static bool ClearWounds(ref LimbZoneState state)
+    {
+        var cleared = false;
+        Clear(ref cleared, ref state.Flesh);
+        Clear(ref cleared, ref state.Bone);
+        Clear(ref cleared, ref state.Cut);
+        Clear(ref cleared, ref state.Pierce);
+        Clear(ref cleared, ref state.Sever);
+        Clear(ref cleared, ref state.Skin);
+        Clear(ref cleared, ref state.Heat);
+        Clear(ref cleared, ref state.Caustic);
+        Clear(ref cleared, ref state.Bleed);
+        Clear(ref cleared, ref state.HitBlunt);
+        Clear(ref cleared, ref state.HitSlash);
+        Clear(ref cleared, ref state.HitPierce);
+        Clear(ref cleared, ref state.HitHeat);
+        Clear(ref cleared, ref state.HitCaustic);
+        Clear(ref cleared, ref state.HitBlood);
+        Clear(ref cleared, ref state.HitAir);
+        return cleared;
+
+        static void Clear(ref bool cleared, ref float value)
+        {
+            if (value <= 0f)
+                return;
+
+            value = 0f;
+            cleared = true;
+        }
     }
 
     private static void ApplySmallToHead(Span<LimbZoneState> zones, LimbStrike strike)
