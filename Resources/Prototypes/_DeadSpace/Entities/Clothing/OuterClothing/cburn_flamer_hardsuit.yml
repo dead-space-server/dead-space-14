@@ -9,26 +9,10 @@
     sprite: _DeadSpace/Clothing/Head/Hardsuits/cburn_flamer.rsi
     layers:
     - state: icon
-    - state: icon-unshaded
-      shader: unshaded
-    - state: light-overlay
-      visible: false
-      shader: unshaded
-      map: [ "light" ]
   - type: Clothing
     clothingVisuals:
       head:
       - state: equipped-head
-      - state: equipped-head-unshaded
-        shader: unshaded
-      head-vox:
-      - state: equipped-head-vox
-      - state: equipped-head-unshaded-vox
-        shader: unshaded
-      head-reptilian:
-      - state: equipped-head-reptilian
-      - state: equipped-head-unshaded-reptilian
-        shader: unshaded
 
 - type: entity
   parent: ClothingOuterHardsuitCBURN
