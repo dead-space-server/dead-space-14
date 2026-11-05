@@ -126,6 +126,19 @@
       sponsorsPriority: true
 
 - type: entity
+  parent: SpiderTerror
+  id: SpiderTerrorOutbreak
+  components:
+  - type: StationEvent
+    earliestStart: 60
+    minimumPlayers: 40
+    weight: 1
+    duration: null # SpiderTerrorRule must stay active for stage progression and round-end checks
+    reoccurrenceDelay: 60
+    maxOccurrences: 1
+    occursDuringRoundEnd: false
+
+- type: entity
   id: SpiderTerrorSpawn
   parent: BaseStationEventShortDelay
   components:

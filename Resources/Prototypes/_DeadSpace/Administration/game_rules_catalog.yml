@@ -80,6 +80,8 @@
     - ImmovableRodSpawn
     - BlobSpawn
     - SpiderTerrorSpawn
+    - SpiderTerrorOutbreak # DS14
+    - XenoborgOutbreak # DS14
     - WizardSpawn
     - RenegadeSpawn
     - HardVirusPandemic
@@ -395,7 +397,11 @@
 
 - type: gameRuleDisplayName
   id: ZombieOutbreak
-  name: Зомби-вспышка (от ~ 90 минут)
+  name: Зомби-вспышка (от ~ 60 минут)
+
+- type: gameRuleDisplayName
+  id: XenoborgOutbreak
+  name: Ксеноборги (от ~ 60 минут)
 
 - type: gameRuleDisplayName
   id: DragonSpawn
@@ -427,6 +433,10 @@
 
 - type: gameRuleDisplayName
   id: SpiderTerrorSpawn
+  name: Пауки ужаса (от ~ 60 минут)
+
+- type: gameRuleDisplayName
+  id: SpiderTerrorOutbreak
   name: Пауки ужаса (от ~ 60 минут)
 
 - type: gameRuleDisplayName

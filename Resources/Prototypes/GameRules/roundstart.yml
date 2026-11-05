@@ -26,8 +26,10 @@
       prob: 1
     - id: SubWizard
       prob: 0.05
-    - id: SubXenoborgs
-      prob: 0.05
+#ds14-start
+#    - id: SubXenoborgs
+#      prob: 0.05
+#ds14-end
     - id: Changeling
       prob: 0.25
 
@@ -41,8 +43,10 @@
       prob: 0.5
     - id: Hooligan # DS14
       prob: 1
-    - id: SubXenoborgs
-      prob: 0.05
+#ds14-start
+#    - id: SubXenoborgs
+#      prob: 0.05
+#ds14-end
     - id: Changeling
       prob: 0.25
 
