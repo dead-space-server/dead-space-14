@@ -92,8 +92,10 @@ public sealed class BlobCarrierSystem : SharedBlobCarrierSystem
 
         if (_mind.TryGetMind(ent, out _, out var mind) && mind.UserId != null)
         {
+            // DS14-start
             var userId = mind.UserId.Value;
             _rollback.PreserveBody(userId, ent, _transform.GetMapCoordinates(ent));
+            // DS14-end
             var core = Spawn(ent.Comp.CoreBlobPrototype, xform.Coordinates);
 
             if (!TryComp<BlobCoreComponent>(core, out var blobCoreComponent))
