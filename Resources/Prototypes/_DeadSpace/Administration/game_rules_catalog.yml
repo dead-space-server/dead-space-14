@@ -79,7 +79,6 @@
     - RevenantSpawn
     - ImmovableRodSpawn
     - BlobSpawn
-    - SpiderTerrorSpawn
     - SpiderTerrorOutbreak # DS14
     - XenoborgOutbreak # DS14
     - WizardSpawn
@@ -430,10 +429,6 @@
 - type: gameRuleDisplayName
   id: BlobSpawn
   name: Носитель блоба (от ~ 60 минут)
-
-- type: gameRuleDisplayName
-  id: SpiderTerrorSpawn
-  name: Пауки ужаса (от ~ 60 минут)
 
 - type: gameRuleDisplayName
   id: SpiderTerrorOutbreak
