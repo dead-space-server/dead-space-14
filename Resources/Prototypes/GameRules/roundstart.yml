@@ -599,8 +599,19 @@
   parent: BaseXenoborgsRule
   id: Xenoborgs
   components:
+#ds14-start
+  - type: StationEvent
+    earliestStart: 60
+    minimumPlayers: 30
+    weight: 1
+    duration: null # XenoborgsRule must stay active for shuttle/round-end checks
+    reoccurrenceDelay: 60
+    maxOccurrences: 1
+    occursDuringRoundEnd: false
+  #ds14-end
   - type: GameRule
     minPlayers: 30
+    cancelPresetOnTooFewPlayers: false #ds14
   - type: AntagMultipleRoleSpawner
     antagRoleToPrototypes:
       MothershipCore: [ MothershipCore ]
