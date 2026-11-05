@@ -429,8 +429,6 @@ public sealed class SurgerySystem : EntitySystem
         if (!LimbWoundRules.IsBody(zone) && zone != LimbZone.Eyes)
             return;
 
-        // Часть приходит сырой строкой от клиента: только валидные прототипы,
-        // иначе мусор навсегда осядет в site.Part и site.Kept (сетевой словарь).
         if (message.Part.Length > 0
             && (message.Part.Length > MaxPartLength || !_prototype.TryIndex<SurgeryPartPrototype>(message.Part, out _)))
             return;

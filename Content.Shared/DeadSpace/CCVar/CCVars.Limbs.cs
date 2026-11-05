@@ -49,15 +49,9 @@ public sealed partial class CCVars
     public static readonly CVarDef<float> LimbMissingLegSpeed =
         CVarDef.Create("limb.missing_leg_speed", LimbWoundRules.MissingLegSpeed, CVar.SERVER | CVar.REPLICATED);
 
-    /// <summary>
-    ///     Период рейт-лимита сетевых сообщений хирургии (секунды).
-    /// </summary>
     public static readonly CVarDef<float> SurgeryRateLimitPeriod =
         CVarDef.Create("surgery.rate_limit_period", 1f, CVar.SERVERONLY);
 
-    /// <summary>
-    ///     Сколько сетевых сообщений хирургии разрешено за один период рейт-лимита.
-    /// </summary>
     public static readonly CVarDef<int> SurgeryRateLimitCount =
         CVarDef.Create("surgery.rate_limit_count", 20, CVar.SERVERONLY);
 }
