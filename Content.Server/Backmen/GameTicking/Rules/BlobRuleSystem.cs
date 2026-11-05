@@ -51,6 +51,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
     private const int AdditionalSupport = 70000;
     private const int BlobVictoryTiles = 1400; // DS14
     private bool _helpSended = false;
+    private static readonly SoundPathSpecifier BlobDetectAudio = new SoundPathSpecifier("/Audio/_DeadSpace/Announcements/outbreak5.ogg"); // DS14-Announcements
 
     public override void Initialize()
     {
@@ -193,6 +194,14 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
         {
             case BlobStage.Default when blobCore.Comp.BlobTiles.Count > 20:
                 blobRuleComp.Stage = BlobStage.Begin;
+
+                // DS14-start
+                RuleStation.Announce(stationUid, Loc.GetString("blob-alert-detect"),
+                    Name(stationUid), true, BlobDetectAudio, Color.Red);
+                // DS14-end
+
+                if (_alertLevel.GetLevel(stationUid) == "green" || _alertLevel.GetLevel(stationUid) == "blue" || _alertLevel.GetLevel(stationUid) == "violet" || _alertLevel.GetLevel(stationUid) == "yellow")
+                    _alertLevel.SetLevel(stationUid, "red", false, true, true, true);
 
                 RaiseLocalEvent(stationUid, new BlobChangeLevelEvent
                 {
