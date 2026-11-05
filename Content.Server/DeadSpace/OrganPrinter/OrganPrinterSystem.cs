@@ -21,6 +21,8 @@ namespace Content.Server.DeadSpace.OrganPrinter;
 /// </summary>
 public sealed class OrganPrinterSystem : EntitySystem
 {
+    public const int MaxWaste = 2048;
+
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -102,13 +104,15 @@ public sealed class OrganPrinterSystem : EntitySystem
         }
 
         var productId = args.Product.Id;
-        var entry = ent.Comp.Entries.FirstOrDefault(e => e.Product.Id == productId);
+        var group = args.Group;
+        var entry = ent.Comp.Entries.FirstOrDefault(e => e.Product.Id == productId && e.Group == group);
         if (entry == null)
             return;
 
         var quality = Math.Clamp(args.Quality, 0, 100);
-        var waste = Math.Max(0, args.Waste);
-        var effectiveCost = entry.Cost + (int) Math.Ceiling(waste * ent.Comp.WasteCost);
+        var waste = Math.Clamp(args.Waste, 0, MaxWaste);
+        var effectiveCost = entry.Cost + (int) Math.Clamp(
+            Math.Ceiling(waste * (double) ent.Comp.WasteCost), 0, int.MaxValue - entry.Cost);
 
         if (_material.GetMaterialAmount(ent.Owner, ent.Comp.Material) < effectiveCost)
         {

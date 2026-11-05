@@ -42,12 +42,14 @@ public sealed class OrganPrinterUpdateState : BoundUserInterfaceState
 public sealed class OrganPrinterPrintRequestMessage : BoundUserInterfaceMessage
 {
     public readonly EntProtoId Product;
+    public readonly OrganSpeciesGroup Group;
     public readonly int Quality;
     public readonly int Waste;
 
-    public OrganPrinterPrintRequestMessage(EntProtoId product, int quality, int waste)
+    public OrganPrinterPrintRequestMessage(EntProtoId product, OrganSpeciesGroup group, int quality, int waste)
     {
         Product = product;
+        Group = group;
         Quality = quality;
         Waste = waste;
     }

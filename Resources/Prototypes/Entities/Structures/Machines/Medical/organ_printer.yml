@@ -54,6 +54,9 @@
     - product: OrganAnimalHeart
       cost: 30
       group: Demon
+    - product: OrganAnimalHeart
+      cost: 30
+      group: Felinid
     - product: OrganVoxHeart
       cost: 30
       group: Vox
@@ -85,6 +88,9 @@
     - product: OrganHumanLungs
       cost: 25
       group: Demon
+    - product: OrganHumanLungs
+      cost: 25
+      group: Felinid
     - product: OrganVoxLungs
       cost: 25
       group: Vox
@@ -119,6 +125,9 @@
     - product: OrganDemonStomach
       cost: 20
       group: Demon
+    - product: OrganReptilianStomach
+      cost: 20
+      group: Felinid
     - product: OrganVoxStomach
       cost: 20
       group: Vox
@@ -153,6 +162,9 @@
     - product: OrganAnimalLiver
       cost: 25
       group: Demon
+    - product: OrganAnimalLiver
+      cost: 25
+      group: Felinid
     - product: OrganVoxLiver
       cost: 25
       group: Vox
@@ -184,6 +196,9 @@
     - product: OrganHumanKidneys
       cost: 20
       group: Demon
+    - product: OrganHumanKidneys
+      cost: 20
+      group: Felinid
     - product: OrganVoxKidneys
       cost: 20
       group: Vox
@@ -215,6 +230,9 @@
     - product: OrganHumanBrain
       cost: 50
       group: Demon
+    - product: OrganHumanBrain
+      cost: 50
+      group: Felinid
     - product: OrganVoxBrain
       cost: 50
       group: Vox
@@ -246,6 +264,9 @@
     - product: OrganHumanEyes
       cost: 15
       group: Demon
+    - product: OrganFelinidEyes
+      cost: 15
+      group: Felinid
     - product: OrganVoxEyes
       cost: 15
       group: Vox
@@ -309,6 +330,12 @@
     - product: RightArmDemon
       cost: 40
       group: Demon
+    - product: LeftArmHuman
+      cost: 40
+      group: Felinid
+    - product: RightArmHuman
+      cost: 40
+      group: Felinid
     - product: LeftArmVox
       cost: 40
       group: Vox
@@ -370,6 +397,12 @@
     - product: RightHandDemon
       cost: 25
       group: Demon
+    - product: LeftHandHuman
+      cost: 25
+      group: Felinid
+    - product: RightHandHuman
+      cost: 25
+      group: Felinid
     - product: LeftHandVox
       cost: 25
       group: Vox
@@ -431,6 +464,12 @@
     - product: RightLegDemon
       cost: 40
       group: Demon
+    - product: LeftLegHuman
+      cost: 40
+      group: Felinid
+    - product: RightLegHuman
+      cost: 40
+      group: Felinid
     - product: LeftLegVox
       cost: 40
       group: Vox
@@ -492,6 +531,12 @@
     - product: RightFootDemon
       cost: 25
       group: Demon
+    - product: LeftFootHuman
+      cost: 25
+      group: Felinid
+    - product: RightFootHuman
+      cost: 25
+      group: Felinid
     - product: LeftFootVox
       cost: 25
       group: Vox

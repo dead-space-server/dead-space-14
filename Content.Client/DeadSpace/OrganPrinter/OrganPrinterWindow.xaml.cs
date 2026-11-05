@@ -19,7 +19,7 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
-    public event Action<EntProtoId, int, int>? OnPrintPressed;
+    public event Action<EntProtoId, OrganSpeciesGroup, int, int>? OnPrintPressed;
     public event Action<bool>? OnGameFailed;
     public event Action? OnEjectPressed;
 
@@ -27,7 +27,7 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
 
     private List<OrganPrinterProduct> _products = new();
     private List<OrganPrinterProduct> _filtered = new();
-    private OrganSpeciesGroup? _groupFilter;
+    private OrganSpeciesGroup? _groupFilter = OrganSpeciesGroup.Humanoid;
     private EntProtoId? _selected;
     private int _biomass;
 
@@ -48,14 +48,13 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
         _game.Visible = false;
 
         var groups = Enum.GetValues<OrganSpeciesGroup>().ToList();
-        GroupFilter.AddItem(Loc.GetString("organ-printer-group-all"));
         foreach (var group in groups)
             GroupFilter.AddItem(Loc.GetString($"organ-printer-group-{group.ToString().ToLowerInvariant()}"));
         GroupFilter.SelectId(0);
         GroupFilter.OnItemSelected += args =>
         {
             GroupFilter.SelectId(args.Id);
-            _groupFilter = args.Id == 0 ? null : groups[args.Id - 1];
+            _groupFilter = groups[args.Id];
             RebuildList();
         };
 
@@ -86,7 +85,10 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
             {
                 GameResultLabel.Text = Loc.GetString("organ-printer-game-win", ("quality", quality), ("waste", waste));
                 if (_selected is { } product)
-                    OnPrintPressed?.Invoke(product, quality, waste);
+                {
+                    var group = _filtered.FirstOrDefault(p => p.Product == product)?.Group ?? OrganSpeciesGroup.Humanoid;
+                    OnPrintPressed?.Invoke(product, group, quality, waste);
+                }
             }
             else
             {

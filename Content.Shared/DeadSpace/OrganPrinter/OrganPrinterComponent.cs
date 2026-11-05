@@ -28,6 +28,7 @@ public enum OrganSpeciesGroup : byte
     Kobolt = 5,
     Shark = 6,
     Demon = 7,
+    Felinid = 8,
     Vox = 9,
     Arachnid = 10,
 }
