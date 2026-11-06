@@ -56,11 +56,18 @@ public sealed class SurgeryGraftSystem : EntitySystem
 
     public void MarkPrinted(EntityUid part, string species)
     {
-        if (TerminatingOrDeleted(part) || HasComp<SurgeryOriginComponent>(part))
+        if (TerminatingOrDeleted(part))
             return;
 
-        var origin = AddComp<SurgeryOriginComponent>(part);
-        origin.Species = species;
+        if (!HasComp<SurgeryOriginComponent>(part))
+        {
+            var origin = AddComp<SurgeryOriginComponent>(part);
+            origin.Species = species;
+        }
+
+        var flesh = EnsureComp<LimbFleshComponent>(part);
+        if (flesh.Species.Length == 0)
+            flesh.Species = species;
     }
 
     public bool Accepts(EntityUid body, EntityUid part, bool popup = true)
