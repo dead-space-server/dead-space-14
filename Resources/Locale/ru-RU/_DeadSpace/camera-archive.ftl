@@ -13,6 +13,7 @@ camera-archive-label-burned-popup = Этикетка сгорела. Камер�
 camera-archive-sealed-popup = Камера заклеена и погасла. Запись остановлена.
 camera-archive-peeled-popup = Этикетка снята. Камера снова пишет.
 camera-archive-printed = Лист напечатан.
+camera-archive-one-sheet = Сначала закройте другой снимок.
 camera-archive-chat = Лог сообщений
 camera-archive-off-station = вне станции
 camera-archive-chat-empty = Пока никто ничего не сказал.

@@ -485,6 +485,21 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         {
             var lines = LimbScanText.Areas(data.LimbShades, null);
             var issues = LimbScanText.Lines(data.LimbIssues);
+            if (entity.Comp.ScannedEntity is { } patient) //DS-14
+            {
+                TryComp<SurgeryCavityComponent>(patient, out var hold); //DS-14
+                TryComp<SurgeryInfectionComponent>(patient, out var infection); //DS-14
+                for (var i = 0; i < LimbWoundRules.BodyZoneCount; i++) //DS-14
+                {
+                    var hidden = new List<string>(); //DS-14
+                    SurgeryXrayReport.NoteHidden((LimbZone) i, hold, infection, hidden); //DS-14
+                    if (hidden.Count == 0) //DS-14
+                        continue;
+
+                    var name = Loc.GetString($"health-analyzer-zone-{i}"); //DS-14
+                    issues.Add(Loc.GetString("health-analyzer-limb-line", ("name", name), ("issues", string.Join(", ", hidden)))); //DS-14
+                }
+            }
             if (lines.Count == 0 && issues.Count == 0)
                 sb.AppendLine("[color=green]• Повреждений не обнаружено[/color]");
             else

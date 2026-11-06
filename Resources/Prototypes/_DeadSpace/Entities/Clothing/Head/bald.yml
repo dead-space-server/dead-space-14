@@ -1,0 +1,26 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBluespaceBald
+  name: bluespace baldness
+  description: You are irresistible, but you reflect light harder.
+  components:
+  - type: SurgeryBald
+  - type: Clothing
+    slots:
+    - HEAD
+    sprite: Clothing/Head/Hats/beanie.rsi
+  - type: Sprite
+    sprite: Clothing/Head/Hats/beanie.rsi
+    layers:
+    - state: body-icon
+      color: "#7a5cff"
+    - state: cuffcrown-icon
+      color: "#c8b6ff"
+    - state: pompom-icon
+      color: "#efe6ff"
+  - type: HideLayerClothing
+    bodyLayers:
+    - Hair
+    - FacialHair
+    - HeadTop
+    - HeadSide

@@ -271,6 +271,16 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
     {
         var marks = new SortedDictionary<int, bool>();
         var words = new Dictionary<int, List<string>>();
+        LimbBodyComponent? limbBody = null; //DS-14
+        SurgeryCavityComponent? hold = null; //DS-14
+        SurgeryInfectionComponent? infection = null; //DS-14
+        if (_limbPatient is { } net && _entityManager.TryGetEntity(net, out var scanned)) //DS-14
+        {
+            _entityManager.TryGetComponent(scanned.Value, out limbBody); //DS-14
+            _entityManager.TryGetComponent(scanned.Value, out hold); //DS-14
+            _entityManager.TryGetComponent(scanned.Value, out infection); //DS-14
+        }
+
         void Mark(int index, bool urgent)
         {
             if ((uint) index >= (uint) LimbWoundRules.BodyZoneCount)
@@ -280,6 +290,18 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                 marks[index] = already || urgent;
             else
                 marks[index] = urgent;
+        }
+
+        void Note(int index, string word) //DS-14
+        {
+            if (!words.TryGetValue(index, out var list))
+            {
+                list = new List<string>();
+                words[index] = list;
+            }
+
+            if (!list.Contains(word))
+                list.Add(word);
         }
 
         if (_limbIssueCache != null)
@@ -315,24 +337,30 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                     or LimbIssueKind.Embedded;
                 Mark(index, urgent);
 
-                if (!_limbDetailed)
-                    continue;
-
                 var prefix = _limbMachine ? "health-analyzer-issue-machine-" : "health-analyzer-issue-";
                 var word = Loc.GetString($"{prefix}{(byte) issue.Kind}");
+                if (!_limbMachine && issue.Kind == LimbIssueKind.Bleed && limbBody != null && (uint) index < (uint) limbBody.Zones.Count) //DS-14
+                    word = Loc.GetString("surgery-xray-bleed", ("level", SurgeryXrayReport.BleedLevel(limbBody.Zones[index].Bleed)));
                 if (issue.Organ)
                     word = $"{word} ({Loc.GetString($"health-analyzer-organ-{issue.Index}")})";
 
-                if (!words.TryGetValue(index, out var list))
-                {
-                    list = new List<string>();
-                    words[index] = list;
-                }
-
-                if (!list.Contains(word))
-                    list.Add(word);
+                Note(index, word);
             }
         }
+
+        //DS-14 start
+        for (var i = 0; i < LimbWoundRules.BodyZoneCount; i++)
+        {
+            var hidden = new List<string>();
+            SurgeryXrayReport.NoteHidden((LimbZone) i, hold, infection, hidden);
+            if (hidden.Count == 0)
+                continue;
+
+            Mark(i, infection != null && infection.Rots((LimbZone) i));
+            foreach (var line in hidden)
+                Note(i, line);
+        }
+        //DS-14 end
 
         if (_limbShadeCache != null)
         {
@@ -350,11 +378,9 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         foreach (var (index, urgent) in marks)
         {
             var name = Loc.GetString($"health-analyzer-zone-{index}");
-            var phrase = !_limbDetailed
-                ? Loc.GetString(urgent ? "health-analyzer-limb-urgent" : "health-analyzer-limb-look")
-                : words.TryGetValue(index, out var found) && found.Count > 0
-                    ? string.Join(", ", found)
-                    : Loc.GetString("health-analyzer-limb-hurt");
+            var phrase = words.TryGetValue(index, out var found) && found.Count > 0
+                ? string.Join(", ", found)
+                : Loc.GetString("health-analyzer-limb-hurt");
             text.AddChild(new Label
             {
                 Text = $"{name}: {phrase}",

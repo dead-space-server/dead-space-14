@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Client.UserInterface.Systems.Alerts.Widgets;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
@@ -99,6 +100,7 @@ public sealed class SurgeryClientSystem : EntitySystem
     private SurgeryGameKind _game;
     private SurgeryChestMap? _map;
     private SurgeryHint? _hint;
+    private TextureButton? _leave;
     private Vector2? _coneLocal;
     private EntityUid? _coneFor;
     private Vector2? _fanLocal;
@@ -358,6 +360,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         KeepFan();
         if (_board == null || _patient == null || _players.LocalEntity is not { } user)
         {
+            ClearLeave();
             if (_players.LocalEntity is { } aimer)
             {
                 if (_picking != null)
@@ -383,7 +386,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         }
 
         _time += frameTime;
-        _sawPhase += frameTime * 3.4f * (1f + 0.5f * _passes);
+        _sawPhase += frameTime * 2.4f;
         var here = _transform.GetWorldPosition(user);
         var there = _transform.GetWorldPosition(patient.Value);
         if (!InReach(here, there))
@@ -448,13 +451,11 @@ public sealed class SurgeryClientSystem : EntitySystem
                 down = false;
         }
 
-        if (_input.IsKeyDown(Keyboard.Key.MouseRight))
-        {
-            EndView();
-            return;
-        }
+        PlaceLeave();
 
-        if (LimbCoverRules.Worn(patient.Value, (LimbZone) _board!.Zone, EntityManager, _inventory))
+        if (LimbCoverRules.Worn(patient.Value, (LimbZone) _board!.Zone, EntityManager, _inventory)
+            || SurgeryPartPrototype.CoverOf(_proto, _board.Part, null) is { } cover
+            && LimbCoverRules.Worn(patient.Value, cover, EntityManager, _inventory))
         {
             if (down && !_down)
                 _popup.PopupEntity(Loc.GetString("surgery-clothes"), patient.Value, user);
@@ -957,7 +958,7 @@ public sealed class SurgeryClientSystem : EntitySystem
 
     private float SawHalf()
     {
-        return MathF.Max(0.03f, (0.12f - _passes * 0.03f) * Steady());
+        return 0.2f * Steady();
     }
 
     private float Steady()
@@ -1260,9 +1261,10 @@ public sealed class SurgeryClientSystem : EntitySystem
             ? Loc.GetString("surgery-hint-left", ("n", Math.Max(1, need - _passes)))
             : "";
         var extra = "";
+        var machine = _patient is { } body && MachineBody(body);
         if (Lodged() || OrgansReady())
-            extra = _patient is { } body && MachineBody(body) ? "MachinePry" : "Extract";
-        _hint.Show(shown, other, shown == stepVerb ? _board.StepHint : "", suffix, extra);
+            extra = machine ? "MachinePry" : "Extract";
+        _hint.Show(shown, other, shown == stepVerb ? _board.StepHint : "", suffix, extra, machine);
         _hint.SetSize = _hint.MinSize;
         var size = _hint.MinSize * UiScale();
         var view = _ui.RootControl.PixelSize;
@@ -2062,7 +2064,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (!operation.Fits(zone) || !Suits(patient, operation))
             return false;
 
-        if (!_nearby.Has(patient, operation, _players.LocalEntity))
+        if (!_nearby.Has(patient, operation, _players.LocalEntity) || SurgeryPartPrototype.Blocks(_proto, EntityManager, patient, operation.ID))
             return false;
 
         if (operation.Appendage.Length > 0
@@ -2099,7 +2101,9 @@ public sealed class SurgeryClientSystem : EntitySystem
             return false;
 
         var infected = TryComp<SurgeryInfectionComponent>(patient, out var infection) && infection.Rots(zone);
-        return SurgeryConditions.Has(when, limbs.Zones[index], HasBone(patient, zone), infected, SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs));
+        return SurgeryConditions.Has(when, limbs.Zones[index], HasBone(patient, zone), infected, SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs),
+            SurgeryRot.Treatable(EntityManager, patient, zone, limbs),
+            TryComp<SurgeryCavityComponent>(patient, out var cavity) && cavity.Holds(zone));
     }
 
     private bool HasBone(EntityUid patient, LimbZone zone)
@@ -2172,6 +2176,7 @@ public sealed class SurgeryClientSystem : EntitySystem
     {
         _headMenu?.Orphan();
         _headMenu = null;
+        _menuFor = null;
         _picking = null;
         _preview = null;
         RaiseNetworkEvent(new SurgeryZoneMessage
@@ -2255,6 +2260,7 @@ public sealed class SurgeryClientSystem : EntitySystem
     {
         _headMenu?.Orphan();
         _headMenu = null;
+        _menuFor = null;
         _picking = null;
         RaiseNetworkEvent(new SurgeryZoneMessage
         {
@@ -2416,13 +2422,52 @@ public sealed class SurgeryClientSystem : EntitySystem
         });
     }
 
+    private void PlaceLeave()
+    {
+        var alerts = _ui.GetActiveUIWidgetOrNull<AlertsUI>();
+        if (alerts == null)
+            return;
+
+        if (_leave == null)
+        {
+            var rsi = _cache.GetResource<RSIResource>("/Textures/_DeadSpace/Structures/Furniture/Tables/xraytable.rsi").RSI;
+            if (!rsi.TryGetState("table", out var state))
+                return;
+
+            _leave = new TextureButton
+            {
+                TextureNormal = state.GetFrame(RsiDirection.South, 0),
+                MinSize = new Vector2(32f, 32f),
+                MaxSize = new Vector2(32f, 32f),
+                HorizontalExpand = false,
+                VerticalExpand = false,
+                ToolTip = Loc.GetString("surgery-leave"),
+            };
+            _leave.OnPressed += _ => EndView();
+        }
+
+        if (_leave.Parent != alerts.AlertContainer)
+        {
+            _leave.Orphan();
+            alerts.AlertContainer.AddChild(_leave);
+            _leave.SetPositionFirst();
+        }
+    }
+
+    private void ClearLeave()
+    {
+        _leave?.Orphan();
+    }
+
     private void EndView()
     {
+        ClearLeave();
         if (_zoomed)
             RaiseNetworkEvent(new SurgeryFocusMessage { On = 0 });
 
         _zoomed = false;
         _picking = null;
+        _menuFor = null;
         _stay = _patient;
         _headMenu?.Orphan();
         _guide.Active = false;

@@ -60,6 +60,7 @@ public sealed class RespiratorSystem : EntitySystem
         SubscribeLocalEvent<BodyComponent, InhaledGasEvent>(OnGasInhaled);
         SubscribeLocalEvent<BodyComponent, ExhaledGasEvent>(OnGasExhaled);
         SubscribeLocalEvent<BodyComponent, CanMetabolizeGasEvent>(CanBodyMetabolizeGas);
+        SubscribeLocalEvent<BodyComponent, BreathableAirEvent>(OnBreathableAir); //DS-14
         SubscribeLocalEvent<BodyComponent, SuffocationEvent>(OnSuffocation);
         SubscribeLocalEvent<BodyComponent, StopSuffocatingEvent>(OnStopSuffocating);
     }
@@ -165,7 +166,15 @@ public sealed class RespiratorSystem : EntitySystem
         RaiseLocalEvent(entity, ref inhaleEv);
 
         if (inhaleEv.Handled && inhaleEv.Succeeded)
+        {
+            //DS-14 start
+            var breath = new CanMetabolizeGasEvent(gas);
+            RaiseLocalEvent(entity, ref breath);
+            if (breath.Saturation > 0f)
+                UpdateSaturation(entity, breath.Saturation, entity.Comp);
+            //DS-14 end
             return;
+        }
 
         // If nothing could inhale the gas give it back.
         _atmosSys.Merge(ev.Gas, gas);
@@ -256,6 +265,14 @@ public sealed class RespiratorSystem : EntitySystem
         return ev.Saturation > ent.Comp.UpdateInterval.TotalSeconds;
     }
 
+    //DS-14 start
+    private void OnBreathableAir(Entity<BodyComponent> ent, ref BreathableAirEvent args)
+    {
+        args.Handled = true;
+        args.Breathable = CanMetabolizeInhaledAir(ent.Owner, args.Air);
+    }
+    //DS-14 end
+
     /// <summary>
     /// Tries to safely metabolize the current solutions in a body's lungs.
     /// </summary>
@@ -271,18 +288,15 @@ public sealed class RespiratorSystem : EntitySystem
         var solution = _lungSystem.GasToReagent(args.Gas);
 
         var saturation = 0f;
+        var toxic = false; //DS-14
         foreach (var organ in organs)
         {
-            saturation += GetSaturation(solution, organ.Owner, out var toxic);
-            if (!toxic)
-                continue;
-
-            args.Handled = true;
-            args.Toxic = true;
-            return;
+            saturation += GetSaturation(solution, organ.Owner, out var organToxic); //DS-14
+            toxic |= organToxic; //DS-14
         }
 
         args.Handled = true;
+        args.Toxic = toxic; //DS-14
         args.Saturation = saturation;
     }
 

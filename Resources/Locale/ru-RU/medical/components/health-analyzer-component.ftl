@@ -16,7 +16,7 @@ health-analyzer-window-entity-unrevivable-text = [color=red]Обнаружено
 health-analyzer-window-entity-bleeding-text = [color=red]У пациента кровотечение![/color]
 health-analyzer-window-entity-uncloning-text = [color=violet]Обнаружен нестабильный генетический код! Пациент не может быть клонирован![/color]
 # DS14
-health-analyzer-window-entity-infection-text = [color=#a6c64a]Воспалительный процесс: в теле что-то не так. Нужен рентген.[/color]
+health-analyzer-window-entity-infection-text = [color=#a6c64a]Воспалительный процесс: в теле что-то не так.[/color]
 health-analyzer-window-scan-mode-text = Режим сканирования:
 health-analyzer-window-scan-mode-active = Активен
 health-analyzer-window-scan-mode-inactive = Неактивен

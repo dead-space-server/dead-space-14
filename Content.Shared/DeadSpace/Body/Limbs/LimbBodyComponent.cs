@@ -108,6 +108,9 @@ public sealed partial class LimbBodyComponent : Component
     public TimeSpan? Died;
 
     [DataField]
+    public float Decay;
+
+    [DataField]
     public bool LimbDeath;
 
     [DataField]

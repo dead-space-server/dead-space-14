@@ -3,6 +3,7 @@
 using Content.Shared.Atmos.Components;
 using Content.Shared.Clothing.Components;
 using Content.Shared.DeadSpace.Psychiatry;
+using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.Inventory;
 using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
@@ -97,6 +98,9 @@ public static class LimbCoverRules
 
                 continue;
             }
+
+            if (entities.HasComponent<SurgeryBaldComponent>(item))
+                continue;
 
             if (entities.TryGetComponent(item, out LimbCoverComponent? cover))
             {

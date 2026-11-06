@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Atmos.Rotting;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
@@ -14,6 +15,7 @@ public sealed class SurgeryRepairSystem : EntitySystem
     private const string Effect = "MachineRepair";
     private const string OrganMend = "OrganMend";
     private const string TissueMend = "TissueMend";
+    private const string RotMend = "RotMend";
     private const string Rules = "Default";
 
     private static readonly Dictionary<string, string[]> ZoneHeals = new()
@@ -34,6 +36,7 @@ public sealed class SurgeryRepairSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly LimbWoundSystem _limbs = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
+    [Dependency] private readonly SharedRottingSystem _rotting = default!;
     [Dependency] private readonly Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
 
     public override void Initialize()
@@ -56,6 +59,13 @@ public sealed class SurgeryRepairSystem : EntitySystem
             args.Handled = true;
             MendOrgans(ent, args.User);
             HealZone(ent, ent.Comp.Zone, OrganMendHeals);
+            return;
+        }
+
+        if (!args.Handled && args.Effect == RotMend)
+        {
+            args.Handled = true;
+            MendRot(ent, ent.Comp.Zone);
             return;
         }
 
@@ -102,6 +112,25 @@ public sealed class SurgeryRepairSystem : EntitySystem
 
         if (_prototype.TryIndex<SurgeryRepairPrototype>(Rules, out var rules))
             _damage.TryChangeDamage(ent.Owner, rules.Heal, true, false);
+    }
+
+    private void MendRot(EntityUid body, LimbZone zone)
+    {
+        if (!TryComp<LimbBodyComponent>(body, out var limbs) || !SurgeryRot.Treatable(EntityManager, body, zone, limbs))
+            return;
+
+        if (zone == LimbZone.Head)
+        {
+            limbs.Decay = 0f;
+            _limbs.ApplyOrganEdit(body, LimbOrgan.Brain, new LimbOrganEdit { SetDamage = true, Damage = 0f });
+            return;
+        }
+
+        if (zone != LimbZone.Torso || !TryComp<PerishableComponent>(body, out var perishable))
+            return;
+
+        var total = perishable.RotAccumulator + (CompOrNull<RottingComponent>(body)?.TotalRotTime ?? TimeSpan.Zero);
+        _rotting.ReduceAccumulator(body, total);
     }
 
     public void HealZone(EntityUid body, LimbZone zone, IReadOnlyList<string> types)

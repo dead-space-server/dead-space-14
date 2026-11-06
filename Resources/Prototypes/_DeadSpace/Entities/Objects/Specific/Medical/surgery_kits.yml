@@ -60,6 +60,7 @@
     whitelist:
       components:
       - Organ
+      - BodyPart
   - type: AntiRottingContainer
   - type: EmitSoundOnPickup
     sound:

@@ -52,6 +52,7 @@ public sealed class SurgeryLimbPort : EntitySystem
 
         foreach (var zone in new[]
                  {
+                     LimbZone.Head,
                      LimbZone.ArmLeft, LimbZone.ArmRight, LimbZone.LegLeft, LimbZone.LegRight,
                      LimbZone.HandLeft, LimbZone.HandRight, LimbZone.FootLeft, LimbZone.FootRight,
                  })

@@ -1,99 +1,4 @@
 - type: entity
-  id: ActionLimbImplantHudBase
-  abstract: true
-  components:
-  - type: Action
-    itemIconStyle: BigAction
-    useDelay: 1
-    raiseOnAction: true
-  - type: InstantAction
-    event: !type:ToggleLimbImplantEvent
-
-- type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantMedicalHud
-  name: medical HUD
-  description: Toggle the ocular medical overlay.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Hud/med.rsi
-      state: icon
-
-- type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantSecurityHud
-  name: security HUD
-  description: Toggle the ocular security overlay.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Hud/sec.rsi
-      state: icon
-
-- type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantDiagnosticHud
-  name: diagnostic HUD
-  description: Toggle the ocular diagnostic overlay.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Hud/diag.rsi
-      state: icon
-
-- type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantCommandHud
-  name: administration HUD
-  description: Toggle the ocular administration overlay.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Hud/command.rsi
-      state: icon
-
-- type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantNutritionHud
-  name: nutrition HUD
-  description: Toggle the ocular hunger and thirst overlay.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Hud/beergoggles.rsi
-      state: icon
-
-- type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantSyndicateHud
-  name: syndicate HUD
-  description: Toggle the ocular syndicate overlay.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Hud/synd.rsi
-      state: icon
-
-- type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantFlashShield
-  name: flash shield
-  description: Darken the ocular filter against flashes and welding light.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Glasses/sunglasses.rsi
-      state: icon
-
-- type: entity
   id: ActionLimbImplantArmBlade
   name: arm blade
   description: Extend or retract the blade in this arm.
@@ -116,30 +21,6 @@
       collection: gib
 
 - type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantWeldShield
-  name: welding shield
-  description: Darken the ocular filter against welding light.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Glasses/meson.rsi
-      state: icon
-
-- type: entity
-  parent: ActionLimbImplantHudBase
-  id: ActionLimbImplantChemicalHud
-  name: chemical scanner
-  description: Toggle the ocular chemical analysis.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    icon:
-      sprite: Clothing/Eyes/Glasses/science.rsi
-      state: icon
-
-- type: entity
   parent: BaseItem
   id: LimbImplantHudBase
   abstract: true
@@ -153,15 +34,14 @@
   parent: LimbImplantHudBase
   id: LimbImplantMedicalHud
   name: ocular medical HUD implant
-  description: A surgical ocular implant. Installed in the eyes, it grants a toggleable medical overlay.
+  description: A surgical ocular implant. Installed in the eyes, it grants a medical overlay.
   components:
   - type: Sprite
     state: medhud
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantMedicalHud
-    toggleComponents:
+    implantComponents:
     - type: ShowHealthBars
     - type: ShowHealthIcons
     - type: ShowMedicalStatusIcons
@@ -177,8 +57,7 @@
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantSecurityHud
-    toggleComponents:
+    implantComponents:
     - type: ShowJobIcons
     - type: ShowMindShieldIcons
     - type: ShowCriminalRecordIcons
@@ -198,8 +77,7 @@
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantDiagnosticHud
-    toggleComponents:
+    implantComponents:
     - type: ShowHealthBars
       damageContainers:
       - Inorganic
@@ -217,8 +95,7 @@
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantCommandHud
-    toggleComponents:
+    implantComponents:
     - type: ShowJobIcons
     - type: ShowPersonnelRecordIcons
     - type: ShowMedicalStatusIcons
@@ -234,8 +111,7 @@
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantNutritionHud
-    toggleComponents:
+    implantComponents:
     - type: ShowSatiationIcons
       shownTypes:
       - Hunger
@@ -252,8 +128,7 @@
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantSyndicateHud
-    toggleComponents:
+    implantComponents:
     - type: ShowSyndicateIcons
     - type: ShowJobIcons
     - type: ShowMindShieldIcons
@@ -263,15 +138,14 @@
   parent: LimbImplantHudBase
   id: LimbImplantFlashShield
   name: ocular flash shield implant
-  description: A surgical ocular implant. Installed in the eyes, it darkens on command against flashes and welding light.
+  description: A surgical ocular implant. Installed in the eyes, it shields them from flashes and welding light.
   components:
   - type: Sprite
     state: flashshield
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantFlashShield
-    toggleComponents:
+    implantComponents:
     - type: FlashImmunity
       showInExamine: false
     - type: EyeProtection
@@ -280,15 +154,14 @@
   parent: LimbImplantHudBase
   id: LimbImplantWeldShield
   name: ocular welding shield implant
-  description: A surgical ocular implant. Installed in the eyes, it darkens on command against welding light.
+  description: A surgical ocular implant. Installed in the eyes, it shields them from welding light.
   components:
   - type: Sprite
     state: weldshield
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantWeldShield
-    toggleComponents:
+    implantComponents:
     - type: EyeProtection
 
 - type: entity
@@ -302,8 +175,7 @@
   - type: LimbImplant
     slots:
     - Eyes
-    implantAction: ActionLimbImplantChemicalHud
-    toggleComponents:
+    implantComponents:
     - type: SolutionScanner
 
 - type: entity
@@ -445,6 +317,67 @@
   - verb: SealSap
     layer: Skin
     game: Hold
+
+# Slime eyes
+
+- type: surgeryPart
+  id: ImplantEyesSlime
+  zone: Head
+  anatomy: Eyes
+  operation: TakeImplantEyesSlime
+  put: PutImplantEyesSlime
+  implant: Eyes
+  sprite: /Textures/_DeadSpace/Objects/Medical/limb_implants.rsi
+  state: medhud
+  wound: false
+  order: 20
+  ax: 13.5
+  ay: 6.5
+  bx: 17.5
+  by: 6.5
+
+- type: surgeryOperation
+  id: PutImplantEyesSlime
+  name: surgery-op-put-implant-eyes
+  zone: Head
+  soft: true
+  implant: Eyes
+  implantPut: true
+  steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
+  - verb: Insert
+    layer: Globe
+    undo: Extract
+    implant: Eyes
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantEyesSlime
+  name: surgery-op-take-implant-eyes
+  zone: Head
+  soft: true
+  implant: Eyes
+  steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
+  - verb: Extract
+    layer: Globe
+    undo: Insert
+    implant: Eyes
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
 
 # Arms
 

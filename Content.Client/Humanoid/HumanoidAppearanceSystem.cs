@@ -361,7 +361,12 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         var clothingLayer = int.MaxValue;
         _sprite.LayerMapTryGet((entity.Owner, sprite), "jumpsuit", out clothingLayer, false);
 
-        if (targetLayer < clothingLayer && markingPrototype.BodyPart != HumanoidVisualLayers.Head)
+        if (targetLayer < clothingLayer && markingPrototype.BodyPart is not (HumanoidVisualLayers.Head
+                or HumanoidVisualLayers.Chest
+                or HumanoidVisualLayers.LArm or HumanoidVisualLayers.RArm
+                or HumanoidVisualLayers.LHand or HumanoidVisualLayers.RHand
+                or HumanoidVisualLayers.LLeg or HumanoidVisualLayers.RLeg
+                or HumanoidVisualLayers.LFoot or HumanoidVisualLayers.RFoot))
         {
             foreach (var bodyLayer in humanoid.BaseLayers.Keys)
             {

@@ -15,9 +15,12 @@ public static class SurgeryConditions
         "Severed",
         "Infection",
         "OpenFracture",
+        "OpenPelvis",
         "Shard",
+        "Foreign",
         "Bleed",
         "ClosedFracture",
+        "ClosedPelvis",
         "Fracture",
         "OrganCrack",
         "Bruised",
@@ -29,15 +32,19 @@ public static class SurgeryConditions
         "Damaged",
     };
 
-    public static bool Has(string when, in LimbZoneState state, bool hasBone, bool infected, bool organCrack = false, float pool = 0f)
+    public static bool Has(string when, in LimbZoneState state, bool hasBone, bool infected, bool organCrack = false, float pool = 0f, bool rot = false, bool foreign = false)
     {
         return when switch
         {
             "" => true,
+            "Foreign" => foreign && !state.Severed,
+            "Rot" => rot && !state.Severed,
             "Severed" => state.Severed,
             "Infection" => infected && !state.Severed,
             "OpenFracture" => hasBone && !state.Severed && state.Bone >= LimbWoundRules.BreakBone && (state.SkinBare || state.Flesh >= LimbWoundRules.StrainFlesh),
             "ClosedFracture" => hasBone && !state.Severed && state.Bone >= LimbWoundRules.BreakBone && !state.SkinBare && state.Flesh < LimbWoundRules.StrainFlesh,
+            "OpenPelvis" => !state.Severed && state.Bone >= LimbWoundRules.BreakBone && (state.SkinBare || state.Flesh >= LimbWoundRules.StrainFlesh),
+            "ClosedPelvis" => !state.Severed && state.Bone >= LimbWoundRules.BreakBone && !state.SkinBare && state.Flesh < LimbWoundRules.StrainFlesh,
             "Shard" => !state.Severed && state.Embedded,
             "Bleed" => !state.Severed && state.Bleed >= 1f,
             "Fracture" => hasBone && !state.Severed && state.Bone >= LimbWoundRules.BreakBone,

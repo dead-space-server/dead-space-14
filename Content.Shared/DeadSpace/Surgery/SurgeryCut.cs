@@ -287,7 +287,7 @@ public static class SurgeryCut
             return;
         }
 
-        if (request.Kind is not SurgeryLayerKind.Bone)
+        if (request.Kind is not (SurgeryLayerKind.Bone or SurgeryLayerKind.Cavity))
         {
             result.Rejected = true;
             result.Key = "surgery-bone-shut";
@@ -298,7 +298,7 @@ public static class SurgeryCut
         result.Bone = -span * progress;
         result.Gel = progress > 0.7f;
         result.Finished = progress > 0.85f;
-        if (result.Finished)
+        if (result.Finished && request.Kind is SurgeryLayerKind.Bone)
         {
             result.Integrity = 1f;
             result.Retracted = false;

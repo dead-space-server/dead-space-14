@@ -11,6 +11,7 @@
   - SurgeryDionaSap
   - SurgerySkinRoll
   - SurgeryOrganCooler
+  - ClothingHeadHatBluespaceBald
   - LimbImplantMedicalHud
   - LimbImplantDiagnosticHud
   - LimbImplantNutritionHud
@@ -124,6 +125,14 @@
   materials:
     Plastic: 100
     Glass: 50
+
+- type: latheRecipe
+  id: ClothingHeadHatBluespaceBald
+  result: ClothingHeadHatBluespaceBald
+  completetime: 2
+  materials:
+    Cloth: 200
+    Plastic: 50
 
 - type: latheRecipe
   id: SurgerySkinRoll

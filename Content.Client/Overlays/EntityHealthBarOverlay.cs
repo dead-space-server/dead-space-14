@@ -97,6 +97,9 @@ public sealed class EntityHealthBarOverlay : Overlay
             if (_surgery.Operating == uid) //DS-14
                 continue; //DS-14
 
+            if (_entManager.HasComponent<Content.Shared.DeadSpace.Surgery.SurgeryNoHealthIconComponent>(uid)) //DS-14
+                continue; //DS-14
+
             // we use the status icon component bounds if specified otherwise use sprite
             var bounds = _entManager.GetComponentOrNull<StatusIconComponent>(uid)?.Bounds ?? _spriteSystem.GetLocalBounds((uid, spriteComponent));
             var worldPos = _transform.GetWorldPosition(xform, xformQuery);

@@ -358,7 +358,7 @@ public sealed class PhotocopierSystem : EntitySystem
 
     private void PrintForm(EntityUid uid, int сopiesAmount, PaperworkFormPrototype formPrototype, PhotocopierComponent? component = null)
     {
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref component) || !formPrototype.Listed)
             return;
 
         string text = _resourceManager.ContentFileReadText(formPrototype.Text).ReadToEnd();

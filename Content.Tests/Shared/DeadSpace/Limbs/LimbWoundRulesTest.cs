@@ -371,6 +371,7 @@ public sealed class LimbWoundRulesTest
             Assert.That(LimbWoundRules.MoveSpeed(false, 2), Is.EqualTo(LimbWoundRules.MissingLegSpeed * LimbWoundRules.MissingLegSpeed));
             Assert.That(LimbWoundRules.SlowHands(new LimbZoneState { Bone = LimbWoundRules.BreakBone }, new LimbZoneState(), false), Is.True);
             Assert.That(LimbWoundRules.SlowHands(new LimbZoneState { Bone = LimbWoundRules.BreakBone }, new LimbZoneState(), true), Is.False);
+            Assert.That(LimbWoundRules.SlowHands(new LimbZoneState { Bone = LimbWoundRules.BreakBone, Splinted = true }, new LimbZoneState(), false), Is.False);
         });
     }
 
@@ -598,13 +599,17 @@ public sealed class LimbWoundRulesTest
     public void VestTurnsABulletIntoBehindArmorTrauma()
     {
         var state = new LimbZoneState();
+        var missed = new LimbZoneState();
         LimbWoundRules.Apply(ref state, Strike(LimbZone.Torso, LimbMark.Point, 40f, 0.01f, projectile: true, pierce: 40f, multiplier: 0.55f, behindArmor: true, secondary: 0.01f));
+        LimbWoundRules.Apply(ref missed, Strike(LimbZone.Torso, LimbMark.Point, 40f, 0.5f, projectile: true, pierce: 40f, multiplier: 0.55f, behindArmor: true, secondary: 0.5f));
 
         Assert.Multiple(() =>
         {
             Assert.That(state.Embedded, Is.False);
             Assert.That(state.Flesh, Is.LessThan(20f));
             Assert.That(state.Bone, Is.EqualTo(40f * LimbWoundRules.BehindArmorBone));
+            Assert.That(missed.Bone, Is.EqualTo(0f));
+            Assert.That(missed.Flesh, Is.EqualTo(40f * 0.55f));
         });
     }
 
@@ -642,7 +647,8 @@ public sealed class LimbWoundRulesTest
             Assert.That(LimbWoundRules.BlastSeverChance(0.2f), Is.EqualTo(LimbWoundRules.BlastSeverNearChance));
             Assert.That(LimbWoundRules.BlastSeverChance(LimbWoundRules.BlastSeverFar), Is.EqualTo(0f));
             Assert.That(LimbWoundRules.BlastSeverChance(3f), Is.EqualTo(LimbWoundRules.BlastSeverNearChance * 0.5f).Within(0.001f));
-            Assert.That(LimbWoundRules.TryBlastSever(0.2f, false, 0.5f, LimbZone.ArmLeft), Is.True);
+            Assert.That(LimbWoundRules.TryBlastSever(0.2f, false, 0.3f, LimbZone.ArmLeft), Is.True);
+            Assert.That(LimbWoundRules.TryBlastSever(0.2f, false, 0.5f, LimbZone.ArmLeft), Is.False);
             Assert.That(LimbWoundRules.TryBlastSever(0.2f, true, 0f, LimbZone.ArmLeft), Is.False);
             Assert.That(LimbWoundRules.TryBlastSever(0.2f, false, 0.95f, LimbZone.LegRight), Is.False);
             Assert.That(LimbWoundRules.TryBlastSever(6f, false, 0f, LimbZone.HandLeft), Is.False);

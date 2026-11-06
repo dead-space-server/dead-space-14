@@ -1,13 +1,9 @@
-using System.IO;
 using Content.Client.DeadSpace.CameraArchives; //DS-14
 using Content.Client.Eye;
 using Content.Shared.DeadSpace.CameraArchives; //DS-14
 using Content.Shared.SurveillanceCamera;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
-using Robust.Shared.Utility; //DS-14
-using SixLabors.ImageSharp; //DS-14
-
 namespace Content.Client.SurveillanceCamera.UI;
 
 public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInterface
@@ -171,22 +167,12 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         if (_window == null || _archive == null || _archive.FrameCount <= 0)
             return;
 
-        var camera = _archive.Selected;
-        var index = _archive.FrameIndex;
-        _window.ArchiveView.View.Screenshot(image =>
+        SendMessage(new CameraArchivePrintMessage
         {
-            using var stream = new MemoryStream();
-            image.SaveAsPng(stream);
-            var bytes = stream.ToArray();
-            if (bytes.Length == 0 || bytes.Length > CameraArchivePrintMessage.MaxImageBytes)
-                return;
-
-            SendMessage(new CameraArchivePrintMessage
-            {
-                Camera = camera,
-                FrameIndex = index,
-                Image = bytes,
-            });
+            Camera = _archive.Selected,
+            FrameIndex = _archive.FrameIndex,
+            Magnification = _window.ArchiveView.Magnification,
+            Pan = _window.ArchiveView.ViewPan,
         });
     }
     //DS-14 end

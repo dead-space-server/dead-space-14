@@ -52,6 +52,13 @@ public sealed class DetachedBodyPartSystem : EntitySystem
             case BodyPartType.Leg:
                 DropEquipment(ent.Owner, SlotFlags.LEGS | SlotFlags.FEET | SlotFlags.SOCKS);
                 break;
+            case BodyPartType.Foot:
+                DropEquipment(ent.Owner, SlotFlags.FEET | SlotFlags.SOCKS);
+                break;
+            case BodyPartType.Arm:
+            case BodyPartType.Hand:
+                DropEquipment(ent.Owner, SlotFlags.GLOVES);
+                break;
             case BodyPartType.Head:
                 DropEquipment(ent.Owner, SlotFlags.HEAD | SlotFlags.MASK | SlotFlags.EYES | SlotFlags.EARS);
                 _metaData.SetEntityName(args.Part.Owner,
