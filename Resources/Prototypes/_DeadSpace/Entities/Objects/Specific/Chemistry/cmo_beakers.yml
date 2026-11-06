@@ -38,3 +38,17 @@
   - type: EmitSoundOnLand
     sound:
       path: /Audio/_DeadSpace/Items/Handing/beaker_drop.ogg
+
+- type: entity
+  parent: BeakerCMO
+  id: BeakerCMOWater
+  suffix: с водой
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 200
+        canReact: true
+        reagents:
+        - ReagentId: Water
+          Quantity: 200
