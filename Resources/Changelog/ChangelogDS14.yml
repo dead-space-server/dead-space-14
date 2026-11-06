@@ -9629,3 +9629,66 @@ Entries:
     message: не возможность вылечить при отсутствии повреждений на части
   - type: Fix
     message: Наборы лечат омертвевшее
+- id: 925
+  author: BlueDogDoc
+  time: '2026-11-06T11:43:53.961927+00:00'
+  pr: 2661
+  changes:
+  - type: Add
+    message: Иконка выхода из операции
+  - type: Add
+    message: Блюспейс лысина (Сияй по полной)
+  - type: Add
+    message: Полевая шина
+  - type: Add
+    message: Деревянный протез (Утили, СБ)
+  - type: Add
+    message: Рецепт операционного стола
+  - type: Add
+    message: Прыжок от ног вульп
+  - type: Add
+    message: Азот пересаженных лёгких воксов
+  - type: Add
+    message: Операция инородного тела
+  - type: Add
+    message: Операции перелома таза
+  - type: Add
+    message: Слепота КПБ без головы
+  - type: Add
+    message: Скрытие здоровья без модуля здоровья у КПБ
+  - type: Add
+    message: Шприцы имплантов сандевистана для соло антагов
+  - type: Add
+    message: Лечение гнили
+  - type: Add
+    message: HUD импланты для слаймолюдов
+  - type: Remove
+    message: Окно рентген-стола (хейтеры)
+  - type: Remove
+    message: Выход операции по ПКМ
+  - type: Remove
+    message: Сжигание одежды от огня
+  - type: Remove
+    message: Кнопка включения глазных имплантов
+  - type: Remove
+    message: Кровь на трещинах
+  - type: Tweak
+    message: Заброневая травма 10% (было 33)
+  - type: Tweak
+    message: Картинки подсказок КПБ
+  - type: Tweak
+    message: Пеплоходцы без лимбов
+  - type: Tweak
+    message: Осмотр видимых повреждений (из описания пешки)
+  - type: Tweak
+    message: Убран скилл чек на операциях (bruh...)
+  - type: Fix
+    message: Генокрад без головы жив и регенерирует
+  - type: Fix
+    message: Части тела в холодильник переносной
+  - type: Fix
+    message: Сварка на КПБ жжёт глаза
+  - type: Fix
+    message: Пересадка кожи лечит ожоги
+  - type: Fix
+    message: Спам предсмертного хрипа
