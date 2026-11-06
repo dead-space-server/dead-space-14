@@ -8,6 +8,7 @@ using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network; //DS-14
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
@@ -25,6 +26,7 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly INetManager _net = default!; //DS-14
     // DS14-start
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly RayCastSystem _rayCast = default!;
@@ -36,6 +38,7 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<JumpAbilityComponent, MapInitEvent>(OnInit);
+        SubscribeLocalEvent<JumpAbilityComponent, ComponentStartup>(OnStartup); //DS-14
         SubscribeLocalEvent<JumpAbilityComponent, ComponentShutdown>(OnShutdown);
 
         SubscribeLocalEvent<JumpAbilityComponent, GravityJumpEvent>(OnGravityJump);
@@ -49,11 +52,26 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
 
     private void OnInit(Entity<JumpAbilityComponent> entity, ref MapInitEvent args)
     {
-        if (!TryComp(entity, out ActionsComponent? comp))
+        EnsureAction(entity);
+    }
+
+    //DS-14 start
+    private void OnStartup(Entity<JumpAbilityComponent> entity, ref ComponentStartup args)
+    {
+        if (_net.IsClient)
+            return;
+
+        EnsureAction(entity);
+    }
+
+    private void EnsureAction(Entity<JumpAbilityComponent> entity)
+    {
+        if (entity.Comp.ActionEntity != null || !TryComp(entity, out ActionsComponent? comp))
             return;
 
         _actions.AddAction(entity, ref entity.Comp.ActionEntity, entity.Comp.Action, component: comp);
     }
+    //DS-14 end
 
     private void OnShutdown(Entity<JumpAbilityComponent> entity, ref ComponentShutdown args)
     {

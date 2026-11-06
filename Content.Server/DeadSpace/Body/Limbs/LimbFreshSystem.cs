@@ -3,7 +3,10 @@
 using Content.Server.Atmos.Components;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Rotting;
+using Content.Shared.Body.Events;
+using Content.Shared.Buckle.Components;
 using Content.Shared.DeadSpace.Body.Limbs;
+using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.Examine;
 using Content.Shared.Temperature.Components;
 using Robust.Shared.Containers;
@@ -12,6 +15,8 @@ namespace Content.Server.DeadSpace.Body.Limbs;
 
 public sealed class LimbFreshSystem : EntitySystem
 {
+    public const float SlowRate = 0.1f;
+
     [Dependency] private readonly SharedContainerSystem _container = default!;
 
     public override void Initialize()
@@ -19,6 +24,7 @@ public sealed class LimbFreshSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<LimbFreshComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<LimbFreshComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<BuckleComponent, GetRotMultiplierEvent>(OnTableRot);
     }
 
     public override void Update(float frameTime)
@@ -29,7 +35,7 @@ public sealed class LimbFreshSystem : EntitySystem
             if (fresh.Spent || Preserved(uid, temp, fresh))
                 continue;
 
-            fresh.Left -= frameTime;
+            fresh.Left -= frameTime * Rate(uid);
             if (fresh.Left > 0f)
                 continue;
 
@@ -37,6 +43,28 @@ public sealed class LimbFreshSystem : EntitySystem
             fresh.Spent = true;
             Dirty(uid, fresh);
         }
+    }
+
+    public float Rate(EntityUid uid)
+    {
+        var current = uid;
+        while (_container.TryGetContainingContainer((current, null, null), out var container))
+        {
+            if (HasComp<AntiRottingContainerComponent>(container.Owner))
+                return SlowRate;
+
+            current = container.Owner;
+        }
+
+        var ev = new GetRotMultiplierEvent();
+        RaiseLocalEvent(current, ref ev);
+        return ev.Multiplier;
+    }
+
+    private void OnTableRot(Entity<BuckleComponent> ent, ref GetRotMultiplierEvent args)
+    {
+        if (ent.Comp.BuckledTo is { } table && HasComp<SurgeryXrayTableComponent>(table))
+            args.Multiplier *= SlowRate;
     }
 
     private void OnStartup(Entity<LimbFreshComponent> ent, ref ComponentStartup args)

@@ -20,7 +20,7 @@ health-analyzer-window-entity-unrevivable-text = [color=yellow]Unique body compo
 health-analyzer-window-entity-bleeding-text = [color=red]Patient has open wounds![/color]
 health-analyzer-window-entity-uncloning-text = [color=violet]Unstable genetic code detected! Patient can not be cloned![/color]
 # DS14
-health-analyzer-window-entity-infection-text = [color=#a6c64a]Inflammation: something is wrong inside. An X-ray is needed.[/color]
+health-analyzer-window-entity-infection-text = [color=#a6c64a]Inflammation: something is wrong inside.[/color]
 
 health-analyzer-window-scan-mode-text = Scan Mode:
 health-analyzer-window-scan-mode-active = Active

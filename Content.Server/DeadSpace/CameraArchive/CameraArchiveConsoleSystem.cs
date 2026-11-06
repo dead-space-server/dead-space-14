@@ -15,7 +15,9 @@ using Content.Shared.Popups;
 using Content.Shared.Station.Components;
 using Content.Shared.SurveillanceCamera;
 using Content.Shared.SurveillanceCamera.Components;
+using System.IO;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Serialization;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Player;
@@ -40,14 +42,22 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IRobustSerializer _serializer = default!;
 
     public bool AcceptPrint(EntityUid monitor, CameraArchivePrintMessage message)
     {
         if (!TryComp<CameraArchiveConsoleComponent>(monitor, out var comp) || _timing.CurTime < comp.NextPrint)
             return false;
 
-        if (!TryPrint(monitor, message.Actor, GetEntity(message.Camera), message.FrameIndex, message.Image, out _))
+        if (!TryPrint(monitor, message.Actor, GetEntity(message.Camera), message.FrameIndex, out var paper))
             return false;
+
+        if (TryComp<CameraArchivePrintComponent>(paper, out var shot))
+        {
+            shot.Magnification = Math.Clamp(message.Magnification, 1f, 4f);
+            shot.Pan = message.Pan;
+            Dirty(paper, shot);
+        }
 
         comp.NextPrint = _timing.CurTime + comp.PrintDelay;
         _audio.PlayPvs(comp.PrintSound, monitor);
@@ -59,7 +69,6 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         EntityUid actor,
         EntityUid camera,
         int index,
-        byte[]? image,
         out EntityUid paper)
     {
         paper = default;
@@ -104,12 +113,14 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         if (TryComp<PaperComponent>(paper, out var paperComp))
             _paper.SetContent((paper, paperComp), text);
 
-        if (image != null && image.Length > 0 && image.Length <= CameraArchivePrintMessage.MaxImageBytes)
+        var shot = EnsureComp<CameraArchivePrintComponent>(paper);
+        using (var stream = new MemoryStream())
         {
-            var shot = EnsureComp<CameraArchivePrintComponent>(paper);
-            shot.Image = image;
-            Dirty(paper, shot);
+            _serializer.SerializeDirect(stream, frame.Still);
+            shot.Still = stream.ToArray();
         }
+
+        Dirty(paper, shot);
 
         if (actor.IsValid())
             _popup.PopupEntity(Loc.GetString("camera-archive-printed"), console, actor);

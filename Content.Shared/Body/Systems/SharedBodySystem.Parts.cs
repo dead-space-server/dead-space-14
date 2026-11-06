@@ -131,6 +131,8 @@ public partial class SharedBodySystem
 
         var ev = new BodyPartAddedEvent(slotId, partEnt);
         RaiseLocalEvent(bodyEnt, ref ev);
+        var jump = new LimbJumpRefreshEvent(); //DS-14
+        RaiseLocalEvent(bodyEnt, ref jump); //DS-14
 
         AddLeg(partEnt, bodyEnt);
     }
@@ -146,6 +148,8 @@ public partial class SharedBodySystem
 
         var ev = new BodyPartRemovedEvent(slotId, partEnt);
         RaiseLocalEvent(bodyEnt, ref ev);
+        var jump = new LimbJumpRefreshEvent(); //DS-14
+        RaiseLocalEvent(bodyEnt, ref jump); //DS-14
 
         RemoveLeg(partEnt, bodyEnt);
         PartRemoveDamage(bodyEnt, partEnt);

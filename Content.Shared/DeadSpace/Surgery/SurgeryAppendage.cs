@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Inventory;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -55,4 +56,20 @@ public sealed partial class SurgeryAppendageComponent : Component
 
     [DataField]
     public ComponentRegistry Revoke = new();
+
+    [DataField]
+    public ProtoId<InventoryTemplatePrototype>? Template;
+
+    [DataField]
+    public List<ProtoId<InventoryTemplatePrototype>> TemplateFrom = new();
+}
+
+[RegisterComponent]
+public sealed partial class SurgeryTemplateSwapComponent : Component
+{
+    [DataField]
+    public ProtoId<InventoryTemplatePrototype> Original;
+
+    [DataField]
+    public EntProtoId? Item;
 }

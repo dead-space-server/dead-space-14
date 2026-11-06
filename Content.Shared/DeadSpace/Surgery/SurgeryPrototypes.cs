@@ -112,6 +112,9 @@ public sealed partial class SurgeryHintPrototype : IPrototype
     public List<SurgeryHintIcon> Icons = new();
 
     [DataField]
+    public List<SurgeryHintIcon> MachineIcons = new();
+
+    [DataField]
     public string Name = "";
 
     [DataField]
@@ -667,6 +670,55 @@ public sealed partial class SurgeryPartPrototype : IPrototype
 
     [DataField]
     public bool Pill;
+
+    [DataField]
+    public LimbZone? Cover;
+
+    public bool Tracked => Put.Length > 0 && Organ.Length == 0 && Implant.Length == 0;
+
+    public static LimbZone? CoverOf(IPrototypeManager prototypes, string part, string? operation)
+    {
+        if (part.Length > 0 && prototypes.TryIndex<SurgeryPartPrototype>(part, out var found))
+            return found.Cover;
+
+        if (string.IsNullOrEmpty(operation))
+            return null;
+
+        foreach (var each in prototypes.EnumeratePrototypes<SurgeryPartPrototype>())
+        {
+            if (each.Operation == operation || each.Put == operation)
+                return each.Cover;
+        }
+
+        return null;
+    }
+
+    public static string For(IPrototypeManager prototypes, string operation)
+    {
+        foreach (var part in prototypes.EnumeratePrototypes<SurgeryPartPrototype>())
+        {
+            if (part.Tracked && (part.Operation == operation || part.Put == operation))
+                return part.ID;
+        }
+
+        return "";
+    }
+
+    public static bool Blocks(IPrototypeManager prototypes, IEntityManager entities, EntityUid patient, string operation)
+    {
+        entities.TryGetComponent<SurgeryPartsGoneComponent>(patient, out var lost);
+        foreach (var part in prototypes.EnumeratePrototypes<SurgeryPartPrototype>())
+        {
+            if (!part.Tracked)
+                continue;
+
+            var gone = lost != null && lost.Parts.Contains(part.ID);
+            if (part.Operation == operation && gone || part.Put == operation && !gone)
+                return true;
+        }
+
+        return false;
+    }
 }
 
 [Prototype]

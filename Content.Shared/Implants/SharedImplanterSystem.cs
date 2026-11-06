@@ -30,6 +30,7 @@ public abstract class SharedImplanterSystem : EntitySystem
     [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedForensicsSystem _forensics = default!;
+    [Dependency] private readonly Content.Shared.DeadSpace.Body.Limbs.LimbImplantSystem _limbImplants = default!; //DS-14
 
     public override void Initialize()
     {
@@ -120,6 +121,23 @@ public abstract class SharedImplanterSystem : EntitySystem
     //Set to draw mode if not implant only
     public void Implant(EntityUid user, EntityUid target, EntityUid implanter, ImplanterComponent component)
     {
+        //DS-14 start
+        if (CanImplantLimb(target, component, out var limbImplant))
+        {
+            if (!_limbImplants.TryPlace(target, limbImplant.Value))
+                return;
+
+            if (component.CurrentMode == ImplanterToggleMode.Inject && !component.ImplantOnly)
+                DrawMode(implanter, component);
+            else
+                ImplantMode(implanter, component);
+
+            _forensics.TransferDna(implanter, target);
+            Dirty(implanter, component);
+            return;
+        }
+        //DS-14 end
+
         if (!CanImplant(user, target, implanter, component, out var implant, out _))
             return;
 
@@ -174,6 +192,26 @@ public abstract class SharedImplanterSystem : EntitySystem
         RaiseLocalEvent(target, ev);
         return !ev.Cancelled;
     }
+
+    //DS-14 start
+    public bool CanImplantLimb(EntityUid target, ImplanterComponent component, [NotNullWhen(true)] out EntityUid? implant)
+    {
+        implant = component.ImplanterSlot.ContainerSlot?.ContainedEntities.FirstOrNull();
+        if (implant == null
+            || HasComp<SubdermalImplantComponent>(implant)
+            || !TryComp<Content.Shared.DeadSpace.Body.Limbs.LimbImplantComponent>(implant, out var limb)
+            || !CheckTarget(target, component.Whitelist, component.Blacklist))
+            return false;
+
+        foreach (var slot in limb.Slots)
+        {
+            if (_limbImplants.Fits(target, slot, implant.Value))
+                return true;
+        }
+
+        return false;
+    }
+    //DS-14 end
 
     protected bool CheckTarget(EntityUid target, EntityWhitelist? whitelist, EntityWhitelist? blacklist)
     {

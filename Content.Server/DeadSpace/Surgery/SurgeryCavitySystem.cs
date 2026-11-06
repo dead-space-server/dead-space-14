@@ -43,11 +43,11 @@ public sealed class SurgeryCavitySystem : EntitySystem
     private void Open(EntityUid body, string id)
     {
         var pocket = _containers.EnsureContainer<Container>(body, id);
-        var show = id == SurgeryCavityComponent.Abdomen;
-        if (pocket.ShowContents == show)
+        if (!pocket.ShowContents && pocket.OccludesLight)
             return;
 
-        pocket.ShowContents = show;
+        pocket.ShowContents = false;
+        pocket.OccludesLight = true;
         if (TryComp<ContainerManagerComponent>(body, out var manager))
             Dirty(body, manager);
     }

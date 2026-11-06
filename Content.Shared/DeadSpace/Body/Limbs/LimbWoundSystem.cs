@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
@@ -11,6 +12,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
 using Content.Shared.CCVar;
+using Content.Shared.Changeling.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Events;
@@ -23,7 +25,9 @@ using Content.Shared.Explosion;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.FixedPoint;
+using Content.Shared.Ghost;
 using Content.Shared.Hands;
+using Content.Shared.HealthExaminable;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
@@ -42,6 +46,7 @@ using Content.Shared.Mobs.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Item;
 using Content.Shared.Popups;
@@ -79,6 +84,7 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 public sealed partial class LimbWoundSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -91,6 +97,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedGunSystem _guns = default!;
@@ -120,6 +127,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<LimbBodyComponent, HealthBeingExaminedEvent>(OnHealthExamined);
         SubscribeLocalEvent<LimbBodyComponent, MapInitEvent>(OnSpecies);
         SubscribeLocalEvent<LimbBodyComponent, MobStateChangedEvent>(OnMobState);
         SubscribeLocalEvent<LimbBodyComponent, UpdateMobStateEvent>(OnLimbLife, after: [typeof(MobThresholdSystem)]);
@@ -127,6 +135,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         SubscribeLocalEvent<LimbBodyComponent, LimbHarvestDoAfterEvent>(OnHarvest);
         SubscribeLocalEvent<LimbHarvestingComponent, MeleeAttackEvent>(OnHarvestSwing);
         SubscribeLocalEvent<LimbBodyComponent, BeforeExplodeEvent>(OnBlast);
+        SubscribeLocalEvent<LimbBodyComponent, UpdateCanMoveEvent>(OnCanMove);
         SubscribeLocalEvent<LimbBodyComponent, AccentGetEvent>(OnAccent);
         SubscribeLocalEvent<LimbBodyComponent, RefreshMovementSpeedModifiersEvent>(OnMove);
         SubscribeLocalEvent<LimbBodyComponent, StandAttemptEvent>(OnStand);
@@ -222,7 +231,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 zones[hot].Fire = flame.FireStacks;
 
             LimbWoundRules.SpreadFire(zones, blocked);
-            BurnClothing(uid, zones);
             Dirty(uid, limbs);
         }
 
@@ -258,6 +266,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
                         zones[i].HitBlood += loss * zones[i].Bleed / open;
                     }
+
+                    _bloodstream.TryBleedOut(uid, FixedPoint2.New(loss));
                 }
                 else
                     zones[LimbWoundRules.Index(LimbZone.Torso)].HitBlood += loss;
@@ -326,7 +336,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     public void SetTarget(EntityUid uid, LimbZone? zone, LimbTargetComponent? target = null)
     {
-        if (!Resolve(uid, ref target))
+        if (HasComp<GhostComponent>(uid) || !Resolve(uid, ref target, logMissing: false))
             return;
 
         target.Selected = zone;
@@ -340,7 +350,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     public void SetAiming(EntityUid uid, bool aiming, LimbAimComponent? aim = null)
     {
-        if (!Resolve(uid, ref aim))
+        if (HasComp<GhostComponent>(uid) || !Resolve(uid, ref aim, logMissing: false))
             return;
 
         var was = aim.Aiming;
@@ -1041,10 +1051,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
             if (part.Component.Symmetry != symmetry)
                 continue;
 
-            if (!TryComp<LimbFleshComponent>(part.Id, out var flesh)
-                || flesh.Species.Length == 0
-                || flesh.Species == look.Species.Id
-                || !_proto.TryIndex<SpeciesPrototype>(flesh.Species, out var species)
+            var from = DonorSpecies(part.Id);
+            if (from.Length == 0 && _body.GetParentPartOrNull(part.Id) is { } arm)
+                from = DonorSpecies(arm);
+
+            if (from.Length == 0
+                || from == look.Species.Id
+                || !_proto.TryIndex<SpeciesPrototype>(from, out var species)
                 || !_proto.TryIndex(species.Prototype, out var mob)
                 || !mob.TryGetComponent<MeleeWeaponComponent>(out var donor, EntityManager.ComponentFactory))
                 return;
@@ -1054,6 +1067,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
             args.Damage = new DamageSpecifier(donor.Damage) * scale;
             return;
         }
+    }
+
+    private string DonorSpecies(EntityUid part)
+    {
+        return TryComp<LimbFleshComponent>(part, out var flesh) ? flesh.Species : "";
     }
 
     private void OnGunModifiers(Entity<GunComponent> ent, ref GunRefreshModifiersEvent args)
@@ -1225,7 +1243,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!LimbTuning.Enabled || !_net.IsClient || session?.AttachedEntity is not { } user)
             return;
 
-        if (!TryComp<LimbAimComponent>(user, out var aim))
+        if (HasComp<GhostComponent>(user) || !TryComp<LimbAimComponent>(user, out var aim))
             return;
 
         var next = !aim.Aiming;
@@ -1267,13 +1285,17 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (args.NewMobState == MobState.Dead)
         {
             if (ent.Comp.Died == null)
+            {
                 ent.Comp.Died = _timing.CurTime;
+                ent.Comp.Decay = 0f;
+            }
             if (!_net.IsClient)
                 _standing.Down(ent.Owner, playSound: false, dropHeldItems: true, force: true);
             return;
         }
 
         ent.Comp.Died = null;
+        ent.Comp.Decay = 0f;
         ent.Comp.LimbDeath = false;
         if (args.NewMobState == MobState.Alive)
             ent.Comp.LimbCrit = false;
@@ -1310,6 +1332,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.LungWhistle = false;
         ent.Comp.BoneMend = 0f;
         ent.Comp.Died = null;
+        ent.Comp.Decay = 0f;
         ent.Comp.LimbDeath = false;
         ent.Comp.LimbCrit = false;
         ent.Comp.PendingRefund = null;
@@ -1318,6 +1341,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         {
             RestoreParts(ent.Owner);
             ShowBody(ent.Owner);
+            _blocker.UpdateCanMove(ent.Owner);
         }
         RemComp<LimbWhistleComponent>(ent);
         RemComp<LimbActiveComponent>(ent);
@@ -1630,6 +1654,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         var changed = false;
+        var sever = new List<LimbZone>();
         if (open > 0)
         {
             var share = 1f / open;
@@ -1648,13 +1673,25 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 }
 
                 var zoneDamage = heat[i] + pierce[i] + blunt[i] + slash[i] + caustic[i] + other[i];
-                if (!LimbWoundRules.TryBlastSever(args.Distance, BlastBlocked(ent, (LimbZone) i), _random.NextFloat(), (LimbZone) i, zoneDamage))
-                    continue;
-
-                DropZone(ent.Owner, ent.Comp, (LimbZone) i);
-                zones = CollectionsMarshal.AsSpan(ent.Comp.Zones);
-                changed = true;
+                if (LimbWoundRules.TryBlastSever(args.Distance, BlastBlocked(ent, (LimbZone) i), _random.NextFloat(), (LimbZone) i, zoneDamage))
+                    sever.Add((LimbZone) i);
             }
+        }
+
+        _random.Shuffle(sever);
+        var torn = 0;
+        foreach (var zone in sever)
+        {
+            if (torn >= LimbWoundRules.BlastSeverMax)
+                break;
+
+            var index = (int) zone;
+            if (index >= ent.Comp.Zones.Count || ent.Comp.Zones[index].Severed)
+                continue;
+
+            DropZone(ent.Owner, ent.Comp, zone);
+            torn++;
+            changed = true;
         }
 
         if (!changed)
@@ -1701,6 +1738,16 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
             if (!_containers.TryGetContainingContainer((part.Id, null, null), out var container))
                 continue;
+
+            if (HasComp<LimbProsthesisComponent>(part.Id))
+            {
+                if (TryComp<HumanoidAppearanceComponent>(body, out var worn))
+                    ClearGraftLook(body, worn, zone);
+                HidePart(body, zone);
+                _containers.Remove(part.Id, container, force: true);
+                _transform.SetCoordinates(part.Id, Transform(body).Coordinates);
+                return;
+            }
 
             var bare = false;
             var eyesRemain = true;
@@ -1788,10 +1835,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
             }
 
             var fresh = EnsureComp<LimbFreshComponent>(part.Id);
-            if (limbs != null && limbs.Died is { } died)
+            if (limbs is { Died: not null })
             {
-                var gone = (float) (_timing.CurTime - died).TotalSeconds;
-                fresh.Left = MathF.Max(0f, fresh.Total - gone);
+                fresh.Left = MathF.Max(0f, fresh.Total - limbs.Decay);
                 fresh.Spent = fresh.Left <= 0f;
             }
 
@@ -1906,7 +1952,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (strike.ThroughArmor && taken < LimbWoundRules.HeavyPoint)
             return;
 
-        var mark = strike.BehindArmor && strike.Mark == LimbMark.Point ? LimbMark.Blunt : strike.Mark;
+        var mark = LimbWoundRules.BehindArmorTrauma(strike) ? LimbMark.Blunt : strike.Mark;
         ApplyRibs(uid, strike, mark);
         if (strike.Zone is not (LimbZone.Eyes or LimbZone.Mouth)
             && LimbOrganRules.TryTarget(strike.Zone, mark, out var organ, strike.Projectile)
@@ -2044,12 +2090,15 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return _proto.TryIndex<SurgeryOrganPrototype>(organ.ToString(), out var proto) && proto.Vital;
     }
 
-    private bool VitalGone(LimbBodyComponent limbs)
+    private bool VitalGone(LimbBodyComponent limbs, bool headlessLing = false)
     {
         if (limbs.Vital != null)
         {
             foreach (var kind in limbs.Vital)
             {
+                if (headlessLing && kind is LimbOrgan.Brain or LimbOrgan.Eyes)
+                    continue;
+
                 if (Gone(limbs, kind, (LimbOrganMask) (1 << (int) kind)))
                     return true;
             }
@@ -2060,6 +2109,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
         foreach (var organ in _proto.EnumeratePrototypes<SurgeryOrganPrototype>())
         {
             if (!organ.Vital || !Enum.TryParse<LimbOrgan>(organ.ID, out var kind))
+                continue;
+
+            if (headlessLing && kind is LimbOrgan.Brain or LimbOrgan.Eyes)
                 continue;
 
             if (Gone(limbs, kind, (LimbOrganMask) (1 << (int) kind)))
@@ -2096,9 +2148,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!_net.IsServer)
             return;
 
-        var head = HeadHealth(limbs);
+        var headlessLing = HasComp<ChangelingIdentityComponent>(uid) && !HasPart(uid, LimbZone.Head);
+        var head = headlessLing ? limbs.HeadPool : HeadHealth(limbs);
         var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
-        var life = VitalGone(limbs) ? LimbLife.Dead : LimbWoundRules.Life(head, torso);
+        var life = VitalGone(limbs, headlessLing) ? LimbLife.Dead : LimbWoundRules.Life(head, torso);
         if (life == LimbLife.Dead)
         {
             KillByLimbs(uid, limbs);
@@ -2483,10 +2536,23 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return missing;
     }
 
+    private void OnCanMove(Entity<LimbBodyComponent> ent, ref UpdateCanMoveEvent args)
+    {
+        if (LimbTuning.Enabled && LimbWoundRules.Limbless(ent.Comp.Zones))
+            args.Cancel();
+    }
+
+    public bool Limbless(EntityUid uid)
+    {
+        return LimbTuning.Enabled && TryComp<LimbBodyComponent>(uid, out var limbs) && LimbWoundRules.Limbless(limbs.Zones);
+    }
+
     private void RefreshPosture(EntityUid uid, LimbBodyComponent limbs)
     {
         if (!LimbTuning.Enabled || _net.IsClient)
             return;
+
+        _blocker.UpdateCanMove(uid);
 
         if (MissingLegs(limbs) < 2)
         {
@@ -2531,51 +2597,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
             _hands.TryDrop((uid, hands), held.Value);
         }
-    }
-
-    private void BurnClothing(EntityUid uid, Span<LimbZoneState> zones)
-    {
-        if (_net.IsClient)
-            return;
-
-        var count = Math.Min(zones.Length, LimbWoundRules.BodyZoneCount);
-        var doomed = new List<EntityUid>();
-        for (var i = 0; i < count; i++)
-        {
-            ref var state = ref zones[i];
-            if (state.Fire <= 0f || state.Severed)
-            {
-                state.Cloth = 0f;
-                continue;
-            }
-
-            state.Cloth += LimbActiveComponent.Period;
-            if (state.Cloth < LimbWoundRules.ClothingBurn)
-                continue;
-
-            state.Cloth = 0f;
-            var zone = (LimbZone) i;
-            var slots = _inventory.GetSlotEnumerator(uid, Worn);
-            while (slots.NextItem(out var item))
-            {
-                if (!Flammable(item) || !LimbCoverRules.Covers(item, zone, EntityManager))
-                    continue;
-
-                if (!doomed.Contains(item))
-                    doomed.Add(item);
-            }
-        }
-
-        foreach (var item in doomed)
-            QueueDel(item);
-    }
-
-    private bool Flammable(EntityUid item)
-    {
-        if (HasComp<Content.Shared.Armor.ArmorComponent>(item) || HasComp<Content.Shared.Clothing.Components.FireProtectionComponent>(item) || HasComp<Content.Shared.Clothing.MagbootsComponent>(item))
-            return false;
-
-        return !TryComp<LimbCoverComponent>(item, out var cover) || !cover.StopsFire;
     }
 
     private bool[] FireBlocked(EntityUid uid)
@@ -2687,6 +2708,14 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return true;
 
         return LimbWoundRules.AimIsPrecise(mover.HasDirectionalMovement, mover.Sprinting);
+    }
+
+    private void OnHealthExamined(Entity<LimbBodyComponent> ent, ref HealthBeingExaminedEvent args)
+    {
+        if (!LimbTuning.Enabled)
+            return;
+
+        LimbExamine.Write(args.Message, ent.Comp, Machine(ent.Owner), Adrenaline(ent.Owner));
     }
 
     private bool Adrenaline(EntityUid uid)

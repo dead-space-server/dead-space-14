@@ -75,11 +75,6 @@ public sealed class LimbImplantSystem : EntitySystem
         var removed = new ImplantRemovedEvent(ent.Owner, host);
         RaiseLocalEvent(ent.Owner, ref removed);
         EntityManager.RemoveComponents(host, ent.Comp.ImplantComponents);
-        if (ent.Comp.Toggled)
-        {
-            EntityManager.RemoveComponents(host, ent.Comp.ToggleComponents);
-            ent.Comp.Toggled = false;
-        }
 
         _actions.RemoveAction(host, ent.Comp.Action);
         ent.Comp.Action = null;

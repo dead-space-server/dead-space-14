@@ -292,6 +292,9 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
                 // TODO: We should have to do this with metabolism. ReagentEffect struct needs refactoring and so does metabolism!
                 void ApplyEffect(EntityEffect effect)
                 {
+                    if (effect is Oxygenate && group.Id == Gas)
+                        return; //DS-14
+
                     switch (effect)
                     {
                         case ModifyLungGas:

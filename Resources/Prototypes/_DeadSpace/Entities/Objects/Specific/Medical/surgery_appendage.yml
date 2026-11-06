@@ -119,6 +119,9 @@
     - markingId: SharkTailDefault
       markingColor:
       - "#6f8a9e"
+    template: plafs
+    templateFrom:
+    - human
 
 - type: entity
   parent: SurgeryAppendageTailBase
