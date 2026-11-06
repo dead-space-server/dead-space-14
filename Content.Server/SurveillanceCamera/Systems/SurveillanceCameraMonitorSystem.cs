@@ -194,6 +194,7 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         if (!HasComp<CameraArchiveConsoleComponent>(uid))
             return;
 
+        _archive.Opened(uid);
         _userInterface.ServerSendUiMessage(uid, SurveillanceCameraMonitorUiKey.Key, _archive.Browse(default, -1));
     }
 
@@ -202,7 +203,7 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         if (!HasComp<CameraArchiveConsoleComponent>(uid))
             return;
 
-        _userInterface.ServerSendUiMessage(uid, SurveillanceCameraMonitorUiKey.Key, _archive.Browse(message.Camera, message.FrameIndex));
+        _userInterface.ServerSendUiMessage(uid, SurveillanceCameraMonitorUiKey.Key, _archive.Answer(uid, message));
     }
 
     private void OnArchivePrint(EntityUid uid, SurveillanceCameraMonitorComponent component, CameraArchivePrintMessage message)
@@ -250,6 +251,8 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
     private void OnBoundUiClose(EntityUid uid, SurveillanceCameraMonitorComponent component, BoundUIClosedEvent args)
     {
         RemoveViewer(uid, args.Actor, component);
+        if (!_userInterface.IsUiOpen(uid, SurveillanceCameraMonitorUiKey.Key)) //DS-14
+            _archive.Closed(uid); //DS-14
     }
 
     #endregion

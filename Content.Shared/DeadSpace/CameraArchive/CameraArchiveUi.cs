@@ -24,6 +24,7 @@ public sealed class CameraArchiveState : BoundUserInterfaceState
     public CameraArchiveEntry[] Cameras = [];
     public NetEntity Selected;
     public int FrameIndex;
+    public int FrameId;
     public int FrameCount;
     public TimeSpan FrameTime;
     public CameraArchive? Frame;
@@ -41,5 +42,6 @@ public sealed class CameraArchivePrintMessage : BoundUserInterfaceMessage
 
     public NetEntity Camera;
     public int FrameIndex;
+    public int FrameId;
     public byte[] Image = [];
 }

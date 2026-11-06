@@ -11,6 +11,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Paper;
 using Content.Shared.SSDIndicator;
+using Content.Shared.Storage;
 using Content.Shared.SurveillanceCamera;
 using Content.Shared.TextScreen;
 using Content.Shared.DeadSpace.SignBoard;
@@ -61,6 +62,89 @@ public sealed class CameraArchiveConsoleTest
     }
 
     [Test]
+    public void CleanupKeepsTheNewestFrame()
+    {
+        var frames = new Queue<CameraArchiveSystem.CameraFrame>();
+        frames.Enqueue(new CameraArchiveSystem.CameraFrame(TimeSpan.FromMinutes(0), new CameraArchive()));
+        frames.Enqueue(new CameraArchiveSystem.CameraFrame(TimeSpan.FromMinutes(1), new CameraArchive()));
+
+        Assert.That(CameraArchiveSystem.TrimOlderThan(frames, TimeSpan.FromMinutes(30), TimeSpan.FromMinutes(10), keepNewest: true), Is.True);
+        Assert.That(frames, Has.Count.EqualTo(1));
+        Assert.That(frames.Peek().RoundTime, Is.EqualTo(TimeSpan.FromMinutes(1)));
+    }
+
+    [Test]
+    public void SavedMomentsThinOutWithAgeAndKeepSpeech()
+    {
+        var frames = new Queue<CameraArchiveSystem.CameraFrame>();
+        for (var i = 0; i < 600; i++)
+        {
+            var still = new CameraArchive();
+            if (i % 10 == 0)
+                still.Chat.Add($"line {i}");
+            frames.Enqueue(new CameraArchiveSystem.CameraFrame(TimeSpan.FromSeconds(i * 0.5), still, Saved: true));
+        }
+
+        var window = TimeSpan.FromMinutes(10);
+        Assert.That(CameraArchiveSystem.ThinSaved(frames, TimeSpan.FromMinutes(9), window), Is.False);
+        Assert.That(frames, Has.Count.EqualTo(600));
+
+        Assert.That(CameraArchiveSystem.ThinSaved(frames, TimeSpan.FromMinutes(15), window), Is.True);
+        Assert.That(frames, Has.Count.LessThanOrEqualTo(151));
+        Assert.That(Speech(frames), Is.EqualTo(60), "speech from dropped frames must move to a kept frame");
+
+        Assert.That(CameraArchiveSystem.ThinSaved(frames, TimeSpan.FromMinutes(75), window), Is.True);
+        Assert.That(frames, Has.Count.LessThanOrEqualTo(31));
+        Assert.That(Speech(frames), Is.EqualTo(60));
+    }
+
+    private static int Speech(Queue<CameraArchiveSystem.CameraFrame> frames)
+    {
+        var lines = 0;
+        foreach (var frame in frames)
+            lines += frame.Still.Chat.Count;
+        return lines;
+    }
+
+    [Test]
+    public async Task BagContentsAreNotStoredAndStillRecordsAreShared()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var ents = server.EntMan;
+            var stills = server.System<CameraArchiveSystem>();
+            var camera = ents.SpawnEntity("SurveillanceCameraSecurity", map.GridCoords);
+            var mob = ents.SpawnEntity("MobHuman", map.GridCoords);
+            var bag = ents.SpawnEntity("ClothingBackpack", map.GridCoords);
+            Assert.That(server.System<InventorySystem>().TryEquip(mob, bag, "back", force: true, silent: true), Is.True);
+            var tool = ents.SpawnEntity("Crowbar", map.GridCoords);
+            Assert.That(server.System<SharedContainerSystem>().Insert(tool, ents.GetComponent<StorageComponent>(bag).Container), Is.True);
+
+            var first = stills.Capture(camera);
+            var second = stills.Capture(camera);
+            Assert.That(first, Is.Not.Null);
+            Assert.That(second, Is.Not.Null);
+
+            var worn = first!.Entities.Find(entity => entity.Prototype == "ClothingBackpack");
+            Assert.That(worn, Is.Not.Null);
+            Assert.That(worn!.Container, Is.EqualTo("back"));
+            Assert.That(first.Entities.Find(entity => entity.Prototype == "Crowbar"), Is.Null, "an item inside a closed bag is not drawn and must not be stored");
+            Assert.That(first.Entities.Find(entity => entity.Prototype == "OrganHumanBrain"), Is.Null, "organs are not drawn and must not be stored");
+
+            var mobFirst = first.Entities.Find(entity => entity.Prototype == "MobHuman");
+            var mobSecond = second!.Entities.Find(entity => entity.Prototype == "MobHuman");
+            Assert.That(mobFirst, Is.Not.Null);
+            Assert.That(mobSecond, Is.SameAs(mobFirst), "an unchanged person must reuse the stored record");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task EveryCameraKeepsAFrameAndPrintShowsIt()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -90,6 +174,7 @@ public sealed class CameraArchiveConsoleTest
             stills.Remember(first, new CameraArchive(), TimeSpan.FromMinutes(11));
             Assert.That(stills.TryGetFrame(first, 0, out var oldest), Is.True);
             Assert.That(oldest.RoundTime, Is.GreaterThan(TimeSpan.Zero), "a frame from the start of a 10 minute window must be gone");
+            Assert.That(stills.TryGetFrame(first, 5, out _), Is.False, "a frame number that cleanup already removed must not come back as another frame");
 
             var console = ents.SpawnEntity("ComputerSurveillanceCameraMonitor", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
             var picture = new byte[] { 9, 8, 7, 6 };

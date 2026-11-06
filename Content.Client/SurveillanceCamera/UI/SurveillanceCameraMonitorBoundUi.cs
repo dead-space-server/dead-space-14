@@ -24,6 +24,7 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
     private readonly CameraArchivePlaybackSystem _playback;
     private SurveillanceCameraMonitorUiState? _live;
     private SurveillanceCameraArchiveBrowseMessage? _archive;
+    private int _shownId;
     //DS-14 end
 
     public SurveillanceCameraMonitorBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
@@ -99,9 +100,16 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         if (_window == null || message is not SurveillanceCameraArchiveBrowseMessage browse)
             return;
 
+        var same = _shownId != 0 && browse.FrameId == _shownId && _window.ArchiveView.HoldingFrame;
         _archive = browse;
         ShowArchiveList();
+        if (same)
+        {
+            _window.ArchiveView.Retitle(browse.FrameIndex, browse.FrameCount, browse.FrameTime);
+            return;
+        }
 
+        _shownId = browse.Frame == null ? 0 : browse.FrameId;
         _window.ArchiveView.SetChat(browse.Frame?.Chat, browse.BodyLog);
 
         if (browse.Covered && browse.FrameCount > 0 && browse.FrameIndex >= browse.FrameCount - 1)
@@ -159,10 +167,12 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         if (_archive == null)
             return;
 
+        var step = _shownId != 0 ? index - _archive.FrameIndex : index;
         SendMessage(new SurveillanceCameraArchivePickMessage
         {
             Camera = _archive.Selected,
-            FrameIndex = index,
+            FrameIndex = step,
+            FrameId = _shownId,
         });
     }
 
@@ -173,6 +183,7 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
 
         var camera = _archive.Selected;
         var index = _archive.FrameIndex;
+        var id = _shownId;
         _window.ArchiveView.View.Screenshot(image =>
         {
             using var stream = new MemoryStream();
@@ -185,6 +196,7 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
             {
                 Camera = camera,
                 FrameIndex = index,
+                FrameId = id,
                 Image = bytes,
             });
         });
