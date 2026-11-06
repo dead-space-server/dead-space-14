@@ -9692,3 +9692,10 @@ Entries:
     message: Пересадка кожи лечит ожоги
   - type: Fix
     message: Спам предсмертного хрипа
+- id: 926
+  author: Tuff4ik
+  time: '2026-11-06T12:03:33.902435+00:00'
+  pr: 2647
+  changes:
+  - type: Fix
+    message: Спавн машин и лампа на марафоне в нио
