@@ -113,6 +113,25 @@ public sealed partial class OrganPrinterComponent : Component
     [ViewVariables]
     public int PrintWaste;
 
+    [ViewVariables]
+    public OrganSpeciesGroup PrintGroup;
+
+    [DataField]
+    public Dictionary<OrganSpeciesGroup, string> GroupSpecies = new()
+    {
+        [OrganSpeciesGroup.Humanoid] = "Human",
+        [OrganSpeciesGroup.Feline] = "Tajaran",
+        [OrganSpeciesGroup.Canine] = "Vulpkanin",
+        [OrganSpeciesGroup.Reptilian] = "Reptilian",
+        [OrganSpeciesGroup.Moth] = "Moth",
+        [OrganSpeciesGroup.Kobolt] = "Kobolt",
+        [OrganSpeciesGroup.Shark] = "Shark",
+        [OrganSpeciesGroup.Demon] = "Demon",
+        [OrganSpeciesGroup.Felinid] = "Felinid",
+        [OrganSpeciesGroup.Vox] = "Vox",
+        [OrganSpeciesGroup.Arachnid] = "Arachnid",
+    };
+
     /// <summary>
     /// Звук печати органа.
     /// </summary>

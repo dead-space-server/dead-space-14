@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
+using Content.Server.DeadSpace.Surgery;
 using Content.Server.Materials;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
@@ -24,6 +25,7 @@ public sealed class OrganPrinterSystem : EntitySystem
     public const int MaxWaste = 2048;
 
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly SurgeryGraftSystem _graft = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
@@ -60,6 +62,8 @@ public sealed class OrganPrinterSystem : EntitySystem
             _appearance.SetData(uid, OrganPrinterVisuals.Working, false);
 
             var printed = Spawn(product, _transform.GetMapCoordinates(uid), null, _transform.GetWorldRotation(uid));
+            if (comp.GroupSpecies.TryGetValue(comp.PrintGroup, out var species))
+                _graft.MarkPrinted(printed, species);
             _audio.PlayPvs(comp.PrintSound, uid);
             _popup.PopupEntity(
                 Loc.GetString("organ-printer-printed",
@@ -128,6 +132,7 @@ public sealed class OrganPrinterSystem : EntitySystem
         ent.Comp.PrintEndTime = _timing.CurTime + ent.Comp.PrintDuration;
         ent.Comp.PrintQuality = quality;
         ent.Comp.PrintWaste = waste;
+        ent.Comp.PrintGroup = entry.Group;
         _appearance.SetData(ent.Owner, OrganPrinterVisuals.Working, true);
 
         _popup.PopupEntity(Loc.GetString("organ-printer-started"), ent.Owner, args.Actor);
