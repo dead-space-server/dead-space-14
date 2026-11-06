@@ -26,6 +26,7 @@ public sealed class OrganPrinterSystem : EntitySystem
 
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SurgeryGraftSystem _graft = default!;
+    [Dependency] private readonly SurgeryOrganFreshSystem _fresh = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
@@ -64,6 +65,7 @@ public sealed class OrganPrinterSystem : EntitySystem
             var printed = Spawn(product, _transform.GetMapCoordinates(uid), null, _transform.GetWorldRotation(uid));
             if (comp.GroupSpecies.TryGetValue(comp.PrintGroup, out var species))
                 _graft.MarkPrinted(printed, species);
+            _fresh.MakeFresh(printed);
             _audio.PlayPvs(comp.PrintSound, uid);
             _popup.PopupEntity(
                 Loc.GetString("organ-printer-printed",
