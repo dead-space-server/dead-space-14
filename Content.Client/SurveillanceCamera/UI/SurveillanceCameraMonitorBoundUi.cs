@@ -177,24 +177,13 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         if (_window == null || _archive == null || _archive.FrameCount <= 0)
             return;
 
-        var camera = _archive.Selected;
-        var index = _archive.FrameIndex;
-        var id = _shownId;
-        _window.ArchiveView.View.Screenshot(image =>
+        SendMessage(new CameraArchivePrintMessage
         {
-            using var stream = new MemoryStream();
-            image.SaveAsPng(stream);
-            var bytes = stream.ToArray();
-            if (bytes.Length == 0 || bytes.Length > CameraArchivePrintMessage.MaxImageBytes)
-                return;
-
-            SendMessage(new CameraArchivePrintMessage
-            {
-                Camera = camera,
-                FrameIndex = index,
-                FrameId = id,
-                Image = bytes,
-            });
+            Camera = _archive.Selected,
+            FrameIndex = _archive.FrameIndex,
+            FrameId = _shownId,
+            Magnification = _window.ArchiveView.Magnification,
+            Pan = _window.ArchiveView.ViewPan,
         });
     }
     //DS-14 end

@@ -44,5 +44,6 @@ public sealed class CameraArchivePrintMessage : BoundUserInterfaceMessage
     public NetEntity Camera;
     public int FrameIndex;
     public int FrameId;
-    public byte[] Image = [];
+    public float Magnification = 1f;
+    public Vector2 Pan;
 }

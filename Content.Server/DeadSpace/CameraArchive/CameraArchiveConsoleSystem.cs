@@ -15,6 +15,7 @@ using Content.Shared.Popups;
 using Content.Shared.Station.Components;
 using Content.Shared.SurveillanceCamera;
 using Content.Shared.SurveillanceCamera.Components;
+using System.IO;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Serialization;
@@ -42,6 +43,7 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IRobustSerializer _serializer = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
@@ -60,7 +62,7 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         if (message.FrameId != 0 && !_stills.TryFindFrame(camera, message.FrameId, out index))
             return false;
 
-        if (!TryPrint(monitor, message.Actor, camera, index, message.Image, out _))
+        if (!TryPrint(monitor, message.Actor, camera, index, out var paper))
             return false;
 
         if (TryComp<CameraArchivePrintComponent>(paper, out var shot))
