@@ -51,6 +51,8 @@
     - id: ParadoxCloneSpawn
     - id: SleeperAgents
     - id: ZombieOutbreak
+    - id: Xenoborgs # DS14
+    - id: SpiderTerrorOutbreak # DS14
     - id: LoneOpsSpawn
     - id: GeistMidroundSpawn # DS14
     - id: WizardSpawn
@@ -633,7 +635,7 @@
   parent: BaseGameRule
   components:
   - type: StationEvent
-    earliestStart: 90
+    earliestStart: 60 # ds14
     minimumPlayers: 30 # DS14
     weight: 1 # Zombies was happening basically every single survival round, so now it's super rare
     duration: 1

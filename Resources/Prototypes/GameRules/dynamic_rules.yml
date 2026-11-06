@@ -32,13 +32,15 @@
           conditions:
           - !type:HasBudgetCondition
           - !type:MaxRuleOccurenceCondition
-        - id: Zombie
-          weight: 5
-          conditions:
-          - !type:HasBudgetCondition
-          - !type:MaxRuleOccurenceCondition
-          - !type:PlayerCountCondition
-            min: 20
+#ds14-start
+#        - id: Zombie
+#          weight: 5
+#          conditions:
+#          - !type:HasBudgetCondition
+#          - !type:MaxRuleOccurenceCondition
+#          - !type:PlayerCountCondition
+#            min: 20
+#ds14-end
         - id: Wizard
           weight: 5
           conditions:
