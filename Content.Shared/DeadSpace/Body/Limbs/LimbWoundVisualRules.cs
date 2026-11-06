@@ -76,8 +76,7 @@ public static class LimbWoundVisualRules
         switch (group)
         {
             case Brute:
-                value = MathF.Max(MathF.Max(state.Flesh, state.Bone),
-                    MathF.Max(MathF.Max(state.Cut, state.Pierce), state.Sever));
+                value = MathF.Max(state.Flesh, MathF.Max(MathF.Max(state.Cut, state.Pierce), state.Sever));
                 break;
             case Burn:
                 value = MathF.Max(MathF.Max(state.Skin, state.Heat), state.Caustic);

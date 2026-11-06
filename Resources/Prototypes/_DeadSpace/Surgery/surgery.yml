@@ -207,6 +207,10 @@
     - type: SurgeryMute
     SurgeryStatusModule:
     - type: SurgeryNoHealthIcon
+    SurgeryOptics:
+    - type: PermanentBlindness
+    part:Head:
+    - type: PermanentBlindness
 
 - type: surgerySpecies
   id: Xenomorph
@@ -873,6 +877,9 @@
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
     state: retractor
+  machineIcons:
+  - sprite: /Textures/Objects/Tools/crowbar.rsi
+    state: icon
 
 - type: surgeryHint
   id: RetractClose
@@ -881,6 +888,9 @@
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
     state: retractor
+  machineIcons:
+  - sprite: /Textures/Objects/Tools/crowbar.rsi
+    state: icon
 
 - type: surgeryHint
   id: SawBone
@@ -961,6 +971,9 @@
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/cautery.rsi
     state: cautery
+  machineIcons:
+  - sprite: /Textures/Objects/Tools/welder.rsi
+    state: icon
 
 - type: surgeryHint
   id: Graft
@@ -1138,6 +1151,34 @@
     undo: Incise
 
 - type: surgeryOperation
+  id: PullForeignHead
+  side: Front
+  zone: Head
+  name: surgery-op-pull-foreign
+  when: Foreign
+  order: 3
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
   id: OpenLimb
   side: Front
   name: surgery-op-open-limb
@@ -1281,6 +1322,7 @@
   operation: TakeEye
   put: PutEye
   organ: Eyes
+  cover: Eyes
   states:
   - eyeball-l
   - eyeball-r
@@ -1298,6 +1340,7 @@
   operation: TakeTongue
   put: PutTongue
   state: tongue
+  cover: Mouth
   wound: false
   order: 3
   ax: 12.5
@@ -1312,6 +1355,7 @@
   operation: DrillTooth
   pill: true
   state: tooth
+  cover: Mouth
   wound: false
   order: 4
   sprite: /Textures/_DeadSpace/Objects/Medical/tooth.rsi
@@ -1692,6 +1736,42 @@
     undo: Incise
 
 - type: surgeryOperation
+  id: TreatRot
+  side: Front
+  name: surgery-op-treat-rot
+  when: Rot
+  order: 2
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zones:
+  - Head
+  - Torso
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Stanch
+    layer: Cavity
+    effect: RotMend
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
   id: MendOrgansGroin
   side: Front
   zone: Groin
@@ -1946,6 +2026,56 @@
     layer: Skin
   - verb: MendBone
     layer: Bone
+    effect: FractureOpenMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendPelvis
+  side: Front
+  zone: Groin
+  name: surgery-op-mend-fracture
+  when: ClosedPelvis
+  order: 1
+  across: true
+  icon:
+    sprite: /Textures/_DeadSpace/Objects/Medical/bone_gel.rsi
+    state: icon
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: MendBone
+    layer: Cavity
+    effect: FractureClosedMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: FixOpenPelvis
+  side: Front
+  zone: Groin
+  name: surgery-op-open-fracture
+  when: OpenPelvis
+  order: 0
+  across: true
+  icon:
+    sprite: /Textures/_DeadSpace/Objects/Medical/bone_gel.rsi
+    state: icon
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: MendBone
+    layer: Cavity
     effect: FractureOpenMend
   close:
   - verb: Cauterize
@@ -2233,6 +2363,9 @@
     layer: Skin
     game: Saw
   close:
+  - verb: Append
+    layer: Skin
+    optional: true
   - verb: Cauterize
     layer: Skin
   - verb: Bandage
@@ -2257,12 +2390,16 @@
   - verb: Incise
     layer: Skin
     undo: Cauterize
+  - verb: Retract
+    layer: Skin
   - verb: Append
     layer: Skin
   close:
   - verb: Cauterize
     layer: Skin
     undo: Incise
+  - verb: Bandage
+    layer: Skin
 
 - type: surgeryAppendage
   id: Tail
@@ -2404,4 +2541,7 @@
   - Dylovene
   - Ambuzol
   - AmbuzolPlus
+  - Diphenhydramine
+  - Omnizine
+  - Stellibinin
 

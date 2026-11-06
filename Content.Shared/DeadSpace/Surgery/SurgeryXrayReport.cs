@@ -28,7 +28,7 @@ public static class SurgeryXrayReport
         };
     }
 
-    public static SurgeryXrayCard Make(LimbBodyComponent limbs, SurgeryCavityComponent? hold, LimbZone? zone, string status, SurgeryInfectionComponent? infection = null, float vessel = 0f, bool machine = false)
+    public static SurgeryXrayCard Make(LimbBodyComponent limbs, SurgeryCavityComponent? hold, LimbZone? zone, string status, SurgeryInfectionComponent? infection = null, float vessel = 0f, bool machine = false, float bodyRot = 0f)
     {
         var issues = new List<LimbScanIssue>();
         LimbScan.Build(limbs.Zones, limbs.Organs, out var summary, issues);
@@ -37,6 +37,15 @@ public static class SurgeryXrayReport
             Status = status,
             Overview = Overview(limbs, summary, issues, hold, Foci(infection), vessel, machine),
         };
+
+        if (!machine)
+        {
+            var brain = SurgeryRot.Brain(limbs);
+            if (brain >= 0.01f)
+                card.Overview += "\n" + Loc.GetString("surgery-xray-rot-brain", ("percent", MathF.Round(brain * 100f)));
+            if (bodyRot >= 0.01f)
+                card.Overview += "\n" + Loc.GetString("surgery-xray-rot-body", ("percent", MathF.Round(bodyRot * 100f)));
+        }
 
         if (zone == null)
         {
@@ -166,6 +175,16 @@ public static class SurgeryXrayReport
         if (zone is LimbZone.Head or LimbZone.Torso or LimbZone.Groin && ItemName(hold, zone) is { Length: > 0 } item)
             text += "\n" + Loc.GetString("surgery-xray-item", ("name", item));
         return text;
+    }
+
+    public static void NoteHidden(LimbZone zone, SurgeryCavityComponent? hold, SurgeryInfectionComponent? infection, List<string> lines)
+    {
+        var item = ItemName(hold, zone);
+        if (item.Length > 0)
+            lines.Add(Loc.GetString("surgery-xray-item", ("name", item)));
+
+        if (infection != null && infection.Rots(zone))
+            lines.Add(Loc.GetString("surgery-xray-infection"));
     }
 
     private static bool HasForeign(SurgeryCavityComponent? hold)

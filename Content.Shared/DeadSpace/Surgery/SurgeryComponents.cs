@@ -172,6 +172,12 @@ public sealed partial class SurgeryStatusModuleComponent : Component;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SurgeryNoHealthIconComponent : Component;
 
+[RegisterComponent, NetworkedComponent]
+public sealed partial class SurgeryOpticsComponent : Component;
+
+[RegisterComponent]
+public sealed partial class SurgeryBaldComponent : Component;
+
 [RegisterComponent]
 public sealed partial class SurgeryMarkerComponent : Component
 {

@@ -398,14 +398,14 @@ public sealed class SurgeryHint : Control
         MouseFilter = MouseFilterMode.Ignore;
     }
 
-    public void Show(SurgeryVerbKind verb, SurgeryVerbKind undo = SurgeryVerbKind.Inspect, string hint = "", string suffix = "", string extra = "")
+    public void Show(SurgeryVerbKind verb, SurgeryVerbKind undo = SurgeryVerbKind.Inspect, string hint = "", string suffix = "", string extra = "", bool machine = false)
     {
         _shown.Clear();
-        Add(hint.Length > 0 ? hint : verb.ToString(), suffix);
+        Add(hint.Length > 0 ? hint : verb.ToString(), suffix, machine);
         if (extra.Length > 0)
-            Add(extra, "");
+            Add(extra, "", machine);
         else if (undo != SurgeryVerbKind.Inspect && undo != verb)
-            Add(undo == SurgeryVerbKind.Retract ? "RetractClose" : undo.ToString(), "");
+            Add(undo == SurgeryVerbKind.Retract ? "RetractClose" : undo.ToString(), "", machine);
 
         var width = Pad;
         for (var i = 0; i < _shown.Count; i++)
@@ -418,16 +418,17 @@ public sealed class SurgeryHint : Control
         MinSize = new Vector2(MathF.Max(Pad * 2f + Disc * 2f, width + Pad), HintHeight);
     }
 
-    private void Add(string id, string suffix)
+    private void Add(string id, string suffix, bool machine = false)
     {
         if (!IoCManager.Resolve<IPrototypeManager>().TryIndex<SurgeryHintPrototype>(id, out var hint))
             return;
 
         Texture? icon = null;
-        if (hint.Icons.Count > 0)
+        var icons = machine && hint.MachineIcons.Count > 0 ? hint.MachineIcons : hint.Icons;
+        if (icons.Count > 0)
         {
-            var rsi = IoCManager.Resolve<IResourceCache>().GetResource<RSIResource>(SurgeryClientSystem.TexturePath(hint.Icons[0].Sprite)).RSI;
-            if (rsi.TryGetState(hint.Icons[0].State, out var state))
+            var rsi = IoCManager.Resolve<IResourceCache>().GetResource<RSIResource>(SurgeryClientSystem.TexturePath(icons[0].Sprite)).RSI;
+            if (rsi.TryGetState(icons[0].State, out var state))
                 icon = state.GetFrame(RsiDirection.South, 0);
         }
 

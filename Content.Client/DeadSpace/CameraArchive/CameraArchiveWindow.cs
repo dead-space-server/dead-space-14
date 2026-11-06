@@ -27,6 +27,8 @@ public sealed class CameraArchiveControl : Control
     public readonly Button ZoomInButton;
     public readonly Button ZoomOutButton;
     public readonly Button PrintButton;
+    public float Magnification => _zoomSteps[_zoomStep];
+    public Vector2 ViewPan => _pan;
     public readonly Slider Frames;
 
     private readonly float[] _zoomSteps = [1f, 2f, 4f];

@@ -46,10 +46,12 @@ public static class LimbWoundRules
     public const float AimedShatterChance = 0.12f;
     public const float BehindArmorFlesh = 0.35f;
     public const float BehindArmorBone = 0.6f;
+    public const float BehindArmorChance = 0.1f;
     public const float CloseSeverRange = 1f;
     public const float BlastSeverFar = 5f;
-    public const float BlastSeverNearChance = 0.9f;
-    public const float BlastSeverDamage = 30f;
+    public const float BlastSeverNearChance = 0.4f;
+    public const float BlastSeverDamage = 40f;
+    public const int BlastSeverMax = 2;
     public const int PelletSeverCount = 4;
     public const float PelletWindow = 0.4f;
     public const float ClothingBurn = 3f;
@@ -200,6 +202,18 @@ public static class LimbWoundRules
         if (skin >= LimbTuning.BurnFirst)
             return 1;
         return 0;
+    }
+
+    public static bool Limbless(IReadOnlyList<LimbZoneState> zones)
+    {
+        foreach (var zone in new[] { LimbZone.ArmLeft, LimbZone.ArmRight, LimbZone.LegLeft, LimbZone.LegRight })
+        {
+            var index = Index(zone);
+            if ((uint) index >= (uint) zones.Count || !zones[index].Severed)
+                return false;
+        }
+
+        return true;
     }
 
     public static bool Useless(in LimbZoneState state)
@@ -793,6 +807,14 @@ public static class LimbWoundRules
         return pierce >= HeavyPoint;
     }
 
+    public static bool BehindArmorTrauma(LimbStrike strike)
+    {
+        return strike.BehindArmor
+            && strike.Mark == LimbMark.Point
+            && strike.Amount >= HeavyPoint
+            && strike.SecondaryRoll < BehindArmorChance;
+    }
+
     public static bool HeavyLimb(LimbZone zone)
     {
         return zone is LimbZone.ArmLeft or LimbZone.ArmRight or LimbZone.LegLeft or LimbZone.LegRight;
@@ -901,7 +923,7 @@ public static class LimbWoundRules
                 break;
             case LimbMark.Point:
                 state.Pierce += amount;
-                if (strike.BehindArmor && strike.Amount >= HeavyPoint)
+                if (BehindArmorTrauma(strike))
                 {
                     state.Flesh += amount * BehindArmorFlesh;
                     if (soft)
@@ -1057,7 +1079,7 @@ public static class LimbWoundRules
         if (adrenaline)
             return false;
 
-        return arm.Bone >= BreakBone || hand.Bone >= BreakBone;
+        return !arm.Splinted && arm.Bone >= BreakBone || !hand.Splinted && hand.Bone >= BreakBone;
     }
 
     public static float MoveSpeed(bool limp, int legsMissing)

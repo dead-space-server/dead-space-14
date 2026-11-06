@@ -22,7 +22,7 @@ public sealed class PlayerStubArmorSystem : EntitySystem
 
     public void Apply(DamageModifyEvent args)
     {
-        if (_coefficient >= 1f)
+        if (!LimbTuning.Enabled || _coefficient >= 1f)
             return;
 
         var scaled = new DamageSpecifier(args.Damage);
@@ -37,7 +37,7 @@ public sealed class PlayerStubArmorSystem : EntitySystem
 
     public FixedPoint2 BeforeStub(EntityUid uid, FixedPoint2 total)
     {
-        if (!HasComp<LimbBodyComponent>(uid) || _coefficient <= 0f)
+        if (!LimbTuning.Enabled || !HasComp<LimbBodyComponent>(uid) || _coefficient <= 0f)
             return total;
 
         return total / _coefficient;

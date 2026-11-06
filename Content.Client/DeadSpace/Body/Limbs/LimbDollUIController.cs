@@ -6,6 +6,8 @@ using Content.Client.Gameplay;
 using Content.Client.UserInterface.Systems.Alerts.Widgets;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared.DeadSpace.Body.Limbs;
+using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Ghost;
 using Content.Shared.Input;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -56,10 +58,14 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 
     public override void FrameUpdate(FrameEventArgs args)
     {
-        if (!LimbTuning.Enabled || !_alive)
+        if (!LimbTuning.Enabled || !_alive || !OwnsLimbs())
         {
-            if (_hud != null)
+            if (_hud != null || _menu != null)
+            {
+                CloseMenu();
                 HideDoll();
+            }
+
             return;
         }
 
@@ -111,6 +117,9 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 
     private void ShowDoll()
     {
+        if (!OwnsLimbs())
+            return;
+
         HideDoll();
         var host = Viewport(UIManager.ActiveScreen);
         if (host == null)
@@ -201,6 +210,12 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 
     private void OpenRadial()
     {
+        if (!OwnsLimbs())
+        {
+            CloseMenu();
+            return;
+        }
+
         if (_menu != null)
         {
             CloseMenu();
@@ -265,7 +280,7 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 
     private void Choose(LimbZone? zone)
     {
-        if (_player.LocalEntity is not { } uid)
+        if (!OwnsLimbs() || _player.LocalEntity is not { } uid)
             return;
 
         _entities.System<LimbWoundSystem>().SetTarget(uid, zone);
@@ -290,7 +305,7 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 
     private void ToggleAim()
     {
-        if (_player.LocalEntity is not { } uid || !_entities.TryGetComponent(uid, out LimbAimComponent? aim))
+        if (!OwnsLimbs() || _player.LocalEntity is not { } uid || !_entities.TryGetComponent(uid, out LimbAimComponent? aim))
             return;
 
         var next = !aim.Aiming;
@@ -324,6 +339,17 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
             return null;
 
         return body;
+    }
+
+    private bool OwnsLimbs()
+    {
+        if (_player.LocalEntity is not { } uid || _entities.HasComponent<GhostComponent>(uid))
+            return false;
+
+        if (_entities.HasComponent<SurgeryNoHealthIconComponent>(uid))
+            return false;
+
+        return _entities.HasComponent<LimbTargetComponent>(uid) || _entities.HasComponent<LimbAimComponent>(uid);
     }
 
     private void CloseMenu()

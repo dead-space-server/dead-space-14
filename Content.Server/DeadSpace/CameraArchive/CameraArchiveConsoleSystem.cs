@@ -17,6 +17,7 @@ using Content.Shared.SurveillanceCamera;
 using Content.Shared.SurveillanceCamera.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Serialization;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Player;
@@ -62,6 +63,13 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         if (!TryPrint(monitor, message.Actor, camera, index, message.Image, out _))
             return false;
 
+        if (TryComp<CameraArchivePrintComponent>(paper, out var shot))
+        {
+            shot.Magnification = Math.Clamp(message.Magnification, 1f, 4f);
+            shot.Pan = message.Pan;
+            Dirty(paper, shot);
+        }
+
         comp.NextPrint = _timing.CurTime + comp.PrintDelay;
         _audio.PlayPvs(comp.PrintSound, monitor);
         return true;
@@ -72,7 +80,6 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         EntityUid actor,
         EntityUid camera,
         int index,
-        byte[]? image,
         out EntityUid paper)
     {
         paper = default;
@@ -120,12 +127,14 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         if (TryComp<PaperComponent>(paper, out var paperComp))
             _paper.SetContent((paper, paperComp), text);
 
-        if (image != null && image.Length > 0 && image.Length <= CameraArchivePrintMessage.MaxImageBytes)
+        var shot = EnsureComp<CameraArchivePrintComponent>(paper);
+        using (var stream = new MemoryStream())
         {
-            var shot = EnsureComp<CameraArchivePrintComponent>(paper);
-            shot.Image = image;
-            Dirty(paper, shot);
+            _serializer.SerializeDirect(stream, frame.Still);
+            shot.Still = stream.ToArray();
         }
+
+        Dirty(paper, shot);
 
         if (actor.IsValid())
             _popup.PopupEntity(Loc.GetString("camera-archive-printed"), console, actor);

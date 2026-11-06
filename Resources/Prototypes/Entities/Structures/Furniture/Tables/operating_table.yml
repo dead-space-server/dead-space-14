@@ -19,20 +19,15 @@
           components:
           - GasTank
   # DS14-start
+  - type: Construction
+    graph: OperatingTable
+    node: table
   - type: Appearance
   - type: SurgeryXrayTable
-  - type: ActivatableUI
-    key: enum.SurgeryXrayTableUiKey.Key
-    verbText: surgery-xray-open
-    verbPriority: 1000
-    verbIcon: /Textures/Interface/VerbIcons/examine.svg.192dpi.png
-  - type: UserInterface
-    interfaces:
-      enum.SurgeryXrayTableUiKey.Key:
-        type: SurgeryXrayTableBoundUserInterface
   - type: Sprite
     noRot: true
     sprite: _DeadSpace/Structures/Furniture/Tables/xraytable.rsi
+    state: table
     layers:
     - state: table
       map: [ "enum.AutopsyTableLayers.Base" ]

@@ -21,12 +21,6 @@ public sealed partial class LimbImplantComponent : Component
     [DataField]
     public ComponentRegistry ImplantComponents = new();
 
-    [DataField]
-    public ComponentRegistry ToggleComponents = new();
-
-    [DataField, AutoNetworkedField]
-    public bool Toggled;
-
     [ViewVariables, AutoNetworkedField]
     public EntityUid? Host;
 

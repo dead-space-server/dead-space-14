@@ -8,7 +8,7 @@ public sealed partial class CCVars
 {
 
     public static readonly CVarDef<float> CameraArchiveHistoryMinutes =
-        CVarDef.Create("camera_archive.history_minutes", 10f, CVar.SERVERONLY);
+        CVarDef.Create("camera_archive.history_minutes", 5f, CVar.SERVERONLY); //DS-14
 
     public static readonly CVarDef<float> CameraArchiveFrameGapSeconds = //DS-14
         CVarDef.Create("camera_archive.frame_gap_seconds", 0.5f, CVar.SERVERONLY); //DS-14

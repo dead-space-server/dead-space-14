@@ -177,8 +177,7 @@ public sealed class CameraArchiveConsoleTest
             Assert.That(stills.TryGetFrame(first, 5, out _), Is.False, "a frame number that cleanup already removed must not come back as another frame");
 
             var console = ents.SpawnEntity("ComputerSurveillanceCameraMonitor", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
-            var picture = new byte[] { 9, 8, 7, 6 };
-            Assert.That(archive.TryPrint(console, EntityUid.Invalid, first, -1, picture, out var paper), Is.True);
+            Assert.That(archive.TryPrint(console, EntityUid.Invalid, first, -1, out var paper), Is.True);
             var content = ents.GetComponent<PaperComponent>(paper).Content;
             Assert.That(content, Does.Contain("Архив-камера"));
             Assert.That(content, Does.Contain("00:11:00"));
@@ -187,7 +186,9 @@ public sealed class CameraArchiveConsoleTest
             Assert.That(content, Does.Not.Contain("{В кадре}"));
             Assert.That(content, Does.Not.Contain("Лог сообщений"));
             Assert.That(content, Does.Contain("Место для печатей"));
-            Assert.That(ents.GetComponent<CameraArchivePrintComponent>(paper).Image, Is.EqualTo(picture));
+            var printed = ents.GetComponent<CameraArchivePrintComponent>(paper);
+            Assert.That(printed.Image, Is.Empty);
+            Assert.That(printed.Still, Is.Not.Empty);
         });
 
         await pair.CleanReturnAsync();

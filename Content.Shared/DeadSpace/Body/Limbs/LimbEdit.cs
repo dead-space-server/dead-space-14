@@ -23,6 +23,7 @@ public struct LimbEdit
     public bool ClearEmbedded;
     public bool ClearSevered;
     public bool ClearSkinBare;
+    public bool ClearBurn;
 }
 
 public struct LimbOrganEdit

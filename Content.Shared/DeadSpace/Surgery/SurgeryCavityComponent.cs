@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.DeadSpace.Body.Limbs;
 using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 
@@ -31,4 +32,15 @@ public sealed partial class SurgeryCavityComponent : Component
 
     [AutoNetworkedField]
     public string ChestProto = "";
+
+    public bool Holds(LimbZone zone)
+    {
+        return zone switch
+        {
+            LimbZone.Head => HeadProto.Length > 0,
+            LimbZone.Torso => ChestProto.Length > 0,
+            LimbZone.Groin => AbdomenProto.Length > 0,
+            _ => false,
+        };
+    }
 }

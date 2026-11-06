@@ -83,6 +83,7 @@
         - id: SurgeryDionaSap # DS14
         - id: SurgeryHatchet # DS14
         - id: SurgerySkinRoll # DS14
+        - id: ClothingHeadHatBluespaceBald # DS14
 
 - type: entity
   parent: CrateMedical

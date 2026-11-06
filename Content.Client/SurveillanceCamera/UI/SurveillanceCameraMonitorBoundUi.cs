@@ -1,13 +1,9 @@
-using System.IO;
 using Content.Client.DeadSpace.CameraArchives; //DS-14
 using Content.Client.Eye;
 using Content.Shared.DeadSpace.CameraArchives; //DS-14
 using Content.Shared.SurveillanceCamera;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
-using Robust.Shared.Utility; //DS-14
-using SixLabors.ImageSharp; //DS-14
-
 namespace Content.Client.SurveillanceCamera.UI;
 
 public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInterface

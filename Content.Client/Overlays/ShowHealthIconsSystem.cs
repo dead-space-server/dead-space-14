@@ -58,6 +58,10 @@ public sealed class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealthIconsCo
         if (!IsActive)
             return;
 
+        //DS-14
+        if (HasComp<Content.Shared.DeadSpace.Surgery.SurgeryNoHealthIconComponent>(entity))
+            return;
+
         var healthIcons = DecideHealthIcons(entity);
 
         args.StatusIcons.AddRange(healthIcons);

@@ -40,7 +40,9 @@ public sealed partial class LimbWoundSystem
 
         state.Flesh = edit.SetFlesh ? MathF.Max(0f, edit.Flesh) : MathF.Max(0f, state.Flesh + edit.Flesh);
         state.Bone = edit.SetBone ? MathF.Max(0f, edit.Bone) : MathF.Max(0f, state.Bone + edit.Bone);
-        state.Skin = MathF.Max(0f, state.Skin + edit.Skin);
+        state.Skin = edit.ClearBurn ? 0f : MathF.Max(0f, state.Skin + edit.Skin);
+        if (edit.ClearBurn)
+            state.Fire = 0f;
         state.Bleed = edit.SetBleed ? MathF.Max(0f, edit.Bleed) : MathF.Max(0f, state.Bleed + edit.Bleed);
         state.Scar = Math.Max(0, state.Scar + edit.Scar);
         var cap = LimbWoundRules.HealthFor(zone, limbs);
@@ -76,6 +78,27 @@ public sealed partial class LimbWoundSystem
 
         Dirty(body, limbs);
         ApplyLife(body, limbs);
+        _movement.RefreshMovementSpeedModifiers(body);
+        RefreshActive(body, limbs);
+        return true;
+    }
+
+    public bool SplintZone(EntityUid body, LimbZone zone)
+    {
+        if (!LimbWoundRules.IsBody(zone) || !TryComp<LimbBodyComponent>(body, out var limbs))
+            return false;
+
+        EnsureZones(limbs);
+        var index = LimbWoundRules.Index(zone);
+        var zones = CollectionsMarshal.AsSpan(limbs.Zones);
+        if ((uint) index >= (uint) zones.Length || zones[index].Severed)
+            return false;
+
+        LimbWoundRules.Splint(ref zones[index]);
+        if (!zones[index].Splinted)
+            return false;
+
+        Dirty(body, limbs);
         _movement.RefreshMovementSpeedModifiers(body);
         RefreshActive(body, limbs);
         return true;
@@ -307,6 +330,7 @@ public sealed partial class LimbWoundSystem
         ApplyLife(body, limbs);
         _movement.RefreshMovementSpeedModifiers(body);
         RefreshActive(body, limbs);
+        _blocker.UpdateCanMove(body);
         return true;
     }
 
@@ -423,6 +447,7 @@ public sealed partial class LimbWoundSystem
         ApplyLife(body, limbs);
         _movement.RefreshMovementSpeedModifiers(body);
         RefreshActive(body, limbs);
+        _blocker.UpdateCanMove(body);
         return true;
     }
 
@@ -526,7 +551,7 @@ public sealed partial class LimbWoundSystem
         foreach (var mark in flesh.Marks)
         {
             if (_proto.TryIndex<MarkingPrototype>(mark.MarkingId, out var proto))
-                look.MarkingSet.AddBack(proto.MarkingCategory, new Marking(mark));
+                look.MarkingSet.AddBack(proto.MarkingCategory, new Marking(mark) { Forced = true });
         }
 
         Dirty(body, look);
