@@ -89,7 +89,7 @@ public sealed class CameraArchiveConsoleTest
             stills.Remember(first, new CameraArchive(), TimeSpan.Zero);
             stills.Remember(first, new CameraArchive(), TimeSpan.FromMinutes(11));
             Assert.That(stills.TryGetFrame(first, 0, out var oldest), Is.True);
-            Assert.That(oldest.RoundTime, Is.GreaterThan(TimeSpan.Zero), "a frame from the start of a 10 minute window must be gone");
+            Assert.That(oldest.RoundTime, Is.GreaterThan(TimeSpan.Zero), "a frame from the start of a 5 minute window must be gone");
 
             var console = ents.SpawnEntity("ComputerSurveillanceCameraMonitor", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
             Assert.That(archive.TryPrint(console, EntityUid.Invalid, first, -1, out var paper), Is.True);
