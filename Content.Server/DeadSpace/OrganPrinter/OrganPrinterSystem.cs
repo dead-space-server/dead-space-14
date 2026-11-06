@@ -6,6 +6,7 @@ using Content.Server.Materials;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.OrganPrinter;
 using Content.Shared.Materials;
@@ -66,6 +67,12 @@ public sealed class OrganPrinterSystem : EntitySystem
             if (comp.GroupSpecies.TryGetValue(comp.PrintGroup, out var species))
                 _graft.MarkPrinted(printed, species);
             _fresh.MakeFresh(printed);
+
+            var damage = new DamageSpecifier();
+            damage.DamageDict.Add("Blunt", (100 - comp.PrintQuality) / 100f * 30f);
+            EnsureComp<DamageableComponent>(printed);
+            _damageable.TryChangeDamage(printed, damage, true);
+
             _audio.PlayPvs(comp.PrintSound, uid);
             _popup.PopupEntity(
                 Loc.GetString("organ-printer-printed",
