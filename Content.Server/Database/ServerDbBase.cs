@@ -1498,7 +1498,7 @@ namespace Content.Server.Database
                 antags.ToHashSet(),
                 traits.ToHashSet(),
                 loadouts, profile.TtsVoices?.Deserialize<Dictionary<string, string>>() // DS14
-            );
+            ).WithStationAiLawset(profile.StationAiLawset); // DS14
         }
 
         private static Profile ConvertProfiles(HumanoidCharacterProfile humanoid, int slot, Profile? profile = null)
@@ -1534,6 +1534,7 @@ namespace Content.Server.Database
             profile.Markings = markings;
             profile.Slot = slot;
             profile.PreferenceUnavailable = (DbPreferenceUnavailableMode) humanoid.PreferenceUnavailable;
+            profile.StationAiLawset = humanoid.StationAiLawset?.Id; // DS14
 
             profile.Jobs.Clear();
             profile.Jobs.AddRange(
