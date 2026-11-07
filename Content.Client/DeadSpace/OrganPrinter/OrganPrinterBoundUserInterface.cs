@@ -21,6 +21,8 @@ public sealed class OrganPrinterBoundUserInterface : BoundUserInterface
         base.Open();
 
         _window = this.CreateWindow<OrganPrinterWindow>();
+        _window.OnGameStarted += (product, fast, group) =>
+            SendMessage(new OrganPrinterGameStartMessage(product, fast, group));
         _window.OnPrintPressed += (product, group, quality, waste) =>
             SendMessage(new OrganPrinterPrintRequestMessage(product, group, quality, waste));
         _window.OnGameFailed += fastMode =>

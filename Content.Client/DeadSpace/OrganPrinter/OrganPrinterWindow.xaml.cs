@@ -20,6 +20,7 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
     public event Action<EntProtoId, OrganSpeciesGroup, int, int>? OnPrintPressed;
+    public event Action<EntProtoId, bool, OrganSpeciesGroup>? OnGameStarted;
     public event Action<bool>? OnGameFailed;
     public event Action? OnEjectPressed;
 
@@ -151,6 +152,9 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
     {
         if (_selected is not { } product)
             return;
+
+        var group = _products.FirstOrDefault(p => p.Product == product)?.Group ?? OrganSpeciesGroup.Humanoid;
+        OnGameStarted?.Invoke(product, fast, group);
 
         GameModeHintLabel.Text = Loc.GetString("organ-printer-game-goal");
         _game.Start(product, fast);

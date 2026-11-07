@@ -43,3 +43,5 @@ organ-printer-group-vox = Воксы
 organ-printer-group-arachnid = Арахниды
 organ-printer-eject-button = Извлечь биомассу
 organ-printer-eject-empty = Внутри нет биомассы.
+organ-printer-no-game = Сначала пройди сплайсинг на этом принтере.
+organ-printer-too-fast = Сплайсинг ещё не завершён.

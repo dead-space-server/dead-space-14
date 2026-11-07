@@ -113,6 +113,42 @@ public sealed partial class OrganPrinterComponent : Component
     [ViewVariables]
     public int PrintWaste;
 
+    /// <summary>
+    /// Идёт ли сейчас сплайсинг на этом принтере (клиент объявил старт мини-игры).
+    /// </summary>
+    [ViewVariables]
+    public bool GameStarted;
+
+    /// <summary>
+    /// Орган, выбранный для текущего сплайсинга.
+    /// </summary>
+    [ViewVariables]
+    public EntProtoId? GameStartProduct;
+
+    /// <summary>
+    /// Группа расы выбранного органа.
+    /// </summary>
+    [ViewVariables]
+    public OrganSpeciesGroup GameStartGroup;
+
+    /// <summary>
+    /// Режим текущего сплайсинга: быстрая печать ограничивает качество сервером.
+    /// </summary>
+    [ViewVariables]
+    public bool GameStartFast;
+
+    /// <summary>
+    /// Момент старта сплайсинга.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan GameStartTime;
+
+    /// <summary>
+    /// Минимальное реальное время сплайсинга; быстрее человек физически не успевает.
+    /// </summary>
+    [DataField]
+    public TimeSpan MinGameTime = TimeSpan.FromSeconds(10);
+
     [ViewVariables]
     public OrganSpeciesGroup PrintGroup;
 

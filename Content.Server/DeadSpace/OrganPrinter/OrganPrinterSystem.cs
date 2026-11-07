@@ -44,6 +44,7 @@ public sealed class OrganPrinterSystem : EntitySystem
         SubscribeLocalEvent<OrganPrinterComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<OrganPrinterComponent, BeforeActivatableUIOpenEvent>(OnBeforeUiOpen);
         SubscribeLocalEvent<OrganPrinterComponent, MaterialAmountChangedEvent>(OnMaterialAmountChanged);
+        SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterGameStartMessage>(OnGameStart);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterPrintRequestMessage>(OnPrintRequest);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterEjectMessage>(OnEject);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterGameFailedMessage>(OnGameFailed);
@@ -116,6 +117,23 @@ public sealed class OrganPrinterSystem : EntitySystem
             return;
         }
 
+        // печать возможна только по завершённой на этом принтере мини-игре того же органа
+        if (!ent.Comp.GameStarted
+            || ent.Comp.GameStartProduct != args.Product
+            || ent.Comp.GameStartGroup != args.Group)
+        {
+            _popup.PopupEntity(Loc.GetString("organ-printer-no-game"), ent.Owner, args.Actor);
+            return;
+        }
+
+        if (_timing.CurTime - ent.Comp.GameStartTime < ent.Comp.MinGameTime)
+        {
+            _popup.PopupEntity(Loc.GetString("organ-printer-too-fast"), ent.Owner, args.Actor);
+            return;
+        }
+
+        ent.Comp.GameStarted = false;
+
         var productId = args.Product.Id;
         var group = args.Group;
         var entry = ent.Comp.Entries.FirstOrDefault(e => e.Product.Id == productId && e.Group == group);
@@ -123,6 +141,8 @@ public sealed class OrganPrinterSystem : EntitySystem
             return;
 
         var quality = Math.Clamp(args.Quality, 0, 100);
+        if (ent.Comp.GameStartFast)
+            quality = Math.Min(quality, 65);
         var waste = Math.Clamp(args.Waste, 0, MaxWaste);
         var effectiveCost = entry.Cost + (int) Math.Clamp(
             Math.Ceiling(waste * (double) ent.Comp.WasteCost), 0, int.MaxValue - entry.Cost);
@@ -179,10 +199,25 @@ public sealed class OrganPrinterSystem : EntitySystem
         UpdateUi(ent);
     }
 
+    private void OnGameStart(Entity<OrganPrinterComponent> ent, ref OrganPrinterGameStartMessage args)
+    {
+        if (!args.Actor.Valid || !this.IsPowered(ent.Owner, EntityManager))
+            return;
+
+        ent.Comp.GameStarted = true;
+        ent.Comp.GameStartProduct = args.Product;
+        ent.Comp.GameStartGroup = args.Group;
+        ent.Comp.GameStartFast = args.FastMode;
+        ent.Comp.GameStartTime = _timing.CurTime;
+    }
+
     private void OnGameFailed(Entity<OrganPrinterComponent> ent, ref OrganPrinterGameFailedMessage args)
     {
         if (!args.Actor.Valid)
             return;
+
+        // проваленный сплайсинг сжигает сессию: напечатать без победы нельзя
+        ent.Comp.GameStarted = false;
 
         if (!this.IsPowered(ent.Owner, EntityManager))
             return;

@@ -43,3 +43,5 @@ organ-printer-group-vox = Voxes
 organ-printer-group-arachnid = Arachnids
 organ-printer-eject-button = Eject biomass
 organ-printer-eject-empty = No biomass inside.
+organ-printer-no-game = Run the splicing on this printer first.
+organ-printer-too-fast = The splicing is not finished yet.

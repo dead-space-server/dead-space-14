@@ -56,6 +56,24 @@ public sealed class OrganPrinterPrintRequestMessage : BoundUserInterfaceMessage
 }
 
 /// <summary>
+/// Клиент сообщает о начале мини-игры: сервер запоминает сессию сплайсинга.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class OrganPrinterGameStartMessage : BoundUserInterfaceMessage
+{
+    public readonly EntProtoId Product;
+    public readonly bool FastMode;
+    public readonly OrganSpeciesGroup Group;
+
+    public OrganPrinterGameStartMessage(EntProtoId product, bool fastMode, OrganSpeciesGroup group)
+    {
+        Product = product;
+        FastMode = fastMode;
+        Group = group;
+    }
+}
+
+/// <summary>
 /// Запрос на извлечение всей биомассы из хранилища принтера.
 /// </summary>
 [Serializable, NetSerializable]
