@@ -54,6 +54,22 @@ public sealed class SurgeryGraftSystem : EntitySystem
         origin.Dna = CompOrNull<DnaComponent>(body)?.DNA ?? string.Empty;
     }
 
+    public void MarkPrinted(EntityUid part, string species)
+    {
+        if (TerminatingOrDeleted(part))
+            return;
+
+        if (!HasComp<SurgeryOriginComponent>(part))
+        {
+            var origin = AddComp<SurgeryOriginComponent>(part);
+            origin.Species = species;
+        }
+
+        var flesh = EnsureComp<LimbFleshComponent>(part);
+        if (flesh.Species.Length == 0)
+            flesh.Species = species;
+    }
+
     public bool Accepts(EntityUid body, EntityUid part, bool popup = true)
     {
         if (!TryComp<SurgeryOriginComponent>(part, out var origin) || PartFits(body, origin))

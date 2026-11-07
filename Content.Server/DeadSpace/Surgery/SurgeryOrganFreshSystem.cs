@@ -103,6 +103,22 @@ public sealed class SurgeryOrganFreshSystem : EntitySystem
         return TryComp<LimbFreshComponent>(organ, out var fresh) ? fresh.Spoil : 0f;
     }
 
+    public void MakeFresh(EntityUid organ)
+    {
+        if (TerminatingOrDeleted(organ)
+            || TryComp<SurgeryOrganKindComponent>(organ, out var kind) && kind.Machine
+            || !_prototype.TryIndex<SurgeryDecayPrototype>(Rules, out var rules))
+            return;
+
+        var brain = HasComp<BrainComponent>(organ);
+        var fresh = EnsureComp<LimbFreshComponent>(organ);
+        fresh.Total = brain ? rules.Brain : rules.Organ;
+        fresh.ColdKeeps = !brain;
+        fresh.Left = fresh.Total;
+        fresh.Spent = false;
+        Dirty(organ, fresh);
+    }
+
     public override void Update(float frameTime)
     {
         _accumulator += frameTime;
