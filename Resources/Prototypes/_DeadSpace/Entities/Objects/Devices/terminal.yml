@@ -1,0 +1,29 @@
+- type: entity
+  parent: BaseComputer
+  id: ComputerTerminal
+  name: терминал
+  description: Компьютер с установленной на него системой TempOS. Честно говоря, он не выглядит новым.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/computers.rsi
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: generic
+    - map: ["computerLayerKeys"]
+      state: generic_keys
+    - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+      visible: false
+      state: generic_panel_open
+  - type: Terminal
+  - type: ActivatableUI
+    key: enum.TerminalUiKey.Key
+  - type: Computer
+    board: TerminalCircuitboard
+  - type: UserInterface
+    interfaces:
+      enum.TerminalUiKey.Key:
+        type: TerminalBoundUserInterface
