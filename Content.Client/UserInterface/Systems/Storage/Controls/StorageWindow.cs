@@ -31,6 +31,14 @@ public sealed class StorageWindow : BaseWindow
 
     public EntityUid? StorageEntity;
 
+    // DS14-start
+    /// <summary>
+    /// Whether this window was opened as a nested storage of another open window.
+    /// Nested windows are meant to align with their parent, so they skip overlap avoidance.
+    /// </summary>
+    public bool OpenedAsNested;
+    // DS14-end
+
     private readonly GridContainer _pieceGrid;
     private readonly GridContainer _backgroundGrid;
     private readonly StorageGridBorderOverlay _gridBorders; // DS14
@@ -205,6 +213,8 @@ public sealed class StorageWindow : BaseWindow
         }
 
         BuildGridRepresentation();
+
+        AvoidOverlapWithOtherWindows();
     }
 
     private void CloseParent()
@@ -706,13 +716,78 @@ public sealed class StorageWindow : BaseWindow
         if (_storageController.StaticStorageUIEnabled)
             return DragMode.None;
 
-        if (_sidebar.SizeBox.Contains(relativeMousePos - _sidebar.Position))
-        {
+        // DS14-start
+        // Enlarged drag grip: the sidebar plus the title bar (when shown), each expanded
+        // by a margin so the windows are much easier to grab and move around.
+        if (IsInDragGrip(_sidebar, relativeMousePos))
             return DragMode.Move;
-        }
+
+        if (_titleContainer.Visible && IsInDragGrip(_titleContainer, relativeMousePos))
+            return DragMode.Move;
+        // DS14-end
 
         return DragMode.None;
     }
+
+    // DS14-start
+    private const float DragGripMargin = 10f;
+
+    private bool IsInDragGrip(Control control, Vector2 relativeMousePos)
+    {
+        var local = control.GlobalPosition - GlobalPosition;
+        var box = new UIBox2(
+            local - new Vector2(DragGripMargin, DragGripMargin),
+            local + control.Size + new Vector2(DragGripMargin, DragGripMargin));
+        return box.Contains(relativeMousePos);
+    }
+
+    /// <summary>
+    /// Nudges a freshly opened window so it doesn't spawn exactly on top of another visible
+    /// storage window (e.g. when multiple inventory windows are enabled).
+    /// </summary>
+    private void AvoidOverlapWithOtherWindows()
+    {
+        if (_storageController.StaticStorageUIEnabled || OpenedAsNested || Parent == null)
+            return;
+
+        InvalidateMeasure();
+        Measure(Vector2Helpers.Infinity);
+        var size = DesiredSize;
+        if (size.X <= 0 || size.Y <= 0)
+            return;
+
+        const float step = 24f;
+        const int maxTries = 40;
+        var bounds = Parent.Size;
+
+        for (var i = 0; i < maxTries; i++)
+        {
+            var overlaps = false;
+            foreach (var sibling in Parent.Children)
+            {
+                if (sibling == this || sibling is not StorageWindow other || !other.Visible)
+                    continue;
+
+                var otherRect = new UIBox2(other.Position, other.Position + other.Size);
+                var selfRect = new UIBox2(Position, Position + size);
+                if (otherRect.Intersects(selfRect))
+                {
+                    overlaps = true;
+                    break;
+                }
+            }
+
+            if (!overlaps)
+                return;
+
+            var next = Position + new Vector2(step, step);
+            if (next.X + size.X > bounds.X || next.Y + size.Y > bounds.Y)
+                next = new Vector2(step, step);
+
+            LayoutContainer.SetPosition(this, next);
+        }
+    }
+    // DS14-end
 
     public Vector2i GetMouseGridPieceLocation(Entity<ItemComponent?> entity, ItemStorageLocation location)
     {
