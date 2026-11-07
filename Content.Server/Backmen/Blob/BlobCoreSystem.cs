@@ -40,6 +40,7 @@ public sealed class BlobCoreSystem : SharedBlobCoreSystem
     private static readonly EntProtoId ActionCreateBlobbernaut = "ActionCreateBlobbernaut";
     private static readonly EntProtoId ActionSplitBlobCore = "ActionSplitBlobCore";
     private static readonly EntProtoId ActionSwapBlobCore = "ActionSwapBlobCore";
+    private static readonly EntProtoId ActionPlantBlobMine = "ActionPlantBlobMine";
 
     private static readonly ProtoId<AlertPrototype> BlobResource = "BlobResource";
     [Dependency] private readonly ActionsSystem _action = default!;
@@ -130,6 +131,24 @@ public sealed class BlobCoreSystem : SharedBlobCoreSystem
         _action.AddAction(uid, ref component.ActionCreateBlobbernaut, ActionCreateBlobbernaut);
         _action.AddAction(uid, ref component.ActionSplitBlobCore, ActionSplitBlobCore);
         _action.AddAction(uid, ref component.ActionSwapBlobCore, ActionSwapBlobCore);
+        if (component.CurrentChem == BlobChemType.BlazingOil)
+            _action.AddAction(uid, ref component.ActionPlantBlobMine, ActionPlantBlobMine);
+    }
+
+    public void UpdateMineAction(EntityUid uid, BlobCoreComponent component)
+    {
+        if (component.CurrentChem != BlobChemType.BlazingOil)
+        {
+            if (component.ActionPlantBlobMine is { } mine)
+                _action.RemoveAction(mine);
+            return;
+        }
+
+        if (component.ActionPlantBlobMine == null)
+            _action.AddAction(uid, ref component.ActionPlantBlobMine, ActionPlantBlobMine);
+
+        if (component.Observer is { } observer && !TerminatingOrDeleted(observer))
+            _action.GrantActions(observer, new[] { component.ActionPlantBlobMine!.Value }, uid);
     }
 
     public void ChangeChem(EntityUid uid, BlobChemType newChem, BlobCoreComponent? component = null)
