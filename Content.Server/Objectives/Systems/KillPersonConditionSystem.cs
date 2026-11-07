@@ -43,8 +43,9 @@ public sealed class KillPersonConditionSystem : EntitySystem
         if (!TryComp<MindComponent>(target, out var mind) || mind.OwnedEntity == null)
             return 1f;
 
-        var targetDead = _mind.IsCharacterDeadIc(mind);
-        var targetMarooned = !_emergencyShuttle.IsTargetEscaping(mind.OwnedEntity.Value) || _mind.IsCharacterUnrevivableIc(mind);
+        bool hasMarker = TryComp<KillPersonConditionMarkerComponent>(mind.OwnedEntity, out _); //DS14
+        var targetDead = _mind.IsCharacterDeadIc(mind) || !hasMarker;
+        var targetMarooned = (!_emergencyShuttle.IsTargetEscaping(mind.OwnedEntity.Value) || _mind.IsCharacterUnrevivableIc(mind)) && hasMarker;
         if (!_config.GetCVar(CCVars.EmergencyShuttleEnabled) && requireMaroon)
         {
             requireDead = true;

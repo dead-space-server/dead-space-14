@@ -21,3 +21,12 @@ public sealed partial class KillPersonConditionComponent : Component
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public bool RequireMaroon = false;
 }
+//DS14-start
+/// <summary>
+/// Компонент созданный как маркер при выдаче цели что бы не было
+/// положительно ложных срабатываний на чела который гостнулся
+/// </summary>
+[RegisterComponent]
+public sealed partial class KillPersonConditionMarkerComponent : Component
+{
+}//DS14-End
