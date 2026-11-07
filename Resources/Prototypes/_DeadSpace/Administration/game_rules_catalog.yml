@@ -399,7 +399,7 @@
   name: Зомби-вспышка (от ~ 60 минут)
 
 - type: gameRuleDisplayName
-  id: XenoborgOutbreak
+  id: Xenoborgs
   name: Ксеноборги (от ~ 60 минут)
 
 - type: gameRuleDisplayName
