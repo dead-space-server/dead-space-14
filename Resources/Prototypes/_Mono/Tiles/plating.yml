@@ -1,0 +1,83 @@
+- type: tile
+  id: LatticeCornerNE
+  parent: Lattice
+  name: tiles-latticecornerNE
+  sprite: /Textures/_LuaM/Tiles/lattice/ne.png
+  vertices: ["1, 0", "1, 1", "0, 1"]
+
+- type: tile
+  id: LatticeCornerNW
+  parent: Lattice
+  name: tiles-latticecornerNW
+  sprite: /Textures/_LuaM/Tiles/lattice/nw.png #Lua
+  vertices: ["0, 0", "1, 1", "0, 1"]
+
+- type: tile
+  id: LatticeCornerSE
+  parent: Lattice
+  name: tiles-latticecornerSE
+  sprite: /Textures/_LuaM/Tiles/lattice/se.png #Lua
+  vertices: ["0, 0", "1, 0", "1, 1"]
+
+- type: tile
+  id: LatticeCornerSW
+  parent: Lattice
+  name: tiles-latticecornerSW
+  sprite: /Textures/_LuaM/Tiles/lattice/sw.png #Lua
+  vertices: ["0, 0", "1, 0", "0, 1"]
+
+- type: tile
+  id: TrainLatticeCornerNE
+  parent: TrainLattice #Lua
+  name: tiles-trainlatticecornerNE
+  sprite: /Textures/_LuaM/Tiles/lattice/ne.png #Lua
+  vertices: ["1, 0", "1, 1", "0, 1"]
+
+- type: tile
+  id: TrainLatticeCornerNW
+  parent: TrainLattice #Lua
+  name: tiles-trainlatticecornerNW
+  sprite: /Textures/_LuaM/Tiles/lattice/nw.png #Lua
+  vertices: ["0, 0", "1, 1", "0, 1"]
+
+- type: tile
+  id: TrainLatticeCornerSE
+  parent: TrainLattice #Lua
+  name: tiles-trainlatticecornerSE
+  sprite: /Textures/_LuaM/Tiles/lattice/se.png #Lua
+  vertices: ["0, 0", "1, 0", "1, 1"]
+
+- type: tile
+  id: TrainLatticeCornerSW
+  parent: TrainLattice #Lua
+  name: tiles-trainlatticecornerSW
+  sprite: /Textures/_LuaM/Tiles/lattice/sw.png #Lua
+  vertices: ["0, 0", "1, 0", "0, 1"]
+
+- type: tile
+  id: PlatingCornerNE
+  parent: TrainLattice #Lua
+  name: tiles-platingcornerNE
+  sprite: /Textures/_Mono/Tiles/plating/ne.png
+  vertices: ["1, 0", "1, 1", "0, 1"]
+
+- type: tile
+  id: PlatingCornerNW
+  parent: TrainLattice #Lua
+  name: tiles-platingcornerNW
+  sprite: /Textures/_Mono/Tiles/plating/nw.png
+  vertices: ["0, 0", "1, 1", "0, 1"]
+
+- type: tile
+  id: PlatingCornerSW
+  parent: TrainLattice #Lua
+  name: tiles-platingcornerSW
+  sprite: /Textures/_Mono/Tiles/plating/sw.png
+  vertices: ["0, 0", "1, 0", "0, 1"]
+
+- type: tile
+  id: PlatingCornerSE
+  parent: TrainLattice #Lua
+  name: tiles-platingcornerSE
+  sprite: /Textures/_Mono/Tiles/plating/se.png
+  vertices: ["0, 0", "1, 0", "1, 1"]
