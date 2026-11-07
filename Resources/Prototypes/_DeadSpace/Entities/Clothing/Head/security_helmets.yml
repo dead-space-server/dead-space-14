@@ -46,7 +46,6 @@
     graph: ClothingHeadHelmetSecurityFlashlight
     node: securityHelmetFlashlight
 
-#ви лив ин сосаити
 - type: entity
   parent: ClothingHeadHelmetBasic
   id: ClothingHeadHelmetBasicNeko
