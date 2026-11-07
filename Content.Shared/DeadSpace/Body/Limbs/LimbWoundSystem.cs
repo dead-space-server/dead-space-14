@@ -285,7 +285,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 zones[LimbWoundRules.Index(LimbZone.Torso)].HitCaustic += failure.Poison;
             }
             limbs.LedgerSilence++;
-            _damage.ChangeDamage(uid, spec);
+            _damage.ChangeDamage(uid, spec, interruptsDoAfters: false);
             limbs.LedgerSilence--;
             Dirty(uid, limbs);
         }
@@ -299,7 +299,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             var heat = new DamageSpecifier();
             heat.DamageDict["Heat"] = FixedPoint2.New(pain);
             limbs.LedgerSilence++;
-            _damage.ChangeDamage(uid, heat);
+            _damage.ChangeDamage(uid, heat, interruptsDoAfters: false);
             limbs.LedgerSilence--;
         }
 
