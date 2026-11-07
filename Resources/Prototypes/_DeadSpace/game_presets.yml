@@ -404,3 +404,31 @@
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - SubGamemodesRuleNoWizardNoXenoborg # DS14
+
+- type: gamePreset
+  id: SaveGamemodeDeathmatch
+  alias:
+    - savegamemode-dm
+    - sdm
+    - sgm-dm
+  name: save-gamemode-deathmatch-title
+  description: save-gamemode-deathmatch-description
+  showInVote: false
+  showInAdminVote: true # DS14
+  voteType: admin # DS14
+  rules:
+    - SaveGamemodeDeathmatch
+
+- type: gamePreset
+  id: SaveGamemodeExtended
+  alias:
+    - savegamemode-ext
+    - sext
+    - sgm-ext
+  name: save-gamemode-extended-title
+  description: save-gamemode-extended-description
+  showInVote: false
+  showInAdminVote: true # DS14
+  voteType: admin # DS14
+  rules:
+    - SaveGamemodeExtended
