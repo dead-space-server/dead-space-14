@@ -1,0 +1,125 @@
+- type: entity
+  name: A-22B «Чао»
+  parent: [BaseWeaponPistol, BaseSecurityContraband]
+  id: WeaponSmartChao
+  description: Первый массовый прототип умного пистолета, разработанный дочерней организацией Nakamura Engineering - ЧВК "Asahi". Крайне рекомендуется использовать с имплантом «Смартлинк».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/chao.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-0
+        map: ["enum.GunVisualLayers.Mag"]
+  - type: Gun
+    minAngle: 4
+    maxAngle: 4
+    fireRate: 4.5
+    burstFireRate: 20
+    selectedMode: SemiAuto
+    soundGunshot:
+      path: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/chao/fire_chao.ogg
+    availableModes:
+    - SemiAuto
+    shotsPerBurst: 3
+    burstCooldown: 0.375
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineSmartWeaponChao
+        insertSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/chao/mag_in_chao.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - MagazineSmartWeaponChao
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        priority: 1
+        whitelist:
+          tags:
+            - CartridgePistol
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: Item
+    storedOffset: 0,-2
+  - type: SmartWeapon
+    crosshairColor: "#e6a600"
+    targetHighlightColor: "#ffa000"
+    targetMarkerCrossColor: "#00ffef"
+    debugZoneColor: "#20ff027f"
+    ammoDigitsColor: "#ffba38"
+    magnetismDelay: 0.01
+    magnetismUpdateInterval: 0.002
+    magnetismMaxAngle: 5
+    crosshairAlpha: 0.7
+    cornerStickTexture: /Textures/_DeadSpace/Interface/SmartWeapon/corner_stick.png
+    crossTexture: /Textures/_DeadSpace/Interface/SmartWeapon/cross.png
+    targetLockSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_on.ogg
+    targetLostSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_off.ogg
+    crosshairInnerTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_inner.png
+    crosshairOuterTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_outer.png
+
+- type: entity
+  parent: [ BaseStorageItem, BaseBagOpenClose ]
+  id: CaseChao
+  name: оружейный кейс
+  description: Небольшой кейс, хранящий внутри... что-то? Шестерёнка Nakamura Engineering украшает центр.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case_chao.rsi
+    layers:
+    - state: open
+      map: [ "openLayer" ]
+      visible: false
+    - state: sl
+      map: [ "sl" ]
+      visible: false
+    - state: sg
+      map: [ "sg" ]
+      visible: false
+    - state: mg
+      map: [ "mg" ]
+      visible: false
+    - state: closed
+      map: [ "closeLayer" ]
+  - type: Storage
+    grid:
+    - 0,0,3,1
+    - 1,1,2,2
+  - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case_chao.rsi
+    size: Ginormous
+  - type: ItemMapper
+    mapLayers:
+      sl:
+        whitelist:
+          components:
+          - Implanter
+      sg:
+        whitelist:
+          components:
+          - SmartWeapon
+      mg:
+        whitelist:
+          components:
+          - BallisticAmmoProvider
+  - type: StorageFill
+    contents:
+    - id: WeaponSmartChao
+    - id: MagazineSmartWeaponChao
+    - id: MagazineSmartWeaponChao
+    - id: SmartLinkImplanter
+  - type: ItemCounter
+    count:
+      components: [Item]
+    composite: true
+    layerStates:
+    - mg
+    - sg
+    - sl
+  - type: Appearance
