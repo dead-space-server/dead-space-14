@@ -237,6 +237,15 @@ public static class SurgeryCut
             return;
         }
 
+        if (request.Verb == SurgeryVerbKind.Drill && request.Kind is SurgeryLayerKind.Cavity)
+        {
+            result.Finished = progress >= SurgeryProcedure.CutDone;
+            result.Bleed = slips * 0.7f * messy;
+            result.Health = StrayHealth(request, slips);
+            result.Key = string.Empty;
+            return;
+        }
+
         result.Integrity = request.Integrity;
         result.Flesh = 6f * progress + slips * 2f;
         result.Bleed = 4f * messy;

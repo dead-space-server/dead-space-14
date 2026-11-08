@@ -102,6 +102,44 @@
     undo: Incise
 
 - type: surgeryOperation
+  id: MendMindMachine
+  name: surgery-op-mend-brain
+  machine: true
+  sterile: false
+  side: Any
+  when: MindRupture
+  order: 2
+  zones:
+  - Head
+  - Torso
+  icon:
+    sprite: /Textures/Objects/Tools/screwdriver.rsi
+    state: screwdriver
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Stanch
+    layer: Cavity
+    hint: MachineWire
+    effect: BrainMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
+
+- type: surgeryOperation
   id: MachineRepair
   name: surgery-op-machine-repair
   machine: true

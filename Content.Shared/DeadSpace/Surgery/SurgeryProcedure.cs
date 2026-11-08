@@ -60,6 +60,9 @@ public static class SurgeryProcedure
         if (verb is SurgeryVerbKind.Graft or SurgeryVerbKind.MendBone or SurgeryVerbKind.Stanch or SurgeryVerbKind.Bandage or SurgeryVerbKind.Inject or SurgeryVerbKind.Append or SurgeryVerbKind.Shock or SurgeryVerbKind.SealSap)
             return result.Finished;
 
+        if (verb == SurgeryVerbKind.Drill && layer.Kind == SurgeryLayerKind.Cavity)
+            return result.Finished;
+
         return Done(verb, layer);
     }
 
@@ -68,7 +71,7 @@ public static class SurgeryProcedure
         return verb switch
         {
             SurgeryVerbKind.Incise or SurgeryVerbKind.Chop => layer.Integrity <= 0.2f,
-            SurgeryVerbKind.SawBone or SurgeryVerbKind.Drill => layer.Integrity <= CutDone,
+            SurgeryVerbKind.SawBone or SurgeryVerbKind.Drill => layer.Kind != SurgeryLayerKind.Cavity && layer.Integrity <= CutDone,
             SurgeryVerbKind.Retract => layer.Retracted,
             SurgeryVerbKind.Extract => false,
             SurgeryVerbKind.Cauterize or SurgeryVerbKind.SealSap => layer.Integrity >= 0.85f && !layer.Retracted,

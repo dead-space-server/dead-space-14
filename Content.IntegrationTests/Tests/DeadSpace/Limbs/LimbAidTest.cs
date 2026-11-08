@@ -213,6 +213,33 @@ public sealed class LimbAidTest
         await pair.CleanReturnAsync();
     }
 
+    [TestCase("MobSlimePerson")]
+    [TestCase("MobIPC")]
+    public async Task AHeadlessOptionalHeadStaysAlive(string mob)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid body = default;
+
+        await server.WaitPost(() =>
+        {
+            body = server.EntMan.SpawnEntity(mob, new MapCoordinates(Vector2.Zero, map.MapId));
+        });
+        await server.WaitRunTicks(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var limbs = entities.GetComponent<LimbBodyComponent>(body);
+            Assert.That(limbs.HeadVital, Is.False);
+            Assert.That(entities.System<LimbWoundSystem>().Amputate(body, LimbZone.Head), Is.True);
+            Assert.That(entities.System<MobStateSystem>().IsAlive(body), Is.True, mob);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     [TestCase(true)]
     [TestCase(false)]

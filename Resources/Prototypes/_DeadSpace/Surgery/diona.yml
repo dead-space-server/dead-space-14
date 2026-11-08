@@ -432,6 +432,33 @@
     undo: Chop
 
 - type: surgeryOperation
+  id: MendBrainPlant
+  side: Front
+  plant: true
+  zone: Head
+  name: surgery-op-mend-brain
+  when: MindRupture
+  order: 2
+  icon:
+    sprite: _DeadSpace/Objects/Medical/surgical_hatchet.rsi
+    state: icon
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+  - verb: Clamp
+    layer: Cavity
+    effect: BrainMend
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
   id: AmputatePlant
   side: Front
   plant: true

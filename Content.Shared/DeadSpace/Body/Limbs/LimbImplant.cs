@@ -38,7 +38,6 @@ public static class LimbImplantSlots
     public const string Stomach = "Stomach";
     public const string Liver = "Liver";
     public const string Kidneys = "Kidneys";
-    public const string Intestines = "Intestines";
     public const string Core = "Core";
     public const string Positronic = "Positronic";
 
@@ -49,7 +48,7 @@ public static class LimbImplantSlots
         return slot switch
         {
             Head or Brain or Eyes => LimbZone.Head,
-            Torso or Heart or Lungs or Stomach or Liver or Intestines or Back => LimbZone.Torso,
+            Torso or Heart or Lungs or Stomach or Liver or Back => LimbZone.Torso,
             Groin or Kidneys => LimbZone.Groin,
             ArmLeft => LimbZone.ArmLeft,
             ArmRight => LimbZone.ArmRight,

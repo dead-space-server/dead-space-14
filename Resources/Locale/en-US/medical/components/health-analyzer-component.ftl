@@ -66,7 +66,6 @@ health-analyzer-organ-4 = Stomach
 health-analyzer-organ-5 = Liver
 health-analyzer-organ-6 = Kidneys
 health-analyzer-organ-7 = Core
-health-analyzer-organ-8 = Intestines
 
 health-analyzer-issue-0 = missing
 health-analyzer-issue-1 = fracture

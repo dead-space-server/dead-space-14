@@ -1403,7 +1403,7 @@ public sealed class SurgerySystem : EntitySystem
             verbs.Add((byte) SurgeryVerbKind.Inject);
         if (held != null && HasComp<SurgeryAppendageComponent>(held.Value))
             verbs.Add((byte) SurgeryVerbKind.Append);
-        if (held != null && HasComp<BodyPartComponent>(held.Value))
+        if (held != null && (HasComp<BodyPartComponent>(held.Value) || BladeStump(site, held.Value)))
             verbs.Add((byte) SurgeryVerbKind.Seat);
         if (held != null && HasComp<OrganComponent>(held.Value))
             verbs.Add((byte) SurgeryVerbKind.Insert);
@@ -2331,10 +2331,11 @@ public sealed class SurgerySystem : EntitySystem
         var field = !OnTable(patient);
         var prone = HasComp<SurgeryProneComponent>(patient);
         var cracked = SurgeryConditions.OrganCracked(limbs.Organs, zone);
+        var mind = SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present);
         var foreign = Foreign(patient, zone);
         foreach (var when in SurgeryConditions.Order)
         {
-            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs), foreign: foreign))
+            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs), foreign: foreign, mind: mind))
                 continue;
 
             string? fallback = null;
@@ -2403,7 +2404,8 @@ public sealed class SurgerySystem : EntitySystem
 
         if (operation.When.Length > 0 && operation.When != "Severed"
             && !SurgeryConditions.Has(operation.When, limbs.Zones[index], HasLayer(patient, zone, SurgeryLayerKind.Bone), Infected(patient, zone),
-                SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs), SurgeryRot.Treatable(EntityManager, patient, zone, limbs), Foreign(patient, zone)))
+                SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs), SurgeryRot.Treatable(EntityManager, patient, zone, limbs), Foreign(patient, zone),
+                SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present)))
             return false;
 
         if (operation.Implant.Length > 0 && !ImplantMenuFits(patient, operation))
@@ -2636,7 +2638,7 @@ public sealed class SurgerySystem : EntitySystem
             return false;
 
         if (verb is SurgeryVerbKind.Seat)
-            return held != null && HasComp<BodyPartComponent>(held.Value);
+            return held != null && (HasComp<BodyPartComponent>(held.Value) || BladeStump(site, held.Value));
 
         if (verb is SurgeryVerbKind.Graft)
             return GraftMaterial(site.Owner, held.Value);
@@ -2802,6 +2804,11 @@ public sealed class SurgerySystem : EntitySystem
             return;
 
         _solutions.RemoveReagent(sol.Value, welder.FuelReagent, FixedPoint2.New(1));
+    }
+
+    private bool BladeStump(SurgerySiteComponent site, EntityUid held)
+    {
+        return site.Zone is LimbZone.HandLeft or LimbZone.HandRight && _limbs.Blade(held);
     }
 
     private bool TryPartZone(EntityUid part, out LimbZone zone)

@@ -269,14 +269,15 @@ public sealed class LimbWoundTest
         {
             var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
             var wounds = server.EntMan.System<LimbWoundSystem>();
-            var strike = new LimbStrike(LimbZone.Torso, LimbMark.Point, 40f, 0.9f, 40f, false, false, false, false, false, 1f);
+            var strike = new LimbStrike(LimbZone.Torso, LimbMark.Point, 99f, 0.9f, 40f, false, false, false, false, false, 1f);
             wounds.Strike(human, strike);
-            var heart = server.EntMan.GetComponent<LimbBodyComponent>(human).Organs[(int) LimbOrgan.Heart];
+            var organs = server.EntMan.GetComponent<LimbBodyComponent>(human).Organs;
 
             Assert.Multiple(() =>
             {
-                Assert.That(heart.Ruptured, Is.True);
-                Assert.That(server.EntMan.GetComponent<LimbBodyComponent>(human).Organs[(int) LimbOrgan.Lungs].Ruptured, Is.False);
+                Assert.That(organs[(int) LimbOrgan.Heart].Ruptured, Is.True);
+                Assert.That(organs[(int) LimbOrgan.Lungs].Ruptured, Is.True);
+                Assert.That(organs[(int) LimbOrgan.Kidneys].Ruptured, Is.False);
             });
         });
 
@@ -294,8 +295,7 @@ public sealed class LimbWoundTest
         {
             var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
             var wounds = server.EntMan.System<LimbWoundSystem>();
-            var strike = new LimbStrike(LimbZone.LegLeft, LimbMark.Blunt, LimbWoundRules.BreakBone, 0f, 0f, false, false, false, false, false, 1f);
-            wounds.Strike(human, strike);
+            wounds.ApplyEdit(human, LimbZone.LegLeft, new LimbEdit { SetBone = true, Bone = LimbWoundRules.BreakBone });
             Assert.That(wounds.HasLimp(human), Is.True);
 
             var status = server.EntMan.System<StatusEffectsSystem>();

@@ -328,20 +328,29 @@ public sealed class SurgeryLimbPort : EntitySystem
         if (user is { } placer)
             _adminLog.Add(LogType.Surgery, LogImpact.Medium, $"{ToPrettyString(placer):user} inserted {ToPrettyString(item):entity} as {organ} into {ToPrettyString(patient):target}");
         var rotten = decay >= 1f;
+        var carriedDamage = 0f;
+        var carriedRupture = false;
+        if (TryComp<OrganFindingComponent>(item, out var finding))
+        {
+            carriedDamage = finding.Damage;
+            carriedRupture = finding.Ruptured;
+        }
+
+        var brought = LimbOrganRules.Carry(carriedDamage, carriedRupture, result.Rupture, rotten, decay);
         _limbs.ApplyOrganEdit(patient, organ, new LimbOrganEdit
         {
             SetMissing = true,
             Missing = false,
             SetDamage = true,
-            Damage = MathF.Max(result.Rupture ? LimbOrganRules.Rupture : 0f, decay * LimbOrganRules.Rupture),
+            Damage = brought.Damage,
             SetRuptured = true,
-            Ruptured = result.Rupture || rotten,
+            Ruptured = brought.Ruptured,
             EyesGone = organ == LimbOrgan.Eyes ? -2 : 0,
         });
         if (rotten && HasComp<BrainComponent>(item))
             _fresh.MarkRotten(patient);
 
-        if (!rotten && !result.Rupture && organ is LimbOrgan.Kidneys or LimbOrgan.Liver)
+        if (!rotten && !brought.Ruptured && organ is LimbOrgan.Kidneys or LimbOrgan.Liver)
             Cleanse(patient, 1f - decay);
     }
 
@@ -395,13 +404,23 @@ public sealed class SurgeryLimbPort : EntitySystem
         var finding = EnsureComp<OrganFindingComponent>(organ);
         finding.Donor = Name(patient);
         finding.Organ = kind.ToString();
-        finding.Ruptured = result.Rupture;
+        var damage = result.OrganDamage;
+        var ruptured = result.Rupture;
         if (TryComp<LimbBodyComponent>(patient, out var limbs))
         {
             var index = (int) kind;
             if ((uint) index < (uint) limbs.Organs.Count)
-                finding.Damage = limbs.Organs[index].Damage + result.OrganDamage;
+            {
+                damage += limbs.Organs[index].Damage;
+                ruptured |= limbs.Organs[index].Ruptured;
+            }
         }
+
+        if (ruptured)
+            damage = MathF.Max(damage, LimbOrganRules.Rupture);
+
+        finding.Damage = damage;
+        finding.Ruptured = ruptured;
     }
 
     private bool TryOrgan(EntityUid patient, LimbOrgan organ, out EntityUid entity)
