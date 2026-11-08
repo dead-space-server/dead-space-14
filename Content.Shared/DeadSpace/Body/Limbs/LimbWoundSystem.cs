@@ -370,7 +370,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     public LimbStrikeResult Strike(EntityUid uid, LimbStrike strike, LimbBodyComponent? limbs = null, bool ready = false)
     {
-        if (!LimbTuning.Enabled || !Resolve(uid, ref limbs))
+        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(uid) || !Resolve(uid, ref limbs))
             return LimbStrikeResult.Miss();
 
         EnsureZones(limbs);
@@ -696,7 +696,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnMelee(EntityUid uid, LimbBodyComponent limbs, AttackedEvent args)
     {
-        if (!LimbTuning.Enabled || !TryComp<MeleeWeaponComponent>(args.Used, out var melee))
+        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(uid) || !TryComp<MeleeWeaponComponent>(args.Used, out var melee))
             return;
 
         var zone = LimbZone.Torso;
@@ -1101,7 +1101,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnProjectile(Entity<ProjectileComponent> ent, ref ProjectileHitEvent args)
     {
-        if (!LimbTuning.Enabled || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
+        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(args.Target) || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
             return;
 
         var shooter = args.Shooter;
@@ -1191,7 +1191,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnHitscan(Entity<HitscanBasicDamageComponent> ent, ref HitscanDamageDealtEvent args)
     {
-        if (!LimbTuning.Enabled || args.Data.Shooter is not { } shooter || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
+        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(args.Target) || args.Data.Shooter is not { } shooter || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
             return;
 
         var aiming = TryComp<LimbAimComponent>(shooter, out var aim) && aim.Aiming && AimPrecise(shooter);
@@ -1654,7 +1654,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnBlast(Entity<LimbBodyComponent> ent, ref BeforeExplodeEvent args)
     {
-        if (!LimbTuning.Enabled || _net.IsClient)
+        if (!LimbTuning.Enabled || _net.IsClient || HasComp<GodmodeComponent>(ent))
             return;
 
         if (args.Damage.GetTotal() <= 0)
