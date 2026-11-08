@@ -75,6 +75,7 @@ public sealed class SurgeryClientSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private readonly LimbWoundSystem _limbs = default!;
 
     private const float NearDistance = 2.5f;
     private const float BodyTexels = 32f;
@@ -549,6 +550,9 @@ public sealed class SurgeryClientSystem : EntitySystem
     private void OnEye(EntityUid uid, ContentEyeComponent comp, ref GetEyeOffsetEvent args)
     {
         if (!_zoomed || uid != _players.LocalEntity || _patient is not { } patient)
+            return;
+
+        if (!TryComp<TransformComponent>(patient, out _) || !TryComp<TransformComponent>(uid, out _))
             return;
 
         args.Offset += _transform.GetWorldPosition(patient) - _transform.GetWorldPosition(uid);
@@ -1301,9 +1305,10 @@ public sealed class SurgeryClientSystem : EntitySystem
             : "";
         var extra = "";
         var machine = _patient is { } body && MachineBody(body);
+        var soft = _patient is { } slime && SoftBody(slime);
         if (Lodged() || OrgansReady())
             extra = machine ? "MachinePry" : "Extract";
-        _hint.Show(shown, other, shown == stepVerb ? _board.StepHint : "", suffix, extra, machine);
+        _hint.Show(shown, other, shown == stepVerb ? _board.StepHint : "", suffix, extra, machine, soft);
         _hint.SetSize = _hint.MinSize;
         var size = _hint.MinSize * UiScale();
         var view = _ui.RootControl.PixelSize;
@@ -1378,6 +1383,11 @@ public sealed class SurgeryClientSystem : EntitySystem
             return true;
 
         if (_tool != null && verb == SurgeryVerbKind.Seat && HasComp<BodyPartComponent>(_tool.Value))
+            return true;
+
+        if (_tool != null && verb == SurgeryVerbKind.Seat && _board is { } bladeBoard
+            && (LimbZone) bladeBoard.Zone is LimbZone.HandLeft or LimbZone.HandRight
+            && _limbs.Blade(_tool.Value))
             return true;
 
         if (_tool != null && verb == SurgeryVerbKind.Bandage && Wraps(_tool.Value))
@@ -2155,7 +2165,8 @@ public sealed class SurgeryClientSystem : EntitySystem
         var infected = TryComp<SurgeryInfectionComponent>(patient, out var infection) && infection.Rots(zone);
         return SurgeryConditions.Has(when, limbs.Zones[index], HasBone(patient, zone), infected, SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs),
             SurgeryRot.Treatable(EntityManager, patient, zone, limbs),
-            TryComp<SurgeryCavityComponent>(patient, out var cavity) && cavity.Holds(zone));
+            TryComp<SurgeryCavityComponent>(patient, out var cavity) && cavity.Holds(zone),
+            SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present));
     }
 
     private bool HasBone(EntityUid patient, LimbZone zone)

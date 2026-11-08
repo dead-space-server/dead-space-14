@@ -420,14 +420,14 @@ public sealed class SurgeryHint : Control
         MouseFilter = MouseFilterMode.Ignore;
     }
 
-    public void Show(SurgeryVerbKind verb, SurgeryVerbKind undo = SurgeryVerbKind.Inspect, string hint = "", string suffix = "", string extra = "", bool machine = false)
+    public void Show(SurgeryVerbKind verb, SurgeryVerbKind undo = SurgeryVerbKind.Inspect, string hint = "", string suffix = "", string extra = "", bool machine = false, bool soft = false)
     {
         _shown.Clear();
-        Add(hint.Length > 0 ? hint : verb.ToString(), suffix, machine);
+        Add(hint.Length > 0 ? hint : verb.ToString(), suffix, machine, soft);
         if (extra.Length > 0)
-            Add(extra, "", machine);
+            Add(extra, "", machine, soft);
         else if (undo != SurgeryVerbKind.Inspect && undo != verb)
-            Add(undo == SurgeryVerbKind.Retract ? "RetractClose" : undo.ToString(), "", machine);
+            Add(undo == SurgeryVerbKind.Retract ? "RetractClose" : undo.ToString(), "", machine, soft);
 
         var width = Pad;
         for (var i = 0; i < _shown.Count; i++)
@@ -440,8 +440,11 @@ public sealed class SurgeryHint : Control
         MinSize = new Vector2(MathF.Max(Pad * 2f + Disc * 2f, width + Pad), HintHeight);
     }
 
-    private void Add(string id, string suffix, bool machine = false)
+    private void Add(string id, string suffix, bool machine = false, bool soft = false)
     {
+        if (soft && id == nameof(SurgeryVerbKind.MendBone))
+            id = "SlimeStir";
+
         if (!IoCManager.Resolve<IPrototypeManager>().TryIndex<SurgeryHintPrototype>(id, out var hint))
             return;
 

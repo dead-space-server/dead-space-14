@@ -1,4 +1,5 @@
 using Content.Shared.Actions;
+using Content.Shared.DeadSpace.Surgery; //DS-14
 using Content.Shared.Mind;
 using Content.Shared.MouseRotator;
 using Content.Shared.Movement.Components;
@@ -47,6 +48,15 @@ public abstract class SharedCombatModeSystem : EntitySystem
         if (args.Handled)
             return;
 
+        //DS-14 start
+        if (!component.IsInCombatMode && HasComp<SurgeryLobotomyComponent>(uid))
+        {
+            args.Handled = true;
+            _popup.PopupClient(Loc.GetString("surgery-lobotomy-combat"), args.Performer, args.Performer);
+            return;
+        }
+        //DS-14 end
+
         args.Handled = true;
         SetInCombatMode(uid, !component.IsInCombatMode, component);
 
@@ -71,6 +81,9 @@ public abstract class SharedCombatModeSystem : EntitySystem
     {
         if (!Resolve(entity, ref component))
             return;
+
+        if (value && HasComp<SurgeryLobotomyComponent>(entity)) //DS-14
+            return; //DS-14
 
         if (component.IsInCombatMode == value)
             return;

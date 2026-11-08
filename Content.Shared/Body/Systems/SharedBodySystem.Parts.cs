@@ -201,6 +201,7 @@ public partial class SharedBodySystem
         if (!_timing.ApplyingState
             && partEnt.Comp.IsVital
             && !HasComp<ChangelingIdentityComponent>(bodyEnt) //DS-14
+            && !OptionalHead(bodyEnt, partEnt) //DS-14
             && !GetBodyChildrenOfType(bodyEnt, partEnt.Comp.PartType, bodyEnt.Comp).Any()
         )
         {
@@ -208,6 +209,14 @@ public partial class SharedBodySystem
             var damage = new DamageSpecifier(Prototypes.Index(BloodlossDamageType), 300);
             Damageable.ChangeDamage(bodyEnt.Owner, damage);
         }
+    }
+
+    //DS-14
+    private bool OptionalHead(Entity<BodyComponent?> bodyEnt, Entity<BodyPartComponent> partEnt)
+    {
+        return partEnt.Comp.PartType == BodyPartType.Head
+               && TryComp<LimbBodyComponent>(bodyEnt, out var limbs)
+               && !limbs.HeadVital;
     }
 
     /// <summary>

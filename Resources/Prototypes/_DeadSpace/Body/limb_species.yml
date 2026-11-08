@@ -29,7 +29,6 @@
   - id: Stomach
   - id: Liver
   - id: Kidneys
-  - id: Intestines
 
 - type: limbSpecies
   id: Felinid
@@ -88,6 +87,7 @@
 
 - type: limbSpecies
   id: IPC
+  headVital: false
   organs:
   - Brain
   - Eyes

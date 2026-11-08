@@ -1491,6 +1491,37 @@
     undo: Incise
 
 - type: surgeryOperation
+  id: Lobotomy
+  side: Front
+  zone: Head
+  name: surgery-op-lobotomy
+  order: 4
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/drill.rsi
+    state: drill
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Drill
+    layer: Cavity
+    game: Drill
+    effect: Lobotomy
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
   id: PutBrain
   side: Front
   zone: Head
@@ -1766,6 +1797,40 @@
   - verb: Stanch
     layer: Cavity
     effect: OrganMend
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendBrain
+  side: Front
+  name: surgery-op-mend-brain
+  when: MindRupture
+  order: 2
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zone: Head
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Stanch
+    layer: Cavity
+    effect: BrainMend
   close:
   - verb: MendBone
     layer: Bone

@@ -23,6 +23,7 @@ public static class SurgeryConditions
         "ClosedPelvis",
         "Fracture",
         "Crack",
+        "MindRupture",
         "OrganCrack",
         "Bruised",
         "Lacerated",
@@ -33,7 +34,7 @@ public static class SurgeryConditions
         "Damaged",
     };
 
-    public static bool Has(string when, in LimbZoneState state, bool hasBone, bool infected, bool organCrack = false, float pool = 0f, bool rot = false, bool foreign = false)
+    public static bool Has(string when, in LimbZoneState state, bool hasBone, bool infected, bool organCrack = false, float pool = 0f, bool rot = false, bool foreign = false, bool mind = false)
     {
         return when switch
         {
@@ -51,6 +52,7 @@ public static class SurgeryConditions
             "Fracture" => hasBone && !state.Severed && state.Bone >= LimbWoundRules.BreakBone,
             "Crack" => hasBone && !state.Severed && state.Bone >= LimbWoundRules.StrainBone && state.Bone < LimbWoundRules.BreakBone,
             "OrganCrack" => organCrack && !state.Severed,
+            "MindRupture" => mind && !state.Severed,
             "Bruised" => !state.Severed && state.HitBlunt > TraumaMin,
             "Lacerated" => !state.Severed && (state.HitSlash > TraumaMin || OpenWound(state) && state.HitSlash >= state.HitPierce),
             "Punctured" => !state.Severed && (state.HitPierce > TraumaMin || OpenWound(state) && state.HitPierce > state.HitSlash),
@@ -65,6 +67,22 @@ public static class SurgeryConditions
     private static bool OpenWound(in LimbZoneState state)
     {
         return state.Flesh >= LimbWoundRules.StrainFlesh;
+    }
+
+    public static bool MindTorn(IReadOnlyList<LimbOrganState> organs, LimbZone zone, LimbOrganMask present)
+    {
+        var organ = zone == LimbZone.Head ? LimbOrgan.Brain
+            : zone == LimbZone.Torso ? LimbOrgan.Core
+            : (LimbOrgan?) null;
+        if (organ == null)
+            return false;
+
+        var index = (int) organ.Value;
+        if ((present & (LimbOrganMask) (1 << index)) == 0 || (uint) index >= (uint) organs.Count)
+            return false;
+
+        var state = organs[index];
+        return !state.Missing && state.Ruptured && LimbOrganHomes.Home(organ.Value) == zone;
     }
 
     public static bool OrganCracked(IReadOnlyList<LimbOrganState> organs, LimbZone zone)

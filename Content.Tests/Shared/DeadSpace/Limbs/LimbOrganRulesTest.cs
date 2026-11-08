@@ -1,4 +1,5 @@
 using Content.Shared.DeadSpace.Body.Limbs;
+using Content.Shared.DeadSpace.Surgery;
 using NUnit.Framework;
 
 namespace Content.Tests.Shared.DeadSpace.Limbs;
@@ -38,8 +39,9 @@ public sealed class LimbOrganRulesTest
         var burst = LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Point, 1f, 1f);
         Assert.Multiple(() =>
         {
-            Assert.That(burst.Ruptured, Is.True);
+            Assert.That(burst.Ruptured, Is.False);
             Assert.That(burst.Organ, Is.EqualTo(LimbOrgan.Heart));
+            Assert.That(organs[(int) LimbOrgan.Heart].Damage, Is.EqualTo(40f));
             Assert.That(organs[(int) LimbOrgan.Lungs].Damage, Is.EqualTo(40f * 0.8f));
         });
     }
@@ -54,10 +56,10 @@ public sealed class LimbOrganRulesTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(lungs[(int) LimbOrgan.Lungs].Ruptured, Is.True);
-            Assert.That(lungs[(int) LimbOrgan.Heart].Ruptured, Is.False);
-            Assert.That(brain[(int) LimbOrgan.Brain].Ruptured, Is.True);
-            Assert.That(brain[(int) LimbOrgan.Eyes].Ruptured, Is.False);
+            Assert.That(lungs[(int) LimbOrgan.Lungs].Ruptured, Is.False);
+            Assert.That(lungs[(int) LimbOrgan.Lungs].Damage, Is.EqualTo(80f * 0.8f));
+            Assert.That(brain[(int) LimbOrgan.Brain].Ruptured, Is.False);
+            Assert.That(brain[(int) LimbOrgan.Brain].Damage, Is.EqualTo(40f * 1.25f));
         });
     }
 
@@ -91,8 +93,8 @@ public sealed class LimbOrganRulesTest
         {
             Assert.That(heat[(int) LimbOrgan.Liver].Damage, Is.EqualTo(0f));
             Assert.That(acid[(int) LimbOrgan.Kidneys].Damage, Is.EqualTo(0f));
-            Assert.That(drink.Ruptured, Is.True);
-            Assert.That(swallowed[(int) LimbOrgan.Liver].Ruptured, Is.True);
+            Assert.That(drink.Ruptured, Is.False);
+            Assert.That(swallowed[(int) LimbOrgan.Liver].Damage, Is.EqualTo(40f));
         });
     }
 
@@ -116,15 +118,15 @@ public sealed class LimbOrganRulesTest
     public void RupturedEyesBlindOnce()
     {
         var organs = LimbOrganRules.CreateAll().ToArray();
-        var burst = LimbOrganRules.Apply(organs, LimbZone.Eyes, LimbMark.Point, 40f, 1f);
-        var again = LimbOrganRules.Apply(organs, LimbZone.Eyes, LimbMark.Point, 40f, 1f);
+        var burst = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f);
+        var again = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f);
 
         Assert.Multiple(() =>
         {
-            Assert.That(burst.Ruptured, Is.True);
-            Assert.That(burst.EyeDamage, Is.EqualTo(LimbOrganRules.EyeRuptureDamage));
-            Assert.That(again.Ruptured, Is.False);
-            Assert.That(again.EyeDamage, Is.EqualTo(0));
+            Assert.That(burst, Is.EqualTo(LimbOrganRules.EyeRuptureDamage));
+            Assert.That(organs[(int) LimbOrgan.Eyes].Ruptured, Is.True);
+            Assert.That(organs[(int) LimbOrgan.Brain].Ruptured, Is.True);
+            Assert.That(again, Is.EqualTo(0));
         });
     }
 
@@ -135,6 +137,8 @@ public sealed class LimbOrganRulesTest
         LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Point, 40f, 1f);
         LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Edge, 80f, 1f);
         LimbOrganRules.Apply(organs, LimbZone.Head, LimbMark.Point, 40f, 1f);
+        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, 0.9f);
+        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f);
         var tick = LimbOrganRules.Tick(organs);
         LimbOrganRules.Cryo(organs);
 
@@ -158,6 +162,43 @@ public sealed class LimbOrganRulesTest
         {
             Assert.That(organs[(int) LimbOrgan.Kidneys].Ruptured, Is.False);
             Assert.That(organs[(int) LimbOrgan.Kidneys].Damage, Is.EqualTo(20f * 0.85f - 15f));
+        });
+    }
+
+    [Test]
+    public void PuttingAnOrganBackKeepsItsRupture()
+    {
+        var fresh = LimbOrganRules.Carry(0f, false, false, false, 0f);
+        var crack = LimbOrganRules.Carry(12f, false, false, false, 0f);
+        var returned = LimbOrganRules.Carry(12f, true, false, false, 0f);
+        var torn = LimbOrganRules.Carry(12f, true, true, false, 0f);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(fresh.Ruptured, Is.False);
+            Assert.That(fresh.Damage, Is.EqualTo(0f));
+            Assert.That(crack.Ruptured, Is.False);
+            Assert.That(crack.Damage, Is.EqualTo(12f));
+            Assert.That(returned.Ruptured, Is.True);
+            Assert.That(returned.Damage, Is.EqualTo(LimbOrganRules.Rupture));
+            Assert.That(torn.Ruptured, Is.True);
+        });
+    }
+
+    [Test]
+    public void ARupturedBrainIsRepairedInItsPlace()
+    {
+        var organs = LimbOrganRules.CreateAll();
+        organs[(int) LimbOrgan.Brain] = new LimbOrganState { Ruptured = true, Damage = 40f };
+        organs[(int) LimbOrgan.Core] = new LimbOrganState { Ruptured = true, Damage = 40f };
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(SurgeryConditions.MindTorn(organs, LimbZone.Head, LimbOrganMask.Standard), Is.True);
+            Assert.That(SurgeryConditions.MindTorn(organs, LimbZone.Torso, LimbOrganMask.Standard), Is.False);
+            Assert.That(SurgeryConditions.MindTorn(organs, LimbZone.Torso, LimbOrganMask.Core), Is.True);
+            Assert.That(SurgeryConditions.Has("MindRupture", new LimbZoneState(), true, false, mind: true), Is.True);
+            Assert.That(SurgeryConditions.Has("MindRupture", new LimbZoneState(), true, false), Is.False);
         });
     }
 

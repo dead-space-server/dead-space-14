@@ -9,14 +9,14 @@ namespace Content.Tests.Shared.DeadSpace.Limbs;
 public sealed class LimbCatalogTest
 {
     [Test]
-    public void AChestStabIsAHeartRowAndACritHook()
+    public void AChestStabIsAHeartRow()
     {
         var hooks = Hooks(LimbZone.Torso, LimbMark.Point, projectile: false);
 
         Assert.Multiple(() =>
         {
             Assert.That(hooks, Does.Contain(LimbHooks.Organ));
-            Assert.That(hooks, Does.Contain(LimbHooks.Crit));
+            Assert.That(hooks, Does.Not.Contain(LimbHooks.Crit));
             Assert.That(hooks, Does.Not.Contain(LimbHooks.Air));
             Assert.That(hooks, Does.Not.Contain(LimbHooks.Blind));
         });

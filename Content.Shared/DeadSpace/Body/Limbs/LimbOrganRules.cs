@@ -4,7 +4,8 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 
 public static class LimbOrganRules
 {
-    public const int Count = 9;
+    public const int Count = 8;
+    public const float RuptureShare = 0.9f;
     public const float Rupture = 40f;
     public const float HeartBleed = 0.5f;
     public const float LungAir = 1f;
@@ -12,14 +13,23 @@ public static class LimbOrganRules
     public const float LiverPoison = 0.25f;
     public const float KidneyPoison = 0.15f;
     public const float StomachPoison = 0.1f;
-    public const float IntestineBleed = 0.3f;
-    public const float IntestinePoison = 0.15f;
     public const float LungTornAir = 0.9f;
     public const int EyeRuptureDamage = 9;
     public const float LungHitAir = 6f;
     public const float LungHitShare = 0.3f;
     public const float ConcussionHit = 12f;
     public const float ConcussionBrain = 15f;
+
+    public static (float Damage, bool Ruptured) Carry(float damage, bool ruptured, bool tore, bool rotten, float decay)
+    {
+        var next = MathF.Max(0f, damage);
+        next = MathF.Max(next, MathF.Max(0f, decay) * Rupture);
+        var burst = ruptured || tore || rotten;
+        if (burst)
+            next = MathF.Max(next, Rupture);
+
+        return (next, burst);
+    }
 
     public static float OrganSize(LimbOrgan organ)
     {
@@ -29,7 +39,6 @@ public static class LimbOrganRules
             LimbOrgan.Lungs => 0.2f,
             LimbOrgan.Kidneys => 0.16f,
             LimbOrgan.Stomach => 0.18f,
-            LimbOrgan.Intestines => 0.2f,
             LimbOrgan.Brain => 0.35f,
             LimbOrgan.Eyes => 0.08f,
             _ => 0.14f,
@@ -98,7 +107,7 @@ public static class LimbOrganRules
                 primary = row.Organ;
 
             any = true;
-            concussion |= Hurt(organs, new OrganShare(row.Organ, row.Factor), mark, scaled, ref ruptured, ref eyes);
+            concussion |= Hurt(organs, new OrganShare(row.Organ, row.Factor), mark, scaled);
         }
 
         if (!any)
@@ -107,7 +116,32 @@ public static class LimbOrganRules
         return new OrganHit(true, primary, ruptured, eyes, concussion);
     }
 
-    private static bool Hurt(Span<LimbOrganState> organs, OrganShare share, LimbMark mark, float scaled, ref bool ruptured, ref int eyes)
+    public static int RuptureHome(Span<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, float lost)
+    {
+        if (lost < RuptureShare)
+            return 0;
+
+        var eyes = 0;
+        var count = Math.Min(organs.Length, Count);
+        for (var i = 0; i < count; i++)
+        {
+            var organ = (LimbOrgan) i;
+            if (LimbOrganHomes.Home(organ) != zone || (present & (LimbOrganMask) (1 << i)) == 0)
+                continue;
+
+            ref var state = ref organs[i];
+            if (state.Missing || state.Ruptured)
+                continue;
+
+            state.Ruptured = true;
+            if (organ == LimbOrgan.Eyes)
+                eyes += EyeRuptureDamage;
+        }
+
+        return eyes;
+    }
+
+    private static bool Hurt(Span<LimbOrganState> organs, OrganShare share, LimbMark mark, float scaled)
     {
         var index = (int) share.Organ;
         if (index < 0 || index >= organs.Length)
@@ -122,14 +156,6 @@ public static class LimbOrganRules
         var concussion = share.Organ == LimbOrgan.Brain
                          && mark is LimbMark.Blunt or LimbMark.Point
                          && (scaled >= ConcussionHit || (before < ConcussionBrain && state.Damage >= ConcussionBrain));
-        if (state.Damage < Rupture)
-            return concussion;
-
-        state.Ruptured = true;
-        ruptured = true;
-        if (share.Organ == LimbOrgan.Eyes)
-            eyes += EyeRuptureDamage;
-
         return concussion;
     }
 
@@ -164,17 +190,13 @@ public static class LimbOrganRules
             poison += KidneyPoison;
         if (Ruptured(organs, LimbOrgan.Stomach))
             poison += StomachPoison;
-        if (Ruptured(organs, LimbOrgan.Intestines))
-            poison += IntestinePoison;
-        if (Bleeding(organs, LimbOrgan.Intestines))
-            blood += IntestineBleed;
 
         return new OrganFailure(blood, air, poison);
     }
 
     public static float Breath(float damage, bool ruptured)
     {
-        if (ruptured || damage >= Rupture)
+        if (ruptured)
             return LungTornAir;
 
         if (damage >= 15f)
@@ -227,7 +249,7 @@ public static class LimbOrganHomes
         return organ switch
         {
             LimbOrgan.Brain or LimbOrgan.Eyes => LimbZone.Head,
-            LimbOrgan.Intestines or LimbOrgan.Kidneys => LimbZone.Groin,
+            LimbOrgan.Kidneys => LimbZone.Groin,
             _ => LimbZone.Torso,
         };
     }
