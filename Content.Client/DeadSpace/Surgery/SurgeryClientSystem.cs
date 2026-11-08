@@ -552,7 +552,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (!_zoomed || uid != _players.LocalEntity || _patient is not { } patient)
             return;
 
-        if (!TryComp<TransformComponent>(patient, out _) || !TryComp<TransformComponent>(uid, out _))
+        if (!TryComp(patient, out TransformComponent? _) || !TryComp(uid, out TransformComponent? _))
             return;
 
         args.Offset += _transform.GetWorldPosition(patient) - _transform.GetWorldPosition(uid);
