@@ -16,7 +16,6 @@ public enum LimbOrgan : byte
     Liver = 5,
     Kidneys = 6,
     Core = 7,
-    Intestines = 8,
 }
 
 [Flags]
@@ -31,7 +30,6 @@ public enum LimbOrganMask : ushort
     Liver = 1 << 5,
     Kidneys = 1 << 6,
     Core = 1 << 7,
-    Intestines = 1 << 8,
     Standard = Brain | Eyes | Heart | Lungs | Stomach | Liver | Kidneys,
 }
 

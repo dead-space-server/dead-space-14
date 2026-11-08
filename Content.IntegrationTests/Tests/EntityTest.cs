@@ -173,6 +173,10 @@ namespace Content.IntegrationTests.Tests
             if (batchSize < 1)
                 batchSize = 1;
 
+            var maps = new List<MapId>();
+            var clientEnt = client.ResolveDependency<IEntityManager>();
+            var clientGain = 0;
+
             for (var start = 0; start < protoIds.Count; start += batchSize)
             {
                 var batchStart = start;
@@ -180,11 +184,15 @@ namespace Content.IntegrationTests.Tests
                 if (batchEnd > protoIds.Count)
                     batchEnd = protoIds.Count;
 
+                var clientBefore = clientEnt.EntityCount;
+
                 await server.WaitPost(() =>
                 {
+                    maps.Clear();
                     for (var i = batchStart; i < batchEnd; i++)
                     {
                         mapSys.CreateMap(out var mapId);
+                        maps.Add(mapId);
                         var grid = mapManager.CreateGridEntity(mapId);
                         var ent = sEntMan.SpawnEntity(protoIds[i], new EntityCoordinates(grid.Owner, 0.5f, 0.5f));
                         foreach (var (_, component) in sEntMan.GetNetComponents(ent))
@@ -195,6 +203,18 @@ namespace Content.IntegrationTests.Tests
                 });
 
                 await pair.RunTicksSync(1);
+
+                var clientAfter = clientEnt.EntityCount;
+                if (clientAfter > clientBefore)
+                    clientGain += clientAfter - clientBefore;
+
+                await server.WaitPost(() =>
+                {
+                    foreach (var mapId in maps)
+                        mapSys.DeleteMap(mapId);
+                });
+
+                await pair.RunTicksSync(1);
             }
             //DS-14 end
 
@@ -202,7 +222,7 @@ namespace Content.IntegrationTests.Tests
 
             // Make sure the client actually received the entities
             // 500 is completely arbitrary. Note that the client & sever entity counts aren't expected to match.
-            Assert.That(client.ResolveDependency<IEntityManager>().EntityCount, Is.GreaterThan(500));
+            Assert.That(clientGain, Is.GreaterThan(500));
 
             await server.WaitPost(() =>
             {

@@ -9,10 +9,16 @@ using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
 using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Interaction.Components;
+using Content.Shared.Item.ItemToggle.Components;
+using Content.Shared.Kitchen.Components;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Stacks;
+using Content.Shared.Weapons.Melee;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -44,6 +50,11 @@ public sealed partial class LimbWoundSystem
         if (edit.ClearBurn)
             state.Fire = 0f;
         state.Bleed = edit.SetBleed ? MathF.Max(0f, edit.Bleed) : MathF.Max(0f, state.Bleed + edit.Bleed);
+        if (limbs.Soft)
+        {
+            state.Bone = 0f;
+            state.Bleed = 0f;
+        }
         state.Scar = Math.Max(0, state.Scar + edit.Scar);
         var cap = LimbWoundRules.HealthFor(zone, limbs);
         state.Health = edit.SetHealth
@@ -329,6 +340,9 @@ public sealed partial class LimbWoundSystem
 
     public bool PartFits(LimbZone zone, EntityUid part)
     {
+        if (!HasComp<BodyPartComponent>(part))
+            return zone is LimbZone.HandLeft or LimbZone.HandRight && Blade(part);
+
         var type = PartType(zone);
         var symmetry = Symmetry(zone);
         return type != null
@@ -341,6 +355,9 @@ public sealed partial class LimbWoundSystem
     {
         if (_net.IsClient || !LimbWoundRules.CanSever(zone))
             return false;
+
+        if (!HasComp<BodyPartComponent>(part))
+            return PartFits(zone, part) && WeldBlade(body, zone, part);
 
         if (!TryComp<BodyComponent>(body, out var bodyComp)
             || bodyComp.Prototype is not { } protoId
@@ -414,6 +431,12 @@ public sealed partial class LimbWoundSystem
             state.Atrophied = false;
             state.Health = LimbWoundRules.HealthFor(zone, limbs) * fraction;
             state.Flesh = LimbWoundRules.StrainFlesh;
+            state.Bone = 0f;
+            state.Bleed = 0f;
+        }
+
+        if (limbs.Soft)
+        {
             state.Bone = 0f;
             state.Bleed = 0f;
         }
@@ -619,5 +642,101 @@ public sealed partial class LimbWoundSystem
     {
         return TryComp<HumanoidAppearanceComponent>(body, out var look)
                && SurgerySpeciesPrototype.IsMachine(_proto, look.Species.Id);
+    }
+
+    public bool Blade(EntityUid item)
+    {
+        return !HasComp<StackComponent>(item)
+               && HasComp<MeleeWeaponComponent>(item)
+               && (HasComp<SharpComponent>(item) || HasComp<ItemToggleMeleeWeaponComponent>(item));
+    }
+
+    private bool WeldBlade(EntityUid body, LimbZone zone, EntityUid blade)
+    {
+        if (zone is not (LimbZone.HandLeft or LimbZone.HandRight)
+            || !TryComp<LimbBodyComponent>(body, out var limbs)
+            || !TryComp<HandsComponent>(body, out var hands))
+            return false;
+
+        EnsureZones(limbs);
+        var index = LimbWoundRules.Index(zone);
+        var zones = CollectionsMarshal.AsSpan(limbs.Zones);
+        if ((uint) index >= (uint) zones.Length || !zones[index].Severed)
+            return false;
+
+        if (!TryZoneSlot(body, zone, out var handId))
+            return false;
+
+        var created = !_hands.TryGetHand((body, hands), handId, out _);
+        var location = zone == LimbZone.HandLeft ? HandLocation.Left : HandLocation.Right;
+        _hands.AddHand((body, hands), handId, location);
+        if (!_hands.TryPickup(body, blade, handId, checkActionBlocker: false, animate: false, handsComp: hands))
+        {
+            if (created)
+                _hands.RemoveHand((body, hands), handId);
+            return false;
+        }
+
+        var stuck = EnsureComp<UnremoveableComponent>(blade);
+        stuck.DeleteOnDrop = false;
+        Dirty(blade, stuck);
+
+        var mounts = EnsureComp<LimbBladeHandsComponent>(body);
+        mounts.Blades.Add(new LimbBladeHand(zone, handId, blade));
+
+        ref var state = ref zones[index];
+        state.Severed = false;
+        state.Bandaged = false;
+        state.Atrophied = false;
+        state.Health = LimbWoundRules.HealthFor(zone, limbs);
+        state.Flesh = 0f;
+        state.Bone = 0f;
+        state.Bleed = 0f;
+        Dirty(body, limbs);
+        ApplyLife(body, limbs);
+        _movement.RefreshMovementSpeedModifiers(body);
+        RefreshActive(body, limbs);
+        _blocker.UpdateCanMove(body);
+        return true;
+    }
+
+    private void ReleaseBlade(EntityUid body, LimbZone zone)
+    {
+        if (!TryComp<LimbBladeHandsComponent>(body, out var mounts))
+            return;
+
+        for (var i = mounts.Blades.Count - 1; i >= 0; i--)
+        {
+            var mount = mounts.Blades[i];
+            if (mount.Zone != zone)
+                continue;
+
+            mounts.Blades.RemoveAt(i);
+            if (!TerminatingOrDeleted(mount.Blade))
+                RemComp<UnremoveableComponent>(mount.Blade);
+
+            if (TryComp<HandsComponent>(body, out var hands))
+            {
+                _hands.TryDrop((body, hands), mount.Hand, checkActionBlocker: false);
+                _hands.RemoveHand((body, hands), mount.Hand);
+            }
+        }
+
+        if (mounts.Blades.Count == 0)
+            RemComp(body, mounts);
+    }
+
+    private bool TryZoneSlot(EntityUid body, LimbZone zone, out string slotId)
+    {
+        slotId = "";
+        var type = PartType(zone);
+        if (type == null
+            || !TryComp<BodyComponent>(body, out var bodyComp)
+            || bodyComp.Prototype is not { } protoId
+            || !_proto.TryIndex(protoId, out BodyPrototype? prototype)
+            || !TryMatchSlot(prototype, type.Value, Symmetry(zone), out slotId, out var parentSlot))
+            return false;
+
+        return TryLivingPart(body, bodyComp, prototype, parentSlot, out _);
     }
 }

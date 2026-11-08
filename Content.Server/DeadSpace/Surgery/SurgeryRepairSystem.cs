@@ -14,6 +14,7 @@ public sealed class SurgeryRepairSystem : EntitySystem
 {
     private const string Effect = "MachineRepair";
     private const string OrganMend = "OrganMend";
+    private const string BrainMend = "BrainMend";
     private const string TissueMend = "TissueMend";
     private const string RotMend = "RotMend";
     private const string Rules = "Default";
@@ -59,6 +60,13 @@ public sealed class SurgeryRepairSystem : EntitySystem
             args.Handled = true;
             MendOrgans(ent, args.User);
             HealZone(ent, ent.Comp.Zone, OrganMendHeals);
+            return;
+        }
+
+        if (!args.Handled && args.Effect == BrainMend)
+        {
+            args.Handled = true;
+            MendMind(ent, args.User);
             return;
         }
 
@@ -177,5 +185,34 @@ public sealed class SurgeryRepairSystem : EntitySystem
         }
 
         _popup.PopupEntity(Loc.GetString(torn ? "surgery-organ-mend-torn" : "surgery-organ-mend-done"), ent, user);
+    }
+
+    private void MendMind(Entity<SurgerySiteComponent> ent, EntityUid user)
+    {
+        if (!TryComp<LimbBodyComponent>(ent, out var limbs))
+            return;
+
+        var organ = ent.Comp.Zone == LimbZone.Head ? LimbOrgan.Brain
+            : ent.Comp.Zone == LimbZone.Torso ? LimbOrgan.Core
+            : (LimbOrgan?) null;
+        if (organ == null)
+            return;
+
+        var index = (int) organ.Value;
+        if ((limbs.Present & (LimbOrganMask) (1 << index)) == 0 || (uint) index >= (uint) limbs.Organs.Count)
+            return;
+
+        var state = limbs.Organs[index];
+        if (state.Missing || !state.Ruptured && state.Damage <= 0f)
+            return;
+
+        _limbs.ApplyOrganEdit(ent, organ.Value, new LimbOrganEdit
+        {
+            SetDamage = true,
+            Damage = 0f,
+            SetRuptured = true,
+            Ruptured = false,
+        });
+        _popup.PopupEntity(Loc.GetString(organ == LimbOrgan.Brain ? "surgery-brain-mend" : "surgery-core-mend"), ent, user);
     }
 }

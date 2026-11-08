@@ -60,7 +60,6 @@ health-analyzer-organ-4 = Желудок
 health-analyzer-organ-5 = Печень
 health-analyzer-organ-6 = Почки
 health-analyzer-organ-7 = Ядро
-health-analyzer-organ-8 = Кишки
 
 health-analyzer-issue-0 = нет части
 health-analyzer-issue-1 = перелом

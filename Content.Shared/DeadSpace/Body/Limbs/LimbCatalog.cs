@@ -40,7 +40,6 @@ public static class LimbCatalog
         new(LimbZone.Mouth, LimbMark.Liquid, LimbHooks.Organ, 1f, LimbOrgan.Liver),
         new(LimbZone.Torso, LimbMark.Point, LimbHooks.Organ, 1f, LimbOrgan.Heart, MeleeOnly: true),
         new(LimbZone.Torso, LimbMark.Point, LimbHooks.Organ, 0.8f, LimbOrgan.Lungs, MeleeOnly: true),
-        new(LimbZone.Torso, LimbMark.Point, LimbHooks.Crit, MeleeOnly: true),
         new(LimbZone.Torso, LimbMark.Point, LimbHooks.Whistle, MeleeOnly: true),
         new(LimbZone.Torso, LimbMark.Point, LimbHooks.Rib, 0.45f),
         new(LimbZone.Torso, LimbMark.Edge, LimbHooks.Organ, 0.8f, LimbOrgan.Lungs, MeleeOnly: true),

@@ -143,6 +143,38 @@
     undo: Incise
 
 - type: surgeryOperation
+  id: MendCoreSlime
+  side: Front
+  soft: true
+  zone: Torso
+  name: surgery-op-mend-core
+  when: MindRupture
+  order: 2
+  icon:
+    sprite: _DeadSpace/Objects/Medical/slime_gel.rsi
+    state: icon
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+    game: Steady
+  - verb: Clamp
+    layer: Cavity
+    game: Clamp
+  - verb: Stanch
+    layer: Cavity
+    effect: BrainMend
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
   id: PutCore
   side: Front
   soft: true
