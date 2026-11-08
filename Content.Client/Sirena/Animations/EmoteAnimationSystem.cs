@@ -110,9 +110,7 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
             spriteColor = sprite.Color;
             spriteOffset = sprite.Offset;
 
-            //DS-14 start: движок не откатывает свойства после анимации, поэтому снимок
-            // делаем только если предыдущий снапшот ещё не восстановлен — иначе
-            // «домой» вернёт уже испорченный цвет.
+            //DS-14 start
             if (!_sprites.ContainsKey(uid))
             {
                 var bodyRotationHome = Angle.Zero;
