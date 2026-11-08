@@ -2,9 +2,9 @@ meta:
   format: 7
   category: Map
   engineVersion: 276.0.6
-  forkId: dsfobos
-  forkVersion: b756dec5fc67ab80ffd9cb4b41ff2e371e201e6d
-  time: 11/08/2026 13:11:16
+  forkId: ""
+  forkVersion: ""
+  time: 11/08/2026 22:02:16
   entityCount: 53148
 maps:
 - 1
@@ -23965,7 +23965,7 @@ entities:
     - type: DeviceList
       devices:
       - 34789
-      - 34472
+      - 19020
       - 22697
       - 23261
       - 23262
@@ -27686,7 +27686,7 @@ entities:
       pos: 148.5,130.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -42796.516
+      secondsUntilStateChange: -42862.113
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -29053,7 +29053,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -320253.8
+      secondsUntilStateChange: -320319.4
       state: Opening
     - type: Forensics
       residues: []
@@ -29932,7 +29932,7 @@ entities:
       pos: 25.5,132.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -325253.72
+      secondsUntilStateChange: -325319.3
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -30115,7 +30115,7 @@ entities:
       pos: 99.5,50.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -242545.02
+      secondsUntilStateChange: -242610.61
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -31472,7 +31472,7 @@ entities:
       pos: 14.5,132.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -313334.84
+      secondsUntilStateChange: -313400.44
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -132790,29 +132790,28 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 46.5,137.5
       parent: 2
-  - uid: 37622
-    components:
-    - type: Transform
-      pos: 160.5,115.5
-      parent: 2
-- proto: CryogenicSleepUnitSpawnerLateJoin
-  entities:
   - uid: 19019
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 102.5,128.5
-      parent: 2
-  - uid: 19020
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
+      rot: 1.5707963267948966 rad
       pos: 102.5,127.5
       parent: 2
   - uid: 19021
     components:
     - type: Transform
+      rot: -1.5707963267948966 rad
       pos: 103.5,125.5
+      parent: 2
+  - uid: 34472
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 102.5,128.5
+      parent: 2
+  - uid: 37622
+    components:
+    - type: Transform
+      pos: 160.5,115.5
       parent: 2
 - proto: CryoPod
   entities:
@@ -154291,7 +154290,7 @@ entities:
       pos: 145.5,140.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -91936.06
+      secondsUntilStateChange: -92001.664
       state: Closing
     - type: DeviceNetwork
       deviceLists:
@@ -241985,6 +241984,19 @@ entities:
       parent: 2
 - proto: GasVentPump
   entities:
+  - uid: 19020
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 102.5,128.5
+      parent: 2
+    - type: DeviceNetwork
+      configurators:
+      - invalid
+      deviceLists:
+      - 301
+    - type: AtmosPipeColor
+      color: '#0055CCFF'
   - uid: 34367
     components:
     - type: Transform
@@ -243104,17 +243116,6 @@ entities:
       - 300
       - 22366
       - 22367
-    - type: AtmosPipeColor
-      color: '#0055CCFF'
-  - uid: 34472
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 102.5,128.5
-      parent: 2
-    - type: DeviceNetwork
-      deviceLists:
-      - 301
     - type: AtmosPipeColor
       color: '#0055CCFF'
   - uid: 34473
@@ -277301,7 +277302,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -308288
+      secondsUntilStateChange: -308353.6
       state: Opening
     - type: Airlock
       autoClose: False
