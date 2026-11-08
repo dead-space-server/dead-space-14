@@ -9778,3 +9778,10 @@ Entries:
     message: У кнопки прицельной стрельбы в настройках есть локализация.
   - type: Fix
     message: Godmode конечностей.
+- id: 931
+  author: BlueDogDoc
+  time: '2026-11-08T04:44:21.629171+00:00'
+  pr: 2679
+  changes:
+  - type: Add
+    message: Принтер органов и конечностей от Ивана Кувалды.
