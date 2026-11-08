@@ -15,6 +15,9 @@ using Content.Shared.Climbing.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Robust.Server.Containers;
+using Content.Server.DeadSpace.Cloning; //DS-14
+using Content.Shared.Hands.EntitySystems; //DS-14
+using Content.Shared.Interaction; //DS-14
 using static Content.Shared.MedicalScanner.SharedMedicalScannerComponent; // Hmm...
 
 namespace Content.Server.Medical
@@ -28,6 +31,8 @@ namespace Content.Server.Medical
         [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
         [Dependency] private readonly ContainerSystem _containerSystem = default!;
         [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+        [Dependency] private readonly CloningLimbSystem _cloningLimb = default!; //DS-14
+        [Dependency] private readonly SharedHandsSystem _hands = default!; //DS-14
 
         private const float UpdateRate = 1f;
         private float _updateDif;
@@ -45,7 +50,20 @@ namespace Content.Server.Medical
             SubscribeLocalEvent<MedicalScannerComponent, PortDisconnectedEvent>(OnPortDisconnected);
             SubscribeLocalEvent<MedicalScannerComponent, AnchorStateChangedEvent>(OnAnchorChanged);
             SubscribeLocalEvent<MedicalScannerComponent, CanDropTargetEvent>(OnCanDragDropOn);
+            SubscribeLocalEvent<MedicalScannerComponent, InteractUsingEvent>(OnInteractUsing); //DS-14
         }
+
+        //DS-14 start
+        private void OnInteractUsing(EntityUid uid, MedicalScannerComponent component, InteractUsingEvent args)
+        {
+            if (args.Handled || IsOccupied(component) || !_cloningLimb.IsRemains(args.Used))
+                return;
+
+            args.Handled = true;
+            if (_hands.TryDrop(args.User, args.Used, checkActionBlocker: false))
+                InsertBody(uid, args.Used, component);
+        }
+        //DS-14 end
 
         private void OnCanDragDropOn(EntityUid uid, MedicalScannerComponent component, ref CanDropTargetEvent args)
         {
@@ -58,7 +76,7 @@ namespace Content.Server.Medical
             if (!Resolve(uid, ref component))
                 return false;
 
-            return HasComp<BodyComponent>(target);
+            return HasComp<BodyComponent>(target) || _cloningLimb.IsRemains(target); //DS-14
         }
 
         private void OnComponentInit(EntityUid uid, MedicalScannerComponent scannerComponent, ComponentInit args)
@@ -89,9 +107,10 @@ namespace Content.Server.Medical
             if (TryComp(args.Using.Value, out MetaDataComponent? metadata))
                 name = metadata.EntityName;
 
+            var used = args.Using.Value; //DS-14
             InteractionVerb verb = new()
             {
-                Act = () => InsertBody(uid, args.Target, component),
+                Act = () => InsertBody(uid, used, component), //DS-14
                 Category = VerbCategory.Insert,
                 Text = name
             };
@@ -227,7 +246,7 @@ namespace Content.Server.Medical
             if (scannerComponent.BodyContainer.ContainedEntity != null)
                 return;
 
-            if (!HasComp<BodyComponent>(to_insert))
+            if (!CanScannerInsert(uid, to_insert, scannerComponent)) //DS-14
                 return;
 
             _containerSystem.Insert(to_insert, scannerComponent.BodyContainer);

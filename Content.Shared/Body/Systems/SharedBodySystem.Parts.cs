@@ -5,6 +5,7 @@ using Content.Shared.DeadSpace.Body.Limbs; //DS-14
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
+using Content.Shared.Changeling.Components; //DS-14
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Movement.Components;
@@ -199,6 +200,7 @@ public partial class SharedBodySystem
 
         if (!_timing.ApplyingState
             && partEnt.Comp.IsVital
+            && !HasComp<ChangelingIdentityComponent>(bodyEnt) //DS-14
             && !GetBodyChildrenOfType(bodyEnt, partEnt.Comp.PartType, bodyEnt.Comp).Any()
         )
         {

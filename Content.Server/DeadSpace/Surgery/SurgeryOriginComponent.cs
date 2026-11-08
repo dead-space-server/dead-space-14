@@ -10,4 +10,10 @@ public sealed partial class SurgeryOriginComponent : Component
 
     [DataField]
     public string Dna = string.Empty;
+
+    [DataField]
+    public bool Gelatin;
+
+    [DataField]
+    public string Donor = string.Empty;
 }

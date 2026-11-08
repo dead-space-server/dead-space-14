@@ -244,10 +244,24 @@
     sprite: /Textures/Mobs/Species/Human/parts.rsi
     state: r_arm
   steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
   - verb: Seat
     layer: Skin
+  - verb: Stanch
+    layer: Skin
+    hint: MachineWire
+    game: Hold
   close:
   - verb: Cauterize
     layer: Skin
     hint: MachineWeld
     game: Steady
+    undo: Incise

@@ -1296,6 +1296,9 @@
   - SurgerySkinRoll
   - SurgeryMarker
   - SurgeryAppendage
+  - Pda
+  - HealthAnalyzer
+  - AutopsyScanner
 
 - type: surgerySpeech
   id: Mumble
@@ -1635,6 +1638,41 @@
   side: Front
   name: surgery-op-mend-fracture
   when: ClosedFracture
+  limb: true
+  order: 1
+  icon:
+    sprite: /Textures/_DeadSpace/Objects/Medical/bone_gel.rsi
+    state: icon
+  zones:
+  - Head
+  - Torso
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: MendBone
+    layer: Bone
+    effect: FractureClosedMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendCrack
+  side: Front
+  name: surgery-op-mend-crack
+  when: Crack
   limb: true
   order: 1
   icon:

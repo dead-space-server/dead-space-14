@@ -35,6 +35,15 @@ public sealed partial class LimbFleshComponent : Component
     [DataField]
     public bool Unstable;
 
+    [DataField]
+    public bool Gelatin;
+
+    [ViewVariables]
+    public EntityUid? Source;
+
+    [DataField]
+    public string Donor = "";
+
     [DataField, AutoNetworkedField]
     public Color Eyes = Color.White;
 

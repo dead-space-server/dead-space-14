@@ -619,6 +619,71 @@
     layer: Skin
     undo: Incise
 
+- type: surgeryPart
+  id: ImplantBrainPlant
+  zone: Head
+  anatomy: Plant
+  operation: TakeImplantBrainPlant
+  put: PutImplantBrainPlant
+  implant: Brain
+  sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+  state: implanter0
+  wound: false
+  order: 20
+  ax: 13
+  ay: 4.5
+  bx: 18
+  by: 4.5
+
+- type: surgeryOperation
+  id: PutImplantBrainPlant
+  name: surgery-op-put-implant-brain
+  zone: Head
+  plant: true
+  implant: Brain
+  implantPut: true
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    implant: Brain
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
+  id: TakeImplantBrainPlant
+  name: surgery-op-take-implant-brain
+  zone: Head
+  plant: true
+  implant: Brain
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    implant: Brain
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
 # Slime core
 
 - type: surgeryPart

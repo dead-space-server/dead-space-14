@@ -52,11 +52,36 @@ public sealed class SurgeryGraftSystem : EntitySystem
         var origin = AddComp<SurgeryOriginComponent>(part);
         origin.Species = look.Species.Id;
         origin.Dna = CompOrNull<DnaComponent>(body)?.DNA ?? string.Empty;
+        origin.Gelatin = HasComp<SurgeryMannequinComponent>(body);
+        origin.Donor = Name(body);
+    }
+
+    public bool TryOrigin(EntityUid part, out string species, out string dna, out string donor)
+    {
+        species = dna = donor = string.Empty;
+        if (!TryComp<SurgeryOriginComponent>(part, out var origin) || origin.Species.Length == 0)
+            return false;
+
+        species = origin.Species;
+        dna = origin.Dna;
+        donor = origin.Donor;
+        return true;
     }
 
     public bool Accepts(EntityUid body, EntityUid part, bool popup = true)
     {
-        if (!TryComp<SurgeryOriginComponent>(part, out var origin) || PartFits(body, origin))
+        if (!TryComp<SurgeryOriginComponent>(part, out var origin))
+            return true;
+
+        var mannequin = HasComp<SurgeryMannequinComponent>(body);
+        if (origin.Gelatin != mannequin)
+        {
+            if (popup)
+                _popup.PopupEntity(Loc.GetString("surgery-graft-gelatin"), body, PopupType.MediumCaution);
+            return false;
+        }
+
+        if (mannequin || PartFits(body, origin))
             return true;
 
         if (TryComp<HumanoidAppearanceComponent>(body, out var look)
@@ -72,7 +97,7 @@ public sealed class SurgeryGraftSystem : EntitySystem
 
     public void Grafted(EntityUid body, EntityUid part, LimbZone zone, string? organ, string? appendage)
     {
-        if (TryComp<SurgeryOriginComponent>(part, out var origin) && !PartFits(body, origin))
+        if (TryComp<SurgeryOriginComponent>(part, out var origin) && !origin.Gelatin && !PartFits(body, origin))
             Begin(body, origin.Species, zone, organ, appendage);
     }
 
@@ -87,6 +112,17 @@ public sealed class SurgeryGraftSystem : EntitySystem
     private void OnAttempt(Entity<LimbBodyComponent> ent, ref LimbGraftAttemptEvent args)
     {
         if (!TryComp<LimbFleshComponent>(args.Part, out var flesh) || flesh.Species.Length == 0)
+            return;
+
+        var mannequin = HasComp<SurgeryMannequinComponent>(ent);
+        if (flesh.Gelatin != mannequin)
+        {
+            args.Cancelled = true;
+            _popup.PopupEntity(Loc.GetString("surgery-graft-gelatin"), ent, PopupType.MediumCaution);
+            return;
+        }
+
+        if (mannequin)
             return;
 
         if (SameDna(ent, flesh))
@@ -113,7 +149,7 @@ public sealed class SurgeryGraftSystem : EntitySystem
 
     private void OnGrafted(Entity<LimbBodyComponent> ent, ref LimbGraftedEvent args)
     {
-        if (HasComp<ChangelingIdentityComponent>(ent))
+        if (HasComp<ChangelingIdentityComponent>(ent) || HasComp<SurgeryMannequinComponent>(ent))
             return;
 
         if (TryComp<LimbFleshComponent>(args.Part, out var flesh) && flesh.Species.Length > 0 && !SameDna(ent, flesh))

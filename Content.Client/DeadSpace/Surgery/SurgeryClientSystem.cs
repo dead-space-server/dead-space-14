@@ -11,6 +11,7 @@ using Content.Shared.Camera;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.DragDrop;
+using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Humanoid;
@@ -19,6 +20,7 @@ using Content.Shared.Chemistry.Events;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
+using Content.Shared.Placeable;
 using Content.Shared.Movement.Components;
 using Content.Shared.Rotation;
 using Content.Shared.Movement.Pulling.Systems;
@@ -33,6 +35,7 @@ using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Containers;
 using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Prototypes;
 using Robust.Shared.GameStates;
@@ -70,6 +73,8 @@ public sealed class SurgeryClientSystem : EntitySystem
     [Dependency] private readonly ItemToggleSystem _toggle = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private readonly SharedContainerSystem _containers = default!;
 
     private const float NearDistance = 2.5f;
     private const float BodyTexels = 32f;
@@ -166,6 +171,11 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (args.State != BoundKeyState.Down
             || _board == null || _patient is not { } patient || _tool == null || args.EntityUid == patient || !Exists(patient)
             || _players.LocalEntity is not { } user || !_hands.TryGetActiveItem(user, out var held) || held != _tool)
+            return false;
+
+        if (args.EntityUid.IsValid()
+            && !HasComp<PlaceableSurfaceComponent>(args.EntityUid)
+            && !(TryComp<BuckleComponent>(patient, out var buckle) && buckle.BuckledTo == args.EntityUid))
             return false;
 
         var mouse = _transform.ToMapCoordinates(args.Coordinates);
@@ -1014,9 +1024,10 @@ public sealed class SurgeryClientSystem : EntitySystem
         }
 
         var lodged = Lodged();
+        var shard = CavityShard();
         var count = _board.Organs.Length + _board.Empty.Length + (lodged ? 1 : 0);
         var coneFrom = _patient is { } body && MachineBody(body) ? 0 : ConeFrom;
-        if (_board.Part.Length > 0 || count <= coneFrom)
+        if (_board.Part.Length > 0 || !lodged && !shard && count <= coneFrom)
         {
             if (Inserting())
                 _organ = _board.Empty[0];
@@ -1029,7 +1040,7 @@ public sealed class SurgeryClientSystem : EntitySystem
             return;
         }
 
-        if (lodged && ToolHas(SurgeryVerbKind.Extract))
+        if (lodged && ToolHas(SurgeryVerbKind.Extract) || shard && ToolHas(SurgeryVerbKind.PullEmbedded))
         {
             OpenWork(false);
             return;
@@ -1062,6 +1073,11 @@ public sealed class SurgeryClientSystem : EntitySystem
         return _board != null && _board.LodgedItem.Valid && LayerOpen(SurgeryLayerKind.Cavity);
     }
 
+    private bool CavityShard()
+    {
+        return _board != null && _board.Embedded != 0 && _board.Part.Length == 0 && LayerOpen(SurgeryLayerKind.Cavity);
+    }
+
     private bool Inserting()
     {
         if (_board == null || _board.Empty.Length == 0 || !Has(_board.Verbs, SurgeryVerbKind.Insert))
@@ -1081,6 +1097,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         {
             _map.Picked += OnOrganPicked;
             _map.TakeLodged += OnTakeLodged;
+            _map.TakeShard += OnTakeShard;
             _map.Stanched += () => Send(1f, 0, false, SurgeryVerbKind.Stanch);
             _subscribed = true;
         }
@@ -1089,7 +1106,8 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (_map.Parent == null)
             _ui.WindowRoot.AddChild(_map);
 
-        _map.Lodged = ItemIcon(_board.LodgedItem);
+        _map.Lodged = Lodged() ? ItemIcon(_board.LodgedItem) : null;
+        _map.Shard = CavityShard() ? ShardIcon() : null;
         var species = _patient is { } shown && TryComp<HumanoidAppearanceComponent>(shown, out var shownLook) ? shownLook.Species.Id : "";
         _map.Show(_board.Organs, _board.Empty, _board.Chosen, !pick && !insert, insert, (LimbZone) _board.Zone, species);
     }
@@ -1135,6 +1153,27 @@ public sealed class SurgeryClientSystem : EntitySystem
             Organ = 254,
             Progress = 1f,
         });
+    }
+
+    private void OnTakeShard()
+    {
+        if (_board == null)
+            return;
+
+        RaiseNetworkEvent(new SurgeryCutMessage
+        {
+            Patient = _board.Patient,
+            Verb = (byte) SurgeryVerbKind.PullEmbedded,
+            Layer = _layer,
+            Organ = 255,
+            Progress = 1f,
+        });
+    }
+
+    private Texture? ShardIcon()
+    {
+        var rsi = _cache.GetResource<RSIResource>("/Textures/Objects/Materials/Shards/shard.rsi").RSI;
+        return rsi.TryGetState("shard1", out var state) ? state.GetFrame(RsiDirection.South, 0) : null;
     }
 
     private void OnOrganSevered()
@@ -1520,11 +1559,19 @@ public sealed class SurgeryClientSystem : EntitySystem
         _nicks.RemoveAll(nick => !Exists(nick.Body) || Healed(nick.Body, nick.Zone));
         foreach (var nick in _nicks)
         {
-            if (!Exists(nick.Body) || ZoneSevered(nick.Body, nick.Zone))
+            if (!Exists(nick.Body) || ZoneSevered(nick.Body, nick.Zone) || !Seen(nick.Body))
                 continue;
 
             _guide.Cuts.Add((ToWorld(nick.Body, nick.Local - nick.Dir * 0.05f), ToWorld(nick.Body, nick.Local + nick.Dir * 0.05f)));
         }
+    }
+
+    private bool Seen(EntityUid body)
+    {
+        return _players.LocalEntity is { } viewer
+               && !_containers.IsEntityOrParentInContainer(body)
+               && (!TryComp<SpriteComponent>(body, out var sprite) || sprite.Visible)
+               && _examine.InRangeUnOccluded(viewer, body);
     }
 
     private bool Healed(EntityUid body, LimbZone zone)
@@ -1934,6 +1981,11 @@ public sealed class SurgeryClientSystem : EntitySystem
                               || !_proto.TryIndex<SurgeryOperationPrototype>(part.Put, out var put)
                               || !Suits(patient, put)
                               || !_nearby.Has(patient, put, _players.LocalEntity)))
+                    continue;
+
+                if (!empty
+                    && _proto.TryIndex<SurgeryOperationPrototype>(part.Operation, out var take)
+                    && !Suits(patient, take))
                     continue;
 
                 badge = empty ? SurgeryFanBadge.Put : SurgeryFanBadge.Take;
@@ -2437,8 +2489,9 @@ public sealed class SurgeryClientSystem : EntitySystem
             _leave = new TextureButton
             {
                 TextureNormal = state.GetFrame(RsiDirection.South, 0),
-                MinSize = new Vector2(32f, 32f),
-                MaxSize = new Vector2(32f, 32f),
+                Scale = new Vector2(2f, 2f),
+                MinSize = new Vector2(64f, 64f),
+                MaxSize = new Vector2(64f, 64f),
                 HorizontalExpand = false,
                 VerticalExpand = false,
                 ToolTip = Loc.GetString("surgery-leave"),
@@ -2450,8 +2503,10 @@ public sealed class SurgeryClientSystem : EntitySystem
         {
             _leave.Orphan();
             alerts.AlertContainer.AddChild(_leave);
-            _leave.SetPositionFirst();
         }
+
+        if (_leave.GetPositionInParent() != alerts.AlertContainer.ChildCount - 1)
+            _leave.SetPositionLast();
     }
 
     private void ClearLeave()

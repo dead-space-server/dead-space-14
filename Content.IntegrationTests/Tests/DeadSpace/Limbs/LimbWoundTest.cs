@@ -422,7 +422,7 @@ public sealed class LimbWoundTest
             Assert.Multiple(() =>
             {
                 Assert.That(server.EntMan.GetComponent<DamageableComponent>(dead).TotalDamage, Is.EqualTo(FixedPoint2.Zero));
-                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(13)));
+                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(20)));
                 Assert.That(wounds.BleedTotal(dead), Is.EqualTo(0f));
             });
         });
@@ -431,7 +431,7 @@ public sealed class LimbWoundTest
     }
 
     [Test]
-    public async Task FireBurnsClothesButNotArmor()
+    public async Task FireDoesNotDeleteClothes()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -463,7 +463,7 @@ public sealed class LimbWoundTest
         {
             Assert.Multiple(() =>
             {
-                Assert.That(server.EntMan.Deleted(suit), Is.True, "the jumpsuit burns");
+                Assert.That(server.EntMan.Deleted(suit), Is.False, "the jumpsuit does not burn away");
                 Assert.That(server.EntMan.Deleted(vest), Is.False, "the armor vest does not burn");
             });
         });

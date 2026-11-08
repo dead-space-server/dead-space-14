@@ -1,7 +1,9 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
+using Content.Server.Administration.Logs;
 using Content.Shared.Bed.Sleep;
+using Content.Shared.Database;
 using Content.Shared.Body.Organ;
 using Content.Shared.DoAfter;
 using Robust.Shared.Audio.Systems;
@@ -35,6 +37,7 @@ using Content.Shared.Standing;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Tag;
 using Content.Server.Humanoid;
+using Content.Server.Stack;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Traits.Assorted;
 using Robust.Shared.GameObjects;
@@ -49,6 +52,7 @@ namespace Content.Server.DeadSpace.Surgery;
 public sealed class SurgerySystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly IAdminLogManager _adminLog = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ISharedPlayerManager _players = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -79,7 +83,7 @@ public sealed class SurgerySystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ItemToggleSystem _toggle = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
+    [Dependency] private readonly StackSystem _stack = default!;
 
     [Dependency] private readonly IComponentFactory _factory = default!;
 
@@ -266,7 +270,7 @@ public sealed class SurgerySystem : EntitySystem
                 && !Unpocketable(args.Used)
                 && TryComp<SurgerySiteComponent>(ent.Owner, out var pocket)
                 && OpenCavity(pocket)
-                && _cavity.TryLodge(ent.Owner, pocket.Zone, args.Used))
+                && _cavity.TryLodge(ent.Owner, pocket.Zone, args.Used, args.User))
             {
                 args.Handled = true;
                 Send(ent.Owner, args.User, pocket, null, string.Empty, false);
@@ -318,6 +322,14 @@ public sealed class SurgerySystem : EntitySystem
         }
 
         Send(ent.Owner, args.User, site, args.Used, string.Empty, true);
+    }
+
+    private EntityUid? OnePiece(EntityUid held)
+    {
+        if (!TryComp<StackComponent>(held, out var stack) || stack.Count <= 1)
+            return held;
+
+        return _stack.Split((held, stack), 1, Transform(held).Coordinates);
     }
 
     private bool Unpocketable(EntityUid used)
@@ -477,6 +489,9 @@ public sealed class SurgerySystem : EntitySystem
                 site.CloseStep = 0;
                 site.Sterile = !Operation(patient.Value, site, out var started) || started.Sterile;
             }
+
+            var named = Operation(patient.Value, site, out var begun) ? begun.ID : site.Part;
+            _adminLog.Add(LogType.Surgery, LogImpact.Medium, $"{ToPrettyString(user):user} started surgery {named} on {site.Zone} of {ToPrettyString(patient.Value):target}");
         }
 
         Send(patient.Value, user, site, Held(user), string.Empty, true);
@@ -638,8 +653,14 @@ public sealed class SurgerySystem : EntitySystem
             && SpareOrgan(patient.Value, site, spareItem) is { } spare)
         {
             var placed = new SurgeryResult { PlaceOrgan = true, Key = "surgery-inserted" };
-            _port.Apply(patient.Value, site.Zone, spare, placed, spareItem);
+            _port.Apply(patient.Value, site.Zone, spare, placed, spareItem, user);
             Send(patient.Value, user, site, Held(user), placed.Key, false);
+            return;
+        }
+
+        if (verb == SurgeryVerbKind.Cauterize && !WelderReady(held, user, out var welderLine))
+        {
+            Send(patient.Value, user, site, held, welderLine, false);
             return;
         }
 
@@ -657,15 +678,28 @@ public sealed class SurgerySystem : EntitySystem
             Send(patient.Value, user, site, held, string.Empty, false);
             return;
         }
+        if (verb == SurgeryVerbKind.PullEmbedded
+            && site.Part.Length == 0
+            && OpenCavity(site)
+            && StepNow(patient.Value, site) is not { Verb: SurgeryVerbKind.PullEmbedded })
+        {
+            var pulledKey = string.Empty;
+            if (VerbAllowed(verb, held, site) && Embedded(patient.Value, site.Zone))
+            {
+                _port.Apply(patient.Value, site.Zone, null, new SurgeryResult { ClearEmbedded = true }, held, user);
+                _adminLog.Add(LogType.Surgery, LogImpact.Low, $"{ToPrettyString(user):user} pulled a shard out of {site.Zone} of {ToPrettyString(patient.Value):target}");
+                var mend = new SurgeryEffectEvent(user, held, "ShardMend");
+                RaiseLocalEvent(patient.Value, ref mend);
+                _anesthesia.Tear(patient.Value, site.Zone, Asleep(patient.Value));
+                PlayStep(patient.Value, verb.ToString());
+                pulledKey = "surgery-shard-out";
+            }
+            Send(patient.Value, user, site, held, pulledKey, false);
+            return;
+        }
         if (!VerbAllowed(verb, held, site))
         {
             Send(patient.Value, user, site, held, "surgery-wrong-hand", false);
-            return;
-        }
-
-        if (verb == SurgeryVerbKind.Cauterize && !WelderReady(held, user, out var welderLine))
-        {
-            Send(patient.Value, user, site, held, welderLine, false);
             return;
         }
 
@@ -676,7 +710,10 @@ public sealed class SurgerySystem : EntitySystem
             && open.Steps[site.Step].Verb != SurgeryVerbKind.Cauterize)
         {
             if (message.Progress >= 0.95f)
+            {
+                _adminLog.Add(LogType.Surgery, LogImpact.Medium, $"{ToPrettyString(user):user} cauterized and aborted surgery {open.ID} on {site.Zone} of {ToPrettyString(patient.Value):target}");
                 Abort(patient.Value, site);
+            }
             Send(patient.Value, user, site, held, string.Empty, false);
             return;
         }
@@ -951,16 +988,21 @@ public sealed class SurgerySystem : EntitySystem
                     result.Rejected = true;
                     result.Key = "surgery-implant-fit";
                 }
+                else
+                    _adminLog.Add(LogType.Surgery, LogImpact.High, $"{ToPrettyString(user):user} implanted {ToPrettyString(held.Value):entity} into {implantSlot} of {ToPrettyString(patient.Value):target}");
             }
-            else if (implantSlot.Length == 0 || !_implants.TryExtract(patient.Value, implantSlot, out _))
+            else if (implantSlot.Length == 0 || !_implants.TryExtract(patient.Value, implantSlot, out var extracted))
             {
                 advance = false;
                 result.RemoveImplant = false;
                 result.Rejected = true;
                 result.Key = "surgery-implant-gone";
             }
+            else
+                _adminLog.Add(LogType.Surgery, LogImpact.High, $"{ToPrettyString(user):user} extracted {ToPrettyString(extracted):entity} from {implantSlot} of {ToPrettyString(patient.Value):target}");
         }
 
+        SurgeryOperationPrototype? cared = null;
         if (advance && stepVerb == verb)
         {
             if (stepVerb == SurgeryVerbKind.Clamp)
@@ -979,11 +1021,13 @@ public sealed class SurgerySystem : EntitySystem
 
                     var dropped = Spawn(drop, Transform(patient.Value).Coordinates.Offset(new Vector2(0.4f, 0.2f)));
                     _graft.Mark(dropped, patient.Value);
+                    _adminLog.Add(LogType.Surgery, LogImpact.High, $"{ToPrettyString(user):user} removed {ToPrettyString(dropped):entity} from {site.Zone} of {ToPrettyString(patient.Value):target}");
                     PartGone(patient.Value, site.Part.Length > 0 ? site.Part : SurgeryPartPrototype.For(_prototype, voiced.ID), true);
                 }
 
                 if (acting.Need.Count > 0 && held != null)
                 {
+                    _adminLog.Add(LogType.Surgery, LogImpact.Medium, $"{ToPrettyString(user):user} put {ToPrettyString(held.Value):entity} into {site.Zone} of {ToPrettyString(patient.Value):target}");
                     _graft.Grafted(patient.Value, held.Value, site.Zone, site.Part, null);
                     QueueDel(held.Value);
                     PartGone(patient.Value, site.Part.Length > 0 ? site.Part : SurgeryPartPrototype.For(_prototype, voiced.ID), false);
@@ -991,6 +1035,7 @@ public sealed class SurgerySystem : EntitySystem
 
                 if (acting.Effect.Length > 0)
                 {
+                    _adminLog.Add(LogType.Surgery, LogImpact.Low, $"{ToPrettyString(user):user} applied {acting.Effect} on {site.Zone} of {ToPrettyString(patient.Value):target}");
                     var effect = new SurgeryEffectEvent(user, held, acting.Effect);
                     RaiseLocalEvent(patient.Value, ref effect);
                 }
@@ -1008,7 +1053,9 @@ public sealed class SurgerySystem : EntitySystem
             if (Operation(patient.Value, site, out var finished) && site.Step >= finished.Steps.Count)
             {
                 site.CloseStep = 0;
-                if (!FollowCare(patient.Value, site, finished) && NextClose(finished, site) == null)
+                if (IsCare(finished))
+                    cared = finished;
+                else if (!FollowCare(patient.Value, site, finished) && NextClose(finished, site) == null)
                     Finish(patient.Value, site);
             }
         }
@@ -1074,7 +1121,7 @@ public sealed class SurgerySystem : EntitySystem
         if (!implantStep)
         {
             var lodging = verb == SurgeryVerbKind.Insert && held != null && !HasComp<OrganComponent>(held.Value) && !HasComp<LimbImplantComponent>(held.Value);
-            if (lodging && _cavity.Blocked(held!.Value))
+            if (lodging && (_cavity.Blocked(held!.Value) || Unpocketable(held.Value)))
             {
                 result.PlaceOrgan = false;
                 result.Rejected = true;
@@ -1090,9 +1137,11 @@ public sealed class SurgerySystem : EntitySystem
                 }
                 else if (result.PlaceOrgan)
                 {
-                    var piece = _stack.GetOne(held.Value);
-                    if (!_cavity.TryLodge(patient.Value, site.Zone, piece))
+                    var piece = OnePiece(held.Value);
+                    if (piece == null || !_cavity.TryLodge(patient.Value, site.Zone, piece.Value, user))
                     {
+                        if (piece != null && piece != held)
+                            _stack.TryMergeStacks(piece.Value, held.Value, out _);
                         result.PlaceOrgan = false;
                         result.Rejected = true;
                         result.Key = "surgery-cavity-full";
@@ -1119,12 +1168,17 @@ public sealed class SurgerySystem : EntitySystem
         if (result.RemoveOrgan && organ == null && OpenCavity(site))
             _cavity.TryWithdraw(patient.Value, site.Zone, user);
 
+        if (result.ClearEmbedded && !result.Rejected)
+            _adminLog.Add(LogType.Surgery, LogImpact.Low, $"{ToPrettyString(user):user} pulled a shard out of {site.Zone} of {ToPrettyString(patient.Value):target}");
+
         if (!result.Rejected && (advance || closedStep || result.Finished || message.Progress >= 0.3f))
             PlayStep(patient.Value, verb.ToString());
         if (message.Slips > 0)
             PlayStep(patient.Value, "Miss");
-        _port.Apply(patient.Value, site.Zone, organ, result, held);
+        _port.Apply(patient.Value, site.Zone, organ, result, held, user);
         Wither(patient.Value, site.Zone);
+        if (cared != null && !site.Done)
+            FollowCare(patient.Value, site, cared);
         if (verb == SurgeryVerbKind.Seat && result.Attach && ZoneSevered(patient.Value, site.Zone))
             result.Key = "surgery-wrong-hand";
         RemComp<SurgeryBusyComponent>(user);
@@ -1614,8 +1668,14 @@ public sealed class SurgerySystem : EntitySystem
         return index >= 0 || site.Layers.Count == 0 ? index : site.Layers.Count - 1;
     }
 
-    private void Finish(EntityUid patient, SurgerySiteComponent site)
+    private void Finish(EntityUid patient, SurgerySiteComponent site, bool completed = true)
     {
+        if (completed)
+        {
+            var named = Operation(patient, site, out var done) ? done.ID : site.Part;
+            _adminLog.Add(LogType.Surgery, LogImpact.Medium, $"Surgery {named} on {site.Zone} of {ToPrettyString(patient):target} finished");
+        }
+
         if (Machine(patient) && site.Cut > 0f)
         {
             _limbs.ApplyEdit(patient, site.Zone, new LimbEdit { Health = site.Cut * LimbWoundRules.HealthFor(site.Zone, CompOrNull<LimbBodyComponent>(patient)) });
@@ -1665,7 +1725,7 @@ public sealed class SurgerySystem : EntitySystem
         site.CloseStep = 0;
         site.Clamped = false;
         site.Chosen = 255;
-        Finish(patient, site);
+        Finish(patient, site, false);
     }
 
     private byte UndoVerb(EntityUid patient, SurgerySiteComponent site)
@@ -2146,7 +2206,7 @@ public sealed class SurgerySystem : EntitySystem
     private bool FollowCare(EntityUid patient, SurgerySiteComponent site, SurgeryOperationPrototype finished)
     {
         if (site.Part.Length > 0
-            || !IsOpening(patient, site.Zone, finished)
+            || !IsOpening(patient, site.Zone, finished) && !IsCare(finished)
             || OpeningCare(patient, site.Zone) is not { } next
             || next.ID == finished.ID)
             return false;
@@ -2154,6 +2214,13 @@ public sealed class SurgerySystem : EntitySystem
         site.Queued = next.ID;
         site.Step = SurgeryProcedure.CatchUp(next.Steps, site.Layers, 0);
         return site.Step < next.Steps.Count;
+    }
+
+    private static bool IsCare(SurgeryOperationPrototype operation)
+    {
+        return operation.When.Length > 0
+               && operation.Steps.Count > 0
+               && operation.Steps[0].Verb == SurgeryVerbKind.Incise;
     }
 
     private SurgeryOperationPrototype? OpeningCare(EntityUid patient, LimbZone zone)

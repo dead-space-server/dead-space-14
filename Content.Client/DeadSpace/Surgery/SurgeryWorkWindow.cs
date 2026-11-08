@@ -163,6 +163,13 @@ public sealed class SurgeryChestMap : Control
             return;
         }
 
+        if (Shard != null && _shardBox.Width > 1f && _shardBox.Contains(args.RelativePosition * UIScale))
+        {
+            TakeShard?.Invoke();
+            args.Handle();
+            return;
+        }
+
         if (organ == null)
             return;
 
@@ -241,14 +248,14 @@ public sealed class SurgeryChestMap : Control
             }
         }
 
+        var item = 30f * scale;
+        var both = Lodged != null && Shard != null;
+        _lodgedBox = default;
+        _shardBox = default;
         if (Lodged != null)
-        {
-            var box = 30f * scale;
-            _lodgedBox = UIBox2.FromDimensions(new Vector2(cavity.Center.X - box / 2f, cavity.Bottom - box - 4f * scale), new Vector2(box, box));
-            handle.DrawCircle(_lodgedBox.Center, box * 0.62f, Take.WithAlpha(0.85f));
-            handle.DrawCircle(_lodgedBox.Center, box * 0.56f, new Color(0.14f, 0.16f, 0.19f, 0.92f));
-            handle.DrawTextureRect(Lodged, _lodgedBox, Color.White);
-        }
+            _lodgedBox = ItemBox(handle, Lodged, cavity, item, both ? -0.75f : 0f);
+        if (Shard != null)
+            _shardBox = ItemBox(handle, Shard, cavity, item, both ? 0.75f : 0f);
 
         var beat = 1f + 0.18f * MathF.Sin(_pulse * 7f);
         foreach (var (at, left) in _bleeds)
@@ -263,6 +270,17 @@ public sealed class SurgeryChestMap : Control
 
         if (_hover is { } hover)
             Label(handle, SurgerySpeciesPrototype.OrganName(IoCManager.Resolve<IPrototypeManager>(), _species, hover.ToString()), Missing(hover) ? Put : Take, new Vector2(size.X / 2f, size.Y - 6f * scale));
+        else if (Shard != null && _shardBox.Contains(_mouse))
+            Label(handle, Loc.GetString("surgery-cavity-shard"), Take, new Vector2(size.X / 2f, size.Y - 6f * scale));
+    }
+
+    private static UIBox2 ItemBox(DrawingHandleScreen handle, Texture icon, UIBox2 cavity, float box, float shift)
+    {
+        var at = UIBox2.FromDimensions(new Vector2(cavity.Center.X - box / 2f + shift * box, cavity.Bottom - box * 1.13f), new Vector2(box, box));
+        handle.DrawCircle(at.Center, box * 0.62f, Take.WithAlpha(0.85f));
+        handle.DrawCircle(at.Center, box * 0.56f, new Color(0.14f, 0.16f, 0.19f, 0.92f));
+        handle.DrawTextureRect(icon, at, Color.White);
+        return at;
     }
 
     private void Label(DrawingHandleScreen handle, string text, Color color, Vector2 bottom)
@@ -313,6 +331,10 @@ public sealed class SurgeryChestMap : Control
     public event Action? TakeLodged;
     public Texture? Lodged;
     private UIBox2 _lodgedBox;
+
+    public event Action? TakeShard;
+    public Texture? Shard;
+    private UIBox2 _shardBox;
 
     private UIBox2 OrganRect(Spot spot, UIBox2 cavity)
     {

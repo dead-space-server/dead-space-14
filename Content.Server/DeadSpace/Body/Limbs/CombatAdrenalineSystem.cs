@@ -21,7 +21,6 @@ public sealed class CombatAdrenalineSystem : EntitySystem
     private static readonly EntProtoId SurgeEffect = "StatusEffectCombatAdrenaline";
 
     [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly PlayerStubArmorSystem _stub = default!;
     [Dependency] private readonly SharedCombatModeSystem _combat = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly MobStateSystem _mobs = default!;
@@ -50,7 +49,6 @@ public sealed class CombatAdrenalineSystem : EntitySystem
                 positive += value.Float();
         }
 
-        positive = _stub.BeforeStub(ent.Owner, FixedPoint2.New(positive)).Float();
         var surging = Surging(ent);
         var hit = args.Origin != null || positive >= 5f;
         if (hit && CombatAdrenalineRules.TryRefresh(surging, positive))

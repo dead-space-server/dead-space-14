@@ -206,21 +206,7 @@ public sealed partial class LimbWoundSystem
             if (zones[i].Severed)
                 continue;
 
-            ApplyEdit(body, (LimbZone) i, new LimbEdit
-            {
-                SetHealth = true,
-                Health = LimbWoundRules.HealthFor((LimbZone) i, limbs),
-                SetBone = true,
-                Bone = 0f,
-                SetFlesh = true,
-                Flesh = 0f,
-                SetBleed = true,
-                Bleed = 0f,
-                Skin = -1000f,
-                ClearAtrophy = true,
-                ClearEmbedded = true,
-                ClearSkinBare = true,
-            });
+            zones[i] = new LimbZoneState { Health = LimbWoundRules.HealthFor((LimbZone) i, limbs) };
         }
 
         for (var i = 0; i < limbs.Organs.Count && i < LimbOrganRules.Count; i++)
@@ -243,7 +229,14 @@ public sealed partial class LimbWoundSystem
         limbs.EyesGone = 0;
         limbs.Mouth = 0f;
         limbs.EyeBurn = 0f;
+        limbs.LungWhistle = false;
+        limbs.BoneMend = 0f;
+        RemComp<LimbWhistleComponent>(body);
+        if (TryComp<BlindableComponent>(body, out var blind) && blind.EyeDamage != 0)
+            _blind.AdjustEyeDamage((body, blind), -blind.EyeDamage);
         Dirty(body, limbs);
+        ApplyLife(body, limbs);
+        _movement.RefreshMovementSpeedModifiers(body);
         RefreshActive(body, limbs);
     }
 
