@@ -24,6 +24,8 @@ public sealed partial class AlertLevelComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)] public string CurrentLevel = string.Empty;
 
+    [ViewVariables(VVAccess.ReadWrite)] public string CurrentSecondLevel = string.Empty;
+
     /// <summary>
     /// Is current station level can be changed by crew.
     /// </summary>
@@ -44,6 +46,20 @@ public sealed partial class AlertLevelComponent : Component
                 || !AlertLevels.Levels.TryGetValue(CurrentLevel, out var level))
             {
                 return false;
+            }
+
+            return level.Selectable && !level.DisableSelection && !IsLevelLocked;
+        }
+    }
+
+    [ViewVariables]
+    public bool IsSecondLevelSelectable
+    {
+        get
+        {
+            if (AlertLevels == null || !AlertLevels.SecondLevels.TryGetValue(CurrentSecondLevel, out var level))
+            {
+                return CurrentSecondLevel == string.Empty;
             }
 
             return level.Selectable && !level.DisableSelection && !IsLevelLocked;

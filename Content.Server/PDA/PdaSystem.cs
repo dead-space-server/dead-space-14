@@ -217,7 +217,9 @@ namespace Content.Server.PDA
                     IdOwner = id?.FullName,
                     JobTitle = id?.LocalizedJobTitle,
                     StationAlertLevel = pda.StationAlertLevel,
-                    StationAlertColor = pda.StationAlertColor
+                    StationSecondAlertLevel = pda.StationSecondAlertLevel,
+                    StationAlertColor = pda.StationAlertColor,
+                    StationSecondAlertColor = pda.StationSecondAlertColor
                 },
                 pda.StationName,
                 showUplink,
@@ -323,8 +325,11 @@ namespace Content.Server.PDA
                 alertComp.AlertLevels == null)
                 return;
             pda.StationAlertLevel = alertComp.CurrentLevel;
+            pda.StationSecondAlertLevel = alertComp.CurrentSecondLevel;
             if (alertComp.AlertLevels.Levels.TryGetValue(alertComp.CurrentLevel, out var details))
                 pda.StationAlertColor = details.Color;
+            if (alertComp.AlertLevels.SecondLevels.TryGetValue(alertComp.CurrentSecondLevel, out var SecondDetails))
+                pda.StationSecondAlertColor = SecondDetails.Color;
         }
 
         private string? GetDeviceNetAddress(EntityUid uid)

@@ -72,9 +72,9 @@ namespace Content.Client.Communications.UI
             // DS14-end
         }
 
-        public void AlertLevelSelected(string level)
+        public void AlertLevelSelected(string level, bool isSecondLevel)
         {
-            SendMessage(new CommunicationsConsoleSelectAlertLevelMessage(level));
+            SendMessage(new CommunicationsConsoleSelectAlertLevelMessage(level, isSecondLevel));
         }
 
         public void RadioAnnounceButtonPressed(string message)
@@ -117,6 +117,9 @@ namespace Content.Client.Communications.UI
                 commsState.CurrentAlert,
                 commsState.CurrentAlertColor,
                 commsState.AlertLevels,
+                commsState.CurrentSecondAlert,
+                commsState.CurrentSecondAlertColor,
+                commsState.AlertSecondLevels,
                 canChangeAlertLevel);
         }
         // DS14-end

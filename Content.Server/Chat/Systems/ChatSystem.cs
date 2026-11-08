@@ -532,6 +532,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         Color? colorOverride = null,
         string? voice = null,
         // DS14-start
+        string? alertLevel = null,
         string? languageId = null,
         Filter? recipientFilter = null,
         bool usePresetTTS = false)
@@ -550,6 +551,17 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         var wrappedMessage = Loc.GetString(announcementWrap, ("sender", sender), ("language", langName), ("message", FormattedMessage.EscapeText(message)));
         var lexiconWrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(lexiconMessage)));
+
+        if (alertLevel != null)
+        {
+            announcementWrap = _language.ShowInChat(languageId)
+                ? "chat-manager-sender-alert-level-announcement-wrap-message-lang"
+                : "chat-manager-sender-alert-level-announcement-wrap-message";
+
+            wrappedMessage = Loc.GetString(announcementWrap, ("sender", sender), ("language", langName), ("message", FormattedMessage.EscapeText(message)), ("message2", alertLevel));
+            lexiconWrappedMessage = Loc.GetString("chat-manager-sender-alert-level-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(lexiconMessage)), ("message2", alertLevel));
+        }
+
 
         var station = _stationSystem.GetOwningStation(source);
 

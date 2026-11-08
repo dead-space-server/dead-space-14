@@ -15,11 +15,19 @@ public sealed partial class AlertLevelPrototype : IPrototype
     /// </summary>
     [DataField("levels")] public Dictionary<string, AlertLevelDetail> Levels = new();
 
+    [DataField("Secondlevels")] public Dictionary<string, AlertLevelDetail> SecondLevels = new();
+
     /// <summary>
     /// Default level that the station is on upon initialization.
     /// If this isn't in the dictionary, this will default to whatever .First() gives.
     /// </summary>
     [DataField("defaultLevel")] public string DefaultLevel { get; private set; } = default!;
+
+    /// <summary>
+    /// Default level that the station is on upon initialization.
+    /// If this isn't in the dictionary, this will default to whatever .First() gives.
+    /// </summary>
+    [DataField("defaultSecondLevel")] public string DefaultSecondLevel { get; private set; } = "none";
 }
 
 /// <summary>

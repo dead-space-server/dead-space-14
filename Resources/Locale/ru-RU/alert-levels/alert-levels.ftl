@@ -1,4 +1,5 @@
 alert-level-announcement = Внимание! Уровень угрозы станции теперь "{ $name }"! { $announcement }
+alert-Doplevel-announcement = Внимание! Второстепенный уровень угрозы станции теперь "{ $name }"! { $announcement }
 alert-level-unknown = Неизвестный.
 alert-level-unknown-instructions = Неизвестно
 alert-level-green = Зелёный
@@ -31,3 +32,8 @@ alert-level-delta-instructions = Службе безопасности прик�
 alert-level-epsilon = Эпсилон
 alert-level-epsilon-announcement = Внимание! Внимание! Станция теперь под контролем центрального командования.
 alert-level-epsilon-instructions = Не сопротивляйтесь
+alert-level-none = Ничего
+alert-level-none-announcement = Внимание! Второстепенный уровень угрозы станции теперь отменен. Но основные угрозы, могут быть еще не окончены
+alert-level-none-instructions = Спокойствие.
+alert-level-main = [color=Gold]Основной код:[/color][color={$color}]{$level}[/color]
+alert-level-second = [color=Gold]Второстепенный код:[/color][color={$color}]{$level}[/color]

@@ -16,6 +16,9 @@ namespace Content.Shared.Communications
         public List<string>? AlertLevels;
         public string CurrentAlert;
         public Color CurrentAlertColor; // DS14 - alert level prototypes are server-only on this branch.
+        public List<string>? AlertSecondLevels;
+        public string CurrentSecondAlert;
+        public Color CurrentSecondAlertColor; // DS14 - alert level prototypes are server-only on this branch.
         public float CurrentAlertDelay;
 
         public CommunicationsConsoleInterfaceState(bool canAnnounce,
@@ -23,6 +26,9 @@ namespace Content.Shared.Communications
             List<string>? alertLevels,
             string currentAlert,
             Color currentAlertColor, // DS14
+            List<string>? alertSecondLevels,
+            string currentSecondAlert,
+            Color currentSecondAlertColor, // DS14
             float currentAlertDelay,
             TimeSpan? expectedCountdownEnd = null)
         {
@@ -33,6 +39,9 @@ namespace Content.Shared.Communications
             AlertLevels = alertLevels;
             CurrentAlert = currentAlert;
             CurrentAlertColor = currentAlertColor; // DS14
+            AlertSecondLevels = alertSecondLevels;
+            CurrentSecondAlert = currentSecondAlert;
+            CurrentSecondAlertColor = currentSecondAlertColor; // DS14
             CurrentAlertDelay = currentAlertDelay;
         }
     }
@@ -42,9 +51,11 @@ namespace Content.Shared.Communications
     {
         public readonly string Level;
 
-        public CommunicationsConsoleSelectAlertLevelMessage(string level)
+        public readonly bool IsSecondLevel;
+        public CommunicationsConsoleSelectAlertLevelMessage(string level,bool isSecondLevel = false)
         {
             Level = level;
+            IsSecondLevel = isSecondLevel;
         }
     }
 

@@ -3,7 +3,7 @@
     <!-- Info about the current alert level -->
     <BoxContainer HorizontalAlignment="Center">
         <!-- DS14-start -->
-        <Label StyleClasses="DeadSpaceSectionTitle" Margin="0 0 9 0"
+        <Label Name = "AlertLevelLabel" StyleClasses="DeadSpaceSectionTitle" Margin="0 0 9 0"
             Text="{Loc 'comms-console-alert-current-level-header'}" />
         <!-- DS14-end -->
         <Label Name="CurrentAlertLevelLabel" Margin="9 0 0 0"/>

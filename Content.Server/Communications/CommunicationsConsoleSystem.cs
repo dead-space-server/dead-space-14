@@ -166,6 +166,10 @@ namespace Content.Server.Communications
             List<string>? levels = null;
             var currentLevel = string.Empty;
             var currentLevelColor = Color.White; // DS14 - send server-only alert prototype color to the client UI.
+
+            List<string>? secondLevels = null;
+            var currentSecondLevel = string.Empty;
+            var currentSecondLevelColor = Color.White; // DS14 - send server-only alert prototype color to the client UI.
             float currentDelay = 0;
 
             if (stationUid != null)
@@ -185,9 +189,26 @@ namespace Content.Server.Communications
                         }
                     }
 
+                    if (alertComp.IsSecondLevelSelectable)
+                    {
+                        secondLevels = new();
+                        foreach (var (id, detail) in alertComp.AlertLevels.SecondLevels)
+                        {
+                            if (detail.Selectable)
+                            {
+                                secondLevels.Add(id);
+                            }
+                        }
+                    }
+
                     currentLevel = alertComp.CurrentLevel;
                     if (alertComp.AlertLevels.Levels.TryGetValue(currentLevel, out var currentLevelDetails))
                         currentLevelColor = currentLevelDetails.Color; // DS14
+
+                    currentSecondLevel = alertComp.CurrentSecondLevel;
+                    if (alertComp.AlertLevels.SecondLevels.TryGetValue(currentSecondLevel, out var currentSecondLevelDetails))
+                        currentSecondLevelColor = currentSecondLevelDetails.Color; // DS14
+
                     currentDelay = _alertLevelSystem.GetAlertLevelDelay(stationUid.Value, alertComp);
                 }
             }
@@ -197,6 +218,9 @@ namespace Content.Server.Communications
                 levels,
                 currentLevel,
                 currentLevelColor, // DS14
+                secondLevels,
+                currentSecondLevel,
+                currentSecondLevelColor,
                 currentDelay,
                 _roundEndSystem.ExpectedCountdownEnd
             ));
@@ -262,7 +286,10 @@ namespace Content.Server.Communications
             var stationUid = _stationSystem.GetOwningStation(uid);
             if (stationUid != null)
             {
-                _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true);
+                if (!message.IsSecondLevel)
+                    _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true);
+                else
+                    _alertLevelSystem.SetSecondLevel(stationUid.Value, message.Level, true, true);
             }
         }
 

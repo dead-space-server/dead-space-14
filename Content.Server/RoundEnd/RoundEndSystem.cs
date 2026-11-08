@@ -162,9 +162,15 @@ namespace Content.Server.RoundEnd
                 var stationUid = _stationSystem.GetOwningStation(requester.Value);
                 if (TryComp<AlertLevelComponent>(stationUid, out var alertLevel))
                 {
-                    duration = _protoManager
+                    var durationFromMainAlertLevel = _protoManager
                         .Index<AlertLevelPrototype>(AlertLevelSystem.DefaultAlertLevelSet)
                         .Levels[alertLevel.CurrentLevel].ShuttleTime;
+
+                    var durationFromDopAlertLevel = _protoManager
+                        .Index<AlertLevelPrototype>(AlertLevelSystem.DefaultAlertLevelSet)
+                        .SecondLevels[alertLevel.CurrentSecondLevel].ShuttleTime;
+
+                    duration = durationFromMainAlertLevel >= durationFromDopAlertLevel ? durationFromMainAlertLevel : durationFromDopAlertLevel;
                 }
             }
 

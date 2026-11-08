@@ -15,7 +15,7 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
 {
     public event Action? OnShuttleCalled;
     public event Action? OnShuttleRecalled;
-    public event Action<string>? OnAlertLevelChanged;
+    public event Action<string, bool>? OnAlertLevelChanged;
     public event Action<string>? OnRadioAnnounce;
     public event Action<string>? OnScreenBroadcast;
     public event Action? OnEmagChannel; // DS14
@@ -28,7 +28,9 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
         MessagingControls.OnRadioAnnounce += message => OnRadioAnnounce?.Invoke(message);
         MessagingControls.OnScreenBroadcast += message => OnScreenBroadcast?.Invoke(message);
 
-        AlertLevelControls.OnAlertLevelChanged += newLevel => OnAlertLevelChanged?.Invoke(newLevel);
+        AlertLevelControls.OnAlertLevelChanged += newLevel => OnAlertLevelChanged?.Invoke(newLevel, false);
+
+        AlertSecondLevelControls.OnAlertLevelChanged += newLevel => OnAlertLevelChanged?.Invoke(newLevel, true);
 
         ShuttleControls.OnShuttleCalled += () => OnShuttleCalled?.Invoke();
         ShuttleControls.OnShuttleRecalled += () => OnShuttleRecalled?.Invoke();
@@ -53,6 +55,9 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
         string currentAlertLevel,
         Color currentAlertColor,
         List<string>? selectableAlertLevels,
+        string currentSecondAlertLevel,
+        Color currentSecondAlertColor,
+        List<string>? selectableAlertSecondLevels,
         bool canChangeAlertLevel)
     {
         MessagingControls.CanRadioAnnounce = commsState.CanAnnounce;
@@ -63,6 +68,13 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
             currentAlertLevel,
             currentAlertColor,
             alertLevelSelectable);
+
+        var alertSecondLevelSelectable = selectableAlertSecondLevels != null && canChangeAlertLevel;
+        AlertSecondLevelControls.UpdateAlertLevels(selectableAlertSecondLevels,
+            currentSecondAlertLevel,
+            currentSecondAlertColor,
+            alertSecondLevelSelectable,
+            true);
 
         ShuttleControls.UpdateState(commsState.CanCall, commsState.CountdownStarted, commsState.ExpectedCountdownEnd);
     }

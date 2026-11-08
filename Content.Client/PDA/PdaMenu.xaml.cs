@@ -32,6 +32,7 @@ namespace Content.Client.PDA
         private string _jobTitle = Loc.GetString("comp-pda-ui-unassigned");
         private string _stationName = Loc.GetString("comp-pda-ui-unknown");
         private string _alertLevel = Loc.GetString("comp-pda-ui-unknown");
+        private string _alertSecondLevel = Loc.GetString("comp-pda-ui-unknown");
         private string _instructions = Loc.GetString("comp-pda-ui-unknown");
 
 
@@ -115,6 +116,11 @@ namespace Content.Client.PDA
                 _clipboard.SetText(_alertLevel);
             };
 
+            StationAlertSecondLevelButton.OnPressed += _ =>
+            {
+                _clipboard.SetText(_alertSecondLevel);
+            };
+
             StationTimeButton.OnPressed += _ =>
             {
                 var stationTime = _gameTiming.CurTime.Subtract(_gameTicker.RoundStartTimeSpan);
@@ -178,7 +184,6 @@ namespace Content.Client.PDA
             var alertColor = state.PdaOwnerInfo.StationAlertColor;
             var alertLevelKey = alertLevel != null ? $"alert-level-{alertLevel}" : "alert-level-unknown";
             _alertLevel = Loc.GetString(alertLevelKey);
-
             StationAlertLevelLabel.SetMarkup(Loc.GetString(
                 "comp-pda-ui-station-alert-level",
                 ("color", alertColor),
@@ -186,6 +191,21 @@ namespace Content.Client.PDA
             ));
             _instructions = Loc.GetString($"{alertLevelKey}-instructions");
             StationAlertLevelInstructions.SetMarkup(Loc.GetString(
+                "comp-pda-ui-station-alert-level-instructions",
+                ("instructions", _instructions))
+            );
+
+            var alertSecondLevel = state.PdaOwnerInfo.StationSecondAlertLevel;
+            var alertSecondLevelColor = state.PdaOwnerInfo.StationSecondAlertColor;
+            var alertSecondLevelKey = alertSecondLevel != null ? $"alert-level-{alertSecondLevel}" : "alert-level-unknown";
+            _alertSecondLevel = Loc.GetString(alertSecondLevelKey);
+            StationAlertSecondLevelLabel.SetMarkup(Loc.GetString(
+                "comp-pda-ui-station-alert-Second-level",
+                ("color", alertSecondLevelColor),
+                ("level", _alertSecondLevel)
+            ));
+            _instructions = Loc.GetString($"{alertSecondLevelKey}-instructions");
+            StationAlertSecondLevelInstructions.SetMarkup(Loc.GetString(
                 "comp-pda-ui-station-alert-level-instructions",
                 ("instructions", _instructions))
             );

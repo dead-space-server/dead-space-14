@@ -64,7 +64,14 @@ public sealed class AlertLevelSystem : EntitySystem
             defaultLevel = alertLevelComponent.AlertLevels.Levels.Keys.First();
         }
 
+        var defaultSecondLevel = alertLevelComponent.AlertLevels.DefaultSecondLevel;
+        if (string.IsNullOrEmpty(defaultLevel))
+        {
+            defaultSecondLevel = alertLevelComponent.AlertLevels.SecondLevels.Keys.First();
+        }
+
         SetLevel(args.Station, defaultLevel, false, false, true);
+        SetSecondLevel(args.Station, defaultSecondLevel, false, false, true);
     }
 
     private void OnPrototypeReload(PrototypesReloadedEventArgs args)
@@ -89,7 +96,14 @@ public sealed class AlertLevelSystem : EntitySystem
                     defaultLevel = comp.AlertLevels.Levels.Keys.First();
                 }
 
+                var defaultSecondLevel = comp.AlertLevels.DefaultSecondLevel;
+                if (string.IsNullOrEmpty(defaultSecondLevel))
+                {
+                    defaultSecondLevel = comp.AlertLevels.SecondLevels.Keys.First();
+                }
+
                 SetLevel(uid, defaultLevel, true, true, true);
+                SetSecondLevel(uid, defaultSecondLevel, true, true, true);
             }
         }
 
@@ -104,6 +118,16 @@ public sealed class AlertLevelSystem : EntitySystem
         }
 
         return alert.CurrentLevel;
+    }
+
+    public string GetSecondLevel(EntityUid station, AlertLevelComponent? alert = null)
+    {
+        if (!Resolve(station, ref alert))
+        {
+            return string.Empty;
+        }
+
+        return alert.CurrentSecondLevel;
     }
 
     public float GetAlertLevelDelay(EntityUid station, AlertLevelComponent? alert = null)
@@ -130,6 +154,84 @@ public sealed class AlertLevelSystem : EntitySystem
         return station.Comp.AlertLevels.DefaultLevel;
     }
 
+    public void SetSecondLevel(EntityUid station, string level, bool playSound, bool announce, bool force = false,
+        bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null)
+    {
+        if (!Resolve(station, ref component, ref dataComponent)
+            || component.AlertLevels == null
+            || !component.AlertLevels.SecondLevels.TryGetValue(level, out var detail)
+            || component.CurrentSecondLevel == level)
+        {
+            return;
+        }
+
+        if (!force)
+        {
+            if (!detail.Selectable
+                || component.CurrentDelay > 0
+                || component.IsLevelLocked)
+            {
+                return;
+            }
+
+            component.CurrentDelay = _cfg.GetCVar(CCVars.GameAlertLevelChangeDelay);
+            component.ActiveDelay = true;
+        }
+
+        component.CurrentSecondLevel = level;
+        component.IsLevelLocked = locked;
+
+        var stationName = dataComponent.EntityName;
+
+        var name = level.ToLower();
+
+        if (Loc.TryGetString($"alert-level-{level}", out var locName))
+        {
+            name = locName.ToLower();
+        }
+
+        // Announcement text. Is passed into announcementFull.
+        var announcement = detail.Announcement;
+
+        if (Loc.TryGetString(detail.Announcement, out var locAnnouncement))
+        {
+            announcement = locAnnouncement;
+        }
+
+        // The full announcement to be spat out into chat.
+        var announcementFull = Loc.GetString("alert-Secondlevel-announcement", ("name", name), ("announcement", announcement));
+        var stationMapFilter = GetStationMapFilter(station); // DS14
+
+        if (level == "none")
+        {
+            announcementFull = Loc.GetString("alert-level-none-announcement");
+        }
+
+        var playDefault = false;
+        if (playSound)
+        {
+            if (detail.Sound != null)
+            {
+                _sound.PlayAlertLevelGlobal(stationMapFilter, detail.Sound, detail.Sound.Params); // DS14
+            }
+            else
+            {
+                playDefault = true;
+            }
+        }
+
+        if (announce)
+        {
+            string? mainLevelAnnouncement= null;
+            if (component.AlertLevels.Levels.TryGetValue(component.CurrentLevel, out var mainDetail) && Loc.TryGetString($"alert-level-{component.CurrentLevel.ToLower()}", out var mainLevelName))
+                mainLevelAnnouncement = Loc.GetString("alert-level-main", ("color", mainDetail.Color.ToHex()), ("level", mainLevelName));
+
+            _chatSystem.DispatchStationAnnouncement(station, announcementFull, playDefaultSound: playDefault,
+                colorOverride: detail.Color, sender: stationName, alertLevel: mainLevelAnnouncement, recipientFilter: stationMapFilter); // DS14
+        }
+
+        RaiseLocalEvent(new AlertLevelChangedEvent(station, component.CurrentLevel, component.CurrentSecondLevel));
+    }
     /// <summary>
     /// Set the alert level based on the station's entity ID.
     /// </summary>
@@ -203,11 +305,16 @@ public sealed class AlertLevelSystem : EntitySystem
 
         if (announce)
         {
+            string? secondLevelannouncement = null;
+            if (component.CurrentSecondLevel != "none" && component.AlertLevels.SecondLevels.TryGetValue(component.CurrentSecondLevel, out var secondLevelDetail)
+            && Loc.TryGetString($"alert-level-{component.CurrentSecondLevel.ToLower()}", out var secondLevelName))
+                secondLevelannouncement = Loc.GetString("alert-level-second", ("color", secondLevelDetail.Color.ToHex()), ("level", secondLevelName));
+
             _chatSystem.DispatchStationAnnouncement(station, announcementFull, playDefaultSound: playDefault,
-                colorOverride: detail.Color, sender: stationName, recipientFilter: stationMapFilter); // DS14
+                colorOverride: detail.Color, sender: stationName, alertLevel: secondLevelannouncement, recipientFilter: stationMapFilter); // DS14
         }
 
-        RaiseLocalEvent(new AlertLevelChangedEvent(station, level));
+        RaiseLocalEvent(new AlertLevelChangedEvent(station, component.CurrentLevel, component.CurrentSecondLevel));
     }
 
     // DS14-start
@@ -239,9 +346,12 @@ public sealed class AlertLevelChangedEvent : EntityEventArgs
     public EntityUid Station { get; }
     public string AlertLevel { get; }
 
-    public AlertLevelChangedEvent(EntityUid station, string alertLevel)
+    public string AlertSecondLevel { get; }
+
+    public AlertLevelChangedEvent(EntityUid station, string alertLevel,string alertSecondLevel)
     {
         Station = station;
         AlertLevel = alertLevel;
+        AlertSecondLevel = alertSecondLevel;
     }
 }

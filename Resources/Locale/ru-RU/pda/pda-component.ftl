@@ -16,6 +16,7 @@ comp-pda-ui-menu-title = КПК
 comp-pda-ui-footer = Карманный Персональный Компьютер
 comp-pda-ui-station = Станция: [color=white]{ $station }[/color]
 comp-pda-ui-station-alert-level = Уровень угрозы: [color={ $color }]{ $level }[/color]
+comp-pda-ui-station-alert-second-level = Второстепенный уровень угрозы: [color={ $color }]{ $level }[/color]
 comp-pda-ui-station-alert-level-instructions = Инструкции: [color=white]{ $instructions }[/color]
 comp-pda-ui-station-time = Смена: [color=white]{ $time } · { $date }[/color]
 comp-pda-ui-eject-id-button = Извлечь ID

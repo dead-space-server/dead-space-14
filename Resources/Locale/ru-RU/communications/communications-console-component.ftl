@@ -37,6 +37,7 @@ comms-console-menu-alert-level-button-tooltip = Изменить уровень 
 comms-console-change-alert-level-button = Изменить уровень
 comms-console-confirm-alert-level-button = Подтвердить
 comms-console-alert-current-level-header = Уровень тревоги
+comms-console-alert-current-second-level-header = Второстепенный уровень тревоги
 # Emergency shuttle
 comms-console-menu-category-shuttle = Шаттл эвакуации
 comms-console-announcement-title-wizard = Маг

@@ -51,6 +51,8 @@ namespace Content.Shared.PDA
         public string? IdOwner;
         public string? JobTitle;
         public string? StationAlertLevel;
+        public string? StationSecondAlertLevel;
         public Color StationAlertColor;
+        public Color StationSecondAlertColor;
     }
 }
