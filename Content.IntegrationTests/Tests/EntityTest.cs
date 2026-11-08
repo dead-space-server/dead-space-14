@@ -168,19 +168,35 @@ namespace Content.IntegrationTests.Tests
                 .Select(p => p.ID)
                 .ToList();
 
-            await server.WaitPost(() =>
+            //DS-14 start
+            var batchSize = protoIds.Count / 8;
+            if (batchSize < 1)
+                batchSize = 1;
+
+            for (var start = 0; start < protoIds.Count; start += batchSize)
             {
-                foreach (var protoId in protoIds)
+                var batchStart = start;
+                var batchEnd = start + batchSize;
+                if (batchEnd > protoIds.Count)
+                    batchEnd = protoIds.Count;
+
+                await server.WaitPost(() =>
                 {
-                    mapSys.CreateMap(out var mapId);
-                    var grid = mapManager.CreateGridEntity(mapId);
-                    var ent = sEntMan.SpawnEntity(protoId, new EntityCoordinates(grid.Owner, 0.5f, 0.5f));
-                    foreach (var (_, component) in sEntMan.GetNetComponents(ent))
+                    for (var i = batchStart; i < batchEnd; i++)
                     {
-                        sEntMan.Dirty(ent, component);
+                        mapSys.CreateMap(out var mapId);
+                        var grid = mapManager.CreateGridEntity(mapId);
+                        var ent = sEntMan.SpawnEntity(protoIds[i], new EntityCoordinates(grid.Owner, 0.5f, 0.5f));
+                        foreach (var (_, component) in sEntMan.GetNetComponents(ent))
+                        {
+                            sEntMan.Dirty(ent, component);
+                        }
                     }
-                }
-            });
+                });
+
+                await pair.RunTicksSync(1);
+            }
+            //DS-14 end
 
             await pair.RunTicksSync(15);
 
