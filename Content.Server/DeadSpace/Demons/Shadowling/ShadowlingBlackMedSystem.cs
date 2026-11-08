@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Server.DeadSpace.Surgery;
 using Content.Shared.Actions;
 using Content.Shared.DeadSpace.Demons.Shadowling;
 using Content.Shared.Mobs.Systems;
@@ -19,6 +20,7 @@ public sealed class ShadowlingBlackMedSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SurgeryLimbPort _limbs = default!;
 
     public override void Initialize()
     {
@@ -63,6 +65,8 @@ public sealed class ShadowlingBlackMedSystem : EntitySystem
 
         if (!HasComp<ShadowlingSlaveComponent>(targetUid))
             return;
+
+        _limbs.Restore(targetUid);
 
         if (TryComp<DamageableComponent>(targetUid, out var damageable))
             _damageable.SetAllDamage(targetUid, FixedPoint2.Zero);

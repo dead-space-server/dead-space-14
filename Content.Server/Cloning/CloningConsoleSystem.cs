@@ -17,6 +17,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Power;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
+using Content.Server.DeadSpace.Cloning; //DS-14
 
 namespace Content.Server.Cloning
 {
@@ -29,7 +30,8 @@ namespace Content.Server.Cloning
         [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
         [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
         [Dependency] private readonly PowerReceiverSystem _powerReceiverSystem = default!;
-        [Dependency] private readonly SharedMindSystem _mindSystem = default!;
+        // [Dependency] private readonly SharedMindSystem _mindSystem = default!; //DS-14
+        [Dependency] private readonly CloningLimbSystem _cloningLimb = default!; //DS-14
 
         public override void Initialize()
         {
@@ -162,13 +164,13 @@ namespace Content.Server.Cloning
             if (body is null)
                 return;
 
-            if (!_mindSystem.TryGetMind(body.Value, out var mindId, out var mind))
+            if (!_cloningLimb.TryGetMind(body.Value, out var mindId, out var mind)) //DS-14
                 return;
 
             if (mind.UserId.HasValue == false || !_playerManager.ValidSessionId(mind.UserId.Value))
                 return;
 
-            if (_cloningPodSystem.TryCloning(cloningPodUid, body.Value, (mindId, mind), cloningPod, scannerComp.CloningFailChanceMultiplier))
+            if (_cloningPodSystem.TryCloning(cloningPodUid, _cloningLimb.Source(body.Value), (mindId, mind), cloningPod, scannerComp.CloningFailChanceMultiplier)) //DS-14
                 _adminLogger.Add(LogType.Action, LogImpact.Medium, $"{ToPrettyString(uid)} successfully cloned {ToPrettyString(body.Value)}.");
         }
 
@@ -204,19 +206,19 @@ namespace Content.Server.Cloning
                 EntityUid? scanBody = scanner.BodyContainer.ContainedEntity;
 
                 // GET STATE
-                if (scanBody == null || !HasComp<MobStateComponent>(scanBody))
+                if (scanBody == null || !HasComp<MobStateComponent>(scanBody) && !_cloningLimb.IsRemains(scanBody.Value)) //DS-14
                     clonerStatus = ClonerStatus.ScannerEmpty;
                 else
                 {
                     scanBodyInfo = MetaData(scanBody.Value).EntityName;
 
-                    if (!_mobStateSystem.IsDead(scanBody.Value))
+                    if (!_mobStateSystem.IsDead(scanBody.Value) && !_cloningLimb.IsRemains(scanBody.Value)) //DS-14
                     {
                         clonerStatus = ClonerStatus.ScannerOccupantAlive;
                     }
                     else
                     {
-                        if (!_mindSystem.TryGetMind(scanBody.Value, out _, out var mind) ||
+                        if (!_cloningLimb.TryGetMind(scanBody.Value, out _, out var mind) || //DS-14
                             mind.UserId == null ||
                             !_playerManager.TryGetSessionById(mind.UserId.Value, out _))
                         {

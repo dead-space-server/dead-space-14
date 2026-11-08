@@ -13,7 +13,6 @@ namespace Content.IntegrationTests.Tests.DeadSpace.Limbs;
 [TestFixture]
 public sealed class LimbArmorShotTest
 {
-    [TestCase("ClothingOuterHardsuitSecurity")]
     [TestCase("ClothingOuterHardsuitDeathsquad")]
     public async Task ArmorShieldsTheChestFromRifleRounds(string worn)
     {

@@ -1,5 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Server.Administration.Logs;
+using Content.Shared.Database;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.Gibbing;
@@ -23,6 +25,7 @@ public sealed class SurgeryCavitySystem : EntitySystem
     [Dependency] private readonly SharedItemSystem _items = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IComponentFactory _factory = default!;
+    [Dependency] private readonly IAdminLogManager _adminLog = default!;
 
     public override void Initialize()
     {
@@ -116,7 +119,7 @@ public sealed class SurgeryCavitySystem : EntitySystem
                && _items.GetItemSizeWeight(held.Size) <= _items.GetItemSizeWeight(max);
     }
 
-    public bool TryLodge(EntityUid patient, LimbZone zone, EntityUid item)
+    public bool TryLodge(EntityUid patient, LimbZone zone, EntityUid item, EntityUid? user = null)
     {
         if (!Fits(zone, item) || !Pocket(zone, out var id, out _))
             return false;
@@ -131,6 +134,8 @@ public sealed class SurgeryCavitySystem : EntitySystem
             return false;
 
         Remember(patient, zone, item);
+        if (user is { } lodger)
+            _adminLog.Add(LogType.Surgery, LogImpact.High, $"{ToPrettyString(lodger):user} lodged {ToPrettyString(item):entity} into the {zone} cavity of {ToPrettyString(patient):target}");
         return true;
     }
 
@@ -148,6 +153,7 @@ public sealed class SurgeryCavitySystem : EntitySystem
 
         Remember(patient, zone, cavity.ContainedEntities.Count == 0 ? null : cavity.ContainedEntities[0]);
         _hands.TryPickupAnyHand(user, item);
+        _adminLog.Add(LogType.Surgery, LogImpact.High, $"{ToPrettyString(user):user} took {ToPrettyString(item):entity} out of the {zone} cavity of {ToPrettyString(patient):target}");
         return true;
     }
 

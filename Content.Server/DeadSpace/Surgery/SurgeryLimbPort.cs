@@ -1,6 +1,8 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Server.Administration.Logs;
 using Content.Shared.Changeling.Systems;
+using Content.Shared.Database;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
@@ -11,6 +13,8 @@ using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
+using Content.Shared.Projectiles;
 using Content.Shared.Humanoid;
 using Content.Shared.Rotation;
 using Content.Shared.Standing;
@@ -32,6 +36,9 @@ public sealed class SurgeryLimbPort : EntitySystem
     [Dependency] private readonly SurgeryOrganFreshSystem _fresh = default!;
     [Dependency] private readonly SurgeryGraftSystem _graft = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
+    [Dependency] private readonly IAdminLogManager _adminLog = default!;
+    [Dependency] private readonly BloodstreamSystem _blood = default!;
+    [Dependency] private readonly SharedProjectileSystem _projectiles = default!;
 
     private const float Detox = 0.6f;
 
@@ -46,7 +53,11 @@ public sealed class SurgeryLimbPort : EntitySystem
 
     private void OnStasis(ref RegenerativeStasisExitedEvent args)
     {
-        var uid = args.Target;
+        Restore(args.Target);
+    }
+
+    public void Restore(EntityUid uid)
+    {
         if (!TryComp<LimbBodyComponent>(uid, out _))
             return;
 
@@ -61,7 +72,51 @@ public sealed class SurgeryLimbPort : EntitySystem
         _limbs.ClearInsides(uid);
         RemComp<SurgeryInfectionComponent>(uid);
         RemComp<SurgeryRejectionComponent>(uid);
+        Seal(uid);
+        PullShards(uid);
+        if (TryComp<BloodstreamComponent>(uid, out var blood))
+        {
+            _blood.TryModifyBloodLevel(uid, blood.BloodReferenceSolution.MaxVolume);
+            _blood.TryModifyBleedAmount(uid, -blood.BleedAmount);
+        }
+
         _restock.Add(uid);
+    }
+
+    private void Seal(EntityUid uid)
+    {
+        if (!TryComp<SurgerySiteComponent>(uid, out var site))
+            return;
+
+        site.SpringBone = 0f;
+        site.Done = true;
+        site.Part = "";
+        site.Queued = "";
+        site.Step = 0;
+        site.CloseStep = 0;
+        site.Clamped = false;
+        site.Chosen = 255;
+        site.Cut = 0f;
+        for (var i = 0; i < site.Layers.Count; i++)
+        {
+            var layer = site.Layers[i];
+            layer.Integrity = 1f;
+            layer.Retracted = false;
+            site.Layers[i] = layer;
+        }
+
+        Dirty(uid, site);
+    }
+
+    private void PullShards(EntityUid uid)
+    {
+        if (!TryComp<EmbeddedContainerComponent>(uid, out var embedded))
+            return;
+
+        var stuck = new EntityUid[embedded.EmbeddedObjects.Count];
+        embedded.EmbeddedObjects.CopyTo(stuck);
+        foreach (var shard in stuck)
+            _projectiles.EmbedDetach(shard, null);
     }
 
     private void Grow(EntityUid uid, LimbZone zone)
@@ -144,7 +199,7 @@ public sealed class SurgeryLimbPort : EntitySystem
         return turn.RotateVec(local);
     }
 
-    public void Apply(EntityUid patient, LimbZone zone, LimbOrgan? organ, in SurgeryResult result, EntityUid? held)
+    public void Apply(EntityUid patient, LimbZone zone, LimbOrgan? organ, in SurgeryResult result, EntityUid? held, EntityUid? user = null)
     {
         if (result.Rejected)
             return;
@@ -169,7 +224,7 @@ public sealed class SurgeryLimbPort : EntitySystem
         if (organ is { } picked)
         {
             if (result.RemoveOrgan)
-                Take(patient, picked, result);
+                Take(patient, picked, result, user);
 
             if (result.PlaceOrgan && picked == LimbOrgan.Eyes
                 && TryComp<LimbBodyComponent>(patient, out var seeing) && seeing.EyesGone > 0
@@ -180,11 +235,13 @@ public sealed class SurgeryLimbPort : EntitySystem
                 {
                     _graft.Grafted(patient, spare, LimbOrganHomes.Home(picked), picked.ToString(), null);
                     _limbs.ApplyOrganEdit(patient, picked, new LimbOrganEdit { EyesGone = -seeing.EyesGone });
+                    if (user is { } inserter)
+                        _adminLog.Add(LogType.Surgery, LogImpact.Medium, $"{ToPrettyString(inserter):user} inserted {ToPrettyString(spare):entity} as {picked} into {ToPrettyString(patient):target}");
                     Del(spare);
                 }
             }
             else if (result.PlaceOrgan && held is { } item)
-                Place(patient, picked, item, result);
+                Place(patient, picked, item, result, user);
 
             if (!result.RemoveOrgan && !result.PlaceOrgan && (result.OrganDamage > 0f || result.Rupture || result.Eyes != 0))
             {
@@ -201,14 +258,18 @@ public sealed class SurgeryLimbPort : EntitySystem
         if (organ != null && (result.RemoveOrgan || result.PlaceOrgan))
             _organs.Refresh(patient);
 
-        if (result.Sever)
-            _limbs.Amputate(patient, zone, CutAt(patient, zone));
+        if (result.Sever && _limbs.Amputate(patient, zone, CutAt(patient, zone)) && user is { } cutter)
+            _adminLog.Add(LogType.Surgery, LogImpact.High, $"{ToPrettyString(cutter):user} amputated {zone} of {ToPrettyString(patient):target}");
 
         if (result.Attach && held is { } part)
-            _limbs.TryReattach(patient, zone, part, result.Crude);
+        {
+            var name = ToPrettyString(part);
+            if (_limbs.TryReattach(patient, zone, part, result.Crude) && user is { } sewer)
+                _adminLog.Add(LogType.Surgery, LogImpact.Medium, $"{ToPrettyString(sewer):user} attached {name:entity} to {zone} of {ToPrettyString(patient):target}");
+        }
     }
 
-    private void Take(EntityUid patient, LimbOrgan organ, in SurgeryResult result)
+    private void Take(EntityUid patient, LimbOrgan organ, in SurgeryResult result, EntityUid? user)
     {
         var edit = new LimbOrganEdit
         {
@@ -230,6 +291,8 @@ public sealed class SurgeryLimbPort : EntitySystem
             return;
 
         Stamp(entity, patient, organ, result);
+        if (user is { } taker)
+            _adminLog.Add(LogType.Surgery, LogImpact.High, $"{ToPrettyString(taker):user} removed {ToPrettyString(entity):entity} ({organ}) from {ToPrettyString(patient):target}");
         _transform.SetCoordinates(entity, Transform(patient).Coordinates.Offset(new Vector2(0.45f, 0.15f)));
         _limbs.ApplyOrganEdit(patient, organ, edit);
         if (_limbs.IsVital(patient, organ))
@@ -240,7 +303,7 @@ public sealed class SurgeryLimbPort : EntitySystem
         }
     }
 
-    private void Place(EntityUid patient, LimbOrgan organ, EntityUid item, in SurgeryResult result)
+    private void Place(EntityUid patient, LimbOrgan organ, EntityUid item, in SurgeryResult result, EntityUid? user)
     {
         if (!TryComp<OrganComponent>(item, out _))
             return;
@@ -262,6 +325,8 @@ public sealed class SurgeryLimbPort : EntitySystem
             return;
 
         _graft.Grafted(patient, item, LimbOrganHomes.Home(organ), organ.ToString(), null);
+        if (user is { } placer)
+            _adminLog.Add(LogType.Surgery, LogImpact.Medium, $"{ToPrettyString(placer):user} inserted {ToPrettyString(item):entity} as {organ} into {ToPrettyString(patient):target}");
         var rotten = decay >= 1f;
         _limbs.ApplyOrganEdit(patient, organ, new LimbOrganEdit
         {
@@ -315,7 +380,7 @@ public sealed class SurgeryLimbPort : EntitySystem
             return false;
 
         var item = Spawn(grown, Transform(patient).Coordinates);
-        Place(patient, organ, item, new SurgeryResult());
+        Place(patient, organ, item, new SurgeryResult(), null);
         if (!TerminatingOrDeleted(item) && !_containers.IsEntityInContainer(item))
         {
             QueueDel(item);

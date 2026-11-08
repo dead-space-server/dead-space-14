@@ -61,10 +61,10 @@ public sealed class InternalsSystem : SharedInternalsSystem
             var tankEnt = ent.Comp.GasTankEntity!.Value;
             var gasTank = Comp<GasTankComponent>(tankEnt);
             //DS-14 start
-            if (!_respirator.CanMetabolizeInhaledAir(ent.Owner, gasTank.Air))
+            if (!_respirator.Saturates(ent.Owner, gasTank.Air))
             {
                 var better = FindBestGasTank(ent.Owner);
-                if (better != null && _respirator.CanMetabolizeInhaledAir(ent.Owner, better.Value.Comp.Air))
+                if (better != null && _respirator.Saturates(ent.Owner, better.Value.Comp.Air))
                 {
                     if (better.Value.Owner != tankEnt && !_gasTank.ConnectToInternals(better.Value, user: ent.Owner))
                         return;

@@ -271,6 +271,16 @@ public sealed class RespiratorSystem : EntitySystem
         args.Handled = true;
         args.Breathable = CanMetabolizeInhaledAir(ent.Owner, args.Air);
     }
+
+    public bool Saturates(Entity<RespiratorComponent?> ent, GasMixture gas)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        var ev = new CanMetabolizeGasEvent(gas);
+        RaiseLocalEvent(ent, ref ev);
+        return ev.Handled && ev.Saturation > 0f;
+    }
     //DS-14 end
 
     /// <summary>

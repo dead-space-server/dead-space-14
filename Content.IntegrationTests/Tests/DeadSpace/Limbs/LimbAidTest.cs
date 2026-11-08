@@ -194,6 +194,10 @@ public sealed class LimbAidTest
             var stasis = entities.GetComponent<RegenerativeStasisActionComponent>(action);
 
             Assert.That(entities.System<LimbWoundSystem>().Amputate(ling, LimbZone.Head), Is.True);
+            Assert.That(stasis.IsInStasis, Is.False);
+            Assert.That(entities.System<MobStateSystem>().IsAlive(ling), Is.True, "a headless changeling stays alive");
+
+            entities.System<RegenerativeStasisSystem>().EnterStasis((action, stasis), ling);
             Assert.That(stasis.IsInStasis, Is.True);
 
             entities.System<RegenerativeStasisSystem>().ExitStasis((action, stasis), ling);
@@ -254,8 +258,15 @@ public sealed class LimbAidTest
             var entities = server.EntMan;
             var minds = entities.System<SharedMindSystem>();
             Assert.That(minds.TryGetMind(ling, out _, out _), Is.True, "mind left the body");
-            Assert.That(entities.GetComponent<RegenerativeStasisActionComponent>(action).IsInStasis, Is.True);
             var actions = entities.System<SharedActionsSystem>();
+            var stasis = entities.GetComponent<RegenerativeStasisActionComponent>(action);
+            if (!stasisFirst)
+            {
+                Assert.That(stasis.IsInStasis, Is.False, "losing the head does not enter stasis");
+                actions.PerformAction(ling, (action, entities.GetComponent<ActionComponent>(action)), predicted: false);
+            }
+
+            Assert.That(stasis.IsInStasis, Is.True, "stasis survives the head loss");
             actions.ClearCooldown(action);
             actions.PerformAction(ling, (action, entities.GetComponent<ActionComponent>(action)), predicted: false);
         });

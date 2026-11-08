@@ -334,8 +334,10 @@ public sealed class LimbWoundRulesTest
     {
         var bare = new LimbZoneState();
         var gloved = new LimbZoneState();
-        var bareHit = LimbWoundRules.Apply(ref bare, Strike(LimbZone.HandRight, LimbMark.Blunt, 10f, 0.5f));
-        var glovedHit = LimbWoundRules.Apply(ref gloved, Strike(LimbZone.HandRight, LimbMark.Blunt, 10f, 0.5f, grip: true));
+        var light = new LimbZoneState();
+        var bareHit = LimbWoundRules.Apply(ref bare, Strike(LimbZone.HandRight, LimbMark.Blunt, 10f, 0.3f));
+        var glovedHit = LimbWoundRules.Apply(ref gloved, Strike(LimbZone.HandRight, LimbMark.Blunt, 10f, 0.3f, grip: true));
+        var lightHit = LimbWoundRules.Apply(ref light, Strike(LimbZone.HandRight, LimbMark.Blunt, 9f, 0f));
         var leg = new LimbZoneState();
         LimbWoundRules.Apply(ref leg, Strike(LimbZone.LegLeft, LimbMark.Blunt, LimbWoundRules.BreakBone, 0f));
 
@@ -343,9 +345,28 @@ public sealed class LimbWoundRulesTest
         {
             Assert.That(bareHit.DropItem, Is.True);
             Assert.That(glovedHit.DropItem, Is.False);
+            Assert.That(lightHit.DropItem, Is.False, "blunt under 10 never disarms");
             Assert.That(LimbWoundRules.Limp(leg, false), Is.True);
             Assert.That(LimbWoundRules.Limp(leg, true), Is.False);
         });
+    }
+
+    [Test]
+    public void CrackRollFollowsLostHealthAndTurnsIntoFracture()
+    {
+        var state = new LimbZoneState();
+        Assert.Multiple(() =>
+        {
+            Assert.That(LimbWoundRules.CrackChance(0.5f), Is.EqualTo(0f));
+            Assert.That(LimbWoundRules.CrackChance(0.6f), Is.EqualTo(0.05f));
+            Assert.That(LimbWoundRules.CrackChance(0.81f), Is.EqualTo(0.1f));
+            Assert.That(LimbWoundRules.RollCrack(ref state, 0.6f, 0.06f), Is.False);
+        });
+
+        Assert.That(LimbWoundRules.RollCrack(ref state, 0.6f, 0.04f), Is.True);
+        Assert.That(state.Bone, Is.EqualTo(LimbWoundRules.StrainBone));
+        Assert.That(LimbWoundRules.RollCrack(ref state, 0.9f, 0.09f), Is.True);
+        Assert.That(state.Bone, Is.EqualTo(LimbWoundRules.BreakBone));
     }
 
     [Test]
