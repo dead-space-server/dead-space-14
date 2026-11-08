@@ -1,0 +1,17 @@
+- type: entity
+  parent: BaseItem
+  id: BannerCommandItem
+  name: command banner
+  description: A war banner of the detachment. Whoever holds it can give one command, and those standing nearby will hear it.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Decoration/banner.rsi
+    state: banner-deathsquad
+  - type: Item
+    size: Large
+    inhandVisuals:
+      left:
+      - state: banner-deathsquad
+      right:
+      - state: banner-deathsquad
+  - type: Banner
