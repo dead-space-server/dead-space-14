@@ -49,11 +49,18 @@ public sealed partial class AlertLevelControls : BoxContainer
         string currentAlertLevel,
         Color currentAlertColor,
         bool alertLevelSelectable,
-        bool secondLevel = false)
+        bool secondLevel = false //DS14
+        )
     {
         _alertLevelSelectable = alertLevelSelectable;
         _currentAlertLevel = currentAlertLevel;
-        AlertLevelLabel.Text = secondLevel ? Loc.GetString("comms-console-alert-current-second-level-header") : Loc.GetString("comms-console-alert-current-level-header");
+
+        //DS14-start
+        AlertLevelLabel.Text = secondLevel ?
+        Loc.GetString("comms-console-alert-current-second-level-header") :
+        Loc.GetString("comms-console-alert-current-level-header");
+        //DS14-end
+
         CurrentAlertLevelLabel.Text = GetLocalizedAlertName(currentAlertLevel);
         CurrentAlertLevelLabel.ModulateSelfOverride = currentAlertColor;
 

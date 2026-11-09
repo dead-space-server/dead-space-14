@@ -15,20 +15,24 @@ namespace Content.Shared.Communications
         public readonly bool CountdownStarted;
         public List<string>? AlertLevels;
         public string CurrentAlert;
-        public Color CurrentAlertColor; // DS14 - alert level prototypes are server-only on this branch.
+        //DS14-start
+        public Color CurrentAlertColor; // alert level prototypes are server-only on this branch.
         public List<string>? AlertSecondLevels;
         public string CurrentSecondAlert;
-        public Color CurrentSecondAlertColor; // DS14 - alert level prototypes are server-only on this branch.
+        public Color CurrentSecondAlertColor;
+        //DS14-end
         public float CurrentAlertDelay;
 
         public CommunicationsConsoleInterfaceState(bool canAnnounce,
             bool canCall,
             List<string>? alertLevels,
             string currentAlert,
-            Color currentAlertColor, // DS14
+            //DS14-start
+            Color currentAlertColor, 
             List<string>? alertSecondLevels,
             string currentSecondAlert,
-            Color currentSecondAlertColor, // DS14
+            Color currentSecondAlertColor,
+            //DS14-end
             float currentAlertDelay,
             TimeSpan? expectedCountdownEnd = null)
         {
@@ -38,10 +42,12 @@ namespace Content.Shared.Communications
             CountdownStarted = expectedCountdownEnd != null;
             AlertLevels = alertLevels;
             CurrentAlert = currentAlert;
-            CurrentAlertColor = currentAlertColor; // DS14
+            //DS14-start
+            CurrentAlertColor = currentAlertColor;
             AlertSecondLevels = alertSecondLevels;
             CurrentSecondAlert = currentSecondAlert;
-            CurrentSecondAlertColor = currentSecondAlertColor; // DS14
+            CurrentSecondAlertColor = currentSecondAlertColor;
+            //DS14-end
             CurrentAlertDelay = currentAlertDelay;
         }
     }
@@ -51,11 +57,11 @@ namespace Content.Shared.Communications
     {
         public readonly string Level;
 
-        public readonly bool IsSecondLevel;
-        public CommunicationsConsoleSelectAlertLevelMessage(string level,bool isSecondLevel = false)
+        public readonly bool IsSecondLevel; //DS14
+        public CommunicationsConsoleSelectAlertLevelMessage(string level, bool isSecondLevel = false) //DS14
         {
             Level = level;
-            IsSecondLevel = isSecondLevel;
+            IsSecondLevel = isSecondLevel; //DS14
         }
     }
 

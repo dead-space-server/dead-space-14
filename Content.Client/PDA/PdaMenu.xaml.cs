@@ -32,7 +32,7 @@ namespace Content.Client.PDA
         private string _jobTitle = Loc.GetString("comp-pda-ui-unassigned");
         private string _stationName = Loc.GetString("comp-pda-ui-unknown");
         private string _alertLevel = Loc.GetString("comp-pda-ui-unknown");
-        private string _alertSecondLevel = Loc.GetString("comp-pda-ui-unknown");
+        private string _alertSecondLevel = Loc.GetString("comp-pda-ui-unknown"); //DS14
         private string _instructions = Loc.GetString("comp-pda-ui-unknown");
 
 
@@ -116,10 +116,12 @@ namespace Content.Client.PDA
                 _clipboard.SetText(_alertLevel);
             };
 
+            //DS14-start
             StationAlertSecondLevelButton.OnPressed += _ =>
             {
                 _clipboard.SetText(_alertSecondLevel);
             };
+            //DS14-end
 
             StationTimeButton.OnPressed += _ =>
             {
@@ -195,12 +197,13 @@ namespace Content.Client.PDA
                 ("instructions", _instructions))
             );
 
+            //DS14-start
             var alertSecondLevel = state.PdaOwnerInfo.StationSecondAlertLevel;
             var alertSecondLevelColor = state.PdaOwnerInfo.StationSecondAlertColor;
             var alertSecondLevelKey = alertSecondLevel != null ? $"alert-level-{alertSecondLevel}" : "alert-level-unknown";
             _alertSecondLevel = Loc.GetString(alertSecondLevelKey);
             StationAlertSecondLevelLabel.SetMarkup(Loc.GetString(
-                "comp-pda-ui-station-alert-Second-level",
+                "comp-pda-ui-station-alert-second-level",
                 ("color", alertSecondLevelColor),
                 ("level", _alertSecondLevel)
             ));
@@ -209,6 +212,7 @@ namespace Content.Client.PDA
                 "comp-pda-ui-station-alert-level-instructions",
                 ("instructions", _instructions))
             );
+            //DS14-end
 
             AddressLabel.Text = state.Address?.ToUpper() ?? " - ";
 

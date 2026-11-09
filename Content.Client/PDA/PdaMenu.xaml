@@ -51,12 +51,14 @@
                 <ContainerButton Name="StationAlertLevelInstructionsButton">
                     <RichTextLabel Name="StationAlertLevelInstructions" Access="Public"/>
                 </ContainerButton>
+                //DS14-start
                 <ContainerButton Name="StationAlertSecondLevelButton">
                     <RichTextLabel Name="StationAlertSecondLevelLabel" Access="Public"/>
                 </ContainerButton>
                 <ContainerButton Name="StationAlertSecondLevelInstructionsButton">
                     <RichTextLabel Name="StationAlertSecondLevelInstructions" Access="Public"/>
                 </ContainerButton>
+                //DS14-end
             </BoxContainer>
         </ScrollContainer>
         <!-- DS14-end -->

@@ -945,6 +945,15 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
                 reason = Loc.GetString("ert-call-fail-code-blacklist", ("level", level));
                 return false;
             }
+
+            //DS14-start
+            var secondLevel = _alertLevelSystem.GetSecondLevel(station.Value);
+            if (prototype.CodeBlackList.Contains(secondLevel))
+            {
+                reason = Loc.GetString("ert-call-fail-code-blacklist", ("level", secondLevel));
+                return false;
+            }
+            //DS14-end
         }
 
         if (needCooldown)

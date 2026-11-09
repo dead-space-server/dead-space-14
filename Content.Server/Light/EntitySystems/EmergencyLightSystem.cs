@@ -98,7 +98,8 @@ public sealed class EmergencyLightSystem : SharedEmergencyLightSystem
         if (!TryComp<AlertLevelComponent>(ev.Station, out var alert))
             return;
 
-        if (alert.AlertLevels == null || !alert.AlertLevels.Levels.TryGetValue(ev.AlertLevel, out var mainLevelDetails) || !alert.AlertLevels.SecondLevels.TryGetValue(ev.AlertSecondLevel, out var secondLevelDetails))
+        if (alert.AlertLevels == null || !alert.AlertLevels.Levels.TryGetValue(ev.AlertLevel, out var mainLevelDetails)
+            || !alert.AlertLevels.SecondLevels.TryGetValue(ev.AlertSecondLevel, out var secondLevelDetails)) //DS14
             return;
 
         var query = EntityQueryEnumerator<EmergencyLightComponent, PointLightComponent, AppearanceComponent, TransformComponent>();
@@ -106,7 +107,7 @@ public sealed class EmergencyLightSystem : SharedEmergencyLightSystem
         {
             if (CompOrNull<StationMemberComponent>(xform.GridUid)?.Station != ev.Station)
                 continue;
-
+            //DS14-start
             if (ev.AlertSecondLevel != "none" && !mainLevelDetails.ForceEnableEmergencyLights)
             {
                 _pointLight.SetColor(uid, secondLevelDetails.EmergencyLightColor, pointLight);
@@ -141,7 +142,7 @@ public sealed class EmergencyLightSystem : SharedEmergencyLightSystem
                     UpdateState((uid, light));
                 }
             }
-
+            //DS14-end
 
         }
     }

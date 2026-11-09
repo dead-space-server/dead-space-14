@@ -72,9 +72,9 @@ namespace Content.Client.Communications.UI
             // DS14-end
         }
 
-        public void AlertLevelSelected(string level, bool isSecondLevel)
+        public void AlertLevelSelected(string level, bool isSecondLevel) //DS14
         {
-            SendMessage(new CommunicationsConsoleSelectAlertLevelMessage(level, isSecondLevel));
+            SendMessage(new CommunicationsConsoleSelectAlertLevelMessage(level, isSecondLevel)); //DS14
         }
 
         public void RadioAnnounceButtonPressed(string message)
