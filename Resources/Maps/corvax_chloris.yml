@@ -241991,8 +241991,6 @@ entities:
       pos: 102.5,128.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 301
     - type: AtmosPipeColor
