@@ -9818,3 +9818,10 @@ Entries:
   - type: Tweak
     message: Обновлён спрайт медибота by Amaliz. Добавлен спрайт сканера аутопсии
       в руках by pivo_3amopckoe.
+- id: 936
+  author: MTF97
+  time: '2026-11-09T23:41:51.318124+00:00'
+  pr: 2692
+  changes:
+  - type: Fix
+    message: Технические баги парочки карт.
