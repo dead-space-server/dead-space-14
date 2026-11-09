@@ -29,6 +29,9 @@
   id: BorgModuleSecurity
 
 - type: Tag
+  id: BorgRemoteModule
+
+- type: Tag
   id: BorgSecHead
 
 - type: Tag
@@ -96,7 +99,7 @@
 
 - type: Tag
   id: CloningPodMachineCircuitboard
-  
+
 - type: Tag
   id: CorruptTeleportItem
 
@@ -504,7 +507,7 @@
   id: VulpkaninEmotes
 
 - type: Tag
-  id: voicesensor 
+  id: voicesensor
 
 - type: Tag
   id: WeldingMaskFlame

@@ -47,6 +47,7 @@
   recipes:
   - ProximitySensor
   - Nanopaste # DS14
+  - BorgRemoteModule # DS14
 
 - type: latheRecipePack
   id: BorgModules

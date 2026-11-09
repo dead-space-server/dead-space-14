@@ -1,0 +1,26 @@
+- type: entity
+  parent: BaseItem
+  id: BorgRemoteModule
+  name: B.O.R.I.S. remote access module
+  description: Installed instead of a positronic brain, it lets the station's Central AI take control of the cyborg.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Robotics/mmi.rsi
+    state: mmi_off
+  - type: BorgBrain
+  - type: BorgRemoteModule
+    chassisWhitelist:
+      components:
+      - BorgChassis
+    chassisBlacklist:
+      components:
+      - Xenoborg
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/component_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/component_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/component_drop.ogg
