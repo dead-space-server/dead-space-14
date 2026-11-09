@@ -17,7 +17,10 @@ namespace Content.Client.ContextMenu.UI
     /// <remarks>
     ///     This largely involves setting up timers to open and close sub-menus when hovering over other menu elements.
     /// </remarks>
-    public sealed class ContextMenuUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>, IOnSystemChanged<CombatModeSystem>, IOnStateEntered<MappingState>, IOnStateExited<MappingState>
+    public sealed class ContextMenuUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>, IOnSystemChanged<CombatModeSystem>, IOnStateEntered<MappingState>, IOnStateExited<MappingState>,
+        // DeadSpace14 BetterMappingEditor start
+        IOnStateEntered<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>, IOnStateExited<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>
+        // DeadSpace14 BetterMappingEditor end
     {
         public static readonly TimeSpan HoverDelay = TimeSpan.FromSeconds(0.2);
 
@@ -64,6 +67,18 @@ namespace Content.Client.ContextMenu.UI
         {
             Shutdown();
         }
+
+        // DeadSpace14 BetterMappingEditor start
+        public void OnStateEntered(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
+        {
+            Setup();
+        }
+
+        public void OnStateExited(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
+        {
+            Shutdown();
+        }
+        // DeadSpace14 BetterMappingEditor end
 
         public void Setup()
         {

@@ -1,5 +1,7 @@
-﻿- type: decal
+﻿# DeadSpace14 BetterMappingEditor start
+- type: decal
   id: MarkupSquare
+  parent: Markup
   tags: ["overlay"]
   defaultCustomColor: true
   sprite:
@@ -8,6 +10,7 @@
 
 - type: decal
   id: MarkupRectangle1x2
+  parent: Markup
   tags: ["overlay"]
   defaultCustomColor: true
   sprite:
@@ -16,6 +19,7 @@
 
 - type: decal
   id: MarkupRectangle1x2Center
+  parent: Markup
   tags: ["overlay"]
   defaultCustomColor: true
   sprite:
@@ -24,6 +28,7 @@
 
 - type: decal
   id: MarkupSquareQuater
+  parent: Markup
   tags: ["overlay"]
   defaultCustomColor: true
   sprite:
@@ -32,8 +37,10 @@
 
 - type: decal
   id: MarkupSquareQuaterCenter
+  parent: Markup
   tags: ["overlay"]
   defaultCustomColor: true
   sprite:
     sprite: Decals/Overlays/markups.rsi
     state: squareQuaterCenter
+# DeadSpace14 BetterMappingEditor end

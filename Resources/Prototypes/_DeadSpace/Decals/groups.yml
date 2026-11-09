@@ -1,0 +1,214 @@
+# Abstract decal prototypes used by the DeadSpace mapping editor to group decals into subcategories.
+
+- type: decal
+  id: Overlays
+  abstract: true
+
+- type: decal
+  id: Brick
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: HalfTile
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: QuarterTile
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: ThreeQuarterTile
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: Checker
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: MiniTile
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: Offset
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: Pavement
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: BrickTileDark
+  parent: BrickTile
+  abstract: true
+
+- type: decal
+  id: burnt
+  abstract: true
+
+- type: decal
+  id: GrayConcreteTrim
+  parent: ConcreteTrim
+  abstract: true
+
+- type: decal
+  id: OldConcreteTrim
+  parent: ConcreteTrim
+  abstract: true
+
+- type: decal
+  id: Crayons
+  abstract: true
+
+- type: decal
+  id: Numbers
+  parent: Crayons
+  abstract: true
+
+- type: decal
+  id: Alphabet
+  parent: Crayons
+  abstract: true
+
+- type: decal
+  id: Graffiti
+  parent: Crayons
+  abstract: true
+
+- type: decal
+  id: Symbols
+  parent: Crayons
+  abstract: true
+
+- type: decal
+  id: Info
+  parent: Crayons
+  abstract: true
+
+- type: decal
+  id: Brushes
+  parent: Crayons
+  abstract: true
+
+- type: decal
+  id: DerelictSign
+  abstract: true
+
+#Bottom
+
+- type: decal
+  id: Dirty
+  abstract: true
+
+- type: decal
+  id: Flora
+  abstract: true
+
+- type: decal
+  id: Grass
+  parent: Flora
+  abstract: true
+
+- type: decal
+  id: GrassSnow
+  parent: Flora
+  abstract: true
+
+- type: decal
+  id: Bush
+  parent: Flora
+  abstract: true
+
+- type: decal
+  id: BushSnow
+  parent: Flora
+  abstract: true
+
+- type: decal
+  id: Rock
+  parent: Flora
+  abstract: true
+
+- type: decal
+  id: Flower
+  parent: Flora
+  abstract: true
+
+- type: decal
+  id: Bots
+  parent: Markings
+  abstract: true
+
+- type: decal
+  id: Warn
+  parent: Markings
+  abstract: true
+
+- type: decal
+  id: Deprecated
+  abstract: true
+
+- type: decal
+  id: SyndicateLogo
+  abstract: true
+
+- type: decal
+  id: Markup
+  parent: Overlays
+  abstract: true
+
+- type: decal
+  id: BrickTile
+  abstract: true
+
+- type: decal
+  id: BrickTileSteel
+  parent: BrickTile
+  abstract: true
+
+- type: decal
+  id: BrickTileWhite
+  parent: BrickTile
+  abstract: true
+
+- type: decal
+  id: ConcreteTrim
+  abstract: true
+
+- type: decal
+  id: Markings
+  abstract: true
+
+- type: decal
+  id: MiniTileDark
+  parent: MiniTile
+  abstract: true
+
+- type: decal
+  id: MiniTileSteel
+  parent: MiniTile
+  abstract: true
+
+- type: decal
+  id: MiniTileWhite
+  parent: MiniTile
+  abstract: true
+
+- type: decal
+  id: OriginStationSign
+  abstract: true
+
+- type: decal
+  id: SpaceStationSign
+  abstract: true
+
+- type: decal
+  id: WoodTrimThin
+  abstract: true

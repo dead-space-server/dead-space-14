@@ -1,0 +1,10 @@
+mapping-favorite = Избранное
+mapping-search = Поиск
+mapping-erase-tile = Стереть плитку
+mapping-erase-entity-tooltip = Удерживайте {$key}
+mapping-pick-tooltip = Удерживайте {$key}
+mapping-flip-tooltip = Перевернуть стороны
+mapping-hide-left-side-tooltip = Показать или скрыть левый список
+mapping-hide-right-side-tooltip = Показать или скрыть правый список
+mapping-collapse-all-tooltip = Свернуть всё
+mapping-clear-search-tooltip = Очистить поиск
