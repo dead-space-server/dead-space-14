@@ -57,11 +57,9 @@ namespace Content.Shared.Communications
     {
         public readonly string Level;
 
-        public readonly bool IsSecondLevel; //DS14
-        public CommunicationsConsoleSelectAlertLevelMessage(string level, bool isSecondLevel = false) //DS14
+        public CommunicationsConsoleSelectAlertLevelMessage(string level)
         {
             Level = level;
-            IsSecondLevel = isSecondLevel; //DS14
         }
     }
 

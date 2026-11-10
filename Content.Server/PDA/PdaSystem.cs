@@ -327,12 +327,12 @@ namespace Content.Server.PDA
                 alertComp.AlertLevels == null)
                 return;
             pda.StationAlertLevel = alertComp.CurrentLevel;
-            if (alertComp.AlertLevels.Levels.TryGetValue(alertComp.CurrentLevel, out var details))
-                pda.StationAlertColor = details.Color;
+            if (alertComp.AlertLevels.Levels.TryGetValue(alertComp.CurrentLevel, out var mainLevelDetails))
+                pda.StationAlertColor = mainLevelDetails.Color;
             //DS14-start
             pda.StationSecondAlertLevel = alertComp.CurrentSecondLevel;
-            if (alertComp.AlertLevels.SecondLevels.TryGetValue(alertComp.CurrentSecondLevel, out var SecondDetails))
-                pda.StationSecondAlertColor = SecondDetails.Color;
+            if (alertComp.AlertLevels.Levels.TryGetValue(alertComp.CurrentSecondLevel, out var secondLevelDetails))
+                pda.StationSecondAlertColor = secondLevelDetails.Color;
             //DS14-end
         }
 

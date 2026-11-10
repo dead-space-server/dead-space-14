@@ -23,13 +23,12 @@
       color: Red
       emergencyLightColor: Red
       forceEnableEmergencyLights: true
-  # DS14-start
-  Secondlevels:
     none:
       announcement: alert-level-none-announcement
       sound: null # DS14 alert sound
       color: Green
       emergencyLightColor: Green
+      isSecondary: true
     audit:
       announcement: alert-level-audit-announcement
       selectable: false
@@ -37,6 +36,7 @@
       color: MidnightBlue
       emergencyLightColor: DarkBlue
       shuttleTime: 600
+      isSecondary: true
     zeta:
       announcement: alert-level-zeta-announcement
       selectable: true
@@ -44,6 +44,7 @@
       color: PowderBlue
       emergencyLightColor: PowderBlue
       forceEnableEmergencyLights: true
+      isSecondary: true
     yellow:
       announcement: alert-level-yellow-announcement
       sound: /Audio/_DeadSpace/AlertLevels/yellow.ogg # DS14 alert sound
@@ -51,4 +52,4 @@
       emergencyLightColor: Goldenrod
       forceEnableEmergencyLights: true
       shuttleTime: 600
-  # DS14-end
+      isSecondary: true

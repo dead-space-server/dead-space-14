@@ -38,7 +38,7 @@ public sealed partial class AlertLevelComponent : Component
     /// If the level can be selected on the station.
     /// </summary>
     [ViewVariables]
-    public bool IsSelectable
+    public bool IsMainLevelSelectable
     {
         get
         {
@@ -58,7 +58,7 @@ public sealed partial class AlertLevelComponent : Component
     {
         get
         {
-            if (AlertLevels == null || !AlertLevels.SecondLevels.TryGetValue(CurrentSecondLevel, out var level))
+            if (AlertLevels == null || !AlertLevels.Levels.TryGetValue(CurrentSecondLevel, out var level))
             {
                 return CurrentSecondLevel == string.Empty;
             }

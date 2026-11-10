@@ -180,12 +180,12 @@ namespace Content.Server.Communications
                 if (TryComp(stationUid.Value, out AlertLevelComponent? alertComp) &&
                     alertComp.AlertLevels != null)
                 {
-                    if (alertComp.IsSelectable)
+                    if (alertComp.IsMainLevelSelectable)
                     {
                         levels = new();
                         foreach (var (id, detail) in alertComp.AlertLevels.Levels)
                         {
-                            if (detail.Selectable)
+                            if (detail.Selectable && !detail.IsSecondary)
                             {
                                 levels.Add(id);
                             }
@@ -196,9 +196,9 @@ namespace Content.Server.Communications
                     if (alertComp.IsSecondLevelSelectable)
                     {
                         secondLevels = new();
-                        foreach (var (id, detail) in alertComp.AlertLevels.SecondLevels)
+                        foreach (var (id, detail) in alertComp.AlertLevels.Levels)
                         {
-                            if (detail.Selectable)
+                            if (detail.Selectable && detail.IsSecondary)
                             {
                                 secondLevels.Add(id);
                             }
@@ -212,7 +212,7 @@ namespace Content.Server.Communications
 
                     //DS14-start
                     currentSecondLevel = alertComp.CurrentSecondLevel;
-                    if (alertComp.AlertLevels.SecondLevels.TryGetValue(currentSecondLevel, out var currentSecondLevelDetails))
+                    if (alertComp.AlertLevels.Levels.TryGetValue(currentSecondLevel, out var currentSecondLevelDetails))
                         currentSecondLevelColor = currentSecondLevelDetails.Color; // DS14
                     //DS14-end
 
@@ -295,12 +295,7 @@ namespace Content.Server.Communications
             var stationUid = _stationSystem.GetOwningStation(uid);
             if (stationUid != null)
             {
-                //DS14-start
-                if (!message.IsSecondLevel)
-                    _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true);
-                else
-                    _alertLevelSystem.SetSecondLevel(stationUid.Value, message.Level, true, true);
-                //DS14-end
+                _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true);
             }
         }
 

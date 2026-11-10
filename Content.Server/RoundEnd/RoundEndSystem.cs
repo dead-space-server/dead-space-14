@@ -169,7 +169,7 @@ namespace Content.Server.RoundEnd
 
                     var durationFromSecondAlertLevel = _protoManager
                         .Index<AlertLevelPrototype>(AlertLevelSystem.DefaultAlertLevelSet)
-                        .SecondLevels[alertLevel.CurrentSecondLevel].ShuttleTime;
+                        .Levels[alertLevel.CurrentSecondLevel].ShuttleTime;
 
                     duration = durationFromMainAlertLevel >= durationFromSecondAlertLevel ? durationFromMainAlertLevel : durationFromSecondAlertLevel;
                     //DS14-end

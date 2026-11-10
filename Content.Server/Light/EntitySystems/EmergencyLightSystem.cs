@@ -99,7 +99,7 @@ public sealed class EmergencyLightSystem : SharedEmergencyLightSystem
             return;
 
         if (alert.AlertLevels == null || !alert.AlertLevels.Levels.TryGetValue(ev.AlertLevel, out var mainLevelDetails)
-            || !alert.AlertLevels.SecondLevels.TryGetValue(ev.AlertSecondLevel, out var secondLevelDetails)) //DS14
+            || !alert.AlertLevels.Levels.TryGetValue(ev.AlertSecondLevel, out var secondLevelDetails)) //DS14
             return;
 
         var query = EntityQueryEnumerator<EmergencyLightComponent, PointLightComponent, AppearanceComponent, TransformComponent>();

@@ -15,8 +15,6 @@ public sealed partial class AlertLevelPrototype : IPrototype
     /// </summary>
     [DataField("levels")] public Dictionary<string, AlertLevelDetail> Levels = new();
 
-    [DataField("Secondlevels")] public Dictionary<string, AlertLevelDetail> SecondLevels = new();//DS14
-
     /// <summary>
     /// Default level that the station is on upon initialization.
     /// If this isn't in the dictionary, this will default to whatever .First() gives.
@@ -33,6 +31,7 @@ public sealed partial class AlertLevelPrototype : IPrototype
 [DataDefinition]
 public sealed partial class AlertLevelDetail
 {
+    [DataField("isSecondary")] public bool IsSecondary { get; private set; } = false;
     /// <summary>
     /// What is announced upon this alert level change. Can be a localized string.
     /// </summary>
