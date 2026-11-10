@@ -9841,3 +9841,10 @@ Entries:
   changes:
   - type: Add
     message: Телевизор с логотипом нт для маппинга.
+- id: 939
+  author: BlueDogDoc
+  time: '2026-11-10T22:13:08.492092+00:00'
+  pr: 2704
+  changes:
+  - type: Fix
+    message: Тест химических реакций
