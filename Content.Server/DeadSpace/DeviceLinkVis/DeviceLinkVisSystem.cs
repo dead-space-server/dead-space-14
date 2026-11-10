@@ -119,7 +119,7 @@ public sealed class DeviceLinkVisSystem : EntitySystem
         var sources = EntityQueryEnumerator<DeviceLinkSourceComponent, TransformComponent>();
         while (sources.MoveNext(out var uid, out var source, out var xform))
         {
-            if (xform.MapID != map)
+            if (!DeviceLinkVisMap.IsOnMap(EntityManager, uid, xform, map))
                 continue;
 
             _deviceLinks.CopyLinkedSinks(source, _sinks);
@@ -130,7 +130,7 @@ public sealed class DeviceLinkVisSystem : EntitySystem
             var sourcePos = GetNetCoordinates(xform.Coordinates);
             foreach (var sink in _sinks)
             {
-                if (!TryComp(sink, out TransformComponent? sinkXform) || sinkXform.MapID != map)
+                if (!TryComp(sink, out TransformComponent? sinkXform) || !DeviceLinkVisMap.IsOnMap(EntityManager, sink, sinkXform, map))
                     continue;
 
                 var sinkNet = GetNetEntity(sink);
@@ -158,7 +158,7 @@ public sealed class DeviceLinkVisSystem : EntitySystem
         var query = EntityQueryEnumerator<TComp, DeviceListComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var list, out var xform))
         {
-            if (xform.MapID != map)
+            if (!DeviceLinkVisMap.IsOnMap(EntityManager, uid, xform, map))
                 continue;
 
             _deviceLists.CopyAllowDevices(list, _devices);
@@ -169,7 +169,7 @@ public sealed class DeviceLinkVisSystem : EntitySystem
             var sourcePos = GetNetCoordinates(xform.Coordinates);
             foreach (var device in _devices)
             {
-                if (device == uid || !TryComp(device, out TransformComponent? deviceXform) || deviceXform.MapID != map)
+                if (device == uid || !TryComp(device, out TransformComponent? deviceXform) || !DeviceLinkVisMap.IsOnMap(EntityManager, device, deviceXform, map))
                     continue;
 
                 var sinkNet = GetNetEntity(device);
@@ -192,7 +192,7 @@ public sealed class DeviceLinkVisSystem : EntitySystem
         if (session.AttachedEntity is not { } uid || !TryComp(uid, out TransformComponent? xform))
             return MapId.Nullspace;
 
-        return xform.MapID;
+        return DeviceLinkVisMap.Resolve(EntityManager, uid, xform);
     }
 
     private bool CanSee(ICommonSession session)

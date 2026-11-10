@@ -40,6 +40,7 @@ public sealed partial class SandboxWindow : DefaultWindow
         base.Opened();
 
         ToggleDeviceLinksButton.Pressed = _deviceLinks.Enabled; //DS-14
+        ToggleSubfloorButton.Pressed = _subFloorSystem.ShowAll; //DS-14
         ToggleDisposalButton.Pressed = (_subFloorSystem.ShowLayers & VisibilityFlags.SubfloorDisposal) != 0; //DS-14
         ToggleCableButton.Pressed = (_subFloorSystem.ShowLayers & VisibilityFlags.SubfloorCable) != 0; //DS-14
         ToggleAtmosButton.Pressed = (_subFloorSystem.ShowLayers & VisibilityFlags.SubfloorAtmos) != 0; //DS-14

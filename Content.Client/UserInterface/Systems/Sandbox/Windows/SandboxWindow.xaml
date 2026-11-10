@@ -14,6 +14,7 @@
         <!-- <Button Name="ToggleFovButton" Access="Public" Text="{Loc sandbox-window-toggle-fov-button}" ToggleMode="True"/> -->
         <Button Name="ToggleShadowsButton" Access="Public" Text="{Loc sandbox-window-toggle-shadows-button}" ToggleMode="True"/>
         <Button Name="ToggleDeviceLinksButton" Access="Public" Text="{Loc sandbox-window-toggle-device-links-button}" ToggleMode="True"/> <!-- DS14 -->
+        <Button Name="ToggleSubfloorButton" Access="Public" Text="{Loc sandbox-window-toggle-subfloor-button}" ToggleMode="True"/>
         <Button Name="ToggleDisposalButton" Access="Public" Text="{Loc sandbox-window-toggle-disposal-button}" ToggleMode="True"/>
         <Button Name="ToggleCableButton" Access="Public" Text="{Loc sandbox-window-toggle-cable-button}" ToggleMode="True"/>
         <Button Name="ToggleAtmosButton" Access="Public" Text="{Loc sandbox-window-toggle-atmos-button}" ToggleMode="True"/>
