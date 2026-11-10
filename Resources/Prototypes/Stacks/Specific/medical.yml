@@ -48,13 +48,3 @@
   name: stack-regenerative-mesh
   icon: {sprite: "/Textures/Objects/Specific/Medical/medical.rsi", state: regenerative-mesh}
   spawn: RegenerativeMesh
-
-# DS14-Start
-- type: stack
-  parent: BaseSmallStack
-  id: Tourniquet
-  name: stack-tourniquet
-  icon: { sprite: "/Textures/Objects/Specific/Medical/medical.rsi", state: tourniquet }
-  spawn: Tourniquet
-  maxCount: 3
-# DS14-End

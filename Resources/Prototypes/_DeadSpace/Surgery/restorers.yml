@@ -24,7 +24,7 @@
   - type: Sprite
     state: syndicate
   - type: LimbRestorer
-    charges: 3
+    charges: 4
     prime: 4
     delay: 8
     selfDelay: 12

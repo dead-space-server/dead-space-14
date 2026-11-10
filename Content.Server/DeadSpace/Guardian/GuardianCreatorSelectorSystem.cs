@@ -5,6 +5,7 @@ using Content.Shared.DeadSpace.Guardian;
 using Content.Shared.DoAfter;
 using Content.Shared.Guardian;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -169,7 +170,7 @@ public sealed class GuardianCreatorSelectorSystem : EntitySystem
             return false;
         }
 
-        if (!HasComp<CanHostGuardianComponent>(target))
+        if (!HasComp<CanHostGuardianComponent>(target) || !HasComp<HumanoidAppearanceComponent>(target))
         {
             if (!quiet)
             {
