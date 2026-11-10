@@ -696,7 +696,7 @@
   description: uplink-osteogen-desc
   productEntity: ChemistryBottleOsteogen
   cost:
-    Telecrystal: 6
+    Telecrystal: 4
   categories:
   - UplinkChemicals
   conditions:
@@ -705,21 +705,6 @@
       tags:
       - NukeOpsUplink
     blacklist:
-      tags:
-      - LoneOpsUplink
-
-- type: listing
-  id: UplinkOsteogenLone
-  name: uplink-osteogen-name
-  description: uplink-osteogen-desc
-  productEntity: ChemistryBottleOsteogen
-  cost:
-    Telecrystal: 6
-  categories:
-  - UplinkChemicals
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
       tags:
       - LoneOpsUplink
 
