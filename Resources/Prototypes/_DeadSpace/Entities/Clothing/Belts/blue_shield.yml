@@ -61,10 +61,7 @@
     slots: [ belt ]
   - type: Storage
     grid:
-    - 0,0,2,1
-    whitelist:
-      tags:
-      - WeaponRevolverBlueShieldKR19
+    - 0,0,9,1
   - type: ItemMapper
     mapLayers:
       icon_1:
