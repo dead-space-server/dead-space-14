@@ -84,6 +84,15 @@
       Dead:
         Base: dead
         BaseUnshaded: dead-unshaded
+#ds14-start
+  - type: GenericVisualizer
+    visuals:
+      enum.MobStateVisuals.State:
+        eyes:
+          Alive: { visible: true }
+          Critical: { visible: false }
+          Dead: { visible: false }
+#ds14-end
   - type: Physics
     bodyType: KinematicController
   - type: Fixtures
