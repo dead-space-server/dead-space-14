@@ -111,16 +111,18 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
                 authorJob = card.Comp.LocalizedJobTitle ?? string.Empty;
         }
 
-        text = text.Replace("{{AUTHOR.NAME}}", authorName);
-        text = text.Replace("{{AUTHOR.JOB}}", authorJob);
-        text = text.Replace("{{CAMERA.NAME}}", CameraLabel(camera));
+        text = text.Replace("{{AUTHOR.NAME}}", BreakLongWords(authorName));
+        text = text.Replace("{{AUTHOR.JOB}}", BreakLongWords(authorJob));
+        text = text.Replace("{{CAMERA.NAME}}", BreakLongWords(CameraLabel(camera)));
         text = text.Replace("{{FRAME.TIME}}", frame.RoundTime.ToString("hh\\:mm\\:ss"));
         var chat = string.Empty;
         if (frame.Still.Chat.Count > 0)
         {
-            const string rule = "═════════════════════════════════════";
             var title = Loc.GetString("camera-archive-chat");
-            chat = $"\n{rule}\n[bold]{title}[/bold]\n{string.Join('\n', frame.Still.Chat)}\n{rule}";
+            var lines = new string[frame.Still.Chat.Count];
+            for (var i = 0; i < lines.Length; i++)
+                lines[i] = BreakLongWords(frame.Still.Chat[i]);
+            chat = $"\n[bold]{title}[/bold]\n{string.Join('\n', lines)}\n";
         }
 
         text = text.Replace("{ЧАТ}", chat);
@@ -142,6 +144,34 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("camera-archive-printed"), console, actor);
 
         return true;
+    }
+
+    private static string BreakLongWords(string text)
+    {
+        const int limit = 24;
+        var built = new char[text.Length + text.Length / limit + 1];
+        var count = 0;
+        var run = 0;
+        foreach (var c in text)
+        {
+            if (c is ' ' or '\n' or '-' or '\t')
+            {
+                run = 0;
+                built[count++] = c;
+                continue;
+            }
+
+            if (run == limit)
+            {
+                built[count++] = ' ';
+                run = 0;
+            }
+
+            built[count++] = c;
+            run++;
+        }
+
+        return new string(built, 0, count);
     }
 
     public void Opened(EntityUid monitor)
