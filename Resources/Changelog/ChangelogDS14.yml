@@ -9825,3 +9825,12 @@ Entries:
   changes:
   - type: Fix
     message: Технические баги парочки карт.
+- id: 937
+  author: Manstari
+  time: '2026-11-10T07:10:09.014701+00:00'
+  pr: 2618
+  changes:
+  - type: Tweak
+    message: Интерфейс vending машин теперь феншуйный и красивый
+  - type: Fix
+    message: Наручники киборга СБ теперь нельзя выбить
