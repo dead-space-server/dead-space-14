@@ -9855,3 +9855,10 @@ Entries:
   changes:
   - type: Fix
     message: Русская локализация посаженных растений.
+- id: 941
+  author: BlueDogDoc
+  time: '2026-11-10T22:19:07.722793+00:00'
+  pr: 2701
+  changes:
+  - type: Fix
+    message: Цвет печати ГСБ
