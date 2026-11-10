@@ -418,6 +418,10 @@
     blacklist:
       tags:
       - NukeOpsUplink
+  - !type:PurchasedBlacklistCondition
+    blacklist:
+    - UplinkHoloparaKit
+    - UplinkTraitorUltraHoloparaKit
 
 - type: listing
   id: UplinkArkalyseBundleNukeOps

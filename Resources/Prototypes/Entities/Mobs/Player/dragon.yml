@@ -225,7 +225,7 @@
   - type: AntiRottingContainer
   - type: NecromorfAfterInfection
     necroPrototype: NecroDragon # DS14
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Dragonping
   - type: Destructible
     thresholds:
@@ -294,7 +294,7 @@
   description: For dragon's breathing.
   components:
   - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 5
+    rechargeCooldown: 8 #ds14
     rechargeSound:
       path: /Audio/Animals/space_dragon_roar.ogg
   - type: BasicEntityAmmoProvider

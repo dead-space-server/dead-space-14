@@ -33,3 +33,10 @@
   parent: BaseSurgicalRecipe
   id: SurgerySaw
   result: SurgerySaw
+
+- type: latheRecipe
+  id: Tourniquet
+  result: Tourniquet
+  completetime: 1
+  materials:
+    Plastic: 50

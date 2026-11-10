@@ -1616,6 +1616,13 @@
     blacklist:
       tags:
       - NukeOpsUplink
+#ds14-start
+  - !type:PurchasedBlacklistCondition
+    blacklist:
+    - UplinkSmokingCarpInjector
+    - UplinkTraitorUltraSmokingCarpInjector
+    - UplinkTraitorUltraSmokingCarpInjectorDiscounted
+#ds14-end
 
 - type: listing
   id: UplinkReinforcementRadioSyndicate
