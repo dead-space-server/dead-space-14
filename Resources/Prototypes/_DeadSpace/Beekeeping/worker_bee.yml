@@ -1,0 +1,13 @@
+# The bee of a hive. It has no HTN of its own to follow, see BeeAISystem. It does not attack (the usual bee
+# does, the angry one still does).
+- type: entity
+  parent: MobBee
+  id: MobBeeWorker
+  suffix: Hive
+  components:
+  - type: Bee
+    maxPollenCarry: 20
+    idleCooldown: 5
+    searchRadius: 15
+    arrivalThreshold: 0.5
+  - type: NPCSteering

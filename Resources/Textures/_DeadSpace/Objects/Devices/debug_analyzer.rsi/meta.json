@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "license": "CC-BY-SA-3.0",
+  "copyright": "PLACEHOLDER, replace with real art. Debug analyzer. 'icon' is a copy of 'icon' from Objects/Specific/Medical/healthanalyzer.rsi (Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/f07f847706d85b7cfa4b398e5175732212b69a63 and recolored, in-hand sprites by SeamLesss (github)); 'analyzer' is a copy of 'analyzer' from Objects/Specific/Medical/healthanalyzer.rsi (Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/f07f847706d85b7cfa4b398e5175732212b69a63 and recolored, in-hand sprites by SeamLesss (github)); 'analyzer-inhand-left' is a copy of 'analyzer-inhand-left' from Objects/Specific/Medical/healthanalyzer.rsi (Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/f07f847706d85b7cfa4b398e5175732212b69a63 and recolored, in-hand sprites by SeamLesss (github)); 'analyzer-inhand-right' is a copy of 'analyzer-inhand-right' from Objects/Specific/Medical/healthanalyzer.rsi (Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/f07f847706d85b7cfa4b398e5175732212b69a63 and recolored, in-hand sprites by SeamLesss (github))",
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "analyzer",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "analyzer-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "analyzer-inhand-right",
+      "directions": 4
+    }
+  ]
+}

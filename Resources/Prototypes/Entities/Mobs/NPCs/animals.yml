@@ -207,7 +207,7 @@
 
 - type: entity
   name: chicken
-  parent: [ SimpleMobBase, BaseExaminableHunger ] # DS14: slicing/destructible behavior is component-based here.
+  parent: BaseHusbandryAnimal # DS14: livestock lives by the husbandry rules
   id: MobChicken
   description: Comes before an egg, and IS a dinosaur!
   components:
@@ -247,18 +247,50 @@
     - DoorBumpOpener
     - Chicken
     - VimPilot
-  - type: Reproductive
-    breedChance: 0.05
-    birthPopup: reproductive-laid-egg-popup
-    makeOffspringInfant: false
-    minHungerThreshold: Peckish
-    partnerWhitelist:
+  # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
+  - type: AnimalNeeds
+    satiety:
+      decayPerMinute: 1.2
+      deprivationDamage:
+        types:
+          Blunt: 1
+    hydration:
+      decayPerMinute: 0.8
+      deprivationDamage:
+        types:
+          Blunt: 1
+  - type: Diet
+    whitelist:
+      components:
+      - Produce
+    blacklist:
       tags:
-      - Chicken
+      - Meat
+      - Trash
+  - type: AnimalBreeding
+    species: chicken
+    adultStage: adult
+    newbornStage: baby
+    breedChance: 0.2
+    capacity: 8
+    gestationDuration: 120
+    cooldown: 360
+    satietyCost: 15
+    birthPopup: husbandry-laid-egg-popup
     offspring:
     - id: FoodEggChickenFertilized
       maxAmount: 3
-  - type: ReproductivePartner
+  - type: Growth
+    meat: FoodMeatChicken
+    stages:
+    - id: baby
+      duration: 360
+      scale: 0.5, 0.5
+      meatCount: 1
+    - id: adult
+      scale: 1, 1
+      meatCount: 1
+  # DS14-end
   - type: Appearance
   - type: DamageStateVisuals
     states:
@@ -285,6 +317,7 @@
       - ReagentId: Blood
         Quantity: 100
   - type: EggLayer
+    hungerUsage: 15
     eggSpawn:
     - id: FoodEgg
   - type: ReplacementAccent
@@ -353,9 +386,9 @@
   - type: Timer
   - type: TimedSpawner
     prototypes:
-    - MobChicken
-    - MobChicken1
-    - MobChicken2
+    - MobChickenChick
+    - MobChickenChick1
+    - MobChickenChick2
     intervalSeconds: 20
     minimumEntitiesSpawned: 1
     maximumEntitiesSpawned: 1
@@ -696,7 +729,7 @@
 
 - type: entity
   name: mallard duck #Quack
-  parent: [ SimpleMobBase, BaseExaminableHunger ] # DS14: slicing/destructible behavior is component-based here.
+  parent: BaseHusbandryAnimal # DS14: livestock lives by the husbandry rules
   id: MobDuckMallard
   description: An adorable mallard duck, it's fluffy and soft!
   components:
@@ -726,18 +759,50 @@
     - DoorBumpOpener
     - Duck
     - VimPilot
-  - type: Reproductive
-    breedChance: 0.05
-    birthPopup: reproductive-laid-egg-popup
-    makeOffspringInfant: false
-    minHungerThreshold: Peckish
-    partnerWhitelist:
+  # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
+  - type: AnimalNeeds
+    satiety:
+      decayPerMinute: 1.2
+      deprivationDamage:
+        types:
+          Blunt: 1
+    hydration:
+      decayPerMinute: 1
+      deprivationDamage:
+        types:
+          Blunt: 1
+  - type: Diet
+    whitelist:
+      components:
+      - Produce
+    blacklist:
       tags:
-      - Duck
+      - Meat
+      - Trash
+  - type: AnimalBreeding
+    species: duck
+    adultStage: adult
+    newbornStage: baby
+    breedChance: 0.2
+    capacity: 8
+    gestationDuration: 120
+    cooldown: 360
+    satietyCost: 15
+    birthPopup: husbandry-laid-egg-popup
     offspring:
     - id: FoodEggDuckFertilized
       maxAmount: 3
-  - type: ReproductivePartner
+  - type: Growth
+    meat: FoodMeatDuck
+    stages:
+    - id: baby
+      duration: 360
+      scale: 0.5, 0.5
+      meatCount: 1
+    - id: adult
+      scale: 1, 1
+      meatCount: 1
+  # DS14-end
   - type: Appearance
   - type: DamageStateVisuals
     states:
@@ -764,6 +829,7 @@
       - ReagentId: Blood
         Quantity: 100
   - type: EggLayer
+    hungerUsage: 15
     eggSpawn:
     - id: FoodEgg
   - type: ReplacementAccent
@@ -820,9 +886,9 @@
     - type: Timer
     - type: TimedSpawner
       prototypes:
-      - MobDuckMallard
-      - MobDuckWhite
-      - MobDuckBrown
+      - MobDuckMallardChick
+      - MobDuckWhiteChick
+      - MobDuckBrownChick
       intervalSeconds: 20
       minimumEntitiesSpawned: 1
       maximumEntitiesSpawned: 1
@@ -912,7 +978,7 @@
 
 - type: entity
   name: cow
-  parent: [ SimpleMobBase, BaseExaminableHunger ] # DS14: current body definitions do not use BaseMobRuminant.
+  parent: BaseHusbandryAnimal # DS14: livestock lives by the husbandry rules
   id: MobCow
   description: Moo.
   components:
@@ -926,14 +992,48 @@
     tags:
     - DoorBumpOpener
     - Cow
-  - type: Reproductive
-    minHungerThreshold: Peckish
-    partnerWhitelist:
+  # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
+  - type: AnimalNeeds
+    satiety:
+      decayPerMinute: 2
+      deprivationDamage:
+        types:
+          Blunt: 1
+    hydration:
+      decayPerMinute: 1.2
+      deprivationDamage:
+        types:
+          Blunt: 1
+  - type: Diet
+    whitelist:
+      components:
+      - Produce
+    blacklist:
       tags:
-      - Cow
+      - Meat
+      - Trash
+  - type: AnimalBreeding
+    species: cow
+    adultStage: adult
+    newbornStage: baby
+    breedChance: 0.3
+    capacity: 6
+    gestationDuration: 240
+    cooldown: 900
+    satietyCost: 25
     offspring:
     - id: MobCow
-  - type: ReproductivePartner
+  - type: Growth
+    meat: FoodMeat
+    stages:
+    - id: baby
+      duration: 600
+      scale: 0.6, 0.6
+      meatCount: 1
+    - id: adult
+      scale: 1, 1
+      meatCount: 5
+  # DS14-end
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -962,6 +1062,7 @@
         - ReagentId: Milk
           Quantity: 30
   - type: Udder
+    hungerUsage: 2
     minHungerThreshold: Peckish
     reagentId: Milk
     quantityPerUpdate: 25
@@ -990,7 +1091,7 @@
     prototype: AnimalRuminant
   - type: HTN
     rootTask:
-      task: RuminantCompound
+      task: LivestockCompound
   - type: GuideHelp
     guides:
     - Chef
@@ -1076,7 +1177,7 @@
 
 - type: entity
   name: goat
-  parent: [ SimpleMobBase, BaseExaminableHunger ] # DS14: current body definitions do not use BaseMobRuminant.
+  parent: BaseHusbandryAnimal # DS14: livestock lives by the husbandry rules
   id: MobGoat
   description: Her spine consists of long sharp segments, no wonder she is so grumpy.
   components:
@@ -1107,14 +1208,48 @@
     - ClothMade
     - DoorBumpOpener
     - Goat
-  - type: Reproductive
-    minHungerThreshold: Peckish
-    partnerWhitelist:
+  # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
+  - type: AnimalNeeds
+    satiety:
+      decayPerMinute: 1.8
+      deprivationDamage:
+        types:
+          Blunt: 1
+    hydration:
+      decayPerMinute: 1
+      deprivationDamage:
+        types:
+          Blunt: 1
+  - type: Diet
+    whitelist:
+      components:
+      - Produce
+    blacklist:
       tags:
-      - Goat
+      - Meat
+      - Trash
+  - type: AnimalBreeding
+    species: goat
+    adultStage: adult
+    newbornStage: baby
+    breedChance: 0.3
+    capacity: 6
+    gestationDuration: 240
+    cooldown: 900
+    satietyCost: 25
     offspring:
     - id: MobGoat
-  - type: ReproductivePartner
+  - type: Growth
+    meat: FoodMeat
+    stages:
+    - id: baby
+      duration: 480
+      scale: 0.6, 0.6
+      meatCount: 1
+    - id: adult
+      scale: 1, 1
+      meatCount: 4
+  # DS14-end
   - type: Appearance
   - type: DamageStateVisuals
     states:
@@ -1134,11 +1269,13 @@
       wool:
         maxVol: 250
   - type: Udder
+    hungerUsage: 2
     minHungerThreshold: Peckish
     reagentId: MilkGoat
     quantityPerUpdate: 25
     growthDelay: 20
   - type: Wooly
+    hungerUsage: 2
     minHungerThreshold: Peckish
   - type: Edible
     destroyOnEmpty: false
@@ -1181,11 +1318,11 @@
   - type: FactionException
   - type: HTN
     rootTask:
-      task: RuminantHostileCompound
+      task: LivestockHostileCompound
 
 - type: entity
   abstract: true
-  parent: BaseExaminableHunger # DS14: this build has no BaseMobRuminant or ExaminableHunger component.
+  parent: BaseHusbandryAnimal # DS14: livestock lives by the husbandry rules
   id: MobSheepBase
   name: sheepBase
   description: A sheep.
@@ -1230,13 +1367,48 @@
     - ClothMade
     - DoorBumpOpener
     - Sheep
-  - type: Reproductive
-    partnerWhitelist:
+  # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
+  - type: AnimalNeeds
+    satiety:
+      decayPerMinute: 1.8
+      deprivationDamage:
+        types:
+          Blunt: 1
+    hydration:
+      decayPerMinute: 1
+      deprivationDamage:
+        types:
+          Blunt: 1
+  - type: Diet
+    whitelist:
+      components:
+      - Produce
+    blacklist:
       tags:
-      - Sheep
+      - Meat
+      - Trash
+  - type: AnimalBreeding
+    species: sheep
+    adultStage: adult
+    newbornStage: baby
+    breedChance: 0.3
+    capacity: 6
+    gestationDuration: 240
+    cooldown: 900
+    satietyCost: 25
     offspring:
     - id: MobSheep
-  - type: ReproductivePartner
+  - type: Growth
+    meat: FoodMeat
+    stages:
+    - id: baby
+      duration: 480
+      scale: 0.6, 0.6
+      meatCount: 1
+    - id: adult
+      scale: 1, 1
+      meatCount: 4
+  # DS14-end
   - type: Appearance
   - type: DamageStateVisuals
     states:
@@ -1261,11 +1433,13 @@
           Quantity: 25
   # DS14-end
   - type: Udder
+    hungerUsage: 2
     minHungerThreshold: Peckish # DS14: required by the old component schema.
     reagentId: MilkSheep
     quantityPerUpdate: 25
     growthDelay: 20
   - type: Wooly
+    hungerUsage: 2
     minHungerThreshold: Peckish # DS14: required by the old component schema.
   - type: Shearable
     targetSolutionName: wool
@@ -1316,7 +1490,7 @@
   # DS14-end
   - type: HTN
     rootTask:
-      task: RuminantCompound
+      task: LivestockCompound
   - type: MovementSpeedModifier
     baseWalkSpeed: 0.6
     baseSprintSpeed: 0.8
@@ -1326,7 +1500,7 @@
     - FoodRecipes
 
 - type: entity
-  parent: [ MobSheepBase, SimpleMobBase ]
+  parent: MobSheepBase
   id: MobSheep
   name: sheep
   description: An adorable genetically engineered chemical factory producing milk and cotton.
@@ -4009,7 +4183,7 @@
 
 - type: entity
   name: pig
-  parent: [SimpleMobBase, StripableInventoryBase]
+  parent: [BaseHusbandryAnimal, StripableInventoryBase] # DS14
   id: MobPig
   description: Oink.
   components:
@@ -4042,14 +4216,48 @@
     - DoorBumpOpener
     - Pig
     - VimPilot
-  - type: Reproductive
-    minHungerThreshold: Peckish
-    partnerWhitelist:
+  # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
+  - type: AnimalNeeds
+    satiety:
+      decayPerMinute: 2.2
+      deprivationDamage:
+        types:
+          Blunt: 1
+    hydration:
+      decayPerMinute: 1.2
+      deprivationDamage:
+        types:
+          Blunt: 1
+  - type: Diet
+    whitelist:
+      components:
+      - Produce
+    blacklist:
       tags:
-      - Pig
+      - Meat
+      - Trash
+  - type: AnimalBreeding
+    species: pig
+    adultStage: adult
+    newbornStage: baby
+    breedChance: 0.3
+    capacity: 6
+    gestationDuration: 240
+    cooldown: 900
+    satietyCost: 25
     offspring:
     - id: MobPig
-  - type: ReproductivePartner
+  - type: Growth
+    meat: FoodMeatBacon
+    stages:
+    - id: baby
+      duration: 480
+      scale: 0.6, 0.6
+      meatCount: 2
+    - id: adult
+      scale: 1, 1
+      meatCount: 6
+  # DS14-end
   - type: DamageStateVisuals
     states:
       Alive:
@@ -4081,7 +4289,7 @@
     - Passive
   - type: HTN
     rootTask:
-      task: RuminantCompound
+      task: LivestockCompound
 
 - type: entity
   name: diona nymph

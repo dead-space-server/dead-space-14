@@ -1,0 +1,28 @@
+- type: entity
+  id: MaterialHoneycomb
+  name: honeycomb
+  description: Wax honeycomb full of honey!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Beekeeping/comb.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: Honeycomb
+    count: 1
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: Honey
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+
+- type: stack
+  id: Honeycomb
+  name: stack-honeycomb
+  spawn: MaterialHoneycomb
+  maxCount: 50

@@ -1,0 +1,97 @@
+# A manger for animals. It is a storage: whatever fits their diet (produce) is put in it and the animals eat from it
+# on their own, ahead of food on the floor (see AnimalFeederComponent and FindFoodOperator). The sprite (feeder.rsi) shows
+# the hay in it in four levels with the usual storage fill visuals.
+- type: entity
+  id: AnimalFeeder
+  name: animal feeder
+  description: Put produce in it and the animals will eat from it.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+  - type: Rotatable
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Husbandry/feeder.rsi
+    layers:
+    - state: feeder
+    - map: [ "enum.StorageFillLayers.Fill" ]
+      state: feeder-fill-0
+  - type: Appearance
+  - type: StorageFillVisualizer
+    maxFillLevels: 3
+    fillBaseName: feeder-fill
+  - type: Storage
+    grid:
+    - 0,0,5,3
+    maxItemSize: Normal
+    whitelist:
+      components:
+      - Produce
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+  - type: AnimalFeeder
+  - type: Tag
+    tags:
+    - Wooden
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialWoodPlank1:
+            min: 2
+            max: 4
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: AnimalFeederGraph
+    node: AnimalFeederNode
+
+- type: constructionGraph
+  id: AnimalFeederGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: AnimalFeederNode
+      steps:
+      - material: WoodPlank
+        amount: 4
+        doAfter: 3
+  - node: AnimalFeederNode
+    entity: AnimalFeeder
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: MaterialWoodPlank1
+        amount: 4
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: construction
+  id: AnimalFeederConstruction
+  graph: AnimalFeederGraph
+  startNode: start
+  targetNode: AnimalFeederNode
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false

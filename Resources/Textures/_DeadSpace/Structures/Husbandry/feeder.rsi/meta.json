@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Animal feeder (a manger with planks, four levels of hay) by mrl4an for Project Horizon",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "feeder",
+      "directions": 4
+    },
+    {
+      "name": "feeder-fill-0",
+      "directions": 4
+    },
+    {
+      "name": "feeder-fill-1",
+      "directions": 4
+    },
+    {
+      "name": "feeder-fill-2",
+      "directions": 4
+    },
+    {
+      "name": "feeder-fill-3",
+      "directions": 4
+    }
+  ]
+}

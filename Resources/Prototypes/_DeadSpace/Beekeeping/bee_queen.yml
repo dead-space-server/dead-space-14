@@ -1,0 +1,11 @@
+- type: entity
+  id: QueenBee
+  name: queen bee
+  description: The heart of the hive. The swarm works while she is inside.
+  components:
+  - type: Sprite
+    sprite: Mobs/Animals/bee.rsi
+    state: 0
+  - type: Item
+    size: Small
+  - type: QueenBee

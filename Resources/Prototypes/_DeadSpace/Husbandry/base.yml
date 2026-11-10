@@ -1,0 +1,40 @@
+# The base of animals that live by the Husbandry rules (Content.*/DeadSpace/Husbandry): their own needs (satiety and
+# hydration), a sex, own walking and wandering. It is SimpleMobBase without its Satiation (the vanilla hunger and
+# thirst), which would only get in the way of AnimalNeeds.
+- type: entity
+  abstract: true
+  parent:
+  - MobRespirator
+  - MobAtmosStandard
+  - SimpleSpaceMobBase
+  id: BaseHusbandryAnimal
+  suffix: AI
+  components:
+  - type: StatusEffects
+    allowed:
+    - SeeingRainbows
+    - Drunk
+    - Electrocution
+    - TemporaryBlindness
+    - Pacified
+    - Flashed
+    - RadiationProtection
+    - Adrenaline
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 150
+  - type: MobPrice
+    price: 150
+  - type: FloatingVisuals
+  - type: Appearance
+  - type: AnimalNeeds
+  - type: AnimalSex
+  # The place it lives in, for the farm (see AnimalPenSystem).
+  - type: AnimalPen
+  - type: AnimalWalker
+  - type: AnimalWander
+  - type: HTN
+    rootTask:
+      task: LivestockCompound

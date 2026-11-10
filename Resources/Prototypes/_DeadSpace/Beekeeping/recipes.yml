@@ -1,0 +1,35 @@
+- type: constructionGraph
+  id: BeeHiveGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: beehive
+      completed:
+      - !type:SnapToGrid { }
+      steps:
+      - material: WoodPlank
+        amount: 5
+        doAfter: 4
+  - node: beehive
+    entity: BeeHive
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: MaterialWoodPlank1
+        amount: 5
+      - !type:DeleteEntity {}
+      steps:
+      - tool: Prying
+        doAfter: 4
+
+- type: construction
+  id: BeeHiveConstruction
+  graph: BeeHiveGraph
+  startNode: start
+  targetNode: beehive
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false

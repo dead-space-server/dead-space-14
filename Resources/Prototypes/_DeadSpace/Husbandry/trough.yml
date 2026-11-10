@@ -1,0 +1,91 @@
+# A trough for animals. Animals drink from it on their own, buckets and the like fill and empty it by hand. The sprite
+# (trough.rsi) is a half log with a hollow, the water is a separate layer.
+- type: entity
+  name: animal trough
+  id: AnimalTrough
+  description: Animals drink from it. Fill it with a bucket.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Husbandry/trough.rsi
+    layers:
+      - state: trough
+      - map: [ "enum.SolutionContainerLayers.Fill" ]
+        state: trough-fill-1
+        visible: false
+  - type: Appearance
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    fillBaseName: trough-fill-
+    solutionName: tank
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 100
+  - type: WaterSource
+    solution: tank
+    amountPerDrink: 15
+    hydrationPerUnit: 1
+    delay: 2
+  - type: DrainableSolution
+    solution: tank
+  - type: RefillableSolution
+    solution: tank
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 60
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:PlaySoundBehavior
+            sound:
+              collection: MetalBreak
+  - type: Construction
+    graph: AnimalTroughGraph
+    node: AnimalTroughNode
+
+- type: constructionGraph
+  id: AnimalTroughGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: AnimalTroughNode
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 3
+
+  - node: AnimalTroughNode
+    entity: AnimalTrough
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 3
+
+- type: construction
+  id: AnimalTroughConstruction
+  graph: AnimalTroughGraph
+  startNode: start
+  targetNode: AnimalTroughNode
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false

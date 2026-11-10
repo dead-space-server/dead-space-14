@@ -1,0 +1,101 @@
+# Livestock looks for food and water before it gets desperate, unlike the usual FoodCompound. Finding the target,
+# walking to it, eating and drinking are done by the Husbandry operators (Content.Server/DeadSpace/Husbandry/Npc).
+- type: htnCompound
+  id: LivestockCompound
+  branches:
+    # Food
+    - tasks:
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:NeedPrecondition
+              need: Satiety
+          operator: !type:FindFoodOperator
+
+        # The way is walked by the AnimalWalker, not by the usual steering of the AI, which twitches.
+        - !type:HTNPrimitiveTask
+          operator: !type:AnimalGoToOperator
+            arriveDistance: 1.5
+
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: Target
+          operator: !type:AnimalEatOperator
+
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: IdleTime
+          operator: !type:WaitOperator
+            key: IdleTime
+
+    # Water
+    - tasks:
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:NeedPrecondition
+              need: Hydration
+          operator: !type:FindWaterOperator
+
+        - !type:HTNPrimitiveTask
+          operator: !type:AnimalGoToOperator
+            arriveDistance: 1.5
+
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: Target
+          operator: !type:AnimalDrinkOperator
+
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: IdleTime
+          operator: !type:WaitOperator
+            key: IdleTime
+
+    - tasks:
+        - !type:HTNCompoundTask
+          task: LivestockIdleCompound
+
+# The same, but it fights first (a goat).
+- type: htnCompound
+  id: LivestockHostileCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: MeleeCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: LivestockCompound
+
+# Stands around, and now and then walks to a random place in the open. The walking is not the usual steering of the
+# AI (which twitches against walls), see AnimalWander.
+- type: htnCompound
+  id: LivestockIdleCompound
+  branches:
+    # Still standing around from the last time.
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:WaitOperator
+            key: IdleTime
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: IdleTime
+
+    # Walk somewhere or stay, then stand around for a while.
+    - preconditions:
+        - !type:BuckledPrecondition
+          isBuckled: false
+        - !type:PulledPrecondition
+          isPulled: false
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:AnimalWanderOperator
+
+        - !type:HTNPrimitiveTask
+          operator: !type:WaitOperator
+            key: IdleTime
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: IdleTime

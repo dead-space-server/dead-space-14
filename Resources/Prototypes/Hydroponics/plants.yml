@@ -41,6 +41,9 @@
   - type: PlantAtmospheric
   - type: PlantGrowth
   - type: PlantConsumeExudeGas
+  # DS14-start: bees pollinate every plant, a plant that should not be visited turns isFlowering off
+  - type: Pollination
+  # DS14-end
 
 - type: entity
   parent: BasePlant
