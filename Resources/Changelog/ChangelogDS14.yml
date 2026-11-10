@@ -9862,3 +9862,10 @@ Entries:
   changes:
   - type: Fix
     message: Цвет печати ГСБ
+- id: 942
+  author: BlueDogDoc
+  time: '2026-11-10T22:23:58.556878+00:00'
+  pr: 2700
+  changes:
+  - type: Fix
+    message: Мертый персонаж, в крите или сне - не может выключить балон через иконку.
