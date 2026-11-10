@@ -1,3 +1,4 @@
+using Content.Shared.ActionBlocker; //DS-14
 using Content.Shared.Alert;
 using Content.Shared.Atmos; //DS-14
 using Content.Shared.Atmos.Components;
@@ -22,6 +23,7 @@ namespace Content.Shared.Body.Systems;
 /// </summary>
 public abstract class SharedInternalsSystem : EntitySystem
 {
+    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!; //DS-14
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -155,6 +157,11 @@ public abstract class SharedInternalsSystem : EntitySystem
     {
         if (args.Handled)
             return;
+
+        //DS-14 start
+        if (!_actionBlocker.CanConsciouslyPerformAction(ent.Owner))
+            return;
+        //DS-14 end
 
         args.Handled |= ToggleInternals(ent, ent, false, internals: ent.Comp);
     }
