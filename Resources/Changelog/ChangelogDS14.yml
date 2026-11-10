@@ -9848,3 +9848,10 @@ Entries:
   changes:
   - type: Fix
     message: Тест химических реакций
+- id: 940
+  author: BlueDogDoc
+  time: '2026-11-10T22:16:50.326247+00:00'
+  pr: 2703
+  changes:
+  - type: Fix
+    message: Русская локализация посаженных растений.
