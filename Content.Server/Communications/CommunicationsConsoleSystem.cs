@@ -185,7 +185,7 @@ namespace Content.Server.Communications
                         levels = new();
                         foreach (var (id, detail) in alertComp.AlertLevels.Levels)
                         {
-                            if (detail.Selectable && !detail.IsSecondary)
+                            if (detail.Selectable && !detail.IsSecondary) //DS14
                             {
                                 levels.Add(id);
                             }
@@ -213,7 +213,7 @@ namespace Content.Server.Communications
                     //DS14-start
                     currentSecondLevel = alertComp.CurrentSecondLevel;
                     if (alertComp.AlertLevels.Levels.TryGetValue(currentSecondLevel, out var currentSecondLevelDetails))
-                        currentSecondLevelColor = currentSecondLevelDetails.Color; // DS14
+                        currentSecondLevelColor = currentSecondLevelDetails.Color;
                     //DS14-end
 
                     currentDelay = _alertLevelSystem.GetAlertLevelDelay(stationUid.Value, alertComp);

@@ -1,5 +1,4 @@
 alert-level-announcement = Внимание! Уровень угрозы станции теперь "{ $name }"! { $announcement }
-alert-secondlevel-announcement = Внимание! Второстепенный уровень угрозы станции теперь "{ $name }"! { $announcement } //DS14
 alert-level-unknown = Неизвестный.
 alert-level-unknown-instructions = Неизвестно
 alert-level-green = Зелёный
@@ -36,6 +35,7 @@ alert-level-epsilon-instructions = Не сопротивляйтесь
 alert-level-none = Ничего
 alert-level-none-announcement = Внимание! Второстепенный уровень угрозы станции теперь отменен. Но основные угрозы, могут быть еще не окончены
 alert-level-none-instructions = дополнительных инструкций нет.
+alert-secondlevel-announcement = Внимание! Второстепенный уровень угрозы станции теперь "{ $name }"! { $announcement } 
 alert-level-main = [color=Gold]Основной код:[/color][color={$color}]{$level}[/color]
 alert-level-second = [color=Gold]Второстепенный код:[/color][color={$color}]{$level}[/color]
 # DS14-end
