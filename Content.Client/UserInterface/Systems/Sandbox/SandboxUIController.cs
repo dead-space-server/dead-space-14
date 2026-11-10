@@ -141,6 +141,7 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
             _window.ToggleDeviceLinksButton.Pressed = _sandbox.ToggleDeviceLinks();
         };
         //DS-14 end
+        _window.ToggleSubfloorButton.OnPressed += _ => _sandbox.ToggleSubfloor(); //DS-14
         _window.ToggleDisposalButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("disposal"); //DS-14
         _window.ToggleCableButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("cable"); //DS-14
         _window.ToggleAtmosButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("atmos"); //DS-14
@@ -223,6 +224,7 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
             return;
 
         //DS-14 start
+        _window.ToggleSubfloorButton.Pressed = (layers & SubfloorVisibility.All) == SubfloorVisibility.All;
         _window.ToggleDisposalButton.Pressed = (layers & VisibilityFlags.SubfloorDisposal) != 0;
         _window.ToggleCableButton.Pressed = (layers & VisibilityFlags.SubfloorCable) != 0;
         _window.ToggleAtmosButton.Pressed = (layers & VisibilityFlags.SubfloorAtmos) != 0;
