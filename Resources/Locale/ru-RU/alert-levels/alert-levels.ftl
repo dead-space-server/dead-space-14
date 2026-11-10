@@ -33,7 +33,7 @@ alert-level-epsilon-announcement = Внимание! Внимание! Стан�
 alert-level-epsilon-instructions = Не сопротивляйтесь
 # DS14-start
 alert-level-none = Ничего
-alert-level-none-announcement = Внимание! Второстепенный уровень угрозы станции теперь отменен. Но основные угрозы, могут быть еще не окончены
+alert-level-none-announcement = Внимание! Второстепенный уровень угрозы станции теперь отменен. Но основные угрозы, могут быть еще не устранены
 alert-level-none-instructions = дополнительных инструкций нет.
 alert-secondlevel-announcement = Внимание! Второстепенный уровень угрозы станции теперь "{ $name }"! { $announcement } 
 alert-level-main = [color=Gold]Основной код:[/color][color={$color}]{$level}[/color]

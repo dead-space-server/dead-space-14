@@ -222,7 +222,21 @@ public sealed class AlertLevelSystem : EntitySystem
         }
 
         // The full announcement to be spat out into chat.
-        var announcementFull = Loc.GetString(detail.IsSecondary ? "alert-secondlevel-announcement" : "alert-level-announcement", ("name", name), ("announcement", announcement));
+        var announcementFull = string.Empty;
+
+        //DS14-start
+        if (detail.IsSecondary)
+        {
+            if (level == "none")
+                announcementFull = Loc.GetString("alert-level-none-announcement");
+            else
+                announcementFull = Loc.GetString("alert-secondlevel-announcement", ("name", name), ("announcement", announcement));
+        }
+        else
+        {
+            announcementFull = Loc.GetString("alert-level-announcement", ("name", name), ("announcement", announcement));
+        }
+        //DS14-end
 
         var stationMapFilter = GetStationMapFilter(station); // DS14
 
@@ -243,18 +257,15 @@ public sealed class AlertLevelSystem : EntitySystem
         {
             //DS14-start
             string? secondAnnouncement = null;
-            if (component.CurrentSecondLevel != "none")
+            if (detail.IsSecondary)
             {
-                if (detail.IsSecondary)
-                {
-                    if (component.AlertLevels.Levels.TryGetValue(component.CurrentLevel, out var mainLeveldetail))
-                        secondAnnouncement = Loc.GetString("alert-level-main", ("color", mainLeveldetail.Color.ToHex()), ("level", Loc.GetString($"alert-level-{component.CurrentLevel}")));
-                }
-                else
-                {
-                    if (component.AlertLevels.Levels.TryGetValue(component.CurrentSecondLevel, out var secondLeveldetail))
-                        secondAnnouncement = Loc.GetString("alert-level-second", ("color", secondLeveldetail.Color.ToHex()), ("level", Loc.GetString($"alert-level-{component.CurrentSecondLevel}")));
-                }
+                if (component.AlertLevels.Levels.TryGetValue(component.CurrentLevel, out var mainLeveldetail))
+                    secondAnnouncement = Loc.GetString("alert-level-main", ("color", mainLeveldetail.Color.ToHex()), ("level", Loc.GetString($"alert-level-{component.CurrentLevel}")));
+            }
+            else if (component.CurrentSecondLevel != "none")
+            {
+                if (component.AlertLevels.Levels.TryGetValue(component.CurrentSecondLevel, out var secondLeveldetail))
+                    secondAnnouncement = Loc.GetString("alert-level-second", ("color", secondLeveldetail.Color.ToHex()), ("level", Loc.GetString($"alert-level-{component.CurrentSecondLevel}")));
             }
             //DS14-end
 
