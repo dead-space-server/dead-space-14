@@ -3,6 +3,8 @@
 using System.Numerics;
 using Content.Server.Administration.Logs;
 using Content.Server.DeadSpace.Husbandry.Growth;
+using Content.Server.DeadSpace.Husbandry.Pen;
+using Content.Shared.DeadSpace.Husbandry.Pen;
 using Content.Shared.DeadSpace.Husbandry.Growth;
 using Content.Server.Popups;
 using Content.Shared.CCVar;
@@ -38,6 +40,7 @@ public sealed class AnimalBreedingSystem : EntitySystem
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly GrowthSystem _growth = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly AnimalPenSystem _pens = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedAnimalNeedsSystem _needs = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -146,9 +149,18 @@ public sealed class AnimalBreedingSystem : EntitySystem
             return false;
 
         var comp = mother.Comp;
-        var range = Math.Max(comp.BreedRange, comp.CrowdRange);
-        _nearby.Clear();
-        _lookup.GetEntitiesInRange(Transform(mother).Coordinates, range, _nearby);
+        // The partner has to be in the same pen: the whole enclosure, or the square round the home. Nobody has to
+        // watch, and a male on the other side of the room counts. An animal with no pen falls back to the radius.
+        var pen = TryComp<AnimalPenComponent>(mother, out var penComp) ? _pens.GetPen((mother.Owner, penComp)) : null;
+        if (pen != null)
+        {
+            _pens.GetEntitiesInPen(pen, _nearby);
+        }
+        else
+        {
+            _nearby.Clear();
+            _lookup.GetEntitiesInRange(Transform(mother).Coordinates, Math.Max(comp.BreedRange, comp.CrowdRange), _nearby);
+        }
 
         var crowd = 0;
         Entity<AnimalBreedingComponent>? father = null;
@@ -163,7 +175,7 @@ public sealed class AnimalBreedingSystem : EntitySystem
 
             if (father != null ||
                 SexOf(EntityManager, other) != AnimalSexKind.Male ||
-                Vector2.Distance(_transform.GetWorldPosition(other), motherPos) > comp.BreedRange ||
+                (pen == null && Vector2.Distance(_transform.GetWorldPosition(other), motherPos) > comp.BreedRange) ||
                 !IsValidFather(mother, other) ||
                 !IsReady(other))
                 continue;

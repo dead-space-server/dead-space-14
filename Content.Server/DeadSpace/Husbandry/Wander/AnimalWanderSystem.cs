@@ -2,7 +2,14 @@
 
 using System.Numerics;
 using Content.Server.DeadSpace.Husbandry.Walking;
+using Content.Shared.DeadSpace.Husbandry.Breeding;
+using Content.Shared.DeadSpace.Husbandry.Core;
+using Content.Shared.DeadSpace.Husbandry.Feeding;
+using Content.Shared.DeadSpace.Husbandry.Sex;
 using Content.Shared.DeadSpace.Husbandry.Walking;
+using Content.Shared.Ghost;
+using Content.Shared.Mobs.Systems;
+using Robust.Shared.Player;
 using Content.Shared.DeadSpace.Husbandry.Wander;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -26,6 +33,8 @@ public sealed class AnimalWanderSystem : EntitySystem
     private const float Margin = 0.2f;
 
     [Dependency] private readonly AnimalWalkerSystem _walker = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -41,11 +50,28 @@ public sealed class AnimalWanderSystem : EntitySystem
         if (IsWalking(ent) || !_random.Prob(wander.WalkChance))
             return Roll(wander.StandTime);
 
-        if (!TryComp<AnimalWalkerComponent>(ent, out var walker) ||
-            !TryFindPlace(ent, walker, null, wander.MinClearProbes, out var place, out var heading))
-        {
+        if (!TryComp<AnimalWalkerComponent>(ent, out var walker))
             return Roll(wander.RetryTime);
+
+        // What kind of stroll: round a player, after a mate, round a feeder, or the plain roam.
+        PickMode(ent);
+
+        EntityCoordinates place;
+        Vector2 heading;
+        var found = wander.Mode != WanderMode.Roam
+            ? TryFindSocialPlace(ent, walker, out place, out heading)
+            : TryFindPlace(ent, walker, null, wander.MinClearProbes, out place, out heading);
+
+        // A social stroll with no way to the subject is a roam.
+        if (!found && wander.Mode != WanderMode.Roam)
+        {
+            wander.Mode = WanderMode.Roam;
+            wander.Subject = null;
+            found = TryFindPlace(ent, walker, null, wander.MinClearProbes, out place, out heading);
         }
+
+        if (!found)
+            return Roll(wander.RetryTime);
 
         wander.WalkStart = _timing.CurTime;
         wander.LegsLeft = _random.Next(wander.Legs.X, Math.Max(wander.Legs.X, wander.Legs.Y) + 1);
@@ -66,6 +92,8 @@ public sealed class AnimalWanderSystem : EntitySystem
     /// </summary>
     public void StopWalk(Entity<AnimalWanderComponent> ent)
     {
+        ent.Comp.Mode = WanderMode.Roam;
+        ent.Comp.Subject = null;
         ent.Comp.LegsLeft = 0;
         ent.Comp.PauseUntil = null;
 
@@ -137,7 +165,13 @@ public sealed class AnimalWanderSystem : EntitySystem
         ent.Comp.PauseUntil = null;
 
         // The next leg only needs one good place, the room was looked at when the stroll began.
-        if (!TryFindPlace(ent, walker, ent.Comp.Heading, 1, out var place, out var heading))
+        EntityCoordinates place;
+        Vector2 heading;
+        var found = ent.Comp.Mode != WanderMode.Roam
+            ? TryFindSocialPlace(ent, walker, out place, out heading)
+            : TryFindPlace(ent, walker, ent.Comp.Heading, 1, out place, out heading);
+
+        if (!found)
         {
             StopWalk(ent);
             return;
@@ -205,6 +239,263 @@ public sealed class AnimalWanderSystem : EntitySystem
         place = new EntityCoordinates(gridUid, Vector2.Transform(chosen.Position, _transform.GetInvWorldMatrix(gridUid)));
         return true;
     }
+
+    #region Social strolls
+
+    private static readonly TimeSpan PlayerScanInterval = TimeSpan.FromSeconds(2);
+
+    private readonly List<EntityUid> _players = new();
+    private readonly HashSet<Entity<AnimalBreedingComponent>> _animals = new();
+    private readonly HashSet<Entity<AnimalFeederComponent>> _feeders = new();
+    private readonly HashSet<Entity<WaterSourceComponent>> _waters = new();
+    private TimeSpan _nextPlayerScan;
+
+    /// <summary>
+    /// Rolls what kind of stroll this is and who or what it is round, see <see cref="WanderMode"/>. The subject is
+    /// looked for once per stroll, not per leg, so the cost is one small lookup every few seconds of an animal that
+    /// the AI is awake for (so one that is near a player).
+    /// </summary>
+    private void PickMode(Entity<AnimalWanderComponent> ent)
+    {
+        var wander = ent.Comp;
+        wander.Mode = WanderMode.Roam;
+        wander.Subject = null;
+
+        var roll = _random.NextFloat();
+
+        if (roll < wander.OrbitChance)
+        {
+            if (FindNearestPlayer(ent) is { } player)
+            {
+                wander.Mode = WanderMode.OrbitPlayer;
+                wander.Subject = player;
+                wander.OrbitAngle = _random.NextFloat(0f, MathF.Tau);
+            }
+
+            return;
+        }
+
+        roll -= wander.OrbitChance;
+
+        var male = TryComp<AnimalSexComponent>(ent, out var sex) && sex.Sex == AnimalSexKind.Male;
+        if (male && roll < wander.FollowMateChance)
+        {
+            if (FindMate(ent) is { } mate)
+            {
+                wander.Mode = WanderMode.FollowMate;
+                wander.Subject = mate;
+            }
+
+            return;
+        }
+
+        if (male)
+            roll -= wander.FollowMateChance;
+
+        if (roll < wander.HangoutChance)
+        {
+            if (FindHangout(ent) is { } place)
+            {
+                wander.Mode = WanderMode.Hangout;
+                wander.Subject = place;
+            }
+
+            return;
+        }
+
+        roll -= wander.HangoutChance;
+
+        // With the herd: after a random animal of the same kind that is near, so the animals of a kind keep together.
+        if (roll < wander.HerdChance && FindHerdMember(ent) is { } member)
+        {
+            wander.Mode = WanderMode.FollowHerd;
+            wander.Subject = member;
+        }
+    }
+
+    private EntityUid? FindNearestPlayer(Entity<AnimalWanderComponent> ent)
+    {
+        var now = _timing.CurTime;
+        if (now >= _nextPlayerScan)
+        {
+            _nextPlayerScan = now + PlayerScanInterval;
+            _players.Clear();
+
+            var query = EntityQueryEnumerator<ActorComponent>();
+            while (query.MoveNext(out var uid, out _))
+            {
+                if (!HasComp<GhostComponent>(uid) && _mobState.IsAlive(uid))
+                    _players.Add(uid);
+            }
+        }
+
+        var origin = _transform.GetWorldPosition(ent);
+        var mapId = Transform(ent).MapID;
+        var range = ent.Comp.SocialRange * ent.Comp.SocialRange;
+        EntityUid? best = null;
+        var bestDistance = float.MaxValue;
+
+        foreach (var player in _players)
+        {
+            if (TerminatingOrDeleted(player) || Transform(player).MapID != mapId)
+                continue;
+
+            var distance = (_transform.GetWorldPosition(player) - origin).LengthSquared();
+            if (distance <= range && distance < bestDistance)
+            {
+                bestDistance = distance;
+                best = player;
+            }
+        }
+
+        return best;
+    }
+
+    /// <summary>
+    /// The nearest living female of the same kind.
+    /// </summary>
+    private EntityUid? FindMate(Entity<AnimalWanderComponent> ent)
+    {
+        if (!TryComp<AnimalBreedingComponent>(ent, out var own))
+            return null;
+
+        _animals.Clear();
+        _lookup.GetEntitiesInRange(Transform(ent).Coordinates, ent.Comp.SocialRange, _animals);
+
+        var origin = _transform.GetWorldPosition(ent);
+        EntityUid? best = null;
+        var bestDistance = float.MaxValue;
+
+        foreach (var other in _animals)
+        {
+            if (other.Owner == ent.Owner ||
+                other.Comp.Species != own.Species ||
+                !TryComp<AnimalSexComponent>(other, out var sex) ||
+                sex.Sex != AnimalSexKind.Female ||
+                !_mobState.IsAlive(other))
+                continue;
+
+            var distance = (_transform.GetWorldPosition(other) - origin).LengthSquared();
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                best = other;
+            }
+        }
+
+        return best;
+    }
+
+    /// <summary>
+    /// A living animal of the same kind that is near, any of them.
+    /// </summary>
+    private EntityUid? FindHerdMember(Entity<AnimalWanderComponent> ent)
+    {
+        if (!TryComp<AnimalBreedingComponent>(ent, out var own))
+            return null;
+
+        _animals.Clear();
+        _lookup.GetEntitiesInRange(Transform(ent).Coordinates, ent.Comp.SocialRange, _animals);
+
+        var count = 0;
+        EntityUid? pick = null;
+        foreach (var other in _animals)
+        {
+            if (other.Owner == ent.Owner || other.Comp.Species != own.Species || !_mobState.IsAlive(other))
+                continue;
+
+            // Reservoir sampling: every candidate is equally likely, nothing is allocated.
+            count++;
+            if (_random.Next(count) == 0)
+                pick = other;
+        }
+
+        return pick;
+    }
+
+    /// <summary>
+    /// A feeder or a water source that is near, any of them.
+    /// </summary>
+    private EntityUid? FindHangout(Entity<AnimalWanderComponent> ent)
+    {
+        var coordinates = Transform(ent).Coordinates;
+        _feeders.Clear();
+        _waters.Clear();
+        _lookup.GetEntitiesInRange(coordinates, ent.Comp.SocialRange, _feeders);
+        _lookup.GetEntitiesInRange(coordinates, ent.Comp.SocialRange, _waters);
+
+        var count = _feeders.Count + _waters.Count;
+        if (count == 0)
+            return null;
+
+        var pick = _random.Next(count);
+        foreach (var feeder in _feeders)
+        {
+            if (pick-- == 0)
+                return feeder;
+        }
+
+        foreach (var water in _waters)
+        {
+            if (pick-- == 0)
+                return water;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// The next place of a social stroll: a point on the circle round the player (the angle goes on from the last
+    /// one, so the animal circles), or a point close to the mate or the feeder. It has to be reachable in a straight
+    /// line, as for the roam.
+    /// </summary>
+    private bool TryFindSocialPlace(Entity<AnimalWanderComponent> ent, AnimalWalkerComponent walker, out EntityCoordinates place, out Vector2 direction)
+    {
+        place = default;
+        direction = default;
+
+        var wander = ent.Comp;
+        var xform = Transform(ent);
+        if (wander.Subject is not { } subject ||
+            TerminatingOrDeleted(subject) ||
+            xform.GridUid is not { } gridUid ||
+            !TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
+
+        var origin = _transform.GetWorldPosition(xform);
+        var center = _transform.GetWorldPosition(subject);
+
+        Vector2 point;
+        if (wander.Mode == WanderMode.OrbitPlayer)
+        {
+            wander.OrbitAngle += _random.NextFloat(0.9f, 1.9f);
+            point = center + new Vector2(MathF.Cos(wander.OrbitAngle), MathF.Sin(wander.OrbitAngle)) * Roll(wander.OrbitRadius);
+        }
+        else
+        {
+            point = center + _random.NextAngle().ToVec() * Roll(wander.CompanionDistance);
+        }
+
+        var diff = point - origin;
+        var distance = diff.Length();
+        if (distance < 0.6f || distance > wander.SocialRange + 6f)
+            return false;
+
+        var dir = diff / distance;
+        var mask = _walker.GetHardMask(ent);
+        var room = _walker.FreeLength(ent, xform.MapID, origin, dir, distance + walker.Clearance, walker.Clearance, mask) - walker.Clearance - Margin;
+
+        if (room < distance ||
+            !_walker.IsSolidGround((gridUid, grid), origin, dir, distance) ||
+            !_walker.IsTargetAllowed(ent, new MapCoordinates(point, xform.MapID)))
+            return false;
+
+        direction = dir;
+        place = new EntityCoordinates(gridUid, Vector2.Transform(point, _transform.GetInvWorldMatrix(gridUid)));
+        return true;
+    }
+
+    #endregion
 
     private float Roll(Vector2 range)
     {

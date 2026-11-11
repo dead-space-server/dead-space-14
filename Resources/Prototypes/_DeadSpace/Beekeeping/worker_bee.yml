@@ -7,7 +7,7 @@
   components:
   - type: Bee
     maxPollenCarry: 20
-    idleCooldown: 5
-    searchRadius: 15
+    idleCooldown: 1
+    searchRadius: 5
     arrivalThreshold: 0.5
   - type: NPCSteering

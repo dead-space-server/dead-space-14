@@ -55,7 +55,6 @@ public sealed class BeeAISystem : EntitySystem
         SubscribeLocalEvent<BeeComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<BeeComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<BeeComponent, BeePollinatingDoAfterEvent>(OnPollinatingDoAfter);
-        SubscribeLocalEvent<BeeComponent, BeeDepositingDoAfterEvent>(OnDepositingDoAfter);
     }
 
     private void OnStartup(Entity<BeeComponent> ent, ref ComponentStartup args)
@@ -148,7 +147,6 @@ public sealed class BeeAISystem : EntitySystem
                 case BeeState.MovingToFlower: TickMoving(ent, xform); break;
                 case BeeState.Pollinating: TickPollinating(ent, xform); break;
                 case BeeState.ReturningToHive: TickReturning(ent, xform); break;
-                case BeeState.DepositingPollen: TickDepositing(ent, xform); break;
             }
         }
     }
@@ -159,7 +157,7 @@ public sealed class BeeAISystem : EntitySystem
         if (bee.State == state)
             return;
 
-        if (bee.State is BeeState.Pollinating or BeeState.DepositingPollen)
+        if (bee.State is BeeState.Pollinating)
             CancelDoAfters(ent);
 
         if (bee.State is BeeState.MovingToFlower or BeeState.ReturningToHive)
@@ -180,7 +178,7 @@ public sealed class BeeAISystem : EntitySystem
     /// </summary>
     public void RecallToHive(Entity<BeeComponent> ent)
     {
-        if (ent.Comp.State is BeeState.Idle or BeeState.ReturningToHive or BeeState.DepositingPollen)
+        if (ent.Comp.State is BeeState.Idle or BeeState.ReturningToHive)
             return;
 
         ent.Comp.TargetFlower = null;
@@ -359,8 +357,8 @@ public sealed class BeeAISystem : EntitySystem
 
         bee.TargetFlower = null;
 
-        // Fly on to the next flower until the bee is full, then home.
-        SetState(ent, bee.PollenCarried >= bee.MaxPollenCarry ? BeeState.ReturningToHive : BeeState.SearchingFlower);
+        // One flower, then straight home with the pollen.
+        SetState(ent, BeeState.ReturningToHive);
     }
 
     private void TickReturning(Entity<BeeComponent> ent, TransformComponent xform)
@@ -373,7 +371,13 @@ public sealed class BeeAISystem : EntitySystem
         var distance = DistanceTo(hive, xform);
         if (distance < bee.ArrivalThreshold)
         {
-            SetState(ent, BeeState.DepositingPollen);
+            // At home: the pollen is left in the hive at once and the bee rests before the next flight.
+            var ev = new BeePollenDepositedEvent(ent, bee.PollenCarried);
+            RaiseLocalEvent(hive, ref ev);
+
+            bee.PollenCarried = 0f;
+            bee.TargetFlower = null;
+            SetState(ent, BeeState.Idle);
             return;
         }
 
@@ -423,55 +427,4 @@ public sealed class BeeAISystem : EntitySystem
         return true;
     }
 
-    private void TickDepositing(Entity<BeeComponent> ent, TransformComponent xform)
-    {
-        var bee = ent.Comp;
-        if (!HasValidHive(ent))
-            return;
-
-        var hive = bee.HiveOwner!.Value;
-        if (DistanceTo(hive, xform) > bee.ArrivalThreshold * 2f)
-        {
-            SetState(ent, BeeState.ReturningToHive);
-            return;
-        }
-
-        bee.IsBusy = true;
-
-        var args = new DoAfterArgs(EntityManager, ent, TimeSpan.FromSeconds(bee.DepositingDuration), new BeeDepositingDoAfterEvent(), ent, hive)
-        {
-            BreakOnMove = true,
-            BreakOnDamage = true,
-            NeedHand = false,
-            BlockDuplicate = true,
-        };
-
-        if (!_doAfter.TryStartDoAfter(args))
-        {
-            bee.IsBusy = false;
-            SetState(ent, BeeState.ReturningToHive);
-        }
-    }
-
-    private void OnDepositingDoAfter(Entity<BeeComponent> ent, ref BeeDepositingDoAfterEvent args)
-    {
-        var bee = ent.Comp;
-        bee.IsBusy = false;
-
-        if (args.Cancelled)
-        {
-            SetState(ent, BeeState.ReturningToHive);
-            return;
-        }
-
-        if (!HasValidHive(ent))
-            return;
-
-        var ev = new BeePollenDepositedEvent(ent, bee.PollenCarried);
-        RaiseLocalEvent(bee.HiveOwner!.Value, ref ev);
-
-        bee.PollenCarried = 0f;
-        bee.TargetFlower = null;
-        SetState(ent, BeeState.Idle);
-    }
 }

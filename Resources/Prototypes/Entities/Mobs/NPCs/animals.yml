@@ -272,7 +272,7 @@
     adultStage: adult
     newbornStage: baby
     breedChance: 0.2
-    capacity: 8
+    capacity: 20
     gestationDuration: 120
     cooldown: 360
     satietyCost: 15
@@ -784,7 +784,7 @@
     adultStage: adult
     newbornStage: baby
     breedChance: 0.2
-    capacity: 8
+    capacity: 20
     gestationDuration: 120
     cooldown: 360
     satietyCost: 15

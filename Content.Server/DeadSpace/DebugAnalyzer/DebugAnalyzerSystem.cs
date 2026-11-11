@@ -10,6 +10,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Atmos;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -45,13 +46,13 @@ public sealed class DebugAnalyzerSystem : EntitySystem
 {
     [Dependency] private readonly AnimalFeedingSystem _feeding = default!;
     [Dependency] private readonly AnimalPenSystem _pens = default!;
+    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly SatiationSystem _satiation = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
 
@@ -236,19 +237,16 @@ public sealed class DebugAnalyzerSystem : EntitySystem
 
         if (TryComp<BloodstreamComponent>(target, out var bloodstream))
         {
-            if (_solutions.ResolveSolution(target, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution,
-                    out var blood))
+            // The share of the normal amount (the reference solution of the bloodstream), not of the volume of the
+            // container, which is twice as big: 100% is a healthy being.
+            var level = _bloodstream.GetBloodLevel((target, bloodstream));
+            var severity = level switch
             {
-                var fraction = (float) blood.FillFraction;
-                var severity = fraction switch
-                {
-                    < 0.6f => DebugAnalyzerSeverity.Critical,
-                    < 0.9f => DebugAnalyzerSeverity.Warning,
-                    _ => DebugAnalyzerSeverity.Normal,
-                };
-                rows.Add(new DebugAnalyzerRow(L("blood"), $"{Fmt(fraction * 100f)}%", Math.Clamp(fraction, 0f, 1f),
-                    severity));
-            }
+                < 0.6f => DebugAnalyzerSeverity.Critical,
+                < 0.9f => DebugAnalyzerSeverity.Warning,
+                _ => DebugAnalyzerSeverity.Normal,
+            };
+            rows.Add(new DebugAnalyzerRow(L("blood"), $"{Fmt(level * 100f)}%", Math.Clamp(level, 0f, 1f), severity));
 
             var bleeding = bloodstream.BleedAmount > 0f;
             rows.Add(new DebugAnalyzerRow(L("bleeding"), bleeding ? Fmt(bloodstream.BleedAmount) : "-",

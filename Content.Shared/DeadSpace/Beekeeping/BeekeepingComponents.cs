@@ -14,7 +14,6 @@ public enum BeeState : byte
     MovingToFlower,
     Pollinating,
     ReturningToHive,
-    DepositingPollen,
 }
 
 /// <summary>
@@ -44,13 +43,13 @@ public sealed partial class BeeComponent : Component
     /// How long the bee rests at the hive before the next flight, in seconds.
     /// </summary>
     [DataField]
-    public float IdleCooldown = 5f;
+    public float IdleCooldown = 1f;
 
     /// <summary>
-    /// How far from the bee it looks for flowers, in tiles.
+    /// How far from the bee it looks for plants once a second, in tiles.
     /// </summary>
     [DataField]
-    public float SearchRadius = 15f;
+    public float SearchRadius = 5f;
 
     [DataField]
     public float ArrivalThreshold = 0.5f;
@@ -63,9 +62,6 @@ public sealed partial class BeeComponent : Component
 
     [DataField]
     public float PollinatingDuration = 2f;
-
-    [DataField]
-    public float DepositingDuration = 1.5f;
 
     /// <summary>
     /// If the distance to the target does not shrink by <see cref="ProgressEpsilon"/> for this long, the path is
@@ -148,7 +144,7 @@ public sealed partial class BeeHiveComponent : Component
     public float OfflinePollenPerBee = 5f;
 
     [DataField]
-    public float OfflineRange = 15f;
+    public float OfflineRange = 5f;
 
     [ViewVariables]
     public float SpawnTimer;
@@ -252,9 +248,6 @@ public sealed partial class PollinationComponent : Component
 
 [Serializable, NetSerializable]
 public sealed partial class BeePollinatingDoAfterEvent : SimpleDoAfterEvent;
-
-[Serializable, NetSerializable]
-public sealed partial class BeeDepositingDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class HiveFrameDoAfterEvent : SimpleDoAfterEvent;

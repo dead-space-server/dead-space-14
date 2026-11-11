@@ -36,16 +36,16 @@ public sealed partial class AnimalWanderComponent : Component
     /// How many legs a stroll has (min, max, both included). A leg is one straight walk.
     /// </summary>
     [DataField]
-    public Vector2i Legs = new(2, 4);
+    public Vector2i Legs = new(3, 6);
 
     /// <summary>
     /// How far each leg is meant to be, in tiles. A leg is shorter where there is less room.
     /// </summary>
     [DataField]
-    public float MinDistance = 4f;
+    public float MinDistance = 6f;
 
     [DataField]
-    public float MaxDistance = 10f;
+    public float MaxDistance = 16f;
 
     /// <summary>
     /// The shortest leg worth walking, in tiles. With less room than this in a direction it is not a place to walk to.
@@ -114,4 +114,67 @@ public sealed partial class AnimalWanderComponent : Component
     /// </summary>
     [ViewVariables]
     public TimeSpan WalkStart;
+
+    // Social strolls: instead of a random place the animal walks round something. Each stroll rolls one of them, the
+    // rest is the plain roam. A stroll whose subject is not there (no player, no female, no feeder) is a roam.
+
+    /// <summary>
+    /// Chance of a stroll round the nearest player: the animal circles him at <see cref="OrbitRadius"/> tiles.
+    /// </summary>
+    [DataField]
+    public float OrbitChance = 0.15f;
+
+    /// <summary>
+    /// Chance, for a male, of a stroll after the nearest female of its kind.
+    /// </summary>
+    [DataField]
+    public float FollowMateChance = 0.3f;
+
+    /// <summary>
+    /// Chance of a stroll round a feeder or a water source that is near.
+    /// </summary>
+    [DataField]
+    public float HangoutChance = 0.2f;
+
+    /// <summary>
+    /// How far the subject of a social stroll may be, in tiles.
+    /// </summary>
+    /// <summary>
+    /// Chance of a stroll after a random animal of the same kind that is near (the herd).
+    /// </summary>
+    [DataField]
+    public float HerdChance = 0.25f;
+
+    [DataField]
+    public float SocialRange = 12f;
+
+    [DataField]
+    public Vector2 OrbitRadius = new(2f, 4f);
+
+    /// <summary>
+    /// How close to the subject of a social stroll each leg ends (a mate, a feeder).
+    /// </summary>
+    [DataField]
+    public Vector2 CompanionDistance = new(1.5f, 3f);
+
+    [ViewVariables]
+    public WanderMode Mode;
+
+    [ViewVariables]
+    public EntityUid? Subject;
+
+    /// <summary>
+    /// Where on the circle round the subject the last leg of an orbit ended, in radians.
+    /// </summary>
+    [ViewVariables]
+    public float OrbitAngle;
+}
+
+public enum WanderMode : byte
+{
+    Roam,
+    OrbitPlayer,
+    FollowMate,
+    Hangout,
+    FollowHerd,
 }
