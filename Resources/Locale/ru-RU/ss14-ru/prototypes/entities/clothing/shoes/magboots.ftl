@@ -1,4 +1,4 @@
-сапогиent-ClothingShoesBootsMagBase = магнитные сапоги
+ent-ClothingShoesBootsMagBase = магнитные сапоги
     .desc = Магнитные сапоги, используемые во время работы вне корабля, чтобы оставаться надёжно прикреплёнными к поверхности.
 ent-ClothingShoesBootsMag = { ent-ClothingShoesBootsMagBase }
     .desc = { ent-ClothingShoesBootsMagBase.desc }
