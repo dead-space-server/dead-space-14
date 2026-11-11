@@ -238,9 +238,8 @@ namespace Content.Server.Communications
             {
                 //DS14-start
                 var stationUid = _stationSystem.GetOwningStation(comp.Owner);
-                if (stationUid != null &&
-                (_alertLevelSystem.GetLevel(stationUid.Value) == "gamma" || _alertLevelSystem.GetLevel(stationUid.Value) == "sierra"
-                || _alertLevelSystem.GetLevel(stationUid.Value) == "delta" || _alertLevelSystem.GetLevel(stationUid.Value) == "epsilon"))
+                if (stationUid != null && (_alertLevelSystem.GetLevel(stationUid.Value) == "gamma"
+                || _alertLevelSystem.GetLevel(stationUid.Value) == "sierra" || _alertLevelSystem.GetLevel(stationUid.Value) == "epsilon"))
                 {
                     return false;
                 }
