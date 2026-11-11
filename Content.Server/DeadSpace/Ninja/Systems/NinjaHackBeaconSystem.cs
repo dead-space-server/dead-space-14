@@ -289,45 +289,27 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
 
     private string GenerateGarbage(string input, float percent = 0.25f)
     {
-        const string chars = "&@(!)#$%^*?~+=<>/|";
-
         if (string.IsNullOrEmpty(input) || percent <= 0f)
             return input;
-
         percent = Math.Clamp(percent, 0f, 1f);
-
-        var indices = new List<int>();
-        for (var i = 0; i < input.Length; i++)
+        const string chars = "&@(!)#$%^*?~+=<>/|";
+        var sb = new StringBuilder(input);
+        var i = 0;
+        while (i < input.Length)
         {
             if (input[i] == '[')
             {
                 var close = input.IndexOf(']', i + 1);
-                if (close != -1)
+                if (close >= 0)
                 {
-                    i = close;
+                    i = close + 1;
                     continue;
                 }
             }
-
-            if (!char.IsWhiteSpace(input[i]))
-                indices.Add(i);
+            if (!char.IsWhiteSpace(input[i]) && _random.NextDouble() < percent)
+                sb[i] = chars[_random.Next(chars.Length)];
+            i++;
         }
-
-        if (indices.Count == 0)
-            return input;
-
-        var count = Math.Min((int)Math.Round(indices.Count * percent), indices.Count);
-
-        var sb = new StringBuilder(input);
-
-        for (var i = 0; i < count; i++)
-        {
-            var j = _random.Next(i, indices.Count);
-            (indices[i], indices[j]) = (indices[j], indices[i]);
-
-            sb[indices[i]] = chars[_random.Next(chars.Length)];
-        }
-
         return sb.ToString();
     }
 }
