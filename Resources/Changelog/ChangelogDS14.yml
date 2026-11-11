@@ -9917,3 +9917,10 @@ Entries:
   changes:
   - type: Fix
     message: Ксеноборги на камерах СБ
+- id: 948
+  author: BlueDogDoc
+  time: '2026-11-11T07:57:13.604865+00:00'
+  pr: 2708
+  changes:
+  - type: Fix
+    message: Локализации
