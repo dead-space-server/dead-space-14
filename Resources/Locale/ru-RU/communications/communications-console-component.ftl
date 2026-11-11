@@ -1,6 +1,6 @@
 # Comms console variant titles
 comms-console-announcement-title-station = Консоль связи
-comms-console-announcement-title-centcom = Центральное КЫомандование
+comms-console-announcement-title-centcom = Центральное Командование
 comms-console-announcement-title-soc = Корпус Специальных Операций
 comms-console-announcement-title-nukie = Ядерные оперативники
 comms-console-announcement-title-taipan = ННКСС Тайпан
