@@ -9969,3 +9969,10 @@ Entries:
   changes:
   - type: Add
     message: Админ возможность смотреть нагрузку
+- id: 954
+  author: BlueDogDoc
+  time: '2026-11-11T22:10:48.375774+00:00'
+  pr: 2719
+  changes:
+  - type: Tweak
+    message: Параметр настроки сервера
