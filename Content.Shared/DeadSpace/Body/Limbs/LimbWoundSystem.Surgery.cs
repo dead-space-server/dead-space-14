@@ -163,7 +163,13 @@ public sealed partial class LimbWoundSystem
             ? MathF.Max(0f, edit.Damage)
             : MathF.Max(0f, state.Damage + edit.Damage);
         if (edit.SetRuptured)
+        {
             state.Ruptured = edit.Ruptured;
+            if (edit.Ruptured)
+                state.BleedStopped = false;
+        }
+        if (edit.SetBleedStopped)
+            state.BleedStopped = edit.BleedStopped;
         if (edit.SetMissing)
             state.Missing = edit.Missing;
         limbs.Organs[index] = state;

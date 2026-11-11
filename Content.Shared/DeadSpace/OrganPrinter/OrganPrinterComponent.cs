@@ -31,6 +31,7 @@ public enum OrganSpeciesGroup : byte
     Felinid = 8,
     Vox = 9,
     Arachnid = 10,
+    Xenomorph = 11,
 }
 
 /// <summary>
@@ -112,6 +113,7 @@ public sealed partial class OrganPrinterComponent : Component
         [OrganSpeciesGroup.Felinid] = "Felinid",
         [OrganSpeciesGroup.Vox] = "Vox",
         [OrganSpeciesGroup.Arachnid] = "Arachnid",
+        [OrganSpeciesGroup.Xenomorph] = "Xenomorph",
     };
 
     /// <summary>

@@ -25,5 +25,6 @@ organ-printer-group-demon = Арканы
 organ-printer-group-felinid = Фелиниды
 organ-printer-group-vox = Воксы
 organ-printer-group-arachnid = Арахниды
+organ-printer-group-xenomorph = Ксеноморфы
 organ-printer-eject-button = Извлечь биомассу
 organ-printer-eject-empty = Внутри нет биомассы.
