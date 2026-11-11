@@ -146,10 +146,13 @@
   id: SealWearable
 
 - type: Tag
-  id: DonkCo
+  id: Demon
 
 - type: Tag
-  id: Demon
+  id: DevourImmune
+
+- type: Tag
+  id: DonkCo
 
 - type: Tag
   id: Durf
