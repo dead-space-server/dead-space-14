@@ -752,7 +752,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
                 continue;
             }
 
-            var parryEvent = new BeforeMeleeDamageEvent(user, meleeUid);
+            var parryEvent = new BeforeMeleeDamageEvent(user, meleeUid, Wide: true);
             RaiseLocalEvent(target, ref parryEvent);
             if (parryEvent.Cancelled)
                 targets.RemoveAt(i);

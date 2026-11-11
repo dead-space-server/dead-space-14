@@ -115,16 +115,16 @@ public sealed partial class CQCParams // Список переменных, ко
     public List<LocId>? PackMessageOnHit;
 
     [DataField]
-    public float StaminaDamageMuteAtack = 35.0f;
+    public float StaminaDamageEyeAttack = 35.0f;
 
     [DataField]
-    public TimeSpan ParalyzeTimeMuteAtack = TimeSpan.FromSeconds(15);
+    public TimeSpan BlindnessTimeEyeAttack = TimeSpan.FromSeconds(2);
 
     [DataField]
-    public int HitDamageForMuteAtack = 5;
+    public int HitDamageForEyeAttack = 5;
 
     [DataField]
-    public string DamageTypeForMuteAtack = "Blunt";
+    public string DamageTypeForEyeAttack = "Blunt";
 
     [DataField]
     public SoundSpecifier? HitSoundForStunAtack;

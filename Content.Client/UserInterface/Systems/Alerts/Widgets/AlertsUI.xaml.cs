@@ -113,7 +113,10 @@ public sealed partial class AlertsUI : UIWidget
                     var added = false;
                     foreach (var alertControl in AlertContainer.Children)
                     {
-                        if (alertOrderPrototype.Compare(newAlert, ((AlertControl) alertControl).Alert) >= 0)
+                        if (alertControl is not AlertControl ordered) //DS-14
+                            continue;
+
+                        if (alertOrderPrototype.Compare(newAlert, ordered.Alert) >= 0)
                             continue;
 
                         var idx = alertControl.GetPositionInParent();

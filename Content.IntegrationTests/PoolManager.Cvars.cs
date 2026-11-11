@@ -37,5 +37,7 @@ public static partial class PoolManager
         (CCVars.InteractionRateLimitPeriod.Name, "0.1"),
         (CCVars.MovementMobPushing.Name, "false"),
         (CCCCVars.LavalandAutoGenerate.Name, "false"), // DS14
+        (CCVars.CameraArchiveActive.Name, "true"), //DS-14
+        (CCVars.CameraArchiveIdleEnabled.Name, "true"), //DS-14
     };
 }

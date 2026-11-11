@@ -96,6 +96,7 @@
   - type: Tag
     tags:
       - SecBeltEquip
+      - Seclite # DS14
   - type: ItemSlots
     slots:
       cell_slot:

@@ -82,6 +82,7 @@ lavaland-geist-ambush-shot = Гейст вздрагивает и провали
 lavaland-boss-execute-start = { CAPITALIZE(THE($boss)) } чует смерть, что держится на { THE($target) }, и идёт за ней!
 lavaland-boss-execute = { CAPITALIZE(THE($boss)) } разрывает { THE($target) } - мементо мори больше не держит!
 lavaland-memento-skeleton = В скелете не осталось жизни, которую мементо мори мог бы забрать.
+lavaland-memento-soulscythe = Ваша душа уже связана с косой - мементо мори не за что ухватиться.
 lavaland-memento-released = Мементо мори отпускает вас и соскальзывает.
 lavaland-talisman-recharging = [color=gray]Талисман восстанавливается: ещё { $seconds } с.[/color]
 lavaland-talisman-ready = [color=#b48cff]Талисман готов.[/color]

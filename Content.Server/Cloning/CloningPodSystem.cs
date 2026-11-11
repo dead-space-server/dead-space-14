@@ -31,6 +31,9 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DeadSpace.Cloning; // DS14
+using Content.Shared.DeadSpace.Body.Limbs; //DS-14
+using Content.Shared.Humanoid; //DS-14
+using Content.Shared.Mobs.Components; //DS-14
 
 namespace Content.Server.Cloning;
 
@@ -141,7 +144,7 @@ public sealed class CloningPodSystem : EntitySystem
             return false;
 
         // DS14-start
-        if (HasComp<UncloningComponent>(bodyToClone) && !clonePod.CanCloneUnclonable)
+        if ((HasComp<UncloningComponent>(bodyToClone) || TryComp<LimbFleshComponent>(bodyToClone, out var flesh) && flesh.Unstable) && !clonePod.CanCloneUnclonable)
         {
             if (clonePod.ConnectedConsole != null)
                 _chatSystem.TrySendInGameICMessage(clonePod.ConnectedConsole.Value,
@@ -163,7 +166,7 @@ public sealed class CloningPodSystem : EntitySystem
             ClonesWaitingForMind.Remove(mind);
         }
 
-        if (mind.OwnedEntity != null && !_mobStateSystem.IsDead(mind.OwnedEntity.Value))
+        if (mind.OwnedEntity is { } owned && HasComp<MobStateComponent>(owned) && !_mobStateSystem.IsDead(owned)) //DS-14
             return false; // Body controlled by mind is not dead
 
         // Yes, we still need to track down the client because we need to open the Eui
@@ -174,6 +177,8 @@ public sealed class CloningPodSystem : EntitySystem
             return false;
 
         var cloningCost = (int)Math.Round(physics.FixturesMass);
+        if (!HasComp<HumanoidAppearanceComponent>(bodyToClone)) //DS-14
+            cloningCost = Math.Max(cloningCost, clonePod.HeadCost); //DS-14
 
         if (_configManager.GetCVar(CCVars.BiomassEasyMode))
             cloningCost = (int)Math.Round(cloningCost * EasyModeCloningCost);

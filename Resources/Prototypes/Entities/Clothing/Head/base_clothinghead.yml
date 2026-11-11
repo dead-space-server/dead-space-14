@@ -134,6 +134,13 @@
     heatingCoefficient: 0.2
     coolingCoefficient: 0.2
   - type: IngestionBlocker
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: Clothing
     #Copies ClothingHeadHardsuitBase behavior
     equipSound: /Audio/Mecha/mechmove03.ogg
@@ -191,6 +198,13 @@
         Piercing: 0.95
         Heat: 0.90
         Radiation: 0.25
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: GroupExamine
   - type: IngestionBlocker
   - type: Tag

@@ -7,7 +7,7 @@
   - type: StorageFill
     contents:
       - id: Hemostat
-      - id: Saw
+      - id: SurgerySaw # DS14
       - id: Drill
       - id: Cautery
       - id: Retractor

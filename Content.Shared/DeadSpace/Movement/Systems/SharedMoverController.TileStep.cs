@@ -26,6 +26,9 @@ public abstract partial class SharedMoverController
     /// <summary>Close enough to a tile center to count as standing on it.</summary>
     private const float TileStepArriveDistance = 0.02f;
 
+    /// <summary>Farther than a diagonal step (with some slack) from its target, the step is no step any more.</summary>
+    private const float TileStepMaxLength = 1.6f;
+
     /// <summary>Returns true when the movement of this tick was done here.</summary>
     protected bool HandleTileStepMovement(
         Entity<TileStepMovementComponent> ent,
@@ -57,6 +60,11 @@ public abstract partial class SharedMoverController
         var now = Timing.CurTime;
 
         if (step.Stepping && step.Parent != xform.ParentUid)
+            step.Stepping = false;
+
+        // Knocked off the step (a throw, a blast, a hook): the old target is tiles away now. Walking back to it drove
+        // the mob sideways with no stopping, deaf to any direction held: start over from where it landed.
+        if (step.Stepping && (step.Target - position).LengthSquared() > TileStepMaxLength * TileStepMaxLength)
             step.Stepping = false;
 
         var direction = HeldTileDirection(mover);

@@ -89,7 +89,7 @@ ent-ClothingHeadNeuroMesh = neuro-mesh
 ent-HandheldEncephalograph = encephalograph
     .desc = A brain monitor. Through a neuro-mesh it lights the region that just fired: speech, hearing, sight, movement, fear, arousal. Works without a traumatic brain injury.
 ent-ShockTherapyPaddles = shock therapy unit
-    .desc = A two-handed unit with round electrodes. Shocks any creature. Without a medical gag the jaw breaks. Metal conducts to anyone touching it. Wood does not conduct. Connected puddles conduct: fuel catches fire, the water that was struck evaporates, and rubber boots block that shock. It clears a traumatic brain injury and can blind, deafen, or mute. On an IPC it scrambles the processor and worsens cyberpsychosis.
+    .desc = Used for the "Shock treatment of a traumatic brain injury" operation.
 ent-ClothingMaskMedicalGag = medical gag
     .desc = A jaw guard. Without it, shock therapy breaks the jaw.
 

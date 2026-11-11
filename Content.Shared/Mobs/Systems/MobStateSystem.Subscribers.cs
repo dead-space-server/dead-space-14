@@ -1,4 +1,4 @@
-﻿using Content.Shared.Bed.Sleep;
+using Content.Shared.Bed.Sleep;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Cuffs;
@@ -118,11 +118,13 @@ public partial class MobStateSystem
                 //unused
                 break;
             case MobState.Critical:
-                _standing.Stand(target);
+                if (!IsBuckledToDownStrap(target)) //DS-14
+                    _standing.Stand(target);
                 break;
             case MobState.Dead:
                 RemComp<CollisionWakeComponent>(target);
-                _standing.Stand(target);
+                if (!IsBuckledToDownStrap(target)) //DS-14
+                    _standing.Stand(target);
                 break;
             case MobState.Invalid:
                 //unused

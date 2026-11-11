@@ -1,7 +1,10 @@
+using Content.Shared.ActionBlocker; //DS-14
 using Content.Shared.Alert;
+using Content.Shared.Atmos; //DS-14
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.Body.Components;
+using Content.Shared.DeadSpace.Surgery; //DS-14
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
@@ -20,6 +23,7 @@ namespace Content.Shared.Body.Systems;
 /// </summary>
 public abstract class SharedInternalsSystem : EntitySystem
 {
+    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!; //DS-14
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -154,6 +158,11 @@ public abstract class SharedInternalsSystem : EntitySystem
         if (args.Handled)
             return;
 
+        //DS-14 start
+        if (!_actionBlocker.CanConsciouslyPerformAction(ent.Owner))
+            return;
+        //DS-14 end
+
         args.Handled |= ToggleInternals(ent, ent, false, internals: ent.Comp);
     }
 
@@ -266,46 +275,69 @@ public abstract class SharedInternalsSystem : EntitySystem
         // 4. Pocket/belt
         // Jetpacks will only be used as a fallback if no other tank is found
 
-        // Store the first jetpack seen
-        Entity<GasTankComponent>? found = null;
+        Entity<GasTankComponent>? first = null;
+        Entity<GasTankComponent>? breathable = null;
+        Entity<GasTankComponent>? jetpack = null;
 
         if (!Resolve(user, ref user.Comp2, ref user.Comp3))
             return null;
 
-        if (_inventory.TryGetSlotEntity(user, "back", out var backEntity, user.Comp2, user.Comp3) &&
-            TryComp<GasTankComponent>(backEntity, out var backGasTank) &&
-            _gasTank.CanConnectToInternals((backEntity.Value, backGasTank)))
+        // DS-14-start
+        var mounted = new FindInternalsTankEvent();
+        RaiseLocalEvent(user, ref mounted);
+        if (mounted.Tank is { } mountedTank && _gasTank.CanConnectToInternals(mountedTank))
+            return mountedTank;
+        // DS-14-end
+
+        void Consider(EntityUid tankUid, GasTankComponent tank)
         {
-            found = (backEntity.Value, backGasTank);
-            if (!HasComp<JetpackComponent>(backEntity.Value))
+            if (!_gasTank.CanConnectToInternals((tankUid, tank)))
+                return;
+
+            var candidate = new Entity<GasTankComponent>(tankUid, tank);
+            if (HasComp<JetpackComponent>(tankUid))
             {
-                return found;
+                jetpack ??= candidate;
+                return;
             }
+
+            first ??= candidate;
+            if (breathable == null && Breathable(user, tank.Air))
+                breathable = candidate;
         }
 
+        if (_inventory.TryGetSlotEntity(user, "back", out var backEntity, user.Comp2, user.Comp3) &&
+            TryComp<GasTankComponent>(backEntity, out var backGasTank))
+            Consider(backEntity.Value, backGasTank);
+
         if (_inventory.TryGetSlotEntity(user, "suitstorage", out var entity, user.Comp2, user.Comp3) &&
-            TryComp<GasTankComponent>(entity, out var gasTank) &&
-            _gasTank.CanConnectToInternals((entity.Value, gasTank)))
-        {
-            found ??= (entity.Value, gasTank);
-            if (!HasComp<JetpackComponent>(entity.Value))
-            {
-                return (entity.Value, gasTank);
-            }
-        }
+            TryComp<GasTankComponent>(entity, out var gasTank))
+            Consider(entity.Value, gasTank);
 
         foreach (var item in _inventory.GetHandOrInventoryEntities((user.Owner, user.Comp1, user.Comp2)))
         {
-            if (TryComp(item, out gasTank) && _gasTank.CanConnectToInternals((item, gasTank)))
-            {
-                found ??= (item, gasTank);
-                if (!HasComp<JetpackComponent>(item))
-                {
-                    return (item, gasTank);
-                }
-            }
+            if (TryComp<GasTankComponent>(item, out var heldTank))
+                Consider(item, heldTank);
         }
 
-        return found;
+        return breathable ?? first ?? jetpack; //DS-14
     }
+
+    //DS-14 start
+    private bool Breathable(EntityUid user, GasMixture air)
+    {
+        var ev = new BreathableAirEvent(air);
+        RaiseLocalEvent(user, ref ev);
+        return !ev.Handled || ev.Breathable;
+    }
+    //DS-14 end
 }
+
+//DS-14 start
+[ByRefEvent]
+public record struct BreathableAirEvent(GasMixture Air)
+{
+    public bool Breathable;
+    public bool Handled;
+}
+//DS-14 end

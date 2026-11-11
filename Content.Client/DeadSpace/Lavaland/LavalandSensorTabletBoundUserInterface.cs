@@ -27,6 +27,8 @@ public sealed class LavalandSensorTabletBoundUserInterface(EntityUid owner, Enum
         base.Open();
         _window = this.CreateWindow<LavalandSensorTabletWindow>();
         _window.OnClose += Close;
+        _window.OnSonar += () => SendMessage(new LavalandSensorTabletSonarMessage());
+        _window.OnSwitchLayer += () => SendMessage(new LavalandSensorTabletSwitchLayerMessage());
         _window.OpenCentered();
     }
 
@@ -46,6 +48,14 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
         Text = "Нет активных координатных датчиков на лаваленде",
     };
     private readonly Label _coordinates = new() { Text = "X: ---  Y: ---" };
+    private readonly Button _sonar = new() { Text = "Сонар", Margin = new Thickness(0, 0, 4, 0) };
+    private readonly Button _layer = new() { Text = "Слой: лаваленд", Visible = false, Margin = new Thickness(0, 0, 4, 0) };
+    private readonly StyleBoxFlat _bodyStyle;
+    private readonly StyleBoxFlat _frameStyle;
+    private bool? _caves;
+
+    public event Action? OnSonar;
+    public event Action? OnSwitchLayer;
 
     public LavalandSensorTabletWindow()
     {
@@ -71,8 +81,8 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
         searchToggle.OnToggled += args => _radar.ShowSearchAreas = args.Pressed;
         var gridToggle = new Button { Text = "Сетка", ToggleMode = true, Pressed = true, Margin = new Thickness(0, 0, 4, 0) };
         gridToggle.OnToggled += args => _radar.ShowGrid = args.Pressed;
-        var sweepToggle = new Button { Text = "Луч", ToggleMode = true, Pressed = true, Margin = new Thickness(0, 0, 4, 0) };
-        sweepToggle.OnToggled += args => _radar.ShowSweep = args.Pressed;
+        _sonar.OnPressed += _ => OnSonar?.Invoke();
+        _layer.OnPressed += _ => OnSwitchLayer?.Invoke();
         _radar.CoordinatesChanged += coordinates =>
             _coordinates.Text = $"X: {coordinates.X,7:0.0}  Y: {coordinates.Y,7:0.0}";
         var hint = new Label { Text = "Колесо — масштаб · ЛКМ с перетаскиванием — перемещение", HorizontalAlignment = Control.HAlignment.Center };
@@ -86,11 +96,12 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
                 new Control { HorizontalExpand = true },
                 searchToggle,
                 gridToggle,
-                sweepToggle,
+                _layer,
+                _sonar,
                 recenter,
             },
         };
-        var frameStyle = new StyleBoxFlat
+        var frameStyle = _frameStyle = new StyleBoxFlat
         {
             BackgroundColor = Color.FromHex("#07100e"),
             BorderColor = Color.FromHex("#b96b2d"),
@@ -144,7 +155,7 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
         {
             HorizontalExpand = true,
             VerticalExpand = true,
-            PanelOverride = new StyleBoxFlat
+            PanelOverride = _bodyStyle = new StyleBoxFlat
             {
                 BackgroundColor = Color.FromHex("#57240f"),
                 BorderColor = Color.FromHex("#d8792f"),
@@ -157,6 +168,14 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
             Children = { content },
         };
         Contents.AddChild(tabletBody);
+    }
+
+    /// <summary>The lead salvager's rugged tablet: a black body instead of the orange one.</summary>
+    private void ApplyRuggedLook()
+    {
+        _bodyStyle.BackgroundColor = Color.FromHex("#141414");
+        _bodyStyle.BorderColor = Color.FromHex("#050505");
+        _frameStyle.BorderColor = Color.FromHex("#3a3a3a");
     }
 
     private static void AddLegend(BoxContainer legend, string text, Color color)
@@ -205,10 +224,31 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
     public void SetState(LavalandSensorTabletState state)
     {
         _status.Visible = !state.Points.Exists(p => p.Kind is LavalandRadarPointKind.LivingMiner or LavalandRadarPointKind.DeadMiner);
+        _status.Text = state.Caves
+            ? "Нет активных координатных датчиков в шахтах"
+            : "Нет активных координатных датчиков на лаваленде";
+
+        // Another layer: its own coordinates, so the map is centered again.
+        if (_caves != state.Caves)
+        {
+            if (_caves != null)
+                _radar.ResetView();
+            _caves = state.Caves;
+        }
+
+        if (state.CanSwitchLayer && !_layer.Visible)
+            ApplyRuggedLook();
+        _layer.Visible = state.CanSwitchLayer;
+        _layer.Text = state.Caves ? "Слой: шахты" : "Слой: лаваленд";
+        _sonar.Text = state.SonarCharges is { } charges ? $"Сонар ({charges})" : "Сонар (нет картриджа)";
+        _sonar.Disabled = state.SonarCharges is not > 0;
+
         if (state.BasePoints != null)
             _radar.SetBasePoints(state.BasePoints);
+        _radar.Caves = state.Caves;
         _radar.SetPoints(state.Points);
         _radar.Storm = state.Storm;
+        _radar.SetPing(state.Ping);
     }
 }
 
@@ -231,8 +271,22 @@ public sealed class LavalandRadarControl : MapGridControl
     /// <summary>World grid and range rings.</summary>
     public bool ShowGrid = true;
 
-    /// <summary>The rotating radar beam.</summary>
-    public bool ShowSweep = true;
+    /// <summary>The chromite caves are shown: a purple grid instead of the orange one of the surface.</summary>
+    public bool Caves;
+
+    private static readonly Color SurfaceGrid = Color.FromHex("#ff9a3c");
+    private static readonly Color CavesGrid = Color.FromHex("#b06cff");
+    private Color GridColor => Caves ? CavesGrid : SurfaceGrid;
+
+    private LavalandSonarPing? _ping;
+    private float _pingStart;
+
+    /// <summary>How long the sonar's arena circle stays on the screen, fading.</summary>
+    private const float PingLifetime = 2f;
+
+    /// <summary>How long the mini-bosses the sonar caught nearby stay marked.</summary>
+    private const float MinibossLifetime = 5f;
+
     protected override bool Draggable => true;
 
     public LavalandRadarControl() : base(4f, 600f, 48f)
@@ -256,6 +310,22 @@ public sealed class LavalandRadarControl : MapGridControl
             Recenter();
             _initialized = true;
         }
+    }
+
+    /// <summary>A new layer: the old points are gone, the map is centered on the new ones when they come.</summary>
+    public void ResetView()
+    {
+        _points = new List<LavalandRadarPoint>();
+        _initialized = false;
+    }
+
+    public void SetPing(LavalandSonarPing? ping)
+    {
+        if (ping == null || ping.Id == _ping?.Id)
+            return;
+
+        _ping = ping;
+        _pingStart = _interferenceTime;
     }
 
     public void Recenter()
@@ -404,8 +474,10 @@ public sealed class LavalandRadarControl : MapGridControl
             }
         }
 
-        if (ShowSweep)
-            DrawSweep(handle, center);
+        DrawPing(handle, scale);
+        // The beam only sweeps while a sonar pulse goes out: one turn after the button.
+        if (_ping != null && _interferenceTime - _pingStart < SweepTime)
+            DrawSweep(handle, center, (_interferenceTime - _pingStart) / SweepTime);
         DrawInterference(handle);
         DrawStorm(handle);
         DrawScanlines(handle);
@@ -540,6 +612,83 @@ public sealed class LavalandRadarControl : MapGridControl
         }
     }
 
+    private static readonly Color PingColor = Color.FromHex("#ff4f6d");
+
+    /// <summary>
+    /// The sonar's answer: a circle where the nearest boss arena is thought to be. A near one is a sharp ring, a far
+    /// one a wide, faint, trembling blur of several rings. It grows out of a pulse and fades over a minute.
+    /// </summary>
+    private void DrawPing(DrawingHandleScreen handle, float scale)
+    {
+        // Only on the layer the pulse went out on: lavaland's bosses are not drawn over the caves.
+        if (_ping is not { } ping || ping.Caves != Caves)
+            return;
+
+        var age = _interferenceTime - _pingStart;
+        DrawMinibosses(handle, scale, ping, age);
+        if (!ping.HasArena || age > PingLifetime)
+            return;
+
+        var relative = (ping.Center - Offset) * scale;
+        var position = PixelSize / 2 + new Vector2(relative.X, -relative.Y);
+        var grow = Math.Clamp(age / 0.3f, 0f, 1f);
+        var radius = MathF.Max(6f, ping.Radius * scale) * grow;
+        var fade = 1f - age / PingLifetime;
+        var sharpness = 1f - ping.Fuzz;
+
+        handle.DrawCircle(position, radius, PingColor.WithAlpha((0.05f + 0.1f * sharpness) * fade));
+
+        // More, fainter, shakier rings the farther the arena.
+        var rings = 1 + (int) MathF.Round(ping.Fuzz * 4f);
+        for (var r = 0; r < rings; r++)
+        {
+            var ringRadius = radius * (1f + (r - rings / 2f) * 0.08f * ping.Fuzz);
+            const int segments = 40;
+            var previous = Vector2.Zero;
+            for (var i = 0; i <= segments; i++)
+            {
+                var angle = MathF.Tau * i / segments;
+                var jitter = 1f + ping.Fuzz * 0.12f * MathF.Sin(i * 3.7f + r * 1.9f + _interferenceTime * 6f);
+                var current = position + new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * ringRadius * jitter;
+                if (i > 0)
+                    handle.DrawLine(previous, current, PingColor.WithAlpha((0.35f + 0.6f * sharpness) * fade / rings * 1.6f));
+                previous = current;
+            }
+        }
+
+        // A sharp answer marks its middle too.
+        if (sharpness > 0.5f)
+        {
+            var cross = 6f * fade;
+            handle.DrawLine(position - new Vector2(cross, 0), position + new Vector2(cross, 0), PingColor.WithAlpha(fade));
+            handle.DrawLine(position - new Vector2(0, cross), position + new Vector2(0, cross), PingColor.WithAlpha(fade));
+        }
+
+        // The pulse running out from the ring.
+        var wave = radius + age * 60f;
+        handle.DrawCircle(position, wave, PingColor.WithAlpha(0.5f * fade), false);
+    }
+
+    private static readonly Color MinibossColor = Color.FromHex("#3d8bff");
+
+    /// <summary>The mini-bosses the pulse caught nearby: pulsing rings with a dot, fading over a few seconds.</summary>
+    private void DrawMinibosses(DrawingHandleScreen handle, float scale, LavalandSonarPing ping, float age)
+    {
+        if (ping.Minibosses.Count == 0 || age > MinibossLifetime)
+            return;
+
+        var fade = 1f - age / MinibossLifetime;
+        var pulse = 0.5f + 0.5f * MathF.Sin(_interferenceTime * 6f);
+        foreach (var miniboss in ping.Minibosses)
+        {
+            var relative = (miniboss - Offset) * scale;
+            var position = PixelSize / 2 + new Vector2(relative.X, -relative.Y);
+            handle.DrawCircle(position, 9f + pulse * 4f, MinibossColor.WithAlpha(0.18f * fade));
+            handle.DrawCircle(position, 9f + pulse * 4f, MinibossColor.WithAlpha(0.8f * fade), false);
+            handle.DrawCircle(position, 3.5f, MinibossColor.WithAlpha(fade));
+        }
+    }
+
     /// <summary>World grid every 10 tiles, brighter every 50.</summary>
     private void DrawWorldGrid(DrawingHandleScreen handle, float scale)
     {
@@ -554,14 +703,14 @@ public sealed class LavalandRadarControl : MapGridControl
         {
             var px = PixelSize.X / 2 + (x - Offset.X) * scale;
             var major = MathF.Abs(x % 50f) < 0.01f;
-            handle.DrawLine(new Vector2(px, 0), new Vector2(px, PixelSize.Y), Phosphor.WithAlpha(major ? 0.13f : 0.05f));
+            handle.DrawLine(new Vector2(px, 0), new Vector2(px, PixelSize.Y), GridColor.WithAlpha(major ? 0.16f : 0.06f));
         }
 
         for (var y = MathF.Floor(min.Y / step) * step; y <= max.Y; y += step)
         {
             var py = PixelSize.Y / 2 - (y - Offset.Y) * scale;
             var major = MathF.Abs(y % 50f) < 0.01f;
-            handle.DrawLine(new Vector2(0, py), new Vector2(PixelSize.X, py), Phosphor.WithAlpha(major ? 0.13f : 0.05f));
+            handle.DrawLine(new Vector2(0, py), new Vector2(PixelSize.X, py), GridColor.WithAlpha(major ? 0.16f : 0.06f));
         }
     }
 
@@ -570,24 +719,28 @@ public sealed class LavalandRadarControl : MapGridControl
         var max = MathF.Min(PixelSize.X, PixelSize.Y) / 2f;
         for (var i = 1; i <= 4; i++)
         {
-            handle.DrawCircle(center, max * i / 4f, Phosphor.WithAlpha(0.10f), false);
+            handle.DrawCircle(center, max * i / 4f, GridColor.WithAlpha(0.12f), false);
         }
 
-        handle.DrawLine(new Vector2(center.X, 0), new Vector2(center.X, PixelSize.Y), Phosphor.WithAlpha(0.08f));
-        handle.DrawLine(new Vector2(0, center.Y), new Vector2(PixelSize.X, center.Y), Phosphor.WithAlpha(0.08f));
+        handle.DrawLine(new Vector2(center.X, 0), new Vector2(center.X, PixelSize.Y), GridColor.WithAlpha(0.1f));
+        handle.DrawLine(new Vector2(0, center.Y), new Vector2(PixelSize.X, center.Y), GridColor.WithAlpha(0.1f));
     }
 
-    /// <summary>A rotating radar beam with a fading trail.</summary>
-    private void DrawSweep(DrawingHandleScreen handle, Vector2 center)
+    /// <summary>How long the sonar beam takes for its one turn.</summary>
+    private const float SweepTime = 2.5f;
+
+    /// <summary>The sonar beam with a fading trail: one full turn from the top, fading out at its end.</summary>
+    private void DrawSweep(DrawingHandleScreen handle, Vector2 center, float progress)
     {
         var length = ((Vector2) PixelSize).Length() / 2f;
-        var angle = _interferenceTime * 1.3f;
+        var angle = -MathF.PI / 2f + progress * MathF.Tau;
+        var fade = progress < 0.85f ? 1f : (1f - progress) / 0.15f;
         const int trail = 28;
         for (var i = 0; i < trail; i++)
         {
             var a = angle - i * 0.025f;
             var end = center + new Vector2(MathF.Cos(a), MathF.Sin(a)) * length;
-            handle.DrawLine(center, end, Phosphor.WithAlpha(0.28f * (1f - i / (float) trail)));
+            handle.DrawLine(center, end, GridColor.WithAlpha(0.32f * fade * (1f - i / (float) trail)));
         }
     }
 

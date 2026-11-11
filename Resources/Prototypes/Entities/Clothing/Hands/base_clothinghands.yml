@@ -12,6 +12,11 @@
   # DS14-end
   - type: Clothing
     slots: [gloves]
+  # DS14
+  - type: LimbCover
+    zones:
+    - HandLeft
+    - HandRight
   - type: Edible
     requiresSpecialDigestion: true
   - type: Item

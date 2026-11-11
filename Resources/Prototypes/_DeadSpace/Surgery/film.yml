@@ -1,0 +1,2596 @@
+- type: surgeryFilm
+  id: Default
+  scale: 8
+  skeleton: /Textures/_DeadSpace/Mobs/Surgery/xray_skeleton.rsi
+  skeletonStates:
+    Head: head
+    Torso: torso
+    Groin: groin
+    ArmLeft: arm_l
+    ArmRight: arm_r
+    HandLeft: hand_l
+    HandRight: hand_r
+    LegLeft: leg_l
+    LegRight: leg_r
+    FootLeft: foot_l
+    FootRight: foot_r
+  tissue:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 6
+    w: 8.6
+    h: 8.4
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.2
+    bx: 15.5
+    by: 11
+    w: 3.2
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 15
+    w: 10.4
+    h: 10
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.4
+    w: 9.4
+    h: 5
+  - kind: Line
+    zone: ArmRight
+    ax: 10.5
+    ay: 11.8
+    bx: 9
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegRight
+    ax: 13.5
+    ay: 22.8
+    bx: 13
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootRight
+    ax: 12
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  - kind: Line
+    zone: ArmLeft
+    ax: 20.5
+    ay: 11.8
+    bx: 22
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegLeft
+    ax: 17.5
+    ay: 22.8
+    bx: 18
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootLeft
+    ax: 19
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  bones:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5.6
+    w: 7.4
+    h: 6.6
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 8.7
+    w: 4.6
+    h: 2
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 3.6
+    bx: 15.5
+    by: 4.6
+    w: 2
+    anchor: true
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.4
+    bx: 15.5
+    by: 10.8
+    w: 0.9
+  - kind: Line
+    zone: Torso
+    ax: 15.5
+    ay: 10.8
+    bx: 15.5
+    by: 21
+    w: 0.9
+  - kind: Line
+    zone: Torso
+    ax: 15.5
+    ay: 11.6
+    bx: 15.5
+    by: 15.8
+    w: 0.75
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 12.2
+    bx: 12.3
+    by: 12.6
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 12.6
+    bx: 11.7
+    by: 13.7
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 13.6
+    bx: 12.3
+    by: 14
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 14
+    bx: 11.7
+    by: 15.1
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 15
+    bx: 12.3
+    by: 15.4
+    w: 0.38
+    anchor: true
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 15.4
+    bx: 11.7
+    by: 16.5
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 16.4
+    bx: 12.3
+    by: 16.8
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 16.8
+    bx: 11.7
+    by: 17.9
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 17.6
+    bx: 12.3
+    by: 18
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 18
+    bx: 12.6
+    by: 19.1
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 12.2
+    bx: 18.7
+    by: 12.6
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 12.6
+    bx: 19.3
+    by: 13.7
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 13.6
+    bx: 18.7
+    by: 14
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 14
+    bx: 19.3
+    by: 15.1
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 15
+    bx: 18.7
+    by: 15.4
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 15.4
+    bx: 19.3
+    by: 16.5
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 16.4
+    bx: 18.7
+    by: 16.8
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 16.8
+    bx: 19.3
+    by: 17.9
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 17.6
+    bx: 18.7
+    by: 18
+    w: 0.38
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 18
+    bx: 18.4
+    by: 19.1
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 15.2
+    ay: 11
+    bx: 11.6
+    by: 11.4
+    w: 0.6
+  - kind: Line
+    zone: Torso
+    ax: 15.8
+    ay: 11
+    bx: 19.4
+    by: 11.4
+    w: 0.6
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.7
+    w: 7
+    h: 2.8
+  - kind: Line
+    zone: Groin
+    ax: 12.98
+    ay: 21.3
+    bx: 18.02
+    by: 21.3
+    w: 1.6
+    anchor: true
+  - kind: Hole
+    zone: Groin
+    ax: 15.5
+    ay: 22.2
+    w: 3
+    h: 1.5
+  - kind: Oval
+    zone: ArmRight
+    ax: 10.4
+    ay: 11.6
+    w: 1.3
+    h: 1.3
+  - kind: Line
+    zone: ArmRight
+    ax: 10
+    ay: 12
+    bx: 9.2
+    by: 15
+    w: 0.85
+    anchor: true
+  - kind: Oval
+    zone: ArmRight
+    ax: 9.15
+    ay: 15.1
+    w: 1
+    h: 0.9
+  - kind: Line
+    zone: ArmRight
+    ax: 9
+    ay: 15.3
+    bx: 8.6
+    by: 17.9
+    w: 0.45
+  - kind: Line
+    zone: ArmRight
+    ax: 9.5
+    ay: 15.3
+    bx: 9.3
+    by: 17.9
+    w: 0.45
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 18.6
+    w: 1.4
+    h: 0.9
+  - kind: Line
+    zone: HandRight
+    ax: 9
+    ay: 19.1
+    bx: 9
+    by: 21.3
+    w: 0.32
+    anchor: true
+  - kind: Line
+    zone: HandRight
+    ax: 8.5
+    ay: 19
+    bx: 8.2
+    by: 21
+    w: 0.3
+  - kind: Line
+    zone: HandRight
+    ax: 9.5
+    ay: 19
+    bx: 9.7
+    by: 21
+    w: 0.3
+  - kind: Line
+    zone: HandRight
+    ax: 9.7
+    ay: 18.7
+    bx: 10.4
+    by: 19.8
+    w: 0.32
+  - kind: Oval
+    zone: LegRight
+    ax: 13.6
+    ay: 22.7
+    w: 1.2
+    h: 1.2
+  - kind: Line
+    zone: LegRight
+    ax: 13.5
+    ay: 23
+    bx: 13.1
+    by: 26.4
+    w: 1
+    anchor: true
+  - kind: Oval
+    zone: LegRight
+    ax: 13.05
+    ay: 26.6
+    w: 1.2
+    h: 0.9
+  - kind: Line
+    zone: LegRight
+    ax: 13.1
+    ay: 26.9
+    bx: 13
+    by: 29
+    w: 0.7
+  - kind: Line
+    zone: LegRight
+    ax: 12.4
+    ay: 27
+    bx: 12.4
+    by: 28.9
+    w: 0.35
+  - kind: Oval
+    zone: FootRight
+    ax: 12.9
+    ay: 29.5
+    w: 1.3
+    h: 0.9
+  - kind: Line
+    zone: FootRight
+    ax: 12.6
+    ay: 29.8
+    bx: 10.6
+    by: 30.6
+    w: 0.35
+    anchor: true
+  - kind: Line
+    zone: FootRight
+    ax: 12.8
+    ay: 30
+    bx: 11.2
+    by: 30.9
+    w: 0.35
+  - kind: Line
+    zone: FootRight
+    ax: 13.1
+    ay: 30
+    bx: 12
+    by: 31
+    w: 0.35
+  - kind: Oval
+    zone: ArmLeft
+    ax: 20.6
+    ay: 11.6
+    w: 1.3
+    h: 1.3
+  - kind: Line
+    zone: ArmLeft
+    ax: 21
+    ay: 12
+    bx: 21.8
+    by: 15
+    w: 0.85
+    anchor: true
+  - kind: Oval
+    zone: ArmLeft
+    ax: 21.85
+    ay: 15.1
+    w: 1
+    h: 0.9
+  - kind: Line
+    zone: ArmLeft
+    ax: 22
+    ay: 15.3
+    bx: 22.4
+    by: 17.9
+    w: 0.45
+  - kind: Line
+    zone: ArmLeft
+    ax: 21.5
+    ay: 15.3
+    bx: 21.7
+    by: 17.9
+    w: 0.45
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 18.6
+    w: 1.4
+    h: 0.9
+  - kind: Line
+    zone: HandLeft
+    ax: 22
+    ay: 19.1
+    bx: 22
+    by: 21.3
+    w: 0.32
+    anchor: true
+  - kind: Line
+    zone: HandLeft
+    ax: 22.5
+    ay: 19
+    bx: 22.8
+    by: 21
+    w: 0.3
+  - kind: Line
+    zone: HandLeft
+    ax: 21.5
+    ay: 19
+    bx: 21.3
+    by: 21
+    w: 0.3
+  - kind: Line
+    zone: HandLeft
+    ax: 21.3
+    ay: 18.7
+    bx: 20.6
+    by: 19.8
+    w: 0.32
+  - kind: Oval
+    zone: LegLeft
+    ax: 17.4
+    ay: 22.7
+    w: 1.2
+    h: 1.2
+  - kind: Line
+    zone: LegLeft
+    ax: 17.5
+    ay: 23
+    bx: 17.9
+    by: 26.4
+    w: 1
+    anchor: true
+  - kind: Oval
+    zone: LegLeft
+    ax: 17.95
+    ay: 26.6
+    w: 1.2
+    h: 0.9
+  - kind: Line
+    zone: LegLeft
+    ax: 17.9
+    ay: 26.9
+    bx: 18
+    by: 29
+    w: 0.7
+  - kind: Line
+    zone: LegLeft
+    ax: 18.6
+    ay: 27
+    bx: 18.6
+    by: 28.9
+    w: 0.35
+  - kind: Oval
+    zone: FootLeft
+    ax: 18.1
+    ay: 29.5
+    w: 1.3
+    h: 0.9
+  - kind: Line
+    zone: FootLeft
+    ax: 18.4
+    ay: 29.8
+    bx: 20.4
+    by: 30.6
+    w: 0.35
+    anchor: true
+  - kind: Line
+    zone: FootLeft
+    ax: 18.2
+    ay: 30
+    bx: 19.8
+    by: 30.9
+    w: 0.35
+  - kind: Line
+    zone: FootLeft
+    ax: 17.9
+    ay: 30
+    bx: 19
+    by: 31
+    w: 0.35
+  - kind: Hole
+    zone: Head
+    ax: 14.1
+    ay: 6
+    w: 1.6
+    h: 1.3
+  - kind: Hole
+    zone: Head
+    ax: 16.9
+    ay: 6
+    w: 1.6
+    h: 1.3
+  - kind: Hole
+    zone: Head
+    ax: 15.5
+    ay: 7.4
+    w: 0.7
+    h: 1
+  - kind: Hole
+    zone: Head
+    ax: 15.5
+    ay: 8.35
+    w: 3
+    h: 0.3
+  items:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5
+    w: 3
+    h: 3
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 14.5
+    w: 5
+    h: 5
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 20.8
+    w: 4.5
+    h: 4.5
+
+- type: surgeryFilm
+  id: Female
+  scale: 8
+  sex: Female
+  skeleton: /Textures/_DeadSpace/Mobs/Surgery/xray_skeleton.rsi
+  skeletonStates:
+    Head: head
+    Torso: torso_f
+    Groin: groin_f
+    ArmLeft: arm_l
+    ArmRight: arm_r
+    HandLeft: hand_l
+    HandRight: hand_r
+    LegLeft: leg_l
+    LegRight: leg_r
+    FootLeft: foot_l
+    FootRight: foot_r
+  tissue:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 6
+    w: 8.17
+    h: 7.98
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.2
+    bx: 15.5
+    by: 11
+    w: 3.2
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 15
+    w: 9.78
+    h: 10
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.4
+    w: 10.53
+    h: 5
+  - kind: Line
+    zone: ArmRight
+    ax: 10.5
+    ay: 11.8
+    bx: 9
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegRight
+    ax: 13.5
+    ay: 22.8
+    bx: 13
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootRight
+    ax: 12
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  - kind: Line
+    zone: ArmLeft
+    ax: 20.5
+    ay: 11.8
+    bx: 22
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegLeft
+    ax: 17.5
+    ay: 22.8
+    bx: 18
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootLeft
+    ax: 19
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  bones:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5.6
+    w: 7.03
+    h: 6.27
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 8.7
+    w: 4.14
+    h: 2
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 3.6
+    bx: 15.5
+    by: 4.6
+    w: 2
+    anchor: true
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.4
+    bx: 15.5
+    by: 10.8
+    w: 0.81
+  - kind: Line
+    zone: Torso
+    ax: 15.5
+    ay: 10.8
+    bx: 15.5
+    by: 21
+    w: 0.81
+  - kind: Line
+    zone: Torso
+    ax: 15.5
+    ay: 11.6
+    bx: 15.5
+    by: 15.8
+    w: 0.68
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 12.2
+    bx: 12.49
+    by: 12.6
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 12.49
+    ay: 12.6
+    bx: 11.93
+    by: 13.7
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 13.6
+    bx: 12.49
+    by: 14
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 12.49
+    ay: 14
+    bx: 11.93
+    by: 15.1
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 15
+    bx: 12.49
+    by: 15.4
+    w: 0.34
+    anchor: true
+  - kind: Line
+    zone: Torso
+    ax: 12.49
+    ay: 15.4
+    bx: 11.93
+    by: 16.5
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 16.4
+    bx: 12.49
+    by: 16.8
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 12.49
+    ay: 16.8
+    bx: 11.93
+    by: 17.9
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 17.6
+    bx: 12.49
+    by: 18
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 12.49
+    ay: 18
+    bx: 12.77
+    by: 19.1
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 12.2
+    bx: 18.51
+    by: 12.6
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 18.51
+    ay: 12.6
+    bx: 19.07
+    by: 13.7
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 13.6
+    bx: 18.51
+    by: 14
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 18.51
+    ay: 14
+    bx: 19.07
+    by: 15.1
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 15
+    bx: 18.51
+    by: 15.4
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 18.51
+    ay: 15.4
+    bx: 19.07
+    by: 16.5
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 16.4
+    bx: 18.51
+    by: 16.8
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 18.51
+    ay: 16.8
+    bx: 19.07
+    by: 17.9
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 17.6
+    bx: 18.51
+    by: 18
+    w: 0.34
+  - kind: Line
+    zone: Torso
+    ax: 18.51
+    ay: 18
+    bx: 18.23
+    by: 19.1
+    w: 0.31
+  - kind: Line
+    zone: Torso
+    ax: 15.2
+    ay: 11
+    bx: 11.91
+    by: 11.4
+    w: 0.54
+  - kind: Line
+    zone: Torso
+    ax: 15.8
+    ay: 11
+    bx: 19.09
+    by: 11.4
+    w: 0.54
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.7
+    w: 7.84
+    h: 3.02
+  - kind: Line
+    zone: Groin
+    ax: 12.68
+    ay: 21.3
+    bx: 18.32
+    by: 21.3
+    w: 1.6
+    anchor: true
+  - kind: Hole
+    zone: Groin
+    ax: 15.5
+    ay: 22.2
+    w: 3.9
+    h: 1.95
+  - kind: Oval
+    zone: ArmRight
+    ax: 10.81
+    ay: 11.6
+    w: 1.17
+    h: 1.17
+  - kind: Line
+    zone: ArmRight
+    ax: 10.41
+    ay: 12
+    bx: 9.2
+    by: 15
+    w: 0.77
+    anchor: true
+  - kind: Oval
+    zone: ArmRight
+    ax: 9.15
+    ay: 15.1
+    w: 0.9
+    h: 0.81
+  - kind: Line
+    zone: ArmRight
+    ax: 9
+    ay: 15.3
+    bx: 8.6
+    by: 17.9
+    w: 0.41
+  - kind: Line
+    zone: ArmRight
+    ax: 9.5
+    ay: 15.3
+    bx: 9.3
+    by: 17.9
+    w: 0.41
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 18.6
+    w: 1.26
+    h: 0.81
+  - kind: Line
+    zone: HandRight
+    ax: 9
+    ay: 19.1
+    bx: 9
+    by: 21.3
+    w: 0.29
+    anchor: true
+  - kind: Line
+    zone: HandRight
+    ax: 8.5
+    ay: 19
+    bx: 8.2
+    by: 21
+    w: 0.27
+  - kind: Line
+    zone: HandRight
+    ax: 9.5
+    ay: 19
+    bx: 9.7
+    by: 21
+    w: 0.27
+  - kind: Line
+    zone: HandRight
+    ax: 9.7
+    ay: 18.7
+    bx: 10.4
+    by: 19.8
+    w: 0.29
+  - kind: Oval
+    zone: LegRight
+    ax: 13.37
+    ay: 22.7
+    w: 1.08
+    h: 1.08
+  - kind: Line
+    zone: LegRight
+    ax: 13.26
+    ay: 23
+    bx: 13.1
+    by: 26.4
+    w: 0.9
+    anchor: true
+  - kind: Oval
+    zone: LegRight
+    ax: 13.05
+    ay: 26.6
+    w: 1.08
+    h: 0.81
+  - kind: Line
+    zone: LegRight
+    ax: 13.1
+    ay: 26.9
+    bx: 13
+    by: 29
+    w: 0.63
+  - kind: Line
+    zone: LegRight
+    ax: 12.4
+    ay: 27
+    bx: 12.4
+    by: 28.9
+    w: 0.32
+  - kind: Oval
+    zone: FootRight
+    ax: 12.9
+    ay: 29.5
+    w: 1.17
+    h: 0.81
+  - kind: Line
+    zone: FootRight
+    ax: 12.6
+    ay: 29.8
+    bx: 10.6
+    by: 30.6
+    w: 0.32
+    anchor: true
+  - kind: Line
+    zone: FootRight
+    ax: 12.8
+    ay: 30
+    bx: 11.2
+    by: 30.9
+    w: 0.32
+  - kind: Line
+    zone: FootRight
+    ax: 13.1
+    ay: 30
+    bx: 12
+    by: 31
+    w: 0.32
+  - kind: Oval
+    zone: ArmLeft
+    ax: 20.19
+    ay: 11.6
+    w: 1.17
+    h: 1.17
+  - kind: Line
+    zone: ArmLeft
+    ax: 20.59
+    ay: 12
+    bx: 21.8
+    by: 15
+    w: 0.77
+    anchor: true
+  - kind: Oval
+    zone: ArmLeft
+    ax: 21.85
+    ay: 15.1
+    w: 0.9
+    h: 0.81
+  - kind: Line
+    zone: ArmLeft
+    ax: 22
+    ay: 15.3
+    bx: 22.4
+    by: 17.9
+    w: 0.41
+  - kind: Line
+    zone: ArmLeft
+    ax: 21.5
+    ay: 15.3
+    bx: 21.7
+    by: 17.9
+    w: 0.41
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 18.6
+    w: 1.26
+    h: 0.81
+  - kind: Line
+    zone: HandLeft
+    ax: 22
+    ay: 19.1
+    bx: 22
+    by: 21.3
+    w: 0.29
+    anchor: true
+  - kind: Line
+    zone: HandLeft
+    ax: 22.5
+    ay: 19
+    bx: 22.8
+    by: 21
+    w: 0.27
+  - kind: Line
+    zone: HandLeft
+    ax: 21.5
+    ay: 19
+    bx: 21.3
+    by: 21
+    w: 0.27
+  - kind: Line
+    zone: HandLeft
+    ax: 21.3
+    ay: 18.7
+    bx: 20.6
+    by: 19.8
+    w: 0.29
+  - kind: Oval
+    zone: LegLeft
+    ax: 17.63
+    ay: 22.7
+    w: 1.08
+    h: 1.08
+  - kind: Line
+    zone: LegLeft
+    ax: 17.74
+    ay: 23
+    bx: 17.9
+    by: 26.4
+    w: 0.9
+    anchor: true
+  - kind: Oval
+    zone: LegLeft
+    ax: 17.95
+    ay: 26.6
+    w: 1.08
+    h: 0.81
+  - kind: Line
+    zone: LegLeft
+    ax: 17.9
+    ay: 26.9
+    bx: 18
+    by: 29
+    w: 0.63
+  - kind: Line
+    zone: LegLeft
+    ax: 18.6
+    ay: 27
+    bx: 18.6
+    by: 28.9
+    w: 0.32
+  - kind: Oval
+    zone: FootLeft
+    ax: 18.1
+    ay: 29.5
+    w: 1.17
+    h: 0.81
+  - kind: Line
+    zone: FootLeft
+    ax: 18.4
+    ay: 29.8
+    bx: 20.4
+    by: 30.6
+    w: 0.32
+    anchor: true
+  - kind: Line
+    zone: FootLeft
+    ax: 18.2
+    ay: 30
+    bx: 19.8
+    by: 30.9
+    w: 0.32
+  - kind: Line
+    zone: FootLeft
+    ax: 17.9
+    ay: 30
+    bx: 19
+    by: 31
+    w: 0.32
+  - kind: Hole
+    zone: Head
+    ax: 14.1
+    ay: 6
+    w: 1.52
+    h: 1.23
+  - kind: Hole
+    zone: Head
+    ax: 16.9
+    ay: 6
+    w: 1.52
+    h: 1.23
+  - kind: Hole
+    zone: Head
+    ax: 15.5
+    ay: 7.4
+    w: 0.7
+    h: 1
+  - kind: Hole
+    zone: Head
+    ax: 15.5
+    ay: 8.35
+    w: 2.7
+    h: 0.3
+  items:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5
+    w: 3
+    h: 3
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 14.5
+    w: 5
+    h: 5
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 20.8
+    w: 4.5
+    h: 4.5
+
+- type: surgeryFilm
+  id: Small
+  scale: 8
+  species:
+  - Dwarf
+  - Felinid
+  - Kobolt
+  skeleton: /Textures/_DeadSpace/Mobs/Surgery/xray_skeleton.rsi
+  skeletonStates:
+    Head: head
+    Torso: torso
+    Groin: groin
+    ArmLeft: arm_l
+    ArmRight: arm_r
+    HandLeft: hand_l
+    HandRight: hand_r
+    LegLeft: leg_l
+    LegRight: leg_r
+    FootLeft: foot_l
+    FootRight: foot_r
+  tissue:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 6
+    w: 9.29
+    h: 9.07
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.2
+    bx: 15.5
+    by: 11
+    w: 3.2
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 15
+    w: 10.4
+    h: 10
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.4
+    w: 9.4
+    h: 5
+  - kind: Line
+    zone: ArmRight
+    ax: 10.5
+    ay: 11.8
+    bx: 9
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegRight
+    ax: 13.5
+    ay: 22.8
+    bx: 13
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootRight
+    ax: 12
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  - kind: Line
+    zone: ArmLeft
+    ax: 20.5
+    ay: 11.8
+    bx: 22
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegLeft
+    ax: 17.5
+    ay: 22.8
+    bx: 18
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootLeft
+    ax: 19
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  bones:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5.6
+    w: 7.99
+    h: 7.13
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 8.7
+    w: 4.83
+    h: 2
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 3.6
+    bx: 15.5
+    by: 4.6
+    w: 2
+    anchor: true
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.4
+    bx: 15.5
+    by: 10.8
+    w: 1.06
+  - kind: Line
+    zone: Torso
+    ax: 15.5
+    ay: 10.8
+    bx: 15.5
+    by: 21
+    w: 1.06
+  - kind: Line
+    zone: Torso
+    ax: 15.5
+    ay: 11.6
+    bx: 15.5
+    by: 15.8
+    w: 0.89
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 12.2
+    bx: 12.3
+    by: 12.6
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 12.6
+    bx: 11.7
+    by: 13.7
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 13.6
+    bx: 12.3
+    by: 14
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 14
+    bx: 11.7
+    by: 15.1
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 15
+    bx: 12.3
+    by: 15.4
+    w: 0.45
+    anchor: true
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 15.4
+    bx: 11.7
+    by: 16.5
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 16.4
+    bx: 12.3
+    by: 16.8
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 16.8
+    bx: 11.7
+    by: 17.9
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 17.6
+    bx: 12.3
+    by: 18
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 12.3
+    ay: 18
+    bx: 12.6
+    by: 19.1
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 12.2
+    bx: 18.7
+    by: 12.6
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 12.6
+    bx: 19.3
+    by: 13.7
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 13.6
+    bx: 18.7
+    by: 14
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 14
+    bx: 19.3
+    by: 15.1
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 15
+    bx: 18.7
+    by: 15.4
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 15.4
+    bx: 19.3
+    by: 16.5
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 16.4
+    bx: 18.7
+    by: 16.8
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 16.8
+    bx: 19.3
+    by: 17.9
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 17.6
+    bx: 18.7
+    by: 18
+    w: 0.45
+  - kind: Line
+    zone: Torso
+    ax: 18.7
+    ay: 18
+    bx: 18.4
+    by: 19.1
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 15.2
+    ay: 11
+    bx: 11.6
+    by: 11.4
+    w: 0.71
+  - kind: Line
+    zone: Torso
+    ax: 15.8
+    ay: 11
+    bx: 19.4
+    by: 11.4
+    w: 0.71
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.7
+    w: 7
+    h: 2.8
+  - kind: Line
+    zone: Groin
+    ax: 12.98
+    ay: 21.3
+    bx: 18.02
+    by: 21.3
+    w: 1.6
+    anchor: true
+  - kind: Hole
+    zone: Groin
+    ax: 15.5
+    ay: 22.2
+    w: 3
+    h: 1.5
+  - kind: Oval
+    zone: ArmRight
+    ax: 10.4
+    ay: 11.6
+    w: 1.53
+    h: 1.53
+  - kind: Line
+    zone: ArmRight
+    ax: 10
+    ay: 12
+    bx: 9.2
+    by: 15
+    w: 1
+    anchor: true
+  - kind: Oval
+    zone: ArmRight
+    ax: 9.15
+    ay: 15.1
+    w: 1.18
+    h: 1.06
+  - kind: Line
+    zone: ArmRight
+    ax: 9
+    ay: 15.3
+    bx: 8.6
+    by: 17.9
+    w: 0.53
+  - kind: Line
+    zone: ArmRight
+    ax: 9.5
+    ay: 15.3
+    bx: 9.3
+    by: 17.9
+    w: 0.53
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 18.6
+    w: 1.65
+    h: 1.06
+  - kind: Line
+    zone: HandRight
+    ax: 9
+    ay: 19.1
+    bx: 9
+    by: 20.86
+    w: 0.38
+    anchor: true
+  - kind: Line
+    zone: HandRight
+    ax: 8.5
+    ay: 19
+    bx: 8.2
+    by: 20.6
+    w: 0.35
+  - kind: Line
+    zone: HandRight
+    ax: 9.5
+    ay: 19
+    bx: 9.7
+    by: 20.6
+    w: 0.35
+  - kind: Line
+    zone: HandRight
+    ax: 9.7
+    ay: 18.7
+    bx: 10.4
+    by: 19.8
+    w: 0.38
+  - kind: Oval
+    zone: LegRight
+    ax: 13.6
+    ay: 22.7
+    w: 1.42
+    h: 1.42
+  - kind: Line
+    zone: LegRight
+    ax: 13.5
+    ay: 23
+    bx: 13.1
+    by: 26.4
+    w: 1.18
+    anchor: true
+  - kind: Oval
+    zone: LegRight
+    ax: 13.05
+    ay: 26.6
+    w: 1.42
+    h: 1.06
+  - kind: Line
+    zone: LegRight
+    ax: 13.1
+    ay: 26.9
+    bx: 13
+    by: 29
+    w: 0.83
+  - kind: Line
+    zone: LegRight
+    ax: 12.4
+    ay: 27
+    bx: 12.4
+    by: 28.9
+    w: 0.41
+  - kind: Oval
+    zone: FootRight
+    ax: 12.9
+    ay: 29.5
+    w: 1.53
+    h: 1.06
+  - kind: Line
+    zone: FootRight
+    ax: 12.6
+    ay: 29.8
+    bx: 10.6
+    by: 30.6
+    w: 0.41
+    anchor: true
+  - kind: Line
+    zone: FootRight
+    ax: 12.8
+    ay: 30
+    bx: 11.2
+    by: 30.9
+    w: 0.41
+  - kind: Line
+    zone: FootRight
+    ax: 13.1
+    ay: 30
+    bx: 12
+    by: 31
+    w: 0.41
+  - kind: Oval
+    zone: ArmLeft
+    ax: 20.6
+    ay: 11.6
+    w: 1.53
+    h: 1.53
+  - kind: Line
+    zone: ArmLeft
+    ax: 21
+    ay: 12
+    bx: 21.8
+    by: 15
+    w: 1
+    anchor: true
+  - kind: Oval
+    zone: ArmLeft
+    ax: 21.85
+    ay: 15.1
+    w: 1.18
+    h: 1.06
+  - kind: Line
+    zone: ArmLeft
+    ax: 22
+    ay: 15.3
+    bx: 22.4
+    by: 17.9
+    w: 0.53
+  - kind: Line
+    zone: ArmLeft
+    ax: 21.5
+    ay: 15.3
+    bx: 21.7
+    by: 17.9
+    w: 0.53
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 18.6
+    w: 1.65
+    h: 1.06
+  - kind: Line
+    zone: HandLeft
+    ax: 22
+    ay: 19.1
+    bx: 22
+    by: 20.86
+    w: 0.38
+    anchor: true
+  - kind: Line
+    zone: HandLeft
+    ax: 22.5
+    ay: 19
+    bx: 22.8
+    by: 20.6
+    w: 0.35
+  - kind: Line
+    zone: HandLeft
+    ax: 21.5
+    ay: 19
+    bx: 21.3
+    by: 20.6
+    w: 0.35
+  - kind: Line
+    zone: HandLeft
+    ax: 21.3
+    ay: 18.7
+    bx: 20.6
+    by: 19.8
+    w: 0.38
+  - kind: Oval
+    zone: LegLeft
+    ax: 17.4
+    ay: 22.7
+    w: 1.42
+    h: 1.42
+  - kind: Line
+    zone: LegLeft
+    ax: 17.5
+    ay: 23
+    bx: 17.9
+    by: 26.4
+    w: 1.18
+    anchor: true
+  - kind: Oval
+    zone: LegLeft
+    ax: 17.95
+    ay: 26.6
+    w: 1.42
+    h: 1.06
+  - kind: Line
+    zone: LegLeft
+    ax: 17.9
+    ay: 26.9
+    bx: 18
+    by: 29
+    w: 0.83
+  - kind: Line
+    zone: LegLeft
+    ax: 18.6
+    ay: 27
+    bx: 18.6
+    by: 28.9
+    w: 0.41
+  - kind: Oval
+    zone: FootLeft
+    ax: 18.1
+    ay: 29.5
+    w: 1.53
+    h: 1.06
+  - kind: Line
+    zone: FootLeft
+    ax: 18.4
+    ay: 29.8
+    bx: 20.4
+    by: 30.6
+    w: 0.41
+    anchor: true
+  - kind: Line
+    zone: FootLeft
+    ax: 18.2
+    ay: 30
+    bx: 19.8
+    by: 30.9
+    w: 0.41
+  - kind: Line
+    zone: FootLeft
+    ax: 17.9
+    ay: 30
+    bx: 19
+    by: 31
+    w: 0.41
+  - kind: Hole
+    zone: Head
+    ax: 14.1
+    ay: 6
+    w: 1.73
+    h: 1.4
+  - kind: Hole
+    zone: Head
+    ax: 16.9
+    ay: 6
+    w: 1.73
+    h: 1.4
+  - kind: Hole
+    zone: Head
+    ax: 15.5
+    ay: 7.4
+    w: 0.7
+    h: 1
+  - kind: Hole
+    zone: Head
+    ax: 15.5
+    ay: 8.35
+    w: 3.15
+    h: 0.3
+  items:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5
+    w: 3
+    h: 3
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 14.5
+    w: 5
+    h: 5
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 20.8
+    w: 4.5
+    h: 4.5
+
+- type: surgeryFilm
+  id: SmallFemale
+  scale: 8
+  sex: Female
+  species:
+  - Dwarf
+  - Felinid
+  - Kobolt
+  skeleton: /Textures/_DeadSpace/Mobs/Surgery/xray_skeleton.rsi
+  skeletonStates:
+    Head: head
+    Torso: torso_f
+    Groin: groin_f
+    ArmLeft: arm_l
+    ArmRight: arm_r
+    HandLeft: hand_l
+    HandRight: hand_r
+    LegLeft: leg_l
+    LegRight: leg_r
+    FootLeft: foot_l
+    FootRight: foot_r
+  tissue:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 6
+    w: 8.94
+    h: 8.74
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.2
+    bx: 15.5
+    by: 11
+    w: 3.2
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 15
+    w: 9.88
+    h: 10
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.4
+    w: 10.53
+    h: 5
+  - kind: Line
+    zone: ArmRight
+    ax: 10.5
+    ay: 11.8
+    bx: 9
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegRight
+    ax: 13.5
+    ay: 22.8
+    bx: 13
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootRight
+    ax: 12
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  - kind: Line
+    zone: ArmLeft
+    ax: 20.5
+    ay: 11.8
+    bx: 22
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegLeft
+    ax: 17.5
+    ay: 22.8
+    bx: 18
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootLeft
+    ax: 19
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  bones:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5.6
+    w: 7.7
+    h: 6.86
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 8.7
+    w: 4.37
+    h: 2
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 3.6
+    bx: 15.5
+    by: 4.6
+    w: 2
+    anchor: true
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.4
+    bx: 15.5
+    by: 10.8
+    w: 0.95
+  - kind: Line
+    zone: Torso
+    ax: 15.5
+    ay: 10.8
+    bx: 15.5
+    by: 21
+    w: 0.95
+  - kind: Line
+    zone: Torso
+    ax: 15.5
+    ay: 11.6
+    bx: 15.5
+    by: 15.8
+    w: 0.8
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 12.2
+    bx: 12.46
+    by: 12.6
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 12.46
+    ay: 12.6
+    bx: 11.89
+    by: 13.7
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 13.6
+    bx: 12.46
+    by: 14
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 12.46
+    ay: 14
+    bx: 11.89
+    by: 15.1
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 15
+    bx: 12.46
+    by: 15.4
+    w: 0.4
+    anchor: true
+  - kind: Line
+    zone: Torso
+    ax: 12.46
+    ay: 15.4
+    bx: 11.89
+    by: 16.5
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 16.4
+    bx: 12.46
+    by: 16.8
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 12.46
+    ay: 16.8
+    bx: 11.89
+    by: 17.9
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.1
+    ay: 17.6
+    bx: 12.46
+    by: 18
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 12.46
+    ay: 18
+    bx: 12.74
+    by: 19.1
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 12.2
+    bx: 18.54
+    by: 12.6
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 18.54
+    ay: 12.6
+    bx: 19.11
+    by: 13.7
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 13.6
+    bx: 18.54
+    by: 14
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 18.54
+    ay: 14
+    bx: 19.11
+    by: 15.1
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 15
+    bx: 18.54
+    by: 15.4
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 18.54
+    ay: 15.4
+    bx: 19.11
+    by: 16.5
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 16.4
+    bx: 18.54
+    by: 16.8
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 18.54
+    ay: 16.8
+    bx: 19.11
+    by: 17.9
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.9
+    ay: 17.6
+    bx: 18.54
+    by: 18
+    w: 0.4
+  - kind: Line
+    zone: Torso
+    ax: 18.54
+    ay: 18
+    bx: 18.26
+    by: 19.1
+    w: 0.36
+  - kind: Line
+    zone: Torso
+    ax: 15.2
+    ay: 11
+    bx: 11.87
+    by: 11.4
+    w: 0.64
+  - kind: Line
+    zone: Torso
+    ax: 15.8
+    ay: 11
+    bx: 19.13
+    by: 11.4
+    w: 0.64
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.7
+    w: 7.84
+    h: 3.02
+  - kind: Line
+    zone: Groin
+    ax: 12.68
+    ay: 21.3
+    bx: 18.32
+    by: 21.3
+    w: 1.6
+    anchor: true
+  - kind: Hole
+    zone: Groin
+    ax: 15.5
+    ay: 22.2
+    w: 3.9
+    h: 1.95
+  - kind: Oval
+    zone: ArmRight
+    ax: 10.76
+    ay: 11.6
+    w: 1.38
+    h: 1.38
+  - kind: Line
+    zone: ArmRight
+    ax: 10.36
+    ay: 12
+    bx: 9.2
+    by: 15
+    w: 0.9
+    anchor: true
+  - kind: Oval
+    zone: ArmRight
+    ax: 9.15
+    ay: 15.1
+    w: 1.06
+    h: 0.95
+  - kind: Line
+    zone: ArmRight
+    ax: 9
+    ay: 15.3
+    bx: 8.6
+    by: 17.9
+    w: 0.48
+  - kind: Line
+    zone: ArmRight
+    ax: 9.5
+    ay: 15.3
+    bx: 9.3
+    by: 17.9
+    w: 0.48
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 18.6
+    w: 1.48
+    h: 0.95
+  - kind: Line
+    zone: HandRight
+    ax: 9
+    ay: 19.1
+    bx: 9
+    by: 20.86
+    w: 0.34
+    anchor: true
+  - kind: Line
+    zone: HandRight
+    ax: 8.5
+    ay: 19
+    bx: 8.2
+    by: 20.6
+    w: 0.32
+  - kind: Line
+    zone: HandRight
+    ax: 9.5
+    ay: 19
+    bx: 9.7
+    by: 20.6
+    w: 0.32
+  - kind: Line
+    zone: HandRight
+    ax: 9.7
+    ay: 18.7
+    bx: 10.4
+    by: 19.8
+    w: 0.34
+  - kind: Oval
+    zone: LegRight
+    ax: 13.37
+    ay: 22.7
+    w: 1.27
+    h: 1.27
+  - kind: Line
+    zone: LegRight
+    ax: 13.26
+    ay: 23
+    bx: 13.1
+    by: 26.4
+    w: 1.06
+    anchor: true
+  - kind: Oval
+    zone: LegRight
+    ax: 13.05
+    ay: 26.6
+    w: 1.27
+    h: 0.95
+  - kind: Line
+    zone: LegRight
+    ax: 13.1
+    ay: 26.9
+    bx: 13
+    by: 29
+    w: 0.74
+  - kind: Line
+    zone: LegRight
+    ax: 12.4
+    ay: 27
+    bx: 12.4
+    by: 28.9
+    w: 0.37
+  - kind: Oval
+    zone: FootRight
+    ax: 12.9
+    ay: 29.5
+    w: 1.38
+    h: 0.95
+  - kind: Line
+    zone: FootRight
+    ax: 12.6
+    ay: 29.8
+    bx: 10.6
+    by: 30.6
+    w: 0.37
+    anchor: true
+  - kind: Line
+    zone: FootRight
+    ax: 12.8
+    ay: 30
+    bx: 11.2
+    by: 30.9
+    w: 0.37
+  - kind: Line
+    zone: FootRight
+    ax: 13.1
+    ay: 30
+    bx: 12
+    by: 31
+    w: 0.37
+  - kind: Oval
+    zone: ArmLeft
+    ax: 20.24
+    ay: 11.6
+    w: 1.38
+    h: 1.38
+  - kind: Line
+    zone: ArmLeft
+    ax: 20.64
+    ay: 12
+    bx: 21.8
+    by: 15
+    w: 0.9
+    anchor: true
+  - kind: Oval
+    zone: ArmLeft
+    ax: 21.85
+    ay: 15.1
+    w: 1.06
+    h: 0.95
+  - kind: Line
+    zone: ArmLeft
+    ax: 22
+    ay: 15.3
+    bx: 22.4
+    by: 17.9
+    w: 0.48
+  - kind: Line
+    zone: ArmLeft
+    ax: 21.5
+    ay: 15.3
+    bx: 21.7
+    by: 17.9
+    w: 0.48
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 18.6
+    w: 1.48
+    h: 0.95
+  - kind: Line
+    zone: HandLeft
+    ax: 22
+    ay: 19.1
+    bx: 22
+    by: 20.86
+    w: 0.34
+    anchor: true
+  - kind: Line
+    zone: HandLeft
+    ax: 22.5
+    ay: 19
+    bx: 22.8
+    by: 20.6
+    w: 0.32
+  - kind: Line
+    zone: HandLeft
+    ax: 21.5
+    ay: 19
+    bx: 21.3
+    by: 20.6
+    w: 0.32
+  - kind: Line
+    zone: HandLeft
+    ax: 21.3
+    ay: 18.7
+    bx: 20.6
+    by: 19.8
+    w: 0.34
+  - kind: Oval
+    zone: LegLeft
+    ax: 17.63
+    ay: 22.7
+    w: 1.27
+    h: 1.27
+  - kind: Line
+    zone: LegLeft
+    ax: 17.74
+    ay: 23
+    bx: 17.9
+    by: 26.4
+    w: 1.06
+    anchor: true
+  - kind: Oval
+    zone: LegLeft
+    ax: 17.95
+    ay: 26.6
+    w: 1.27
+    h: 0.95
+  - kind: Line
+    zone: LegLeft
+    ax: 17.9
+    ay: 26.9
+    bx: 18
+    by: 29
+    w: 0.74
+  - kind: Line
+    zone: LegLeft
+    ax: 18.6
+    ay: 27
+    bx: 18.6
+    by: 28.9
+    w: 0.37
+  - kind: Oval
+    zone: FootLeft
+    ax: 18.1
+    ay: 29.5
+    w: 1.38
+    h: 0.95
+  - kind: Line
+    zone: FootLeft
+    ax: 18.4
+    ay: 29.8
+    bx: 20.4
+    by: 30.6
+    w: 0.37
+    anchor: true
+  - kind: Line
+    zone: FootLeft
+    ax: 18.2
+    ay: 30
+    bx: 19.8
+    by: 30.9
+    w: 0.37
+  - kind: Line
+    zone: FootLeft
+    ax: 17.9
+    ay: 30
+    bx: 19
+    by: 31
+    w: 0.37
+  - kind: Hole
+    zone: Head
+    ax: 14.1
+    ay: 6
+    w: 1.66
+    h: 1.35
+  - kind: Hole
+    zone: Head
+    ax: 16.9
+    ay: 6
+    w: 1.66
+    h: 1.35
+  - kind: Hole
+    zone: Head
+    ax: 15.5
+    ay: 7.4
+    w: 0.7
+    h: 1
+  - kind: Hole
+    zone: Head
+    ax: 15.5
+    ay: 8.35
+    w: 2.85
+    h: 0.3
+  items:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5
+    w: 3
+    h: 3
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 14.5
+    w: 5
+    h: 5
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 20.8
+    w: 4.5
+    h: 4.5
+
+- type: surgeryFilm
+  id: IPC
+  scale: 8
+  species:
+  - IPC
+  tint: "#4a8a9a"
+  glow: "#6ec8d0"
+  bone: "#d0e8ee"
+  skeleton: /Textures/_DeadSpace/Mobs/Surgery/xray_skeleton_ipc.rsi
+  skeletonStates:
+    Head: head
+    Torso: torso
+    Groin: groin
+    ArmLeft: arm_l
+    ArmRight: arm_r
+    HandLeft: hand_l
+    HandRight: hand_r
+    LegLeft: leg_l
+    LegRight: leg_r
+    FootLeft: foot_l
+    FootRight: foot_r
+  tissue:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 6
+    w: 8.6
+    h: 8.4
+  - kind: Line
+    zone: Head
+    ax: 15.5
+    ay: 9.2
+    bx: 15.5
+    by: 11
+    w: 3.2
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 15
+    w: 10.4
+    h: 10
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 21.4
+    w: 9.4
+    h: 5
+  - kind: Line
+    zone: ArmRight
+    ax: 10.5
+    ay: 11.8
+    bx: 9
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandRight
+    ax: 9
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegRight
+    ax: 13.5
+    ay: 22.8
+    bx: 13
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootRight
+    ax: 12
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  - kind: Line
+    zone: ArmLeft
+    ax: 20.5
+    ay: 11.8
+    bx: 22
+    by: 17.8
+    w: 2.8
+  - kind: Oval
+    zone: HandLeft
+    ax: 22
+    ay: 19.9
+    w: 2.6
+    h: 3.4
+  - kind: Line
+    zone: LegLeft
+    ax: 17.5
+    ay: 22.8
+    bx: 18
+    by: 29
+    w: 3.4
+  - kind: Oval
+    zone: FootLeft
+    ax: 19
+    ay: 30.2
+    w: 3.8
+    h: 1.9
+  items:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 5
+    w: 3
+    h: 3
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 14.5
+    w: 5
+    h: 5
+  - kind: Oval
+    zone: Groin
+    ax: 15.5
+    ay: 20.8
+    w: 4.5
+    h: 4.5

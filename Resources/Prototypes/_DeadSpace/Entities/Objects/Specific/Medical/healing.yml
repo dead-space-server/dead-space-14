@@ -68,3 +68,12 @@
         reagents:
           - ReagentId: Lexorin
             Quantity: 15
+
+- type: entity
+  id: Tourniquet4
+  parent: Tourniquet
+  suffix: Полный
+  components:
+  - type: Stack
+    stackType: Tourniquet
+    count: 4

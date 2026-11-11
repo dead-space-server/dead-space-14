@@ -1,13 +1,17 @@
 // Dead Space 14, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.IO;
+using System.Numerics;
 using Content.Client.Paper.UI;
 using Content.Client.RichText;
+using Content.Client.Viewport;
 using Content.Shared.DeadSpace.CameraArchives;
 using Content.Shared.Paper;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Maths;
+using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.CameraArchives;
@@ -19,35 +23,87 @@ public sealed class CameraArchiveSheetSystem : EntitySystem
 
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly IClyde _clyde = default!;
+    [Dependency] private readonly IRobustSerializer _serializer = default!;
+    [Dependency] private readonly CameraArchivePlaybackSystem _playback = default!;
 
-    private readonly List<(CameraArchivePrintComponent Shot, string Content)> _prints = new();
+    private readonly List<(EntityUid Paper, CameraArchivePrintComponent Shot, string Content)> _prints = new();
+    private EntityUid _played;
 
     public override void FrameUpdate(float frameTime)
     {
         _prints.Clear();
         var query = EntityQueryEnumerator<CameraArchivePrintComponent, PaperComponent>();
-        while (query.MoveNext(out _, out var shot, out var paper))
+        while (query.MoveNext(out var uid, out var shot, out var paper))
         {
-            if (shot.Image.Length > 0 && paper.Content.Contains(Marker))
-                _prints.Add((shot, paper.Content));
+            if ((shot.Still.Length > 0 || shot.Image.Length > 0) && paper.Content.Contains(Marker))
+                _prints.Add((uid, shot, paper.Content));
         }
 
         if (_prints.Count == 0)
+        {
+            _playback.ClearSheet();
+            _played = default;
             return;
+        }
 
+        var windows = new List<PaperWindow>();
         foreach (var child in _ui.WindowRoot.Children)
         {
             if (child is PaperWindow window)
-                Mount(window);
+                windows.Add(window);
+        }
+
+        var shown = false;
+        var kept = false;
+        foreach (var window in windows)
+        {
+            if (ArchiveStill(window))
+            {
+                if (kept)
+                {
+                    window.Close();
+                    continue;
+                }
+
+                kept = true;
+            }
+
+            if (Mount(window))
+                shown = true;
+        }
+
+        if (!shown)
+        {
+            _playback.ClearSheet();
+            _played = default;
         }
     }
 
-    private void Mount(PaperWindow window)
+    private bool ArchiveStill(PaperWindow window)
     {
         var text = Rope.Collapse(window.Input.TextRope);
         if (!text.Contains(Marker))
-            return;
+            return false;
 
+        foreach (var print in _prints)
+        {
+            if (print.Shot.Still.Length == 0)
+                continue;
+
+            if (text.Contains(print.Content) || print.Content.Contains(text))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool Mount(PaperWindow window)
+    {
+        var text = Rope.Collapse(window.Input.TextRope);
+        if (!text.Contains(Marker))
+            return false;
+
+        EntityUid paper = default;
         CameraArchivePrintComponent? shot = null;
         string? content = null;
         foreach (var print in _prints)
@@ -55,21 +111,22 @@ public sealed class CameraArchiveSheetSystem : EntitySystem
             if (!text.Contains(print.Content) && !print.Content.Contains(text))
                 continue;
 
+            paper = print.Paper;
             shot = print.Shot;
             content = print.Content;
             break;
         }
 
         if (shot == null || content == null)
-            return;
+            return false;
 
         var written = FindWritten(window);
         if (written == null)
-            return;
+            return false;
 
         var at = content.IndexOf(Marker, StringComparison.Ordinal);
         if (at < 0)
-            return;
+            return false;
 
         var before = content[..at].TrimEnd();
         var after = content[(at + Marker.Length)..].TrimStart();
@@ -79,7 +136,30 @@ public sealed class CameraArchiveSheetSystem : EntitySystem
 
         var parent = written.Parent;
         if (parent == null)
-            return;
+            return false;
+
+        var place = written.GetPositionInParent();
+        if (shot.Still.Length > 0)
+        {
+            ShowStill(paper, shot, parent, place + 1);
+            var stillTail = Find<RichTextLabel>(parent, "CameraArchiveTail");
+            if (stillTail == null)
+            {
+                stillTail = new RichTextLabel
+                {
+                    Name = "CameraArchiveTail",
+                    VerticalAlignment = Control.VAlignment.Top,
+                };
+                stillTail.StyleClasses.Add("PaperWrittenText");
+                parent.AddChild(stillTail);
+            }
+
+            var stillAfter = new FormattedMessage();
+            stillAfter.AddMarkupPermissive(after);
+            stillTail.SetMessage(stillAfter, UserFormattableTags.BaseAllowedTags, Ink);
+            stillTail.SetPositionInParent(place + 2);
+            return true;
+        }
 
         var image = Find<TextureRect>(parent, "CameraArchiveShot");
         var tail = Find<RichTextLabel>(parent, "CameraArchiveTail");
@@ -89,7 +169,7 @@ public sealed class CameraArchiveSheetSystem : EntitySystem
             {
                 Name = "CameraArchiveShot",
                 Stretch = TextureRect.StretchMode.KeepAspectCentered,
-                MinSize = new System.Numerics.Vector2(460, 260),
+                MinSize = new Vector2(460, 260),
                 Margin = new Thickness(0, 4),
                 HorizontalAlignment = Control.HAlignment.Center,
             };
@@ -127,6 +207,47 @@ public sealed class CameraArchiveSheetSystem : EntitySystem
         var index = written.GetPositionInParent();
         image.SetPositionInParent(index + 1);
         tail.SetPositionInParent(index + 2);
+        return false;
+    }
+
+    private void ShowStill(EntityUid paper, CameraArchivePrintComponent shot, Control parent, int at)
+    {
+        var view = Find<ScalingViewport>(parent, "CameraArchiveView");
+        if (view == null)
+        {
+            view = new ScalingViewport
+            {
+                Name = "CameraArchiveView",
+                MinSize = new Vector2(460, 260),
+                Margin = new Thickness(0, 4),
+                HorizontalAlignment = Control.HAlignment.Center,
+                MouseFilter = Control.MouseFilterMode.Ignore,
+            };
+            view.MinSize = new Vector2(460, 345);
+            view.ViewportSize = new Vector2i(480, 360);
+            parent.AddChild(view);
+        }
+
+        view.SetPositionInParent(at);
+        if (_played == paper)
+            return;
+
+        try
+        {
+            using var stream = new MemoryStream(shot.Still);
+            _serializer.DeserializeDirect<CameraArchive>(stream, out var still);
+            var eye = _playback.PlaySheet(still).Eye;
+            var step = Math.Clamp(shot.Magnification, 1f, 4f);
+            eye.Zoom = CameraArchiveViewMath.EyeZoom(still.Zoom, step);
+            eye.Offset = shot.Pan;
+            view.Eye = eye;
+            _played = paper;
+        }
+        catch (Exception)
+        {
+            view.Eye = null;
+            _played = paper;
+        }
     }
 
     private static RichTextLabel? FindWritten(Control root)

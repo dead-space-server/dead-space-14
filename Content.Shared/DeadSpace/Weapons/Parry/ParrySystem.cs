@@ -110,6 +110,7 @@ public sealed class ParrySystem : EntitySystem
         parryWeapon.Comp.ActiveUntil = TimeSpan.Zero;
         Dirty(parryWeapon);
         args.Cancelled = true;
+        StaggerAttacker(args.Weapon);
         if (_net.IsServer)
             KnockBackAttacker(args.Attacker, defender.Owner, parryWeapon.Comp);
 
@@ -237,6 +238,23 @@ public sealed class ParrySystem : EntitySystem
 
         parryWeapon = (weapon, parry);
         return true;
+    }
+
+    /// <summary>A parried <see cref="ParryStaggerComponent"/> weapon is thrown off its stroke for a moment.</summary>
+    private void StaggerAttacker(EntityUid weapon)
+    {
+        if (!TryComp<ParryStaggerComponent>(weapon, out var stagger) || stagger.Stagger <= TimeSpan.Zero ||
+            !TryComp<MeleeWeaponComponent>(weapon, out var melee))
+        {
+            return;
+        }
+
+        var until = _timing.CurTime + stagger.Stagger;
+        if (melee.NextAttack >= until)
+            return;
+
+        melee.NextAttack = until;
+        Dirty(weapon, melee);
     }
 
     private void KnockBackAttacker(EntityUid attacker, EntityUid defender, ParryComponent component)

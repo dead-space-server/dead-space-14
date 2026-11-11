@@ -2,12 +2,12 @@
 - type: damageModifierSet
   id: DragonScale
   coefficients:
-    Blunt: 0.6 # 40% reduction
-    Piercing: 0.6 # 40% reduction
-    Slash: 0.65 # 35% reduction
-    Heat: 0.6 # 40% reduction
-    Radiation: 0.7 # 30% reduction
-    Caustic: 0.8 # 20% reduction
+    Blunt: 0.7
+    Piercing: 0.7
+    Slash: 0.7
+    Heat: 0.7
+    Radiation: 0.7
+    Caustic: 0.7
 # DS14-end
 
 - type: entity
@@ -84,6 +84,15 @@
       Dead:
         Base: dead
         BaseUnshaded: dead-unshaded
+#ds14-start
+  - type: GenericVisualizer
+    visuals:
+      enum.MobStateVisuals.State:
+        eyes:
+          Alive: { visible: true }
+          Critical: { visible: false }
+          Dead: { visible: false }
+#ds14-end
   - type: Physics
     bodyType: KinematicController
   - type: Fixtures
@@ -225,7 +234,7 @@
   - type: AntiRottingContainer
   - type: NecromorfAfterInfection
     necroPrototype: NecroDragon # DS14
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Dragonping
   - type: Destructible
     thresholds:
@@ -294,7 +303,7 @@
   description: For dragon's breathing.
   components:
   - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 5
+    rechargeCooldown: 8 #ds14
     rechargeSound:
       path: /Audio/Animals/space_dragon_roar.ogg
   - type: BasicEntityAmmoProvider

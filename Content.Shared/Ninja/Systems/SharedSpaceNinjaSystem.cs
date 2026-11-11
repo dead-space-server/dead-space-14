@@ -144,7 +144,7 @@ public abstract class SharedSpaceNinjaSystem : EntitySystem
     /// </summary>
     public void BindKatana(Entity<SpaceNinjaComponent?> ent, EntityUid katana)
     {
-        if (!NinjaQuery.Resolve(ent, ref ent.Comp, false) || ent.Comp.Katana != null)
+        if (!NinjaQuery.Resolve(ent, ref ent.Comp, false) || ent.Comp.Katana != null && !Deleted(ent.Comp.Katana)) //DS14
             return;
 
         ent.Comp.Katana = katana;

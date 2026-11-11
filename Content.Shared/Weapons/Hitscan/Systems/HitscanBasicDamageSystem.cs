@@ -1,6 +1,7 @@
 using Content.Shared.Administration.Logs; // DS14
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.Database; // DS14
 using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Hitscan.Events;
@@ -34,9 +35,18 @@ public sealed class HitscanBasicDamageSystem : EntitySystem
 
         var dmg = ent.Comp.Damage * _damage.UniversalHitscanDamageModifier;
 
+        // DS14-start
+        var locate = new LimbArmorZoneEvent(args.Data);
+        RaiseLocalEvent(args.Data.HitEntity.Value, ref locate);
+        // DS14-end
+
         if (!_damage.TryChangeDamage(args.Data.HitEntity.Value, dmg, out var damageDealt, ent.Comp.IgnoreResistances, origin: args.Data.Shooter ?? args.Data.Gun)) // DS14
         {
-            LogHit(args.Data, null); // DS14
+            // DS14-start
+            if (TryComp<LimbBodyComponent>(args.Data.HitEntity.Value, out var missed))
+                missed.ArmorZone = null;
+            LogHit(args.Data, null);
+            // DS14-end
             return;
         }
 

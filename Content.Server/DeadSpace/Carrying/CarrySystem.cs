@@ -8,6 +8,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Carrying;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
@@ -67,6 +68,7 @@ public sealed class CarrySystem : EntitySystem
     [Dependency] private readonly StunSystem _stun = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly LimbWoundSystem _limbs = default!;
 
     public override void Initialize()
     {
@@ -769,6 +771,9 @@ public sealed class CarrySystem : EntitySystem
             return false;
 
         if (TryComp<MobStateComponent>(ent.Owner, out var mobState) && _mobState.IsIncapacitated(ent.Owner, mobState))
+            return false;
+
+        if (_limbs.Limbless(ent.Owner))
             return false;
 
         var time = _timing.CurTime;

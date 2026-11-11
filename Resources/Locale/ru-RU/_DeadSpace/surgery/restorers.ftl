@@ -1,0 +1,56 @@
+ent-BaseLimbRestorer = полевой восстановитель
+    .desc = Подготовьте в руке, затем держите на пациенте.
+ent-LimbRestorerSyndicate = блюспейс-реконструктор Cybersun
+    .desc = Блюспейс-поле пересобирает тело по резервному снимку. Сращивает кости, останавливает внутреннее кровотечение, вынимает осколки, чинит органы и выращивает потерянные. Конечности не отращивает.
+ent-LimbRestorerNecro = некро-реликварий
+    .desc = Осколок Маркера в латунной оправе. Его шёпот сращивает плоть, кости и органы и даже выталкивает новые конечности. Тело за это платит.
+ent-LimbRestorerPirate = блюспейс-бальзам контрабандиста
+    .desc = Жестянка краденой блюспейс-взвеси. Сращивает кости, останавливает внутреннее кровотечение, вынимает осколки и латает органы. На вкус как топливный бак.
+ent-LimbRestorerERT = полевой автохирург ОБР
+    .desc = Полевой автохирург Nanotrasen для медиков отряда быстрого реагирования. Полностью чинит внутренности и выращивает органы, но только другому.
+
+ent-ActionLimbRestorerImplant = Экстренная реконструкция
+    .desc = Запустить имплант. За секунду собирает тело изнутри.
+ent-ActionLimbRestorerImplantNecro = Сердцебиение Маркера
+    .desc = Разбудить осколок под кожей. Он сшивает тело и берёт свою плату.
+ent-LimbRestorerImplantSyndicate = имплант экстренной реконструкции
+    .desc = Блюспейс-узел Cybersun под кожей. Два заряда, сам срабатывает, когда носитель падает в критическое состояние.
+ent-LimbRestorerImplantNecro = сердце Маркера
+    .desc = Щепка Маркера, вшитая под кожу. Два заряда, сама просыпается при критическом состоянии и даже выталкивает потерянные конечности.
+ent-LimbRestorerImplantPirate = латальный имплант контрабандиста
+    .desc = Дешёвая блюспейс-капсула под кожей. Один заряд, сама лопается при критическом состоянии.
+ent-LimbRestorerImplanterSyndicate = { ent-BaseImplantOnlyImplanterSyndi }
+    .suffix = экстренная реконструкция
+    .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
+ent-LimbRestorerImplanterNecro = { ent-BaseImplantOnlyImplanterSyndi }
+    .suffix = сердце Маркера
+    .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
+ent-LimbRestorerImplanterPirate = { ent-BaseImplantOnlyImplanterSyndi }
+    .suffix = латальный имплант
+    .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
+limb-restorer-implant-empty = Имплант пуст.
+uplink-limb-restorer-implant-name = Имплант экстренной реконструкции
+uplink-limb-restorer-implant-desc = Два заряда. Срабатывает кнопкой без рук или сам при критическом состоянии: кости, кровотечение, осколки, органы и их выращивание, заражение, плюс немного лечит раны. Конечности не отращивает.
+uplink-limb-restorer-implant-necro-name = Сердце Маркера
+uplink-limb-restorer-implant-necro-desc = Два заряда. Срабатывает кнопкой без рук или само при критическом состоянии. Чинит всё внутреннее, отращивает конечности, немного лечит раны. Стоит клеточного урона.
+uplink-limb-restorer-implant-pirate-name = Латальный имплант контрабандиста
+uplink-limb-restorer-implant-pirate-desc = Один заряд. Срабатывает кнопкой без рук или сам при критическом состоянии. Кости, кровотечение, осколки и органы, немного лечит раны и слегка травит.
+limb-restorer-charges = Осталось зарядов: [color=yellow]{ $count }[/color].
+limb-restorer-examine-primed = [color=cyan]Подготовлен[/color] и ждёт пациента.
+limb-restorer-primed = Устройство подготовлено. Держите его на пациенте.
+limb-restorer-primed-necro = Реликварий шепчет и наливается красным.
+limb-restorer-not-primed = Сначала подготовьте устройство в руке.
+limb-restorer-no-self = На себе это устройство не работает.
+limb-restorer-done = Тело собрано заново.
+limb-restorer-done-necro = Плоть срастается под красным светом.
+
+uplink-limb-implant-syndicate-hud-name = Глазной HUD-имплант Синдиката
+uplink-limb-implant-syndicate-hud-desc = Показывает своих агентов и данные СБ прямо в глазах, без визора. Ставится хирургически в глаза.
+uplink-limb-restorer-name = Блюспейс-реконструктор
+uplink-limb-restorer-desc = Три заряда полевой хирургии без стола: кости, внутреннее кровотечение, осколки, органы и их пересадка, заражение и отторжение. Подготовка 4 с, на другом 8 с, на себе 12 с. Конечности не отращивает.
+uplink-limb-restorer-necro-name = Некро-реликварий
+uplink-limb-restorer-necro-desc = Два заряда. Чинит всё внутреннее, выращивает органы и отращивает конечности. Стоит пациенту клеточного урона.
+uplink-field-chemistry-name = Коробка полевой химии
+uplink-field-chemistry-desc = Гемостатин, кальцеген, ферролизин и миореген по 30 единиц. Внутреннее кровотечение, переломы, осколки и отмершие конечности без операции.
+uplink-limb-restorer-pirate-name = Блюспейс-бальзам контрабандиста
+uplink-limb-restorer-pirate-desc = Два заряда. Кости, внутреннее кровотечение, осколки, органы и заражение. Органы и конечности не выращивает, немного травит.

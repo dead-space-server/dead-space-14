@@ -1,0 +1,98 @@
+- type: entity
+  parent: BaseItem
+  id: FieldSplint
+  name: field splint
+  description: Two slats and a roll of bandage. Holds a broken limb in place so it can knit.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/medical.rsi
+    state: cast
+  - type: Item
+    size: Small
+    sprite: Objects/Specific/Medical/medical.rsi
+    heldPrefix: brutepack
+  - type: LimbSplint
+  - type: StaticPrice
+    price: 0
+
+- type: entity
+  parent: BaseItem
+  id: ProstheticPegLeg
+  name: wooden peg leg
+  description: A carved peg. Strap it to a stump and hobble home.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/peg_leg.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Objects/Specific/Medical/peg_leg.rsi
+  - type: LimbPeg
+    left: PegLegPartLeft
+    right: PegLegPartRight
+  - type: StaticPrice
+    price: 0
+
+- type: entity
+  parent: BaseLeftLeg
+  id: PegLegPartLeft
+  name: wooden peg leg
+  description: A carved peg. Strap it to a stump and hobble home.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/peg_leg.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Objects/Specific/Medical/peg_leg.rsi
+  - type: MovementBodyPart
+    walkSpeed: 1.6
+    sprintSpeed: 1.6
+  - type: LimbProsthesis
+    sprite: MobPegLegLeft
+  - type: LimbPeg
+    left: PegLegPartLeft
+    right: PegLegPartRight
+  - type: Tag
+    tags: []
+
+- type: entity
+  parent: BaseRightLeg
+  id: PegLegPartRight
+  name: wooden peg leg
+  description: A carved peg. Strap it to a stump and hobble home.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/peg_leg.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Objects/Specific/Medical/peg_leg.rsi
+  - type: MovementBodyPart
+    walkSpeed: 1.6
+    sprintSpeed: 1.6
+  - type: LimbProsthesis
+    sprite: MobPegLegRight
+  - type: LimbPeg
+    left: PegLegPartLeft
+    right: PegLegPartRight
+  - type: Tag
+    tags: []
+
+- type: humanoidBaseSprite
+  id: MobPegLegLeft
+  matchSkin: false
+  allowsMarkings: false
+  baseSprite:
+    sprite: _DeadSpace/Objects/Specific/Medical/peg_leg.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobPegLegRight
+  matchSkin: false
+  allowsMarkings: false
+  baseSprite:
+    sprite: _DeadSpace/Objects/Specific/Medical/peg_leg.rsi
+    state: r_leg

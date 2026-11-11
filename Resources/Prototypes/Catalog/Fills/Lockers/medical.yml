@@ -125,6 +125,8 @@
     - id: JetInjector
     - id: HandheldHealthAnalyzer
     - id: BoxBodyBag
+    - id: SurgeryFieldKitFilled # DS14
+    - id: SurgeryOrganCooler # DS14
     - !type:GroupSelector
       children:
       - id: RollerBedSpawnFolded

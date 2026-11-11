@@ -1,0 +1,477 @@
+- type: reagent
+  id: SlimeGel
+  name: reagent-name-slime-gel
+  desc: reagent-desc-slime-gel
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#6ec8a0"
+  boilingPoint: 340
+  meltingPoint: 250
+
+- type: reaction
+  id: SlimeGel
+  reactants:
+    Slime:
+      amount: 1
+    Flour:
+      amount: 1
+    Sugar:
+      amount: 1
+  products:
+    SlimeGel: 2
+
+- type: entity
+  parent: BaseItem
+  id: SurgerySlimeGel
+  name: slime gel
+  description: A tube of mixed slime gel. Packs torn gel and the collagen scaffold.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/slime_gel.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Fun/glue.rsi
+    size: Small
+  - type: Tag
+    tags:
+    - SurgeryTool
+  - type: SurgeryTool
+    precision: 0.85
+    slip: 0.05
+    wobble: 10
+    verbs: []
+    softVerbs:
+    - MendBone
+  - type: SurgerySlimeGel
+    uses: 5
+  - type: StaticPrice
+    price: 25
+
+- type: entity
+  parent: BaseMentalAction
+  id: ActionSurgerySlimeRegrow
+  name: Regrow a limb
+  description: "Spend a large share of your satiation to regrow a missing limb. Priority: head, arm, hand, leg, foot."
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    priority: 6
+    useDelay: 30
+    icon:
+      sprite: _DeadSpace/Interface/Actions/surgery.rsi
+      state: slime_regrow
+  - type: InstantAction
+    event: !type:SurgerySlimeRegrowEvent
+  - type: ActionRequireSatiation
+    satiation: Hunger
+    amount: 80
+    spend: true
+    failReason: surgery-slime-regrow-hungry
+
+- type: surgeryHint
+  id: SlimeStretch
+  name: surgery-hint-slime-stretch
+  color: "#6ec8a0"
+  icons:
+  - sprite: Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+
+- type: surgeryHint
+  id: SlimeScoop
+  name: surgery-hint-slime-scoop
+  color: "#6ec8a0"
+  icons:
+  - sprite: Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+
+- type: surgeryHint
+  id: SlimeStir
+  name: surgery-hint-slime-stir
+  color: "#6ec8a0"
+  icons:
+  - sprite: _DeadSpace/Objects/Medical/slime_gel.rsi
+    state: icon
+
+- type: surgeryHint
+  id: SlimeSever
+  name: surgery-hint-slime-sever
+  color: "#6ec8a0"
+  icons:
+  - sprite: Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+
+- type: surgeryGameRoll
+  id: MendBone
+  games:
+  - Glue
+  - Steady
+
+- type: surgeryGameRoll
+  id: PullEmbedded
+  games:
+  - Dots
+  - Hold
+
+- type: surgeryOperation
+  id: TakeCore
+  side: Front
+  soft: true
+  zone: Torso
+  name: surgery-op-take-core
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+    game: Steady
+  - verb: Clamp
+    layer: Cavity
+    game: Clamp
+  - verb: Extract
+    layer: Cavity
+    game: Dots
+    hint: SlimeScoop
+    undo: Insert
+    organ: Core
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendCoreSlime
+  side: Front
+  soft: true
+  zone: Torso
+  name: surgery-op-mend-core
+  when: MindRupture
+  order: 2
+  icon:
+    sprite: _DeadSpace/Objects/Medical/slime_gel.rsi
+    state: icon
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+    game: Steady
+  - verb: Clamp
+    layer: Cavity
+    game: Clamp
+  - verb: Stanch
+    layer: Cavity
+    effect: BrainMend
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: PutCore
+  side: Front
+  soft: true
+  zone: Torso
+  name: surgery-op-put-core
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+    game: Steady
+  - verb: Insert
+    layer: Cavity
+    game: Hold
+    undo: Extract
+    organ: Core
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: PullShardSlime
+  side: Front
+  soft: true
+  name: surgery-op-pull-shard-slime
+  when: Shard
+  limb: true
+  order: 2
+  icon:
+    sprite: Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+  - verb: PullEmbedded
+    layer: Skin
+    game: Dots
+    hint: SlimeScoop
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendScaffold
+  side: Front
+  soft: true
+  name: surgery-op-mend-scaffold
+  when: Scaffold
+  limb: true
+  order: 1
+  icon:
+    sprite: _DeadSpace/Objects/Medical/slime_gel.rsi
+    state: icon
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: CureInfectionSlime
+  side: Front
+  soft: true
+  name: surgery-op-cure
+  when: Infection
+  order: -1
+  icon:
+    sprite: /Textures/Objects/Specific/Chemistry/syringe.rsi
+    state: syringe_base0
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+  - verb: Inject
+    layer: Skin
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: AmputateSlime
+  side: Front
+  soft: true
+  name: surgery-op-amputate-slime
+  limb: true
+  order: 5
+  icon:
+    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+  across: true
+  whole: true
+  zones:
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+    game: Steady
+  - verb: Amputate
+    layer: Skin
+    hint: SlimeSever
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+
+- type: surgeryOperation
+  id: AmputateHeadSlime
+  side: Front
+  soft: true
+  name: surgery-op-amputate-head-slime
+  order: 10
+  icon:
+    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+  zone: Head
+  across: true
+  whole: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+    game: Steady
+  - verb: Amputate
+    layer: Skin
+    hint: SlimeSever
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+
+- type: surgeryOperation
+  id: TailRemoveSlime
+  name: surgery-op-tail
+  soft: true
+  zones:
+  - Groin
+  side: Back
+  appendage: Tail
+  across: true
+  order: 0
+  icon:
+    sprite: Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+  - verb: Amputate
+    layer: Skin
+    hint: SlimeSever
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+
+- type: surgeryOperation
+  id: TailAttachSlime
+  name: surgery-op-tail-attach
+  soft: true
+  zones:
+  - Groin
+  side: Back
+  nearby:
+  - SurgeryAppendage
+  appendage: Tail
+  attach: true
+  across: true
+  order: 1
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_arm
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Append
+    layer: Skin
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryPart
+  id: Core
+  zone: Torso
+  anatomy: Slime
+  operation: TakeCore
+  put: PutCore
+  organ: Core
+  sprite: /Textures/Mobs/Species/Slime/organs.rsi
+  state: brain-slime
+  order: 0
+  ax: 13
+  ay: 15
+  bx: 18
+  by: 15
+
+- type: surgerySound
+  id: SoftIncise
+  sound:
+    path: /Audio/Effects/Fluids/blood1.ogg
+    params:
+      volume: -6
+      variation: 0.15
+
+- type: surgerySound
+  id: SoftMend
+  sound:
+    path: /Audio/Effects/Fluids/splat.ogg
+    params:
+      volume: -6

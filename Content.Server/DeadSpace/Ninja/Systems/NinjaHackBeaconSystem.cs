@@ -16,6 +16,8 @@ using Robust.Shared.Random;
 using System.Text;
 using Content.Shared.Mind;
 using Content.Shared.Foldable;
+using Content.Server.GameTicking;
+using Content.Server.Pinpointer;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
@@ -31,6 +33,7 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly NinjaStealMoneyObjectiveSystem _ninjaStealMoneyObjective = default!;
+    [Dependency] private readonly NavMapSystem _navMap = default!;
 
     public override void Initialize()
     {
@@ -54,6 +57,9 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
         if (active)
         {
             if (IsFolded(ent))
+                return;
+
+            if (_station.GetOwningStation(ent) == null)
                 return;
 
             if (user == null)
@@ -248,6 +254,9 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
             if (console.IsTaipan || !plan.ContainsKey(console.Account))
                 continue;
 
+            if (MetaData(uid).EntityPrototype?.ID == GameTicker.AdminObserverPrototypeName.Id)
+                continue;
+
             if (_station.GetOwningStation(uid) != station)
                 continue;
 
@@ -270,24 +279,37 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
 
             var msg = Loc.GetString("ninja-hack-beacon-transfer-broadcast",
                 ("amount", taken),
-                ("name1", Loc.GetString(account.Name)),
-                ("code1", Loc.GetString(account.Code)),
-                ("name2", GenerateGarbage()));
+                ("name", Loc.GetString(account.Name)),
+                ("code", Loc.GetString(account.Code)),
+                ("position", GenerateGarbage(_navMap.GetNearestBeaconString(console))));
 
             _radio.SendRadioMessage(console, msg, account.RadioChannel, console, escapeMarkup: false);
         }
     }
 
-    private string GenerateGarbage(int minLength = 6, int maxLength = 10)
+    private string GenerateGarbage(string input, float percent = 0.25f)
     {
+        if (string.IsNullOrEmpty(input) || percent <= 0f)
+            return input;
+        percent = Math.Clamp(percent, 0f, 1f);
         const string chars = "&@(!)#$%^*?~+=<>/|";
-
-        var length = _random.Next(minLength, maxLength + 1);
-        var sb = new StringBuilder(length);
-
-        for (var i = 0; i < length; i++)
-            sb.Append(chars[_random.Next(chars.Length)]);
-
+        var sb = new StringBuilder(input);
+        var i = 0;
+        while (i < input.Length)
+        {
+            if (input[i] == '[')
+            {
+                var close = input.IndexOf(']', i + 1);
+                if (close >= 0)
+                {
+                    i = close + 1;
+                    continue;
+                }
+            }
+            if (!char.IsWhiteSpace(input[i]) && _random.NextDouble() < percent)
+                sb[i] = chars[_random.Next(chars.Length)];
+            i++;
+        }
         return sb.ToString();
     }
 }

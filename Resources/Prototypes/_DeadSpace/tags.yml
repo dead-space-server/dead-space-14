@@ -50,6 +50,9 @@
   id: BluespaceHandHeldMassScanner
 
 - type: Tag
+  id: BlueShieldHatUpdateArmor
+
+- type: Tag
   id: DarkFlower
 
 - type: Tag
@@ -523,6 +526,9 @@
 
 - type: Tag
   id: WriteReWrite
+
+- type: Tag
+  id: WeaponRevolverBlueShieldKR19
 
 - type: Tag
   id: YellowFlower

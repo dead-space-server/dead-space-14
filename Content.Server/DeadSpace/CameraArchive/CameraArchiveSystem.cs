@@ -36,6 +36,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.SSDIndicator;
 using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.SurveillanceCamera.Components;
+using Content.Shared.Xenoborgs.Components;
 using Content.Shared.TextScreen;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
@@ -53,7 +54,12 @@ namespace Content.Server.DeadSpace.CameraArchives;
 
 public sealed class CameraArchiveSystem : EntitySystem
 {
-    public readonly record struct CameraFrame(TimeSpan RoundTime, CameraArchive Still, bool Saved = false);
+    public readonly record struct CameraFrame(TimeSpan RoundTime, CameraArchive Still, bool Saved = false, int Id = 0, CameraFrameParts? Parts = null);
+
+    public sealed record CameraFrameParts(List<CameraArchiveEntity> Fixed, KeyValuePair<int, CameraArchiveEntity>[]? Patch);
+
+    [ByRefEvent]
+    public readonly record struct CameraArchiveHistoryEvent(EntityUid? Camera);
 
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
@@ -86,14 +92,18 @@ public sealed class CameraArchiveSystem : EntitySystem
     private readonly HashSet<EntityUid> _seen = new();
     private readonly List<EntityUid> _order = new();
     private readonly Dictionary<EntityUid, Queue<CameraFrame>> _history = new();
-    private readonly Dictionary<EntityUid, (int Stamp, CameraArchive Still)> _reuse = new();
+    private readonly Dictionary<EntityUid, (int Stamp, CameraArchive Head, CameraFrameParts Parts)> _reuse = new();
     private readonly Dictionary<EntityUid, BuiltView> _built = new();
     private readonly Dictionary<EntityUid, List<string>> _chat = new();
     private readonly Dictionary<EntityUid, CameraArchive> _latest = new();
     private readonly Queue<EntityUid> _soon = new();
     private readonly HashSet<EntityUid> _soonSet = new();
     private readonly Dictionary<EntityUid, TimeSpan> _turnDue = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _waitDue = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _lastShot = new();
     private readonly List<EntityUid> _turnReady = new();
+    private readonly List<EntityUid> _trimmed = new();
+    private readonly List<EntityUid> _prune = new();
     private readonly Dictionary<EntityUid, List<(EntityUid Camera, int Index)>> _spriteOf = new();
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _spriteCams = new();
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _spriteDirty = new();
@@ -106,9 +116,15 @@ public sealed class CameraArchiveSystem : EntitySystem
     private const string BodyCameraTag = "BodyCamera";
     private const int ChatLineCap = 40;
     private const int SavedMinutes = 5;
+    private const float MaintainSeconds = 5f;
+    private const int PatchRebase = 16;
+    private static readonly Comparison<(EntityUid Uid, TransformComponent Xform, string Prototype)> ByUid =
+        (a, b) => b.Uid.Id.CompareTo(a.Uid.Id);
     private readonly Dictionary<EntityUid, (GameTick Tick, byte[] Bytes)> _appearanceCache = new();
     private readonly Dictionary<EntityUid, (GameTick Tick, byte[]? Bytes)> _humanoidCache = new();
     private int _cursor;
+    private int _nextFrame = 1;
+    private float _maintainTimer;
     private bool _recording;
 
     public override void Initialize()
@@ -152,6 +168,8 @@ public sealed class CameraArchiveSystem : EntitySystem
         _soon.Clear();
         _soonSet.Clear();
         _turnDue.Clear();
+        _waitDue.Clear();
+        _lastShot.Clear();
         _turnReady.Clear();
         _spriteOf.Clear();
         _spriteCams.Clear();
@@ -161,12 +179,15 @@ public sealed class CameraArchiveSystem : EntitySystem
         _spriteTick.Clear();
         _spriteGone.Clear();
         _spriteTimer = 0f;
+        _maintainTimer = 0f;
         _appearanceCache.Clear();
         _humanoidCache.Clear();
         _order.Clear();
         _cursor = 0;
         if (_resources.UserData.Exists(StoreDir))
             _resources.UserData.Delete(StoreDir);
+        var wiped = new CameraArchiveHistoryEvent(null);
+        RaiseLocalEvent(ref wiped);
     }
 
     public override void Update(float frameTime)
@@ -185,6 +206,13 @@ public sealed class CameraArchiveSystem : EntitySystem
         }
 
         FlushSprites(now);
+        _maintainTimer += frameTime;
+        if (_maintainTimer >= MaintainSeconds)
+        {
+            _maintainTimer = 0f;
+            Maintain(now);
+        }
+
         if (!shot)
             BaselineOne(now);
     }
@@ -202,7 +230,7 @@ public sealed class CameraArchiveSystem : EntitySystem
         if (!Exists(camera))
             return false;
 
-        if (OnCentComm(camera))
+        if (OnCentComm(camera) || HasComp<XenoborgComponent>(camera))
             return false;
 
         if (!_cfg.GetCVar(CCVars.CameraArchiveActive))
@@ -227,7 +255,7 @@ public sealed class CameraArchiveSystem : EntitySystem
 
     public bool Listed(EntityUid camera)
     {
-        if (!HasComp<SurveillanceCameraComponent>(camera) || OnCentComm(camera))
+        if (!HasComp<SurveillanceCameraComponent>(camera) || OnCentComm(camera) || HasComp<XenoborgComponent>(camera))
             return false;
 
         if (!_tag.HasTag(camera, BodyCameraTag))
@@ -288,10 +316,15 @@ public sealed class CameraArchiveSystem : EntitySystem
         _history.Remove(camera);
         _chat.Remove(camera);
         _reuse.Remove(camera);
+        _built.Remove(camera);
         _latest.Remove(camera);
         _turnDue.Remove(camera);
+        _waitDue.Remove(camera);
+        _lastShot.Remove(camera);
         _soonSet.Remove(camera);
         UnwatchSprites(camera);
+        var forgotten = new CameraArchiveHistoryEvent(camera);
+        RaiseLocalEvent(ref forgotten);
     }
 
     private void OnEmagged(Entity<SurveillanceCameraComponent> ent, ref GotEmaggedEvent args)
@@ -605,6 +638,12 @@ public sealed class CameraArchiveSystem : EntitySystem
 
         foreach (var camera in _spriteReady)
         {
+            if (Waits(camera, now, out var ready))
+            {
+                _spriteDue[camera] = ready;
+                continue;
+            }
+
             _spriteDue.Remove(camera);
             PatchSprites(camera, now);
         }
@@ -618,7 +657,8 @@ public sealed class CameraArchiveSystem : EntitySystem
         if (!_built.TryGetValue(camera, out var cache) || !ShouldRecord(camera))
             return;
 
-        var entities = new List<CameraArchiveEntity>(cache.Still.Entities);
+        var fixedCount = cache.Fixed.Count;
+        List<CameraArchiveEntity>? loose = null;
         var changed = false;
         foreach (var uid in dirty)
         {
@@ -635,11 +675,16 @@ public sealed class CameraArchiveSystem : EntitySystem
                 break;
             }
 
-            if (index < 0 || index >= entities.Count || !Exists(uid))
+            if (index < 0 || index >= fixedCount + cache.Loose.Count || !Exists(uid))
                 continue;
 
+            CameraArchiveEntity previous;
+            if (index < fixedCount)
+                previous = cache.Patch.TryGetValue(index, out var patched) ? patched : cache.Fixed[index];
+            else
+                previous = (loose ?? cache.Loose)[index - fixedCount];
+
             var bytes = SerializeAppearance(uid);
-            var previous = entities[index];
             if (SameBytes(previous.Appearance, bytes))
                 continue;
 
@@ -652,29 +697,110 @@ public sealed class CameraArchiveSystem : EntitySystem
                 copy.ScreenText = hold.ScreenText;
             }
 
-            entities[index] = copy;
+            if (index < fixedCount)
+            {
+                cache.Patch[index] = copy;
+                cache.FixedRecords[uid] = copy;
+            }
+            else
+            {
+                loose ??= new List<CameraArchiveEntity>(cache.Loose);
+                loose[index - fixedCount] = copy;
+                cache.LooseRecords[uid] = copy;
+            }
+
+            cache.Parts = null;
             changed = true;
         }
 
         if (!changed)
             return;
 
-        var still = new CameraArchive
+        if (loose != null)
+            cache.Loose = loose;
+
+        if (cache.Patch.Count > Math.Max(PatchRebase, fixedCount / 8))
+            Rebase(cache);
+
+        Store(camera, NewHead(cache), Parts(cache), now);
+    }
+
+    private static void Rebase(BuiltView cache)
+    {
+        var rebased = new List<CameraArchiveEntity>(cache.Fixed);
+        foreach (var (index, record) in cache.Patch)
+            rebased[index] = record;
+
+        cache.Fixed = rebased;
+        cache.Patch.Clear();
+        cache.Parts = null;
+    }
+
+    private static CameraFrameParts Parts(BuiltView cache)
+    {
+        if (cache.Parts != null)
+            return cache.Parts;
+
+        KeyValuePair<int, CameraArchiveEntity>[]? patch = null;
+        if (cache.Patch.Count > 0)
         {
-            GridRotation = cache.Still.GridRotation,
-            CameraFacing = cache.Still.CameraFacing,
-            CameraLocal = cache.Still.CameraLocal,
-            Zoom = cache.Still.Zoom,
-            DrawFov = cache.Still.DrawFov,
-            DrawLight = cache.Still.DrawLight,
-            Tiles = cache.Still.Tiles,
-            Decals = cache.Still.Decals,
-            Entities = entities,
-            Chat = new List<string>(),
-            Interference = cache.Still.Interference,
+            patch = new KeyValuePair<int, CameraArchiveEntity>[cache.Patch.Count];
+            var i = 0;
+            foreach (var pair in cache.Patch)
+                patch[i++] = pair;
+        }
+
+        cache.Parts = new CameraFrameParts(cache.Fixed, patch);
+        return cache.Parts;
+    }
+
+    private static CameraArchive NewHead(BuiltView cache)
+    {
+        var head = cache.Head;
+        return new CameraArchive
+        {
+            GridRotation = head.GridRotation,
+            CameraFacing = head.CameraFacing,
+            CameraLocal = head.CameraLocal,
+            Zoom = head.Zoom,
+            DrawFov = head.DrawFov,
+            DrawLight = head.DrawLight,
+            Tiles = head.Tiles,
+            Decals = head.Decals,
+            Entities = cache.Loose,
+            Interference = head.Interference,
         };
-        cache.Still = still;
-        Remember(camera, still, now);
+    }
+
+    private static CameraArchive Materialize(CameraFrame frame)
+    {
+        if (frame.Parts is not { } parts)
+            return frame.Still;
+
+        var head = frame.Still;
+        var entities = new List<CameraArchiveEntity>(parts.Fixed.Count + head.Entities.Count);
+        entities.AddRange(parts.Fixed);
+        if (parts.Patch != null)
+        {
+            foreach (var (index, record) in parts.Patch)
+                entities[index] = record;
+        }
+
+        entities.AddRange(head.Entities);
+        return new CameraArchive
+        {
+            GridRotation = head.GridRotation,
+            CameraFacing = head.CameraFacing,
+            CameraLocal = head.CameraLocal,
+            Zoom = head.Zoom,
+            DrawFov = head.DrawFov,
+            DrawLight = head.DrawLight,
+            Tiles = head.Tiles,
+            Decals = head.Decals,
+            Entities = entities,
+            Chat = head.Chat,
+            Interference = head.Interference,
+        };
     }
 
     private void WatchSprites(EntityUid camera, Dictionary<EntityUid, int> placed)
@@ -718,6 +844,9 @@ public sealed class CameraArchiveSystem : EntitySystem
 
     private static bool SameBytes(byte[]? left, byte[]? right)
     {
+        if (ReferenceEquals(left, right))
+            return true;
+
         if (left == null || left.Length == 0)
             return right == null || right.Length == 0;
 
@@ -748,13 +877,78 @@ public sealed class CameraArchiveSystem : EntitySystem
         };
     }
 
+    private static bool SameRecord(CameraArchiveEntity a, CameraArchiveEntity b)
+    {
+        return a.Prototype == b.Prototype
+               && a.LocalPosition == b.LocalPosition
+               && a.LocalRotation.Equals(b.LocalRotation)
+               && a.Anchored == b.Anchored
+               && a.Parent == b.Parent
+               && a.Container == b.Container
+               && a.ShowContents == b.ShowContents
+               && a.Loose == b.Loose
+               && a.InHand == b.InHand
+               && a.HandSide == b.HandSide
+               && a.CopySsd == b.CopySsd
+               && a.IsSsd == b.IsSsd
+               && a.SignText == b.SignText
+               && a.ScreenText == b.ScreenText
+               && a.Conceal == b.Conceal
+               && SameBytes(a.Humanoid, b.Humanoid)
+               && SameBytes(a.Appearance, b.Appearance);
+    }
+
+    private static bool SameTile(CameraArchiveTile a, CameraArchiveTile b)
+    {
+        return a.Indices == b.Indices
+               && a.TypeId == b.TypeId
+               && a.Flags == b.Flags
+               && a.Variant == b.Variant
+               && a.RotationMirroring == b.RotationMirroring;
+    }
+
+    private static bool SameItems<T>(List<T> a, List<T> b) where T : class
+    {
+        if (a.Count != b.Count)
+            return false;
+
+        for (var i = 0; i < a.Count; i++)
+        {
+            if (!ReferenceEquals(a[i], b[i]))
+                return false;
+        }
+
+        return true;
+    }
+
+    private static bool SameFixed(BuiltView previous, List<CameraArchiveEntity> fresh)
+    {
+        if (previous.Fixed.Count != fresh.Count)
+            return false;
+
+        for (var i = 0; i < fresh.Count; i++)
+        {
+            var current = previous.Patch.TryGetValue(i, out var patched) ? patched : previous.Fixed[i];
+            if (!ReferenceEquals(current, fresh[i]))
+                return false;
+        }
+
+        return true;
+    }
+
     private void PromoteTurns(TimeSpan now)
     {
-        if (_turnDue.Count == 0)
+        Promote(_turnDue, now);
+        Promote(_waitDue, now);
+    }
+
+    private void Promote(Dictionary<EntityUid, TimeSpan> pending, TimeSpan now)
+    {
+        if (pending.Count == 0)
             return;
 
         _turnReady.Clear();
-        foreach (var (camera, due) in _turnDue)
+        foreach (var (camera, due) in pending)
         {
             if (due <= now)
                 _turnReady.Add(camera);
@@ -762,10 +956,20 @@ public sealed class CameraArchiveSystem : EntitySystem
 
         foreach (var camera in _turnReady)
         {
-            _turnDue.Remove(camera);
+            pending.Remove(camera);
             if (_soonSet.Add(camera))
                 _soon.Enqueue(camera);
         }
+    }
+
+    private bool Waits(EntityUid camera, TimeSpan now, out TimeSpan ready)
+    {
+        ready = now;
+        if (!_lastShot.TryGetValue(camera, out var last))
+            return false;
+
+        ready = last + TimeSpan.FromSeconds(Math.Max(0f, _cfg.GetCVar(CCVars.CameraArchiveFrameGapSeconds)));
+        return now < ready;
     }
 
     private bool FlushSoon(TimeSpan now)
@@ -785,6 +989,12 @@ public sealed class CameraArchiveSystem : EntitySystem
             _soonSet.Remove(camera);
             if (!ShouldRecord(camera))
                 continue;
+
+            if (Waits(camera, now, out var ready))
+            {
+                _waitDue[camera] = ready;
+                continue;
+            }
 
             if (!Shoot(camera, now, allowRebuild: !heavy))
             {
@@ -832,8 +1042,8 @@ public sealed class CameraArchiveSystem : EntitySystem
         if (!allowRebuild)
             return false;
 
-        if (Capture(camera) is { } still)
-            Remember(camera, still, now);
+        if (Build(camera) is { } cache)
+            Store(camera, NewHead(cache), Parts(cache), now);
 
         return true;
     }
@@ -919,30 +1129,28 @@ public sealed class CameraArchiveSystem : EntitySystem
     public bool TryGetFrame(EntityUid camera, int index, out CameraFrame frame)
     {
         frame = default;
-        if (!_history.TryGetValue(camera, out var ring) || ring.Count == 0)
+        if (!_history.TryGetValue(camera, out var ring) || index < 0 || index >= ring.Count)
             return false;
-
-        if (index < 0)
-            index = ring.Count - 1;
-        if (index >= ring.Count)
-            index = ring.Count - 1;
 
         var i = 0;
         foreach (var item in ring)
         {
-            if (i == index)
-            {
-                frame = item;
-                return true;
-            }
+            if (i++ != index)
+                continue;
 
-            i++;
+            frame = item with { Still = Materialize(item), Parts = null };
+            return true;
         }
 
         return false;
     }
 
     public void Remember(EntityUid camera, CameraArchive still, TimeSpan time)
+    {
+        Store(camera, still, null, time);
+    }
+
+    private void Store(EntityUid camera, CameraArchive still, CameraFrameParts? parts, TimeSpan time)
     {
         if (HasComp<CameraArchiveSealedComponent>(camera) || HasComp<CameraArchiveBurnedComponent>(camera))
             return;
@@ -972,9 +1180,14 @@ public sealed class CameraArchiveSystem : EntitySystem
             _history.Add(camera, ring);
         }
 
-        ring.Enqueue(new CameraFrame(time, still));
+        ring.Enqueue(new CameraFrame(time, still, Id: _nextFrame++, Parts: parts));
         _latest[camera] = still;
-        TrimOlderThan(ring, time, HistoryWindow);
+        _lastShot[camera] = time;
+        if (TrimOlderThan(ring, time, HistoryWindow))
+        {
+            var trimmed = new CameraArchiveHistoryEvent(camera);
+            RaiseLocalEvent(ref trimmed);
+        }
     }
 
     public int CaptureAll(TimeSpan now)
@@ -983,37 +1196,237 @@ public sealed class CameraArchiveSystem : EntitySystem
         var captured = 0;
         foreach (var camera in _order)
         {
-            if (!ShouldRecord(camera))
+            if (!ShouldRecord(camera) || Build(camera) is not { } cache)
                 continue;
 
-            if (Capture(camera) is not { } still)
-                continue;
-
-            Remember(camera, still, now);
+            Store(camera, NewHead(cache), Parts(cache), now);
             captured++;
         }
 
         return captured;
     }
 
-    public static void TrimOlderThan(Queue<CameraFrame> frames, TimeSpan now, TimeSpan window)
+    public static bool TrimOlderThan(Queue<CameraFrame> frames, TimeSpan now, TimeSpan window, bool keepNewest = false)
     {
-        if (frames.Count == 0)
-            return;
-
-        var keep = new List<CameraFrame>(frames.Count);
-        foreach (var frame in frames)
+        var keepLast = keepNewest ? 1 : 0;
+        var trimmed = false;
+        while (frames.Count > keepLast
+               && frames.TryPeek(out var oldest)
+               && !oldest.Saved
+               && now - oldest.RoundTime > window)
         {
-            if (frame.Saved || now - frame.RoundTime <= window)
-                keep.Add(frame);
+            frames.Dequeue();
+            trimmed = true;
         }
 
-        if (keep.Count == frames.Count)
-            return;
+        var last = frames.Count - 1;
+        var i = 0;
+        var stale = false;
+        foreach (var frame in frames)
+        {
+            if (!frame.Saved && now - frame.RoundTime > window && !(keepNewest && i == last))
+            {
+                stale = true;
+                break;
+            }
+
+            i++;
+        }
+
+        if (!stale)
+            return trimmed;
+
+        var keep = new List<CameraFrame>(frames.Count);
+        i = 0;
+        foreach (var frame in frames)
+        {
+            if (frame.Saved || now - frame.RoundTime <= window || keepNewest && i == last)
+                keep.Add(frame);
+
+            i++;
+        }
 
         frames.Clear();
         foreach (var frame in keep)
             frames.Enqueue(frame);
+        return true;
+    }
+
+    public static TimeSpan SavedGap(TimeSpan age, TimeSpan window)
+    {
+        if (age <= window)
+            return TimeSpan.Zero;
+
+        var past = age - window;
+        if (past > TimeSpan.FromMinutes(50))
+            return TimeSpan.FromSeconds(10);
+
+        return past > TimeSpan.FromMinutes(20) ? TimeSpan.FromSeconds(5) : TimeSpan.FromSeconds(2);
+    }
+
+    public static bool ThinSaved(Queue<CameraFrame> frames, TimeSpan now, TimeSpan window)
+    {
+        if (Thin(frames, now, window, null) == 0)
+            return false;
+
+        var keep = new List<CameraFrame>(frames.Count);
+        Thin(frames, now, window, keep);
+        frames.Clear();
+        foreach (var frame in keep)
+            frames.Enqueue(frame);
+        return true;
+    }
+
+    private static int Thin(Queue<CameraFrame> frames, TimeSpan now, TimeSpan window, List<CameraFrame>? keep)
+    {
+        var dropped = 0;
+        var kept = false;
+        var lastTime = TimeSpan.Zero;
+        var lastIndex = -1;
+        List<string>? pending = null;
+        foreach (var frame in frames)
+        {
+            var gap = frame.Saved ? SavedGap(now - frame.RoundTime, window) : TimeSpan.Zero;
+            if (gap == TimeSpan.Zero)
+            {
+                if (keep != null && pending != null && lastIndex >= 0)
+                    keep[lastIndex] = WithChat(keep[lastIndex], pending, append: true);
+
+                pending = null;
+                kept = false;
+                lastIndex = -1;
+                keep?.Add(frame);
+                continue;
+            }
+
+            var delta = frame.RoundTime - lastTime;
+            if (!kept || delta < TimeSpan.Zero || delta >= gap)
+            {
+                kept = true;
+                lastTime = frame.RoundTime;
+                if (keep != null)
+                {
+                    keep.Add(pending != null ? WithChat(frame, pending, append: false) : frame);
+                    lastIndex = keep.Count - 1;
+                }
+
+                pending = null;
+                continue;
+            }
+
+            dropped++;
+            if (keep != null && frame.Still.Chat.Count > 0)
+            {
+                pending ??= new List<string>();
+                pending.AddRange(frame.Still.Chat);
+            }
+        }
+
+        if (keep != null && pending != null && lastIndex >= 0)
+            keep[lastIndex] = WithChat(keep[lastIndex], pending, append: true);
+
+        return dropped;
+    }
+
+    private static CameraFrame WithChat(CameraFrame frame, List<string> lines, bool append)
+    {
+        var still = frame.Still;
+        var chat = new List<string>(still.Chat.Count + lines.Count);
+        chat.AddRange(append ? still.Chat : lines);
+        chat.AddRange(append ? lines : still.Chat);
+        return frame with
+        {
+            Still = new CameraArchive
+            {
+                GridRotation = still.GridRotation,
+                CameraFacing = still.CameraFacing,
+                CameraLocal = still.CameraLocal,
+                Zoom = still.Zoom,
+                DrawFov = still.DrawFov,
+                DrawLight = still.DrawLight,
+                Tiles = still.Tiles,
+                Entities = still.Entities,
+                Decals = still.Decals,
+                Chat = chat,
+                Interference = still.Interference,
+            },
+        };
+    }
+
+    public bool TryFindNearest(EntityUid camera, TimeSpan time, out int index)
+    {
+        index = -1;
+        if (!_history.TryGetValue(camera, out var ring))
+            return false;
+
+        var best = TimeSpan.MaxValue;
+        var i = 0;
+        foreach (var frame in ring)
+        {
+            var delta = (frame.RoundTime - time).Duration();
+            if (delta < best)
+            {
+                best = delta;
+                index = i;
+            }
+
+            i++;
+        }
+
+        return index >= 0;
+    }
+
+    public bool TryFindFrame(EntityUid camera, int id, out int index)
+    {
+        index = 0;
+        if (id == 0 || !_history.TryGetValue(camera, out var ring))
+            return false;
+
+        foreach (var item in ring)
+        {
+            if (item.Id == id)
+                return true;
+
+            index++;
+        }
+
+        return false;
+    }
+
+    private void Maintain(TimeSpan now)
+    {
+        var window = HistoryWindow;
+        _trimmed.Clear();
+        foreach (var (camera, ring) in _history)
+        {
+            var changed = TrimOlderThan(ring, now, window, keepNewest: true);
+            changed |= ThinSaved(ring, now, window);
+            if (changed)
+                _trimmed.Add(camera);
+        }
+
+        foreach (var camera in _trimmed)
+        {
+            var trimmed = new CameraArchiveHistoryEvent(camera);
+            RaiseLocalEvent(ref trimmed);
+        }
+
+        Prune(_appearanceCache);
+        Prune(_humanoidCache);
+        Prune(_spriteTick);
+    }
+
+    private void Prune<T>(Dictionary<EntityUid, T> cache)
+    {
+        _prune.Clear();
+        foreach (var uid in cache.Keys)
+        {
+            if (!Exists(uid))
+                _prune.Add(uid);
+        }
+
+        foreach (var uid in _prune)
+            cache.Remove(uid);
     }
 
     private void OnBodyCameraVerb(Entity<SurveillanceCameraComponent> ent, ref GetVerbsEvent<Verb> args)
@@ -1057,7 +1470,8 @@ public sealed class CameraArchiveSystem : EntitySystem
 
     public CameraArchive? Latest(EntityUid camera)
     {
-        return TryGetFrame(camera, -1, out var frame) ? frame.Still : Capture(camera);
+        var count = Count(camera);
+        return count > 0 && TryGetFrame(camera, count - 1, out var frame) ? frame.Still : Capture(camera);
     }
 
     private void RebuildOrder()
@@ -1086,13 +1500,21 @@ public sealed class CameraArchiveSystem : EntitySystem
             gone.Add(uid);
         }
 
+        foreach (var uid in _built.Keys)
+        {
+            if (Exists(uid) && HasComp<SurveillanceCameraComponent>(uid) || gone != null && gone.Contains(uid))
+                continue;
+
+            gone ??= new List<EntityUid>();
+            gone.Add(uid);
+        }
+
         if (gone == null)
             return;
 
         foreach (var uid in gone)
         {
-            _history.Remove(uid);
-            _reuse.Remove(uid);
+            Forget(uid);
             _appearanceCache.Remove(uid);
             _humanoidCache.Remove(uid);
         }
@@ -1100,13 +1522,21 @@ public sealed class CameraArchiveSystem : EntitySystem
 
     public CameraArchive? Capture(EntityUid camera)
     {
+        return Build(camera) is { } cache
+            ? Materialize(new CameraFrame(TimeSpan.Zero, NewHead(cache), Parts: Parts(cache)))
+            : null;
+    }
+
+    private BuiltView? Build(EntityUid camera)
+    {
         if (!TryComp(camera, out TransformComponent? cameraXform) || cameraXform.GridUid is not { } grid)
             return null;
 
         if (!TryComp<MapGridComponent>(grid, out var gridComp))
             return null;
 
-        var still = new CameraArchive
+        _built.TryGetValue(camera, out var previous);
+        var head = new CameraArchive
         {
             GridRotation = _xform.GetWorldRotation(grid),
             CameraFacing = _xform.GetWorldRotation(camera) - _xform.GetWorldRotation(grid),
@@ -1115,26 +1545,36 @@ public sealed class CameraArchiveSystem : EntitySystem
 
         if (TryComp<EyeComponent>(camera, out var eye))
         {
-            still.Zoom = eye.Zoom;
-            still.DrawFov = eye.DrawFov;
-            still.DrawLight = eye.DrawLight;
+            head.Zoom = eye.Zoom;
+            head.DrawFov = eye.DrawFov;
+            head.DrawLight = eye.DrawLight;
         }
 
         var radius = CameraArchive.ViewRadius;
-        var center = still.CameraLocal;
+        var center = head.CameraLocal;
         var box = new Box2(center - new Vector2(radius, radius), center + new Vector2(radius, radius));
 
+        var tiles = new List<CameraArchiveTile>();
+        var tileRecords = new Dictionary<Vector2i, CameraArchiveTile>();
         foreach (var tile in _map.GetLocalTilesIntersecting(grid, gridComp, box))
         {
-            still.Tiles.Add(new CameraArchiveTile
+            var record = new CameraArchiveTile
             {
                 Indices = tile.GridIndices,
                 TypeId = tile.Tile.TypeId,
                 Flags = tile.Tile.Flags,
                 Variant = tile.Tile.Variant,
                 RotationMirroring = tile.Tile.RotationMirroring,
-            });
+            };
+
+            if (previous != null && previous.TileRecords.TryGetValue(tile.GridIndices, out var old) && SameTile(old, record))
+                record = old;
+
+            tiles.Add(record);
+            tileRecords[tile.GridIndices] = record;
         }
+
+        head.Tiles = previous != null && SameItems(previous.Head.Tiles, tiles) ? previous.Head.Tiles : tiles;
 
         _seen.Clear();
 
@@ -1160,6 +1600,9 @@ public sealed class CameraArchiveSystem : EntitySystem
             if (proto.ID == AudioEntity || HiddenFromArchive(uid))
                 continue;
 
+            if (!IsStructural(uid, xform) && HiddenInside(uid, xform))
+                continue;
+
             var local = ToGridLocal(uid, xform, grid, gridComp);
             var delta = local.Position - center;
             if (MathF.Abs(delta.X) > radius || MathF.Abs(delta.Y) > radius)
@@ -1171,34 +1614,51 @@ public sealed class CameraArchiveSystem : EntitySystem
             found.Add((uid, xform, proto.ID));
         }
 
+        found.Sort(ByUid);
         var placed = new Dictionary<EntityUid, int>();
-        Append(found, still, placed, grid, gridComp, structuralPass: true);
-        Append(found, still, placed, grid, gridComp, structuralPass: false);
-
-        var structureCount = 0;
-        while (structureCount < still.Entities.Count && !still.Entities[structureCount].Loose)
-            structureCount++;
+        var fixedList = new List<CameraArchiveEntity>();
+        var loose = new List<CameraArchiveEntity>();
+        var fixedRecords = new Dictionary<EntityUid, CameraArchiveEntity>();
+        var looseRecords = new Dictionary<EntityUid, CameraArchiveEntity>();
+        Append(found, fixedList, 0, placed, grid, gridComp, structuralPass: true, previous?.FixedRecords, fixedRecords);
+        Append(found, loose, fixedList.Count, placed, grid, gridComp, structuralPass: false, previous?.LooseRecords, looseRecords);
 
         var index = new Dictionary<EntityUid, int>();
         foreach (var (uid, entityIndex) in placed)
         {
-            if (entityIndex < structureCount)
+            if (entityIndex < fixedList.Count)
                 index.Add(uid, entityIndex);
         }
 
-        _built[camera] = new BuiltView
+        var cache = new BuiltView
         {
             Anchored = AnchoredStamp(camera),
-            Loose = LooseStamp(camera),
-            StructureCount = structureCount,
+            LooseStamp = LooseStamp(camera),
+            Head = head,
+            Fixed = fixedList,
+            Loose = loose,
             Index = index,
-            Still = still,
+            FixedRecords = fixedRecords,
+            LooseRecords = looseRecords,
+            TileRecords = tileRecords,
         };
-        _reuse[camera] = (WorldStamp(camera), still);
+
+        if (previous != null && SameFixed(previous, fixedList))
+        {
+            cache.Fixed = previous.Fixed;
+            cache.Patch = previous.Patch;
+            cache.Parts = previous.Parts;
+        }
+
+        if (previous != null && SameItems(previous.Loose, loose))
+            cache.Loose = previous.Loose;
+
+        _built[camera] = cache;
+        _reuse[camera] = (WorldStamp(camera), NewHead(cache), Parts(cache));
         WatchSprites(camera, placed);
         _spriteDirty.Remove(camera);
         _spriteDue.Remove(camera);
-        return still;
+        return cache;
     }
 
     private bool TryLoose(EntityUid camera, TimeSpan now, bool allowRebuild)
@@ -1209,44 +1669,51 @@ public sealed class CameraArchiveSystem : EntitySystem
         if (AnchoredStamp(camera) != cache.Anchored)
             return false;
 
-        var loose = LooseStamp(camera);
-        if (loose == cache.Loose)
+        var stamp = LooseStamp(camera);
+        if (stamp == cache.LooseStamp)
             return true;
 
         if (!allowRebuild)
             return false;
 
-        if (RebuildLoose(camera, cache) is not { } still)
+        var loose = cache.Loose;
+        var head = cache.Head;
+        if (!RebuildLoose(camera, cache))
             return false;
 
-        cache.Still = still;
-        cache.Loose = loose;
-        Remember(camera, still, now);
+        cache.LooseStamp = stamp;
+        if (!ReferenceEquals(loose, cache.Loose) || !ReferenceEquals(head, cache.Head))
+            Store(camera, NewHead(cache), Parts(cache), now);
+
         return true;
     }
 
-    private CameraArchive? RebuildLoose(EntityUid camera, BuiltView cache)
+    private bool RebuildLoose(EntityUid camera, BuiltView cache)
     {
         if (!TryComp(camera, out TransformComponent? cameraXform) || cameraXform.GridUid is not { } grid)
-            return null;
+            return false;
 
         if (!TryComp<MapGridComponent>(grid, out var gridComp))
-            return null;
+            return false;
 
-        var still = new CameraArchive
+        var gridRotation = _xform.GetWorldRotation(grid);
+        var center = ToGridLocal(camera, cameraXform, grid, gridComp).Position;
+        if (center != cache.Head.CameraLocal || !gridRotation.Equals(cache.Head.GridRotation))
         {
-            GridRotation = _xform.GetWorldRotation(grid),
-            CameraFacing = cache.Still.CameraFacing,
-            CameraLocal = ToGridLocal(camera, cameraXform, grid, gridComp).Position,
-            Zoom = cache.Still.Zoom,
-            DrawFov = cache.Still.DrawFov,
-            DrawLight = cache.Still.DrawLight,
-            Tiles = cache.Still.Tiles,
-            Decals = cache.Still.Decals,
-            Entities = cache.Still.Entities.GetRange(0, cache.StructureCount),
-        };
+            cache.Head = new CameraArchive
+            {
+                GridRotation = gridRotation,
+                CameraFacing = cache.Head.CameraFacing,
+                CameraLocal = center,
+                Zoom = cache.Head.Zoom,
+                DrawFov = cache.Head.DrawFov,
+                DrawLight = cache.Head.DrawLight,
+                Tiles = cache.Head.Tiles,
+                Decals = cache.Head.Decals,
+                Interference = cache.Head.Interference,
+            };
+        }
 
-        var center = still.CameraLocal;
         var radius = CameraArchive.ViewRadius;
         var range = radius * MathF.Sqrt(2f) + 1f;
         var found = new List<(EntityUid Uid, TransformComponent Xform, string Prototype)>();
@@ -1267,7 +1734,7 @@ public sealed class CameraArchiveSystem : EntitySystem
             if (!TryComp(uid, out MetaDataComponent? meta) || meta.EntityPrototype is not { } proto)
                 continue;
 
-            if (proto.ID == AudioEntity || HiddenFromArchive(uid))
+            if (proto.ID == AudioEntity || HiddenFromArchive(uid) || HiddenInside(uid, xform))
                 continue;
 
             var local = ToGridLocal(uid, xform, grid, gridComp);
@@ -1277,19 +1744,39 @@ public sealed class CameraArchiveSystem : EntitySystem
             found.Add((uid, xform, proto.ID));
         }
 
+        found.Sort(ByUid);
         var placed = new Dictionary<EntityUid, int>(cache.Index);
-        Append(found, still, placed, grid, gridComp, structuralPass: false);
+        var loose = new List<CameraArchiveEntity>();
+        var records = new Dictionary<EntityUid, CameraArchiveEntity>();
+        Append(found, loose, cache.Fixed.Count, placed, grid, gridComp, structuralPass: false, cache.LooseRecords, records);
+        if (!SameItems(cache.Loose, loose))
+            cache.Loose = loose;
+
+        cache.LooseRecords = records;
         WatchSprites(camera, placed);
-        return still;
+        return true;
+    }
+
+    private bool HiddenInside(EntityUid uid, TransformComponent xform)
+    {
+        if (!_containers.TryGetContainingContainer((uid, xform, (MetaDataComponent?) null), out var container)
+            || container.ShowContents)
+            return false;
+
+        var owner = container.Owner;
+        return !_inventory.HasSlot(owner, container.ID) && !_hands.TryGetHand(owner, container.ID, out _);
     }
 
     private void Append(
         List<(EntityUid Uid, TransformComponent Xform, string Prototype)> found,
-        CameraArchive still,
+        List<CameraArchiveEntity> target,
+        int offset,
         Dictionary<EntityUid, int> placed,
         EntityUid grid,
         MapGridComponent gridComp,
-        bool structuralPass)
+        bool structuralPass,
+        Dictionary<EntityUid, CameraArchiveEntity>? previous,
+        Dictionary<EntityUid, CameraArchiveEntity> records)
     {
         var guard = found.Count;
         while (found.Count > 0 && guard-- >= 0)
@@ -1306,7 +1793,7 @@ public sealed class CameraArchiveSystem : EntitySystem
                 if (parent != grid && !placed.ContainsKey(parent))
                     continue;
 
-                placed.Add(item.Uid, still.Entities.Count);
+                placed.Add(item.Uid, offset + target.Count);
                 var local = ToGridLocal(item.Uid, item.Xform, grid, gridComp);
                 if (parent != grid)
                     local = (item.Xform.LocalPosition, item.Xform.LocalRotation);
@@ -1323,7 +1810,7 @@ public sealed class CameraArchiveSystem : EntitySystem
                 }
 
                 var conceal = WearsCloak(item.Uid);
-                still.Entities.Add(new CameraArchiveEntity
+                var record = new CameraArchiveEntity
                 {
                     Prototype = item.Prototype,
                     LocalPosition = local.Position,
@@ -1342,7 +1829,13 @@ public sealed class CameraArchiveSystem : EntitySystem
                     ScreenText = hold.ScreenText,
                     Humanoid = conceal ? null : CopyHumanoid(item.Uid),
                     Conceal = conceal,
-                });
+                };
+
+                if (previous != null && previous.TryGetValue(item.Uid, out var old) && SameRecord(old, record))
+                    record = old;
+
+                target.Add(record);
+                records[item.Uid] = record;
                 found.RemoveAt(i);
                 added = true;
             }
@@ -1435,6 +1928,9 @@ public sealed class CameraArchiveSystem : EntitySystem
             if (!TryComp(uid, out MetaDataComponent? meta))
                 continue;
 
+            if (!anchored)
+                hash.Add(xform.ParentUid);
+
             hash.Add(meta.EntityPrototype?.ID);
             hash.Add((int) MathF.Round(xform.LocalPosition.X * 4f));
             hash.Add((int) MathF.Round(xform.LocalPosition.Y * 4f));
@@ -1447,10 +1943,16 @@ public sealed class CameraArchiveSystem : EntitySystem
     private sealed class BuiltView
     {
         public int Anchored;
-        public int Loose;
-        public int StructureCount;
+        public int LooseStamp;
+        public CameraArchive Head = new();
+        public List<CameraArchiveEntity> Fixed = new();
+        public Dictionary<int, CameraArchiveEntity> Patch = new();
+        public List<CameraArchiveEntity> Loose = new();
+        public CameraFrameParts? Parts;
         public Dictionary<EntityUid, int> Index = new();
-        public CameraArchive Still = new();
+        public Dictionary<EntityUid, CameraArchiveEntity> FixedRecords = new();
+        public Dictionary<EntityUid, CameraArchiveEntity> LooseRecords = new();
+        public Dictionary<Vector2i, CameraArchiveTile> TileRecords = new();
     }
 
     public bool TryReuse(EntityUid camera, TimeSpan now)
@@ -1461,7 +1963,7 @@ public sealed class CameraArchiveSystem : EntitySystem
         if (WorldStamp(camera) != cached.Stamp)
             return false;
 
-        Remember(camera, cached.Still, now);
+        Store(camera, cached.Head, cached.Parts, now);
         return true;
     }
 

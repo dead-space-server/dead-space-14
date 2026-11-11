@@ -59,4 +59,8 @@ public sealed partial class LavalandSpectralBladeComponent : Component
 
     [ViewVariables]
     public TimeSpan NextActivation;
+
+    /// <summary>The ghosts following it shown to the living while it is active.</summary>
+    [ViewVariables]
+    public HashSet<EntityUid> RevealedGhosts = new();
 }

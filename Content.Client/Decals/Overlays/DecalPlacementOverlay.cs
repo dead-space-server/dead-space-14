@@ -30,7 +30,7 @@ public sealed class DecalPlacementOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        var (decal, snap, rotation, color) = _placement.GetActiveDecal();
+        var (decal, snap, rotation, color, offset) = _placement.GetActiveDecal(); //DS-14
 
         if (decal == null)
             return;
@@ -59,6 +59,8 @@ public sealed class DecalPlacementOverlay : Overlay
         {
             localPos = localPos.Floored() + grid.TileSizeHalfVector;
         }
+
+        localPos += offset; //DS-14
 
         // Nothing uses snap cardinals so probably don't need preview?
         var aabb = Box2.UnitCentered.Translated(localPos);

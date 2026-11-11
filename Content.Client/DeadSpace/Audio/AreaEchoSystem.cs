@@ -60,6 +60,10 @@ public sealed class AreaEchoSystem : EntitySystem
     /// </summary>
     public bool DrugEchoOverride { get; set; }
 
+    private static readonly ProtoId<AudioPresetPrototype> HearingPreset = "Underwater";
+
+    public bool HearingEchoOverride { get; set; }
+
     private readonly Dictionary<(EntityUid Grid, Vector2i Tile, EntityUid Source), RoomAcoustics> _rooms = new();
     private readonly List<(EntityUid Auxiliary, EntityUid Effect)> _effects = new();
     private readonly HashSet<EntityUid> _leased = new();
@@ -172,7 +176,7 @@ public sealed class AreaEchoSystem : EntitySystem
             return;
 
         var echoGain = TryComp<SpeechAudioComponent>(sound, out var speech) ? speech.EchoGain : 1f;
-        var drugEcho = DrugEchoOverride;
+        var drugEcho = DrugEchoOverride || HearingEchoOverride;
         if (!drugEcho && echoGain <= 0f)
         {
             RemoveEcho(sound, sound.Comp1);
@@ -240,7 +244,7 @@ public sealed class AreaEchoSystem : EntitySystem
         float tailDuration;
         if (drugEcho)
         {
-            var preset = _prototypes.Index(DrugPreset);
+            var preset = _prototypes.Index(DrugEchoOverride ? DrugPreset : HearingPreset);
             _audio.SetEffectPreset(effect.Value, Comp<AudioEffectComponent>(effect.Value), preset);
             tailDuration = preset.DecayTime + preset.ReflectionsDelay + preset.LateReverbDelay;
         }
@@ -277,7 +281,7 @@ public sealed class AreaEchoSystem : EntitySystem
             sound.Comp.Flags |= AudioFlags.NoOcclusion;
             sound.Comp.Occlusion = 0f;
         }
-        if ((radio || suppressEcho) && !DrugEchoOverride)
+        if ((radio || suppressEcho) && !DrugEchoOverride && !HearingEchoOverride)
             RemoveEcho(sound, sound.Comp);
         else if (_enabled && !_backendUnavailable)
             UpdateEcho((sound.Owner, sound.Comp, Transform(sound)), _audio.GetListenerCoordinates(), smooth: false);

@@ -189,7 +189,7 @@
       - !type:Oxygenate
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Plant ]
+          type: [ Plant, Vox ] # DS14
           inverted: true
         factor: -4
     Gas:
@@ -214,9 +214,35 @@
       - !type:Oxygenate # carbon dioxide displaces oxygen from the bloodstream, causing asphyxiation
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Plant ]
+          type: [ Plant, Vox ] # DS14
           inverted: true
         factor: -4
+      # DS14-start
+      - !type:PopupMessage
+        minScale: 0.5
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Vox ]
+        type: Local
+        visualType: Medium
+        messages: [ "effect-sleepy" ]
+        probability: 0.1
+      - !type:MovementSpeedModifier
+        minScale: 1
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Vox ]
+        walkSpeedModifier: 0.65
+        sprintSpeedModifier: 0.65
+      - !type:ModifyStatusEffect
+        minScale: 1.8
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Vox ]
+        effectProto: StatusEffectForcedSleeping
+        time: 3
+        type: Update
+      # DS14-end
       # We need a metabolism effect on reagent removal
       #- !type:AdjustAlert
       #  alertType: CarbonDioxide
@@ -281,7 +307,7 @@
         minScale: 0.2
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Slime ]
+          type: [ Slime, Vox ] # DS14
           inverted: true
         emote: Laugh
         showInChat: true
@@ -290,7 +316,7 @@
         minScale: 0.2
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Slime ]
+          type: [ Slime, Vox ] # DS14
           inverted: true
         emote: Scream
         showInChat: true
@@ -299,7 +325,7 @@
         minScale: 0.5
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Slime ]
+          type: [ Slime, Vox ] # DS14
           inverted: true
         type: Local
         visualType: Medium
@@ -309,7 +335,7 @@
         minScale: 1
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Slime ]
+          type: [ Slime, Vox ] # DS14
           inverted: true
         walkSpeedModifier: 0.65
         sprintSpeedModifier: 0.65
@@ -317,7 +343,7 @@
         minScale: 1.8
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Slime ]
+          type: [ Slime, Vox ] # DS14
           inverted: true
         effectProto: StatusEffectForcedSleeping
         time: 3
@@ -326,7 +352,7 @@
         minScale: 3.5
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Slime ]
+          type: [ Slime, Vox ] # DS14
           inverted: true
         ignoreResistances: true
         damage:

@@ -41,6 +41,7 @@
   - type: StorageFill
     contents:
       - id: MedkitCombatFilled
+      - id: SurgeryFieldKitFilled
       - id: MedkitAdvancedFilled
       - id: FlashlightSeclite
       - id: RubberStampBlueShield

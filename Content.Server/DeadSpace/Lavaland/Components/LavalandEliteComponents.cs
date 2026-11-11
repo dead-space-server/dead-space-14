@@ -24,9 +24,16 @@ public sealed partial class LavalandEliteTumorComponent : Component
     [DataField]
     public EntProtoId WallPrototype = "LavalandEliteTumorWall";
 
-    /// <summary>How long the activator may stay away from the arena before the fight resets.</summary>
+    /// <summary>
+    /// How long the activator may stay away from the arena before the fight resets: short, so stepping out (a staff's
+    /// blink) to strike from beyond the wall is no way to win.
+    /// </summary>
     [DataField]
-    public TimeSpan LeashTime = TimeSpan.FromSeconds(10);
+    public TimeSpan LeashTime = TimeSpan.FromSeconds(2);
+
+    /// <summary>Awakened, the elite takes this long to come to before it moves or strikes.</summary>
+    [DataField]
+    public TimeSpan AwakeningTime = TimeSpan.FromSeconds(2.5);
 
     [DataField]
     public SoundSpecifier? ActivateSound;
@@ -77,6 +84,10 @@ public sealed partial class LavalandEliteComponent : Component
 
     [ViewVariables]
     public TimeSpan NextAttack;
+
+    /// <summary>Just awakened from its tumor: still, harmless, till then.</summary>
+    [ViewVariables]
+    public TimeSpan AwakeUntil;
 
     public bool RewardsSpawned;
     public int HudId;
@@ -137,6 +148,17 @@ public sealed partial class LavalandBroodmotherComponent : Component
 
     [DataField]
     public float RageSpeed = 2f;
+
+    /// <summary>The roar comes this long before the rush, time enough to step back from her.</summary>
+    [DataField]
+    public TimeSpan RageWindup = TimeSpan.FromSeconds(0.8);
+
+    /// <summary>After a rush she gets her breath back this long before her next move: no rush straight after another.</summary>
+    [DataField]
+    public TimeSpan RageRecovery = TimeSpan.FromSeconds(3);
+
+    public TimeSpan RageStartAt;
+    public bool LastAttackWasRage;
 
     /// <summary>Below half health, random tentacles burst around it this often.</summary>
     [DataField]

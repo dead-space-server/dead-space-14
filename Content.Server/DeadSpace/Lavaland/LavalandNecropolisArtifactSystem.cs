@@ -66,7 +66,6 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly Robust.Shared.Physics.Systems.SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedGodmodeSystem _godmode = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -550,8 +549,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         holeComp.User = user;
         holeComp.ReleaseAt = now + ent.Comp.Duration;
         ent.Comp.NextUse = now + ent.Comp.Cooldown;
-        _godmode.EnableGodmode(user);
-        // Out of reality: no shooting or striking from the hole while nothing can touch them.
+        // Out of reality: nothing can touch them, and they touch nothing - no item, no shot, no blow from the hole.
         EnsureComp<LavalandRealityHiddenComponent>(user);
     }
 
@@ -567,7 +565,6 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
             return;
 
         ent.Comp.User = null;
-        _godmode.DisableGodmode(user);
         RemComp<LavalandRealityHiddenComponent>(user);
         if (_containers.TryGetContainer(ent, HoleContainer, out var container))
             _containers.Remove(user, container, destination: Transform(ent).Coordinates);
@@ -760,6 +757,13 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("lavaland-memento-skeleton"), args.Performer, args.Performer);
             return;
         }
+
+        // A soul already bound to one's scythe: the pendant finds no life of the wearer's own to take.
+        if (HasSoulscythe(args.Performer))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-memento-soulscythe"), args.Performer, args.Performer);
+            return;
+        }
         args.Handled = true;
 
         _popup.PopupEntity(Loc.GetString("lavaland-memento-draining"), args.Performer, args.Performer, PopupType.MediumCaution);
@@ -778,6 +782,12 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         args.Handled = true;
 
         var user = args.User;
+        // A scythe woken while the pendant was draining.
+        if (HasSoulscythe(user))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-memento-soulscythe"), user, user);
+            return;
+        }
         if (!TryComp<MobThresholdsComponent>(user, out var thresholds))
             return;
 
@@ -796,6 +806,19 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         ent.Comp.LinkedUser = user;
         _appearance.SetData(ent, LavalandArtifactVisuals.Active, true);
         _popup.PopupEntity(Loc.GetString("lavaland-memento-linked"), user, user, PopupType.Large);
+    }
+
+    /// <summary>A soul scythe is woken, or waking, for this master.</summary>
+    private bool HasSoulscythe(EntityUid user)
+    {
+        var scythes = EntityQueryEnumerator<LavalandSoulscytheComponent>();
+        while (scythes.MoveNext(out var scythe))
+        {
+            if (scythe.Master == user && (scythe.Possessed || scythe.Awakening))
+                return true;
+        }
+
+        return false;
     }
 
     private void OnMementoUnequipped(Entity<LavalandMementoMoriComponent> ent, ref GotUnequippedEvent args)

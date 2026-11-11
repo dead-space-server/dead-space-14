@@ -36,8 +36,8 @@
     - ST
   name: spider-terror-title
   description: spider-terror-description
-  showInVote: true
-  showInAdminVote: true # DS14
+  showInVote: false
+  showInAdminVote: false
   voteType: rdm # DS14
   rules:
     - WageScheduler # backmen: currency

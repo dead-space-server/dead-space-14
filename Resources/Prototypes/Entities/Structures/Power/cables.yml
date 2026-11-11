@@ -43,6 +43,7 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: SubFloorHide
+    viewLayer: Cable #DS-14
   - type: Electrified
     onHandInteract: false
     onInteractUsing: false # wire-cutting handled separately.

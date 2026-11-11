@@ -99,6 +99,8 @@ namespace Content.Client.Input
             human.AddFunction(DeadSpaceKeys.SwitchComponentMode); // DS14
             human.AddFunction(DeadSpaceKeys.SwitchGunAmmoMode); // DS14
             human.AddFunction(ContentKeyFunctions.Parry); // DS14
+            human.AddFunction(ContentKeyFunctions.AimShot); // DS14
+            human.AddFunction(ContentKeyFunctions.LimbDoll); // DS14
 
             // actions should be common (for ghosts, mobs, etc)
             common.AddFunction(ContentKeyFunctions.OpenActionsMenu);

@@ -45,7 +45,8 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
         }
         else
         {
-            if (!CanImplant(args.User, target, uid, component, out var implant, out _))
+            if (!CanImplantLimb(target, component, out _) //DS-14
+                && !CanImplant(args.User, target, uid, component, out var implant, out _))
             {
                 // no popup if implant doesn't exist
                 if (implant == null)

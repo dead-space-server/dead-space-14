@@ -68,6 +68,23 @@
 # Инструменты
 
 - type: listing
+  id: LavalandMiningSensorTablet
+  productEntity: LavalandSensorTablet
+  categories:
+  - LavalandMiningUtility
+  cost:
+    LavalandMiningPoint: 6500
+
+- type: listing
+  id: LavalandMiningSonarCartridge
+  productEntity: LavalandSonarCartridge
+  categories:
+  - LavalandMiningUtility
+  - LavalandMiningUtilityTaipan
+  cost:
+    LavalandMiningPoint: 3000
+
+- type: listing
   id: LavalandMiningOreBag
   productEntity: OreBag
   categories:

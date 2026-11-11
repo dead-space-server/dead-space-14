@@ -23,6 +23,8 @@ public sealed partial class DecalPlacerWindow : DefaultWindow
     private readonly SpriteSystem _sprite;
 
     public FloatSpinBox RotationSpinBox;
+    public FloatSpinBox OffsetXSpinBox; //DS-14
+    public FloatSpinBox OffsetYSpinBox; //DS-14
 
     private PaletteColorPicker? _picker;
 
@@ -32,6 +34,8 @@ public sealed partial class DecalPlacerWindow : DefaultWindow
     private bool _useColor;
     private bool _snap;
     private float _rotation;
+    private float _offsetX; //DS-14
+    private float _offsetY; //DS-14
     private bool _cleanable;
     private int _zIndex;
 
@@ -52,6 +56,19 @@ public sealed partial class DecalPlacerWindow : DefaultWindow
             HorizontalExpand = true
         };
         SpinBoxContainer.AddChild(RotationSpinBox);
+
+        //DS-14 start
+        OffsetXSpinBox = new FloatSpinBox(1f, 0)
+        {
+            HorizontalExpand = true
+        };
+        OffsetXContainer.AddChild(OffsetXSpinBox);
+        OffsetYSpinBox = new FloatSpinBox(1f, 0)
+        {
+            HorizontalExpand = true
+        };
+        OffsetYContainer.AddChild(OffsetYSpinBox);
+        //DS-14 end
 
         Search.OnTextChanged += _ => RefreshList();
         ColorPicker.OnColorChanged += OnColorPicked;
@@ -87,6 +104,18 @@ public sealed partial class DecalPlacerWindow : DefaultWindow
             _rotation = args.Value;
             UpdateDecalPlacementInfo();
         };
+        //DS-14 start
+        OffsetXSpinBox.OnValueChanged += args =>
+        {
+            _offsetX = args.Value;
+            UpdateDecalPlacementInfo();
+        };
+        OffsetYSpinBox.OnValueChanged += args =>
+        {
+            _offsetY = args.Value;
+            UpdateDecalPlacementInfo();
+        };
+        //DS-14 end
         EnableAuto.OnToggled += args =>
         {
             _auto = args.Pressed;
@@ -129,7 +158,7 @@ public sealed partial class DecalPlacerWindow : DefaultWindow
             return;
 
         var color = _useColor ? _color : Color.White;
-        _decalPlacementSystem.UpdateDecalInfo(_selected, color, _rotation, _snap, _zIndex, _cleanable);
+        _decalPlacementSystem.UpdateDecalInfo(_selected, color, _rotation, _snap, _zIndex, _cleanable, _offsetX, _offsetY); //DS-14
     }
 
     private void RefreshList()

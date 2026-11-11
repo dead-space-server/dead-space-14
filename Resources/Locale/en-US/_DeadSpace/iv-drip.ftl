@@ -6,7 +6,7 @@ iv-drip-examine-attached = Connected to [color=green]{$patient}[/color].
 iv-drip-examine-detached = Not connected to a patient.
 
 iv-drip-speed-off = Off
-iv-drip-speed-slow = Slow (0.5 u/s)
+iv-drip-speed-slow = Slow (0.25 u/s)
 iv-drip-speed-medium = Medium (1.5 u/s)
 iv-drip-speed-fast = Fast (3 u/s)
 

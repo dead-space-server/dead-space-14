@@ -1,5 +1,7 @@
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.DeadSpace.Surgery; //DS-14
+using Content.Shared.FixedPoint; //DS-14
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -106,8 +108,33 @@ namespace Content.IntegrationTests.Tests.Chemistry
                     var foundProductsMap = reactionPrototype.Products
                         .Concat(reactionPrototype.Reactants.Where(x => x.Value.Catalyst).ToDictionary(x => x.Key, x => x.Value.Amount))
                         .ToDictionary(x => x, _ => false);
+                    //DS-14 start
+                    string spoilInto = null;
+                    string spoilReagent = null;
+                    var spoilAmount = FixedPoint2.Zero;
+                    foreach (var effect in reactionPrototype.Effects)
+                    {
+                        if (effect is not GraftMutagenSpoil spoil)
+                            continue;
+
+                        spoilInto = spoil.Into;
+                        spoilReagent = spoil.Reagent;
+                        reactionPrototype.Products.TryGetValue(spoil.Reagent, out spoilAmount);
+                    }
+                    //DS-14 end
                     foreach (var (reagent, quantity) in solution.Contents)
                     {
+                        //DS-14 start
+                        if (spoilInto != null
+                            && reagent.Prototype == spoilInto
+                            && quantity == spoilAmount
+                            && foundProductsMap.TryFirstOrNull(x => x.Key.Key == spoilReagent && x.Key.Value == spoilAmount, out var spoiled))
+                        {
+                            foundProductsMap[spoiled.Value.Key] = true;
+                            continue;
+                        }
+                        //DS-14 end
+
                         Assert.That(foundProductsMap.TryFirstOrNull(x => x.Key.Key == reagent.Prototype && x.Key.Value == quantity, out var foundProduct));
                         foundProductsMap[foundProduct.Value.Key] = true;
                     }

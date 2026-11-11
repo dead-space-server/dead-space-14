@@ -205,7 +205,21 @@ namespace Content.Shared.Cuffs
             if (cancelled || user != ent.Owner)
                 return;
 
-            if (!TryComp<HandsComponent>(ent, out var hands) || ent.Comp.CuffedHandCount < hands.Count)
+            if (!TryComp<HandsComponent>(ent, out var hands))
+                return;
+
+            //DS-14 start
+            if (hands.Count == 0)
+            {
+                cancelled = true;
+                if (popup)
+                    _popup.PopupClient(Loc.GetString("buckle-component-no-hands-message"), ent, user);
+
+                return;
+            }
+            //DS-14 end
+
+            if (ent.Comp.CuffedHandCount < hands.Count)
                 return;
 
             cancelled = true;

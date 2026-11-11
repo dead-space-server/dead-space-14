@@ -1,0 +1,6 @@
+- type: entity
+  parent: StatusEffectAdrenaline
+  id: StatusEffectCombatAdrenaline
+  name: combat adrenaline
+  components:
+  - type: CombatAdrenalineSurge
