@@ -1,14 +1,13 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Content.Server.NPC.Components;
+using System.Numerics;
+using Content.Server.DeadSpace.Husbandry.Walking;
 using Content.Server.NPC.HTN;
-using Content.Server.NPC.Systems;
 using Content.Shared.DeadSpace.Beekeeping;
+using Content.Shared.DeadSpace.Husbandry.Walking;
 using Content.Shared.DoAfter;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.NPC;
-using Content.Shared.NPC.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -17,12 +16,17 @@ using Robust.Shared.Timing;
 namespace Content.Server.DeadSpace.Beekeeping;
 
 /// <summary>
-/// The brain of a worker bee, see <see cref="BeeComponent"/>. What keeps it cheap on a server with many players:
+/// The brain of a worker bee, see <see cref="BeeComponent"/>. The cycle: once a second the bee looks for a plant to
+/// pollinate within <see cref="BeeComponent.SearchRadius"/>, flies to it, pollinates it and flies straight home with
+/// the pollen, which it leaves in the hive.
+///
+/// The bee flies in a straight line (the <c>AnimalWalker</c> of the husbandry module sets its input), there is no
+/// pathfinding and no steering, nothing that could leave it standing. What keeps it cheap on a server with many players:
 /// <list type="bullet">
 /// <item>a bee thinks twice a second, not every tick;</item>
 /// <item>a bee that has no player within <see cref="ActiveRange"/> does nothing, the hive is simulated instead
 /// (see <see cref="BeeHiveSystem"/>);</item>
-/// <item>flowers are found with a lookup around the bee, not by going through every plant of the round.</item>
+/// <item>plants are found with a lookup around the bee, not by going through every plant of the round.</item>
 /// </list>
 /// </summary>
 public sealed class BeeAISystem : EntitySystem
@@ -34,12 +38,12 @@ public sealed class BeeAISystem : EntitySystem
 
     private static readonly TimeSpan PlayerScanInterval = TimeSpan.FromSeconds(2);
 
+    [Dependency] private readonly AnimalWalkerSystem _walker = default!;
     [Dependency] private readonly BeeHiveSystem _hive = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
     [Dependency] private readonly PollinationSystem _pollination = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -59,13 +63,9 @@ public sealed class BeeAISystem : EntitySystem
 
     private void OnStartup(Entity<BeeComponent> ent, ref ComponentStartup args)
     {
-        // Without this the steering does not move the bee. The usual brain is taken off: two brains would fight
-        // over the steering and the bee would freeze. (The prototype of the worker still inherits HTN from the
-        // base of simple mobs, and a prototype cannot take a parent component away.)
-        // The order matters: taking HTN off puts the NPC to sleep (the HTN shutdown removes ActiveNPC), so the bee is
-        // woken up only after that. The other way round the bee stood still and never flew.
+        // The usual brain is taken off: two brains would fight over the movement. (The prototype of the worker still
+        // inherits HTN from the base of simple mobs, and a prototype cannot take a parent component away.)
         RemComp<HTNComponent>(ent);
-        EnsureComp<ActiveNPCComponent>(ent);
         ent.Comp.NextThink = _timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(0f, ent.Comp.ThinkInterval));
 
         if (ent.Comp.HiveOwner is { } hive && TryComp<BeeHiveComponent>(hive, out var hiveComp))
@@ -74,8 +74,6 @@ public sealed class BeeAISystem : EntitySystem
 
     private void OnShutdown(Entity<BeeComponent> ent, ref ComponentShutdown args)
     {
-        _steering.Unregister(ent);
-
         if (ent.Comp.HiveOwner is { } hive && TryComp<BeeHiveComponent>(hive, out var hiveComp))
             hiveComp.Bees.Remove(ent);
     }
@@ -128,9 +126,7 @@ public sealed class BeeAISystem : EntitySystem
             // Nobody sees the bee: it stays where it is, and costs nothing.
             if (!IsPlayerNear(xform.Coordinates))
             {
-                if (bee.State is BeeState.MovingToFlower or BeeState.ReturningToHive)
-                    _steering.Unregister(uid);
-
+                StopFlying((uid, bee));
                 continue;
             }
 
@@ -144,11 +140,17 @@ public sealed class BeeAISystem : EntitySystem
             {
                 case BeeState.Idle: TickIdle(ent); break;
                 case BeeState.SearchingFlower: TickSearching(ent, xform); break;
-                case BeeState.MovingToFlower: TickMoving(ent, xform); break;
+                case BeeState.MovingToFlower: TickMoving(ent); break;
                 case BeeState.Pollinating: TickPollinating(ent, xform); break;
-                case BeeState.ReturningToHive: TickReturning(ent, xform); break;
+                case BeeState.ReturningToHive: TickReturning(ent); break;
             }
         }
+    }
+
+    private void StopFlying(Entity<BeeComponent> ent)
+    {
+        if (TryComp<AnimalWalkerComponent>(ent, out var walker))
+            _walker.Stop((ent, walker));
     }
 
     private void SetState(Entity<BeeComponent> ent, BeeState state)
@@ -157,20 +159,14 @@ public sealed class BeeAISystem : EntitySystem
         if (bee.State == state)
             return;
 
-        if (bee.State is BeeState.Pollinating)
+        if (bee.State == BeeState.Pollinating)
             CancelDoAfters(ent);
 
-        if (bee.State is BeeState.MovingToFlower or BeeState.ReturningToHive)
-            _steering.Unregister(ent);
+        // A new state starts a new flight, or none.
+        StopFlying(ent);
 
         bee.State = state;
         bee.StateTimer = 0f;
-
-        if (state is BeeState.MovingToFlower or BeeState.ReturningToHive)
-        {
-            bee.LastDistanceToTarget = float.MaxValue;
-            bee.NoProgressTime = 0f;
-        }
     }
 
     /// <summary>
@@ -223,6 +219,31 @@ public sealed class BeeAISystem : EntitySystem
         return (_transform.GetWorldPosition(target) - _transform.GetWorldPosition(xform)).Length();
     }
 
+    /// <summary>
+    /// Sends the bee to the target in a straight line, or lets it go on if it is on its way.
+    /// </summary>
+    /// <returns>The state of the flight: arrived, still flying, or failed (it did not get anywhere).</returns>
+    private WalkStatus Fly(Entity<BeeComponent> ent, EntityUid target)
+    {
+        if (!TryComp<AnimalWalkerComponent>(ent, out var walker))
+            return WalkStatus.Failed;
+
+        if (walker.Status == WalkStatus.Walking)
+            return WalkStatus.Walking;
+
+        if (walker.Status is WalkStatus.Arrived or WalkStatus.Failed)
+        {
+            var status = walker.Status;
+            _walker.Stop((ent, walker));
+            return status;
+        }
+
+        var destination = new EntityCoordinates(target, Vector2.Zero);
+        return _walker.StartRoute((ent, walker), new[] { destination }, ent.Comp.ArrivalThreshold, run: true)
+            ? WalkStatus.Walking
+            : WalkStatus.Failed;
+    }
+
     private void TickIdle(Entity<BeeComponent> ent)
     {
         if (ent.Comp.StateTimer < ent.Comp.IdleCooldown || !HasValidHive(ent))
@@ -268,33 +289,39 @@ public sealed class BeeAISystem : EntitySystem
         SetState(ent, BeeState.MovingToFlower);
     }
 
-    private void TickMoving(Entity<BeeComponent> ent, TransformComponent xform)
+    private void TickMoving(Entity<BeeComponent> ent)
     {
         var bee = ent.Comp;
         if (!HasValidFlower(ent))
             return;
 
-        var target = bee.TargetFlower!.Value;
-        var distance = DistanceTo(target, xform);
-        if (distance < bee.ArrivalThreshold)
-        {
-            SetState(ent, BeeState.Pollinating);
-            return;
-        }
-
-        var coordinates = Transform(target).Coordinates;
-
-        if (SteeringLostPath(ent) || ReRouteIfStuck(ent, distance, coordinates))
-            return;
-
-        if (bee.StateTimer > bee.MaxMovingTime)
+        // The flower may have been pollinated by another bee while this one was on its way.
+        var flower = bee.TargetFlower!.Value;
+        if (!TryComp<PollinationComponent>(flower, out var pollination) || !_pollination.CanPollinate((flower, pollination)))
         {
             bee.TargetFlower = null;
             SetState(ent, BeeState.SearchingFlower);
             return;
         }
 
-        _steering.TryRegister(ent, coordinates);
+        switch (Fly(ent, flower))
+        {
+            case WalkStatus.Arrived:
+                SetState(ent, BeeState.Pollinating);
+                break;
+            case WalkStatus.Failed:
+                bee.TargetFlower = null;
+                SetState(ent, BeeState.SearchingFlower);
+                break;
+            default:
+                if (bee.StateTimer > bee.MaxMovingTime)
+                {
+                    bee.TargetFlower = null;
+                    SetState(ent, BeeState.SearchingFlower);
+                }
+
+                break;
+        }
     }
 
     private void TickPollinating(Entity<BeeComponent> ent, TransformComponent xform)
@@ -304,7 +331,7 @@ public sealed class BeeAISystem : EntitySystem
             return;
 
         var flower = bee.TargetFlower!.Value;
-        if (DistanceTo(flower, xform) > bee.ArrivalThreshold * 2f ||
+        if (DistanceTo(flower, xform) > bee.ArrivalThreshold * 3f ||
             !TryComp<PollinationComponent>(flower, out var pollination) ||
             !_pollination.CanPollinate((flower, pollination)))
         {
@@ -347,84 +374,36 @@ public sealed class BeeAISystem : EntitySystem
             return;
         }
 
-        var pollen = Math.Min(pollination.PollenYield, bee.MaxPollenCarry - bee.PollenCarried);
-        if (pollen > 0f)
-        {
-            bee.PollenCarried += pollen;
-            var ev = new PlantPollinatedEvent(ent, pollen);
-            RaiseLocalEvent(flower, ref ev);
-        }
-
-        bee.TargetFlower = null;
+        bee.PollenCarried = Math.Min(pollination.PollenYield, bee.MaxPollenCarry);
+        var ev = new PlantPollinatedEvent(ent, bee.PollenCarried);
+        RaiseLocalEvent(flower, ref ev);
 
         // One flower, then straight home with the pollen.
+        bee.TargetFlower = null;
         SetState(ent, BeeState.ReturningToHive);
     }
 
-    private void TickReturning(Entity<BeeComponent> ent, TransformComponent xform)
+    private void TickReturning(Entity<BeeComponent> ent)
     {
         var bee = ent.Comp;
         if (!HasValidHive(ent))
             return;
 
         var hive = bee.HiveOwner!.Value;
-        var distance = DistanceTo(hive, xform);
-        if (distance < bee.ArrivalThreshold)
+        switch (Fly(ent, hive))
         {
-            // At home: the pollen is left in the hive at once and the bee rests before the next flight.
-            var ev = new BeePollenDepositedEvent(ent, bee.PollenCarried);
-            RaiseLocalEvent(hive, ref ev);
+            case WalkStatus.Arrived:
+                // At home: the pollen is left in the hive at once and the bee rests before the next flight.
+                var ev = new BeePollenDepositedEvent(ent, bee.PollenCarried);
+                RaiseLocalEvent(hive, ref ev);
 
-            bee.PollenCarried = 0f;
-            bee.TargetFlower = null;
-            SetState(ent, BeeState.Idle);
-            return;
+                bee.PollenCarried = 0f;
+                SetState(ent, BeeState.Idle);
+                break;
+            case WalkStatus.Failed:
+                // Stuck on the way: try again from where it is.
+                StopFlying(ent);
+                break;
         }
-
-        var coordinates = Transform(hive).Coordinates;
-
-        if (bee.StateTimer > bee.MaxMovingTime || SteeringLostPath(ent))
-        {
-            bee.StateTimer = 0f;
-            _steering.Unregister(ent);
-            _steering.Register(ent, coordinates);
-            return;
-        }
-
-        if (ReRouteIfStuck(ent, distance, coordinates))
-            return;
-
-        _steering.TryRegister(ent, coordinates);
     }
-
-    private bool SteeringLostPath(Entity<BeeComponent> ent)
-    {
-        return TryComp<NPCSteeringComponent>(ent, out var steering) && steering.Status == SteeringStatus.NoPath;
-    }
-
-    /// <summary>
-    /// If the bee does not get closer for a while, the path is planned again.
-    /// </summary>
-    /// <returns>True if it was.</returns>
-    private bool ReRouteIfStuck(Entity<BeeComponent> ent, float distance, EntityCoordinates target)
-    {
-        var bee = ent.Comp;
-        if (distance < bee.LastDistanceToTarget - bee.ProgressEpsilon)
-        {
-            bee.LastDistanceToTarget = distance;
-            bee.NoProgressTime = 0f;
-            return false;
-        }
-
-        bee.NoProgressTime += bee.ThinkInterval;
-        if (bee.NoProgressTime < bee.StuckTimeout)
-            return false;
-
-        bee.NoProgressTime = 0f;
-        bee.LastDistanceToTarget = float.MaxValue;
-        _steering.Unregister(ent);
-        _steering.Register(ent, target);
-        return true;
-    }
-
 }

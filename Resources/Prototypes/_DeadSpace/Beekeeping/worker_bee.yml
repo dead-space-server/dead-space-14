@@ -1,5 +1,5 @@
-# The bee of a hive. It has no HTN of its own to follow, see BeeAISystem. It does not attack (the usual bee
-# does, the angry one still does).
+# The bee of a hive. It has no HTN of its own to follow, see BeeAISystem: it flies in a straight line by the
+# AnimalWalker of the husbandry module. It does not attack (the usual bee does, the angry one still does).
 - type: entity
   parent: MobBee
   id: MobBeeWorker
@@ -10,4 +10,4 @@
     idleCooldown: 1
     searchRadius: 5
     arrivalThreshold: 0.5
-  - type: NPCSteering
+  - type: AnimalWalker

@@ -5,7 +5,6 @@ using Content.Server.DeadSpace.Husbandry.Feeding;
 using Content.Server.DeadSpace.Husbandry.Pen;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
-using Content.Server.NPC.Components;
 using Content.Shared.Damage.Components;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Atmos;
@@ -22,13 +21,13 @@ using Content.Shared.DeadSpace.Husbandry.Growth;
 using Content.Shared.DeadSpace.Husbandry.Needs;
 using Content.Shared.DeadSpace.Husbandry.Pen;
 using Content.Shared.DeadSpace.Husbandry.Sex;
+using Content.Shared.DeadSpace.Husbandry.Walking;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.NPC;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Robust.Server.GameObjects;
@@ -444,9 +443,7 @@ public sealed class DebugAnalyzerSystem : EntitySystem
                 severity: hive == null || Deleted(hive.Value) ? DebugAnalyzerSeverity.Critical : DebugAnalyzerSeverity.Normal),
             new(L("bee-pollen"), $"{Fmt(bee.PollenCarried)} / {Fmt(bee.MaxPollenCarry)}", Fraction(bee.PollenCarried, bee.MaxPollenCarry)),
             new(L("bee-target"), bee.TargetFlower is { } flower && !Deleted(flower) ? GetNetEntity(flower).ToString() : "-"),
-            new(L("bee-awake"), HasComp<ActiveNPCComponent>(target) ? "yes" : "no",
-                severity: HasComp<ActiveNPCComponent>(target) ? DebugAnalyzerSeverity.Normal : DebugAnalyzerSeverity.Critical),
-            new(L("bee-steering"), HasComp<NPCSteeringComponent>(target) ? "yes" : "no"),
+            new(L("bee-walker"), TryComp<AnimalWalkerComponent>(target, out var walker) ? walker.Status.ToString() : "-"),
             new(L("bee-htn"), HasComp<HTNComponent>(target) ? "yes" : "no",
                 severity: HasComp<HTNComponent>(target) ? DebugAnalyzerSeverity.Warning : DebugAnalyzerSeverity.Normal),
             new(L("bee-busy"), bee.IsBusy ? "yes" : "no"),

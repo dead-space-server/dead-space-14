@@ -61,8 +61,6 @@ debug-analyzer-bee-state = Состояние
 debug-analyzer-bee-hive = Улей
 debug-analyzer-bee-pollen = Пыльца
 debug-analyzer-bee-target = Цель (цветок)
-debug-analyzer-bee-awake = Активна (ActiveNPC)
-debug-analyzer-bee-steering = Есть NPCSteering
 debug-analyzer-bee-htn = Есть HTN (должно быть нет)
 debug-analyzer-bee-busy = Занята (опыляет или сдаёт)
 
@@ -76,3 +74,4 @@ debug-analyzer-pollination-cooldown = До нового опыления
 debug-analyzer-pollination-boost = До конца эффекта
 debug-analyzer-pollination-age = Бонус к возрасту
 debug-analyzer-pollination-potency = Бонус к потенции
+debug-analyzer-bee-walker = Полёт (AnimalWalker)

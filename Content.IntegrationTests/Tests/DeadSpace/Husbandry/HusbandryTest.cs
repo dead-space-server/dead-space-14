@@ -281,7 +281,7 @@ public sealed class HusbandryTest
     }
 
     [Test]
-    public async Task WorkerBeeIsAwakeAndHasNoOtherBrain()
+    public async Task WorkerBeeHasNoOtherBrainAndCanFly()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -293,11 +293,43 @@ public sealed class HusbandryTest
 
             Assert.Multiple(() =>
             {
-                // Taking HTN off puts an NPC to sleep, the bee must be woken after that or it never flies.
+                // Two brains would fight over the movement.
                 Assert.That(server.EntMan.HasComponent<Content.Server.NPC.HTN.HTNComponent>(bee), Is.False);
-                Assert.That(server.EntMan.HasComponent<Content.Shared.NPC.ActiveNPCComponent>(bee), Is.True, "the steering moves only active NPCs");
-                Assert.That(server.EntMan.HasComponent<Content.Server.NPC.Components.NPCSteeringComponent>(bee), Is.True);
+                Assert.That(server.EntMan.HasComponent<Content.Shared.DeadSpace.Husbandry.Walking.AnimalWalkerComponent>(bee), Is.True, "the bee flies by the walker");
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task WorkerBeeFliesToAPointInAStraightLine()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid bee = default;
+        System.Numerics.Vector2 start = default;
+
+        await server.WaitPost(() =>
+        {
+            var ents = server.EntMan;
+            var xforms = server.System<SharedTransformSystem>();
+            bee = ents.SpawnEntity("MobBeeWorker", map.GridCoords);
+            start = xforms.GetWorldPosition(bee);
+
+            var target = map.GridCoords.Offset(new System.Numerics.Vector2(4f, 0f));
+            var walker = ents.GetComponent<Content.Shared.DeadSpace.Husbandry.Walking.AnimalWalkerComponent>(bee);
+            Assert.That(server.System<Content.Server.DeadSpace.Husbandry.Walking.AnimalWalkerSystem>().StartRoute((bee, walker), new[] { target }, 0.5f, run: true), Is.True);
+        });
+
+        await pair.RunTicksSync(3 * 60);
+
+        await server.WaitAssertion(() =>
+        {
+            var end = server.System<SharedTransformSystem>().GetWorldPosition(bee);
+            Assert.That((end - start).Length(), Is.GreaterThan(2f), "the bee got going towards the point");
         });
 
         await pair.CleanReturnAsync();
