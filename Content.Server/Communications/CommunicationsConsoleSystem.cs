@@ -235,7 +235,17 @@ namespace Content.Server.Communications
 
             // Calling shuttle checks
             if (_roundEndSystem.ExpectedCountdownEnd is null)
+            {
+                var stationUid = _stationSystem.GetOwningStation(comp.Owner);
+                if (stationUid != null &&
+                (_alertLevelSystem.GetLevel(stationUid.Value) == "gamma" || _alertLevelSystem.GetLevel(stationUid.Value) == "sierra"
+                || _alertLevelSystem.GetLevel(stationUid.Value) == "delta" || _alertLevelSystem.GetLevel(stationUid.Value) == "epsilon"))
+                {
+                    return false;
+                }
+
                 return true;
+            }
 
             // Recalling shuttle checks
             var recallThreshold = _cfg.GetCVar(CCVars.EmergencyRecallTurningPoint);
