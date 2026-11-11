@@ -528,7 +528,6 @@
     possibleSets:
     - ScarLBlueShieldSet
     - MP5SDBlueShieldSet
-    - AresSWCBlueShieldSet
     - CQCBlueShieldSet
     - TruncheonsecBlueShieldSet
     - PistolBlueShieldUpgradeKitSet
@@ -554,7 +553,6 @@
     possibleSets:
     - ScarLBlueShieldSet
     - MP5SDBlueShieldSet
-    - AresSWCBlueShieldSet
     - CQCBlueShieldSet
     - TruncheonsecBlueShieldSet
   - type: ActivatableUI
@@ -592,19 +590,6 @@
   - BoxLethalshot
   - BoxShotgunSlug
   - BoxBeanbag
-
-- type: thiefBackpackSet
-  id: AresSWCBlueShieldSet
-  name: ert-loadout-category-ares-swcbs-name
-  description: ert-loadout-category-ares-swcbs-description
-  sprite:
-    sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/ares.rsi
-    state: icon
-  content:
-  - WeaponShotgunAresSWC
-  - MagazineShotgun
-  - MagazineShotgun
-  - MagazineShotgun
 
 - type: thiefBackpackSet
   id: AresSWCIncendiarySet
