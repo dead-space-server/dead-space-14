@@ -236,6 +236,7 @@ namespace Content.Server.Communications
             // Calling shuttle checks
             if (_roundEndSystem.ExpectedCountdownEnd is null)
             {
+                //DS14-start
                 var stationUid = _stationSystem.GetOwningStation(comp.Owner);
                 if (stationUid != null &&
                 (_alertLevelSystem.GetLevel(stationUid.Value) == "gamma" || _alertLevelSystem.GetLevel(stationUid.Value) == "sierra"
@@ -243,6 +244,7 @@ namespace Content.Server.Communications
                 {
                     return false;
                 }
+                //DS14-end
 
                 return true;
             }
