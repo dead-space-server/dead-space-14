@@ -284,10 +284,10 @@
     - product: RightArmDemon
       cost: 40
       group: Demon
-    - product: LeftArmHuman
+    - product: LeftArmFelinid
       cost: 40
       group: Felinid
-    - product: RightArmHuman
+    - product: RightArmFelinid
       cost: 40
       group: Felinid
     - product: LeftArmVox
@@ -351,10 +351,10 @@
     - product: RightHandDemon
       cost: 25
       group: Demon
-    - product: LeftHandHuman
+    - product: LeftHandFelinid
       cost: 25
       group: Felinid
-    - product: RightHandHuman
+    - product: RightHandFelinid
       cost: 25
       group: Felinid
     - product: LeftHandVox
@@ -418,10 +418,10 @@
     - product: RightLegDemon
       cost: 40
       group: Demon
-    - product: LeftLegHuman
+    - product: LeftLegFelinid
       cost: 40
       group: Felinid
-    - product: RightLegHuman
+    - product: RightLegFelinid
       cost: 40
       group: Felinid
     - product: LeftLegVox
@@ -485,10 +485,10 @@
     - product: RightFootDemon
       cost: 25
       group: Demon
-    - product: LeftFootHuman
+    - product: LeftFootFelinid
       cost: 25
       group: Felinid
-    - product: RightFootHuman
+    - product: RightFootFelinid
       cost: 25
       group: Felinid
     - product: LeftFootVox

@@ -1,0 +1,85 @@
+- type: entity
+  id: PartFelinid
+  parent: [BaseItem, BasePart]
+  name: часть тела фелинида
+  abstract: true
+  components:
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 3
+      - ReagentId: Blood
+        Quantity: 10
+
+- type: entity
+  id: LeftArmFelinid
+  name: левая рука фелинида
+  parent: [PartFelinid, BaseLeftArm]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: l_arm
+
+- type: entity
+  id: RightArmFelinid
+  name: правая рука фелинида
+  parent: [PartFelinid, BaseRightArm]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: r_arm
+
+- type: entity
+  id: LeftHandFelinid
+  name: левая кисть фелинида
+  parent: [PartFelinid, BaseLeftHand]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: l_hand
+
+- type: entity
+  id: RightHandFelinid
+  name: правая кисть фелинида
+  parent: [PartFelinid, BaseRightHand]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: r_hand
+
+- type: entity
+  id: LeftLegFelinid
+  name: левая нога фелинида
+  parent: [PartFelinid, BaseLeftLeg]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: l_leg
+
+- type: entity
+  id: RightLegFelinid
+  name: правая нога фелинида
+  parent: [PartFelinid, BaseRightLeg]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: r_leg
+
+- type: entity
+  id: LeftFootFelinid
+  name: левая ступня фелинида
+  parent: [PartFelinid, BaseLeftFoot]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: l_foot
+
+- type: entity
+  id: RightFootFelinid
+  name: правая ступня фелинида
+  parent: [PartFelinid, BaseRightFoot]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: r_foot

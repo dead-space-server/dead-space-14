@@ -24,26 +24,26 @@
         liver:  OrganAnimalLiver
         kidneys: OrganHumanKidneys
     right arm:
-      part: RightArmHuman
+      part: RightArmFelinid
       connections:
       - right hand
     left arm:
-      part: LeftArmHuman
+      part: LeftArmFelinid
       connections:
       - left hand
     right hand:
-      part: RightHandHuman
+      part: RightHandFelinid
     left hand:
-      part: LeftHandHuman
+      part: LeftHandFelinid
     right leg:
-      part: RightLegHuman
+      part: RightLegFelinid
       connections:
       - right foot
     left leg:
-      part: LeftLegHuman
+      part: LeftLegFelinid
       connections:
       - left foot
     right foot:
-      part: RightFootHuman
+      part: RightFootFelinid
     left foot:
-      part: LeftFootHuman
+      part: LeftFootFelinid
