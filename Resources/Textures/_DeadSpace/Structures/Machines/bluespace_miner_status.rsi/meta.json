@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by ripentropy (dicrord) for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "miner"
+    },
+    {
+      "name": "miner-on",
+      "delays": [
+        [ 0.1, 0.1 ]
+      ]
+    },
+    {
+      "name": "miner-blue",
+      "delays": [
+        [ 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 ]
+      ]
+    },
+    {
+      "name": "miner-red",
+      "delays": [
+        [ 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 ]
+      ]
+    }
+  ]
+}

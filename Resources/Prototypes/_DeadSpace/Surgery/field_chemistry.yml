@@ -1,0 +1,253 @@
+- type: reagent
+  id: Hemostatin
+  name: reagent-name-hemostatin
+  group: Medicine
+  desc: reagent-desc-hemostatin
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: medicine
+  color: "#8c1d2c"
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:LimbMend
+        bleed: 0.6
+        text: reagent-effect-guidebook-hemostatin
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Hemostatin
+          min: 30
+        damage:
+          types:
+            Asphyxiation: 1.5
+
+- type: reagent
+  id: Calcigen
+  name: reagent-name-calcigen
+  group: Medicine
+  desc: reagent-desc-calcigen
+  physicalDesc: reagent-physical-desc-chalky
+  flavor: chalky
+  color: "#e8e2cf"
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:LimbMend
+        crack: 13
+        fracture: 23
+        rate: 0.5
+        text: reagent-effect-guidebook-calcigen
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Calcigen
+          min: 30
+        damage:
+          types:
+            Blunt: 1
+
+- type: reagent
+  id: Osteogen
+  name: reagent-name-osteogen
+  group: Medicine
+  desc: reagent-desc-osteogen
+  physicalDesc: reagent-physical-desc-chalky
+  flavor: chalky
+  color: "#f2d2a2"
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:LimbMend
+        crack: 5
+        fracture: 9
+        rate: 0.5
+        text: reagent-effect-guidebook-osteogen
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Osteogen
+          min: 20
+        damage:
+          types:
+            Blunt: 1.5
+
+- type: reagent
+  id: Ferrolysin
+  name: reagent-name-ferrolysin
+  group: Medicine
+  desc: reagent-desc-ferrolysin
+  physicalDesc: reagent-physical-desc-fizzy
+  flavor: sour
+  color: "#9fb8c4"
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:LimbMend
+        shard: 0.12
+        text: reagent-effect-guidebook-ferrolysin
+      - !type:HealthChange
+        damage:
+          types:
+            Caustic: 0.3
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Ferrolysin
+          min: 20
+        damage:
+          types:
+            Caustic: 2
+
+- type: reagent
+  id: Myoregen
+  name: reagent-name-myoregen
+  group: Medicine
+  desc: reagent-desc-myoregen
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: medicine
+  color: "#6fd18a"
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:LimbMend
+        revive: 0.05
+        text: reagent-effect-guidebook-myoregen
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Myoregen
+          min: 20
+        damage:
+          types:
+            Cellular: 1
+
+- type: reaction
+  id: Hemostatin
+  impact: Medium
+  minTemp: 310
+  priority: 1
+  reactants:
+    TranexamicAcid:
+      amount: 1
+    Iron:
+      amount: 1
+    Silicon:
+      amount: 1
+  products:
+    Hemostatin: 2
+
+- type: reaction
+  id: Calcigen
+  impact: Medium
+  minTemp: 330
+  reactants:
+    Bicaridine:
+      amount: 1
+    Milk:
+      amount: 1
+    Phosphorus:
+      amount: 1
+  products:
+    Calcigen: 2
+
+- type: reaction
+  id: Ferrolysin
+  impact: Medium
+  minTemp: 340
+  reactants:
+    SulfuricAcid:
+      amount: 1
+    Dylovene:
+      amount: 1
+    Fluorine:
+      amount: 1
+  products:
+    Ferrolysin: 2
+
+- type: reaction
+  id: Myoregen
+  impact: Medium
+  reactants:
+    Cryoxadone:
+      amount: 1
+    Bicaridine:
+      amount: 1
+    Plasma:
+      amount: 1
+  products:
+    Myoregen: 2
+
+- type: entity
+  id: ChemistryBottleHemostatin
+  suffix: hemostatin
+  parent: BaseChemistryBottleFilled
+  components:
+  - type: Label
+    currentLabel: reagent-name-hemostatin
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Hemostatin
+          Quantity: 30
+
+- type: entity
+  id: ChemistryBottleCalcigen
+  suffix: calcigen
+  parent: BaseChemistryBottleFilled
+  components:
+  - type: Label
+    currentLabel: reagent-name-calcigen
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Calcigen
+          Quantity: 30
+
+- type: entity
+  id: ChemistryBottleFerrolysin
+  suffix: ferrolysin
+  parent: BaseChemistryBottleFilled
+  components:
+  - type: Label
+    currentLabel: reagent-name-ferrolysin
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Ferrolysin
+          Quantity: 30
+
+- type: entity
+  id: ChemistryBottleMyoregen
+  suffix: myoregen
+  parent: BaseChemistryBottleFilled
+  components:
+  - type: Label
+    currentLabel: reagent-name-myoregen
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Myoregen
+          Quantity: 30
+
+- type: entity
+  id: ChemistryBottleOsteogen
+  suffix: osteogen
+  parent: [BaseChemistryBottleFilled, BaseSyndicateContraband]
+  components:
+  - type: Label
+    currentLabel: reagent-name-osteogen
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Osteogen
+          Quantity: 30

@@ -120,7 +120,11 @@
   - type: Sprite
     sprite: Objects/Misc/zipties.rsi
     state: cuff
-  #DS14-Start
+    #DS14-Start
+  - type: Tag
+    tags:
+    - Handcuffs
+    - Zipties
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/headset/headset_pickup.ogg

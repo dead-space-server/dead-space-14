@@ -1,0 +1,24 @@
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackShadowling
+  name: Теневое хранилище
+  description: Летающая зловещая пылинка.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Demons/shadowling.rsi
+    state: backpack_icon
+  - type: Clothing
+    sprite: _DeadSpace/Demons/shadowling.rsi
+    clothingVisuals:
+      back: []
+  - type: Unremoveable
+  - type: Item
+    size: Ginormous
+    sprite: _DeadSpace/Demons/shadowling.rsi
+    heldPrefix: null
+
+- type: startingGear
+  id: ShadowlingGear
+  equipment:
+    back: ClothingBackpackShadowling

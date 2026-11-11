@@ -75,6 +75,7 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
         Control.AddOptionCheckBox(CCCCVars.MultipleInventoryWindows, MultipleInventoryWindowsCheckBox); // DS14
         Control.AddOptionCheckBox(CCCCVars.ActionsRestoreItemSlots, ActionsRestoreItemSlotsCheckBox); // DS14
+        Control.AddOptionCheckBox(CCCCVars.GunAmmoModeAction, GunAmmoModeActionCheckBox); // DS14
         Control.AddOptionCheckBox(CCCCVars.PopOutChat, PopOutChat); // DS14
 
         Control.Initialize();

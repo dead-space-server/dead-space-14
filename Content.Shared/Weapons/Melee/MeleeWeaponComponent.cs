@@ -27,6 +27,9 @@ public sealed partial class MeleeWeaponComponent : Component
     [DataField, AutoNetworkedField]
     public bool Hidden;
 
+    [DataField, AutoNetworkedField]
+    public bool UseWeaponSpriteForAnimation = true;
+
     /// <summary>
     /// Next time this component is allowed to light attack. Heavy attacks are wound up and never have a cooldown.
     /// </summary>

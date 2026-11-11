@@ -1,0 +1,103 @@
+- type: entity
+  id: NinjaUpgradeDamage
+  parent: BaseItem
+  name: модификация для катаны
+  description: Модификация для катаны, которая позволяет ей наносить больше урона и добавляет возможность наносить яды на лезвие.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Other/katana_mods.rsi
+    layers:
+    - state: red
+    - state: red-unshaded
+      shader: unshaded
+  - type: Tag
+    tags:
+    - EnergyKatanaDamageUpgrade
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_drop.ogg
+
+- type: entity
+  id: NinjaUpgradeReflect
+  parent: BaseItem
+  name: модификация для катаны
+  description: Модификация для катаны, которая позволяет ей лучше отражать атаки.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Other/katana_mods.rsi
+    layers:
+    - state: green
+    - state: green-unshaded
+      shader: unshaded
+  - type: Tag
+    tags:
+    - EnergyKatanaReflectUpgrade
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_drop.ogg
+
+- type: entity
+  id: NinjaUpgradeRecharge
+  parent: BaseItem
+  name: модификация для катаны
+  description: Модификация для катаны, которая позволяет ей быстрее восстанавливать заряды.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Other/katana_mods.rsi
+    layers:
+    - state: blue
+    - state: blue-unshaded
+      shader: unshaded
+  - type: Tag
+    tags:
+    - EnergyKatanaRechargeUpgrade
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_drop.ogg
+
+- type: entity
+  id: NinjaUpgradeCase
+  parent: BaseItem
+  name: набор модификаций для катаны
+  description: Набор модификаций для катаны, в котором содержатся все три модификации.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Other/katana_mods.rsi
+    layers:
+    - state: case
+    - state: case-unshaded
+      shader: unshaded
+  - type: Item
+    size: Normal
+  - type: ThiefUndeterminedBackpack
+    toolName: ninja-mod-case-loadout-tool-name
+    toolDesc: ninja-mod-case-loadout-tool-description
+    maxSelectedSets: 1
+    possibleSets:
+    - NinjaUpgradeDamage
+    - NinjaUpgradeReflect
+    - NinjaUpgradeRecharge
+  - type: ActivatableUI
+    key: enum.ThiefBackpackUIKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.ThiefBackpackUIKey.Key:
+        type: ThiefBackpackBoundUserInterface

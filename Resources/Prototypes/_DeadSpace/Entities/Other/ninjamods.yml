@@ -1,0 +1,29 @@
+- type: thiefBackpackSet
+  id: NinjaUpgradeDamage
+  name: ninja-mod-case-loadout-damage-name
+  description: ninja-mod-case-loadout-damage-description
+  sprite:
+    sprite: _DeadSpace/Other/katana_mods.rsi
+    state: red
+  content:
+  - NinjaUpgradeDamage
+
+- type: thiefBackpackSet
+  id: NinjaUpgradeReflect
+  name: ninja-mod-case-loadout-reflect-name
+  description: ninja-mod-case-loadout-reflect-description
+  sprite:
+    sprite: _DeadSpace/Other/katana_mods.rsi
+    state: green
+  content:
+  - NinjaUpgradeReflect
+
+- type: thiefBackpackSet
+  id: NinjaUpgradeRecharge
+  name: ninja-mod-case-loadout-recharge-name
+  description: ninja-mod-case-loadout-recharge-description
+  sprite:
+    sprite: _DeadSpace/Other/katana_mods.rsi
+    state: blue
+  content:
+  - NinjaUpgradeRecharge

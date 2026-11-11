@@ -1,35 +1,62 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc admin-global-sound-title}"
-               MinWidth="620"
-               MinHeight="420"
-               SetSize="760 520">
+               MinWidth="900"
+               MinHeight="460"
+               SetSize="1000 560">
     <BoxContainer Orientation="Vertical"
                   HorizontalExpand="True"
                   VerticalExpand="True"
                   SeparationOverride="6">
         <Label Name="CurrentTrack" Text="{Loc admin-global-sound-nothing-playing}"/>
         <Label Name="CurrentPath" StyleClasses="LabelSubText"/>
-        <ScrollContainer Name="BrowserScroll"
-                         HorizontalExpand="True"
-                         VerticalExpand="True">
-            <BoxContainer Name="Entries"
-                          Orientation="Vertical"
-                          HorizontalExpand="True"/>
-        </ScrollContainer>
-        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-            <Label Text="{Loc admin-global-sound-volume}"/>
-            <LineEdit Name="Volume" Text="0" SetWidth="70"/>
-            <Label Text="{Loc admin-global-sound-ckey}"/>
-            <LineEdit Name="CKey" HorizontalExpand="True"/>
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-            <Label Name="SelectedFile" HorizontalExpand="True" ClipText="True"/>
-            <Button Name="PlayButton" Text="{Loc admin-global-sound-play}"/>
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-            <Button Name="PauseButton" Text="{Loc admin-global-sound-pause}"/>
-            <Button Name="ResumeButton" Text="{Loc admin-global-sound-resume}"/>
-            <Button Name="FadeButton" Text="{Loc admin-global-sound-fade-out}"/>
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="8">
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          SizeFlagsStretchRatio="1"
+                          SeparationOverride="6">
+                <ScrollContainer Name="BrowserScroll"
+                                 HorizontalExpand="True"
+                                 VerticalExpand="True">
+                    <BoxContainer Name="Entries"
+                                  Orientation="Vertical"
+                                  HorizontalExpand="True"/>
+                </ScrollContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                    <Label Text="{Loc admin-global-sound-volume}"/>
+                    <LineEdit Name="Volume" Text="0" SetWidth="70"/>
+                    <Label Text="{Loc admin-global-sound-ckey}"/>
+                    <LineEdit Name="CKey" HorizontalExpand="True"/>
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                    <Label Name="SelectedFile" HorizontalExpand="True" ClipText="True"/>
+                    <Button Name="PlayButton" Text="{Loc admin-global-sound-play}"/>
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                    <Button Name="PauseButton" Text="{Loc admin-global-sound-pause}"/>
+                    <Button Name="ResumeButton" Text="{Loc admin-global-sound-resume}"/>
+                    <Button Name="FadeButton" Text="{Loc admin-global-sound-fade-out}"/>
+                    <Button Name="StopButton" Text="{Loc admin-global-sound-stop}"/>
+                </BoxContainer>
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical"
+                          SetWidth="330"
+                          SeparationOverride="6">
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                    <Button Name="FolderQueueButton" Text="{Loc admin-global-sound-folder-queue}" HorizontalExpand="True"/>
+                    <CheckBox Name="ShuffleCheck" Text="{Loc admin-global-sound-shuffle}"/>
+                </BoxContainer>
+                <Label Text="{Loc admin-global-sound-queue}"/>
+                <ItemList Name="QueueList" SelectMode="Single" HorizontalExpand="True" VerticalExpand="True"/>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                    <Button Name="QueueAddButton" Text="{Loc admin-global-sound-queue-add}" HorizontalExpand="True"/>
+                    <Button Name="QueueRemoveButton" Text="{Loc admin-global-sound-queue-remove}" Disabled="True"/>
+                    <Button Name="QueueClearButton" Text="{Loc admin-global-sound-queue-clear}"/>
+                    <Button Name="QueueSkipButton" Text="{Loc admin-global-sound-queue-skip}"/>
+                </BoxContainer>
+            </BoxContainer>
         </BoxContainer>
         <Label Name="Error" StyleClasses="LabelDanger"/>
     </BoxContainer>

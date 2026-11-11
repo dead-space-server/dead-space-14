@@ -43,6 +43,40 @@
     sprite: _DeadSpace/Clothing/Head/Hats/beret_blueshield.rsi
 
 - type: entity
+  parent: [ClothingHeadBase, BaseCommandContraband]
+  id: ClothingHeadHatBlueShield
+  name: шляпа офицера "Синий Щит"
+  description: Стильная ковбойская шляпа, с ленточкой и золотой эмблемой Корпуса "Синий Щит". Внутренность шляпы обшита пулестойким материалом, а также имеется место под какие-то детали, похоже требуется разобрать шлем СЩ дабы укрепить эту шляпу.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/cowboy_hat_bs.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/cowboy_hat_bs.rsi
+  - type: Construction
+    graph: BlueShieldHatUpdateArmor
+    node: start
+
+- type: entity
+  parent: ClothingHeadHatBlueShield
+  id: ClothingHeadHatBlueShieldArmor
+  name: шляпа офицера "Синий Щит"
+  description: Стильная ковбойская шляпа, с ленточкой и золотой эмблемой Корпуса "Синий Щит". Внутренность шляпы обшита пулестойким материалом, а между тканями можно увидеть детали шлема ОСЩ.
+  components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.80
+        Slash: 0.80
+        Piercing: 0.80
+        Heat: 0.80
+        Radiation: 0.80
+        Caustic: 0.95
+  - type: ExplosionResistance
+    damageCoefficient: 0.75
+  - type: FlashbangProtection
+    reduction: 1
+
+- type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatBeretGreenBeret
   name: берет офицера "Зелёный Берет"

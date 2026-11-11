@@ -1061,7 +1061,9 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
             return;
         }
 
-        if (TryFindHook(mob, out var hook))
+        if (HasComp<LavalandCaveLeaperComponent>(mob))
+            StartLeap(mob, cavesMap, config);
+        else if (TryFindHook(mob, out var hook))
             StartClimb(mob, hook, cavesMap, config);
         else
             StartHop(mob, cavesMap, config);
@@ -1139,6 +1141,22 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
         var sound = TryComp<GunComponent>(hook, out var gun) && gun.SoundGunshot != null ? gun.SoundGunshot : config.RopeSound;
         if (sound != null)
             _audio.PlayPvs(sound, mob);
+    }
+
+    /// <summary>Out of the pit in one leap: no rope, straight up and over the edge.</summary>
+    private void StartLeap(EntityUid mob, EntityUid cavesMap, LavalandChromiteCavesConfig config)
+    {
+        StopPulling(mob);
+        EnsureComp<LavalandPitFrozenComponent>(mob);
+
+        var climb = EnsureComp<LavalandCaveClimbComponent>(mob);
+        climb.NoRope = true;
+        SetClimbStage(mob, LavalandCaveClimbStage.FlyUp, config.FlyUpDuration);
+
+        var travel = EnsureComp<LavalandCaveTravelComponent>(mob);
+        travel.Stage = LavalandCaveTravelStage.FlyUp;
+        travel.Caves = cavesMap;
+        travel.NextStep = _timing.CurTime + config.FlyUpDuration;
     }
 
     private void SetClimbStage(EntityUid mob, LavalandCaveClimbStage stage, TimeSpan duration)

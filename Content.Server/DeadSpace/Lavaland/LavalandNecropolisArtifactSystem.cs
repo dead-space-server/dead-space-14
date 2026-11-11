@@ -64,8 +64,8 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private readonly Robust.Shared.Physics.Systems.SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedGodmodeSystem _godmode = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -83,10 +83,12 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         SubscribeLocalEvent<LavalandWarpCubeComponent, UseInHandEvent>(OnCubeUse);
         SubscribeLocalEvent<LavalandWarpCubeComponent, LavalandWarpCubeDoAfterEvent>(OnCubeDoAfter);
         SubscribeLocalEvent<LavalandWarpCubeComponent, ComponentShutdown>(OnCubeShutdown);
+        SubscribeLocalEvent<LavalandWarpCubeComponent, EntGotInsertedIntoContainerMessage>(OnCubeInserted);
         SubscribeLocalEvent<LavalandImmortalityTalismanComponent, UseInHandEvent>(OnTalismanUse);
         SubscribeLocalEvent<LavalandImmortalityTalismanComponent, ExaminedEvent>(OnTalismanExamined);
         SubscribeLocalEvent<LavalandParadoxBagComponent, MapInitEvent>(OnParadoxMapInit);
         SubscribeLocalEvent<LavalandParadoxBagComponent, ComponentShutdown>(OnParadoxShutdown);
+        SubscribeLocalEvent<LavalandParadoxBagComponent, EntGotInsertedIntoContainerMessage>(OnParadoxInserted);
         SubscribeLocalEvent<LavalandParadoxBagComponent, ContainerIsInsertingAttemptEvent>(OnParadoxInsertAttempt);
         Subs.BuiEvents<LavalandParadoxBagComponent>(StorageComponent.StorageUiKey.Key, subs =>
         {
@@ -323,6 +325,26 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         var otherComp = EnsureComp<LavalandWarpCubeComponent>(other);
         otherComp.Linked = ent.Owner;
         ent.Comp.Linked = other;
+        ent.Comp.LooseTwin = StoreTwin(ent.Owner, other) ? null : other;
+    }
+
+    private void OnCubeInserted(Entity<LavalandWarpCubeComponent> ent, ref EntGotInsertedIntoContainerMessage args)
+    {
+        if (ent.Comp.LooseTwin is { } twin)
+            StoreTwin(ent.Owner, twin);
+        ent.Comp.LooseTwin = null;
+    }
+
+    /// <summary>
+    /// A pair spawned in a chest: the twin is spawned at the chest, loose, and would lie on the floor beside it - or be
+    /// lost with it. It is put in the same container instead, if there is one and it fits.
+    /// </summary>
+    private bool StoreTwin(EntityUid original, EntityUid twin)
+    {
+        return !TerminatingOrDeleted(twin) &&
+               _containers.TryGetContainingContainer(original, out var container) &&
+               !_containers.IsEntityInContainer(twin) &&
+               _containers.Insert(twin, container);
     }
 
     /// <summary>Held up for <see cref="LavalandWarpCubeComponent.UseTime"/> before it takes its holder away.</summary>
@@ -423,6 +445,14 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         EnsureComp<LavalandParadoxBagComponent>(other).Linked = ent.Owner;
         EntityManager.InitializeAndStartEntity(other);
         ent.Comp.Linked = other;
+        ent.Comp.LooseTwin = StoreTwin(ent.Owner, other) ? null : other;
+    }
+
+    private void OnParadoxInserted(Entity<LavalandParadoxBagComponent> ent, ref EntGotInsertedIntoContainerMessage args)
+    {
+        if (ent.Comp.LooseTwin is { } twin)
+            StoreTwin(ent.Owner, twin);
+        ent.Comp.LooseTwin = null;
     }
 
     /// <summary>The paradox collapses with either bag: the twin goes too, spilling what it held.</summary>
@@ -519,7 +549,8 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         holeComp.User = user;
         holeComp.ReleaseAt = now + ent.Comp.Duration;
         ent.Comp.NextUse = now + ent.Comp.Cooldown;
-        _godmode.EnableGodmode(user);
+        // Out of reality: nothing can touch them, and they touch nothing - no item, no shot, no blow from the hole.
+        EnsureComp<LavalandRealityHiddenComponent>(user);
     }
 
     private void OnHoleShutdown(Entity<LavalandRealityHoleComponent> ent, ref ComponentShutdown args)
@@ -534,7 +565,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
             return;
 
         ent.Comp.User = null;
-        _godmode.DisableGodmode(user);
+        RemComp<LavalandRealityHiddenComponent>(user);
         if (_containers.TryGetContainer(ent, HoleContainer, out var container))
             _containers.Remove(user, container, destination: Transform(ent).Coordinates);
         _popup.PopupEntity(Loc.GetString("lavaland-talisman-return", ("user", user)), user, PopupType.MediumCaution);
@@ -596,6 +627,9 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         }
 
         EntityManager.AddComponents(user, ent.Comp.AddedComponents, false);
+        // Drunk standing on lava or liquid plasma: the contacts made before must be filtered anew (walking on air
+        // they no longer set him alight).
+        _physics.RegenerateContacts(user);
         if (!ent.Comp.Damage.Empty)
             _damageable.TryChangeDamage(user, ent.Comp.Damage, true, origin: user);
         _popup.PopupEntity(Loc.GetString(ent.Comp.Message), user, user, PopupType.LargeCaution);
@@ -723,6 +757,13 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("lavaland-memento-skeleton"), args.Performer, args.Performer);
             return;
         }
+
+        // A soul already bound to one's scythe: the pendant finds no life of the wearer's own to take.
+        if (HasSoulscythe(args.Performer))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-memento-soulscythe"), args.Performer, args.Performer);
+            return;
+        }
         args.Handled = true;
 
         _popup.PopupEntity(Loc.GetString("lavaland-memento-draining"), args.Performer, args.Performer, PopupType.MediumCaution);
@@ -741,6 +782,12 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         args.Handled = true;
 
         var user = args.User;
+        // A scythe woken while the pendant was draining.
+        if (HasSoulscythe(user))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-memento-soulscythe"), user, user);
+            return;
+        }
         if (!TryComp<MobThresholdsComponent>(user, out var thresholds))
             return;
 
@@ -759,6 +806,19 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         ent.Comp.LinkedUser = user;
         _appearance.SetData(ent, LavalandArtifactVisuals.Active, true);
         _popup.PopupEntity(Loc.GetString("lavaland-memento-linked"), user, user, PopupType.Large);
+    }
+
+    /// <summary>A soul scythe is woken, or waking, for this master.</summary>
+    private bool HasSoulscythe(EntityUid user)
+    {
+        var scythes = EntityQueryEnumerator<LavalandSoulscytheComponent>();
+        while (scythes.MoveNext(out var scythe))
+        {
+            if (scythe.Master == user && (scythe.Possessed || scythe.Awakening))
+                return true;
+        }
+
+        return false;
     }
 
     private void OnMementoUnequipped(Entity<LavalandMementoMoriComponent> ent, ref GotUnequippedEvent args)

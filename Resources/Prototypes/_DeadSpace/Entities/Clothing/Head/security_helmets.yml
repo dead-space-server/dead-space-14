@@ -42,6 +42,9 @@
     tags:
     - WhitelistChameleon
     - SecurityHelmet
+  - type: Construction
+    graph: ClothingHeadHelmetSecurityFlashlight
+    node: securityHelmetFlashlight
 
 #ви лив ин сосаити
 - type: entity

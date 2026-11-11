@@ -34,11 +34,12 @@
     socks: ClothingUnderwearSocksSeniorSalvage
   storage:
     back:
+    - WeaponSeniorKinetik
     - LavalandMiningVoucher
     - RubberStampSeniorSalvage
-    - LavalandBluespaceWellFlatpack
+    - Multitool
     - LavalandObjectiveFolder
-    - LavalandSensorTablet
+    - LavalandSensorTabletRugged
 
 - type: chameleonOutfit
   id: SeniorSalvageSpecialistChameleonOutfit

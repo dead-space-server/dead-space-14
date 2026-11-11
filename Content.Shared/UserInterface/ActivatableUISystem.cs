@@ -74,8 +74,8 @@ public sealed partial class ActivatableUISystem : EntitySystem
         {
             Act = () => InteractUI(args.User, uid, component),
             Text = Loc.GetString(component.VerbText),
-            // TODO VERB ICON find a better icon
-            Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/settings.svg.192dpi.png")),
+            Priority = component.VerbPriority, //DS-14
+            Icon = VerbIcon(component), //DS-14
         });
     }
 
@@ -88,9 +88,17 @@ public sealed partial class ActivatableUISystem : EntitySystem
         {
             Act = () => InteractUI(args.User, uid, component),
             Text = Loc.GetString(component.VerbText),
-            // TODO VERB ICON find a better icon
-            Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/settings.svg.192dpi.png")),
+            Priority = component.VerbPriority, //DS-14
+            Icon = VerbIcon(component), //DS-14
         });
+    }
+
+    private static SpriteSpecifier VerbIcon(ActivatableUIComponent component) //DS-14
+    {
+        var path = component.VerbIcon.Length == 0
+            ? "/Textures/Interface/VerbIcons/settings.svg.192dpi.png"
+            : component.VerbIcon;
+        return new SpriteSpecifier.Texture(new ResPath(path));
     }
 
     private bool ShouldAddVerb<T>(EntityUid uid, ActivatableUIComponent component, GetVerbsEvent<T> args) where T : Verb

@@ -1096,6 +1096,17 @@
     sprite: _DeadSpace/Clothing/ERT/ERT_Priests/ERTSuits/ertpriest.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/ERT/ERT_Priests/ERTSuits/ertpriest.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.4
+        Slash: 0.4
+        Piercing: 0.5
+        Heat: 0.35
+        Radiation: 0.05
+        Caustic: 0.5
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
   #DS14-end
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTChaplain
@@ -1121,6 +1132,7 @@
         Heat: 0.1
         Cold: 0.1
         Radiation: 0.1
+        Shock: 0.7 #ds14-value
   - type: StaminaResistance #DS14
     damageCoefficient: 0.6
   - type: ClothingSpeedModifier
@@ -1158,7 +1170,7 @@
         Piercing: 0.5 # DS14-value
         Poison: 0.6 # DS14-value: what is poison?
         Heat: 0.55 # DS14-value
-        Shock: 0.7
+#        Shock: 0.7 #DS14-value
         Radiation: 0.6
         Caustic: 0.4
   - type: StaminaResistance #DS14
@@ -1230,7 +1242,7 @@
     sprite: _DeadSpace/Clothing/ERT/ERT_Gamma/ERTSuits/ertjanitor.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/ERT/ERT_Gamma/ERTSuits/ertjanitor.rsi
-  #DS14-утв
+  #DS14-end
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTJanitor
   - type: HardsuitIdentification # DS14

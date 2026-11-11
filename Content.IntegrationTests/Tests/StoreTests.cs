@@ -117,6 +117,9 @@ public sealed class StoreTests
                     storeComponent.RefundAllowed = true;
 
                     var discountedListingItem = storeComponent.FullListingsCatalog.First(x => x.ID == itemId);
+                    // DS14-start: the server enforces the restock delay now, and a discounted item can have one.
+                    discountedListingItem.RestockTime = TimeSpan.Zero;
+                    // DS14-end
                     var plainDiscountedCost = discountedListingItem.Cost[UplinkSystem.TelecrystalCurrencyPrototype];
 
                     var prototype = listingPrototypes.First(x => x.ID == discountedListingItem.ID);

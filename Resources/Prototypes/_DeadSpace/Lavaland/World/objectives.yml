@@ -34,6 +34,9 @@
   components:
   - type: Transform
     anchored: true
+  # Bolted to its well for good: it is not unscrewed and carried off.
+  - type: Anchorable
+    flags: Anchorable
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Structures/Machines/morkite_extractor.rsi
     state: icon

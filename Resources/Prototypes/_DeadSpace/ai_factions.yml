@@ -37,3 +37,9 @@
 # Marker faction for assault Syndicate units that Taipan turrets treat as allies.
 - type: npcFaction
   id: SyndicateAssault
+
+# The lavaland's rock mimic: the fauna takes it for a boulder and leaves it be, and it does not fight the fauna back.
+- type: npcFaction
+  id: LavalandRockMimic
+  friendly:
+  - SimpleHostile

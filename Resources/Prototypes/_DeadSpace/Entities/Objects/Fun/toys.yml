@@ -1978,3 +1978,16 @@
   - type: EmitSoundOnTrigger
     sound:
       collection: PlushieGnarSounds
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieFyrmorAlt
+  name: плюшевый Сандор де ла Крус Монтехо
+  description: Плюшевая игрушка какого-то усатого испанца. От неё несёт ромом и вонючим холодцом.
+  components:
+  - type: Sprite
+    state: fyrmor
+  - type: TTS
+    voice: MDarkElf
+  - type: SpeakOnTrigger
+    pack: PlushieFyrmorAltSpeech

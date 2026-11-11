@@ -108,6 +108,9 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         if (proto.MatchSkin)
             layer.Color = component.SkinColor.WithAlpha(proto.LayerAlpha);
 
+        if (color != null) //DS-14
+            layer.Color = color.Value.WithAlpha(proto.LayerAlpha); //DS-14
+
         if (proto.BaseSprite != null)
             _sprite.LayerSetSprite((entity.Owner, sprite), layerIndex, proto.BaseSprite);
     }
@@ -244,9 +247,6 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
     }
 
     // DS14-start
-    /// <summary>
-    /// Applies the compact, public round-end appearance DTO to a client-side preview entity.
-    /// </summary>
     public void ApplyRoundEndAppearance(
         EntityUid uid,
         RoundEndHumanoidAppearance appearance,
@@ -358,13 +358,15 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
             return;
 
         // DS14-start
-        // Full-body markings may extend across adjacent limbs, but must remain below clothing.
-        // Layers after the jumpsuit anchor include clothing as well as appendages that are meant to render over it.
         var clothingLayer = int.MaxValue;
         _sprite.LayerMapTryGet((entity.Owner, sprite), "jumpsuit", out clothingLayer, false);
 
-        // Head replacements must stay below screen/eye layers, while full-body markings still need the raised anchor.
-        if (targetLayer < clothingLayer && markingPrototype.BodyPart != HumanoidVisualLayers.Head)
+        if (targetLayer < clothingLayer && markingPrototype.BodyPart is not (HumanoidVisualLayers.Head
+                or HumanoidVisualLayers.Chest
+                or HumanoidVisualLayers.LArm or HumanoidVisualLayers.RArm
+                or HumanoidVisualLayers.LHand or HumanoidVisualLayers.RHand
+                or HumanoidVisualLayers.LLeg or HumanoidVisualLayers.RLeg
+                or HumanoidVisualLayers.LFoot or HumanoidVisualLayers.RFoot))
         {
             foreach (var bodyLayer in humanoid.BaseLayers.Keys)
             {

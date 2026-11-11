@@ -36,6 +36,17 @@ roles-antag-thecircle-geist-start =
 roles-antag-thecircle-shock-trooper-start =
     Вы - Шок-трупер ударного отряда «Круг».
     Устройте кровавую баню на станции.
+roles-antag-thecircle-geist-midround-name = Гейст Круга
+roles-antag-thecircle-geist-midround-description = Одиночный диверсант Круга. Задачу выполнять не обязательно: можно просто срывать работу станции. Нельзя уничтожать гравитацию и энергосистему станции.
+roles-antag-thecircle-geist-midround-start =
+    Вы - Гейст, одиночный диверсант Круга.
+    Задачу выполнять не обязательно: срывайте работу станции ловушками, осколками обелиска и внезапными атаками.
+    Не уничтожайте гравитацию и энергосистему станции.
+roles-antag-thecircle-geist-called-name = Гейст Круга (подкрепление)
+roles-antag-thecircle-geist-called-description = Смертники Круга призвали вас на помощь: помогите им вызвать обелиск и обратить экипаж в рабов.
+roles-antag-thecircle-geist-called-start =
+    Вы - Гейст, подкрепление, вызванное смертниками Круга.
+    Помогите им вызвать обелиск и обратить экипаж в рабов. Ваши задачи - в меню целей антагониста.
 
 antag-gear-selector-geist-name = Гейст
 antag-gear-selector-geist-description = Скрытный шок-трупер с прежним снаряжением, невидимостью и ловушками.

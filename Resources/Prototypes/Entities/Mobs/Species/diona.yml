@@ -26,8 +26,8 @@
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Diona
-  - type: DamageVisuals
-    damageOverlayGroups:
+  - type: LimbWoundVisuals
+    groups:
       Brute:
         sprite: Mobs/Effects/brute_damage.rsi
         color: "#cd7314"

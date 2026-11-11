@@ -1,0 +1,377 @@
+- type: Tag
+  id: GeistMidroundSpawnPoint
+
+- type: entity
+  id: SpawnPointGeistMidround
+  parent: MarkerBase
+  name: "Гейст Круга"
+  suffix: мидраунд, антаг
+  components:
+  - type: SpawnPoint
+  - type: Tag
+    tags:
+    - GeistMidroundSpawnPoint
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: _DeadSpace/Necromorfs/TheCircle/Mics/jobs.rsi
+      state: geist
+
+- type: entity
+  categories: [ HideSpawnMenu, Spawner ]
+  parent: BaseSpawnPointGhostCircle
+  id: SpawnPointGhostGeistMidround
+  suffix: Круг, гейст, мидраунд
+  components:
+  - type: GhostRole
+    name: roles-antag-thecircle-geist-midround-name
+    description: roles-antag-thecircle-geist-midround-description
+    rules: ghost-role-information-rules-default-team-antagonist
+    mindRoles:
+    - MindRoleCircleShockTrooper
+    requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 1944000
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 60h
+    - !type:DepartmentTimeRequirement
+      department: Medical
+      time: 60h
+    - !type:DepartmentTimeRequirement
+      department: Engineering
+      time: 60h
+    raffle:
+      settings: default
+  - type: GhostRoleIntroduction
+    operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ»]
+    textLoc: roles-antag-thecircle-geist-midround-start
+    textColor: '#9db7ff'
+    font: /Fonts/Bedstead/Bedstead.otf
+    fontSize: 18
+    operationFontSize: 26
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+    duration: 12
+    fadeFromBlackDuration: 3
+    textDelay: 0.8
+    charactersPerSecond: 50
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green
+    - sprite: _DeadSpace/Necromorfs/TheCircle/Mics/jobs.rsi
+      state: geist
+
+
+- type: entity
+  categories: [ HideSpawnMenu, Spawner ]
+  parent: SpawnPointGhostGeistMidround
+  id: SpawnPointGhostGeistMidroundCalled
+  suffix: Круг, гейст, подкрепление
+  components:
+  - type: GhostRole
+    name: roles-antag-thecircle-geist-called-name
+    description: roles-antag-thecircle-geist-called-description
+  - type: GhostRoleIntroduction
+    textLoc: roles-antag-thecircle-geist-called-start
+- type: Tag
+  id: NecroobeliskShard
+
+- type: entity
+  parent: BaseItem
+  id: ExperimentalObeliskShard
+  name: экспериментальный осколок обелиска
+  description: Крошечный осколок обелиска. Рядом с ним мысли путаются, а шёпот не умолкает. Его можно закрепить под плиткой пола; разрушить его способен лишь дробитель артефактов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/splinter.rsi
+    scale: 0.55, 0.55
+    layers:
+    - state: splinter
+  - type: Item
+    size: Tiny
+    sprite: _DeadSpace/Necromorfs/splinter.rsi
+    heldPrefix: splinter
+  - type: NecroobeliskShard
+  - type: Anchorable
+  - type: CollideOnAnchor
+  - type: SubFloorHide
+  - type: Visibility
+  - type: Tag
+    tags:
+    - NecroobeliskShard
+
+- type: entity
+  id: UniPhoneGeistMidroundUplink
+  parent: [ BaseItem, UniPhoneGeistMidroundPresetUplink ]
+  name: аплинк Гейста
+  description: Аплинк с диверсионным оснащением и снабжением одиночки.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Mics/etc/uplink.rsi
+    layers:
+    - state: icon
+  - type: Item
+    sprite: _DeadSpace/Necromorfs/TheCircle/Mics/etc/uplink.rsi
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+  - type: Store
+    balance:
+      Telecrystal: 100
+
+- type: entity
+  parent: UniPhoneGeistMidroundUplink
+  id: UniPhoneGeistMidroundCalledUplink
+  suffix: 25 тк
+  components:
+  - type: Store
+    balance:
+      Telecrystal: 25
+
+- type: entity
+  id: UniPhoneGeistMidroundPresetUplink
+  abstract: true
+  components:
+  - type: Store
+    name: circle-store-name
+    categories:
+    - UniPhoneGeistUplinkTraps
+    - UniPhoneGeistMidroundUplinkSupply
+    currencyWhitelist:
+    - Telecrystal
+    balance:
+      Telecrystal: 0
+
+- type: storeCategory
+  id: UniPhoneGeistMidroundUplinkSupply
+  name: Снабжение
+  priority: 2
+
+- type: listing
+  id: UniPhoneGeistMidroundUplinkObeliskShard
+  name: Экспериментальный осколок обелиска
+  description: Сводит с ума и заражает всех в десяти тайлах, пока лежит на полу или спрятан под плиткой.
+  productEntity: ExperimentalObeliskShard
+  cost:
+    Telecrystal: 6
+  categories:
+  - UniPhoneGeistMidroundUplinkSupply
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 5
+
+- type: listing
+  id: UniPhoneGeistMidroundUplinkRSh12
+  name: РШ-12
+  icon: { sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/rsh12/rsh12.rsi, state: icon }
+  description: Мощный штурмовой револьвер с убойным калибром, позволяет сильно пробивать структуры и людей. Встроенный фабрикатор восполняет боезапас каждые 3 секунды.
+  productEntity: WeaponRevolverRSh12
+  cost:
+    Telecrystal: 10
+  categories:
+  - UniPhoneGeistMidroundUplinkSupply
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 2
+
+- type: listing
+  id: UniPhoneGeistMidroundUplinkCombatKit
+  name: Боевая аптечка
+  icon: { sprite: "Objects/Specific/Medical/firstaidkits.rsi", state: blackkit }
+  productEntity: MedkitCombatFilled
+  cost:
+    Telecrystal: 2
+  categories:
+  - UniPhoneGeistMidroundUplinkSupply
+
+- type: listing
+  id: UniPhoneGeistMidroundUplinkCombatMedipen
+  name: Боевой медипен
+  icon: { sprite: "Objects/Specific/Medical/medipen.rsi", state: morphen }
+  productEntity: CombatMedipen
+  cost:
+    Telecrystal: 4
+  categories:
+  - UniPhoneGeistMidroundUplinkSupply
+
+- type: startingGear
+  parent: TheCircleGeistGear
+  id: TheCircleGeistMidroundGear
+  equipment:
+    shoes: ClothingShoesMagBootsUnitology
+    pocket1: UniPhoneGeistMidroundUplink
+    suitstorage: JetpackMiniFilled
+  storage:
+    back:
+    - WeaponShotgunKS23
+    - ExperimentalObeliskShard
+    - ExperimentalObeliskShard
+    - ExperimentalObeliskShard
+    - ExperimentalObeliskShard
+    - ExperimentalObeliskShard
+    - PinpointerBlackObeliskSplinter
+    belt:
+    - BoxShotgun23MM
+    - BoxShotgun23MM
+
+- type: startingGear
+  parent: TheCircleGeistMidroundGear
+  id: TheCircleGeistMidroundCalledGear
+  equipment:
+    pocket1: UniPhoneGeistMidroundCalledUplink
+
+- type: entity
+  parent: BaseGameRule
+  id: GeistMidroundSpawn
+  components:
+  - type: StationEvent
+    earliestStart: 35
+    weight: 3
+    minimumPlayers: 40
+    duration: null
+  - type: RuleGrids
+    spawnerWhitelist:
+      tags:
+      - GeistMidroundSpawnPoint
+  - type: LoadMapRule
+    gridPath: /Maps/Shuttles/ds_geist_shuttle.yml
+  - type: AntagLoadProfileRule
+    speciesOverride: Human
+    speciesOverrideBlacklist:
+    - Vox
+    - Diona
+    - Xenomorph
+    - IPC
+    - Felinid
+  - type: AntagObjectives
+    objectives:
+    - UniSubmissionObjective
+    - UniAssemblyObjective
+  - type: AntagSelection
+    definitions:
+    - spawnerPrototype: SpawnPointGhostGeistMidround
+      fallbackRoles: [ CircleShockTrooper ]
+      min: 1
+      max: 1
+      pickPlayer: false
+      startingGear: TheCircleGeistMidroundGear
+      roleLoadout:
+      - RoleTheCircleShockTrooper
+      briefing:
+        text: roles-antag-thecircle-geist-midround-start
+        color: CornflowerBlue
+        sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
+      components:
+      - type: TheCircleGeist
+      - type: TheCircleGeistSaboteur
+      - type: UnitologyPentagramRecruiter
+      - type: RandomMetadata
+        nameSegments:
+        - UnitologyGeistFirst
+        - UnitologyFighterSecond
+        nameFormat: name-format-nuclear-operation
+      - type: AutoImplant
+        implants:
+        - DeathAcidifierImplant
+      - type: IntrinsicRadioTransmitter
+        channels:
+        - Unitolog
+      - type: ActiveRadio
+        channels:
+        - Unitolog
+      - type: IntrinsicRadioReceiver
+      - type: Unitology
+      - type: UnitologyHead
+      - type: ImmunNecroobelisk
+      - type: IgnoreKudzu
+      - type: NpcFactionMember
+        factions:
+        - Syndicate
+        - Necromorfs
+      - type: Language
+        selectedLanguage: NecromorfLanguage
+        knownLanguages:
+        - NecromorfLanguage
+        - GeneralLanguage
+      mindRoles:
+      - MindRoleCircleShockTrooper
+
+- type: entity
+  parent: BaseGameRule
+  id: GeistMidroundCalledSpawn
+  components:
+  - type: StationEvent
+    earliestStart: 35
+    weight: 3
+    minimumPlayers: 40
+    duration: null
+  - type: RuleGrids
+    spawnerWhitelist:
+      tags:
+      - GeistMidroundSpawnPoint
+  - type: LoadMapRule
+    gridPath: /Maps/Shuttles/ds_geist_shuttle.yml
+  - type: AntagLoadProfileRule
+    speciesOverride: Human
+    speciesOverrideBlacklist:
+    - Vox
+    - Diona
+    - Xenomorph
+    - IPC
+    - Felinid
+  - type: AntagObjectives
+    objectives:
+    - UniSubmissionObjective
+    - UniAssemblyObjective
+  - type: AntagSelection
+    definitions:
+    - spawnerPrototype: SpawnPointGhostGeistMidroundCalled
+      fallbackRoles: [ CircleShockTrooper ]
+      min: 1
+      max: 1
+      pickPlayer: false
+      startingGear: TheCircleGeistMidroundCalledGear
+      roleLoadout:
+      - RoleTheCircleShockTrooper
+      briefing:
+        text: roles-antag-thecircle-geist-called-start
+        color: CornflowerBlue
+        sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
+      components:
+      - type: TheCircleGeist
+      - type: UnitologyPentagramRecruiter
+      - type: RandomMetadata
+        nameSegments:
+        - UnitologyGeistFirst
+        - UnitologyFighterSecond
+        nameFormat: name-format-nuclear-operation
+      - type: AutoImplant
+        implants:
+        - DeathAcidifierImplant
+      - type: IntrinsicRadioTransmitter
+        channels:
+        - Unitolog
+      - type: ActiveRadio
+        channels:
+        - Unitolog
+      - type: IntrinsicRadioReceiver
+      - type: Unitology
+      - type: UnitologyHead
+      - type: ImmunNecroobelisk
+      - type: IgnoreKudzu
+      - type: NpcFactionMember
+        factions:
+        - Syndicate
+        - Necromorfs
+      - type: Language
+        selectedLanguage: NecromorfLanguage
+        knownLanguages:
+        - NecromorfLanguage
+        - GeneralLanguage
+      mindRoles:
+      - MindRoleCircleShockTrooper

@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by Blue Dog Doc for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "none"
+    },
+    {
+      "name": "torso_cut1"
+    },
+    {
+      "name": "torso_cut2"
+    },
+    {
+      "name": "torso_cut3"
+    },
+    {
+      "name": "torso_cut4"
+    },
+    {
+      "name": "torso_open"
+    },
+    {
+      "name": "torso_open_l"
+    },
+    {
+      "name": "torso_open_r"
+    },
+    {
+      "name": "torso_organs"
+    },
+    {
+      "name": "head_cut1"
+    },
+    {
+      "name": "head_cut2"
+    },
+    {
+      "name": "head_cut3"
+    },
+    {
+      "name": "head_cut4"
+    },
+    {
+      "name": "head_open"
+    },
+    {
+      "name": "head_organs"
+    },
+    {
+      "name": "head_brain"
+    },
+    {
+      "name": "back_cut1"
+    },
+    {
+      "name": "back_cut2"
+    },
+    {
+      "name": "back_cut3"
+    },
+    {
+      "name": "back_cut4"
+    },
+    {
+      "name": "back_open"
+    }
+  ]
+}

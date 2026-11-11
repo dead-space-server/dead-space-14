@@ -19,6 +19,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Damage.Components;
+using Content.Shared.DeadSpace.Items;
 
 namespace Content.Shared.DeadSpace.ShieldDash;
 
@@ -181,8 +182,12 @@ public sealed partial class ShieldDashSystem : EntitySystem
                 _stamina.TakeStaminaDamage(uid, shield.StaminaDamageToUser, source: comp.Shield);
                 _stamina.TakeStaminaDamage(args.OtherEntity, shield.StaminaDamage, source: uid);
 
-                if (_random.Prob(shield.DisarmChance))
+                if (_random.Prob(shield.DisarmChance) &&
+                    (!_hands.TryGetActiveItem(args.OtherEntity, out var activeItem) ||
+                     !HasComp<PreventForcedDropComponent>(activeItem.Value)))
+                {
                     _hands.TryDrop(args.OtherEntity);
+                }
 
                 _audio.PlayPvs(shield.ImpactSound, uid);
             }

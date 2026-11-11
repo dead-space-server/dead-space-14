@@ -1,0 +1,75 @@
+- type: entity
+  parent: BaseItem
+  id: SurgeryBoneGel
+  name: bone gel
+  description: A tube of bone gel. It packs cracks in bone, ribs, and the skull until they set.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/bone_gel.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Fun/glue.rsi
+    size: Small
+  - type: Tag
+    tags:
+    - SurgeryTool
+  - type: SurgeryTool
+    precision: 0.85
+    slip: 0.05
+    wobble: 10
+    verbs:
+    - MendBone
+  - type: SurgeryBoneGel
+    uses: 10
+  - type: StaticPrice
+    price: 30
+
+- type: entity
+  parent: BaseItem
+  id: SurgeryFieldStapler
+  name: surgical stapler
+  description: A field stapler. It pulls a cut shut with staples, but the wound heals worse than a cautery sear.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/field_stapler.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Specific/Medical/Surgery/scissors.rsi
+    size: Small
+  - type: Tag
+    tags:
+    - SurgeryTool
+  - type: SurgeryTool
+    precision: 0.45
+    slip: 0.35
+    wobble: 20
+    verbs:
+    - Cauterize
+  - type: StaticPrice
+    price: 25
+
+- type: entity
+  parent: BaseItem
+  id: SurgeryFieldClamp
+  name: field clamp
+  description: A rough clamp from a field kit. It pulls fragments and clamps vessels.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/field_clamp.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Specific/Medical/Surgery/scissors.rsi
+    size: Small
+  - type: Tag
+    tags:
+    - SurgeryTool
+  - type: SurgeryTool
+    precision: 0.4
+    slip: 0.4
+    wobble: 24
+    verbs:
+    - PullEmbedded
+    - Clamp
+    - Retract
+  - type: StaticPrice
+    price: 15

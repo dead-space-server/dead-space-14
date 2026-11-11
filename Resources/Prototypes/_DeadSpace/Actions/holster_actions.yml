@@ -1,0 +1,13 @@
+- type: entity
+  id: ActionHolsterDrawBlueShield
+  name: Достать револьверы из кобуры
+  description: Вы достаёте ловким движением руки сразу два револьвера из кобуры. 
+  components:
+  - type: Action
+    icon:
+      sprite: _DeadSpace/Actions/holster_actions.rsi
+      state: action
+    useDelay: 2
+    itemIconStyle: NoItem
+  - type: InstantAction
+    event: !type:HolsterDrawActionEvent

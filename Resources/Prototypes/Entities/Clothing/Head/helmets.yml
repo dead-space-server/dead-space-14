@@ -39,6 +39,10 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+  # DS14
+  - type: LimbCover
+    zones:
+    - Head
 
 #Basic Helmet (Security Helmet)
 - type: entity
@@ -55,6 +59,11 @@
     tags:
     - WhitelistChameleon
     - SecurityHelmet
+  # DS14
+  - type: LimbCover
+    zones:
+    - Head
+    ricochet: true
 
 #Mercenary Helmet
 - type: entity
@@ -91,6 +100,12 @@
         Heat: 0.80
         Radiation: 0.80
         Caustic: 0.95
+  # DS14
+  - type: LimbCover
+    zones:
+    - Head
+    face: true
+    ricochet: true
   - type: ExplosionResistance
     damageCoefficient: 0.75
   - type: HideLayerClothing
@@ -153,6 +168,13 @@
         Blunt: 0.95
         Slash: 0.95
         Piercing: 0.95
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: HideLayerClothing
     layers:
       Hair: HEAD
@@ -242,6 +264,12 @@
   - type: NinjaAppearanceItem
     itemType: Helmet
   - type: NinjaSuitItem
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   #DS14-end
   - type: Tag
     tags:
@@ -342,6 +370,13 @@
     coolingCoefficient: 0.8
   - type: FireProtection
     reduction: 0.15 # not fully sealed so less protection
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: IdentityBlocker
   - type: Tag
     tags:
@@ -387,6 +422,13 @@
   - type: PressureProtection
     highPressureMultiplier: 0.25
     lowPressureMultiplier: 1000
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: IdentityBlocker
   - type: Tag
     tags:

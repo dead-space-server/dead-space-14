@@ -8,6 +8,7 @@ using Content.Shared.Gibbing;
 using Content.Shared.Guardian;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Humanoid; // DS14
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -19,6 +20,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Auras; // DS14
+using Content.Server.DeadSpace.MartialArts.SmokingCarp.Components; // DS14
 
 namespace Content.Server.Guardian
 {
@@ -210,7 +212,8 @@ namespace Content.Server.Guardian
             }
 
             // Can only inject things with the component...
-            if (!HasComp<CanHostGuardianComponent>(target))
+            // DS14: only humanoid species can host a guardian.
+            if (!HasComp<CanHostGuardianComponent>(target) || !HasComp<HumanoidAppearanceComponent>(target))
             {
                 var msg = Loc.GetString("guardian-activator-invalid-target", ("entity", Identity.Entity(target, EntityManager, user)));
 
@@ -225,6 +228,11 @@ namespace Content.Server.Guardian
                 return;
             }
 
+            // DS14-start
+            if (HasComp<SmokingCarpComponent>(target))
+                return;
+            // DS14-end
+
             _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.InjectionDelay, new GuardianCreatorDoAfterEvent(), injector, target: target, used: injector)
             {
                 BreakOnMove = true,
@@ -238,7 +246,7 @@ namespace Content.Server.Guardian
             if (args.Handled || args.Args.Target == null)
                 return;
 
-            if (args.Cancelled || component.Deleted || component.Used || !_handsSystem.IsHolding(args.Args.User, uid, out _) || HasComp<GuardianHostComponent>(args.Args.Target))
+            if (args.Cancelled || component.Deleted || component.Used || !_handsSystem.IsHolding(args.Args.User, uid, out _) || HasComp<GuardianHostComponent>(args.Args.Target) || HasComp<SmokingCarpComponent>(args.Args.Target) || !HasComp<HumanoidAppearanceComponent>(args.Args.Target)) // DS14
                 return;
 
             var hostXform = Transform(args.Args.Target.Value);

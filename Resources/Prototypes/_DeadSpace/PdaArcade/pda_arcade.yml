@@ -256,3 +256,28 @@
     knight:
       sprite: Mobs/Animals/cow.rsi
       state: cow
+
+- type: pdaArcadeGame
+  id: casino
+  name: pda-arcade-game-casino
+  order: 8
+  quiet: true
+  sprites:
+    diamond:
+      sprite: Objects/Materials/materials.rsi
+      state: diamond
+    gold:
+      sprite: Objects/Materials/ingots.rsi
+      state: gold
+    bell:
+      sprite: Structures/Specific/church-bell.rsi
+      state: church-bell
+    lemon:
+      sprite: Objects/Specific/Hydroponics/lemon.rsi
+      state: produce
+    cherry:
+      sprite: Objects/Specific/Hydroponics/cherry.rsi
+      state: produce
+    clover:
+      sprite: Objects/Specific/Hydroponics/ambrosia_vulgaris.rsi
+      state: produce

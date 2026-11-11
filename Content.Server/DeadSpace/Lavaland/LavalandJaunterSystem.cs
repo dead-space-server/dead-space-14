@@ -5,8 +5,11 @@ using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Server.DeadSpace.Lavaland.SecretBoss;
 using Content.Shared.DeadSpace.Lavaland.SecretBoss;
+using Content.Server.NPC.HTN;
 using Content.Server.Tiles;
 using Content.Shared.Chasm;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Interaction.Events;
@@ -43,6 +46,11 @@ public sealed class LavalandJaunterSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+
+    private readonly HashSet<Entity<HTNComponent>> _creatures = new();
 
     public override void Initialize()
     {
@@ -290,7 +298,31 @@ public sealed class LavalandJaunterSystem : EntitySystem
             return false;
 
         destination = _map.ToCenterCoordinates(tile.Value);
+
+        // The landing spot taken, a random one nearby could be a ruin's room full of basilisks: none with fauna close.
+        if (HasHostileNearby(_transform.ToMapCoordinates(destination), user))
+        {
+            destination = default;
+            return false;
+        }
+
         return true;
+    }
+
+    /// <summary>How far (tiles) from a jaunter's landing no living creature hostile to the user may be.</summary>
+    private const float HostileClearRadius = 8f;
+
+    private bool HasHostileNearby(MapCoordinates coordinates, EntityUid user)
+    {
+        _creatures.Clear();
+        _lookup.GetEntitiesInRange(coordinates, HostileClearRadius, _creatures);
+        foreach (var creature in _creatures)
+        {
+            if (!_mobState.IsDead(creature.Owner) && _npcFaction.IsEntityHostile(creature.Owner, user))
+                return true;
+        }
+
+        return false;
     }
 
     private bool HasUnsafeAnchoredEntity(TileRef tile)

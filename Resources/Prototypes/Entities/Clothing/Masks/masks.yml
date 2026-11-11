@@ -12,6 +12,9 @@
   - type: PsychogenFilter
   - type: IngestionBlocker
   - type: IdentityBlocker
+  # DS14
+  - type: LimbCover
+    face: true
   - type: Tag
     tags:
     - HamsterWearable

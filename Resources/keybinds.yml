@@ -311,6 +311,12 @@ binds:
 - function: Parry
   type: State
   key: F
+- function: AimShot
+  type: State
+  key: MouseButton4
+- function: LimbDoll
+  type: State
+  key: MouseButton5
 # DS14-end
 - function: TextCursorLeft
   type: State
@@ -667,3 +673,7 @@ binds:
 - function: SwitchComponentMode
   type: State
   key: F
+- function: SwitchGunAmmoMode # DS14
+  type: State
+  key: MouseMiddle
+  canFocus: true

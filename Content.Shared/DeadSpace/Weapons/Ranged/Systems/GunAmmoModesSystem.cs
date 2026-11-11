@@ -1,0 +1,339 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
+using Content.Shared.ActionBlocker;
+using Content.Shared.Actions;
+using Content.Shared.Containers.ItemSlots;
+using Content.Shared.DeadSpace;
+using Content.Shared.DeadSpace.Weapons.Ranged.Components;
+using Content.Shared.DeadSpace.Weapons.Ranged.Events;
+using Content.Shared.Examine;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Popups;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
+using Robust.Shared.Containers;
+using Robust.Shared.Input.Binding;
+using Robust.Shared.Map;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
+using DeadSpaceCVars = Content.Shared.DeadSpace.CCCCVars.CCCCVars;
+
+namespace Content.Shared.DeadSpace.Weapons.Ranged.Systems;
+
+/// <summary>
+/// Fire modes of a gun (<see cref="GunAmmoModesComponent"/>), switched with the gun's own action, using it in hand or its key from the settings: each fires the gun's
+/// own self-recharging shots or the ammo loaded into one of its slots.
+/// </summary>
+public sealed class GunAmmoModesSystem : EntitySystem
+{
+    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
+    [Dependency] private readonly INetConfigurationManager _netConfig = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly RechargeBasicEntityAmmoSystem _recharge = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<GunAmmoModesComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<GunAmmoModesComponent, AfterAutoHandleStateEvent>(OnHandleState);
+        SubscribeLocalEvent<GunAmmoModesComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<GunAmmoModesComponent, GunRefreshModifiersEvent>(OnRefreshModifiers);
+        SubscribeLocalEvent<GunAmmoModesComponent, RechargeBasicEntityAmmoCooldownEvent>(OnRechargeCooldown);
+        SubscribeLocalEvent<GunAmmoModesComponent, AttemptShootEvent>(OnAttemptShoot);
+        SubscribeLocalEvent<GunAmmoModesComponent, GunShotEvent>(OnShot);
+        SubscribeLocalEvent<GunAmmoModesComponent, TakeAmmoEvent>(OnTakeAmmo);
+        SubscribeLocalEvent<GunAmmoModesComponent, GetAmmoCountEvent>(OnAmmoCount);
+        SubscribeLocalEvent<GunAmmoModesComponent, GetItemActionsEvent>(OnGetActions);
+        SubscribeLocalEvent<GunAmmoModesComponent, GunAmmoModeSwitchActionEvent>(OnSwitchAction);
+        SubscribeLocalEvent<GunAmmoModesComponent, UseInHandEvent>(OnUseInHand);
+        SubscribeLocalEvent<GunAmmoModesComponent, EntInsertedIntoContainerMessage>(OnSlotInserted);
+        SubscribeLocalEvent<GunAmmoModesComponent, EntRemovedFromContainerMessage>(OnSlotRemoved);
+
+        // Its own rebindable key (Controls in the settings), the middle mouse button by default, in any mode.
+        CommandBinds.Builder
+            .Bind(DeadSpaceKeys.SwitchGunAmmoMode, new PointerInputCmdHandler(OnSwitchKey))
+            .Register<GunAmmoModesSystem>();
+    }
+
+    public override void Shutdown()
+    {
+        CommandBinds.Unregister<GunAmmoModesSystem>();
+        base.Shutdown();
+    }
+
+    private void OnMapInit(Entity<GunAmmoModesComponent> ent, ref MapInitEvent args)
+    {
+        if (ent.Comp.SwitchAction is { } action)
+            _actionContainer.EnsureAction(ent, ref ent.Comp.SwitchActionEntity, action);
+        Dirty(ent);
+
+        ApplyMode(ent);
+    }
+
+    private void OnHandleState(Entity<GunAmmoModesComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        // The bolt the gun fires is not networked: the client sets it itself to predict the shot.
+        ApplyProto(ent);
+        _gun.RefreshAmmoCount(ent);
+    }
+
+    #region Switching
+
+    /// <summary>
+    /// The switch is an action of the gun while it is held: the player puts it on whatever key suits him. Unless he
+    /// turned it off in the settings (the key and using it in hand still switch).
+    /// </summary>
+    private void OnGetActions(Entity<GunAmmoModesComponent> ent, ref GetItemActionsEvent args)
+    {
+        if (ent.Comp.Modes.Count < 2 || !args.InHands)
+            return;
+
+        // The server asks the player's own setting; the client (predicting the hotbar) reads it itself.
+        var wanted = _net.IsServer
+            ? !_player.TryGetSessionByEntity(args.User, out var session) ||
+              _netConfig.GetClientCVar(session.Channel, DeadSpaceCVars.GunAmmoModeAction)
+            : _netConfig.GetCVar(DeadSpaceCVars.GunAmmoModeAction);
+        if (!wanted)
+            return;
+
+        args.AddAction(ent.Comp.SwitchActionEntity);
+    }
+
+    /// <summary>The mode switch key: the gun in the active hand goes to its next mode.</summary>
+    private bool OnSwitchKey(ICommonSession? session, EntityCoordinates coordinates, EntityUid target)
+    {
+        if (session?.AttachedEntity is not { Valid: true } user ||
+            _hands.GetActiveItem(user) is not { } gun ||
+            !TryComp<GunAmmoModesComponent>(gun, out var modes) ||
+            modes.Modes.Count < 2 ||
+            !_actionBlocker.CanInteract(user, gun))
+        {
+            return false;
+        }
+
+        SetMode((gun, modes), (modes.Selected + 1) % modes.Modes.Count, user);
+        return false;
+    }
+
+    private void OnUseInHand(Entity<GunAmmoModesComponent> ent, ref UseInHandEvent args)
+    {
+        if (args.Handled || !ent.Comp.SwitchOnUse || ent.Comp.Modes.Count < 2 ||
+            !_actionBlocker.CanInteract(args.User, ent))
+        {
+            return;
+        }
+
+        args.Handled = true;
+        SetMode(ent, (ent.Comp.Selected + 1) % ent.Comp.Modes.Count, args.User);
+    }
+
+    private void OnSwitchAction(Entity<GunAmmoModesComponent> ent, ref GunAmmoModeSwitchActionEvent args)
+    {
+        if (args.Handled || ent.Comp.Modes.Count < 2 || !_actionBlocker.CanInteract(args.Performer, ent))
+            return;
+
+        args.Handled = true;
+        SetMode(ent, (ent.Comp.Selected + 1) % ent.Comp.Modes.Count, args.Performer);
+    }
+
+    /// <summary>
+    /// Switches the gun's mode. Predicted: the client switches (and shows the new mode's ammo) at once, the server's
+    /// state confirms it.
+    /// </summary>
+    public void SetMode(Entity<GunAmmoModesComponent> ent, int index, EntityUid? user = null)
+    {
+        if (index < 0 || index >= ent.Comp.Modes.Count || index == ent.Comp.Selected)
+            return;
+
+        ent.Comp.Selected = index;
+        Dirty(ent);
+        ApplyMode(ent);
+
+        _audio.PlayPredicted(ent.Comp.SwitchSound, ent, user);
+        if (user != null)
+        {
+            _popup.PopupClient(Loc.GetString("gun-ammo-modes-switched",
+                    ("mode", Loc.GetString(ent.Comp.Modes[index].Name))),
+                ent,
+                user.Value);
+        }
+    }
+
+    private void ApplyMode(Entity<GunAmmoModesComponent> ent)
+    {
+        ApplyProto(ent);
+        ApplyCapacity(ent);
+        _gun.RefreshModifiers(ent.Owner);
+
+        // The charge on its way comes at the new mode's pace, and the counter shows the new mode's ammo.
+        _recharge.RestartCharge(ent.Owner);
+        _gun.RefreshAmmoCount(ent);
+    }
+
+    /// <summary>The mode's own number of charges: the ones over it are lost, the missing ones recharge.</summary>
+    private void ApplyCapacity(Entity<GunAmmoModesComponent> ent)
+    {
+        if (ent.Comp.Current?.Capacity is not { } capacity ||
+            !TryComp<BasicEntityAmmoProviderComponent>(ent, out var basic) ||
+            basic.Capacity == capacity)
+        {
+            return;
+        }
+
+        basic.Capacity = capacity;
+        Dirty(ent.Owner, basic);
+        if (basic.Count is { } count && count > capacity)
+            _gun.UpdateBasicEntityAmmoCount((ent.Owner, basic), capacity);
+        else if (basic.Count < capacity)
+            _recharge.Reset(ent.Owner);
+    }
+
+    private void ApplyProto(Entity<GunAmmoModesComponent> ent)
+    {
+        if (ent.Comp.Current?.Proto is { } proto && TryComp<BasicEntityAmmoProviderComponent>(ent, out var basic))
+            basic.Proto = proto;
+    }
+
+    private void OnExamined(Entity<GunAmmoModesComponent> ent, ref ExaminedEvent args)
+    {
+        if (ent.Comp.Current is not { } mode || ent.Comp.Modes.Count < 2)
+            return;
+
+        args.PushMarkup(Loc.GetString("gun-ammo-modes-examine", ("mode", Loc.GetString(mode.Name))));
+    }
+
+    #endregion
+
+    #region The mode's shot
+
+    private void OnRefreshModifiers(Entity<GunAmmoModesComponent> ent, ref GunRefreshModifiersEvent args)
+    {
+        if (ent.Comp.Current is not { } mode)
+            return;
+
+        args.FireRate *= mode.FireRateMultiplier;
+        if (mode.SoundGunshot != null)
+            args.SoundGunshot = mode.SoundGunshot;
+    }
+
+    private void OnRechargeCooldown(Entity<GunAmmoModesComponent> ent, ref RechargeBasicEntityAmmoCooldownEvent args)
+    {
+        if (ent.Comp.Current is { } mode)
+            args.Cooldown *= mode.RechargeMultiplier;
+    }
+
+    private void OnAttemptShoot(Entity<GunAmmoModesComponent> ent, ref AttemptShootEvent args)
+    {
+        if (args.Cancelled ||
+            ent.Comp.Current is not { Slot: null, Cost: > 1 } mode ||
+            !TryComp<BasicEntityAmmoProviderComponent>(ent, out var basic) ||
+            basic.Count is not { } count ||
+            count >= mode.Cost)
+        {
+            return;
+        }
+
+        // Not enough charge for this mode's shot: wait for the rest.
+        args.Cancelled = true;
+    }
+
+    private void OnShot(Entity<GunAmmoModesComponent> ent, ref GunShotEvent args)
+    {
+        // The shot took one charge; the mode's dearer shot takes the rest.
+        if (ent.Comp.Current is { Slot: null, Cost: > 1 } mode)
+            _gun.ChangeBasicEntityAmmoCount(ent.Owner, -Math.Min(mode.Cost - 1, GetBasicCount(ent)));
+    }
+
+    private int GetBasicCount(EntityUid uid)
+    {
+        return TryComp<BasicEntityAmmoProviderComponent>(uid, out var basic) && basic.Count is { } count ? count : 0;
+    }
+
+    #endregion
+
+    #region Ammo from a slot
+
+    private void OnSlotInserted(Entity<GunAmmoModesComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        OnSlotChanged(ent, args.Container.ID);
+    }
+
+    private void OnSlotRemoved(Entity<GunAmmoModesComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        OnSlotChanged(ent, args.Container.ID);
+    }
+
+    /// <summary>Ammo loaded into (or taken out of) the current mode's slot shows on the counter at once.</summary>
+    private void OnSlotChanged(Entity<GunAmmoModesComponent> ent, string containerId)
+    {
+        if (ent.Comp.Current?.Slot == containerId)
+            _gun.RefreshAmmoCount(ent);
+    }
+
+    private void OnTakeAmmo(Entity<GunAmmoModesComponent> ent, ref TakeAmmoEvent args)
+    {
+        if (ent.Comp.Current?.Slot is not { } slotId ||
+            !_itemSlots.TryGetSlot(ent, slotId, out var slot) ||
+            slot.Item is not { } item)
+        {
+            return;
+        }
+
+        if (TryComp<CartridgeAmmoComponent>(item, out var cartridge))
+        {
+            // A single shell or grenade: out of the slot it goes, to be fired and its casing thrown out.
+            if (cartridge.Spent || args.Shots <= 0 || slot.ContainerSlot == null)
+                return;
+
+            _containers.Remove(item, slot.ContainerSlot);
+            args.Ammo.Add((item, cartridge));
+            return;
+        }
+
+        // A magazine (or anything else that hands out ammo itself).
+        RaiseLocalEvent(item, args);
+    }
+
+    private void OnAmmoCount(Entity<GunAmmoModesComponent> ent, ref GetAmmoCountEvent args)
+    {
+        if (ent.Comp.Current?.Slot is not { } slotId || !_itemSlots.TryGetSlot(ent, slotId, out var slot))
+            return;
+
+        if (slot.Item is not { } item)
+        {
+            args.Count = 0;
+            args.Capacity = 1;
+            return;
+        }
+
+        if (TryComp<CartridgeAmmoComponent>(item, out var cartridge))
+        {
+            args.Count = cartridge.Spent ? 0 : 1;
+            args.Capacity = 1;
+            if (!cartridge.Spent)
+            {
+                args.NextAmmoEntity = item;
+                args.NextAmmoPrototype = cartridge.Prototype;
+            }
+
+            return;
+        }
+
+        RaiseLocalEvent(item, ref args);
+    }
+
+    #endregion
+}

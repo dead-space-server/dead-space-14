@@ -1,0 +1,148 @@
+- type: surgeryAnatomy
+  id: Ears
+  operation: TakeEars
+  layers:
+  - Skin
+  - Cavity
+
+- type: surgeryHint
+  id: EarsIn
+  name: surgery-hint-ears-in
+  color: "#5ccf6a"
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: ears
+
+- type: surgeryPart
+  id: Ears
+  zone: Head
+  anatomy: Ears
+  operation: TakeEars
+  put: PutEars
+  state: ears
+  wound: false
+  order: 2
+  ax: 11
+  ay: 5
+  bx: 11
+  by: 8
+
+- type: surgeryOperation
+  id: TakeEars
+  side: Front
+  zone: Head
+  name: surgery-op-take-ears
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    effect: EarsOut
+    drop: OrganHumanEars
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: PutEars
+  side: Front
+  zone: Head
+  name: surgery-op-put-ears
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    hint: EarsIn
+    effect: EarsIn
+    need:
+    - OrganHumanEars
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryPart
+  id: EarsMachine
+  zone: Head
+  anatomy: MachineHead
+  operation: TakeEarsMachine
+  put: PutEarsMachine
+  machine: true
+  sprite: /Textures/_DeadSpace/Mobs/Species/IPC/organs.rsi
+  state: ears-c-u
+  wound: false
+  order: 2
+  ax: 11
+  ay: 5
+  bx: 11
+  by: 8
+
+- type: surgeryOperation
+  id: TakeEarsMachine
+  name: surgery-op-take-ears-machine
+  machine: true
+  sterile: false
+  side: Front
+  zone: Head
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Extract
+    layer: Cavity
+    hint: MachinePry
+    undo: Insert
+    effect: EarsOut
+    drop: OrganIPCEars
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
+
+- type: surgeryOperation
+  id: PutEarsMachine
+  name: surgery-op-put-ears-machine
+  machine: true
+  sterile: false
+  side: Front
+  zone: Head
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    effect: EarsIn
+    need:
+    - OrganIPCEars
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise

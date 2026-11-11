@@ -36,6 +36,8 @@ public sealed class PdaDeckBoard : PdaArcadeBoard
     private int _kills;
     private bool _left;
     private bool _right;
+    private bool _turnLeft;
+    private bool _turnRight;
     private bool _up;
     private bool _down;
 
@@ -45,6 +47,10 @@ public sealed class PdaDeckBoard : PdaArcadeBoard
             _left = down;
         else if (command == "right")
             _right = down;
+        else if (command == "turnLeft")
+            _turnLeft = down;
+        else if (command == "turnRight")
+            _turnRight = down;
         else if (command == "up")
             _up = down;
         else if (command == "down")
@@ -69,6 +75,8 @@ public sealed class PdaDeckBoard : PdaArcadeBoard
         _kills = 0;
         _left = false;
         _right = false;
+        _turnLeft = false;
+        _turnRight = false;
         _up = false;
         _down = false;
         _bolts.Clear();
@@ -89,10 +97,15 @@ public sealed class PdaDeckBoard : PdaArcadeBoard
         if (Over || IsPaused)
             return;
 
-        if (_left)
+        if (_turnLeft)
             Turn(-2.3f * dt);
-        if (_right)
+        if (_turnRight)
             Turn(2.3f * dt);
+        var side = 2.15f * dt;
+        if (_left)
+            Slide(_dirY * side, -_dirX * side);
+        if (_right)
+            Slide(-_dirY * side, _dirX * side);
         if (_up)
             Slide(_dirX * 2.15f * dt, _dirY * 2.15f * dt);
         if (_down)

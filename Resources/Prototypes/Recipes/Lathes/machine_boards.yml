@@ -195,6 +195,11 @@
   id: BiomassReclaimerMachineCircuitboard
   result: BiomassReclaimerMachineCircuitboard
 
+- type: latheRecipe
+  parent: [ BaseGoldCircuitboardRecipe, BaseMedicalMachineRecipeCategory ]
+  id: OrganPrinterMachineCircuitboard
+  result: OrganPrinterMachineCircuitboard
+
 # Chemistry
 - type: latheRecipe
   parent: [ BaseCircuitboardRecipe, BaseMedicalMachineRecipeCategory ]

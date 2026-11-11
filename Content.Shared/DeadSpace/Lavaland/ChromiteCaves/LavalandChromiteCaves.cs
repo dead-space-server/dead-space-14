@@ -189,6 +189,10 @@ public sealed partial class LavalandCaveClimbComponent : Component
     [DataField, AutoNetworkedField]
     public string? TipPrototype;
 
+    /// <summary>Leaping out on its own (a creature that needs no hook): no rope is drawn.</summary>
+    [DataField, AutoNetworkedField]
+    public bool NoRope;
+
     [DataField, AutoNetworkedField]
     public float Duration = 1f;
 
@@ -258,6 +262,12 @@ public sealed partial class LavalandPitJumperAlertComponent : Component
     [ViewVariables]
     public float Elapsed;
 }
+
+/// <summary>
+/// Climbs out of the chromite caves' pit by a leap of its own, without a grappling hook (the tamed Ash Wolf).
+/// </summary>
+[RegisterComponent]
+public sealed partial class LavalandCaveLeaperComponent : Component;
 
 /// <summary>
 /// The flight potion: a little white cloud forms under the feet and carries its owner over chasms and lava.

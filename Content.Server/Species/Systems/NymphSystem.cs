@@ -26,6 +26,9 @@ public sealed partial class NymphSystem : EntitySystem
         if (TerminatingOrDeleted(uid) || TerminatingOrDeleted(args.OldBody))
             return;
 
+        if (HasComp<Content.Shared.DeadSpace.Surgery.SurgeryKeepOrganComponent>(uid)) // DS14
+            return; // DS14
+
         if (!_protoManager.TryIndex<EntityPrototype>(comp.EntityPrototype, out var entityProto))
             return;
 

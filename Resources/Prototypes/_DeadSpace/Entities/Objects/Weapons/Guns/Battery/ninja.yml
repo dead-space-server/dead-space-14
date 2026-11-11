@@ -43,7 +43,7 @@
       types:
         Heat: 15
   - type: HitscanStaminaDamage
-    staminaDamage: 30
+    staminaDamage: 33
 
 - type: entity
   id: NinjaJohyo
@@ -69,7 +69,7 @@
   - type: NinjaJohyo
     pullAcceleration: 400
     maxPullSpeed: 15
-    arrivalDistance: 1
+    arrivalDistance: 1.5
     maxDistance: 10
     chainSprite:
       sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi

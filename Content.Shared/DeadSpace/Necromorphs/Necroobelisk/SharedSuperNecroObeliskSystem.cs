@@ -46,6 +46,14 @@ public abstract class SharedSuperNecroobeliskSystem : EntitySystem
         var entities = new HashSet<Entity<MobStateComponent>>();
         foreach (var entity in _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(uid, Transform(uid)), component.RangeSanity))
         {
+            // некроморфы с иммунитетом (личинки, мелкая некро-живность) и мобы без сана
+            // не считаются при снижении процентов обелиска
+            if (HasComp<ImmunNecroobeliskComponent>(entity))
+                continue;
+
+            if (!HasComp<SanityComponent>(entity))
+                continue;
+
             if (TryComp<MobStateComponent>(entity, out var mobState))
                 entities.Add((entity, mobState));
         }

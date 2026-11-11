@@ -183,6 +183,10 @@ public sealed partial class LavalandColossusComponent : Component
     [DataField]
     public TimeSpan AimedCooldown = TimeSpan.FromSeconds(1.5);
 
+    /// <summary>It names its attack this long before the attack starts, so the words are a warning.</summary>
+    [DataField]
+    public TimeSpan SpeechLead = TimeSpan.FromSeconds(0.8);
+
     /// <summary>Players outside the arena it does not chase; they become targets again once back inside.</summary>
     [ViewVariables]
     public readonly HashSet<EntityUid> IgnoredOutside = new();

@@ -238,6 +238,11 @@ public sealed class BlobObserverSystem : SharedBlobObserverSystem
         if (component.SelectedChemId == args.SelectedId)
             return;
 
+        // DS14-start: the chem comes from the client - no value outside the list, and before the points are spent.
+        if (!Enum.IsDefined(args.SelectedId))
+            return;
+        // DS14-end
+
         if (!_blobCoreSystem.TryUseAbility(uid, component.Core.Value, blobCoreComponent,
                 blobCoreComponent.SwapChemCost))
             return;

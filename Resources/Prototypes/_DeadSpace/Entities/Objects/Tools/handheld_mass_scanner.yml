@@ -40,6 +40,7 @@
   - type: Tag
     tags:
     - BluespaceHandHeldMassScanner
+    - CorruptTeleportItem
 
 - type: entity
   id: BluespaceHandHeldMassScannerEmpty

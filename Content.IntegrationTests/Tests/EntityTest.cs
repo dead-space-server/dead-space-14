@@ -168,25 +168,61 @@ namespace Content.IntegrationTests.Tests
                 .Select(p => p.ID)
                 .ToList();
 
-            await server.WaitPost(() =>
+            //DS-14 start
+            var batchSize = protoIds.Count / 8;
+            if (batchSize < 1)
+                batchSize = 1;
+
+            var maps = new List<MapId>();
+            var clientEnt = client.ResolveDependency<IEntityManager>();
+            var clientGain = 0;
+
+            for (var start = 0; start < protoIds.Count; start += batchSize)
             {
-                foreach (var protoId in protoIds)
+                var batchStart = start;
+                var batchEnd = start + batchSize;
+                if (batchEnd > protoIds.Count)
+                    batchEnd = protoIds.Count;
+
+                var clientBefore = clientEnt.EntityCount;
+
+                await server.WaitPost(() =>
                 {
-                    mapSys.CreateMap(out var mapId);
-                    var grid = mapManager.CreateGridEntity(mapId);
-                    var ent = sEntMan.SpawnEntity(protoId, new EntityCoordinates(grid.Owner, 0.5f, 0.5f));
-                    foreach (var (_, component) in sEntMan.GetNetComponents(ent))
+                    maps.Clear();
+                    for (var i = batchStart; i < batchEnd; i++)
                     {
-                        sEntMan.Dirty(ent, component);
+                        mapSys.CreateMap(out var mapId);
+                        maps.Add(mapId);
+                        var grid = mapManager.CreateGridEntity(mapId);
+                        var ent = sEntMan.SpawnEntity(protoIds[i], new EntityCoordinates(grid.Owner, 0.5f, 0.5f));
+                        foreach (var (_, component) in sEntMan.GetNetComponents(ent))
+                        {
+                            sEntMan.Dirty(ent, component);
+                        }
                     }
-                }
-            });
+                });
+
+                await pair.RunTicksSync(1);
+
+                var clientAfter = clientEnt.EntityCount;
+                if (clientAfter > clientBefore)
+                    clientGain += clientAfter - clientBefore;
+
+                await server.WaitPost(() =>
+                {
+                    foreach (var mapId in maps)
+                        mapSys.DeleteMap(mapId);
+                });
+
+                await pair.RunTicksSync(1);
+            }
+            //DS-14 end
 
             await pair.RunTicksSync(15);
 
             // Make sure the client actually received the entities
             // 500 is completely arbitrary. Note that the client & sever entity counts aren't expected to match.
-            Assert.That(client.ResolveDependency<IEntityManager>().EntityCount, Is.GreaterThan(500));
+            Assert.That(clientGain, Is.GreaterThan(500));
 
             await server.WaitPost(() =>
             {

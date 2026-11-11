@@ -100,12 +100,29 @@ public abstract partial class SharedSubdermalImplantSystem : EntitySystem
         var coords = Transform(target).Coordinates;
         var implant = Spawn(implantId, coords);
 
+        // DS14-start
+        if (TryComp<Content.Shared.DeadSpace.Body.Limbs.LimbImplantComponent>(implant, out _))
+        {
+            var limbs = EntityManager.System<Content.Shared.DeadSpace.Body.Limbs.LimbImplantSystem>();
+            if (limbs.TryPlace(target, implant))
+                return implant;
+        }
+        // DS14-end
+
         if (TryComp<SubdermalImplantComponent>(implant, out var implantComp))
         {
             ForceImplant(target, (implant, implantComp));
         }
         else
         {
+            // DS14-start
+            if (HasComp<Content.Shared.DeadSpace.Body.Limbs.LimbImplantComponent>(implant))
+            {
+                Del(implant);
+                return null;
+            }
+            // DS14-end
+
             Log.Warning($"Tried to inject implant '{implantId}' without SubdermalImplantComponent into {ToPrettyString(target):implanted}");
             Del(implant);
             return null;

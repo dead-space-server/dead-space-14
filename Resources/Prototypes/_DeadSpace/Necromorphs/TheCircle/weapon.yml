@@ -688,6 +688,7 @@
   - type: Item
     sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/splinter-blade.rsi
   - type: NecroobeliskSplinter
+    canSummonObelisk: false
     soundHeadaches:
       collection: SoundsHeadaches
   - type: LimitedCharges

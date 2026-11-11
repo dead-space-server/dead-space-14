@@ -11,6 +11,10 @@ public sealed partial class NecroobeliskSplinterComponent : Component
     [DataField]
     public bool SpawnsBlackObelisk;
 
+    /// <summary>Whether a unitologist head can raise an obelisk with it: a real splinter can, a blade grown from one can't.</summary>
+    [DataField]
+    public bool CanSummonObelisk = true;
+
     [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan TimeUtilAddCharge = TimeSpan.FromSeconds(120);
 

@@ -5,7 +5,7 @@
   description: A machine able to facilitate communication between a biological brain and electronics, enabling crew to continue to provide value after work-related incidents.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Robotics/mmi.rsi
+    sprite: _DeadSpace/Objects/Specific/Robotics/mmi.rsi # DS14
     layers:
     - state: mmi_brain
       map: ["enum.MMIVisualLayers.Brain"]
@@ -14,6 +14,14 @@
       map: ["enum.MMIVisualLayers.Base"]
   - type: Input
     context: human
+  # DS14-start
+  - type: Eye
+  - type: LimbFreshLock
+  - type: Language
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
+  # DS14-end
   - type: MMI
     brainSlot:
       name: positronic-brain-slot-component-slot-name-brain

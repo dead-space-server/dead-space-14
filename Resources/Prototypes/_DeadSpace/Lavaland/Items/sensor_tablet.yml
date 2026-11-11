@@ -1,9 +1,6 @@
 - type: entity
-  id: LavalandSensorTablet
-  # Works without a power cell: not a handheld computer, only its sounds.
-  parent: BaseItem
-  name: планшет разведки лаваленда
-  description: Показывает координаты шахтёров, передающих данные костюмных датчиков.
+  abstract: true
+  id: BaseLavalandSensorTablet
   components:
   - type: EmitSoundOnPickup
     sound:
@@ -14,13 +11,6 @@
   - type: EmitSoundOnLand
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
-  - type: Sprite
-    sprite: _DeadSpace/Lavaland/Objects/SensorTablet.rsi
-    state: tablet
-  - type: Item
-    size: Normal
-    sprite: _DeadSpace/Lavaland/Objects/SensorTablet.rsi
-    heldPrefix: null
   - type: ActivatableUI
     key: enum.LavalandSensorTabletUiKey.Key
   - type: UserInterface
@@ -42,3 +32,87 @@
     terrainPointSize: 0.52
   - type: StaticPrice
     price: 1000
+
+- type: entity
+  id: LavalandSensorTablet
+  parent: [ BaseLavalandSensorTablet, BaseHandheldComputer ]
+  name: планшет разведки лаваленда
+  description: Показывает координаты шахтёров, передающих данные костюмных датчиков, на том слое, где находится сам планшет. Расходует батарею, пока открыт.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/SensorTablet.rsi
+    state: tablet
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Lavaland/Objects/SensorTablet.rsi
+    heldPrefix: null
+  - type: PowerCellDraw
+    drawRate: 0.6
+    useCharge: 5
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellSmall
+      sonar_cartridge:
+        name: lavaland-sonar-cartridge-slot
+        whitelist:
+          components:
+          - LavalandSonarCartridge
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot { }
+      sonar_cartridge: !type:ContainerSlot { }
+
+- type: entity
+  id: LavalandSensorTabletRugged
+  parent: [ BaseLavalandSensorTablet, BaseItem ]
+  name: защищённый планшет разведки лаваленда
+  description: Планшет ведущего утилизатора в ударопрочном корпусе. Работает без батареи и показывает как поверхность лаваленда, так и шахты - где бы он ни был.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/SensorTabletRugged.rsi
+    state: tablet
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Lavaland/Objects/SensorTabletRugged.rsi
+    heldPrefix: null
+  - type: LavalandSensorTablet
+    canSwitchLayer: true
+    scanRadius: 10
+    livingColor: White
+    deadColor: Black
+    faunaColor: Red
+    oreColor: Gold
+    lavaColor: OrangeRed
+    floorColor: "#50372d"
+    rockColor: "#96694b"
+    mobPointSize: 0.65
+    terrainPointSize: 0.52
+  - type: ItemSlots
+    slots:
+      sonar_cartridge:
+        name: lavaland-sonar-cartridge-slot
+        whitelist:
+          components:
+          - LavalandSonarCartridge
+  - type: ContainerContainer
+    containers:
+      sonar_cartridge: !type:ContainerSlot { }
+
+- type: entity
+  id: LavalandSonarCartridge
+  parent: BaseItem
+  name: картридж сонара
+  description: Вставляется в планшет разведки лаваленда. Каждый импульс сонара находит ближайшую арену и тратит один заряд.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/cartridge.rsi
+    state: cart-mi
+  - type: Item
+    size: Tiny
+  - type: LavalandSonarCartridge
+    charges: 10
+    maxCharges: 10
+  - type: StaticPrice
+    price: 300

@@ -7,6 +7,7 @@ using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Sandevistan;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -319,12 +320,8 @@ public sealed class SandevistanSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!TryComp<SubdermalImplantComponent>(uid, out var subdermal) ||
-            subdermal.ImplantedEntity is not { } target ||
-            Deleted(target))
-        {
+        if (HostOf(uid) is not { } target)
             return;
-        }
 
         var curTime = _timing.CurTime;
         if (TryComp<ActiveSandevistanComponent>(target, out var currentActive))
@@ -460,6 +457,31 @@ public sealed class SandevistanSystem : EntitySystem
             _actions.SetToggled(action, false);
             _actions.ClearCooldown(action);
         }
+
+        var limbQuery = EntityQueryEnumerator<SandevistanImplantComponent, LimbImplantComponent>();
+        while (limbQuery.MoveNext(out _, out var sandevistan, out var limb))
+        {
+            if (limb.Host != uid)
+                continue;
+
+            sandevistan.NextReadyTime = TimeSpan.Zero;
+            if (limb.Action is not { } action)
+                continue;
+
+            _actions.SetToggled(action, false);
+            _actions.ClearCooldown(action);
+        }
+    }
+
+    private EntityUid? HostOf(EntityUid implant)
+    {
+        if (TryComp<LimbImplantComponent>(implant, out var limb) && limb.Host is { } host && !TerminatingOrDeleted(host))
+            return host;
+
+        if (TryComp<SubdermalImplantComponent>(implant, out var subdermal) && subdermal.ImplantedEntity is { } old && !TerminatingOrDeleted(old))
+            return old;
+
+        return null;
     }
 
     private void OnImplantRemoved(Entity<SandevistanImplantComponent> ent, ref ImplantRemovedEvent args)
@@ -475,8 +497,7 @@ public sealed class SandevistanSystem : EntitySystem
 
     private void OnImplantShutdown(Entity<SandevistanImplantComponent> ent, ref ComponentShutdown args)
     {
-        if (!TryComp<SubdermalImplantComponent>(ent.Owner, out var subdermal) ||
-            subdermal.ImplantedEntity is not { } target ||
+        if (HostOf(ent.Owner) is not { } target ||
             TerminatingOrDeleted(target) ||
             !TryComp<ActiveSandevistanComponent>(target, out var active) ||
             active.SourceImplant != ent.Owner)
@@ -525,15 +546,9 @@ public sealed class SandevistanSystem : EntitySystem
 
     private bool ShouldStop(EntityUid uid, ActiveSandevistanComponent active)
     {
-        if (active.SourceImplant is not { } implant ||
+        return active.SourceImplant is not { } implant ||
             Deleted(implant) ||
-            !TryComp<SubdermalImplantComponent>(implant, out var subdermal) ||
-            subdermal.ImplantedEntity != uid)
-        {
-            return true;
-        }
-
-        return false;
+            HostOf(implant) != uid;
     }
 
     private void StopSandevistan(EntityUid uid)
@@ -641,11 +656,8 @@ public sealed class SandevistanSystem : EntitySystem
         var cooldownEnd = curTime + cooldown;
         implantComp.NextReadyTime = cooldownEnd;
 
-        if (!TryComp<SubdermalImplantComponent>(implant, out var subdermal) ||
-            subdermal.Action is not { } action)
-        {
+        if ((CompOrNull<LimbImplantComponent>(implant)?.Action ?? CompOrNull<SubdermalImplantComponent>(implant)?.Action) is not { } action)
             return;
-        }
 
         _actions.SetToggled(action, false);
 

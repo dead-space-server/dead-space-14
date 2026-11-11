@@ -13,5 +13,8 @@
     WeaponProtoKineticAccelerator: 1
     WeaponProtoKineticAcceleratorReapeter: 1
     WeaponProtoKineticAcceleratorShotgun: 1
+    FieldSplint: 4
+    Tourniquet: 4
+    ProstheticPegLeg: 2
   contrabandInventory:
     PlushieCarp: 1

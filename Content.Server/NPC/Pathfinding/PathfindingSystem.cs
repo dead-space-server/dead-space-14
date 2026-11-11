@@ -10,6 +10,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.Administration;
 using Content.Shared.Climbing.Components;
 using Content.Shared.Doors.Components;
+using Content.Shared.Movement.Components; //DS-14
 using Content.Shared.NPC;
 using Robust.Server.Player;
 using Robust.Shared.Enums;
@@ -514,6 +515,14 @@ namespace Content.Server.NPC.Pathfinding
             {
                 flags |= PathFlags.Interact;
             }
+
+            //DS-14 start
+            if (blackboard.TryGetValue<EntityUid>(NPCBlackboard.Owner, out var owner, EntityManager) &&
+                HasComp<CanMoveInAirComponent>(owner))
+            {
+                flags |= PathFlags.Space;
+            }
+            //DS-14 end
 
             return flags;
         }

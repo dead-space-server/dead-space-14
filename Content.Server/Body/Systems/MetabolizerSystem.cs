@@ -229,6 +229,9 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
                 if (ent.Comp1.RemoveEmpty)
                 {
                     // DS14-start
+                    if (reagent.Prototype.StartsWith("GraftCells"))
+                        continue;
+
                     var removed = solution.RemoveReagent(reagent, FixedPoint2.New(1));
                     solutionChanged |= removed > FixedPoint2.Zero;
                     // DS14-end
@@ -289,6 +292,9 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
                 // TODO: We should have to do this with metabolism. ReagentEffect struct needs refactoring and so does metabolism!
                 void ApplyEffect(EntityEffect effect)
                 {
+                    if (effect is Oxygenate && group.Id == Gas)
+                        return; //DS-14
+
                     switch (effect)
                     {
                         case ModifyLungGas:

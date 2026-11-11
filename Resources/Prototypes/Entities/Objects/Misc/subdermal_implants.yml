@@ -405,13 +405,26 @@
 # Sec and Command implants
 
 - type: entity
-  parent: BaseSubdermalImplant
+  parent: BaseItem # DS14
   id: MindShieldImplant
   name: mindshield implant
   description: This implant will ensure loyalty to Nanotrasen and prevent mind control devices.
   categories: [ HideSpawnMenu ]
   components:
-   - type: SubdermalImplant
+   # DS14-start
+   - type: Sprite
+     sprite: Objects/Specific/Medical/implanter.rsi
+     state: implanter1
+   - type: Item
+     size: Small
+   - type: LimbImplant
+     slots:
+     - Brain
+     - Positronic
+     - Core
+     implantComponents:
+     - type: MindShield
+   # DS14-end
    - type: MindShieldImplant
 
 # Centcomm implants

@@ -20,6 +20,22 @@
         Heat: 0.75
   - type: ExplosionResistance
     damageCoefficient: 0.15
+  # DS14
+  - type: LimbCover
+    stopsFire: true
+    blast: true
+    sever: true
+    zones:
+    - Torso
+    - Groin
+    - ArmLeft
+    - ArmRight
+    - HandLeft
+    - HandRight
+    - LegLeft
+    - LegRight
+    - FootLeft
+    - FootRight
   - type: GroupExamine
   - type: Tag
     tags:
@@ -60,6 +76,22 @@
     coolingCoefficient: 0.05
   - type: FireProtection
     reduction: 0.65 # doesnt have a full seal so not as good
+  # DS14
+  - type: LimbCover
+    stopsFire: true
+    blast: true
+    sever: true
+    zones:
+    - Torso
+    - Groin
+    - ArmLeft
+    - ArmRight
+    - HandLeft
+    - HandRight
+    - LegLeft
+    - LegRight
+    - FootLeft
+    - FootRight
   - type: Armor
     modifiers:
       coefficients:
@@ -95,6 +127,22 @@
     coolingCoefficient: 0.05
   - type: FireProtection
     reduction: 0.8 # atmos firesuit offers best protection, hardsuits are a little vulnerable
+  # DS14
+  - type: LimbCover
+    stopsFire: true
+    blast: true
+    sever: true
+    zones:
+    - Torso
+    - Groin
+    - ArmLeft
+    - ArmRight
+    - HandLeft
+    - HandRight
+    - LegLeft
+    - LegRight
+    - FootLeft
+    - FootRight
   - type: Armor
     modifiers:
       coefficients:
@@ -182,6 +230,22 @@
     damageCoefficient: 0.5
   - type: ExplosionResistance
     damageCoefficient: 0.75
+  # DS14
+  - type: LimbCover
+    stopsFire: true
+    blast: true
+    sever: true
+    zones:
+    - Torso
+    - Groin
+    - ArmLeft
+    - ArmRight
+    - HandLeft
+    - HandRight
+    - LegLeft
+    - LegRight
+    - FootLeft
+    - FootRight
   - type: Appearance #DS14
   # core ninja suit stuff
   - type: NinjaSuit
@@ -211,12 +275,18 @@
   - type: AutoDust
   - type: NinjaSuitRefill
     actionMaterials:
-      ActionNinjaHealingCocktail:
-        stack: ClearBluspaceCrystal
-        amount: 10
-      ActionNinjaAdrenal:
-        stack: Uranium
-        amount: 10
+    - action: ActionNinjaHealingCocktail
+      stack: ClearBluspaceCrystal
+      amount: 10
+    - action: ActionNinjaAdrenal
+      stack: Uranium
+      amount: 10
+    - action: ActionNinjaHealingCocktail
+      stack: NinjaRefreshToken
+      amount: 1
+    - action: ActionNinjaAdrenal
+      stack: NinjaRefreshToken
+      amount: 1
   - type: Jetpack
     requiresGas: false
     toggleAction: NinjaActionToggleJetpack

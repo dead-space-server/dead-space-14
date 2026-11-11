@@ -65,3 +65,5 @@
   - type: Anchorable
   - type: Pullable
   - type: AutopsyTable
+  - type: SurgerySurface
+    place: Table

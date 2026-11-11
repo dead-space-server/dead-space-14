@@ -116,6 +116,7 @@
       params:
         variation: 0.250
   - type: MeleeWeapon
+    attackRate: 1.2
     damage:
       types:
         Slash: 10
@@ -128,6 +129,7 @@
     sprite: _DeadSpace/Objects/Weapons/Melee/truncheon_sec.rsi
   - type: DisarmMalus
     malus: 0
+  - type: PreventForcedDrop
   - type: Appearance
   - type: Sharp
   - type: Reflect

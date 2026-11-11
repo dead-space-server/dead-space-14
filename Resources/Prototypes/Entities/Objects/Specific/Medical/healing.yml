@@ -329,17 +329,6 @@
           volume: 1.0
           variation: 0.125
 
-# DS14-Start
-- type: entity
-  id: Tourniquet3
-  parent: Tourniquet
-  suffix: Полный
-  components:
-  - type: Stack
-    stackType: Tourniquet
-    count: 3
-# DS14-End
-
 - type: entity
   name: roll of gauze
   description: Some sterile gauze to wrap around bloody stumps.

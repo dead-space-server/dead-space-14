@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "Taken from tgstation (https://github.com/tgstation/tgstation), master branch as of 2026-10-13; converted to RSI for Dead Space 14",
+    "copyright": "resprited by amaliz (discord), taken from tgstation (https://github.com/tgstation/tgstation) originals",
     "size": {
         "x": 32,
         "y": 32
@@ -11,11 +11,38 @@
             "name": "icon"
         },
         {
+            "name": "icon-cain"
+        },
+        {
             "name": "inhand-left",
             "directions": 4
         },
         {
             "name": "inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "cain-inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "cain-inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "wielded-inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "wielded-inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "cain-wielded-inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "cain-wielded-inhand-right",
             "directions": 4
         }
     ]

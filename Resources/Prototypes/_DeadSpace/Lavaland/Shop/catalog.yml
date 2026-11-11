@@ -68,6 +68,23 @@
 # Инструменты
 
 - type: listing
+  id: LavalandMiningSensorTablet
+  productEntity: LavalandSensorTablet
+  categories:
+  - LavalandMiningUtility
+  cost:
+    LavalandMiningPoint: 6500
+
+- type: listing
+  id: LavalandMiningSonarCartridge
+  productEntity: LavalandSonarCartridge
+  categories:
+  - LavalandMiningUtility
+  - LavalandMiningUtilityTaipan
+  cost:
+    LavalandMiningPoint: 3000
+
+- type: listing
   id: LavalandMiningOreBag
   productEntity: OreBag
   categories:
@@ -84,6 +101,15 @@
   - LavalandMiningUtilityTaipan
   cost:
     LavalandMiningPoint: 800
+
+- type: listing
+  id: LavalandMiningOreBoxFlatpack
+  productEntity: OreBoxFlatpack
+  categories:
+  - LavalandMiningUtility
+  - LavalandMiningUtilityTaipan
+  cost:
+    LavalandMiningPoint: 1000
 
 - type: listing
   id: LavalandMiningPickaxe
@@ -173,6 +199,14 @@
   - LavalandMiningTools
   cost:
     LavalandMiningPoint: 250
+
+- type: listing
+  id: LavalandMiningSeniorKineticAccelerator
+  productEntity: WeaponSeniorKinetik
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 2000
 
 - type: listing
   id: LavalandWeaponPlasmaCutter

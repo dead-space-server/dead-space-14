@@ -1,0 +1,40 @@
+# Двусторонний чек НаноДела: текст можно посмотреть только на лицевой стороне,
+# сам листок переворачивается вердом "Перевернуть", как игральная карта.
+- type: entity
+  parent: Paper
+  id: PaperReceiptFlipFront
+  name: билет
+  components:
+  - type: FlippablePaper
+    flipTarget: PaperReceiptFlipBack
+  - type: Sprite
+    sprite: Objects/Misc/bureaucracy.rsi
+    layers:
+    - state: paper_receipt
+    - state: paper_receipt_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamp-generic
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/Interface/Paper/paper_background_perforated.svg.96dpi.png"
+    headerImagePath: "/Textures/Interface/Paper/paper_heading_nanotask.svg.96dpi.png"
+    headerMargin: 0.0, 0.0, 0.0, 6.0
+    backgroundImageTile: true
+    backgroundPatchMargin: 0.0, 6.0, 0.0, 6.0
+    contentMargin: 12.0, 0.0, 12.0, 0.0
+    maxWritableArea: 256.0, 0.0
+
+# Обратная (реверс) сторона того же чека - выглядит пустой, текст посмотреть нельзя.
+- type: entity
+  parent: BasePaper
+  id: PaperReceiptFlipBack
+  name: билет
+  components:
+  - type: FlippablePaper
+    flipTarget: PaperReceiptFlipFront
+  - type: Sprite
+    sprite: Objects/Misc/bureaucracy.rsi
+    layers:
+    - state: paper_receipt

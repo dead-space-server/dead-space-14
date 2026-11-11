@@ -90,7 +90,7 @@
   categories:
    - UplinkUnitologyInfection
   conditions:
-  - !type:ListingLimitedStockCondition
+  - !type:GlobalLimitedStockCondition
     stock: 2
 
 - type: listing
@@ -146,6 +146,67 @@
     Telecrystal: 5
   categories:
     - UplinkUnitologyInfection
+
+- type: listing
+  id: UnitologyGeistReinforcementList
+  name: Подкрепление - Гейст Круга
+  description: Круг высылает к станции шаттл с Гейстом. Он подчиняется главе и способен воздвигнуть обелиск. Вызвать можно лишь раз за смену.
+  icon: { sprite: _DeadSpace/Necromorfs/TheCircle/Helmet/geist.rsi, state: icon }
+  productEvent: !type:StartGameRuleProductEvent
+    rule: GeistMidroundCalledSpawn
+  disableRefund: true
+  restockTime: 2700
+  cost:
+    Telecrystal: 50
+  categories:
+    - UplinkUnitologyInfection
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - UnitologyHeadUplink
+  - !type:GameRuleNotActiveCondition
+    rules:
+    - GeistMidroundSpawn
+    - GeistMidroundCalledSpawn
+  - !type:GlobalLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UnitologySplinterBladeList
+  name: Осколочный клинок
+  icon: { sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/splinter-blade.rsi, state: icon }
+  description: "Идея вживления в свой организм чего-то инородного, живого меня крайне пугает... Могу ли я пойти на этот риск ради своего Бога?"
+  productEntity: UnitologySplinterBladeImplanter
+  cost:
+    Telecrystal: 10
+  categories:
+    - UplinkUnitologyInfection
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - UnitologyHeadUplink
+  - !type:GlobalLimitedStockCondition
+    stock: 2
+
+- type: listing
+  id: UnitologyLethalBladeList
+  name: Летальный клинок
+  icon: { sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/strike-blade.rsi, state: icon }
+  description: Вы подготовливаете летальный урон, а после чего делаете из врага пончик.
+  productEntity: UnitologyLethalBladeImplanter
+  cost:
+    Telecrystal: 10
+  categories:
+    - UplinkUnitologyInfection
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - UnitologyHeadUplink
+  - !type:GlobalLimitedStockCondition
+    stock: 2
 
 - type: storeCategory
   id: UplinkUnitologyInfection
@@ -218,3 +279,9 @@
   - type: Store
     balance:
       Telecrystal: 50
+  - type: Tag
+    tags:
+    - UnitologyHeadUplink
+
+- type: Tag
+  id: UnitologyHeadUplink

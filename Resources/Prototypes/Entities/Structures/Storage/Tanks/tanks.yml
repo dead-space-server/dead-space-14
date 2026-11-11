@@ -32,7 +32,8 @@
   - type: PacifismDangerousAttack
   - type: Explosive
     explosionType: Default
-    totalIntensity: 70 # ~ 3 tile radius
+    totalIntensity: 45 # DS14
+    maxIntensity: 2.5 # DS14
 
 - type: entity
   id: WeldingFuelTankFull
@@ -74,7 +75,8 @@
         maxVol: 5000
   - type: Explosive
     explosionType: Default
-    totalIntensity: 120
+    totalIntensity: 80 # DS14
+    maxIntensity: 3 # DS14
 
 # Water
 

@@ -86,6 +86,7 @@ public sealed class SurveillanceCameraArchivePickMessage : BoundUserInterfaceMes
 {
     public NetEntity Camera;
     public int FrameIndex = -1;
+    public int FrameId;
 }
 
 [Serializable, NetSerializable]
@@ -94,6 +95,7 @@ public sealed class SurveillanceCameraArchiveBrowseMessage : BoundUserInterfaceM
     public CameraArchiveEntry[] Cameras = [];
     public NetEntity Selected;
     public int FrameIndex;
+    public int FrameId;
     public int FrameCount;
     public TimeSpan FrameTime;
     public CameraArchive? Frame;

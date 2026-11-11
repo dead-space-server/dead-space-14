@@ -45,6 +45,7 @@ pda-arcade-game-ships = Морской бой
 pda-arcade-game-pong = Пинг-понг
 pda-arcade-game-chess = Шахматы
 pda-arcade-game-checks = Шашки
+pda-arcade-game-casino = Казино
 pda-arcade-together = Вместе
 pda-arcade-solo = Один
 pda-arcade-roll-sides = Кто выкинет больше, ходит первым

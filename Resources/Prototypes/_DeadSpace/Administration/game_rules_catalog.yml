@@ -6,7 +6,7 @@
 #   id: (ID геймрула, например BlobSpawn)
 #   name: (Его отображаемое имя, например Носитель блоба)
 #=================================================================================================================
-# По необходимости можно создавать новые категории, локализация находится по пути: 
+# По необходимости можно создавать новые категории, локализация находится по пути:
 # Resources\Locale\ru-RU\_deadspace\administration\manage-gamerules.ftl
 # Если геймрул не существует или не найден, он будет отображаться красным цветом в панели, и не будет добавляться.
 #=================================================================================================================
@@ -79,7 +79,8 @@
     - RevenantSpawn
     - ImmovableRodSpawn
     - BlobSpawn
-    - SpiderTerrorSpawn
+    - SpiderTerrorOutbreak # DS14
+    - Xenoborgs # DS14
     - WizardSpawn
     - RenegadeSpawn
     - HardVirusPandemic
@@ -386,12 +387,20 @@
   name: Одиночный ядерный оперативник (от ~ 90 минут)
 
 - type: gameRuleDisplayName
+  id: GeistMidroundSpawn
+  name: Гейст Круга (от ~ 90 минут)
+
+- type: gameRuleDisplayName
   id: SyndicateRaid
   name: Рейдеры синдиката (от ~ 90 минут)
 
 - type: gameRuleDisplayName
   id: ZombieOutbreak
-  name: Зомби-вспышка (от ~ 90 минут)
+  name: Зомби-вспышка (от ~ 60 минут)
+
+- type: gameRuleDisplayName
+  id: Xenoborgs
+  name: Ксеноборги (от ~ 60 минут)
 
 - type: gameRuleDisplayName
   id: DragonSpawn
@@ -422,7 +431,7 @@
   name: Носитель блоба (от ~ 60 минут)
 
 - type: gameRuleDisplayName
-  id: SpiderTerrorSpawn
+  id: SpiderTerrorOutbreak
   name: Пауки ужаса (от ~ 60 минут)
 
 - type: gameRuleDisplayName

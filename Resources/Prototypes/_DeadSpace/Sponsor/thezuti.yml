@@ -120,6 +120,7 @@
   - type: ClothingSpeedModifier
     walkModifier: 1
     sprintModifier: 1
+  - type: HardsuitIdentification
   - type: Armor
     modifiers:
       coefficients:

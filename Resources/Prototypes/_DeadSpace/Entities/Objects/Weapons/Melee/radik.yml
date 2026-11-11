@@ -93,8 +93,8 @@
       Holywater:
         reagents:
         - ReagentId: Holywater
-          Quantity: 25
-        maxVol: 25
+          Quantity: 125
+        maxVol: 125
   - type: PointLight
     enabled: false
     radius: 5.5

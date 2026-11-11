@@ -1684,7 +1684,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
 
     private bool IsDead(EntityUid uid)
     {
-        return TryComp(uid, out MobStateComponent? mobState) && mobState.CurrentState == MobState.Dead;
+        return !TryComp(uid, out MobStateComponent? mobState) || mobState.CurrentState == MobState.Dead;
     }
 
     private EntityUid? SpawnAnchored(string prototype, EntityUid gridUid, MapGridComponent grid, Vector2i index)

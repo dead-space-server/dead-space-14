@@ -1,5 +1,8 @@
+using System.Linq;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.EUI;
+using Content.Shared.Eye;
+using Robust.Server.GameObjects;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -36,6 +39,9 @@ public sealed class LavalandSpectralBladeSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly VisibilitySystem _visibility = default!;
+
+    private readonly HashSet<EntityUid> _stillFollowing = new();
 
     public override void Initialize()
     {
@@ -56,6 +62,8 @@ public sealed class LavalandSpectralBladeSystem : EntitySystem
         var query = EntityQueryEnumerator<LavalandSpectralBladeComponent>();
         while (query.MoveNext(out var uid, out var component))
         {
+            UpdateRevealedGhosts((uid, component), component.ActiveUntil > now);
+
             if (component.CurrentSpirits <= 0 || component.ActiveUntil > now)
                 continue;
 
@@ -68,6 +76,71 @@ public sealed class LavalandSpectralBladeSystem : EntitySystem
     {
         ent.Comp.CurrentSpirits = 0;
         ApplyDamage(ent);
+        UpdateRevealedGhosts(ent, false);
+    }
+
+    /// <summary>
+    /// While the blade is active the spirits circling it are seen by the living too; let go, or the blade calmed,
+    /// they are ghosts again.
+    /// </summary>
+    private void UpdateRevealedGhosts(Entity<LavalandSpectralBladeComponent> ent, bool active)
+    {
+        _stillFollowing.Clear();
+        if (active && TryComp<FollowedComponent>(ent, out var followed))
+        {
+            foreach (var follower in followed.Following)
+            {
+                if (HasComp<GhostComponent>(follower))
+                    _stillFollowing.Add(follower);
+            }
+        }
+
+        foreach (var ghost in ent.Comp.RevealedGhosts.ToArray())
+        {
+            if (_stillFollowing.Contains(ghost))
+                continue;
+
+            ent.Comp.RevealedGhosts.Remove(ghost);
+            SetGhostShown(ghost, false);
+        }
+
+        foreach (var ghost in _stillFollowing)
+        {
+            // A ghost already shown to all (the round's end) is left as it is.
+            if (ent.Comp.RevealedGhosts.Contains(ghost) ||
+                !TryComp<VisibilityComponent>(ghost, out var visibility) ||
+                (visibility.Layer & (int) VisibilityFlags.Normal) != 0)
+            {
+                continue;
+            }
+
+            ent.Comp.RevealedGhosts.Add(ghost);
+            SetGhostShown(ghost, true);
+        }
+    }
+
+    private void SetGhostShown(EntityUid ghost, bool shown)
+    {
+        // Back in a body, the ghost's own shutdown has already made it visible as it should be.
+        if (TerminatingOrDeleted(ghost) ||
+            !HasComp<GhostComponent>(ghost) ||
+            !TryComp<VisibilityComponent>(ghost, out var visibility))
+        {
+            return;
+        }
+
+        if (shown)
+        {
+            _visibility.AddLayer((ghost, visibility), (int) VisibilityFlags.Normal, false);
+            _visibility.RemoveLayer((ghost, visibility), (int) VisibilityFlags.Ghost, false);
+        }
+        else
+        {
+            _visibility.AddLayer((ghost, visibility), (int) VisibilityFlags.Ghost, false);
+            _visibility.RemoveLayer((ghost, visibility), (int) VisibilityFlags.Normal, false);
+        }
+
+        _visibility.RefreshVisibility(ghost, visibilityComponent: visibility);
     }
 
     private void OnUseInHand(Entity<LavalandSpectralBladeComponent> ent, ref UseInHandEvent args)

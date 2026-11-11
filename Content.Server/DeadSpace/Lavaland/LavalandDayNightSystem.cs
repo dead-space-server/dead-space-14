@@ -60,6 +60,12 @@ public sealed class LavalandDayNightSystem : EntitySystem
             if (now >= cycle.PhaseEnd)
                 StartPhase((uid, cycle), config, (cycle.Phase + 1) % config.Phases.Count, now, false, false);
 
+            if (cycle.PulseUntil != TimeSpan.Zero)
+            {
+                UpdatePulse((uid, cycle), config, now);
+                continue;
+            }
+
             if (cycle.Fading && now >= cycle.NextLightUpdate)
                 UpdateLight((uid, cycle), config, now);
         }
@@ -93,6 +99,8 @@ public sealed class LavalandDayNightSystem : EntitySystem
         var phase = config.Phases[index];
         var cycle = ent.Comp;
         cycle.Phase = index;
+        cycle.Night = phase.DeepNight != null;
+        cycle.CelestialNight = cycle.Night && cycle.Tint != null;
         cycle.PhaseStart = now;
         cycle.PhaseEnd = now + (phase.Duration > TimeSpan.Zero ? phase.Duration : TimeSpan.FromMinutes(1));
         SetFlags(cycle, phase.JamTrackers, phase.BlockJaunter, phase.WispGuide, false, false);
@@ -162,11 +170,90 @@ public sealed class LavalandDayNightSystem : EntitySystem
         cycle.SuppressLavaLight = suppressLava;
     }
 
+    /// <summary>
+    /// From now on the nights of this lavaland take the hue and glow as the chromite caves do; the days keep their own
+    /// light. If it is night now, it fades into it at once.
+    /// </summary>
+    public void SetTint(EntityUid map, Color tint, float brightness = 1f, float minBrightness = 0.08f)
+    {
+        if (!TryComp<LavalandDayCycleComponent>(map, out var cycle))
+            return;
+
+        var target = cycle.Fading ? cycle.BaseColor : EnsureComp<MapLightComponent>(map).AmbientLightColor;
+        cycle.Tint = tint;
+        cycle.TintBrightness = brightness;
+        cycle.TintMinBrightness = minBrightness;
+        cycle.CelestialNight = cycle.Night;
+        Dirty(map, cycle);
+        FadeTo((map, cycle), target, _timing.CurTime);
+    }
+
+    /// <summary>
+    /// The light of the whole map shimmers between two colours for a while, like the chromite caves' pit; then it
+    /// fades back to the phase's own colour.
+    /// </summary>
+    public void Pulse(EntityUid map, Color a, Color b, TimeSpan duration, float period = 2f)
+    {
+        if (!TryComp<LavalandDayCycleComponent>(map, out var cycle))
+            return;
+
+        cycle.PulseUntil = _timing.CurTime + duration;
+        cycle.PulseA = a;
+        cycle.PulseB = b;
+        cycle.PulsePeriod = MathF.Max(0.5f, period);
+        cycle.NextLightUpdate = _timing.CurTime;
+    }
+
+    private void UpdatePulse(Entity<LavalandDayCycleComponent> ent, LavalandDayCycleConfig config, TimeSpan now)
+    {
+        var cycle = ent.Comp;
+        if (now >= cycle.PulseUntil)
+        {
+            cycle.PulseUntil = TimeSpan.Zero;
+            var phase = config.Phases[Math.Clamp(cycle.Phase, 0, config.Phases.Count - 1)];
+            FadeTo(ent, phase.LightColor, now);
+            return;
+        }
+
+        if (now < cycle.NextLightUpdate)
+            return;
+
+        var t = (MathF.Sin((float) now.TotalSeconds * MathF.Tau / cycle.PulsePeriod) + 1f) / 2f;
+        var light = EnsureComp<MapLightComponent>(ent);
+        light.AmbientLightColor = Color.InterpolateBetween(cycle.PulseA, cycle.PulseB, t);
+        Dirty(ent, light);
+        cycle.NextLightUpdate = now + PulseUpdateInterval;
+    }
+
+    private static readonly TimeSpan PulseUpdateInterval = TimeSpan.FromSeconds(0.1);
+
+    /// <summary>
+    /// A night's colour turned towards the tint, as bright as it was times the tint's brightness, but never darker than
+    /// its floor; a day's as it is.
+    /// </summary>
+    private static Color Tinted(LavalandDayCycleComponent cycle, Color color)
+    {
+        if (cycle.Tint is not { } tint || !cycle.Night)
+            return color;
+
+        var brightness = MathF.Max(MathF.Max(color.R, color.G), color.B) * cycle.TintBrightness;
+        brightness = Math.Clamp(MathF.Max(brightness, cycle.TintMinBrightness), 0f, 1f);
+        var hued = new Color(
+            MathF.Min(1f, tint.R * brightness),
+            MathF.Min(1f, tint.G * brightness),
+            MathF.Min(1f, tint.B * brightness),
+            color.A);
+        return Color.InterpolateBetween(color, hued, TintStrength);
+    }
+
+    private const float TintStrength = 0.75f;
+
     private void FadeTo(Entity<LavalandDayCycleComponent> ent, Color color, TimeSpan now)
     {
         var light = EnsureComp<MapLightComponent>(ent);
         ent.Comp.FromColor = light.AmbientLightColor;
-        ent.Comp.ToColor = color;
+        ent.Comp.BaseColor = color;
+        ent.Comp.ToColor = Tinted(ent.Comp, color);
         ent.Comp.Fading = true;
         ent.Comp.FadeStart = now;
         ent.Comp.NextLightUpdate = now;

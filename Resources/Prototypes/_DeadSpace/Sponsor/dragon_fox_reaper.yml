@@ -259,3 +259,26 @@
   cost: 500
   category: cargoproduct-category-name-fun
   group: market
+
+- type: entity
+  parent: ClothingBackpackSatchel
+  id: ClothingBackpackSatchelDragonFoxReaper
+  name: сумка "Жнеца"
+  description: Внутри костюм и плащ жнеца, плащ смерти, обе пары перчаток, ботинки, обе игрушечные косы и плюшевый жнец.
+  suffix: Жнец
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,9,5
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitDragonFoxReaper1
+    - id: ClothingOuterCoatDragonFoxReaper1
+    - id: ClothingOuterCoatDragonFoxReaper2
+    - id: ClothingHandsGlovesDragonFoxReaper1
+    - id: ClothingHandsGlovesDragonFoxReaper2
+    - id: ClothingFootDragonFoxReaper2
+    - id: ToyScytheDragonFoxReaper2
+    - id: ToyScythe3eilado
+    - id: PlushieDragonFoxReaper2

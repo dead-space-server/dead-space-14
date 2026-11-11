@@ -58,8 +58,31 @@ public sealed class InternalsSystem : SharedInternalsSystem
     {
         if (AreInternalsWorking(ent))
         {
-            var gasTank = Comp<GasTankComponent>(ent.Comp.GasTankEntity!.Value);
-            args.Gas = _gasTank.RemoveAirVolume((ent.Comp.GasTankEntity.Value, gasTank), args.Respirator.BreathVolume);
+            var tankEnt = ent.Comp.GasTankEntity!.Value;
+            var gasTank = Comp<GasTankComponent>(tankEnt);
+            //DS-14 start
+            if (!_respirator.Saturates(ent.Owner, gasTank.Air))
+            {
+                var better = FindBestGasTank(ent.Owner);
+                if (better != null && _respirator.Saturates(ent.Owner, better.Value.Comp.Air))
+                {
+                    if (better.Value.Owner != tankEnt && !_gasTank.ConnectToInternals(better.Value, user: ent.Owner))
+                        return;
+                }
+                else
+                {
+                    _gasTank.DisconnectFromInternals((tankEnt, gasTank), user: ent.Owner);
+                    return;
+                }
+
+                if (!AreInternalsWorking(ent))
+                    return;
+
+                tankEnt = ent.Comp.GasTankEntity!.Value;
+                gasTank = Comp<GasTankComponent>(tankEnt);
+            }
+            //DS-14 end
+            args.Gas = _gasTank.RemoveAirVolume((tankEnt, gasTank), args.Respirator.BreathVolume);
             // TODO: Should listen to gas tank updates instead I guess?
             _alerts.ShowAlert(ent.Owner, ent.Comp.InternalsAlert, GetSeverity(ent));
         }
