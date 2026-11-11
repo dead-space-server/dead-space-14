@@ -296,7 +296,7 @@ public sealed class CelestialSystem : EntitySystem
                 // Its own attacks never hurt the Celestial.
                 if (victim == uid || TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim))
                     continue;
-                _damage.TryChangeDamage(victim, sphereDmg, true);
+                _damage.TryChangeDamage(victim, sphereDmg);
             }
         }
     }
@@ -329,7 +329,7 @@ public sealed class CelestialSystem : EntitySystem
                 continue;
             if (HasComp<CelestialComponent>(candidate))
                 continue;
-            _damage.TryChangeDamage(candidate, damage, true);
+            _damage.TryChangeDamage(candidate, damage);
         }
     }
 
@@ -350,6 +350,11 @@ public sealed class CelestialSystem : EntitySystem
     public void BroadcastDeathSpeak(string text, float duration)
     {
         RaiseToMapOrAll(new CelestialDeathSpeakEvent(text, duration));
+    }
+
+    public void BroadcastDeathInvert()
+    {
+        RaiseToMapOrAll(new CelestialDeathInvertEvent());
     }
 
     public void BroadcastDeathEnd()
@@ -594,7 +599,7 @@ public sealed class CelestialSystem : EntitySystem
 
     private void BeamStrike(Entity<CelestialComponent> ent, CelestialComponent comp, int beamCount, bool telegraph = true)
     {
-        var targets = GetTargets(ent, beamCount + comp.ExtraTargets);
+        var targets = GetSpacedTargets(ent, beamCount + comp.ExtraTargets);
         foreach (var target in targets)
         {
             FireBeamsAround(ent, comp, target, beamCount, telegraph);
@@ -603,7 +608,7 @@ public sealed class CelestialSystem : EntitySystem
 
     private void FinalVolley(Entity<CelestialComponent> ent, CelestialComponent comp)
     {
-        var targets = GetTargets(ent, 1 + comp.ExtraTargets);
+        var targets = GetSpacedTargets(ent, 1 + comp.ExtraTargets);
         var count = Math.Max(1, comp.FinalBeamCount);
         foreach (var target in targets)
         {
@@ -659,7 +664,7 @@ public sealed class CelestialSystem : EntitySystem
                     if (DistanceToSegment(victimPos, beamStart, beamEnd) > comp.BeamDamageRadius)
                         continue;
 
-                    _damage.TryChangeDamage(victim, BeamDamage, true);
+                    _damage.TryChangeDamage(victim, BeamDamage);
                 }
 
                 // ломаем пол под ударом
@@ -716,7 +721,7 @@ public sealed class CelestialSystem : EntitySystem
                     // чистим исчезнувшие шары
                     aliveRef.RemoveAll(o => o == EntityUid.Invalid || TerminatingOrDeleted(o) || !Exists(o));
 
-                    if (spawned >= quota || aliveRef.Count >= comp.OrbsPerCrack)
+                    if (spawned >= quota || aliveRef.Count >= 1)
                         return;
                     if (TerminatingOrDeleted(targetRef))
                         return;
@@ -724,7 +729,7 @@ public sealed class CelestialSystem : EntitySystem
                     if (SpawnRiftAndOrb(ent, comp, targetRef, aliveRef, 1))
                         spawned++;
                 });
-                check += 1f;
+                check += 0.3f;
             }
         }
 
@@ -839,7 +844,7 @@ public sealed class CelestialSystem : EntitySystem
         {
             if (TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim) || victim == uid)
                 continue;
-            _damage.TryChangeDamage(victim, damage, true);
+            _damage.TryChangeDamage(victim, damage);
         }
     }
 
@@ -868,7 +873,7 @@ public sealed class CelestialSystem : EntitySystem
                 continue;
             if (DistanceToSegment(_transform.GetMapCoordinates(victim).Position, start, end) > orb.BeamRadius)
                 continue;
-            _damage.TryChangeDamage(victim, damage, true);
+            _damage.TryChangeDamage(victim, damage);
         }
     }
 
@@ -922,7 +927,7 @@ public sealed class CelestialSystem : EntitySystem
                 // у самого центра бьёт гарантированно
                 if (victimRel.Length() <= comp.CutterDamageRadius * 2f)
                 {
-                    _damage.TryChangeDamage(victim, damage, true);
+                    _damage.TryChangeDamage(victim, damage);
                     continue;
                 }
 
@@ -940,7 +945,7 @@ public sealed class CelestialSystem : EntitySystem
                 }
 
                 if (hit)
-                    _damage.TryChangeDamage(victim, damage, true);
+                    _damage.TryChangeDamage(victim, damage);
             }
         });
     }
@@ -994,12 +999,27 @@ public sealed class CelestialSystem : EntitySystem
             angle += Math.Clamp(diff, -maxTurn, maxTurn);
             orb.VelocityDir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
 
-            // лёгкое петляние поверх траектории
+            // зигзаг-телепорт: раз в интервал шар РЫВКОМ телепортируется
+            // к точке прицела (вперёд к игроку + боковой зигзаг)
+            orb.TeleportAccumulator += frameTime;
+            if (orb.TeleportAccumulator >= orb.TeleportInterval)
+            {
+                orb.TeleportAccumulator -= orb.TeleportInterval;
+
+                var blinkAngle = MathF.Atan2(orb.VelocityDir.Y, orb.VelocityDir.X)
+                    + MathF.Sin(orb.Elapsed * orb.WeaveFreq + orb.Phase) * 0.6f;
+                var blinkDir = new Vector2(MathF.Cos(blinkAngle), MathF.Sin(blinkAngle));
+                var blink = blinkDir * MathF.Min(orb.TeleportDist, dist * 0.6f);
+                _transform.SetWorldPosition(uid, orbPos + blink);
+                continue;
+            }
+
+            // между рывками - неспешный неповоротливый дрейф к игроку
             var perpendicular = new Vector2(-orb.VelocityDir.Y, orb.VelocityDir.X);
             var weave = MathF.Sin(orb.Elapsed * orb.WeaveFreq + orb.Phase) * orb.WeaveAmp;
             var moveDir = Vector2.Normalize(orb.VelocityDir + perpendicular * weave);
 
-            var step = orb.Speed * frameTime;
+            var step = orb.Speed * 0.55f * frameTime;
             if (!CanMove(uid))
                 continue;
 
@@ -1171,7 +1191,7 @@ public sealed class CelestialSystem : EntitySystem
                 {
                     if (victim == uid || TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim))
                         continue;
-                    _damage.TryChangeDamage(victim, dmg, true);
+                    _damage.TryChangeDamage(victim, dmg);
                 }
             }
         }
@@ -1186,7 +1206,7 @@ public sealed class CelestialSystem : EntitySystem
         Sound(comp.TeleportSound, ent);
 
         // основные цели плюс дубликаты на дополнительных игроков
-        var targets = GetTargets(ent, comp.SphereTargets + comp.ExtraTargets);
+        var targets = GetSpacedTargets(ent, comp.SphereTargets + comp.ExtraTargets);
         foreach (var target in targets)
         {
             var count = (int)MathF.Round(_random.Next(comp.SpheresPerTargetMin, comp.SpheresPerTargetMax + 1) * multiplier);
@@ -1226,12 +1246,12 @@ public sealed class CelestialSystem : EntitySystem
         SpeakFor(ent, comp.FlashLine, 3f);
         SummonSpheres(ent, comp, comp.FlashSphereMultiplier);
 
-        // (УВЯНЬ В ЦВЕТУ временно выключена - вернуть вызов StartBloom здесь)
+        // как только сферы отжили - СРАЗУ УВЯНЬ В ЦВЕТУ
         Timer.Spawn(TimeSpan.FromSeconds(comp.SphereLifetimeMax + 0.7f), () =>
         {
             if (TerminatingOrDeleted(ent))
                 return;
-            comp.Attacking = false;
+            StartBloom(ent, comp);
         });
     }
 
@@ -1250,104 +1270,67 @@ public sealed class CelestialSystem : EntitySystem
 
         Sound(comp.BloomChargeSound, ent, -2f);
 
-        // три луча от тела Селестиала, каждый плавно следит за своей целью
-        var bossMapPos = _transform.GetMapCoordinates(ent);
-        var targets = GetTargets(ent, 3);
-        var sweeps = new List<(EntityUid target, float angle, float damageAcc)>();
-        foreach (var target in targets)
-        {
-            var startPos = _transform.GetMapCoordinates(target).Position;
-            var initAngle = MathF.Atan2(startPos.Y - bossMapPos.Position.Y, startPos.X - bossMapPos.Position.X);
-            sweeps.Add((target, initAngle, 0f));
-        }
+        // крест из 4 очень длинных лучей вокруг тела Селестиала
+        var center = _transform.GetMapCoordinates(ent).Position;
+        var mapId = Transform(ent).MapID;
+        var baseAngle = _random.NextFloat(0f, MathF.Tau);
 
-        Timer.Spawn(TimeSpan.FromSeconds(comp.BloomChargeTime), () =>
+        RaiseCelestial(ent, new CelestialBloomEvent(
+            center, (int) mapId, baseAngle, comp.BloomLength,
+            comp.BloomRotateSpeed, comp.BloomSweepTime, comp.BloomFireTime));
+
+        // звук активной стадии - отдельным таймером, чтобы не потерять
+        Timer.Spawn(TimeSpan.FromSeconds(comp.BloomSweepTime), () =>
         {
             if (TerminatingOrDeleted(ent))
                 return;
-
             Sound(comp.BloomFireSound, ent, 0f);
-
-            // обход карты: медленный тик 0.25с, луч неторопливо преследует игрока
-            var ticks = (int)(comp.BloomFireTime / 0.25f);
-            for (var tick = 1; tick <= ticks; tick++)
-            {
-                var delay = (tick - 1) * 0.25f;
-                Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
-                {
-                    if (TerminatingOrDeleted(ent))
-                        return;
-
-                    var bossNow = _transform.GetMapCoordinates(ent);
-
-                    for (var i = 0; i < sweeps.Count; i++)
-                    {
-                        var (target, angle, damageAcc) = sweeps[i];
-                        if (TerminatingOrDeleted(target))
-                            continue;
-
-                        var targetPos = _transform.GetMapCoordinates(target);
-
-                        // экстраполяция: целимся туда, где игрок видит сам себя (учёт тикрейта)
-                        var targetVel = Vector2.Zero;
-                        if (TryComp<PhysicsComponent>(target, out var targetPhysics))
-                            targetVel = targetPhysics.LinearVelocity;
-                        var aimPos = targetPos.Position + targetVel * 0.15f;
-
-                        // луч очень плавно доворачивается на игрока
-                        var desired = MathF.Atan2(
-                            aimPos.Y - bossNow.Position.Y,
-                            aimPos.X - bossNow.Position.X);
-                        var diff = AngleDiff(angle, desired);
-                        angle += Math.Clamp(diff, -0.4f * 0.25f, 0.4f * 0.25f);
-
-                        var dir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
-                        var start = bossNow.Position;
-                        var dist = (aimPos - start).Length();
-                        var end = start + dir * (dist + 45f);
-
-                        // массивный чёрный луч с розовой обводкой, постоянно обновляется
-                        RaiseCelestial(ent, new CelestialBeamVisualEvent(
-                            start, end, (int)bossNow.MapId, 0.06f, 0.3f, 2.2f));
-
-                        // урон вдоль линии
-                        damageAcc += 0.25f;
-                        if (damageAcc >= comp.BloomDamageInterval)
-                        {
-                            damageAcc = 0f;
-                            var bloomDamage = new DamageSpecifier();
-                            bloomDamage.DamageDict.TryAdd("Heat", comp.BloomBeamDamage * 0.6f);
-                            bloomDamage.DamageDict.TryAdd("Piercing", comp.BloomBeamDamage * 0.4f);
-
-                            _nearbySpheres.Clear();
-                            foreach (var victim in _lookup.GetEntitiesInRange(
-                                new MapCoordinates(bossNow.Position, bossNow.MapId), dist + 47f, LookupFlags.Uncontained))
-                            {
-                                if (HasComp<CelestialComponent>(victim) || TerminatingOrDeleted(victim))
-                                    continue;
-
-                                // проверяем по позиции, экстраполированной вперёд: летящий игрок
-                                // видит себя впереди серверной позиции - не бьём по расхождению
-                                var victimVel = Vector2.Zero;
-                                if (TryComp<PhysicsComponent>(victim, out var victimPhysics))
-                                    victimVel = victimPhysics.LinearVelocity;
-                                var victimPos = _transform.GetMapCoordinates(victim).Position + victimVel * 0.15f;
-
-                                if (DistanceToSegment(victimPos, start, end) > comp.BeamDamageRadius)
-                                    continue;
-
-                                _damage.TryChangeDamage(victim, bloomDamage, true);
-                            }
-                        }
-
-                        sweeps[i] = (target, angle, damageAcc);
-                    }
-                });
-            }
         });
 
-        // атака заканчивается после обхода
-        Timer.Spawn(TimeSpan.FromSeconds(comp.BloomChargeTime + comp.BloomFireTime + 0.5f), () =>
+        // стадия 2: чёрные лучи наносят урон, продолжая вращаться
+        var damageTicks = (int) (comp.BloomFireTime / comp.BloomDamageInterval);
+        for (var tick = 1; tick <= damageTicks; tick++)
+        {
+            var delay = comp.BloomSweepTime + (tick - 1) * comp.BloomDamageInterval;
+            Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
+            {
+                if (TerminatingOrDeleted(ent))
+                    return;
+
+                var elapsed = (tick - 1) * comp.BloomDamageInterval;
+                var angle = baseAngle + comp.BloomRotateSpeed * (comp.BloomSweepTime + elapsed);
+
+                var bloomDamage = new DamageSpecifier();
+                bloomDamage.DamageDict.TryAdd("Heat", comp.BloomBeamDamage);
+
+                var queryRadius = comp.BloomLength / 2f + 4f;
+                _nearbySpheres.Clear();
+                foreach (var victim in _lookup.GetEntitiesInRange(
+                    new MapCoordinates(center, mapId), queryRadius, LookupFlags.Uncontained))
+                {
+                    if (HasComp<CelestialComponent>(victim) || TerminatingOrDeleted(victim))
+                        continue;
+
+                    var victimPos = _transform.GetMapCoordinates(victim).Position;
+                    var victimRel = victimPos - center;
+
+                    // 4 луча по 90 градусов
+                    for (var k = 0; k < 4; k++)
+                    {
+                        var ang = angle + k * MathF.PI / 2f;
+                        var rayEnd = center + new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * comp.BloomLength;
+                        if (DistanceToSegment(victimPos, center, rayEnd) <= 1.2f)
+                        {
+                            _damage.TryChangeDamage(victim, bloomDamage);
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+        // атака заканчивается после обеих стадий
+        Timer.Spawn(TimeSpan.FromSeconds(comp.BloomSweepTime + comp.BloomFireTime + 0.5f), () =>
         {
             if (TerminatingOrDeleted(ent))
                 return;
@@ -1368,7 +1351,28 @@ public sealed class CelestialSystem : EntitySystem
 
         SpeakFor(ent, comp.FreezeLine, 3f);
 
-        var bossPos = _transform.GetMapCoordinates(ent);
+        // одна атака на ГРУППУ игроков, стоящих рядом друг с другом
+        var groupAnchor = GetTargets(ent, 1).FirstOrDefault();
+        if (groupAnchor == default)
+            return;
+
+        var groupCenter = _transform.GetMapCoordinates(groupAnchor);
+        var groupMembers = new List<EntityUid> { groupAnchor };
+        foreach (var session in _players.Sessions)
+        {
+            if (session.AttachedEntity is not { } player || TerminatingOrDeleted(player))
+                continue;
+            if (player == groupAnchor)
+                continue;
+            if (Transform(player).MapID != groupCenter.MapId)
+                continue;
+            if (!HasComp<MobStateComponent>(player) || _mobState.IsDead(player))
+                continue;
+            if ((_transform.GetMapCoordinates(player).Position - groupCenter.Position).Length() <= 10f)
+                groupMembers.Add(player);
+        }
+
+        var bossPos = groupCenter;
         var freezeBeams = new List<(Vector2 start, Vector2 end)>();
 
         void AddFreezeBeam(Vector2 center)
@@ -1423,7 +1427,7 @@ public sealed class CelestialSystem : EntitySystem
                 {
                     if (DistanceToSegment(victimPos, bs, be) <= comp.FreezeBeamRadius)
                     {
-                        _damage.TryChangeDamage(victim, freezeDamage, true);
+                        _damage.TryChangeDamage(victim, freezeDamage);
                         break;
                     }
                 }
@@ -1496,11 +1500,9 @@ public sealed class CelestialSystem : EntitySystem
         var anchorPos = _transform.GetMapCoordinates(anchor).Position;
         var oldPos = _transform.GetMapCoordinates(ent).Position;
 
-        // 50% - вплотную к цели, 50% - случайная точка невдалеке от игроков
+        // всегда рядом с игроком и никогда не очень далеко
         var angle = _random.NextFloat(0f, MathF.Tau);
-        var dist = _random.Prob(0.5f)
-            ? _random.NextFloat(5f, 8f)
-            : _random.NextFloat(15f, 30f);
+        var dist = _random.NextFloat(4f, 7f);
         var dest = anchorPos + new Vector2(MathF.Cos(angle) * dist, MathF.Sin(angle) * dist);
 
         // эффекты на выходе и входе
@@ -1533,6 +1535,62 @@ public sealed class CelestialSystem : EntitySystem
 
         var xform = Transform(uid);
         return xform.ParentUid.IsValid() && xform.MapUid != null;
+    }
+
+    /// <summary>
+    /// Цели, разнесённые по карте: каждая следующая - ДАЛЬШЕ предыдущих,
+    /// чтобы атаки не складывались в одну толпу.
+    /// </summary>
+    private List<EntityUid> GetSpacedTargets(Entity<CelestialComponent> ent, int max, float minSeparation = 14f)
+    {
+        var mapId = Transform(ent).MapID;
+        var candidates = new List<EntityUid>();
+        foreach (var session in _players.Sessions)
+        {
+            var mob = session.AttachedEntity;
+            if (mob == null || TerminatingOrDeleted(mob.Value))
+                continue;
+            if (Transform(mob.Value).MapID != mapId)
+                continue;
+            if (!HasComp<MobStateComponent>(mob.Value) || _mobState.IsDead(mob.Value))
+                continue;
+            candidates.Add(mob.Value);
+        }
+
+        var picked = new List<EntityUid>();
+        if (candidates.Count == 0)
+            return picked;
+
+        _random.Shuffle(candidates);
+        picked.Add(candidates[0]);
+
+        for (var i = 1; i < max; i++)
+        {
+            EntityUid? best = null;
+            var bestDist = -1f;
+            foreach (var c in candidates)
+            {
+                if (picked.Contains(c))
+                    continue;
+                var cPos = _transform.GetMapCoordinates(c).Position;
+                var minToPicked = float.MaxValue;
+                foreach (var p in picked)
+                    minToPicked = MathF.Min(minToPicked, (cPos - _transform.GetMapCoordinates(p).Position).Length());
+
+                if (minToPicked > bestDist)
+                {
+                    bestDist = minToPicked;
+                    best = c;
+                }
+            }
+
+            if (best == null)
+                break;
+
+            picked.Add(best.Value);
+        }
+
+        return picked;
     }
 
     private List<EntityUid> GetTargets(Entity<CelestialComponent> ent, int max)

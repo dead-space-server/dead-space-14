@@ -53,12 +53,14 @@ public sealed class CelestialClientSystem : EntitySystem
         SubscribeNetworkEvent<CelestialSpeakEvent>(OnSpeak);
         SubscribeNetworkEvent<CelestialBeamVisualEvent>(OnBeam);
         SubscribeNetworkEvent<CelestialCutterEvent>(OnCutter);
+        SubscribeNetworkEvent<CelestialBloomEvent>(OnBloom);
         SubscribeNetworkEvent<CelestialCutsceneStartEvent>(OnCutsceneStart);
         SubscribeNetworkEvent<CelestialCutsceneEndEvent>(OnCutsceneEnd);
         SubscribeNetworkEvent<CelestialSpiritStageEvent>(OnSpiritStage);
         SubscribeNetworkEvent<CelestialDeathEvent>(OnDeathStart);
         SubscribeNetworkEvent<CelestialDeathSpeakEvent>(OnDeathSpeak);
         SubscribeNetworkEvent<CelestialDeathEndEvent>(OnDeathEnd);
+        SubscribeNetworkEvent<CelestialDeathInvertEvent>(OnDeathInvert);
     }
 
     private void DrawSubtitles(PostDrawUIRootEventArgs args)
@@ -106,6 +108,12 @@ public sealed class CelestialClientSystem : EntitySystem
     private void OnCutter(CelestialCutterEvent ev)
     {
         _beamOverlay?.AddCutter(ev.Center, new MapId(ev.MapId), ev.BaseAngle, ev.Length, ev.RotateTime, ev.FireTime);
+    }
+
+    private void OnBloom(CelestialBloomEvent ev)
+    {
+        _beamOverlay?.AddBloom(ev.Center, new MapId(ev.MapId), ev.BaseAngle, ev.Length,
+            ev.RotateSpeed, ev.SweepTime, ev.FireTime);
     }
 
     private void OnCutsceneStart(CelestialCutsceneStartEvent ev)
@@ -168,6 +176,11 @@ public sealed class CelestialClientSystem : EntitySystem
             Filter.Local(),
             false,
             AudioParams.Default.WithVolume(-4f));
+    }
+
+    private void OnDeathInvert(CelestialDeathInvertEvent ev)
+    {
+        _deathOverlay?.BeginInvert();
     }
 
     private void OnDeathEnd(CelestialDeathEndEvent ev)

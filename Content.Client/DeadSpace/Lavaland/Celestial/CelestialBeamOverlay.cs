@@ -51,6 +51,21 @@ public sealed class CelestialBeamOverlay : Overlay
     private readonly List<Beam> _beams = new();
     private readonly List<Cutter> _cutters = new();
 
+    private sealed class Bloom
+    {
+        public Vector2 Center;
+        public MapId Map;
+        public float BaseAngle;
+        public float Length;
+        public float RotateSpeed;
+        public float SweepTime;
+        public float FireTime;
+        public float Elapsed;
+    }
+
+    private readonly List<Bloom> _blooms = new();
+    private readonly Random _bloomRand = new();
+
     private readonly IEntityManager _entities;
     private readonly Dictionary<EntityUid, float> _sphereElapsed = new();
     private readonly Dictionary<EntityUid, List<(Vector2 pos, float age)>> _orbTrails = new();
@@ -74,6 +89,16 @@ public sealed class CelestialBeamOverlay : Overlay
 
     private readonly Random _cutterRand = new();
 
+    public void AddBloom(Vector2 center, MapId map, float baseAngle, float length,
+        float rotateSpeed, float sweepTime, float fireTime)
+    {
+        _blooms.Add(new Bloom
+        {
+            Center = center, Map = map, BaseAngle = baseAngle, Length = length,
+            RotateSpeed = rotateSpeed, SweepTime = sweepTime, FireTime = fireTime
+        });
+    }
+
     public void AddCutter(Vector2 center, MapId map, float baseAngle, float length, float rotateTime, float fireTime)
     {
         _cutters.Add(new Cutter
@@ -93,6 +118,13 @@ public sealed class CelestialBeamOverlay : Overlay
 
     public void FrameUpdate(float frameTime)
     {
+        for (var i = _blooms.Count - 1; i >= 0; i--)
+        {
+            _blooms[i].Elapsed += frameTime;
+            if (_blooms[i].Elapsed >= _blooms[i].SweepTime + _blooms[i].FireTime + 0.5f)
+                _blooms.RemoveAt(i);
+        }
+
         for (var i = _beams.Count - 1; i >= 0; i--)
         {
             var beam = _beams[i];
@@ -113,6 +145,7 @@ public sealed class CelestialBeamOverlay : Overlay
     protected override void Draw(in OverlayDrawArgs args)
     {
         var handle = args.WorldHandle;
+        DrawBloom(handle, args.MapId);
         DrawBeams(handle, args.MapId);
         DrawSpheres(handle, args.MapId);
         DrawOrbs(handle, args.MapId, 1f / 60f);
@@ -167,6 +200,58 @@ public sealed class CelestialBeamOverlay : Overlay
         handle.SetTransform(mid, angle);
         handle.DrawRect(new Box2(-length / 2f, -width / 2f, length / 2f, width / 2f), color);
         handle.SetTransform(Vector2.Zero, Angle.Zero);
+    }
+
+    private void DrawBloom(DrawingHandleWorld handle, MapId map)
+    {
+        foreach (var bloom in _blooms)
+        {
+            if (bloom.Map != map)
+                continue;
+
+            var angle = bloom.BaseAngle + bloom.RotateSpeed * bloom.Elapsed;
+            var sweeping = bloom.Elapsed < bloom.SweepTime;
+            var total = bloom.SweepTime + bloom.FireTime;
+
+            var fadeIn = Math.Clamp(bloom.Elapsed / 0.8f, 0f, 1f);
+            var fadeOut = Math.Clamp((total - bloom.Elapsed) / 0.5f, 0f, 1f);
+            var alpha = MathF.Min(fadeIn, fadeOut);
+
+            for (var k = 0; k < 4; k++)
+            {
+                var ang = angle + k * MathF.PI / 2f;
+                var dir = new Vector2(MathF.Cos(ang), MathF.Sin(ang));
+                var mid = bloom.Center + dir * (bloom.Length / 2f);
+                var beamAngle = new Angle(dir);
+
+                if (sweeping)
+                {
+                    // розовая полупрозрачная светящаяся стадия
+                    DrawBeam(handle, mid, bloom.Length, 2.6f, beamAngle, Pink.WithAlpha(0.22f * alpha));
+                    DrawBeam(handle, mid, bloom.Length, 1.5f, beamAngle, Pink.WithAlpha(0.45f * alpha));
+                    DrawBeam(handle, mid, bloom.Length, 0.5f, beamAngle, new Color(1f, 1f, 1f, 0.5f * alpha));
+
+                    // ветер по периметру: белёсые штрихи вдоль лучей
+                    for (var w = 0; w < 6; w++)
+                    {
+                        var t = (float)(_bloomRand.NextDouble());
+                        var dashPos = bloom.Center + dir * (t * bloom.Length);
+                        var perp = new Vector2(-dir.Y, dir.X) * (float)(_bloomRand.NextDouble() * 2 - 1) * 1.8f;
+                        var dashMid = dashPos + perp;
+                        handle.SetTransform(dashMid, beamAngle);
+                        handle.DrawRect(new Box2(-1.5f, -0.12f, 1.5f, 0.12f),
+                            new Color(1f, 0.85f, 0.95f, 0.3f * alpha));
+                        handle.SetTransform(Vector2.Zero, Angle.Zero, Vector2.One);
+                    }
+                }
+                else
+                {
+                    // чёрное ядро с розовой обводкой
+                    DrawBeam(handle, mid, bloom.Length, 2.3f, beamAngle, Pink.WithAlpha(0.95f * alpha));
+                    DrawBeam(handle, mid, bloom.Length, 1.6f, beamAngle, Black.WithAlpha(0.97f * alpha));
+                }
+            }
+        }
     }
 
     private void DrawSpheres(DrawingHandleWorld handle, MapId map)

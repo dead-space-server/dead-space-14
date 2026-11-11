@@ -32,6 +32,20 @@ public sealed class CelestialCutsceneOverlay : Overlay
     private int _stage;
     private float _elapsed;
 
+    // цикличные чёрные сферы с розовой обводкой, всплывающие у Селестиала
+    private sealed class IntroOrb
+    {
+        public Vector2 Offset;
+        public float Born;
+        public float Life;
+        public float Radius;
+        public float Phase;
+    }
+
+    private readonly List<IntroOrb> _orbs = new();
+    private float _orbWaveTimer;
+    private readonly Random _orbRand = new();
+
     private const float FadeInTime = 1f;
     private const float FadeOutTime = 1.3f;
 
@@ -68,6 +82,27 @@ public sealed class CelestialCutsceneOverlay : Overlay
             return;
 
         _elapsed += frameTime;
+
+        // волны сфер: старая гаснет - появляется новая
+        _orbs.RemoveAll(o => _elapsed - o.Born > o.Life);
+        _orbWaveTimer -= frameTime;
+        if (_orbWaveTimer <= 0f)
+        {
+            _orbWaveTimer = 2.6f;
+            for (var i = 0; i < 6; i++)
+            {
+                var ang = (float)(_orbRand.NextDouble() * Math.PI * 2);
+                var dist = 180f + (float)_orbRand.NextDouble() * 240f;
+                _orbs.Add(new IntroOrb
+                {
+                    Offset = new Vector2((float)Math.Cos(ang) * dist, (float)Math.Sin(ang) * dist * 0.8f),
+                    Born = _elapsed + (float)_orbRand.NextDouble() * 0.6f,
+                    Life = 2f + (float)_orbRand.NextDouble() * 2f,
+                    Radius = 45f + (float)_orbRand.NextDouble() * 75f,
+                    Phase = (float)_orbRand.NextDouble() * 10f,
+                });
+            }
+        }
 
         if (_fadingOut)
         {
@@ -115,6 +150,29 @@ public sealed class CelestialCutsceneOverlay : Overlay
         handle.DrawCircle(Vector2.Zero, baseR, Pink.WithAlpha(0.9f * fade));
         handle.DrawCircle(Vector2.Zero, baseR - 3f, new Color(0f, 0f, 0f, 1f * fade));
         handle.SetTransform(Vector2.Zero, Angle.Zero, Vector2.One);
+
+        // цикличные сферы вокруг Селестиала: всплывают, дрожат, исчезают
+        foreach (var orb in _orbs)
+        {
+            var t = (_elapsed - orb.Born) / orb.Life;
+            if (t < 0f || t >= 1f)
+                continue;
+
+            var fadeIn = Math.Clamp(t / 0.15f, 0f, 1f);
+            var fadeOut = Math.Clamp((1f - t) / 0.25f, 0f, 1f);
+            var alpha = MathF.Min(fadeIn, fadeOut) * 0.9f;
+
+            // дрожание
+            var jx = (float)(_orbRand.NextDouble() * 2 - 1) * 2f;
+            var jy = (float)(_orbRand.NextDouble() * 2 - 1) * 2f;
+            // лёгкое всплытие вверх за время жизни
+            var rise = -40f * t;
+            var orbPos = center + orb.Offset + new Vector2(jx, jy + rise);
+
+            // основная часть - ЧЁРНАЯ, обводка тонкая розовая
+            handle.DrawCircle(orbPos, orb.Radius, new Color(0f, 0f, 0f, alpha));
+            handle.DrawCircle(orbPos, orb.Radius, Pink.WithAlpha(0.8f * alpha), filled: false);
+        }
 
         // спрайт Селестиала по центру
         var stateName = _stage switch
