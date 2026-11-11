@@ -1,7 +1,7 @@
 - type: entity
   parent: CustomizableSpawnerCentralCommandOfficer
   id: CustomizableSpawnerCentralCommandOfficerAlt
-  name: Офицер безопасности ЦК (второй сет)
+  name: Офицер безопасности ЦК (штурмовой)
   suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
   components:
   - type: Sprite
@@ -51,17 +51,18 @@
     back: ClothingBackpackMilitarySatchel
     shoes: ClothingShoesBootsCombatFilled
     eyes: ClothingEyesGlassesHiddenSecurity
-    suitstorage: WeaponEnergyShotgun
+    suitstorage: WeaponSubMachineGunMP5
     pocket1: TelescopicShield
     pocket2: WeaponPistolX01
   storage:
     back:
     - BoxZiptie
+    - BoxMagazinePistolSubMachineGun
 
 - type: entity
   parent: CustomizableSpawnerCentralCommandOfficer
   id: CustomizableSpawnerCentralCommandOfficerArmored
-  name: Офицер безопасности ЦК (бронированный)
+  name: Офицер безопасности ЦК (тяжёлый)
   suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
   components:
   - type: Sprite
@@ -122,8 +123,8 @@
 - type: entity
   parent: CustomizableSpawnerBase
   id: CustomizableSpawnerCentralCommandOfficer
-  name: Офицер безопасности ЦК
-  suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
+  name: Офицер безопасности ЦК (патрульный)
+  suffix: ОБЦК, Призрачная роль, Кастомизируемый персонаж
   components:
   - type: Sprite
     layers:
