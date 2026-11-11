@@ -2140,16 +2140,23 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 continue;
 
             var zone = (LimbZone) i;
-            any |= RuptureIf(uid, limbs, zone, LimbWoundRules.LostShare(zones[i], LimbWoundRules.HealthFor(zone, limbs)));
+            any |= RuptureIf(uid, limbs, zone, LimbWoundRules.LostShare(zones[i], LimbWoundRules.HealthFor(zone, limbs)), before[i]);
         }
 
         return any;
     }
 
-    private bool RuptureIf(EntityUid uid, LimbBodyComponent limbs, LimbZone zone, float lost)
+    private bool RuptureIf(EntityUid uid, LimbBodyComponent limbs, LimbZone zone, float lost, float before)
     {
-        if (lost < LimbOrganRules.RuptureShare || !LimbWoundRules.IsBody(zone))
+        if (lost < LimbOrganRules.RuptureShare || before >= LimbOrganRules.RuptureShare || !LimbWoundRules.IsBody(zone))
             return false;
+
+        var zoneIndex = LimbWoundRules.Index(zone);
+        var bone = (uint) zoneIndex < (uint) limbs.Zones.Count ? limbs.Zones[zoneIndex].Bone : 0f;
+        var chance = bone >= LimbWoundRules.StrainBone ? LimbOrganRules.RuptureChance : LimbOrganRules.RuptureChanceProtected;
+        Span<float> rolls = stackalloc float[LimbOrganRules.Count];
+        for (var i = 0; i < rolls.Length; i++)
+            rolls[i] = _random.NextFloat();
 
         EnsureOrgans(limbs);
         var organs = CollectionsMarshal.AsSpan(limbs.Organs);
@@ -2157,7 +2164,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var heart = (int) LimbOrgan.Heart;
         var brainWas = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartWas = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
-        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, lost);
+        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, lost, chance, rolls);
         var brainNow = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartNow = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
         if (eyes > 0 && TryComp<BlindableComponent>(uid, out var blind))
@@ -2192,7 +2199,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             if (_net.IsServer && !limbs.Soft && !state.Severed)
                 LimbWoundRules.RollCrack(ref state, lost, _random.NextFloat());
             if (_net.IsServer)
-                RuptureIf(uid, limbs, strike.Zone, LimbWoundRules.LostShare(state, LimbWoundRules.HealthFor(strike.Zone, limbs)));
+                RuptureIf(uid, limbs, strike.Zone, LimbWoundRules.LostShare(state, LimbWoundRules.HealthFor(strike.Zone, limbs)), lost);
             Dirty(uid, limbs);
         }
 
