@@ -9949,3 +9949,16 @@ Entries:
   changes:
   - type: Add
     message: Куча декалей для маппинга.
+- id: 952
+  author: zubekkk
+  time: '2026-11-11T11:11:06.184107+00:00'
+  pr: 2711
+  changes:
+  - type: Add
+    message: Местоположение маяка в объявлении о переводе
+  - type: Tweak
+    message: Маяк взлома ниндзя теперь можно запустить только на станции
+  - type: Fix
+    message: Оповещения о переводе от кувалды
+  - type: Fix
+    message: Вечная привязка удалённой катаны
