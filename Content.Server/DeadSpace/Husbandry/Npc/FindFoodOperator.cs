@@ -25,9 +25,10 @@ namespace Content.Server.DeadSpace.Husbandry.Npc;
 public sealed partial class FindFoodOperator : HTNOperator
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+
+    private const LookupFlags Floor = LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries;
     private AnimalFeedingSystem _feeding = default!;
+    private SharedAnimalNeedsSystem _needs = default!;
     private EntityLookupSystem _lookup = default!;
     private PathfindingSystem _pathfinding = default!;
     private SharedTransformSystem _transform = default!;
@@ -70,6 +71,7 @@ public sealed partial class FindFoodOperator : HTNOperator
     {
         base.Initialize(sysManager);
         _feeding = sysManager.GetEntitySystem<AnimalFeedingSystem>();
+        _needs = sysManager.GetEntitySystem<SharedAnimalNeedsSystem>();
         _lookup = sysManager.GetEntitySystem<EntityLookupSystem>();
         _pathfinding = sysManager.GetEntitySystem<PathfindingSystem>();
         _transform = sysManager.GetEntitySystem<SharedTransformSystem>();
@@ -83,7 +85,7 @@ public sealed partial class FindFoodOperator : HTNOperator
 
         // A search that found nothing is not repeated at once: the same lookup of the whole area every plan is the
         // cost of a hungry animal with nothing to eat.
-        if (_entManager.TryGetComponent<AnimalNeedsComponent>(owner, out var needs) && _timing.CurTime < needs.NextFoodSearch)
+        if (_entManager.TryGetComponent<AnimalNeedsComponent>(owner, out var needs) && !_needs.CanSearch((owner, needs), food: true))
             return (false, null);
 
         if (!_entManager.TryGetComponent<DietComponent>(owner, out var diet))
@@ -91,9 +93,10 @@ public sealed partial class FindFoodOperator : HTNOperator
 
         var ownerCoordinates = _entManager.GetComponent<TransformComponent>(owner).Coordinates;
         var foods = new HashSet<Entity<EdibleComponent>>();
-        _lookup.GetEntitiesInRange(ownerCoordinates, Range, foods);
+        // Only what lies about: nothing in bags, pockets or boxes is looked at, that is most of the entities of an area.
+        _lookup.GetEntitiesInRange(ownerCoordinates, Range, foods, Floor);
         var feeders = new HashSet<Entity<AnimalFeederComponent>>();
-        _lookup.GetEntitiesInRange(ownerCoordinates, Range, feeders);
+        _lookup.GetEntitiesInRange(ownerCoordinates, Range, feeders, Floor);
 
         // A feeder comes before food on the floor, then the closest first.
         var candidates = new List<(EntityUid Food, int Priority, float Distance)>();
@@ -145,8 +148,7 @@ public sealed partial class FindFoodOperator : HTNOperator
             });
         }
 
-        if (needs != null)
-            needs.NextFoodSearch = _timing.CurTime + TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.HusbandrySearchCooldown));
+        _feeding.DelaySearch(owner, food: true);
 
         return (false, null);
     }

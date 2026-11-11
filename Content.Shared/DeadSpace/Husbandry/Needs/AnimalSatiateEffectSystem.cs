@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.EntityEffects;
+using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.EntityEffects.Effects.Body;
 
 namespace Content.Shared.DeadSpace.Husbandry.Needs;
@@ -20,15 +21,9 @@ public sealed class AnimalSatiateEffectSystem : EntityEffectSystem<AnimalNeedsCo
     {
         var amount = args.Effect.Factor * args.Scale;
 
-        // The names of the vanilla satiation types.
-        switch (args.Effect.SatiationType.Id)
-        {
-            case "Hunger":
-                _needs.ModifySatiety(entity, amount);
-                break;
-            case "Thirst":
-                _needs.ModifyHydration(entity, amount);
-                break;
-        }
+        if (args.Effect.SatiationType == SatiationSystem.Hunger)
+            _needs.ModifySatiety(entity, amount);
+        else if (args.Effect.SatiationType == SatiationSystem.Thirst)
+            _needs.ModifyHydration(entity, amount);
     }
 }

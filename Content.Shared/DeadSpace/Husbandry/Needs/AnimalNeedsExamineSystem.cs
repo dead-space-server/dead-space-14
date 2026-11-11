@@ -23,9 +23,12 @@ public sealed class AnimalNeedsExamineSystem : EntitySystem
             return;
 
         var identity = Identity.Entity(ent, EntityManager);
-        args.PushMarkup(Loc.GetString($"animal-needs-satiety-{ent.Comp.SatietyLevel.ToString().ToLowerInvariant()}",
+        // Copied out first: calling a method on the field itself would count as an access of the component.
+        var satiety = ent.Comp.SatietyLevel;
+        var hydration = ent.Comp.HydrationLevel;
+        args.PushMarkup(Loc.GetString($"animal-needs-satiety-{satiety.ToString().ToLowerInvariant()}",
             ("entity", identity)));
-        args.PushMarkup(Loc.GetString($"animal-needs-hydration-{ent.Comp.HydrationLevel.ToString().ToLowerInvariant()}",
+        args.PushMarkup(Loc.GetString($"animal-needs-hydration-{hydration.ToString().ToLowerInvariant()}",
             ("entity", identity)));
     }
 }

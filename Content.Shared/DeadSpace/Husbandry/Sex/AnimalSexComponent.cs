@@ -9,6 +9,7 @@ namespace Content.Shared.DeadSpace.Husbandry.Sex;
 /// The sex of an animal. Rolled on map init unless <see cref="Randomize"/> is turned off.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(AnimalSexSystem))]
 public sealed partial class AnimalSexComponent : Component
 {
     [DataField, AutoNetworkedField]

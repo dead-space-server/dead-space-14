@@ -3,7 +3,7 @@
 using System.Numerics;
 using Robust.Shared.Maths;
 
-namespace Content.Shared.DeadSpace.Husbandry.Wander;
+namespace Content.Server.DeadSpace.Husbandry.Wander;
 
 /// <summary>
 /// An animal that stands around and now and then goes for a stroll: a few walks in a row, each one a straight line in
@@ -12,6 +12,7 @@ namespace Content.Shared.DeadSpace.Husbandry.Wander;
 /// brain.
 /// </summary>
 [RegisterComponent]
+[Access(typeof(AnimalWanderSystem))]
 public sealed partial class AnimalWanderComponent : Component
 {
     /// <summary>
@@ -84,6 +85,24 @@ public sealed partial class AnimalWanderComponent : Component
     /// </summary>
     [DataField]
     public float ArriveDistance = 0.3f;
+
+    /// <summary>
+    /// How much room is kept between the end of a leg and what stops it, in tiles.
+    /// </summary>
+    [DataField]
+    public float LegMargin = 0.2f;
+
+    /// <summary>
+    /// A social stroll gives up on a subject that is farther than <see cref="SocialRange"/> plus this.
+    /// </summary>
+    [DataField]
+    public float SocialRangeSlack = 6f;
+
+    /// <summary>
+    /// A leg of a social stroll shorter than this is not made: the animal is where it wants to be.
+    /// </summary>
+    [DataField]
+    public float MinSocialStep = 0.6f;
 
     /// <summary>
     /// It gives up a stroll that takes longer than this.

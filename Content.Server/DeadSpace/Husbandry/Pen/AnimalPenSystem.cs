@@ -1,10 +1,12 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Shared.CCVar;
 using Content.Shared.DeadSpace.Husbandry.Core;
 using Content.Shared.DeadSpace.Husbandry.Pen;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
+using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
@@ -19,23 +21,11 @@ namespace Content.Server.DeadSpace.Husbandry.Pen;
 /// Works out the pen of an animal, see <see cref="AnimalPenComponent"/>: the walls round it, but no more than a
 /// square round its home. The farm asks for it when nobody is watching, so it is not worked out every time: a pen
 /// that is closed in is the same for every animal inside it, so it is worked out once and given to all of them, and
-/// every result is kept for <see cref="CacheTime"/> (walls and doors change, but not often).
+/// every result is kept for the cvar <c>husbandry.pen.cache_time</c> (walls and doors change, but not often).
 /// </summary>
 public sealed class AnimalPenSystem : EntitySystem
 {
-    /// <summary>
-    /// A fill that gets bigger than this stops, it is a field and not a pen: the whole enclosure is not taken for the
-    /// pen then, the square round the home is.
-    /// </summary>
-    private const int EnclosureMaxTiles = 600;
-
-    /// <summary>
-    /// A thing has to cover this much of a tile to count as a wall: a chair does not close a tile.
-    /// </summary>
-    private const float WallArea = 0.5f;
-
-    private static readonly TimeSpan CacheTime = TimeSpan.FromSeconds(30);
-
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
@@ -54,12 +44,14 @@ public sealed class AnimalPenSystem : EntitySystem
     private readonly Dictionary<EntityUid, (AnimalPen Pen, TimeSpan Time)> _open = new();
 
     private TimeSpan _nextSweep;
+    private TimeSpan _cacheTime = TimeSpan.FromSeconds(30);
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<AnimalPenComponent, ComponentShutdown>(OnShutdown);
+        Subs.CVar(_cfg, CCVars.HusbandryPenCacheTime, value => _cacheTime = TimeSpan.FromSeconds(value), true);
     }
 
     private void OnShutdown(Entity<AnimalPenComponent> animal, ref ComponentShutdown args)
@@ -76,12 +68,12 @@ public sealed class AnimalPenSystem : EntitySystem
         if (now < _nextSweep)
             return;
 
-        _nextSweep = now + CacheTime;
+        _nextSweep = now + _cacheTime;
 
         List<(EntityUid, Vector2i)>? oldTiles = null;
         foreach (var (key, value) in _enclosures)
         {
-            if (now - value.Time >= CacheTime || TerminatingOrDeleted(key.Grid))
+            if (now - value.Time >= _cacheTime || TerminatingOrDeleted(key.Grid))
                 (oldTiles ??= new()).Add(key);
         }
 
@@ -96,7 +88,7 @@ public sealed class AnimalPenSystem : EntitySystem
         List<EntityUid>? oldAnimals = null;
         foreach (var (key, value) in _open)
         {
-            if (now - value.Time >= CacheTime || TerminatingOrDeleted(key))
+            if (now - value.Time >= _cacheTime || TerminatingOrDeleted(key))
                 (oldAnimals ??= new()).Add(key);
         }
 
@@ -121,11 +113,11 @@ public sealed class AnimalPenSystem : EntitySystem
 
         var tile = _map.CoordinatesToTile(gridUid, grid, xform.Coordinates);
 
-        if (_enclosures.TryGetValue((gridUid, tile), out var shared) && now - shared.Time < CacheTime)
+        if (_enclosures.TryGetValue((gridUid, tile), out var shared) && now - shared.Time < _cacheTime)
             return shared.Pen;
 
         if (_open.TryGetValue(animal, out var cached) &&
-            now - cached.Time < CacheTime &&
+            now - cached.Time < _cacheTime &&
             cached.Pen.Grid == gridUid &&
             cached.Pen.Contains(tile))
         {
@@ -133,12 +125,12 @@ public sealed class AnimalPenSystem : EntitySystem
         }
 
         var mask = (CollisionGroup) _physics.GetHardCollision(animal).Mask;
-        Func<(int X, int Y), bool> free = cell => IsFree(gridUid, grid, cell, mask);
+        Func<(int X, int Y), bool> free = cell => IsFree(gridUid, grid, cell, mask, animal.Comp.WallArea);
         var cells = new HashSet<(int X, int Y)>();
 
         // First the whole enclosure: the tiles up to the walls, the same for every animal inside. If it is closed
         // there is nothing more to it.
-        var tooBig = PenRules.Fill((tile.X, tile.Y), free, _ => true, cells, EnclosureMaxTiles);
+        var tooBig = PenRules.Fill((tile.X, tile.Y), free, _ => true, cells, animal.Comp.MaxTiles);
         Vector2i anchor;
         PenKind kind;
 
@@ -164,7 +156,7 @@ public sealed class AnimalPenSystem : EntitySystem
             var half = comp.HalfSize;
             Func<(int X, int Y), bool> inSquare = cell => Math.Abs(cell.X - home.X) <= half && Math.Abs(cell.Y - home.Y) <= half;
 
-            var open = PenRules.Fill((tile.X, tile.Y), free, inSquare, cells, EnclosureMaxTiles);
+            var open = PenRules.Fill((tile.X, tile.Y), free, inSquare, cells, animal.Comp.MaxTiles);
             kind = open ? PenKind.Open : PenKind.Enclosed;
         }
 
@@ -230,7 +222,7 @@ public sealed class AnimalPenSystem : EntitySystem
         // The lookup gets a set of its own for each kind, so that nothing is allocated for every call.
         var found = PenLookupCache<T>.Set;
         found.Clear();
-        _lookup.GetEntitiesInRange(centre, pen.Radius, found);
+        _lookup.GetEntitiesInRange(centre, pen.Radius, found, LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries);
 
         foreach (var entity in found)
         {
@@ -251,21 +243,21 @@ public sealed class AnimalPenSystem : EntitySystem
     /// <summary>
     /// Somebody can stand here: there is a floor, it is not space and no wall (or door) stands on it.
     /// </summary>
-    private bool IsFree(EntityUid gridUid, MapGridComponent grid, (int X, int Y) cell, CollisionGroup mask)
+    private bool IsFree(EntityUid gridUid, MapGridComponent grid, (int X, int Y) cell, CollisionGroup mask, float wallArea)
     {
         var indices = new Vector2i(cell.X, cell.Y);
         var tileRef = _map.GetTileRef(gridUid, grid, indices);
         if (tileRef.Tile.IsEmpty || _turf.IsSpace(tileRef))
             return false;
 
-        return !IsWall(gridUid, grid, indices, mask);
+        return !IsWall(gridUid, grid, indices, mask, wallArea);
     }
 
     /// <summary>
     /// Something that is fixed to the tile and keeps the animal out covers most of it. Only fixed things count, the
     /// animal and other mobs standing on the tile are no walls (which is why this is not <c>TurfSystem.IsTileBlocked</c>).
     /// </summary>
-    private bool IsWall(EntityUid gridUid, MapGridComponent grid, Vector2i indices, CollisionGroup mask)
+    private bool IsWall(EntityUid gridUid, MapGridComponent grid, Vector2i indices, CollisionGroup mask, float wallArea)
     {
         var tileBox = Box2.FromDimensions(new Vector2(indices.X, indices.Y) * grid.TileSize, grid.TileSizeVector);
         var area = 0f;
@@ -289,7 +281,7 @@ public sealed class AnimalPenSystem : EntitySystem
                 {
                     var overlap = fixture.Shape.ComputeAABB(shapeTransform, i).Intersect(tileBox);
                     area += overlap.Width * overlap.Height;
-                    if (area >= WallArea * grid.TileSize * grid.TileSize)
+                    if (area >= wallArea * grid.TileSize * grid.TileSize)
                         return true;
                 }
             }

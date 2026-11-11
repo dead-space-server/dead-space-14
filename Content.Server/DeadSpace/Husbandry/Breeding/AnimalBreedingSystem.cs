@@ -5,7 +5,6 @@ using Content.Server.Administration.Logs;
 using Content.Server.DeadSpace.Husbandry.Growth;
 using Content.Server.DeadSpace.Husbandry.Pen;
 using Content.Shared.DeadSpace.Husbandry.Pen;
-using Content.Shared.DeadSpace.Husbandry.Growth;
 using Content.Server.Popups;
 using Content.Shared.CCVar;
 using Content.Shared.Database;

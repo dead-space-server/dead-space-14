@@ -24,4 +24,18 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<float> HusbandrySearchCooldown =
         CVarDef.Create("husbandry.search_cooldown", 20f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     How long the pen of an animal is kept before it is worked out again, in seconds (walls and doors change,
+    ///     but not often).
+    /// </summary>
+    public static readonly CVarDef<float> HusbandryPenCacheTime =
+        CVarDef.Create("husbandry.pen.cache_time", 30f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     How often the positions of the players are taken for the strolls of the animals that go round a player, in
+    ///     seconds.
+    /// </summary>
+    public static readonly CVarDef<float> HusbandryPlayerScanInterval =
+        CVarDef.Create("husbandry.wander.player_scan_interval", 2f, CVar.SERVERONLY);
 }

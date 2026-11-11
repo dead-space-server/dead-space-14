@@ -6,17 +6,19 @@ using Content.Server.DeadSpace.Husbandry.Growth;
 using Content.Shared.Botany.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Server.DeadSpace.Beekeeping;
 using Content.Shared.DeadSpace.Beekeeping;
 using Content.Shared.DeadSpace.Husbandry.Breeding;
 using Content.Shared.DeadSpace.Husbandry.Core;
 using Content.Shared.DeadSpace.Husbandry.Feeding;
-using Content.Shared.DeadSpace.Husbandry.Growth;
 using Content.Shared.DeadSpace.Husbandry.Needs;
 using Content.Shared.DeadSpace.Husbandry.Sex;
 using Content.Shared.Nutrition.AnimalHusbandry;
 using Content.Shared.Nutrition.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
+using Content.Server.DeadSpace.Husbandry.Breeding;
+using Content.Server.DeadSpace.Husbandry.Walking;
 
 namespace Content.IntegrationTests.Tests.DeadSpace.Husbandry;
 
@@ -78,10 +80,7 @@ public sealed class HusbandryTest
             cow = ents.SpawnEntity("MobChicken", map.GridCoords);
             // The brain is off: this tests the eating itself, not where the animal walks.
             ents.RemoveComponent<Content.Server.NPC.HTN.HTNComponent>(cow);
-            var needs = ents.GetComponent<AnimalNeedsComponent>(cow);
-            needs.Satiety.Value = 10f;
-            needs.Satiety.DecayPerMinute = 0f;
-            needs.Hydration.DecayPerMinute = 0f;
+            server.System<SharedAnimalNeedsSystem>().SetNeeds((cow, ents.GetComponent<AnimalNeedsComponent>(cow)), satiety: 10f, satietyDecay: 0f, hydrationDecay: 0f);
 
             apple = ents.SpawnEntity("FoodApple", map.GridCoords);
             var feeding = server.System<AnimalFeedingSystem>();
@@ -121,10 +120,7 @@ public sealed class HusbandryTest
 
             cow = ents.SpawnEntity("MobCow", map.GridCoords);
             ents.RemoveComponent<Content.Server.NPC.HTN.HTNComponent>(cow);
-            var needs = ents.GetComponent<AnimalNeedsComponent>(cow);
-            needs.Hydration.Value = 10f;
-            needs.Satiety.DecayPerMinute = 0f;
-            needs.Hydration.DecayPerMinute = 0f;
+            server.System<SharedAnimalNeedsSystem>().SetNeeds((cow, ents.GetComponent<AnimalNeedsComponent>(cow)), hydration: 10f, satietyDecay: 0f, hydrationDecay: 0f);
 
             trough = ents.SpawnEntity("AnimalTrough", map.GridCoords);
             Assert.That(feeding.CanDrink(trough), Is.False, "an empty trough");
@@ -170,8 +166,7 @@ public sealed class HusbandryTest
         {
             cow = server.EntMan.SpawnEntity("MobCow", map.GridCoords);
             var needs = server.EntMan.GetComponent<AnimalNeedsComponent>(cow);
-            needs.Satiety.Value = 1f;
-            needs.Satiety.DecayPerMinute = 6000f;
+            server.System<SharedAnimalNeedsSystem>().SetNeeds((cow, needs), satiety: 1f, satietyDecay: 6000f);
             needs.UpdateRate = TimeSpan.FromSeconds(0.1);
         });
 
@@ -238,10 +233,7 @@ public sealed class HusbandryTest
             foreach (var cow in new[] { mother, father })
             {
                 var needs = ents.GetComponent<AnimalNeedsComponent>(cow);
-                needs.Satiety.Value = needs.Satiety.Max;
-                needs.Hydration.Value = needs.Hydration.Max;
-                needs.Satiety.DecayPerMinute = 0f;
-                needs.Hydration.DecayPerMinute = 0f;
+                server.System<SharedAnimalNeedsSystem>().SetNeeds((cow, needs), satiety: needs.Satiety.Max, hydration: needs.Hydration.Max, satietyDecay: 0f, hydrationDecay: 0f);
             }
 
             var breeding = ents.GetComponent<AnimalBreedingComponent>(mother);
@@ -292,9 +284,7 @@ public sealed class HusbandryTest
             SetSex(ents, mother, AnimalSexKind.Female);
             SetSex(ents, father, AnimalSexKind.Male);
 
-            var needs = ents.GetComponent<AnimalNeedsComponent>(mother);
-            needs.Satiety.Value = 5f;
-            needs.Satiety.DecayPerMinute = 0f;
+            server.System<SharedAnimalNeedsSystem>().SetNeeds((mother, ents.GetComponent<AnimalNeedsComponent>(mother)), satiety: 5f, satietyDecay: 0f);
 
             var breeding = ents.GetComponent<AnimalBreedingComponent>(mother);
             breeding.BreedChance = 1f;
@@ -358,7 +348,7 @@ public sealed class HusbandryTest
             {
                 // Two brains would fight over the movement.
                 Assert.That(server.EntMan.HasComponent<Content.Server.NPC.HTN.HTNComponent>(bee), Is.False);
-                Assert.That(server.EntMan.HasComponent<Content.Shared.DeadSpace.Husbandry.Walking.AnimalWalkerComponent>(bee), Is.True, "the bee flies by the walker");
+                Assert.That(server.EntMan.HasComponent<Content.Server.DeadSpace.Husbandry.Walking.AnimalWalkerComponent>(bee), Is.True, "the bee flies by the walker");
             });
         });
 
@@ -383,7 +373,7 @@ public sealed class HusbandryTest
             start = xforms.GetWorldPosition(bee);
 
             var target = map.GridCoords.Offset(new System.Numerics.Vector2(4f, 0f));
-            var walker = ents.GetComponent<Content.Shared.DeadSpace.Husbandry.Walking.AnimalWalkerComponent>(bee);
+            var walker = ents.GetComponent<Content.Server.DeadSpace.Husbandry.Walking.AnimalWalkerComponent>(bee);
             Assert.That(server.System<Content.Server.DeadSpace.Husbandry.Walking.AnimalWalkerSystem>().StartRoute((bee, walker), new[] { target }, 0.5f, run: true), Is.True);
         });
 
@@ -445,7 +435,6 @@ public sealed class HusbandryTest
     private static void SetSex(IEntityManager ents, EntityUid animal, AnimalSexKind sex)
     {
         var comp = ents.GetComponent<AnimalSexComponent>(animal);
-        comp.Randomize = false;
-        comp.Sex = sex;
+        ents.System<AnimalSexSystem>().SetSex((animal, comp), sex);
     }
 }

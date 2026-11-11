@@ -4,12 +4,13 @@ using System.Numerics;
 using Content.Shared.DeadSpace.Husbandry.Core;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.DeadSpace.Husbandry.Growth;
+namespace Content.Server.DeadSpace.Husbandry.Growth;
 
 /// <summary>
 /// An animal that grows up through a number of stages. Handled by GrowthSystem and GrowthEffectsSystem.
 /// </summary>
 [RegisterComponent, AutoGenerateComponentPause]
+[Access(typeof(GrowthSystem), typeof(GrowthEffectsSystem))]
 public sealed partial class GrowthComponent : Component
 {
     [DataField(required: true)]

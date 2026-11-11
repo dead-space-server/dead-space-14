@@ -13,11 +13,11 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Server.DeadSpace.Beekeeping;
 using Content.Shared.DeadSpace.Beekeeping;
 using Content.Shared.DeadSpace.DebugAnalyzer;
 using Content.Shared.DeadSpace.Husbandry.Breeding;
 using Content.Shared.DeadSpace.Husbandry.Feeding;
-using Content.Shared.DeadSpace.Husbandry.Growth;
 using Content.Shared.DeadSpace.Husbandry.Needs;
 using Content.Shared.DeadSpace.Husbandry.Pen;
 using Content.Shared.DeadSpace.Husbandry.Sex;
@@ -33,6 +33,9 @@ using Content.Shared.Nutrition.EntitySystems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Server.DeadSpace.Husbandry.Breeding;
+using Content.Server.DeadSpace.Husbandry.Growth;
+using Content.Server.DeadSpace.Husbandry.Walking;
 
 namespace Content.Server.DeadSpace.DebugAnalyzer;
 
@@ -197,7 +200,7 @@ public sealed class DebugAnalyzerSystem : EntitySystem
         }
 
         if (TryComp<AnimalSexComponent>(target, out var sex))
-            rows.Add(new DebugAnalyzerRow(L("sex"), sex.Sex.ToString()));
+            rows.Add(new DebugAnalyzerRow(L("sex"), Text(sex.Sex)));
 
         return new DebugAnalyzerSection(L("section-general"), rows);
     }
@@ -397,12 +400,12 @@ public sealed class DebugAnalyzerSystem : EntitySystem
         var hive = bee.HiveOwner;
         var rows = new List<DebugAnalyzerRow>
         {
-            new(L("bee-state"), bee.State.ToString()),
+            new(L("bee-state"), Text(bee.State)),
             new(L("bee-hive"), hive == null || Deleted(hive.Value) ? "-" : GetNetEntity(hive.Value).ToString(),
                 severity: hive == null || Deleted(hive.Value) ? DebugAnalyzerSeverity.Critical : DebugAnalyzerSeverity.Normal),
             new(L("bee-pollen"), $"{Fmt(bee.PollenCarried)} / {Fmt(bee.MaxPollenCarry)}", Fraction(bee.PollenCarried, bee.MaxPollenCarry)),
             new(L("bee-target"), bee.TargetFlower is { } flower && !Deleted(flower) ? GetNetEntity(flower).ToString() : "-"),
-            new(L("bee-walker"), TryComp<AnimalWalkerComponent>(target, out var walker) ? walker.Status.ToString() : "-"),
+            new(L("bee-walker"), TryComp<AnimalWalkerComponent>(target, out var walker) ? Text(walker.Status) : "-"),
             new(L("bee-htn"), HasComp<HTNComponent>(target) ? "yes" : "no",
                 severity: HasComp<HTNComponent>(target) ? DebugAnalyzerSeverity.Warning : DebugAnalyzerSeverity.Normal),
             new(L("bee-busy"), bee.IsBusy ? "yes" : "no"),
@@ -438,12 +441,15 @@ public sealed class DebugAnalyzerSystem : EntitySystem
             new(L("pollination-flowering"), pollination.IsFlowering ? "yes" : "no"),
             new(L("pollination-cooldown"), FormatTime(pollination.NextAvailable - now)),
             new(L("pollination-boost"), pollination.BoostEnd == TimeSpan.Zero ? "-" : FormatTime(pollination.BoostEnd - now)),
-            new(L("pollination-age"), pollination.AgeBonus.ToString(CultureInfo.InvariantCulture)),
+            new(L("pollination-age"), Text(pollination.AgeBonus)),
             new(L("pollination-potency"), $"{Fmt(pollination.PotencyBonus * 100f)}%"),
         };
 
         return new DebugAnalyzerSection(L("section-pollination"), rows);
     }
+
+    // The value is passed as an argument: calling a method on a field of a component would count as an access of it.
+    private static string Text(object value) => Convert.ToString(value, CultureInfo.InvariantCulture) ?? "-";
 
     private static string L(string id) => $"{ReportPrefix}-{id}";
 

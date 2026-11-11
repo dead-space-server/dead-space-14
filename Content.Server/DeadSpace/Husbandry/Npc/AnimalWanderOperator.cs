@@ -6,7 +6,6 @@ using Content.Server.DeadSpace.Husbandry.Wander;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
-using Content.Shared.DeadSpace.Husbandry.Wander;
 
 namespace Content.Server.DeadSpace.Husbandry.Npc;
 

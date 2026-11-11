@@ -3,7 +3,7 @@
 using System.Numerics;
 using Robust.Shared.Map;
 
-namespace Content.Shared.DeadSpace.Husbandry.Walking;
+namespace Content.Server.DeadSpace.Husbandry.Walking;
 
 /// <summary>
 /// Walks an animal along a route: straight lines from one waypoint to the next at a walk (or a run), with the input set
@@ -12,6 +12,7 @@ namespace Content.Shared.DeadSpace.Husbandry.Walking;
 /// wandering, the way to food and water) hands it a route and reads the status. Handled by AnimalWalkerSystem.
 /// </summary>
 [RegisterComponent]
+[Access(typeof(AnimalWalkerSystem))]
 public sealed partial class AnimalWalkerComponent : Component
 {
     /// <summary>

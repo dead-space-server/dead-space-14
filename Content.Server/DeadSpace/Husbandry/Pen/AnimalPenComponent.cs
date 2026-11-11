@@ -2,13 +2,14 @@
 
 using Robust.Shared.Maths;
 
-namespace Content.Shared.DeadSpace.Husbandry.Pen;
+namespace Content.Server.DeadSpace.Husbandry.Pen;
 
 /// <summary>
 /// Gives an animal a pen: the place it lives in, where a breeding pair is looked for (the same pen means the same herd). The pen is the walls round the
 /// animal, but no more than a square round its home. Handled by AnimalPenSystem.
 /// </summary>
 [RegisterComponent]
+[Access(typeof(AnimalPenSystem))]
 public sealed partial class AnimalPenComponent : Component
 {
     /// <summary>
@@ -16,6 +17,19 @@ public sealed partial class AnimalPenComponent : Component
     /// </summary>
     [DataField]
     public int HalfSize = 7;
+
+    /// <summary>
+    /// A fill that gets bigger than this many tiles stops: it is a field and not a pen, the whole enclosure is not
+    /// taken for the pen then, the square round the home is.
+    /// </summary>
+    [DataField]
+    public int MaxTiles = 600;
+
+    /// <summary>
+    /// A fixed thing has to cover this share of a tile to count as a wall: a chair does not close a tile.
+    /// </summary>
+    [DataField]
+    public float WallArea = 0.5f;
 
     /// <summary>
     /// The grid and the tile the animal calls home: where it first was when the pen was asked for. It is moved to

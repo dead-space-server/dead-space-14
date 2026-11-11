@@ -26,9 +26,8 @@ namespace Content.Server.DeadSpace.Husbandry.Npc;
 public sealed partial class FindWaterOperator : HTNOperator
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
     private AnimalFeedingSystem _feeding = default!;
+    private SharedAnimalNeedsSystem _needs = default!;
     private SharedContainerSystem _container = default!;
     private EntityLookupSystem _lookup = default!;
     private PathfindingSystem _pathfinding = default!;
@@ -72,6 +71,7 @@ public sealed partial class FindWaterOperator : HTNOperator
     {
         base.Initialize(sysManager);
         _feeding = sysManager.GetEntitySystem<AnimalFeedingSystem>();
+        _needs = sysManager.GetEntitySystem<SharedAnimalNeedsSystem>();
         _container = sysManager.GetEntitySystem<SharedContainerSystem>();
         _lookup = sysManager.GetEntitySystem<EntityLookupSystem>();
         _pathfinding = sysManager.GetEntitySystem<PathfindingSystem>();
@@ -86,7 +86,7 @@ public sealed partial class FindWaterOperator : HTNOperator
 
         // A search that found nothing is not repeated at once: the same lookup of the whole area every plan is the
         // cost of a hungry animal with nothing to eat.
-        if (_entManager.TryGetComponent<AnimalNeedsComponent>(owner, out var needs) && _timing.CurTime < needs.NextWaterSearch)
+        if (_entManager.TryGetComponent<AnimalNeedsComponent>(owner, out var needs) && !_needs.CanSearch((owner, needs), food: false))
             return (false, null);
         var ownerCoordinates = _entManager.GetComponent<TransformComponent>(owner).Coordinates;
 
@@ -132,8 +132,7 @@ public sealed partial class FindWaterOperator : HTNOperator
             });
         }
 
-        if (needs != null)
-            needs.NextWaterSearch = _timing.CurTime + TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.HusbandrySearchCooldown));
+        _feeding.DelaySearch(owner, food: false);
 
         return (false, null);
     }

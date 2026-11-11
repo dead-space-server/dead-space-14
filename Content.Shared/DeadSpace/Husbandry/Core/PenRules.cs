@@ -40,8 +40,17 @@ public static class PenRules
         {
             var (x, y) = queue.Dequeue();
 
-            foreach (var next in new[] { (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1) })
+            for (var i = 0; i < 4; i++)
             {
+                // Up and down and sideways, no array for it: this runs for every cell of a pen.
+                var next = i switch
+                {
+                    0 => (x + 1, y),
+                    1 => (x - 1, y),
+                    2 => (x, y + 1),
+                    _ => (x, y - 1),
+                };
+
                 if (cells.Contains(next) || !isFree(next))
                     continue;
 

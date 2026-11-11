@@ -4,7 +4,7 @@ using Content.Shared.Storage;
 using Content.Shared.Whitelist;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared.DeadSpace.Husbandry.Breeding;
+namespace Content.Server.DeadSpace.Husbandry.Breeding;
 
 /// <summary>
 /// An animal that breeds. A female that is grown up, fed and watered, with a grown male of her kind close by, gets
@@ -12,6 +12,7 @@ namespace Content.Shared.DeadSpace.Husbandry.Breeding;
 /// the ones of the husbandry module. Handled by AnimalBreedingSystem.
 /// </summary>
 [RegisterComponent, AutoGenerateComponentPause]
+[Access(typeof(AnimalBreedingSystem))]
 public sealed partial class AnimalBreedingComponent : Component
 {
     /// <summary>
@@ -51,7 +52,7 @@ public sealed partial class AnimalBreedingComponent : Component
     /// <summary>
     /// The chance of a pregnancy on an attempt, for a pair that can breed.
     /// </summary>
-    [DataField]
+    [DataField, Access(Other = AccessPermissions.ReadWriteExecute)]
     public float BreedChance = 0.35f;
 
     [DataField]
@@ -60,10 +61,10 @@ public sealed partial class AnimalBreedingComponent : Component
     [DataField]
     public TimeSpan MaxAttemptInterval = TimeSpan.FromSeconds(120);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField, Access(Other = AccessPermissions.ReadWriteExecute)]
     public TimeSpan NextAttempt;
 
-    [DataField]
+    [DataField, Access(Other = AccessPermissions.ReadWriteExecute)]
     public TimeSpan GestationDuration = TimeSpan.FromMinutes(5);
 
     /// <summary>

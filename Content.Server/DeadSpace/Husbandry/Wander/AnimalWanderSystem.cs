@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Server.DeadSpace.Husbandry.Walking;
+using Content.Shared.CCVar;
 using Content.Shared.DeadSpace.Husbandry.Breeding;
 using Content.Shared.DeadSpace.Husbandry.Core;
 using Content.Shared.DeadSpace.Husbandry.Feeding;
@@ -10,12 +11,14 @@ using Content.Shared.DeadSpace.Husbandry.Walking;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Player;
-using Content.Shared.DeadSpace.Husbandry.Wander;
+using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Server.DeadSpace.Husbandry.Breeding;
+using Content.Server.DeadSpace.Husbandry.Feeding;
 
 namespace Content.Server.DeadSpace.Husbandry.Wander;
 
@@ -27,12 +30,8 @@ namespace Content.Server.DeadSpace.Husbandry.Wander;
 /// </summary>
 public sealed class AnimalWanderSystem : EntitySystem
 {
-    /// <summary>
-    /// How much room is kept between the end of a leg and what stops it.
-    /// </summary>
-    private const float Margin = 0.2f;
-
     [Dependency] private readonly AnimalWalkerSystem _walker = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -208,7 +207,8 @@ public sealed class AnimalWanderSystem : EntitySystem
         var mapId = xform.MapID;
         var mask = _walker.GetHardMask(ent);
 
-        var good = new List<(Vector2 Position, Vector2 Direction)>();
+        var good = _probes;
+        good.Clear();
         for (var i = 0; i < wander.Probes; i++)
         {
             var angle = heading is { } last
@@ -218,7 +218,7 @@ public sealed class AnimalWanderSystem : EntitySystem
             var wanted = _random.NextFloat(wander.MinDistance, wander.MaxDistance);
 
             // The free length counts from the middle of the animal, the leg has to stop before its body hits something.
-            var room = _walker.FreeLength(ent, mapId, origin, dir, wanted + walker.Clearance, walker.Clearance, mask) - walker.Clearance - Margin;
+            var room = _walker.FreeLength(ent, mapId, origin, dir, wanted + walker.Clearance, walker.Clearance, mask) - walker.Clearance - wander.LegMargin;
             var distance = Math.Min(wanted, room);
 
             if (distance >= wander.MinLegDistance &&
@@ -242,13 +242,12 @@ public sealed class AnimalWanderSystem : EntitySystem
 
     #region Social strolls
 
-    private static readonly TimeSpan PlayerScanInterval = TimeSpan.FromSeconds(2);
-
     private readonly List<EntityUid> _players = new();
     private readonly HashSet<Entity<AnimalBreedingComponent>> _animals = new();
     private readonly HashSet<Entity<AnimalFeederComponent>> _feeders = new();
     private readonly HashSet<Entity<WaterSourceComponent>> _waters = new();
     private TimeSpan _nextPlayerScan;
+    private readonly List<(Vector2 Position, Vector2 Direction)> _probes = new();
 
     /// <summary>
     /// Rolls what kind of stroll this is and who or what it is round, see <see cref="WanderMode"/>. The subject is
@@ -318,7 +317,7 @@ public sealed class AnimalWanderSystem : EntitySystem
         var now = _timing.CurTime;
         if (now >= _nextPlayerScan)
         {
-            _nextPlayerScan = now + PlayerScanInterval;
+            _nextPlayerScan = now + TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.HusbandryPlayerScanInterval));
             _players.Clear();
 
             var query = EntityQueryEnumerator<ActorComponent>();
@@ -478,12 +477,12 @@ public sealed class AnimalWanderSystem : EntitySystem
 
         var diff = point - origin;
         var distance = diff.Length();
-        if (distance < 0.6f || distance > wander.SocialRange + 6f)
+        if (distance < wander.MinSocialStep || distance > wander.SocialRange + wander.SocialRangeSlack)
             return false;
 
         var dir = diff / distance;
         var mask = _walker.GetHardMask(ent);
-        var room = _walker.FreeLength(ent, xform.MapID, origin, dir, distance + walker.Clearance, walker.Clearance, mask) - walker.Clearance - Margin;
+        var room = _walker.FreeLength(ent, xform.MapID, origin, dir, distance + walker.Clearance, walker.Clearance, mask) - walker.Clearance - wander.LegMargin;
 
         if (room < distance ||
             !_walker.IsSolidGround((gridUid, grid), origin, dir, distance) ||

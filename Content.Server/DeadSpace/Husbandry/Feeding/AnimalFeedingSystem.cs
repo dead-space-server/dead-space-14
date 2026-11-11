@@ -2,7 +2,6 @@
 
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
-using Content.Shared.CCVar;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -14,9 +13,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Whitelist;
-using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
-using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Husbandry.Feeding;
 
@@ -34,16 +31,7 @@ namespace Content.Server.DeadSpace.Husbandry.Feeding;
 /// </summary>
 public sealed class AnimalFeedingSystem : EntitySystem
 {
-    /// <summary>
-    /// The size of a sip from a container that does not say (see <see cref="WaterSourceComponent"/>).
-    /// </summary>
-    private const float DefaultSip = 10f;
-
-    private static readonly TimeSpan DefaultDrinkTime = TimeSpan.FromSeconds(2);
-
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IngestionSystem _ingestion = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
@@ -51,6 +39,7 @@ public sealed class AnimalFeedingSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly StomachSystem _stomach = default!;
+    [Dependency] private readonly SharedAnimalNeedsSystem _needs = default!;
 
     public override void Initialize()
     {
@@ -65,14 +54,8 @@ public sealed class AnimalFeedingSystem : EntitySystem
     /// </summary>
     public void DelaySearch(EntityUid animal, bool food)
     {
-        if (!TryComp<AnimalNeedsComponent>(animal, out var needs))
-            return;
-
-        var until = _timing.CurTime + TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.HusbandrySearchCooldown));
-        if (food)
-            needs.NextFoodSearch = until;
-        else
-            needs.NextWaterSearch = until;
+        if (TryComp<AnimalNeedsComponent>(animal, out var needs))
+            _needs.DelaySearch((animal, needs), food);
     }
 
     #region Eating
@@ -230,12 +213,13 @@ public sealed class AnimalFeedingSystem : EntitySystem
         delay = TimeSpan.Zero;
 
         if (!HasComp<AnimalNeedsComponent>(animal) ||
+            !TryComp<DietComponent>(animal, out var diet) ||
             _mobState.IsIncapacitated(animal) ||
             !CanDrink(source) ||
             !TryGetStomach(animal, out _))
             return false;
 
-        delay = TryComp<WaterSourceComponent>(source, out var water) ? water.Delay : DefaultDrinkTime;
+        delay = TryComp<WaterSourceComponent>(source, out var water) ? water.Delay : diet.DrinkTime;
 
         var args = new DoAfterArgs(EntityManager, animal, delay, new AnimalDrinkDoAfterEvent(), animal, target: source)
         {
@@ -269,7 +253,10 @@ public sealed class AnimalFeedingSystem : EntitySystem
             !_solutions.ResolveSolution(stomach.Owner, StomachSystem.DefaultSolutionName, ref stomach.Comp1.Solution, out var stomachSolution))
             return false;
 
-        var sip = TryComp<WaterSourceComponent>(source, out var water) ? water.AmountPerDrink : DefaultSip;
+        if (!TryComp<DietComponent>(animal, out var diet))
+            return false;
+
+        var sip = TryComp<WaterSourceComponent>(source, out var water) ? water.AmountPerDrink : diet.SipAmount;
         var amount = FixedPoint2.Min(FixedPoint2.New(sip), FixedPoint2.Min(soln.Comp.Solution.Volume, stomachSolution.AvailableVolume));
         if (amount <= FixedPoint2.Zero)
             return false;

@@ -1,6 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-namespace Content.Shared.DeadSpace.Husbandry.Feeding;
+namespace Content.Server.DeadSpace.Husbandry.Feeding;
 
 /// <summary>
 /// A container that animals prefer to drink from, or one that has to be told how: any open container with something
@@ -8,6 +8,7 @@ namespace Content.Shared.DeadSpace.Husbandry.Feeding;
 /// it takes. A trough has it.
 /// </summary>
 [RegisterComponent]
+[Access(typeof(AnimalFeedingSystem))]
 public sealed partial class WaterSourceComponent : Component
 {
     /// <summary>

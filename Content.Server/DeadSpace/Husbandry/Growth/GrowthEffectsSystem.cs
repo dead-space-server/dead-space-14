@@ -2,7 +2,6 @@
 
 using Content.Server.Cargo.Components;
 using Content.Shared.DeadSpace.Husbandry.Core;
-using Content.Shared.DeadSpace.Husbandry.Growth;
 using Content.Shared.DeadSpace.Husbandry.Needs;
 using Content.Shared.DeadSpace.Husbandry.Sex;
 using Content.Shared.FixedPoint;
@@ -21,6 +20,7 @@ namespace Content.Server.DeadSpace.Husbandry.Growth;
 public sealed class GrowthEffectsSystem : EntitySystem
 {
     [Dependency] private readonly MetaDataSystem _meta = default!;
+    [Dependency] private readonly SharedAnimalNeedsSystem _needs = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
     [Dependency] private readonly SharedScaleVisualsSystem _scale = default!;
 
@@ -55,12 +55,6 @@ public sealed class GrowthEffectsSystem : EntitySystem
             price.Price = stage.Price;
 
         if (TryComp<AnimalNeedsComponent>(ent, out var needs))
-        {
-            if (stage.SatietySeekBelow is { } seekBelow)
-                needs.Satiety.SeekBelow = seekBelow;
-
-            if (stage.SatietyDecayPerMinute is { } decay)
-                needs.Satiety.DecayPerMinute = decay;
-        }
+            _needs.SetSatietyProfile((ent.Owner, needs), stage.SatietySeekBelow, stage.SatietyDecayPerMinute);
     }
 }

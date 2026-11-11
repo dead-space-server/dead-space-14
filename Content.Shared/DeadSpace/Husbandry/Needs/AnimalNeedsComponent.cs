@@ -9,6 +9,7 @@ namespace Content.Shared.DeadSpace.Husbandry.Needs;
 /// Handled by AnimalNeedsSystem.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[Access(typeof(SharedAnimalNeedsSystem))]
 public sealed partial class AnimalNeedsComponent : Component
 {
     [DataField]
@@ -29,7 +30,8 @@ public sealed partial class AnimalNeedsComponent : Component
     /// <summary>
     /// How often the needs are processed.
     /// </summary>
-    [DataField]
+    // How often the needs are processed: a setting, an admin may change it.
+    [DataField, Access(Other = AccessPermissions.ReadWriteExecute)]
     public TimeSpan UpdateRate = TimeSpan.FromSeconds(1);
 
     /// <summary>
