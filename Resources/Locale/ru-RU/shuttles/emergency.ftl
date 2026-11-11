@@ -39,7 +39,7 @@ cmd-dockemergencyshuttle-help = Использование: dockemergencyshuttle
 cmd-launchemergencyshuttle-desc = Досрочно запускает эвакуационный шаттл, если это возможно.
 cmd-launchemergencyshuttle-help = Использование: launchemergencyshuttle
 # Emergency shuttle
-emergency-shuttle-left = Эвакуационный шаттл покинул станцию. Расчётное время прибытия шаттла на станцию Центкома — { $transitTime } секунд.
+emergency-shuttle-left = Эвакуационный шаттл покинул станцию. Расчётное время прибытия шаттла на станцию Центрального Командования — { $transitTime } секунд.
 emergency-shuttle-launch-time = Эвакуационный шаттл будет запущен через { $consoleAccumulator } секунд.
 emergency-shuttle-docked = Эвакуационный шаттл пристыковался к станции { $location }, направление: { $direction }. Он улетит через { $time } секунд.{ $extended }
 emergency-shuttle-good-luck = Эвакуационный шаттл не может найти станцию. Удачи.

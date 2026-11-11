@@ -120,5 +120,5 @@ ent-SmileStealObjective = { ent-BaseThiefStealAnimalObjective }
     .desc = { ent-BaseThiefStealAnimalObjective.desc }
 ent-PunPunStealObjective = { ent-BaseThiefStealAnimalObjective }
     .desc = { ent-BaseThiefStealAnimalObjective.desc }
-ent-EscapeThiefShuttleObjective = Улететь на Центком живым и свободным.
+ent-EscapeThiefShuttleObjective = Улететь на станцию ЦК живым и свободным.
     .desc = Вы же не хотите, чтобы о вашей незаконной деятельности кто-нибудь узнал?

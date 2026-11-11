@@ -95,9 +95,9 @@
 - type: entity
   parent: PhotocopierBase
   id: PhotocopierCentcomm
-  name: копировальный аппарат Центкома
+  name: копировальный аппарат ЦК
   description: От этого копировального аппарата веет понижением зарплаты станции.
-  suffix: Центком
+  suffix: ЦК
   components:
   - type: Photocopier
     paperSlot:
@@ -394,8 +394,8 @@
   name: распечатанный документ
   parent: Paper
   id: PaperPrintedCentcomm
-  description: Лист бумаги с заголовком центкома. Страшно даже смотреть на него.
-  suffix: NanoTrasen, Центком
+  description: Лист бумаги с заголовком ЦК. Страшно даже смотреть на него.
+  suffix: NanoTrasen, ЦК
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi

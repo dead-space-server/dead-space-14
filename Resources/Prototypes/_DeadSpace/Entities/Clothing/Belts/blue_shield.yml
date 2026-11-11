@@ -32,7 +32,7 @@
   parent: ClothingBeltMilitaryWebbingBlueShieldFilled
   name: РПС офицера "Синий Щит"
   description: РПС, которую носят офицеры "Синий Щит"
-  suffix: Заполненный, ЦентКом
+  suffix: Заполненный, ЦК
   components:
   - type: StorageFill
     contents:
@@ -88,7 +88,7 @@
   parent: ClothingBeltMilitaryWebbingBlueShieldFilled
   name: РПС офицера "Красный Меч"
   description: РПС, которую носят офицеры "Красный Меч"
-  suffix: Заполненный, ЦентКом
+  suffix: Заполненный, ЦК
   components:
   - type: StorageFill
     contents:
@@ -108,7 +108,7 @@
   parent: ClothingBeltMilitaryWebbingBlueShieldFilled
   name: РПС офицера "Зелёный Берет"
   description: РПС, которую носят офицеры "Зелёный Берет"
-  suffix: Заполненный, ЦентКом
+  suffix: Заполненный, ЦК
   components:
   - type: StorageFill
     contents:
