@@ -1,4 +1,5 @@
 - type: entity
+  parent: BaseItem
   id: MaterialHoneycomb
   name: honeycomb
   description: Wax honeycomb full of honey!

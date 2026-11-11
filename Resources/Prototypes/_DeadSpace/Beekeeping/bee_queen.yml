@@ -1,4 +1,5 @@
 - type: entity
+  parent: BaseItem
   id: QueenBee
   name: queen bee
   description: The heart of the hive. The swarm works while she is inside.

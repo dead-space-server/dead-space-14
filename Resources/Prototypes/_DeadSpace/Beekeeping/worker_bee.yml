@@ -11,3 +11,17 @@
     searchRadius: 5
     arrivalThreshold: 0.5
   - type: AnimalWalker
+  # A flying bee does not push anybody and nothing pushes it: the body is a sensor, not a hard collider. It can
+  # still be hit and swatted.
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.1
+        density: 30
+        hard: false
+        mask:
+        - FlyingMobMask
+        layer:
+        - FlyingMobLayer

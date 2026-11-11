@@ -336,6 +336,34 @@ public sealed class HusbandryTest
     }
 
     [Test]
+    public async Task BeekeepingItemsCanBePickedUp()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            foreach (var id in new[] { "MaterialHoneycomb", "HiveFrame", "QueenBee" })
+            {
+                var item = server.EntMan.SpawnEntity(id, map.GridCoords);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(server.EntMan.HasComponent<Content.Shared.Item.ItemComponent>(item), Is.True, $"{id} is an item");
+                    Assert.That(server.EntMan.HasComponent<Robust.Shared.Physics.Components.PhysicsComponent>(item), Is.True, $"{id} has a body");
+                    Assert.That(server.EntMan.HasComponent<Content.Shared.Movement.Pulling.Components.PullableComponent>(item), Is.True, $"{id} can be pulled");
+                });
+            }
+
+            var bee = server.EntMan.SpawnEntity("MobBeeWorker", map.GridCoords);
+            var fixtures = server.EntMan.GetComponent<Robust.Shared.Physics.FixturesComponent>(bee);
+            Assert.That(fixtures.Fixtures.Values.Any(f => f.Hard), Is.False, "a worker bee has no hard collider");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task DebugAnalyzerCanBeSpawned()
     {
         await using var pair = await PoolManager.GetServerClient();

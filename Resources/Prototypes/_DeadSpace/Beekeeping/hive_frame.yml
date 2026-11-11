@@ -1,4 +1,5 @@
 - type: entity
+  parent: BaseItem
   id: HiveFrame
   name: hive frame
   description: A frame for a hive, the bees build honeycomb in it.
@@ -12,8 +13,6 @@
     size: Normal
   - type: HiveFrame
     maxCapacity: 50
-  - type: Clickable
-  - type: InteractionOutline
   - type: Appearance
   - type: GenericVisualizer
     visuals:
