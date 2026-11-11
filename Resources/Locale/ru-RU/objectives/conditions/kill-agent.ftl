@@ -1,1 +1,1 @@
-objective-condition-kill-traitor-title = Убейте агента { $targetName }, должность: { CAPITALIZE($job) }.
+objective-condition-kill-traitor-title = Устраните агента { $targetName }, должность: { CAPITALIZE($job) }.

@@ -153,7 +153,7 @@ ghost-role-information-cburn-agent-name = РХБЗЗ Оперативник
 ghost-role-information-cburn-agent-description = Высококвалифицированный оперативник, способный справиться с любыми угрозами.
 ghost-role-information-scst-agent-name = Оперативник ОППУ
 ghost-role-information-scnt-agent-name = Оперативник ОПНУ
-ghost-role-information-centcom-official-description = Инспектируйте станцию, пишите служебные характеристики на руководителей, орудуйте факсом.ghost-role-information-centcom-official-description = Выполняйте обязанности, связанные с Центком, такие как инспекция станции, составление служебных характеристик на руководителей и работа с факсом.
+ghost-role-information-centcom-official-description = Инспектируйте станцию, пишите служебные характеристики на руководителей, орудуйте факсом.ghost-role-information-centcom-official-description = Выполняйте обязанности, связанные с Центральным Командованием, такие как инспекция станции, составление служебных характеристик на руководителей и работа с факсом.
 ghost-role-information-nukeop-rules = Вы [color={ role-type-team-antagonist-color }][bold]{ role-type-team-antagonist-name }[/bold][/color], в команде с другими Ядерными оперативниками. Помощь агентов на станции не гарантируется.
 ghost-role-information-loneop-name = Одинокий оперативник
 ghost-role-information-loneop-description = Вы — одинокий ядерный оперативник. Уничтожьте станцию.
@@ -162,9 +162,9 @@ ghost-role-information-behonker-name = Бехонкер
 ghost-role-information-behonker-description = Вы — антагонист, несущий смерть и хонки всем, кто не следует за хонкоматерью.
 ghost-role-information-hellspawn-name = Адское отродье
 ghost-role-information-hellspawn-description = Несите смерть всем, кто не повинуется великой богине Нар'Си.
-ghost-role-information-Death-Squad-name = Боец эскадрона смерти
+ghost-role-information-Death-Squad-name = Боец Эскадрона смерти
 ghost-role-information-Death-Squad-description = Боец напичканный всевозможными имплантами и обладающий самой лучшей экипировкой с одной целью - аннигиляция.
-ghost-role-information-Death-Squad-rules = Вы обязаны подчиняться ВСЕМ приказам офицера специальных операций.
+ghost-role-information-Death-Squad-rules = Вы обязаны подчиняться ВСЕМ приказам Офицера Специальных Операций.
 ghost-role-information-SyndiCat-name = СиндиКот
 ghost-role-information-SyndiCat-description = Вы — верный дрессированный питомец ядерных оперативников с микробомбой. Служите своему хозяину до самой смерти!
 ghost-role-information-SyndiCat-rules = Вы [color={ role-type-team-antagonist-color }][bold]{ role-type-team-antagonist-name }[/bold][/color], в команде с агентом, который вас призвал.
@@ -223,7 +223,7 @@ ghost-role-information-science-name = Научный
 ghost-role-information-science-description = Вы являетесь частью научной команды, но, похоже, попали в странную ситуацию...
 ghost-role-information-civilian-name = Гражданский
 ghost-role-information-civilian-description = Вы просто гуляли, но, похоже, попали в странную ситуацию...
-ghost-role-information-civilian-centcom-lawyer-name = Юрист Центкома
+ghost-role-information-civilian-centcom-lawyer-name = Юрист ЦК
 ghost-role-information-civilian-centcom-lawyer-description = Юрист, прямо из того самого сериала.
 ghost-role-information-command-name = Коммандир
 ghost-role-information-command-description = Вы являетесь членом командования, но, похоже, попали в странную ситуацию...
@@ -275,8 +275,8 @@ ghost-role-information-redswordofficer-name = Офицер "Красный ме�
 ghost-role-information-redswordofficer-description = Вы - Офицер корпуса Синего Щита, а конкретно подразделение "Красный Меч". Ваша задача спасти VIP персону любой ценой, даже если потребуется отдать свою жизнь! Также вы обладаете всеми навыками.
 ghost-role-information-greenberetofficer-name = Офицер "Зелёный Берет"
 ghost-role-information-greenberetofficer-description = Вы - Офицер корпуса Синего Щита, а конкретно подразделение "Зелёный берет". Ваша задача защита высокопоставленных лиц Центрального Командования и не только. Во благо спасения VIP персоны вы можете отдать свою жизнь! Также вы обладаете всеми навыками.
-ghost-role-information-centcomofficer-name = Офицер Центрального Командования
-ghost-role-information-centcomofficer-description = Вы - Офицер Центрального Командования. Вы должны защищать довереное вам место на котором вы появились и выполнять приказы вышестоящих сотрудников Центрального Командования.
+ghost-role-information-centcomofficer-name = Офицер безопасности ЦК
+ghost-role-information-centcomofficer-description = Вы - Офицер безопасности ЦК. Вы должны обеспечить безопасность станции ЦК и выполнять приказы вышестоящих сотрудников Центрального Командования.
 ghost-role-information-centcom-personal-rules = Вы обязаны подчиняться приказам членов Центрального Командования.
 ghost-role-information-centcom-official-name = Представитель Центрального Командования
 ghost-role-information-ert-centcom-official-description =

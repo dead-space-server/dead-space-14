@@ -91,7 +91,7 @@
   parent: ClothingBeltSecurity
   name: пояс службы безопасности
   description: Может вмещать снаряжение охраны, например наручники и вспышки.
-  suffix: Заполненный, ОЦК
+  suffix: Заполненный, ОБЦК
   components:
   - type: EntityTableContainerFill
     containers:

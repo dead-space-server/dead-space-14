@@ -1,4 +1,4 @@
-ent-AdminObserver = админ наблюдатель
+ ent-AdminObserver = админ наблюдатель
     .desc = { ent-MobObserverBase.desc }
 ent-BaseAGhostAction = { ent-BaseAction }
     .desc = { ent-BaseAction.desc }
