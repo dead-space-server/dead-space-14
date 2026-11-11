@@ -16,6 +16,7 @@ using Robust.Shared.Random;
 using System.Text;
 using Content.Shared.Mind;
 using Content.Shared.Foldable;
+using Content.Server.GameTicking;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
@@ -54,6 +55,9 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
         if (active)
         {
             if (IsFolded(ent))
+                return;
+
+            if (_station.GetOwningStation(ent) == null)
                 return;
 
             if (user == null)
@@ -246,6 +250,9 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
         while (query.MoveNext(out var uid, out var console))
         {
             if (console.IsTaipan || !plan.ContainsKey(console.Account))
+                continue;
+
+            if (MetaData(uid).EntityPrototype?.ID == GameTicker.AdminObserverPrototypeName.Id)
                 continue;
 
             if (_station.GetOwningStation(uid) != station)
