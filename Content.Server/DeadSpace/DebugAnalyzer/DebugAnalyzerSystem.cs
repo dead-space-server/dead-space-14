@@ -126,7 +126,15 @@ public sealed class DebugAnalyzerSystem : EntitySystem
                 continue;
             }
 
-            SendReport(uid, target);
+            try
+            {
+                SendReport(uid, target);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Debug analyzer: the report of {ToPrettyString(target)} failed: {e}");
+                comp.ScannedEntity = null;
+            }
         }
     }
 
@@ -137,24 +145,33 @@ public sealed class DebugAnalyzerSystem : EntitySystem
             BuildGeneral(target),
         };
 
-        TryAdd(sections, BuildHealth(target));
-        TryAdd(sections, BuildSatiation(target));
-        TryAdd(sections, BuildNeeds(target));
-        TryAdd(sections, BuildGrowth(target));
-        TryAdd(sections, BuildBreeding(target));
-        TryAdd(sections, BuildPen(target));
-        TryAdd(sections, BuildBee(target));
-        TryAdd(sections, BuildHive(target));
-        TryAdd(sections, BuildPollination(target));
+        TryAdd(sections, () => BuildHealth(target));
+        TryAdd(sections, () => BuildSatiation(target));
+        TryAdd(sections, () => BuildNeeds(target));
+        TryAdd(sections, () => BuildGrowth(target));
+        TryAdd(sections, () => BuildBreeding(target));
+        TryAdd(sections, () => BuildPen(target));
+        TryAdd(sections, () => BuildBee(target));
+        TryAdd(sections, () => BuildHive(target));
+        TryAdd(sections, () => BuildPollination(target));
 
         var message = new DebugAnalyzerScannedMessage(GetNetEntity(target), Name(target), sections);
         _ui.ServerSendUiMessage(analyzer, DebugAnalyzerUiKey.Key, message);
     }
 
-    private static void TryAdd(List<DebugAnalyzerSection> sections, DebugAnalyzerSection? section)
+    // A section that throws (some being has something odd) is left out and logged, it must not take the whole report
+    // down, and still less the update of every analyzer: one exception there would stop them all until the restart.
+    private void TryAdd(List<DebugAnalyzerSection> sections, Func<DebugAnalyzerSection?> build)
     {
-        if (section != null)
-            sections.Add(section);
+        try
+        {
+            if (build() is { } section)
+                sections.Add(section);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Debug analyzer: a section of the report failed: {e}");
+        }
     }
 
     private DebugAnalyzerSection BuildGeneral(EntityUid target)
