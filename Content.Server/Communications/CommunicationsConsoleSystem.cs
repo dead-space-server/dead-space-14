@@ -233,20 +233,15 @@ namespace Content.Server.Communications
             if (!comp.CanShuttle)
                 return false;
 
+            //DS14-start
+            var stationUid = _stationSystem.GetOwningStation(comp.Owner);
+            if (stationUid != null && _alertLevelSystem.IsCallEvacBlocked(stationUid.Value))
+                return false;
+            //DS14-end
+
             // Calling shuttle checks
             if (_roundEndSystem.ExpectedCountdownEnd is null)
-            {
-                //DS14-start
-                var stationUid = _stationSystem.GetOwningStation(comp.Owner);
-                if (stationUid != null && (_alertLevelSystem.GetLevel(stationUid.Value) == "gamma"
-                || _alertLevelSystem.GetLevel(stationUid.Value) == "sierra" || _alertLevelSystem.GetLevel(stationUid.Value) == "epsilon"))
-                {
-                    return false;
-                }
-                //DS14-end
-
                 return true;
-            }
 
             // Recalling shuttle checks
             var recallThreshold = _cfg.GetCVar(CCVars.EmergencyRecallTurningPoint);
