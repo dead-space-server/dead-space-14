@@ -4,6 +4,7 @@ using System.Linq;
 using Content.Server.DeadSpace.Husbandry.Feeding;
 using Content.Server.DeadSpace.Husbandry.Growth;
 using Content.Shared.Botany.Components;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.DeadSpace.Beekeeping;
 using Content.Shared.DeadSpace.Husbandry.Breeding;
@@ -60,37 +61,98 @@ public sealed class HusbandryTest
         await pair.CleanReturnAsync();
     }
 
+
     [Test]
-    public async Task AnimalEatsAndDrinks()
+    public async Task AnimalEatsThroughTheStomach()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
 
+        EntityUid cow = default;
+        EntityUid apple = default;
+
+        await server.WaitPost(() =>
+        {
+            var ents = server.EntMan;
+            cow = ents.SpawnEntity("MobChicken", map.GridCoords);
+            // The brain is off: this tests the eating itself, not where the animal walks.
+            ents.RemoveComponent<Content.Server.NPC.HTN.HTNComponent>(cow);
+            var needs = ents.GetComponent<AnimalNeedsComponent>(cow);
+            needs.Satiety.Value = 10f;
+            needs.Satiety.DecayPerMinute = 0f;
+            needs.Hydration.DecayPerMinute = 0f;
+
+            apple = ents.SpawnEntity("FoodApple", map.GridCoords);
+            var feeding = server.System<AnimalFeedingSystem>();
+            Assert.That(feeding.CanEat((cow, ents.GetComponent<DietComponent>(cow)), apple), Is.True);
+            Assert.That(feeding.TryEat(cow, apple, out _), Is.True, "the animal starts eating by the usual ingestion");
+        });
+
+        // The bites, then the stomach digests: the satiety goes up gradually, not at once.
+        await pair.RunTicksSync(30 * 30);
+
         await server.WaitAssertion(() =>
+        {
+            var needs = server.EntMan.GetComponent<AnimalNeedsComponent>(cow);
+            Assert.That(needs.Satiety.Value, Is.GreaterThan(10f), "what was eaten was digested into satiety");
+            Assert.That(server.EntMan.Deleted(apple), Is.True, "the apple was eaten up");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AnimalDrinksAnyOpenContainerThroughTheStomach()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid cow = default;
+        EntityUid trough = default;
+        EntityUid bucket = default;
+
+        await server.WaitPost(() =>
         {
             var ents = server.EntMan;
             var feeding = server.System<AnimalFeedingSystem>();
             var solutions = server.System<SharedSolutionContainerSystem>();
 
-            var cow = ents.SpawnEntity("MobCow", map.GridCoords);
+            cow = ents.SpawnEntity("MobCow", map.GridCoords);
+            ents.RemoveComponent<Content.Server.NPC.HTN.HTNComponent>(cow);
             var needs = ents.GetComponent<AnimalNeedsComponent>(cow);
-            needs.Satiety.Value = 10f;
             needs.Hydration.Value = 10f;
+            needs.Satiety.DecayPerMinute = 0f;
+            needs.Hydration.DecayPerMinute = 0f;
 
-            var apple = ents.SpawnEntity("FoodApple", map.GridCoords);
-            Assert.That(feeding.CanEat((cow, ents.GetComponent<DietComponent>(cow)), apple), Is.True);
-            Assert.That(feeding.EatNow((cow, ents.GetComponent<DietComponent>(cow)), apple), Is.True);
-            Assert.That(needs.Satiety.Value, Is.GreaterThan(10f), "eating feeds");
-
-            var trough = ents.SpawnEntity("AnimalTrough", map.GridCoords);
-            Assert.That(feeding.CanDrink((trough, ents.GetComponent<WaterSourceComponent>(trough))), Is.False, "an empty trough");
+            trough = ents.SpawnEntity("AnimalTrough", map.GridCoords);
+            Assert.That(feeding.CanDrink(trough), Is.False, "an empty trough");
 
             Assert.That(solutions.TryGetSolution(trough, "tank", out var soln, out _), Is.True);
             solutions.TryAddReagent(soln.Value, "Water", 50);
+            Assert.That(feeding.CanDrink(trough), Is.True);
 
-            Assert.That(feeding.DrinkNow((cow, needs), trough), Is.True);
-            Assert.That(needs.Hydration.Value, Is.GreaterThan(10f), "drinking waters");
+            // Any open container with a liquid in it, not only a trough.
+            bucket = ents.SpawnEntity("Bucket", map.GridCoords);
+            var drainable = ents.GetComponent<DrainableSolutionComponent>(bucket);
+            Assert.That(solutions.TryGetSolution(bucket, drainable.Solution, out var bucketSoln, out _), Is.True);
+            solutions.TryAddReagent(bucketSoln.Value, "Water", 30);
+            Assert.That(feeding.CanDrink(bucket), Is.True);
+
+            Assert.That(feeding.TryDrink(cow, trough, out _), Is.True);
+        });
+
+        await pair.RunTicksSync(30 * 30);
+
+        await server.WaitAssertion(() =>
+        {
+            var needs = server.EntMan.GetComponent<AnimalNeedsComponent>(cow);
+            Assert.That(needs.Hydration.Value, Is.GreaterThan(10f), "the water in the stomach was digested into hydration");
+
+            var solutions = server.System<SharedSolutionContainerSystem>();
+            Assert.That(solutions.TryGetSolution(trough, "tank", out _, out var sol), Is.True);
+            Assert.That((float) sol.Volume, Is.LessThan(50f), "the sip came out of the trough");
         });
 
         await pair.CleanReturnAsync();
@@ -118,8 +180,9 @@ public sealed class HusbandryTest
         await server.WaitAssertion(() =>
         {
             var needs = server.EntMan.GetComponent<AnimalNeedsComponent>(cow);
-            Assert.That(needs.Satiety.Value, Is.EqualTo(0f));
-            Assert.That(needs.SatietyLevel, Is.EqualTo(NeedLevel.Empty));
+            // The stomach of a new animal holds a little food, so the satiety may not be exactly zero.
+            Assert.That(needs.Satiety.Value, Is.LessThan(2f));
+            Assert.That(needs.SatietyLevel, Is.Not.EqualTo(NeedLevel.Satisfied));
         });
 
         await pair.CleanReturnAsync();

@@ -250,12 +250,12 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
-      decayPerMinute: 1.2
+      decayPerMinute: 0.5
       deprivationDamage:
         types:
           Blunt: 1
     hydration:
-      decayPerMinute: 0.8
+      decayPerMinute: 1.5
       deprivationDamage:
         types:
           Blunt: 1
@@ -317,7 +317,7 @@
       - ReagentId: Blood
         Quantity: 100
   - type: EggLayer
-    hungerUsage: 15
+    hungerUsage: 5
     eggSpawn:
     - id: FoodEgg
   - type: ReplacementAccent
@@ -762,12 +762,12 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
-      decayPerMinute: 1.2
+      decayPerMinute: 0.5
       deprivationDamage:
         types:
           Blunt: 1
     hydration:
-      decayPerMinute: 1
+      decayPerMinute: 1.5
       deprivationDamage:
         types:
           Blunt: 1
@@ -829,7 +829,7 @@
       - ReagentId: Blood
         Quantity: 100
   - type: EggLayer
-    hungerUsage: 15
+    hungerUsage: 5
     eggSpawn:
     - id: FoodEgg
   - type: ReplacementAccent
@@ -995,12 +995,12 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
-      decayPerMinute: 2
+      decayPerMinute: 0.7
       deprivationDamage:
         types:
           Blunt: 1
     hydration:
-      decayPerMinute: 1.2
+      decayPerMinute: 2
       deprivationDamage:
         types:
           Blunt: 1
@@ -1062,7 +1062,7 @@
         - ReagentId: Milk
           Quantity: 30
   - type: Udder
-    hungerUsage: 2
+    hungerUsage: 1
     minHungerThreshold: Peckish
     reagentId: Milk
     quantityPerUpdate: 25
@@ -1211,12 +1211,12 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
-      decayPerMinute: 1.8
+      decayPerMinute: 0.7
       deprivationDamage:
         types:
           Blunt: 1
     hydration:
-      decayPerMinute: 1
+      decayPerMinute: 2
       deprivationDamage:
         types:
           Blunt: 1
@@ -1269,13 +1269,13 @@
       wool:
         maxVol: 250
   - type: Udder
-    hungerUsage: 2
+    hungerUsage: 1
     minHungerThreshold: Peckish
     reagentId: MilkGoat
     quantityPerUpdate: 25
     growthDelay: 20
   - type: Wooly
-    hungerUsage: 2
+    hungerUsage: 1
     minHungerThreshold: Peckish
   - type: Edible
     destroyOnEmpty: false
@@ -1370,12 +1370,12 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
-      decayPerMinute: 1.8
+      decayPerMinute: 0.7
       deprivationDamage:
         types:
           Blunt: 1
     hydration:
-      decayPerMinute: 1
+      decayPerMinute: 2
       deprivationDamage:
         types:
           Blunt: 1
@@ -1433,13 +1433,13 @@
           Quantity: 25
   # DS14-end
   - type: Udder
-    hungerUsage: 2
+    hungerUsage: 1
     minHungerThreshold: Peckish # DS14: required by the old component schema.
     reagentId: MilkSheep
     quantityPerUpdate: 25
     growthDelay: 20
   - type: Wooly
-    hungerUsage: 2
+    hungerUsage: 1
     minHungerThreshold: Peckish # DS14: required by the old component schema.
   - type: Shearable
     targetSolutionName: wool
@@ -4219,12 +4219,12 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
-      decayPerMinute: 2.2
+      decayPerMinute: 0.7
       deprivationDamage:
         types:
           Blunt: 1
     hydration:
-      decayPerMinute: 1.2
+      decayPerMinute: 2
       deprivationDamage:
         types:
           Blunt: 1

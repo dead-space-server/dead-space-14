@@ -5,8 +5,8 @@ using Content.Shared.Whitelist;
 namespace Content.Shared.DeadSpace.Husbandry.Feeding;
 
 /// <summary>
-/// What an animal eats. Only entities with a <c>Food</c> component are ever considered, this narrows them down.
-/// Handled by AnimalFeedingSystem.
+/// What an animal looks for to eat. Only edible things are ever considered, this narrows them down. The eating itself
+/// is the usual one: bites into the stomach, which digests them (see AnimalSatiateEffectSystem).
 /// </summary>
 [RegisterComponent]
 public sealed partial class DietComponent : Component
@@ -22,19 +22,4 @@ public sealed partial class DietComponent : Component
     /// </summary>
     [DataField]
     public EntityWhitelist? Blacklist;
-
-    /// <summary>
-    /// The solution of the food that is counted as its nutrition.
-    /// </summary>
-    [DataField]
-    public string Solution = "food";
-
-    /// <summary>
-    /// How much satiety a unit of the food solution is worth.
-    /// </summary>
-    [DataField]
-    public float NutritionPerUnit = 1f;
-
-    [DataField]
-    public TimeSpan EatDelay = TimeSpan.FromSeconds(2);
 }

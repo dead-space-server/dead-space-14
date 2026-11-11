@@ -8,7 +8,9 @@ using Content.Server.DeadSpace.Husbandry.Feeding;
 using Content.Server.DeadSpace.Husbandry.Walking;
 using Content.Server.NPC.HTN.PrimitiveTasks;
 using Content.Server.NPC.Pathfinding;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.DeadSpace.Husbandry.Feeding;
+using Robust.Shared.Containers;
 using Content.Shared.CCVar;
 using Content.Shared.DeadSpace.Husbandry.Needs;
 using Robust.Shared.Configuration;
@@ -27,6 +29,7 @@ public sealed partial class FindWaterOperator : HTNOperator
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     private AnimalFeedingSystem _feeding = default!;
+    private SharedContainerSystem _container = default!;
     private EntityLookupSystem _lookup = default!;
     private PathfindingSystem _pathfinding = default!;
     private SharedTransformSystem _transform = default!;
@@ -69,6 +72,7 @@ public sealed partial class FindWaterOperator : HTNOperator
     {
         base.Initialize(sysManager);
         _feeding = sysManager.GetEntitySystem<AnimalFeedingSystem>();
+        _container = sysManager.GetEntitySystem<SharedContainerSystem>();
         _lookup = sysManager.GetEntitySystem<EntityLookupSystem>();
         _pathfinding = sysManager.GetEntitySystem<PathfindingSystem>();
         _transform = sysManager.GetEntitySystem<SharedTransformSystem>();
@@ -86,13 +90,15 @@ public sealed partial class FindWaterOperator : HTNOperator
             return (false, null);
         var ownerCoordinates = _entManager.GetComponent<TransformComponent>(owner).Coordinates;
 
-        var sources = new HashSet<Entity<WaterSourceComponent>>();
-        _lookup.GetEntitiesInRange(ownerCoordinates, Range, sources);
+        // Any container with something to drink in it that lies about (not held, not in a bag): a trough, a bucket, a bowl.
+        var sources = new HashSet<Entity<DrainableSolutionComponent>>();
+        _lookup.GetEntitiesInRange(ownerCoordinates, Range, sources, LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries);
 
         var candidates = new List<(EntityUid Source, float Distance)>();
         foreach (var source in sources)
         {
-            if (!_feeding.CanDrink(source) ||
+            if (_container.IsEntityInContainer(source) ||
+                !_feeding.CanDrink(source) ||
                 !_walker.IsTargetAllowed(owner, _transform.GetMapCoordinates(source), Reach))
                 continue;
 
