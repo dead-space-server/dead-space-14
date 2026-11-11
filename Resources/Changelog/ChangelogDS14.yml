@@ -9931,3 +9931,14 @@ Entries:
   changes:
   - type: Fix
     message: Унатхи теперь сплевывают, если их ушить.
+- id: 950
+  author: Non-stop-smetana
+  time: '2026-11-11T08:05:01.763299+00:00'
+  pr: 2702
+  changes:
+  - type: Add
+    message: В ящик ОСЩ добавлен набор для полевой хирургии
+  - type: Remove
+    message: Временно удалён набор с Аресом до лучших времён
+  - type: Tweak
+    message: Изменена кобура ОСЩ, теперь она по вместимости как РПС СЩ
