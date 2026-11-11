@@ -36,6 +36,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.SSDIndicator;
 using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.SurveillanceCamera.Components;
+using Content.Shared.Xenoborgs.Components;
 using Content.Shared.TextScreen;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
@@ -229,7 +230,7 @@ public sealed class CameraArchiveSystem : EntitySystem
         if (!Exists(camera))
             return false;
 
-        if (OnCentComm(camera))
+        if (OnCentComm(camera) || HasComp<XenoborgComponent>(camera))
             return false;
 
         if (!_cfg.GetCVar(CCVars.CameraArchiveActive))
@@ -254,7 +255,7 @@ public sealed class CameraArchiveSystem : EntitySystem
 
     public bool Listed(EntityUid camera)
     {
-        if (!HasComp<SurveillanceCameraComponent>(camera) || OnCentComm(camera))
+        if (!HasComp<SurveillanceCameraComponent>(camera) || OnCentComm(camera) || HasComp<XenoborgComponent>(camera))
             return false;
 
         if (!_tag.HasTag(camera, BodyCameraTag))
