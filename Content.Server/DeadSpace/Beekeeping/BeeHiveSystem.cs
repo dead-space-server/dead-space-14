@@ -1,35 +1,26 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Content.Shared.CCVar;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeadSpace.Beekeeping;
 using Content.Shared.Examine;
 using Content.Shared.Storage;
-using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Beekeeping;
 
 /// <summary>
-/// The hive, see <see cref="BeeHiveComponent"/>. With a player near, the bees fly (see <see cref="BeeAISystem"/>) and
-/// bring the pollen. With nobody near they do not, and the hive makes up for it: it takes the pollen that its bees
-/// would have brought, if there is a plant to pollinate close by. That part is off with the cvar
-/// <see cref="CCVars.HusbandryFarmEnabled"/>.
+/// The hive, see <see cref="BeeHiveComponent"/>. The bees fly (see <see cref="BeeAISystem"/>) and bring the pollen.
 /// </summary>
 public sealed class BeeHiveSystem : EntitySystem
 {
     private static readonly TimeSpan TickInterval = TimeSpan.FromSeconds(1);
 
     [Dependency] private readonly BeeAISystem _beeAI = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly HiveFrameSystem _frames = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ItemSlotsSystem _slots = default!;
-    [Dependency] private readonly PollinationSystem _pollination = default!;
 
-    private readonly HashSet<Entity<PollinationComponent>> _flowers = new();
     private TimeSpan _nextTick;
 
     public override void Initialize()
@@ -83,9 +74,6 @@ public sealed class BeeHiveSystem : EntitySystem
 
             hive.ProductionTimer = 0f;
 
-            if (!_beeAI.IsPlayerNear(Transform(uid).Coordinates))
-                SimulateOffline((uid, hive));
-
             TryProduce((uid, hive));
         }
     }
@@ -102,32 +90,6 @@ public sealed class BeeHiveSystem : EntitySystem
 
         beeComp.HiveOwner = hive;
         hive.Comp.Bees.Add(bee);
-    }
-
-    /// <summary>
-    /// The bees do not fly with nobody near, so the pollen is added by the hive itself, as much as they would bring.
-    /// </summary>
-    private void SimulateOffline(Entity<BeeHiveComponent> hive)
-    {
-        var comp = hive.Comp;
-        if (!_cfg.GetCVar(CCVars.HusbandryFarmEnabled) || comp.Bees.Count == 0)
-            return;
-
-        _flowers.Clear();
-        _lookup.GetEntitiesInRange(Transform(hive).Coordinates, comp.OfflineRange, _flowers);
-
-        var found = false;
-        foreach (var flower in _flowers)
-        {
-            if (_pollination.CanPollinate(flower))
-            {
-                found = true;
-                break;
-            }
-        }
-
-        if (found)
-            comp.PollenStored = MathF.Min(comp.PollenStored + comp.Bees.Count * comp.OfflinePollenPerBee, comp.MaxPollen);
     }
 
     // The queen was taken out: the bees go home.

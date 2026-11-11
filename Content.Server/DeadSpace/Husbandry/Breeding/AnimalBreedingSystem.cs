@@ -149,6 +149,11 @@ public sealed class AnimalBreedingSystem : EntitySystem
             return false;
 
         var comp = mother.Comp;
+
+        // The dice first: most attempts end here, and the pen and the lookup below cost more than a roll.
+        if (!_random.Prob(comp.BreedChance))
+            return false;
+
         // The partner has to be in the same pen: the whole enclosure, or the square round the home. Nobody has to
         // watch, and a male on the other side of the room counts. An animal with no pen falls back to the radius.
         var pen = TryComp<AnimalPenComponent>(mother, out var penComp) ? _pens.GetPen((mother.Owner, penComp)) : null;
@@ -187,9 +192,6 @@ public sealed class AnimalBreedingSystem : EntitySystem
             return false;
 
         if (!BreedingRules.HasRoom(crowd, comp.Capacity, Count<AnimalBreedingComponent>(), _cfg.GetCVar(CCVars.HusbandryPopulationCap)))
-            return false;
-
-        if (!_random.Prob(comp.BreedChance))
             return false;
 
         var attempt = new AnimalBreedingAttemptEvent(dad);

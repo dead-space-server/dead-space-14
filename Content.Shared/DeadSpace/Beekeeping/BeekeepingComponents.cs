@@ -46,7 +46,7 @@ public sealed partial class BeeComponent : Component
     public float IdleCooldown = 1f;
 
     /// <summary>
-    /// How far from the bee it looks for plants once a second, in tiles.
+    /// How far from the hive the bee looks for plants (once a second), in tiles. Counted from the hive, not from the bee.
     /// </summary>
     [DataField]
     public float SearchRadius = 5f;
@@ -134,17 +134,6 @@ public sealed partial class BeeHiveComponent : Component
 
     [DataField]
     public EntProtoId BeePrototype = "MobBeeWorker";
-
-    /// <summary>
-    /// How much pollen each bee brings per production interval while no player is near and the bees do not fly (the
-    /// hive is then simulated, see the cvar husbandry.farm.enabled). It is paid only if there is a flowering plant
-    /// within <see cref="OfflineRange"/>.
-    /// </summary>
-    [DataField]
-    public float OfflinePollenPerBee = 5f;
-
-    [DataField]
-    public float OfflineRange = 5f;
 
     [ViewVariables]
     public float SpawnTimer;

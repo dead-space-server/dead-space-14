@@ -70,6 +70,12 @@ public sealed partial class AnimalWalkerComponent : Component
     public Queue<EntityCoordinates> Route = new();
 
     /// <summary>
+    /// The last waypoint of the route, kept apart so that every tick need not go through the queue for it.
+    /// </summary>
+    [ViewVariables]
+    public EntityCoordinates Destination;
+
+    /// <summary>
     /// How close to the last waypoint counts as being there.
     /// </summary>
     [ViewVariables]

@@ -7,35 +7,7 @@ namespace Content.Shared.CCVar;
 public sealed partial class CCVars
 {
     /// <summary>
-    ///     Master switch of the unattended farm (<c>AnimalFarmSystem</c>): sleeping animals are fed and watered
-    ///     from their pen without walking. Turn it off if the server is struggling.
-    /// </summary>
-    public static readonly CVarDef<bool> HusbandryFarmEnabled =
-        CVarDef.Create("husbandry.farm.enabled", true, CVar.SERVERONLY);
-
-    /// <summary>
-    ///     How often the farm looks at sleeping animals, in seconds.
-    /// </summary>
-    public static readonly CVarDef<float> HusbandryFarmInterval =
-        CVarDef.Create("husbandry.farm.interval", 15f, CVar.SERVERONLY);
-
-    /// <summary>
-    ///     At most this many animals are simulated by the farm per cycle, the rest wait for the next one
-    ///     (round robin), so the cost of a cycle never grows with the number of animals.
-    /// </summary>
-    public static readonly CVarDef<int> HusbandryFarmBudget =
-        CVarDef.Create("husbandry.farm.budget", 16, CVar.SERVERONLY);
-
-    /// <summary>
-    ///     Whether an animal of an open pen can wander off the map and be deleted. Off by default: losing
-    ///     player property to a dice roll is a surprise nobody asked for.
-    /// </summary>
-    public static readonly CVarDef<bool> HusbandryFarmEscape =
-        CVarDef.Create("husbandry.farm.escape", false, CVar.SERVERONLY);
-
-    /// <summary>
-    ///     Whether animals breed while no player is around (the farm does not make them breed in any case, this
-    ///     only lets sleeping animals take part in breeding attempts).
+    ///     Whether animals breed at all.
     /// </summary>
     public static readonly CVarDef<bool> HusbandryBreedingEnabled =
         CVarDef.Create("husbandry.breeding.enabled", true, CVar.SERVERONLY);

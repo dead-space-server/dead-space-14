@@ -227,7 +227,9 @@ public sealed class AnimalPenSystem : EntitySystem
             return;
 
         var centre = _map.GridTileToWorld(pen.Grid, grid, pen.Anchor);
-        var found = new HashSet<Entity<T>>();
+        // The lookup gets a set of its own for each kind, so that nothing is allocated for every call.
+        var found = PenLookupCache<T>.Set;
+        found.Clear();
         _lookup.GetEntitiesInRange(centre, pen.Radius, found);
 
         foreach (var entity in found)
@@ -239,6 +241,11 @@ public sealed class AnimalPenSystem : EntitySystem
             if (xform.GridUid == pen.Grid && pen.Contains(_map.CoordinatesToTile(pen.Grid, grid, xform.Coordinates)))
                 result.Add(entity);
         }
+    }
+
+    private static class PenLookupCache<T> where T : IComponent
+    {
+        public static readonly HashSet<Entity<T>> Set = new();
     }
 
     /// <summary>

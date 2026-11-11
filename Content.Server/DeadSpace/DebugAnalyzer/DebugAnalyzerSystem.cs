@@ -43,14 +43,12 @@ namespace Content.Server.DeadSpace.DebugAnalyzer;
 /// </summary>
 public sealed class DebugAnalyzerSystem : EntitySystem
 {
-    [Dependency] private readonly AnimalFeedingSystem _feeding = default!;
     [Dependency] private readonly AnimalPenSystem _pens = default!;
     [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly SatiationSystem _satiation = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
@@ -145,7 +143,6 @@ public sealed class DebugAnalyzerSystem : EntitySystem
         TryAdd(sections, BuildGrowth(target));
         TryAdd(sections, BuildBreeding(target));
         TryAdd(sections, BuildPen(target));
-        TryAdd(sections, BuildFarm(target));
         TryAdd(sections, BuildBee(target));
         TryAdd(sections, BuildHive(target));
         TryAdd(sections, BuildPollination(target));
@@ -370,61 +367,6 @@ public sealed class DebugAnalyzerSystem : EntitySystem
         rows.Add(new(L("pen-tiles"), pen.Tiles.Count.ToString(CultureInfo.InvariantCulture)));
         rows.Add(new(L("pen-anchor"), $"{pen.Anchor.X}, {pen.Anchor.Y}"));
         return new DebugAnalyzerSection(L("section-pen"), rows);
-    }
-
-    /// <summary>
-    /// What the farm sees for this animal: whether its AI sleeps (then AnimalFarmSystem looks after it) and what lies in
-    /// its pen that it could use.
-    /// </summary>
-    private DebugAnalyzerSection? BuildFarm(EntityUid target)
-    {
-        if (!TryComp<AnimalPenComponent>(target, out var penComp) ||
-            !TryComp<DietComponent>(target, out var diet) ||
-            !TryComp<HTNComponent>(target, out var htn))
-            return null;
-
-        var rows = new List<DebugAnalyzerRow>
-        {
-            new(L("farm-asleep"), _npc.IsAwake(target, htn) ? "no" : "yes"),
-        };
-
-        if (_pens.GetPen((target, penComp)) is { } pen)
-        {
-            var feeders = new HashSet<Entity<AnimalFeederComponent>>();
-            var foods = new HashSet<Entity<EdibleComponent>>();
-            var waters = new HashSet<Entity<WaterSourceComponent>>();
-
-            _pens.GetEntitiesInPen(pen, feeders);
-            _pens.GetEntitiesInPen(pen, foods);
-            _pens.GetEntitiesInPen(pen, waters);
-
-            var feedersWithFood = 0;
-            foreach (var feeder in feeders)
-            {
-                if (_feeding.TryFindFood((target, diet), feeder, out _))
-                    feedersWithFood++;
-            }
-
-            var edible = 0;
-            foreach (var food in foods)
-            {
-                if (_feeding.CanEat((target, diet), food))
-                    edible++;
-            }
-
-            var withWater = 0;
-            foreach (var water in waters)
-            {
-                if (_feeding.CanDrink(water))
-                    withWater++;
-            }
-
-            rows.Add(new(L("farm-feeders"), $"{feedersWithFood} / {feeders.Count}"));
-            rows.Add(new(L("farm-floor-food"), edible.ToString(CultureInfo.InvariantCulture)));
-            rows.Add(new(L("farm-water"), $"{withWater} / {waters.Count}"));
-        }
-
-        return new DebugAnalyzerSection(L("section-farm"), rows);
     }
 
     /// <summary>

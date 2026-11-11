@@ -6,10 +6,8 @@ using Content.Server.NPC.HTN;
 using Content.Shared.DeadSpace.Beekeeping;
 using Content.Shared.DeadSpace.Husbandry.Walking;
 using Content.Shared.DoAfter;
-using Content.Shared.Ghost;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -24,20 +22,11 @@ namespace Content.Server.DeadSpace.Beekeeping;
 /// pathfinding and no steering, nothing that could leave it standing. What keeps it cheap on a server with many players:
 /// <list type="bullet">
 /// <item>a bee thinks twice a second, not every tick;</item>
-/// <item>a bee that has no player within <see cref="ActiveRange"/> does nothing, the hive is simulated instead
-/// (see <see cref="BeeHiveSystem"/>);</item>
 /// <item>plants are found with a lookup around the bee, not by going through every plant of the round.</item>
 /// </list>
 /// </summary>
 public sealed class BeeAISystem : EntitySystem
 {
-    /// <summary>
-    /// Bees farther than this from every player stay where they are.
-    /// </summary>
-    public const float ActiveRange = 40f;
-
-    private static readonly TimeSpan PlayerScanInterval = TimeSpan.FromSeconds(2);
-
     [Dependency] private readonly AnimalWalkerSystem _walker = default!;
     [Dependency] private readonly BeeHiveSystem _hive = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -48,9 +37,7 @@ public sealed class BeeAISystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
-    private readonly List<EntityCoordinates> _players = new();
     private readonly HashSet<Entity<PollinationComponent>> _flowers = new();
-    private TimeSpan _nextPlayerScan;
 
     public override void Initialize()
     {
@@ -78,35 +65,6 @@ public sealed class BeeAISystem : EntitySystem
             hiveComp.Bees.Remove(ent);
     }
 
-    /// <summary>
-    /// Whether a player (not a ghost) is within the range of the coordinates. The positions of the players are
-    /// taken every <see cref="PlayerScanInterval"/>, whatever the number of callers.
-    /// </summary>
-    public bool IsPlayerNear(EntityCoordinates coordinates, float range = ActiveRange)
-    {
-        var now = _timing.CurTime;
-        if (now >= _nextPlayerScan)
-        {
-            _nextPlayerScan = now + PlayerScanInterval;
-            _players.Clear();
-
-            var players = EntityQueryEnumerator<ActorComponent, TransformComponent>();
-            while (players.MoveNext(out var uid, out _, out var xform))
-            {
-                if (!HasComp<GhostComponent>(uid))
-                    _players.Add(xform.Coordinates);
-            }
-        }
-
-        foreach (var player in _players)
-        {
-            if (coordinates.TryDistance(EntityManager, player, out var distance) && distance <= range)
-                return true;
-        }
-
-        return false;
-    }
-
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -123,13 +81,6 @@ public sealed class BeeAISystem : EntitySystem
             if (_mobState.IsIncapacitated(uid))
                 continue;
 
-            // Nobody sees the bee: it stays where it is, and costs nothing.
-            if (!IsPlayerNear(xform.Coordinates))
-            {
-                StopFlying((uid, bee));
-                continue;
-            }
-
             if (bee.IsBusy)
                 continue;
 
@@ -139,7 +90,7 @@ public sealed class BeeAISystem : EntitySystem
             switch (bee.State)
             {
                 case BeeState.Idle: TickIdle(ent); break;
-                case BeeState.SearchingFlower: TickSearching(ent, xform); break;
+                case BeeState.SearchingFlower: TickSearching(ent); break;
                 case BeeState.MovingToFlower: TickMoving(ent); break;
                 case BeeState.Pollinating: TickPollinating(ent, xform); break;
                 case BeeState.ReturningToHive: TickReturning(ent); break;
@@ -210,7 +161,7 @@ public sealed class BeeAISystem : EntitySystem
             return true;
 
         ent.Comp.TargetFlower = null;
-        SetState(ent, BeeState.SearchingFlower);
+        SetState(ent, BeeState.ReturningToHive);
         return false;
     }
 
@@ -256,19 +207,27 @@ public sealed class BeeAISystem : EntitySystem
         SetState(ent, BeeState.SearchingFlower);
     }
 
-    private void TickSearching(Entity<BeeComponent> ent, TransformComponent xform)
+    private void TickSearching(Entity<BeeComponent> ent)
     {
         var bee = ent.Comp;
-        var origin = _transform.GetWorldPosition(xform);
+        if (!HasValidHive(ent))
+            return;
+
+        // Everything is counted from the hive, not from where the bee is: the bees of a hive all work the same
+        // ground, whatever the order they set out in.
+        var hive = bee.HiveOwner!.Value;
+        var hiveCoordinates = Transform(hive).Coordinates;
+        var origin = _transform.GetWorldPosition(hive);
         EntityUid? best = null;
         var bestDistance = float.MaxValue;
 
         _flowers.Clear();
-        _lookup.GetEntitiesInRange(xform.Coordinates, bee.SearchRadius, _flowers);
+        _lookup.GetEntitiesInRange(hiveCoordinates, bee.SearchRadius, _flowers);
 
         foreach (var flower in _flowers)
         {
-            if (!_pollination.CanPollinate(flower))
+            // A plant that another bee of the hive is already on its way to is left to it.
+            if (!_pollination.CanPollinate(flower) || IsClaimed(ent, flower))
                 continue;
 
             var distance = (_transform.GetWorldPosition(flower) - origin).Length();
@@ -289,6 +248,20 @@ public sealed class BeeAISystem : EntitySystem
         SetState(ent, BeeState.MovingToFlower);
     }
 
+    private bool IsClaimed(Entity<BeeComponent> ent, EntityUid flower)
+    {
+        if (!TryComp<BeeHiveComponent>(ent.Comp.HiveOwner, out var hive))
+            return false;
+
+        foreach (var other in hive.Bees)
+        {
+            if (other != ent.Owner && TryComp<BeeComponent>(other, out var otherBee) && otherBee.TargetFlower == flower)
+                return true;
+        }
+
+        return false;
+    }
+
     private void TickMoving(Entity<BeeComponent> ent)
     {
         var bee = ent.Comp;
@@ -300,7 +273,7 @@ public sealed class BeeAISystem : EntitySystem
         if (!TryComp<PollinationComponent>(flower, out var pollination) || !_pollination.CanPollinate((flower, pollination)))
         {
             bee.TargetFlower = null;
-            SetState(ent, BeeState.SearchingFlower);
+            SetState(ent, BeeState.ReturningToHive);
             return;
         }
 
@@ -311,13 +284,13 @@ public sealed class BeeAISystem : EntitySystem
                 break;
             case WalkStatus.Failed:
                 bee.TargetFlower = null;
-                SetState(ent, BeeState.SearchingFlower);
+                SetState(ent, BeeState.ReturningToHive);
                 break;
             default:
                 if (bee.StateTimer > bee.MaxMovingTime)
                 {
                     bee.TargetFlower = null;
-                    SetState(ent, BeeState.SearchingFlower);
+                    SetState(ent, BeeState.ReturningToHive);
                 }
 
                 break;
@@ -335,7 +308,7 @@ public sealed class BeeAISystem : EntitySystem
             !TryComp<PollinationComponent>(flower, out var pollination) ||
             !_pollination.CanPollinate((flower, pollination)))
         {
-            SetState(ent, BeeState.SearchingFlower);
+            SetState(ent, BeeState.ReturningToHive);
             return;
         }
 
@@ -352,7 +325,7 @@ public sealed class BeeAISystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(args))
         {
             bee.IsBusy = false;
-            SetState(ent, BeeState.SearchingFlower);
+            SetState(ent, BeeState.ReturningToHive);
         }
     }
 
@@ -363,14 +336,14 @@ public sealed class BeeAISystem : EntitySystem
 
         if (args.Cancelled || !HasValidFlower(ent))
         {
-            SetState(ent, BeeState.SearchingFlower);
+            SetState(ent, BeeState.ReturningToHive);
             return;
         }
 
         var flower = bee.TargetFlower!.Value;
         if (!TryComp<PollinationComponent>(flower, out var pollination) || !_pollination.CanPollinate((flower, pollination)))
         {
-            SetState(ent, BeeState.SearchingFlower);
+            SetState(ent, BeeState.ReturningToHive);
             return;
         }
 

@@ -20,10 +20,8 @@ public readonly record struct AnimalEatInterruptedEvent;
 /// <summary>
 /// Raised on an animal whenever it ate something, after its satiety was updated.
 /// </summary>
-/// <param name="Offline">True if the farm fed the animal while nobody was around (see AnimalFarmSystem): nothing is
-/// left lying around then, whatever it makes goes into a pit or is lost.</param>
 [ByRefEvent]
-public readonly record struct AnimalAteEvent(EntityUid Food, float Nutrition, bool Offline = false);
+public readonly record struct AnimalAteEvent(EntityUid Food, float Nutrition);
 
 /// <summary>
 /// Raised on an animal whenever it drank something, after its hydration was updated.

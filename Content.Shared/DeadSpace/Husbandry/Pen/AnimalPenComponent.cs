@@ -5,9 +5,8 @@ using Robust.Shared.Maths;
 namespace Content.Shared.DeadSpace.Husbandry.Pen;
 
 /// <summary>
-/// Gives an animal a pen: the place it lives in, which the farm looks at when nobody is around to watch (food and
-/// water within the pen, where the feeders are). The pen is the walls round the animal, but no more than a square round its
-/// home. Handled by AnimalPenSystem.
+/// Gives an animal a pen: the place it lives in, where a breeding pair is looked for (the same pen means the same herd). The pen is the walls round the
+/// animal, but no more than a square round its home. Handled by AnimalPenSystem.
 /// </summary>
 [RegisterComponent]
 public sealed partial class AnimalPenComponent : Component
@@ -17,19 +16,6 @@ public sealed partial class AnimalPenComponent : Component
     /// </summary>
     [DataField]
     public int HalfSize = 7;
-
-    /// <summary>
-    /// How likely it is, per hour, that an animal of an open pen (nothing round it but the square) wanders off the map
-    /// while nobody is around: it is gone. 0 turns it off.
-    /// </summary>
-    [DataField]
-    public float EscapeChancePerHour = 0.005f;
-
-    /// <summary>
-    /// The same for an animal that is hungry or thirsty and finds nothing to eat or drink in the pen.
-    /// </summary>
-    [DataField]
-    public float EscapeChanceStarvingPerHour = 0.25f;
 
     /// <summary>
     /// The grid and the tile the animal calls home: where it first was when the pen was asked for. It is moved to

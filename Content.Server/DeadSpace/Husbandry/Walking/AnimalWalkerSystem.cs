@@ -53,6 +53,8 @@ public sealed class AnimalWalkerSystem : EntitySystem
             walker.Route.Enqueue(point);
         }
 
+        walker.Destination = points.Count > 0 ? points[^1] : default;
+
         var now = _timing.CurTime;
         walker.ArriveDistance = arriveDistance;
         walker.Run = run;
@@ -119,7 +121,7 @@ public sealed class AnimalWalkerSystem : EntitySystem
         }
 
         var position = _transform.GetWorldPosition(xform);
-        var destination = LastWaypoint(walker);
+        var destination = walker.Destination;
         if (!destination.IsValid(EntityManager))
         {
             Finish(ent, WalkStatus.Failed);
@@ -171,18 +173,6 @@ public sealed class AnimalWalkerSystem : EntitySystem
         SetInput(ent, mover, input, walker.Run, true);
     }
 
-    private static EntityCoordinates LastWaypoint(AnimalWalkerComponent walker)
-    {
-        // The queue has no way to look at the last one other than going through it, routes are short.
-        var last = default(EntityCoordinates);
-        foreach (var point in walker.Route)
-        {
-            last = point;
-        }
-
-        return last;
-    }
-
     private void Finish(Entity<AnimalWalkerComponent> ent, WalkStatus status)
     {
         ent.Comp.Status = status;
@@ -223,18 +213,21 @@ public sealed class AnimalWalkerSystem : EntitySystem
     public float FreeLength(EntityUid uid, MapId mapId, Vector2 origin, Vector2 direction, float max, float clearance, int mask)
     {
         var side = new Vector2(-direction.Y, direction.X) * clearance;
-        var free = max;
+        var free = Math.Min(max, NearestHit(uid, mapId, origin, direction, max, mask));
+        free = Math.Min(free, NearestHit(uid, mapId, origin + side, direction, max, mask));
+        return Math.Min(free, NearestHit(uid, mapId, origin - side, direction, max, mask));
+    }
 
-        foreach (var offset in new[] { Vector2.Zero, side, -side })
+    private float NearestHit(EntityUid uid, MapId mapId, Vector2 origin, Vector2 direction, float max, int mask)
+    {
+        var nearest = max;
+        var ray = new CollisionRay(origin, direction, mask);
+        foreach (var hit in _physics.IntersectRay(mapId, ray, max, uid, returnOnFirstHit: false))
         {
-            var ray = new CollisionRay(origin + offset, direction, mask);
-            foreach (var hit in _physics.IntersectRay(mapId, ray, max, uid, returnOnFirstHit: false))
-            {
-                free = Math.Min(free, hit.Distance);
-            }
+            nearest = Math.Min(nearest, hit.Distance);
         }
 
-        return free;
+        return nearest;
     }
 
     /// <summary>

@@ -228,11 +228,10 @@ public sealed class AnimalFeedingSystem : EntitySystem
 
     /// <summary>
     /// The animal eats at once: the food, or the first thing it eats in a feeder, is gone and its satiety goes up.
-    /// Done when the do-after of eating ends, and by the farm for an animal nobody is watching.
+    /// Done when the do-after of eating ends,.
     /// </summary>
-    /// <param name="offline">The farm did it, see <see cref="AnimalAteEvent"/>.</param>
     /// <returns>False if there was nothing it could eat.</returns>
-    public bool EatNow(Entity<DietComponent> animal, EntityUid source, bool offline = false)
+    public bool EatNow(Entity<DietComponent> animal, EntityUid source)
     {
         if (!TryComp<AnimalNeedsComponent>(animal, out var needs) || !TryFindFood(animal, source, out var food))
             return false;
@@ -241,7 +240,7 @@ public sealed class AnimalFeedingSystem : EntitySystem
         _needs.ModifySatiety((animal.Owner, needs), nutrition);
         QueueDel(food);
 
-        var ev = new AnimalAteEvent(food, nutrition, offline);
+        var ev = new AnimalAteEvent(food, nutrition);
         RaiseLocalEvent(animal, ref ev);
         return true;
     }
@@ -259,7 +258,7 @@ public sealed class AnimalFeedingSystem : EntitySystem
 
     /// <summary>
     /// The animal drinks at once: the water is taken from the source (really, the liquid goes down) and its hydration
-    /// goes up. Done when the do-after of drinking ends, and by the farm for an animal nobody is watching.
+    /// goes up. Done when the do-after of drinking ends,.
     /// </summary>
     /// <returns>False if the source has no water.</returns>
     public bool DrinkNow(Entity<AnimalNeedsComponent> animal, EntityUid source)
