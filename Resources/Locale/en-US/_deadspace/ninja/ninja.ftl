@@ -208,7 +208,7 @@ ninja-hack-beacon-verb-enable = Enable
 ninja-hack-beacon-verb-disable = Disable
 ninja-hack-beacon-inactive = The beacon is [color=gray]inactive[/color].
 ninja-hack-beacon-next-mine = Next withdrawal in [color=yellow]{ $seconds }[/color] sec.
-ninja-hack-beacon-transfer-broadcast = [bold]Transferred { $amount } credits from account { $name1 } \[{ $code1 }\] to { $name2 }[/bold]
+ninja-hack-beacon-transfer-broadcast = [bold]Transferred { $amount } credits from account { $name } \[{ $code }\]. Recipient's approximate location: { $position }[/bold]
 
 cargo-console-funds-blocked-by-hack = Account operations are blocked: unauthorized access to the station's banking system detected!
 
