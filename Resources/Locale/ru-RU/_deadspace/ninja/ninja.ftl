@@ -209,7 +209,7 @@ ninja-hack-beacon-verb-enable = Включить
 ninja-hack-beacon-verb-disable = Выключить
 ninja-hack-beacon-inactive = Маяк [color=gray]неактивен[/color].
 ninja-hack-beacon-next-mine = Следующее снятие средств через [color=yellow]{ $seconds }[/color] сек.
-ninja-hack-beacon-transfer-broadcast = [bold]Выполнен перевод { $amount } кредитов со счёта { $name1 } \[{ $code1 }\] на { $name2 }[/bold]
+ninja-hack-beacon-transfer-broadcast = [bold]Выполнен перевод { $amount } кредитов со счёта { $name } \[{ $code }\]. Предположительное местоположение получателя перевода: { $position }[/bold]
 
 cargo-console-funds-blocked-by-hack = Операции со счетами заблокированы: обнаружен несанкционированный доступ к банковской системе станции!
 

@@ -17,6 +17,7 @@ using System.Text;
 using Content.Shared.Mind;
 using Content.Shared.Foldable;
 using Content.Server.GameTicking;
+using Content.Server.Pinpointer;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
@@ -32,6 +33,7 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly NinjaStealMoneyObjectiveSystem _ninjaStealMoneyObjective = default!;
+    [Dependency] private readonly NavMapSystem _navMap = default!;
 
     public override void Initialize()
     {
@@ -277,23 +279,54 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
 
             var msg = Loc.GetString("ninja-hack-beacon-transfer-broadcast",
                 ("amount", taken),
-                ("name1", Loc.GetString(account.Name)),
-                ("code1", Loc.GetString(account.Code)),
-                ("name2", GenerateGarbage()));
+                ("name", Loc.GetString(account.Name)),
+                ("code", Loc.GetString(account.Code)),
+                ("position", GenerateGarbage(_navMap.GetNearestBeaconString(console))));
 
             _radio.SendRadioMessage(console, msg, account.RadioChannel, console, escapeMarkup: false);
         }
     }
 
-    private string GenerateGarbage(int minLength = 6, int maxLength = 10)
+    private string GenerateGarbage(string input, float percent = 0.25f)
     {
         const string chars = "&@(!)#$%^*?~+=<>/|";
 
-        var length = _random.Next(minLength, maxLength + 1);
-        var sb = new StringBuilder(length);
+        if (string.IsNullOrEmpty(input) || percent <= 0f)
+            return input;
 
-        for (var i = 0; i < length; i++)
-            sb.Append(chars[_random.Next(chars.Length)]);
+        percent = Math.Clamp(percent, 0f, 1f);
+
+        var indices = new List<int>();
+        for (var i = 0; i < input.Length; i++)
+        {
+            if (input[i] == '[')
+            {
+                var close = input.IndexOf(']', i + 1);
+                if (close != -1)
+                {
+                    i = close;
+                    continue;
+                }
+            }
+
+            if (!char.IsWhiteSpace(input[i]))
+                indices.Add(i);
+        }
+
+        if (indices.Count == 0)
+            return input;
+
+        var count = Math.Min((int)Math.Round(indices.Count * percent), indices.Count);
+
+        var sb = new StringBuilder(input);
+
+        for (var i = 0; i < count; i++)
+        {
+            var j = _random.Next(i, indices.Count);
+            (indices[i], indices[j]) = (indices[j], indices[i]);
+
+            sb[indices[i]] = chars[_random.Next(chars.Length)];
+        }
 
         return sb.ToString();
     }
