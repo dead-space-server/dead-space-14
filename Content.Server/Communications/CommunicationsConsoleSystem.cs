@@ -166,6 +166,13 @@ namespace Content.Server.Communications
             List<string>? levels = null;
             var currentLevel = string.Empty;
             var currentLevelColor = Color.White; // DS14 - send server-only alert prototype color to the client UI.
+
+            //DS14-start
+            List<string>? secondLevels = null;
+            var currentSecondLevel = string.Empty;
+            var currentSecondLevelColor = Color.White;
+            //DS14-end
+
             float currentDelay = 0;
 
             if (stationUid != null)
@@ -173,21 +180,42 @@ namespace Content.Server.Communications
                 if (TryComp(stationUid.Value, out AlertLevelComponent? alertComp) &&
                     alertComp.AlertLevels != null)
                 {
-                    if (alertComp.IsSelectable)
+                    if (alertComp.IsMainLevelSelectable)
                     {
                         levels = new();
                         foreach (var (id, detail) in alertComp.AlertLevels.Levels)
                         {
-                            if (detail.Selectable)
+                            if (detail.Selectable && !detail.IsSecondary) //DS14
                             {
                                 levels.Add(id);
                             }
                         }
                     }
 
+                    //DS14-start
+                    if (alertComp.IsSecondLevelSelectable)
+                    {
+                        secondLevels = new();
+                        foreach (var (id, detail) in alertComp.AlertLevels.Levels)
+                        {
+                            if (detail.Selectable && detail.IsSecondary)
+                            {
+                                secondLevels.Add(id);
+                            }
+                        }
+                    }
+                    //DS14-end
+
                     currentLevel = alertComp.CurrentLevel;
                     if (alertComp.AlertLevels.Levels.TryGetValue(currentLevel, out var currentLevelDetails))
                         currentLevelColor = currentLevelDetails.Color; // DS14
+
+                    //DS14-start
+                    currentSecondLevel = alertComp.CurrentSecondLevel;
+                    if (alertComp.AlertLevels.Levels.TryGetValue(currentSecondLevel, out var currentSecondLevelDetails))
+                        currentSecondLevelColor = currentSecondLevelDetails.Color;
+                    //DS14-end
+
                     currentDelay = _alertLevelSystem.GetAlertLevelDelay(stationUid.Value, alertComp);
                 }
             }
@@ -196,7 +224,12 @@ namespace Content.Server.Communications
                 CanCallOrRecall(comp),
                 levels,
                 currentLevel,
-                currentLevelColor, // DS14
+                //DS14-start
+                currentLevelColor,
+                secondLevels,
+                currentSecondLevel,
+                currentSecondLevelColor,
+                //DS14-end
                 currentDelay,
                 _roundEndSystem.ExpectedCountdownEnd
             ));

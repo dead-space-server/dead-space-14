@@ -117,6 +117,9 @@ namespace Content.Client.Communications.UI
                 commsState.CurrentAlert,
                 commsState.CurrentAlertColor,
                 commsState.AlertLevels,
+                commsState.CurrentSecondAlert,
+                commsState.CurrentSecondAlertColor,
+                commsState.AlertSecondLevels,
                 canChangeAlertLevel);
         }
         // DS14-end

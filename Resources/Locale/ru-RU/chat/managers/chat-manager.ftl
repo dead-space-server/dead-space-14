@@ -28,6 +28,13 @@ chat-manager-entity-whisper-wrap-message = [font size=11][italic][BubbleHeader][
 chat-manager-sender-announcement-wrap-message-lang = [font size=14][bold]Объявление [font size=11]({ $language }) [font size=14][bold]{ $sender }:[/font][font size=12]
     { $message }[/bold][/font]
 
+chat-manager-sender-alert-level-announcement-wrap-message = [font size=14][bold]Объявление { $sender }:[/font][font size=12]
+    { $message }
+    { $secondmessage }[/bold][/font]
+chat-manager-sender-alert-level-announcement-wrap-message-lang = [font size=14][bold]Объявление [font size=11]({ $language }) [font size=14][bold]{ $sender }:[/font][font size=12]
+    { $message }
+    { $secondmessage }[/bold][/font]
+
 chat-manager-entity-say-wrap-message-lang = [BubbleHeader][bold][Name]{ $entityName }[/Name][/bold][/BubbleHeader] { $verb } [font size=11][italic][BubbleHeader]({ $language }): [font={ $fontType } size={ $fontSize } ]"[BubbleContent]{ $message }[/BubbleContent]"[/font]
 chat-manager-entity-say-bold-wrap-message-lang = [BubbleHeader][bold][Name]{ $entityName }[/Name][/bold][/BubbleHeader] { $verb } [font size=11][italic][BubbleHeader]({ $language }): [font={ $fontType } size={ $fontSize }]"[BubbleContent][bold]{ $message }[/bold][/BubbleContent]"[/font]
 chat-manager-entity-whisper-wrap-message-lang = [font size=11][italic][BubbleHeader][Name]{ $entityName }[/Name][/BubbleHeader] шепчет [font size=11][italic][BubbleHeader]({ $language }): "[BubbleContent]{ $message }[/BubbleContent]"[/italic][/font]

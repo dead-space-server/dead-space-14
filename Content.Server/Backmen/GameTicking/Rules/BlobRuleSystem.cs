@@ -200,7 +200,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
                     Name(stationUid), true, BlobDetectAudio, Color.Red);
                 // DS14-end
 
-                if (_alertLevel.GetLevel(stationUid) == "green" || _alertLevel.GetLevel(stationUid) == "blue" || _alertLevel.GetLevel(stationUid) == "violet" || _alertLevel.GetLevel(stationUid) == "yellow")
+                if (_alertLevel.GetLevel(stationUid) == "green" || _alertLevel.GetLevel(stationUid) == "blue") //DS14
                     _alertLevel.SetLevel(stationUid, "red", false, true, true, true);
 
                 RaiseLocalEvent(stationUid, new BlobChangeLevelEvent

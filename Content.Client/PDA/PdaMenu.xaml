@@ -42,14 +42,20 @@
                 <ContainerButton Name="StationNameButton">
                     <RichTextLabel Name="StationNameLabel" Access="Public"/>
                 </ContainerButton>
-                <ContainerButton Name="StationAlertLevelButton">
-                    <RichTextLabel Name="StationAlertLevelLabel" Access="Public"/>
-                </ContainerButton>
                 <ContainerButton Name="StationTimeButton">
                     <RichTextLabel Name="StationTimeLabel" Access="Public"/>
                 </ContainerButton>
+                <ContainerButton Name="StationAlertLevelButton">
+                    <RichTextLabel Name="StationAlertLevelLabel" Access="Public"/>
+                </ContainerButton>
                 <ContainerButton Name="StationAlertLevelInstructionsButton">
                     <RichTextLabel Name="StationAlertLevelInstructions" Access="Public"/>
+                </ContainerButton>
+                <ContainerButton Name="StationAlertSecondLevelButton">
+                    <RichTextLabel Name="StationAlertSecondLevelLabel" Access="Public"/>
+                </ContainerButton>
+                <ContainerButton Name="StationAlertSecondLevelInstructionsButton">
+                    <RichTextLabel Name="StationAlertSecondLevelInstructions" Access="Public"/>
                 </ContainerButton>
             </BoxContainer>
         </ScrollContainer>

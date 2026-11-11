@@ -40,7 +40,11 @@ namespace Content.Shared.PDA
         [ViewVariables(VVAccess.ReadWrite)] public EntityUid? PdaOwner;
         [ViewVariables] public string? StationName;
         [ViewVariables] public string? StationAlertLevel;
+
+        [ViewVariables] public string? StationSecondAlertLevel; //DS14
         [ViewVariables] public Color StationAlertColor = Color.White;
+
+        [ViewVariables] public Color StationSecondAlertColor = Color.White; //DS14
 
         [DataField] // DS14
         public bool SilentMode;

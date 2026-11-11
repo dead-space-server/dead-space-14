@@ -15,20 +15,6 @@
       forceEnableEmergencyLights: true
       emergencyLightColor: DodgerBlue
       shuttleTime: 600
-    violet:
-      announcement: alert-level-violet-announcement
-      sound: /Audio/_DeadSpace/AlertLevels/violet.ogg # DS14 alert sound
-      color: Violet
-      emergencyLightColor: Violet
-      forceEnableEmergencyLights: true
-      shuttleTime: 600
-    yellow:
-      announcement: alert-level-yellow-announcement
-      sound: /Audio/_DeadSpace/AlertLevels/yellow.ogg # DS14 alert sound
-      color: Yellow
-      emergencyLightColor: Goldenrod
-      forceEnableEmergencyLights: true
-      shuttleTime: 600
     red:
       announcement: alert-level-red-announcement
       sound: /Audio/_DeadSpace/AlertLevels/red.ogg # DS14 alert sound
@@ -79,3 +65,27 @@
       emergencyLightColor: DarkViolet
       forceEnableEmergencyLights: true
       shuttleTime: 1200
+    #DS14-start 
+    none:
+      announcement: alert-level-none-announcement
+      sound: null # DS14 alert sound
+      color: Green
+      emergencyLightColor: Green
+      isSecondary: true
+    #DS14-end
+    violet:
+      announcement: alert-level-violet-announcement
+      sound: /Audio/_DeadSpace/AlertLevels/violet.ogg # DS14 alert sound
+      color: Violet
+      emergencyLightColor: Violet
+      forceEnableEmergencyLights: true
+      shuttleTime: 600
+      isSecondary: true #DS14
+    yellow:
+      announcement: alert-level-yellow-announcement
+      sound: /Audio/_DeadSpace/AlertLevels/yellow.ogg # DS14 alert sound
+      color: Yellow
+      emergencyLightColor: Goldenrod
+      forceEnableEmergencyLights: true
+      shuttleTime: 600
+      isSecondary: true #DS14

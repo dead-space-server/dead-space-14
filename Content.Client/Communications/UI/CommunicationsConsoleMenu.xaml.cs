@@ -30,6 +30,8 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
 
         AlertLevelControls.OnAlertLevelChanged += newLevel => OnAlertLevelChanged?.Invoke(newLevel);
 
+        AlertSecondLevelControls.OnAlertLevelChanged += newLevel => OnAlertLevelChanged?.Invoke(newLevel);//DS14
+
         ShuttleControls.OnShuttleCalled += () => OnShuttleCalled?.Invoke();
         ShuttleControls.OnShuttleRecalled += () => OnShuttleRecalled?.Invoke();
 
@@ -53,6 +55,11 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
         string currentAlertLevel,
         Color currentAlertColor,
         List<string>? selectableAlertLevels,
+        //DS14-start
+        string currentSecondAlertLevel,
+        Color currentSecondAlertColor,
+        List<string>? selectableAlertSecondLevels,
+        //DS14-end
         bool canChangeAlertLevel)
     {
         MessagingControls.CanRadioAnnounce = commsState.CanAnnounce;
@@ -63,6 +70,15 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
             currentAlertLevel,
             currentAlertColor,
             alertLevelSelectable);
+        
+        //DS14-start
+        var alertSecondLevelSelectable = selectableAlertSecondLevels != null && canChangeAlertLevel;
+        AlertSecondLevelControls.UpdateAlertLevels(selectableAlertSecondLevels,
+            currentSecondAlertLevel,
+            currentSecondAlertColor,
+            alertSecondLevelSelectable,
+            true);
+        //DS14-end
 
         ShuttleControls.UpdateState(commsState.CanCall, commsState.CountdownStarted, commsState.ExpectedCountdownEnd);
     }

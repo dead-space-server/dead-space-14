@@ -98,7 +98,8 @@ public sealed class EmergencyLightSystem : SharedEmergencyLightSystem
         if (!TryComp<AlertLevelComponent>(ev.Station, out var alert))
             return;
 
-        if (alert.AlertLevels == null || !alert.AlertLevels.Levels.TryGetValue(ev.AlertLevel, out var details))
+        if (alert.AlertLevels == null || !alert.AlertLevels.Levels.TryGetValue(ev.AlertLevel, out var mainLevelDetails)
+            || !alert.AlertLevels.Levels.TryGetValue(ev.AlertSecondLevel, out var secondLevelDetails)) //DS14
             return;
 
         var query = EntityQueryEnumerator<EmergencyLightComponent, PointLightComponent, AppearanceComponent, TransformComponent>();
@@ -106,21 +107,43 @@ public sealed class EmergencyLightSystem : SharedEmergencyLightSystem
         {
             if (CompOrNull<StationMemberComponent>(xform.GridUid)?.Station != ev.Station)
                 continue;
-
-            _pointLight.SetColor(uid, details.EmergencyLightColor, pointLight);
-            _appearance.SetData(uid, EmergencyLightVisuals.Color, details.EmergencyLightColor, appearance);
-
-            if (details.ForceEnableEmergencyLights && !light.ForciblyEnabled)
+            //DS14-start
+            if (ev.AlertSecondLevel != "none" && !mainLevelDetails.ForceEnableEmergencyLights)
             {
-                light.ForciblyEnabled = true;
-                TurnOn((uid, light));
+                _pointLight.SetColor(uid, secondLevelDetails.EmergencyLightColor, pointLight);
+                _appearance.SetData(uid, EmergencyLightVisuals.Color, secondLevelDetails.EmergencyLightColor, appearance);
+
+                if (secondLevelDetails.ForceEnableEmergencyLights && !light.ForciblyEnabled)
+                {
+                    light.ForciblyEnabled = true;
+                    TurnOn((uid, light));
+                }
+                else if (!secondLevelDetails.ForceEnableEmergencyLights && light.ForciblyEnabled)
+                {
+                    // Previously forcibly enabled, and we went down an alert level.
+                    light.ForciblyEnabled = false;
+                    UpdateState((uid, light));
+                }
             }
-            else if (!details.ForceEnableEmergencyLights && light.ForciblyEnabled)
+            else
             {
-                // Previously forcibly enabled, and we went down an alert level.
-                light.ForciblyEnabled = false;
-                UpdateState((uid, light));
+                _pointLight.SetColor(uid, mainLevelDetails.EmergencyLightColor, pointLight);
+                _appearance.SetData(uid, EmergencyLightVisuals.Color, mainLevelDetails.EmergencyLightColor, appearance);
+
+                if (mainLevelDetails.ForceEnableEmergencyLights && !light.ForciblyEnabled)
+                {
+                    light.ForciblyEnabled = true;
+                    TurnOn((uid, light));
+                }
+                else if (!mainLevelDetails.ForceEnableEmergencyLights && light.ForciblyEnabled)
+                {
+                    // Previously forcibly enabled, and we went down an alert level.
+                    light.ForciblyEnabled = false;
+                    UpdateState((uid, light));
+                }
             }
+            //DS14-end
+
         }
     }
 
