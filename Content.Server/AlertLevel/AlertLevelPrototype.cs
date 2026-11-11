@@ -34,6 +34,10 @@ public sealed partial class AlertLevelDetail
     /// </summary>
     [DataField("announcement")] public string Announcement { get; private set; } = string.Empty;
 
+    //DS14-start
+    [DataField("callEvacBlocker")] public bool CallEvacBlocker { get; private set; } = false;
+    //DS14-end
+
     /// <summary>
     /// Whether this alert level is selectable from a communications console.
     /// </summary>

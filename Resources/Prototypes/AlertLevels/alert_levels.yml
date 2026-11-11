@@ -45,6 +45,7 @@
       color: PaleVioletRed
       emergencyLightColor: PaleVioletRed
       forceEnableEmergencyLights: true
+      callEvacBlocker: true #DS14
     sierra:
       announcement: alert-level-sierra-announcement
       selectable: false
@@ -53,6 +54,7 @@
       color: LightSeaGreen
       emergencyLightColor: LightSeaGreen
       forceEnableEmergencyLights: true
+      callEvacBlocker: true #DS14
     enigma:
       announcement: alert-level-enigma-announcement
       selectable: false
@@ -61,6 +63,7 @@
       color: '#EF7200'
       emergencyLightColor: '#EF7200'
       forceEnableEmergencyLights: true
+      callEvacBlocker: true #DS14
     delta:
       announcement: alert-level-delta-announcement
       selectable: false
@@ -79,3 +82,4 @@
       emergencyLightColor: DarkViolet
       forceEnableEmergencyLights: true
       shuttleTime: 1200
+      callEvacBlocker: true #DS14
