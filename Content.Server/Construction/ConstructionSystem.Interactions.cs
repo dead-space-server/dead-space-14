@@ -338,6 +338,7 @@ namespace Content.Server.Construction
                     else
                     {
                         // If we don't store the item in a container on the entity, we just delete it right away.
+                        DropSecretStash(insert, Transform(interactUsing.User).Coordinates); //DS-14
                         Del(insert);
                     }
 
