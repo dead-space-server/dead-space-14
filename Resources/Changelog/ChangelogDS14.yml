@@ -9962,3 +9962,10 @@ Entries:
     message: Оповещения о переводе от кувалды
   - type: Fix
     message: Вечная привязка удалённой катаны
+- id: 953
+  author: BlueDogDoc
+  time: '2026-11-11T12:33:19.337581+00:00'
+  pr: 2712
+  changes:
+  - type: Add
+    message: Админ возможность смотреть нагрузку
