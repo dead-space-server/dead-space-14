@@ -97,17 +97,21 @@ public sealed partial class CelestialComponent : Component
     [DataField]
     public int FutilityTargets = 1;
 
-    /// <summary>Сколько раз повторяется последовательность трещина-шар.</summary>
+    /// <summary>Сколько шаров всего выпускает атака: по одному за раз, каждый из нового портала.</summary>
     [DataField]
-    public int FutilityRepeats = 4;
+    public int FutilityOrbCount = 4;
 
-    /// <summary>Пауза между повторами, сек.</summary>
+    /// <summary>Насколько далеко перед игроком открывается портал для второго и следующих шаров, метры.</summary>
     [DataField]
-    public float FutilityRepeatDelay = 1.2f;
+    public float FutilityPortalDistance = 4f;
 
-    /// <summary>Скорость шара, м/с. Медленнее бегущего игрока: от шара можно убежать, но не стоять на месте.</summary>
+    /// <summary>Длительность фазы шаров: после неё начинаются Cutter и лучи, сек.</summary>
     [DataField]
-    public float OrbSpeed = 6.5f;
+    public float FutilityOrbPhaseTime = 8f;
+
+    /// <summary>Скорость шара, м/с. Быстрее бегущего игрока: уходить нужно маневром, а не спринтом.</summary>
+    [DataField]
+    public float OrbSpeed = 9.5f;
 
     /// <summary>Максимальное время жизни шара, сек.</summary>
     [DataField]
@@ -121,10 +125,6 @@ public sealed partial class CelestialComponent : Component
 
     [DataField]
     public float RiftMaxDistance = 7f;
-
-    /// <summary>Сколько шаров выходит из одной трещины.</summary>
-    [DataField]
-    public int OrbsPerCrack = 3;
 
     /// <summary>Неповоротливость шаров: скорость поворота, рад/сек. Чем меньше - тем тяжелее им доворачивать за игроком.</summary>
     [DataField]
@@ -281,6 +281,10 @@ public sealed partial class CelestialComponent : Component
     /// <summary>Урон за тик гигантского луча.</summary>
     [DataField]
     public float BloomBeamDamage = 20f;
+
+    /// <summary>Полуширина урона гигантского луча, метры (визуально луч чуть шире).</summary>
+    [DataField]
+    public float BloomDamageRadius = 1.2f;
 
     /// <summary>Интервал урона гигантского луча, сек.</summary>
     [DataField]

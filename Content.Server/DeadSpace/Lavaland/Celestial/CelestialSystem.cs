@@ -699,41 +699,13 @@ public sealed class CelestialSystem : EntitySystem
 
         SpeakFor(ent, "ТЩЕТНО.", 4f);
 
-        // шары ДЕЛЯТСЯ: у каждой цели одновременно гоняются не больше
-        // OrbsPerCrack шаров; погиб — из нового рифта выходит следующий
-        var orbPhase = comp.FutilityRepeats * comp.FutilityRepeatDelay + 3f;
-        var quota = comp.OrbsPerCrack * comp.FutilityRepeats;
+        // строго по одному шару: следующий выходит из нового портала только
+        // после того, как пропал предыдущий (2-й и дальше — из портала прямо
+        // перед игроком)
         foreach (var target in targets)
-        {
-            var spawned = 0;
-            var alive = new List<EntityUid>();
-            var check = 0f;
-            while (check < orbPhase)
-            {
-                var delay = check;
-                var targetRef = target;
-                var aliveRef = alive;
-                Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
-                {
-                    if (TerminatingOrDeleted(ent))
-                        return;
+            SpawnFutilityOrb(ent, comp, target, 0);
 
-                    // чистим исчезнувшие шары
-                    aliveRef.RemoveAll(o => o == EntityUid.Invalid || TerminatingOrDeleted(o) || !Exists(o));
-
-                    if (spawned >= quota || aliveRef.Count >= 1)
-                        return;
-                    if (TerminatingOrDeleted(targetRef))
-                        return;
-
-                    if (SpawnRiftAndOrb(ent, comp, targetRef, aliveRef, 1))
-                        spawned++;
-                });
-                check += 0.3f;
-            }
-        }
-
-        var afterOrbs = orbPhase;
+        var afterOrbs = comp.FutilityOrbPhaseTime;
 
         // Cutter по тем, кто НЕ был целью (с рандомным смещением), но не больше CutterTargets игроков
         var cutterPool = GetTargets(ent, 1 + comp.ExtraTargets + comp.FutilityTargets);
@@ -780,54 +752,95 @@ public sealed class CelestialSystem : EntitySystem
         });
     }
 
-    private bool SpawnRiftAndOrb(Entity<CelestialComponent> ent, CelestialComponent comp,
-        EntityUid target, List<EntityUid> alive, int orbsToSpawn)
+    /// <summary>
+    /// Один шар из свежего портала. Первый портал открывается рядом с целью,
+    /// второй и следующие — прямо перед игроком. Следующий шар запускается
+    /// только после исчезновения текущего.
+    /// </summary>
+    private void SpawnFutilityOrb(Entity<CelestialComponent> ent, CelestialComponent comp,
+        EntityUid target, int index)
     {
-        var targetPos = _transform.GetMapCoordinates(target);
-        var spawnedAny = false;
+        if (index >= comp.FutilityOrbCount)
+            return;
 
-        // рифты вокруг цели, из каждого выходит свой шар
-        for (var i = 0; i < orbsToSpawn; i++)
+        if (TerminatingOrDeleted(ent) || TerminatingOrDeleted(target))
+            return;
+
+        var targetPos = _transform.GetMapCoordinates(target);
+        var riftCenter = GetFutilityRiftCenter(target, comp, index);
+        var riftMap = new MapCoordinates(riftCenter, targetPos.MapId);
+
+        // рифт: текстура телепорта + звук появления
+        Spawn("CelestialRift", riftMap);
+        Sound(comp.FutilityCrackSound, ent, -4f);
+
+        Timer.Spawn(TimeSpan.FromSeconds(0.8f), () =>
+        {
+            if (TerminatingOrDeleted(target) || TerminatingOrDeleted(ent))
+                return;
+
+            if (comp.FutilityOrbSounds.Count > 0)
+                Sound(_random.Pick(comp.FutilityOrbSounds), ent, -8f);
+
+            var orb = Spawn("CelestialOrb", riftMap);
+            var orbComp = EnsureComp<CelestialOrbComponent>(orb);
+            orbComp.Target = target;
+            orbComp.Phase = _random.NextFloat(0f, MathF.Tau);
+            orbComp.Lifetime = comp.OrbLifetime;
+            orbComp.Speed = comp.OrbSpeed;
+            orbComp.TurnRate = comp.OrbTurnRate; // неповоротливость: шар тяжело доворачивает
+            orbComp.FireInterval = comp.OrbFireInterval;
+            orbComp.BeamDamageMin = comp.SmallBeamMinDamage;
+            orbComp.BeamDamageMax = comp.SmallBeamMaxDamage;
+            orbComp.BeamRadius = comp.SmallBeamRadius;
+            orbComp.LocalizedEvents = comp.LocalizedEvents;
+            orbComp.VelocityDir = Vector2.Normalize(
+                _transform.GetMapCoordinates(target).Position - riftCenter);
+
+            WaitFutilityOrbGone(ent, comp, target, orb, index + 1);
+        });
+    }
+
+    /// <summary>Ждёт, пока шар пропадёт, и открывает портал для следующего.</summary>
+    private void WaitFutilityOrbGone(Entity<CelestialComponent> ent, CelestialComponent comp,
+        EntityUid target, EntityUid orb, int nextIndex)
+    {
+        Timer.Spawn(TimeSpan.FromSeconds(0.2f), () =>
+        {
+            if (TerminatingOrDeleted(ent) || TerminatingOrDeleted(target))
+                return;
+
+            if (Exists(orb) && !TerminatingOrDeleted(orb))
+            {
+                WaitFutilityOrbGone(ent, comp, target, orb, nextIndex);
+                return;
+            }
+
+            SpawnFutilityOrb(ent, comp, target, nextIndex);
+        });
+    }
+
+    /// <summary>Точка портала: первый — рядом с целью, остальные — перед игроком по взгляду.</summary>
+    private Vector2 GetFutilityRiftCenter(EntityUid target, CelestialComponent comp, int index)
+    {
+        var targetPos = _transform.GetMapCoordinates(target).Position;
+
+        if (index <= 0)
         {
             var riftAngle = _random.NextFloat(0f, MathF.Tau);
             var riftDist = _random.NextFloat(comp.RiftMinDistance, MathF.Max(comp.RiftMinDistance, comp.RiftMaxDistance));
-            var riftCenter = targetPos.Position +
-                new Vector2(MathF.Cos(riftAngle) * riftDist, MathF.Sin(riftAngle) * riftDist);
-
-            // рифт: текстура телепорта + звук появления
-            Spawn("CelestialRift", new MapCoordinates(riftCenter, targetPos.MapId));
-            Sound(comp.FutilityCrackSound, ent, -4f);
-
-            // шар выходит из этого рифта
-            var riftMap = new MapCoordinates(riftCenter, targetPos.MapId);
-            Timer.Spawn(TimeSpan.FromSeconds(0.8f), () =>
-            {
-                if (TerminatingOrDeleted(target) || TerminatingOrDeleted(ent))
-                    return;
-
-                if (comp.FutilityOrbSounds.Count > 0)
-                    Sound(_random.Pick(comp.FutilityOrbSounds), ent, -8f);
-
-                var orb = Spawn("CelestialOrb", riftMap);
-                var orbComp = EnsureComp<CelestialOrbComponent>(orb);
-                orbComp.Target = target;
-                orbComp.Phase = _random.NextFloat(0f, MathF.Tau);
-                orbComp.Lifetime = comp.OrbLifetime;
-                orbComp.Speed = comp.OrbSpeed;
-                orbComp.TurnRate = comp.OrbTurnRate; // неповоротливость: шар тяжело доворачивает
-                orbComp.FireInterval = comp.OrbFireInterval;
-                orbComp.BeamDamageMin = comp.SmallBeamMinDamage;
-                orbComp.BeamDamageMax = comp.SmallBeamMaxDamage;
-                orbComp.BeamRadius = comp.SmallBeamRadius;
-                orbComp.LocalizedEvents = comp.LocalizedEvents;
-                orbComp.VelocityDir = Vector2.Normalize(
-                    _transform.GetMapCoordinates(target).Position - riftCenter);
-                alive.Add(orb);
-            });
-            spawnedAny = true;
+            return targetPos + new Vector2(MathF.Cos(riftAngle), MathF.Sin(riftAngle)) * riftDist;
         }
 
-        return spawnedAny;
+        // портал открывается прямо перед игроком, по направлению взгляда
+        var facing = _transform.GetWorldRotation(target).ToVec();
+        if (facing.LengthSquared() < 0.01f)
+        {
+            var fallbackAngle = _random.NextFloat(0f, MathF.Tau);
+            facing = new Vector2(MathF.Cos(fallbackAngle), MathF.Sin(fallbackAngle));
+        }
+
+        return targetPos + Vector2.Normalize(facing) * comp.FutilityPortalDistance;
     }
 
     private void OrbContact(EntityUid uid, CelestialOrbComponent orb, Vector2 at)
@@ -1303,7 +1316,10 @@ public sealed class CelestialSystem : EntitySystem
                 var bloomDamage = new DamageSpecifier();
                 bloomDamage.DamageDict.TryAdd("Heat", comp.BloomBeamDamage);
 
-                var queryRadius = comp.BloomLength / 2f + 4f;
+                // радиус запроса = вся длина луча (плюс запас): раньше брали
+                // половину, и всё дальше BloomLength/2 просто не попадало в
+                // выборку — урон шёл только рядом с Селестиалом
+                var queryRadius = comp.BloomLength + 4f;
                 _nearbySpheres.Clear();
                 foreach (var victim in _lookup.GetEntitiesInRange(
                     new MapCoordinates(center, mapId), queryRadius, LookupFlags.Uncontained))
@@ -1319,7 +1335,7 @@ public sealed class CelestialSystem : EntitySystem
                     {
                         var ang = angle + k * MathF.PI / 2f;
                         var rayEnd = center + new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * comp.BloomLength;
-                        if (DistanceToSegment(victimPos, center, rayEnd) <= 1.2f)
+                        if (DistanceToSegment(victimPos, center, rayEnd) <= comp.BloomDamageRadius)
                         {
                             _damage.TryChangeDamage(victim, bloomDamage);
                             break;
