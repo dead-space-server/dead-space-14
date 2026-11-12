@@ -9991,3 +9991,10 @@ Entries:
   changes:
   - type: Tweak
     message: Теперь через консоль связи нельзя вызвать эвак при Гамме,Эпсилон,Сьерра
+- id: 957
+  author: BlueDogDoc
+  time: '2026-11-12T02:08:16.245785+00:00'
+  pr: 2720
+  changes:
+  - type: Fix
+    message: Подлаги на сервере (одни из многих)
