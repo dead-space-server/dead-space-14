@@ -1499,7 +1499,7 @@ public sealed class SurgeryClientSystem : EntitySystem
             return false;
 
         if (_board.StepVerb != (byte) SurgeryVerbKind.Retract)
-            return _board.UndoVerb == (byte) SurgeryVerbKind.Retract;
+            return _board.UndoVerb == (byte) SurgeryVerbKind.Retract || _board.CloseVerb == (byte) SurgeryVerbKind.Retract;
 
         return _board.StepLayer < _board.Retracted.Length && _board.Retracted[_board.StepLayer] != 0;
     }
