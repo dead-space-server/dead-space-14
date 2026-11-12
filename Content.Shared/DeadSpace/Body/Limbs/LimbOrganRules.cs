@@ -5,9 +5,9 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 public static class LimbOrganRules
 {
     public const int Count = 8;
-    public const float RuptureShare = 0.9f;
+    public const float RuptureHpShare = 0.9f;
     public const float Rupture = 40f;
-    public const float RuptureChance = 0.4f;
+    public const float RuptureChance = 0.2f;
     public const float HeartBleed = 0.5f;
     public const float LungAir = 1f;
     public const float BrainAir = 0.2f;
@@ -117,29 +117,31 @@ public static class LimbOrganRules
         return new OrganHit(true, primary, ruptured, eyes, concussion);
     }
 
-    public static int RuptureHome(Span<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, float chance, float roll)
+    public static int RuptureHome(Span<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, float chance, float roll, float pick)
     {
         if (chance <= 0f || roll >= chance)
             return 0;
 
-        var eyes = 0;
+        Span<int> eligible = stackalloc int[Count];
+        var eligibleCount = 0;
         var count = Math.Min(organs.Length, Count);
         for (var i = 0; i < count; i++)
         {
-            var organ = (LimbOrgan) i;
-            if (LimbOrganHomes.Home(organ) != zone || (present & (LimbOrganMask) (1 << i)) == 0)
+            if (LimbOrganHomes.Home((LimbOrgan) i) != zone || (present & (LimbOrganMask) (1 << i)) == 0)
                 continue;
 
-            ref var state = ref organs[i];
-            if (state.Missing || state.Ruptured)
+            if (organs[i].Missing || organs[i].Ruptured)
                 continue;
 
-            state.Ruptured = true;
-            if (organ == LimbOrgan.Eyes)
-                eyes += EyeRuptureDamage;
+            eligible[eligibleCount++] = i;
         }
 
-        return eyes;
+        if (eligibleCount == 0)
+            return 0;
+
+        var target = eligible[Math.Clamp((int) (pick * eligibleCount), 0, eligibleCount - 1)];
+        organs[target].Ruptured = true;
+        return (LimbOrgan) target == LimbOrgan.Eyes ? EyeRuptureDamage : 0;
     }
 
     private static bool Hurt(Span<LimbOrganState> organs, OrganShare share, LimbMark mark, float scaled)

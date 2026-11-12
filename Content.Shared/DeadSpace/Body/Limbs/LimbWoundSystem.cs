@@ -2134,7 +2134,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var any = false;
         for (var i = 0; i < count; i++)
         {
-            if (zones[i].Severed || before[i] < LimbOrganRules.RuptureShare)
+            if (zones[i].Severed || before[i] <= 1f - LimbOrganRules.RuptureHpShare)
                 continue;
 
             var zone = (LimbZone) i;
@@ -2159,7 +2159,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var heart = (int) LimbOrgan.Heart;
         var brainWas = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartWas = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
-        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat());
+        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), _random.NextFloat());
         var brainNow = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartNow = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
         if (eyes > 0 && TryComp<BlindableComponent>(uid, out var blind))
@@ -2194,7 +2194,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             if (_net.IsServer && !limbs.Soft && !state.Severed)
                 LimbWoundRules.RollCrack(ref state, lost, _random.NextFloat());
             if (_net.IsServer && !state.Severed
-                && lost >= LimbOrganRules.RuptureShare
+                && lost > 1f - LimbOrganRules.RuptureHpShare
                 && strike.Mark is LimbMark.Edge or LimbMark.Point or LimbMark.Blunt)
                 RuptureIf(uid, limbs, strike.Zone);
             Dirty(uid, limbs);
