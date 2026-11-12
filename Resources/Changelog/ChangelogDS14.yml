@@ -9998,3 +9998,10 @@ Entries:
   changes:
   - type: Fix
     message: Подлаги на сервере (одни из многих)
+- id: 958
+  author: BlueDogDoc
+  time: '2026-11-12T02:14:20.035316+00:00'
+  pr: 2721
+  changes:
+  - type: Fix
+    message: Операция на хвостах не проходила назад и пешка "свистела задом"
