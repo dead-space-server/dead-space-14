@@ -456,7 +456,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 return true;
         }
 
-        return OrganBleeds(limbs, LimbOrgan.Heart);
+        return false;
     }
 
     public bool StopOneBleed(EntityUid uid, LimbBodyComponent? limbs = null)
@@ -484,12 +484,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
             zones[best].Bleed = 0f;
             Dirty(uid, limbs);
             RefreshActive(uid, limbs);
-            return true;
-        }
-
-        if (StopOrganBleed(limbs, LimbOrgan.Heart))
-        {
-            Dirty(uid, limbs);
             return true;
         }
 
