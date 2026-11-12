@@ -119,9 +119,8 @@ public sealed class LimbOrganRulesTest
     public void RupturedEyesBlindOnce()
     {
         var organs = LimbOrganRules.CreateAll().ToArray();
-        Span<float> rolls = new float[LimbOrganRules.Count];
-        var burst = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f, 1f, rolls);
-        var again = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f, 1f, rolls);
+        var burst = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 1f, 0f);
+        var again = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 1f, 0f);
 
         Assert.Multiple(() =>
         {
@@ -136,9 +135,7 @@ public sealed class LimbOrganRulesTest
     public void ASparedRuptureRollKeepsOrgansIntact()
     {
         var organs = LimbOrganRules.CreateAll().ToArray();
-        var spared = new float[LimbOrganRules.Count];
-        Array.Fill(spared, 1f);
-        var eyes = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, 0.9f, LimbOrganRules.RuptureChance, spared);
+        var eyes = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, LimbOrganRules.RuptureChance, 0.9f);
 
         Assert.Multiple(() =>
         {
@@ -157,9 +154,8 @@ public sealed class LimbOrganRulesTest
         LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Point, 40f, 1f);
         LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Edge, 80f, 1f);
         LimbOrganRules.Apply(organs, LimbZone.Head, LimbMark.Point, 40f, 1f);
-        Span<float> rolls = new float[LimbOrganRules.Count];
-        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, 0.9f, 1f, rolls);
-        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f, 1f, rolls);
+        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, 1f, 0f);
+        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 1f, 0f);
         var tick = LimbOrganRules.Tick(organs);
         LimbOrganRules.Cryo(organs);
 

@@ -8,7 +8,6 @@ public static class LimbOrganRules
     public const float RuptureShare = 0.9f;
     public const float Rupture = 40f;
     public const float RuptureChance = 0.4f;
-    public const float RuptureChanceProtected = 0.1f;
     public const float HeartBleed = 0.5f;
     public const float LungAir = 1f;
     public const float BrainAir = 0.2f;
@@ -118,9 +117,9 @@ public static class LimbOrganRules
         return new OrganHit(true, primary, ruptured, eyes, concussion);
     }
 
-    public static int RuptureHome(Span<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, float lost, float chance, ReadOnlySpan<float> rolls)
+    public static int RuptureHome(Span<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, float chance, float roll)
     {
-        if (lost < RuptureShare || chance <= 0f)
+        if (chance <= 0f || roll >= chance)
             return 0;
 
         var eyes = 0;
@@ -133,9 +132,6 @@ public static class LimbOrganRules
 
             ref var state = ref organs[i];
             if (state.Missing || state.Ruptured)
-                continue;
-
-            if (i >= rolls.Length || rolls[i] >= chance)
                 continue;
 
             state.Ruptured = true;

@@ -126,7 +126,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private readonly Dictionary<string, int> _fields = new();
     private readonly bool[] _fireBlocked = new bool[LimbWoundRules.BodyZoneCount];
-    private readonly float[] _wornBefore = new float[LimbWoundRules.BodyZoneCount];
     private readonly HashSet<EntityUid> _legless = new();
 
     private const SlotFlags Worn = SlotFlags.WITHOUT_POCKET;
@@ -244,12 +243,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         var bleed = BleedTotal(uid, limbs);
-        LostShares(limbs, _wornBefore);
         if (!Machine(uid) && LimbWoundRules.DrainBleed(zones, limbs.TorsoPool))
             Dirty(uid, limbs);
         ApplyLife(uid, limbs);
-        if (RuptureWorn(uid, limbs, _wornBefore))
-            Dirty(uid, limbs);
         var failure = LimbOrganRules.Tick(CollectionsMarshal.AsSpan(limbs.Organs));
         if (_mobs.IsCritical(uid))
             failure = failure with { Asphyxiation = failure.Asphyxiation + LimbWoundRules.CritAir };
@@ -2136,27 +2132,19 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var any = false;
         for (var i = 0; i < count; i++)
         {
-            if (zones[i].Severed || before[i] >= LimbOrganRules.RuptureShare)
+            if (zones[i].Severed || before[i] < LimbOrganRules.RuptureShare)
                 continue;
 
-            var zone = (LimbZone) i;
-            any |= RuptureIf(uid, limbs, zone, LimbWoundRules.LostShare(zones[i], LimbWoundRules.HealthFor(zone, limbs)), before[i]);
+            any |= RuptureIf(uid, limbs, (LimbZone) i);
         }
 
         return any;
     }
 
-    private bool RuptureIf(EntityUid uid, LimbBodyComponent limbs, LimbZone zone, float lost, float before)
+    private bool RuptureIf(EntityUid uid, LimbBodyComponent limbs, LimbZone zone)
     {
-        if (lost < LimbOrganRules.RuptureShare || before >= LimbOrganRules.RuptureShare || !LimbWoundRules.IsBody(zone))
+        if (!LimbWoundRules.IsBody(zone))
             return false;
-
-        var zoneIndex = LimbWoundRules.Index(zone);
-        var bone = (uint) zoneIndex < (uint) limbs.Zones.Count ? limbs.Zones[zoneIndex].Bone : 0f;
-        var chance = bone >= LimbWoundRules.StrainBone ? LimbOrganRules.RuptureChance : LimbOrganRules.RuptureChanceProtected;
-        Span<float> rolls = stackalloc float[LimbOrganRules.Count];
-        for (var i = 0; i < rolls.Length; i++)
-            rolls[i] = _random.NextFloat();
 
         EnsureOrgans(limbs);
         var organs = CollectionsMarshal.AsSpan(limbs.Organs);
@@ -2164,7 +2152,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var heart = (int) LimbOrgan.Heart;
         var brainWas = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartWas = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
-        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, lost, chance, rolls);
+        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat());
         var brainNow = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartNow = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
         if (eyes > 0 && TryComp<BlindableComponent>(uid, out var blind))
@@ -2198,8 +2186,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 RefreshPosture(uid, limbs);
             if (_net.IsServer && !limbs.Soft && !state.Severed)
                 LimbWoundRules.RollCrack(ref state, lost, _random.NextFloat());
-            if (_net.IsServer)
-                RuptureIf(uid, limbs, strike.Zone, LimbWoundRules.LostShare(state, LimbWoundRules.HealthFor(strike.Zone, limbs)), lost);
+            if (_net.IsServer && !state.Severed
+                && lost >= LimbOrganRules.RuptureShare
+                && strike.Mark is LimbMark.Edge or LimbMark.Point or LimbMark.Blunt)
+                RuptureIf(uid, limbs, strike.Zone);
             Dirty(uid, limbs);
         }
 
