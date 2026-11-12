@@ -32,10 +32,6 @@ public sealed class StorageWindow : BaseWindow
     public EntityUid? StorageEntity;
 
     // DS14-start
-    /// <summary>
-    /// Whether this window was opened as a nested storage of another open window.
-    /// Nested windows are meant to align with their parent, so they skip overlap avoidance.
-    /// </summary>
     public bool OpenedAsNested;
     // DS14-end
 
@@ -717,8 +713,6 @@ public sealed class StorageWindow : BaseWindow
             return DragMode.None;
 
         // DS14-start
-        // Enlarged drag grip: the sidebar plus the title bar (when shown), each expanded
-        // by a margin so the windows are much easier to grab and move around.
         if (IsInDragGrip(_sidebar, relativeMousePos))
             return DragMode.Move;
 
@@ -741,10 +735,6 @@ public sealed class StorageWindow : BaseWindow
         return box.Contains(relativeMousePos);
     }
 
-    /// <summary>
-    /// Nudges a freshly opened window so it doesn't spawn exactly on top of another visible
-    /// storage window (e.g. when multiple inventory windows are enabled).
-    /// </summary>
     private void AvoidOverlapWithOtherWindows()
     {
         if (_storageController.StaticStorageUIEnabled || OpenedAsNested || Parent == null)
