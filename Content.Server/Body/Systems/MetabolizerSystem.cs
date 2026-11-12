@@ -67,7 +67,7 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
 
     private void OnMapInit(Entity<MetabolizerComponent> ent, ref MapInitEvent args)
     {
-        ent.Comp.NextUpdate = _gameTiming.CurTime + ent.Comp.AdjustedUpdateInterval;
+        ent.Comp.NextUpdate = _gameTiming.CurTime + ent.Comp.AdjustedUpdateInterval * _random.NextDouble(); // DS14
         ScheduleMetabolizer(ent); // DS14
     }
 
