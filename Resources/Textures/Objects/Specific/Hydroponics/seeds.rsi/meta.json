@@ -32,7 +32,10 @@
       "name": "seed-synthbrain"
     },
     {
-        "name": "paper"
+      "name": "paper"
+    },
+    {
+      "name": "seed-produce-icon"
     }
   ]
 }

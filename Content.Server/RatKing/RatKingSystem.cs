@@ -20,14 +20,31 @@ using Content.Shared.Chat;
 namespace Content.Server.RatKing
 {
     /// <inheritdoc/>
-    public sealed class RatKingSystem : SharedRatKingSystem
+    public sealed partial class RatKingSystem : SharedRatKingSystem
     {
+<<<<<<< ours
         [Dependency] private readonly AtmosphereSystem _atmos = default!;
         [Dependency] private readonly ChatSystem _chat = default!;
         [Dependency] private readonly HTNSystem _htn = default!;
         [Dependency] private readonly SatiationSystem _satiation = default!;
         [Dependency] private readonly NPCSystem _npc = default!;
         [Dependency] private readonly PopupSystem _popup = default!;
+||||||| base
+        [Dependency] private readonly AtmosphereSystem _atmos = default!;
+        [Dependency] private readonly ChatSystem _chat = default!;
+        [Dependency] private readonly HTNSystem _htn = default!;
+        [Dependency] private readonly HungerSystem _hunger = default!;
+        [Dependency] private readonly NPCSystem _npc = default!;
+        [Dependency] private readonly PopupSystem _popup = default!;
+=======
+        [Dependency] private AtmosphereSystem _atmos = default!;
+        [Dependency] private ChatSystem _chat = default!;
+        [Dependency] private HTNSystem _htn = default!;
+        [Dependency] private SatiationSystem _satiation = default!;
+        [Dependency] private NPCSystem _npc = default!;
+        [Dependency] private NPCPointCommandSystem _pointCommands = default!;
+        [Dependency] private PopupSystem _popup = default!;
+>>>>>>> theirs
 
         public override void Initialize()
         {
@@ -46,8 +63,22 @@ namespace Content.Server.RatKing
             if (args.Handled)
                 return;
 
+<<<<<<< ours
             // DS14-necro-start
             if (component.NeedHunger)
+||||||| base
+            if (!TryComp<HungerComponent>(uid, out var hunger))
+                return;
+
+            //make sure the hunger doesn't go into the negatives
+            if (_hunger.GetHunger(hunger) < component.HungerPerArmyUse)
+=======
+            if (!TryComp<SatiationComponent>(uid, out var satiation))
+                return;
+
+            //make sure the hunger doesn't go into the negatives
+            if (_satiation.GetValueOrNull((uid, satiation), SatiationSystem.Hunger) < component.HungerPerArmyUse)
+>>>>>>> theirs
             {
                 if (!TryComp<SatiationComponent>(uid, out var satiation))
                     return;
@@ -63,6 +94,12 @@ namespace Content.Server.RatKing
             // DS14-necro-end
 
             args.Handled = true;
+<<<<<<< ours
+||||||| base
+            _hunger.ModifyHunger(uid, -component.HungerPerArmyUse, hunger);
+=======
+            _satiation.ModifyValue((uid, satiation), SatiationSystem.Hunger, -component.HungerPerArmyUse);
+>>>>>>> theirs
             var servant = Spawn(component.ArmyMobSpawnId, Transform(uid).Coordinates);
             var comp = EnsureComp<RatKingServantComponent>(servant);
             comp.King = uid;
@@ -104,10 +141,7 @@ namespace Content.Server.RatKing
             if (component.CurrentOrder != RatKingOrderType.CheeseEm)
                 return;
 
-            foreach (var servant in component.Servants)
-            {
-                _npc.SetBlackboard(servant, NPCBlackboard.CurrentOrderedTarget, args.Pointed);
-            }
+            _pointCommands.CommandFollowers(component.Servants, args.Pointed);
         }
 
         public override void UpdateServantNpc(EntityUid uid, RatKingOrderType orderType)
@@ -129,7 +163,7 @@ namespace Content.Server.RatKing
             base.DoCommandCallout(uid, component);
 
             if (!component.OrderCallouts.TryGetValue(component.CurrentOrder, out var datasetId) ||
-                !PrototypeManager.TryIndex<LocalizedDatasetPrototype>(datasetId, out var datasetPrototype))
+                !ProtoMan.TryIndex<LocalizedDatasetPrototype>(datasetId, out var datasetPrototype))
                 return;
 
             var msg = Random.Pick(datasetPrototype);

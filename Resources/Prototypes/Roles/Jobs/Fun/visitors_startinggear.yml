@@ -588,7 +588,7 @@
     underwearb: ClothingUnderwearBottomBoxersEngineer ## DS-14
     socks: ClothingUnderwearSocksEngineer ## DS-14
   inhand:
-  - trayScanner
+  - TRayScanner
   - CableApcStack
 
 - type: startingGear
@@ -1651,7 +1651,7 @@
   id: VisitorMusicianRelaxedAltF
   equipment:
     jumpsuit: ClothingUniformRandomShirt
-    shoes: ClothingShoesWizard
+    shoes: ClothingShoesSandalsBrown
     head: ClothingHeadRastaHat
     id: VisitorPDA
     back: ClothingBackpackSatchel

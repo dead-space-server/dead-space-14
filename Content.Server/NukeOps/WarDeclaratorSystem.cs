@@ -26,8 +26,9 @@ namespace Content.Server.NukeOps;
 /// <summary>
 /// This handles nukeops special war mode declaration device and directly using nukeops game rule.
 /// </summary>
-public sealed class WarDeclaratorSystem : EntitySystem
+public sealed partial class WarDeclaratorSystem : EntitySystem
 {
+<<<<<<< ours
     // DS14-start
     private const int MaxSecondaryTitleLength = 120;
     private const int MaxSecondaryTextLength = 2000;
@@ -46,6 +47,23 @@ public sealed class WarDeclaratorSystem : EntitySystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     // DS14-end
+||||||| base
+    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
+=======
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private AccessReaderSystem _accessReaderSystem = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {

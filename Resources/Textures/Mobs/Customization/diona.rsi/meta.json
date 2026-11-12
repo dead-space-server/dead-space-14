@@ -122,6 +122,150 @@
     {
       "name": "wildflower",
       "directions": 4
+    },
+    {
+      "name": "flowers_body_vine",
+      "directions": 4
+    },
+    {
+      "name": "flowers_body_flowers",
+      "directions": 4
+    },
+    {
+      "name": "flowers_head_vine",
+      "directions": 4
+    },
+    {
+      "name": "flowers_head_flowers",
+      "directions": 4
+    },
+    {
+      "name": "bloom_flower",
+      "directions": 4
+    },
+    {
+      "name": "bloom_leaves",
+      "directions": 4
+    },
+    {
+      "name": "brush_branches",
+      "directions": 4
+    },
+    {
+      "name": "brush_leaves",
+      "directions": 4
+    },
+    {
+      "name": "cornflower_branches",
+      "directions": 4
+    },
+    {
+      "name": "cornflower_leaves",
+      "directions": 4
+    },
+    {
+      "name": "cornflower_petals",
+      "directions": 4
+    },
+    {
+      "name": "cornflower_pollen",
+      "directions": 4
+    },
+    {
+      "name": "garland_flowers",
+      "directions": 4
+    },
+    {
+      "name": "garland_leaves",
+      "directions": 4
+    },
+    {
+      "name": "king_flower",
+      "directions": 4
+    },
+    {
+      "name": "king_leaves",
+      "directions": 4
+    },
+    {
+      "name": "lotus_flower",
+      "directions": 4
+    },
+    {
+      "name": "lotus_leaves",
+      "directions": 4
+    },
+    {
+      "name": "rose_flower",
+      "directions": 4
+    },
+    {
+      "name": "rose_leaves",
+      "directions": 4
+    },
+    {
+      "name": "rosey_flowers",
+      "directions": 4
+    },
+    {
+      "name": "rosey_leaves",
+      "directions": 4
+    },
+    {
+      "name": "spinner_branches",
+      "directions": 4
+    },
+    {
+      "name": "spinner_leaves",
+      "directions": 4
+    },
+    {
+      "name": "spinner_eyes",
+      "directions": 4
+    },
+    {
+      "name": "sprout_leaf",
+      "directions": 4
+    },
+    {
+      "name": "sprout_eyes",
+      "directions": 4
+    },
+    {
+      "name": "vine_branches",
+      "directions": 4
+    },
+    {
+      "name": "vine_vines",
+      "directions": 4
+    },
+    {
+      "name": "vinel_vines",
+      "directions": 4
+    },
+    {
+      "name": "vinel_leaves",
+      "directions": 4
+    },
+    {
+      "name": "vines_vines",
+      "directions": 4
+    },
+    {
+      "name": "vines_leaves",
+      "directions": 4
+    },
+    {
+      "name": "wildflower_flowers",
+      "directions": 4
+    },
+    {
+      "name": "wildflower_leaves",
+      "directions": 4
+    },
+    {
+      "name": "wildflower_branches",
+      "directions": 4
     }
   ]
 }

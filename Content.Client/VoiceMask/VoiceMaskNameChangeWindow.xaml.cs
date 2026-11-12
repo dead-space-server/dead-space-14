@@ -24,11 +24,9 @@ public sealed partial class VoiceMaskNameChangeWindow : FancyWindow
     private List<TTSVoicePrototype> _voices = new(); // Corvax-TTS
 
     private string? _verb;
-
     public VoiceMaskNameChangeWindow()
     {
         RobustXamlLoader.Load(this);
-
         NameSelectorSet.OnPressed += _ =>
         {
             OnNameChange?.Invoke(NameSelector.Text);
@@ -105,13 +103,13 @@ public sealed partial class VoiceMaskNameChangeWindow : FancyWindow
     }
     // Corvax-TTS-End
 
-    public void UpdateState(string name, string? verb, string voice, bool active, bool accentHide) // Corvax-TTS
+    public void UpdateState(string name, string? verb, string voice, bool active, bool accentHide, LocId titleText) // Corvax-TTS
     {
         NameSelector.Text = name;
         _verb = verb;
         ToggleButton.Pressed = active;
         ToggleAccentButton.Pressed = accentHide;
-
+        Title = Loc.GetString(titleText);
         for (int id = 0; id < SpeechVerbSelector.ItemCount; id++)
         {
             if (string.Equals(verb, SpeechVerbSelector.GetItemMetadata(id)))

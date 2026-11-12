@@ -29,6 +29,18 @@
     },
     {
       "name": "projectile"
+    },
+    {
+      "name": "emitter0",
+      "directions": 4
+    },
+    {
+      "name": "emitter1",
+      "directions": 4
+    },
+    {
+      "name": "emitter2",
+      "directions": 4
     }
   ]
 }

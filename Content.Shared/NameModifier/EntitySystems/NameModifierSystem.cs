@@ -5,8 +5,9 @@ using Content.Shared.NameModifier.Components;
 namespace Content.Shared.NameModifier.EntitySystems;
 
 /// <inheritdoc cref="NameModifierComponent"/>
-public sealed class NameModifierSystem : EntitySystem
+public sealed partial class NameModifierSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly MetaDataSystem _metaData = default!;
 
     // DS14-start: retain explicit subscriptions used by the current system layout.
@@ -17,7 +18,20 @@ public sealed class NameModifierSystem : EntitySystem
         SubscribeLocalEvent<NameModifierComponent, EntityRenamedEvent>(OnEntityRenamed);
     }
     // DS14-end
+||||||| base
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<NameModifierComponent, EntityRenamedEvent>(OnEntityRenamed);
+    }
+=======
+    [Dependency] private MetaDataSystem _metaData = default!;
+>>>>>>> theirs
+
+    [SubscribeLocalEvent]
     private void OnEntityRenamed(Entity<NameModifierComponent> ent, ref EntityRenamedEvent args)
     {
         SetBaseName(ent, args.NewName);

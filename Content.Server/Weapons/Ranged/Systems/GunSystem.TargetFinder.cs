@@ -7,13 +7,7 @@ namespace Content.Server.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem
 {
-    // DS14-Start - pre-v288 explicit event subscription
-    private void InitializeTargetAssignment()
-    {
-        SubscribeLocalEvent<TargetAssignComponent, AmmoShotEvent>(OnProjectileShot);
-    }
-    // DS14-End
-
+    [SubscribeLocalEvent]
     public void OnProjectileShot(Entity<TargetAssignComponent> entity, ref AmmoShotEvent args)
     {
         if (entity.Comp.Target is null || TerminatingOrDeleted(entity.Comp.Target))

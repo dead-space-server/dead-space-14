@@ -66,6 +66,18 @@
         },
         {
             "name": "screech"
+        },
+        {
+            "name": "armblade_sting"
+        },
+        {
+            "name": "hemotoxin_sting"
+        },
+        {
+            "name": "horror_shop"
+        },
+        {
+            "name": "fleshtomb"
         }
     ]
 }

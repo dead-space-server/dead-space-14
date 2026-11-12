@@ -82,5 +82,7 @@ public sealed partial class AdminOptionsTab : Control
             OverlayGhostHideSlider,
             OverlayGhostHideMin,
             OverlayGhostHideMax);
+
+        Control.AddOptionCheckBox(CCVars.AdminStripMenuOverlayDefault, EnableAdminStripOverlayDefault);
     }
 }

@@ -6,9 +6,20 @@
 - files: ["ric1.ogg", "ric2.ogg", "ric3.ogg", "ric3.ogg", "ric5.ogg"]
   license: "CC-BY-SA-3.0"
   copyright: "Taken from tgstation"
+<<<<<<< ours
   source: "https://github.com/tgstation/tgstation/tree/7501504b0ea029d2cf1c0336d09db5c0959aa412/sound/weapons/effects"
 
 - files: ["nanite_hit1.ogg", "nanite_hit2.ogg", "nanite_hit3.ogg"] # DS14 - corrected upstream filename
   license: "CC-BY-SA-3.0"
   copyright: "Created by sadiefei"
   source: "https://github.com/tgstation/tgstation/tree/7501504b0ea029d2cf1c0336d09db5c0959aa412/sound/weapons/effects"
+||||||| base
+  source: "https://github.com/tgstation/tgstation/tree/7501504b0ea029d2cf1c0336d09db5c0959aa412/sound/weapons/effects"
+=======
+  source: "https://github.com/tgstation/tgstation/tree/7501504b0ea029d2cf1c0336d09db5c0959aa412/sound/weapons/effects"
+
+- files: ["nanite_hit1.ogg", "nanite_hit2.ogg", "nanitehit_3.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by sadiefei"
+  source: "https://github.com/tgstation/tgstation/tree/7501504b0ea029d2cf1c0336d09db5c0959aa412/sound/weapons/effects"
+>>>>>>> theirs

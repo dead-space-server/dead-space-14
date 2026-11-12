@@ -1,5 +1,7 @@
 # Hairs
+
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairAdhara
   bodyPart: Hair
   speciesRestriction: [ Vulpkanin ]
@@ -10,6 +12,7 @@
       state: adhara
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairAnita
   bodyPart: Hair
   speciesRestriction: [ Vulpkanin ]
@@ -20,6 +23,7 @@
       state: anita
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairApollo
   bodyPart: Hair
   speciesRestriction: [ Vulpkanin ]
@@ -30,6 +34,7 @@
       state: apollo
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairBelle
   bodyPart: Hair
   speciesRestriction: [ Vulpkanin ]
@@ -40,6 +45,7 @@
       state: belle
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairBraided
   bodyPart: Hair
   markingCategory: Hair
@@ -50,6 +56,7 @@
       state: braided
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairBun
   bodyPart: Hair
   markingCategory: Hair
@@ -60,6 +67,7 @@
       state: bun
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairCleanCut
   bodyPart: Hair
   markingCategory: Hair
@@ -70,6 +78,7 @@
       state: clean_cut
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairCurl
   bodyPart: Hair
   markingCategory: Hair
@@ -80,6 +89,7 @@
       state: curl
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairHawk
   bodyPart: Hair
   markingCategory: Hair
@@ -90,6 +100,7 @@
       state: hawk
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairJagged
   bodyPart: Hair
   markingCategory: Hair
@@ -100,6 +111,7 @@
       state: jagged
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairJeremy
   bodyPart: Hair
   markingCategory: Hair
@@ -110,6 +122,7 @@
       state: jeremy
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairKajam
   bodyPart: Hair
   markingCategory: Hair
@@ -120,6 +133,7 @@
       state: kajam
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairKeid
   bodyPart: Hair
   markingCategory: Hair
@@ -130,6 +144,7 @@
       state: keid
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairKleeia
   bodyPart: Hair
   markingCategory: Hair
@@ -140,6 +155,7 @@
       state: kleeia
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairMizar
   bodyPart: Hair
   markingCategory: Hair
@@ -150,6 +166,7 @@
       state: mizar
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairPunkBraided
   bodyPart: Hair
   markingCategory: Hair
@@ -160,6 +177,7 @@
       state: punkbraided
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairRaine
   bodyPart: Hair
   markingCategory: Hair
@@ -170,6 +188,7 @@
       state: raine
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairRough
   bodyPart: Hair
   markingCategory: Hair
@@ -180,6 +199,7 @@
       state: rough
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairShort
   bodyPart: Hair
   markingCategory: Hair
@@ -190,6 +210,7 @@
       state: short
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairShort2
   bodyPart: Hair
   markingCategory: Hair
@@ -200,6 +221,7 @@
       state: short2
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpHairSpike
   bodyPart: Hair
   markingCategory: Hair
@@ -210,7 +232,9 @@
       state: spike
 
 # Facial Hairs
+
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpFacialHairRuff
   bodyPart: FacialHair
   markingCategory: FacialHair
@@ -221,6 +245,7 @@
       state: ruff
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpFacialHairElder
   bodyPart: FacialHair
   markingCategory: FacialHair
@@ -231,6 +256,7 @@
       state: elder
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpFacialHairElderChin
   bodyPart: FacialHair
   markingCategory: FacialHair
@@ -241,6 +267,7 @@
       state: elder_chin
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpFacialHairKita
   bodyPart: FacialHair
   markingCategory: FacialHair
@@ -251,6 +278,7 @@
       state: kita
 
 - type: marking
+  parent: [ VulpBaseMarking ]
   id: VulpFacialHairGoatee
   bodyPart: FacialHair
   markingCategory: FacialHair

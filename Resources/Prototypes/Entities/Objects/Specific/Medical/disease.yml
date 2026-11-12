@@ -11,6 +11,7 @@
     state: icon
   - type: Tag
     tags:
+    - BotanyTool
     - Recyclable
     - Trash
     - DiagnoserDataCollector # DS14
@@ -34,6 +35,9 @@
     layers:
     - state: boxwide
     - state: swab
+  - type: Tag
+    tags:
+    - BotanyTool
   - type: BallisticAmmoProvider
     whitelist:
       components:

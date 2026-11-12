@@ -19,12 +19,22 @@ public sealed partial class ContrabandSeverityPrototype : IPrototype
     public LocId ExamineText;
 
     /// <summary>
+<<<<<<< ours
     /// The color used by contraband text and administrative overlays.
     /// </summary>
     [DataField]
     public Color Color = Color.Red;
 
     /// <summary>
+||||||| base
+=======
+    /// The color of the contraband (used in multiple places like the text color, icon color etc...)
+    /// </summary>
+    [DataField]
+    public Color Color = Color.Red;
+
+    /// <summary>
+>>>>>>> theirs
     /// When examining the contraband, should this take into account the viewer's departments and job?
     /// </summary>
     [DataField]

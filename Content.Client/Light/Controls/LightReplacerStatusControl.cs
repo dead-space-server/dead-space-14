@@ -1,4 +1,4 @@
-﻿using Content.Client.Message;
+using Content.Client.Message;
 using Content.Client.Stylesheets;
 using Content.Shared.Light.Components;
 using Robust.Client.UserInterface;
@@ -13,10 +13,8 @@ namespace Content.Client.Light.Controls;
 /// </summary>
 public sealed partial class LightReplacerStatusControl : Control
 {
-    // DS14-start: current engine baseline uses readonly IoC fields.
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IEntityManager _entity = default!;
-    // DS14-end
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entity = default!;
 
     private readonly Entity<LightReplacerComponent> _parent;
     private readonly RichTextLabel _label;

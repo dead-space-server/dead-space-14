@@ -101,13 +101,13 @@
 
   - !type:WormCorridorDunGen
     width: 3
-    tile: FloorCaveDrought
+    tile: FloorCave
 
   - !type:CorridorClutterDunGen
     contents: HauntedClutter
 
   - !type:BoundaryWallDunGen
-    tile: FloorCaveDrought
+    tile: FloorCave
     wall: WallRock
 
 - type: entityTable
@@ -218,23 +218,23 @@
 
   - !type:CorridorDunGen
     width: 3
-    tile: FloorCaveDrought
+    tile: FloorCave
 
   - !type:DungeonEntranceDunGen
     count: 2
-    tile: FloorCaveDrought
+    tile: FloorCave
     contents: BaseWoodWall
 
   - !type:RoomEntranceDunGen
-    tile: FloorCaveDrought
+    tile: FloorCave
     contents: BaseWoodWall
 
   - !type:EntranceFlankDunGen
-    tile: FloorCaveDrought
+    tile: FloorCave
     contents: BaseWoodWall
 
   - !type:ExternalWindowDunGen
-    tile: FloorCaveDrought
+    tile: FloorCave
     contents: BaseWoodWall
 #DS14-start
   - !type:BoundaryWallDunGen
@@ -247,12 +247,12 @@
 
   - !type:JunctionDunGen
     width: 1
-    tile: FloorCaveDrought
+    tile: FloorCave
     contents: BaseWoodSupport
 
   - !type:JunctionDunGen
     width: 3
-    tile: FloorCaveDrought
+    tile: FloorCave
     contents: BaseWoodSupport
 
   - !type:AutoCablingDunGen

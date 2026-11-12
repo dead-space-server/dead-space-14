@@ -1,10 +1,12 @@
 using Content.Client.Guidebook;
 using Content.Client.Guidebook.Richtext;
+using Content.IntegrationTests.Fixtures;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Log;
 using Robust.Shared.Prototypes;
-using System.Linq;
+using Content.IntegrationTests.Utility;
 using Content.Shared.Guidebook;
+using Robust.Shared.Localization;
 
 namespace Content.IntegrationTests.Tests.Guidebook;
 
@@ -12,39 +14,38 @@ namespace Content.IntegrationTests.Tests.Guidebook;
 [TestOf(typeof(GuidebookSystem))]
 [TestOf(typeof(GuideEntryPrototype))]
 [TestOf(typeof(DocumentParsingManager))]
-public sealed class GuideEntryPrototypeTests
+public sealed class GuideEntryPrototypeTests : GameTest
 {
+    private static string[] _guideEntries = GameDataScrounger.PrototypesOfKind<GuideEntryPrototype>();
+
     [Test]
-    public async Task ValidatePrototypeContents()
+    [TestCaseSource(nameof(_guideEntries))]
+    [Description("Ensures a given guidebook entry is valid, checking the document/etc.")]
+    public async Task Validate(string protoKey)
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var pair = Pair;
         var client = pair.Client;
         await client.WaitIdleAsync();
         var protoMan = client.ResolveDependency<IPrototypeManager>();
         var resMan = client.ResolveDependency<IResourceManager>();
         var parser = client.ResolveDependency<DocumentParsingManager>();
-        var prototypes = protoMan.EnumeratePrototypes<GuideEntryPrototype>().ToList();
+        var proto = protoMan.Index<GuideEntryPrototype>(protoKey);
 
-        // Suppress "Hit style update limit" warnings that occur when parsing large guidebook pages
+        // DS14-start: Suppress "Hit style update limit" warnings that occur when parsing large guidebook pages
         var logMan = client.ResolveDependency<ILogManager>();
         var uiSawmill = logMan.GetSawmill("ui");
         var oldLevel = uiSawmill.Level;
         uiSawmill.Level = LogLevel.Error;
+        // DS14-end
 
-        foreach (var proto in prototypes)
+        await client.WaitAssertion(() =>
         {
-            await client.WaitAssertion(() =>
-            {
-                using var reader = resMan.ContentFileReadText(proto.Text);
-                var text = reader.ReadToEnd();
-                Assert.That(parser.TryAddMarkup(new Document(), text), $"Failed to parse guidebook: {proto.Id}");
-            });
+            using var reader = resMan.ContentFileReadText(proto.Text);
+            var text = reader.ReadToEnd();
 
-            // Avoid style update limit
-            await client.WaitRunTicks(1);
-        }
+            Assert.That(parser.TryAddMarkup(new Document(), text), $"Failed to parse the guide entry's document.");
+        });
 
-        uiSawmill.Level = oldLevel;
-        await pair.CleanReturnAsync();
+        uiSawmill.Level = oldLevel; // DS14
     }
 }

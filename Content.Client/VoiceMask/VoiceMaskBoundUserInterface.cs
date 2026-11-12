@@ -5,9 +5,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.VoiceMask;
 
-public sealed class VoiceMaskBoundUserInterface : BoundUserInterface
+public sealed partial class VoiceMaskBoundUserInterface : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _protomanager = default!;
+    [Dependency] private IPrototypeManager _protomanager = default!;
 
     [ViewVariables]
     private VoiceMaskNameChangeWindow? _window;
@@ -54,7 +54,13 @@ public sealed class VoiceMaskBoundUserInterface : BoundUserInterface
             return;
         }
 
+<<<<<<< ours
         _window.UpdateState(cast.Name, cast.Verb, cast.Voice, cast.Active, cast.AccentHide); // Corvax-TTS
+||||||| base
+        _window.UpdateState(cast.Name, cast.Verb, cast.Active, cast.AccentHide);
+=======
+        _window.UpdateState(cast.Name, cast.Verb, cast.Active, cast.AccentHide, cast.TitleText);
+>>>>>>> theirs
     }
 
     protected override void Dispose(bool disposing)

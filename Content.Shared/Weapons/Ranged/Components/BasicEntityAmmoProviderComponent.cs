@@ -1,6 +1,5 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Weapons.Ranged.Components;
 
@@ -11,24 +10,29 @@ namespace Content.Shared.Weapons.Ranged.Components;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)] // DS14: the client redraws the counter on a recharge
 public sealed partial class BasicEntityAmmoProviderComponent : AmmoProviderComponent
 {
+<<<<<<< ours
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("proto", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<EntityPrototype>))]
     [AutoNetworkedField] // DS14: added at runtime (a crusher capsule) or switched (fire modes), the client must know it
     public string Proto = default!;
+||||||| base
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField("proto", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string Proto = default!;
+=======
+    [DataField(required: true)]
+    public EntProtoId Proto = default!;
+>>>>>>> theirs
 
     /// <summary>
     ///     Max capacity.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("capacity")]
-    [AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public int? Capacity = null;
 
     /// <summary>
     ///     Actual ammo left. Initialized to capacity unless they are non-null and differ.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("count")]
-    [AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public int? Count = null;
 }

@@ -1,5 +1,4 @@
 using Content.Server.Atmos.EntitySystems;
-using Content.Server.Atmos.Piping.Components; // DS14 - current engine keeps AtmosDeviceUpdateEvent server-side.
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
 using Content.Shared.Atmos;
@@ -13,31 +12,20 @@ using JetBrains.Annotations;
 namespace Content.Server.Atmos.Piping.Trinary.EntitySystems;
 
 [UsedImplicitly]
-// DS14: Current engine uses explicit event subscriptions without system source generation.
-public sealed class GasFilterSystem : SharedGasFilterSystem
+public sealed partial class GasFilterSystem : SharedGasFilterSystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambientSoundSystem = default!;
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        // DS14-start: Current engine does not support source-generated event subscriptions.
-        SubscribeLocalEvent<GasFilterComponent, ComponentInit>(OnInit);
-        SubscribeLocalEvent<GasFilterComponent, AtmosDeviceUpdateEvent>(OnFilterUpdated);
-        SubscribeLocalEvent<GasFilterComponent, AtmosDeviceDisabledEvent>(OnFilterLeaveAtmosphere);
-        SubscribeLocalEvent<GasFilterComponent, GasAnalyzerScanEvent>(OnFilterAnalyzed);
-        // DS14-end
-    }
-
+    [SubscribeLocalEvent]
     private void OnInit(Entity<GasFilterComponent> ent, ref ComponentInit args)
     {
         UpdateAppearance(ent);
     }
 
+    [SubscribeLocalEvent]
     private void OnFilterUpdated(Entity<GasFilterComponent> ent, ref AtmosDeviceUpdateEvent args)
     {
         if (!ent.Comp.Enabled
@@ -88,6 +76,7 @@ public sealed class GasFilterSystem : SharedGasFilterSystem
         _atmosphereSystem.Merge(inletNode.Air, removed);
     }
 
+    [SubscribeLocalEvent]
     private void OnFilterLeaveAtmosphere(Entity<GasFilterComponent> ent, ref AtmosDeviceDisabledEvent args)
     {
         ent.Comp.Enabled = false;
@@ -101,6 +90,7 @@ public sealed class GasFilterSystem : SharedGasFilterSystem
     /// <summary>
     /// Returns the gas mixture for the gas analyzer
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnFilterAnalyzed(Entity<GasFilterComponent> ent, ref GasAnalyzerScanEvent args)
     {
         args.GasMixtures ??= new List<(string, GasMixture?)>();

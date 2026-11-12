@@ -1,3 +1,4 @@
+using System.Globalization;
 using Content.Client.Administration.Managers;
 using Content.Client.DeadSpace.Administration.UI;
 using Content.Shared.Administration;
@@ -14,8 +15,8 @@ namespace Content.Client.Administration.UI.Tabs
     [GenerateTypedNameReferences]
     public sealed partial class ServerTab : Control
     {
-        [Dependency] private readonly IConfigurationManager _config = default!;
-        [Dependency] private readonly IClientConsoleHost _console = default!;
+        [Dependency] private IConfigurationManager _config = default!;
+        [Dependency] private IClientConsoleHost _console = default!;
 
         // DS14-start
         [Dependency] private readonly IClientAdminManager _admin = default!;
@@ -32,14 +33,37 @@ namespace Content.Client.Administration.UI.Tabs
 
             _config.OnValueChanged(CCVars.OocEnabled, OocEnabledChanged, true);
             _config.OnValueChanged(CCVars.LoocEnabled, LoocEnabledChanged, true);
+            _config.OnValueChanged(CCVars.DeadChatEnabled, DeadChatEnabledChanged, true);
+            _config.OnValueChanged(CCVars.AfkTime, AfkTimeChanged, true);
+            _config.OnValueChanged(CCVars.AdminAfkTime, AdminAfkTimeChanged, true);
+            _config.OnValueChanged(CCVars.AfkConfirmTimeout, AfkConfirmTimeoutChanged, true);
             _admin.AdminStatusUpdated += RefreshAutoMapVoteVisibility; // DS14
 
             ServerShutdownButton.OnPressed += _ => _console.ExecuteCommand("shutdown");
+
+            AfkTime.OnTextEntered += args => SendFloatCVar(CCVars.AfkTime.Name, args.Text);
+            AfkTime.OnFocusExit += args => SendFloatCVar(CCVars.AfkTime.Name, args.Text);
+            AdminAfkTime.OnTextEntered += args => SendFloatCVar(CCVars.AdminAfkTime.Name, args.Text);
+            AdminAfkTime.OnFocusExit += args => SendFloatCVar(CCVars.AdminAfkTime.Name, args.Text);
+            AfkConfirmTimeout.OnTextEntered += args => SendFloatCVar(CCVars.AfkConfirmTimeout.Name, args.Text);
+            AfkConfirmTimeout.OnFocusExit += args => SendFloatCVar(CCVars.AfkConfirmTimeout.Name, args.Text);
 
             // DS14-start
             OpenAutoMapVoteConfigButton.OnPressed += _ => OpenAutoMapVoteConfigWindow();
             RefreshAutoMapVoteVisibility();
             // DS14-end
+        }
+
+        private void SendFloatCVar(string cvar, string text)
+        {
+            if (string.IsNullOrWhiteSpace(text) ||
+                !float.TryParse(text, CultureInfo.InvariantCulture, out var value) ||
+                value < 0f)
+            {
+                return;
+            }
+
+            _console.ExecuteCommand($"changecvar {cvar} {value.ToString(CultureInfo.InvariantCulture)}");
         }
 
         private void OocEnabledChanged(bool value)
@@ -52,6 +76,26 @@ namespace Content.Client.Administration.UI.Tabs
             SetLoocButton.Pressed = value;
         }
 
+        private void DeadChatEnabledChanged(bool value)
+        {
+            SetDeadChatButton.Pressed = value;
+        }
+
+        private void AfkTimeChanged(float value)
+        {
+            AfkTime.PlaceHolder = value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void AdminAfkTimeChanged(float value)
+        {
+            AdminAfkTime.PlaceHolder = value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void AfkConfirmTimeoutChanged(float value)
+        {
+            AfkConfirmTimeout.PlaceHolder = value.ToString(CultureInfo.InvariantCulture);
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -60,6 +104,9 @@ namespace Content.Client.Administration.UI.Tabs
             {
                 _config.UnsubValueChanged(CCVars.OocEnabled, OocEnabledChanged);
                 _config.UnsubValueChanged(CCVars.LoocEnabled, LoocEnabledChanged);
+                _config.UnsubValueChanged(CCVars.AfkTime, AfkTimeChanged);
+                _config.UnsubValueChanged(CCVars.AdminAfkTime, AdminAfkTimeChanged);
+                _config.UnsubValueChanged(CCVars.AfkConfirmTimeout, AfkConfirmTimeoutChanged);
 
                 // DS14-start
                 _admin.AdminStatusUpdated -= RefreshAutoMapVoteVisibility;

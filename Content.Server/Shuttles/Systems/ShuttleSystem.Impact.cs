@@ -1,15 +1,10 @@
-using Content.Server.Shuttles.Components;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Audio;
 using Content.Shared.CCVar;
-using Content.Shared.Clothing;
 using Content.Shared.Damage;
 using Content.Shared.Database;
-using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
-using Content.Shared.Projectiles;
-using Content.Shared.Slippery;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -21,12 +16,16 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using System.Numerics;
 using Content.Shared.Damage.Components;
+using Content.Shared.Shuttles.Components;
 
 namespace Content.Server.Shuttles.Systems;
 
 // shuttle impact damage ported from Goobstation (AGPLv3) with agreement of all coders involved
 public sealed partial class ShuttleSystem
 {
+    [Dependency] private EntityQuery<DamageableComponent> _damageableQuery = default!;
+    [Dependency] private EntityQuery<MovedByPressureComponent> _movedByPressureQuery = default!;
+
     private bool _enabled;
     private float _minimumImpactInertia;
     private float _minimumImpactVelocity;
@@ -43,8 +42,8 @@ public sealed partial class ShuttleSystem
     private float _platingMass;
 
     private const float _sparkChance = 0.2f;
-    // shuttle mass to consider the neutral point for inertia scaling
-    private const float _baseShuttleMass = 50f;
+    // shuttle mass to consider the neutral point for inertia scaling: 100 tiles at standard weight
+    private const float _baseShuttleMass = 100f * TileDensityMultiplier;
     // exists primarily for optimisation so not a cvar
     private const float _minImpulseVelocity = 0.07f;
     // high-speed collisions tend to be a series of increasingly smaller collisions so don't spam admin logs
@@ -54,6 +53,7 @@ public sealed partial class ShuttleSystem
     private readonly ProtoId<ContentTileDefinition> _platingId = "Plating";
     private readonly EntProtoId _sparkEffect = "EffectSparks";
 
+<<<<<<< ours
     private EntityQuery<DamageableComponent> _dmgQuery;
     private EntityQuery<ProjectileComponent> _projQuery;
     private EntityQuery<MovedByPressureComponent> _movedByPressureQuery;
@@ -66,6 +66,16 @@ public sealed partial class ShuttleSystem
     private readonly List<(Vector2i, Tile)> _brokenImpactTiles = new();
     private readonly List<Vector2i> _sparkImpactTiles = new();
     private readonly HashSet<Entity<TransformComponent>> _entitiesOnImpactTile = new();
+||||||| base
+    private EntityQuery<DamageableComponent> _dmgQuery;
+    private EntityQuery<ProjectileComponent> _projQuery;
+
+    private HashSet<EntityUid> _countedEnts = new();
+    private HashSet<EntityUid> _intersecting = new();
+=======
+    private HashSet<EntityUid> _countedEnts = new();
+    private HashSet<EntityUid> _intersecting = new();
+>>>>>>> theirs
     // for _adminLogSpacing
     private Dictionary<EntityUid, TimeSpan> _impactedAt = new();
 
@@ -73,10 +83,17 @@ public sealed partial class ShuttleSystem
     {
         SubscribeLocalEvent<ShuttleComponent, StartCollideEvent>(OnShuttleCollide);
 
+<<<<<<< ours
         _dmgQuery = GetEntityQuery<DamageableComponent>();
         _projQuery = GetEntityQuery<ProjectileComponent>();
         _movedByPressureQuery = GetEntityQuery<MovedByPressureComponent>();
 
+||||||| base
+        _dmgQuery = GetEntityQuery<DamageableComponent>();
+        _projQuery = GetEntityQuery<ProjectileComponent>();
+
+=======
+>>>>>>> theirs
         Subs.CVar(_cfg, CCVars.ImpactEnabled, value => _enabled = value, true);
         Subs.CVar(_cfg, CCVars.MinimumImpactInertia, value => _minimumImpactInertia = value, true);
         Subs.CVar(_cfg, CCVars.MinimumImpactVelocity, value => _minimumImpactVelocity = value, true);
@@ -90,7 +107,7 @@ public sealed partial class ShuttleSystem
         Subs.CVar(_cfg, CCVars.ImpactMassBias, value => _massBias = value, true);
         Subs.CVar(_cfg, CCVars.ImpactInertiaScaling, value => _inertiaScaling = value, true);
 
-        _platingMass = _protoManager.Index(_platingId).Mass;
+        _platingMass = ProtoMan.Index(_platingId).Mass;
     }
 
     /// <summary>
@@ -168,7 +185,7 @@ public sealed partial class ShuttleSystem
             var coordinates = new EntityCoordinates(ourXform.MapUid.Value, worldPoint);
 
             var volume = MathF.Min(10f, MathF.Pow(jungleDiff, 0.5f) - 5f);
-            var audioParams = AudioParams.Default.WithVariation(SharedContentAudioSystem.DefaultVariation).WithVolume(volume);
+            var audioParams = AudioParams.Default.WithVariation(SharedContentAudioSystem.DefaultVariation).AddVolume(volume);
             _audio.PlayPvs(_shuttleImpactSound, coordinates, audioParams);
 
             // if we're not enabled, stop after playing sound
@@ -288,7 +305,7 @@ public sealed partial class ShuttleSystem
             if (direction.LengthSquared() > minsq)
             {
                 _stuns.TryCrawling(ent.Owner, knockdownTime);
-                _throwing.TryThrow(ent, direction, ent.Comp, Transform(ent), _projQuery, direction.Length(), playSound: false);
+                _throwing.TryThrow(ent, direction, ent.Comp, Transform(ent), direction.Length(), playSound: false);
             }
             else
             {
@@ -418,7 +435,7 @@ public sealed partial class ShuttleSystem
                 if (MathF.Abs(toCenter.X) > 0.5f || MathF.Abs(toCenter.Y) > 0.5f)
                     continue;
 
-                if (_dmgQuery.TryComp(localEnt, out var damageable))
+                if (_damageableQuery.TryComp(localEnt, out var damageable))
                 {
                     // Apply damage scaled by distance but capped to prevent gibbing
                     var scaledDamage = tileData.Energy * _damageMultiplier;
@@ -443,7 +460,7 @@ public sealed partial class ShuttleSystem
                 else if (throwEntities)
                 {
                     var direction = throwDirection * tileData.DistanceFactor;
-                    _throwing.TryThrow(localEnt, direction, physics, localEnt.Comp, _projQuery, direction.Length(), playSound: false);
+                    _throwing.TryThrow(localEnt, direction, physics, localEnt.Comp, direction.Length(), playSound: false);
                 }
             }
 

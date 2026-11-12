@@ -1,4 +1,5 @@
-﻿using Content.Shared.Hands.Components;
+using Content.Shared.Hands.Components;
+using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 
 namespace Content.Shared.Hands.EntitySystems;
@@ -49,5 +50,11 @@ public abstract partial class SharedHandsSystem
             args.SpeedModifier *= ratio;
         }
         // DS14-end
+    }
+
+    [SubscribeLocalEvent]
+    private void OnAttemptedItemDrop(Entity<PreventForcedThrowComponent> ent, ref FellDownThrowAttemptEvent args)
+    {
+        args.Cancelled = true;
     }
 }

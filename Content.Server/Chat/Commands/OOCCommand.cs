@@ -7,10 +7,16 @@ using Robust.Shared.GameObjects;
 namespace Content.Server.Chat.Commands
 {
     [AnyCommand]
-    internal sealed class OOCCommand : LocalizedCommands
+    internal sealed partial class OOCCommand : LocalizedCommands
     {
+<<<<<<< ours
         [Dependency] private readonly IChatManager _chatManager = default!;
         [Dependency] private readonly IEntityManager _entityManager = default!;
+||||||| base
+        [Dependency] private readonly IChatManager _chatManager = default!;
+=======
+        [Dependency] private IChatManager _chatManager = default!;
+>>>>>>> theirs
 
         public override string Command => "ooc";
 

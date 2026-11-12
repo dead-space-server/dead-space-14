@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Resources;
 using Robust.Client.ResourceManagement;

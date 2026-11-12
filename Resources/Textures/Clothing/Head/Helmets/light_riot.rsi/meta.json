@@ -25,6 +25,25 @@
     {
       "name": "inhand-right",
       "directions": 4
+    },
+    {
+      "name": "visor-icon"
+    },
+    {
+      "name": "visor-equipped-HELMET",
+      "directions": 4
+    },
+    {
+      "name": "visor-equipped-HELMET-vox",
+      "directions": 4
+    },
+    {
+      "name": "visor-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "visor-inhand-right",
+      "directions": 4
     }
   ]
 }

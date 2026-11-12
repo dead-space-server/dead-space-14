@@ -16,34 +16,20 @@ namespace Content.Shared.Botany.Items.Systems;
 /// </summary>
 public sealed partial class BotanySeedSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions and query initialization.
-    public override void Initialize()
-    {
-        base.Initialize();
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
-        SubscribeLocalEvent<SeedComponent, AfterInteractEvent>(OnAfterInteract);
-        SubscribeLocalEvent<PlantTrayComponent, PlantingSeedAttemptEvent>(OnPlantingSeedAttempt);
-        _dataQuery = GetEntityQuery<PlantDataComponent>();
-        _trayQuery = GetEntityQuery<PlantTrayComponent>();
-        _labelQuery = GetEntityQuery<PaperLabelComponent>();
-    }
-    // DS14-end
+    [Dependency] private EntityQuery<PlantDataComponent> _dataQuery;
+    [Dependency] private EntityQuery<PlantTrayComponent> _trayQuery;
+    [Dependency] private EntityQuery<PaperLabelComponent> _labelQuery;
 
-    // DS14-start
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-
-    private EntityQuery<PlantDataComponent> _dataQuery;
-    private EntityQuery<PlantTrayComponent> _trayQuery;
-    private EntityQuery<PaperLabelComponent> _labelQuery;
-    // DS14-end
-
+    [SubscribeLocalEvent]
     private void OnAfterInteract(Entity<SeedComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Handled || !args.CanReach || !_trayQuery.HasComp(args.Target)) // DS14
+        if (args.Handled || !args.CanReach || !_trayQuery.HasComp(args.Target))
             return;
 
         var ev = new PlantingSeedAttemptEvent(ent, args.User);
@@ -52,14 +38,26 @@ public sealed partial class BotanySeedSystem : EntitySystem
         args.Handled = true;
     }
 
+    [SubscribeLocalEvent]
+    private void OnPlantAnalyzerAttempt(Entity<SeedComponent> ent, ref PlantAnalyzerAttemptEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.PlantData = ent.Comp.PlantData;
+        args.PlantProtoId = ent.Comp.PlantProtoId;
+        args.Handled = true;
+    }
+
+    [SubscribeLocalEvent]
     private void OnPlantingSeedAttempt(Entity<PlantTrayComponent> ent, ref PlantingSeedAttemptEvent args)
     {
         if (args.Cancelled)
             return;
 
-        if (_plantTray.TryGetPlant(ent.AsNullable(), out _))
+        if (_plantTray.HasPlant(ent.AsNullable()))
         {
-            _popup.PopupPredictedCursor(
+            _popup.PopupPredictedCursor( // DS14
                 Loc.GetString("plant-component-already-seeded-popup", ("name", MetaData(ent.Owner).EntityName)),
                 args.User,
                 PopupType.Medium);
@@ -74,13 +72,13 @@ public sealed partial class BotanySeedSystem : EntitySystem
 
         var name = Loc.GetString(plantData.Name);
         var noun = Loc.GetString(plantData.Noun);
-        _popup.PopupPredictedCursor(Loc.GetString("plant-component-plant-success-popup",
+        _popup.PopupPredictedCursor(Loc.GetString("plant-component-plant-success-popup", // DS14
                 ("seedName", name),
                 ("seedNoun", noun)),
             args.User,
-            PopupType.Medium);
+            PopupType.Medium); // DS14
 
-        if (_labelQuery.TryComp(args.Seed, out var paperLabel)) // DS14
+        if (_labelQuery.TryComp(args.Seed, out var paperLabel))
             _itemSlots.TryEjectToHands(args.Seed, paperLabel.LabelSlot, args.User);
 
         _plantTray.PlantingPlantInTray(ent.Owner, plantUid, args.Seed.Comp.HealthOverride);
@@ -92,6 +90,6 @@ public sealed partial class BotanySeedSystem : EntitySystem
                 $"{ToPrettyString(args.User):player} planted {Loc.GetString(plantData.Name):seed} at Pos:{Transform(ent.Owner).Coordinates}.");
         }
 
-        PredictedDel(args.Seed.Owner);
+        PredictedDel(args.Seed.Owner); // DS14: predicted deletion after the seed has been used
     }
 }

@@ -1,4 +1,4 @@
-﻿using Content.Server.Chat.Systems;
+using Content.Server.Chat.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Popups;
 using Content.Shared.Teleportation;
@@ -15,9 +15,18 @@ namespace Content.Server.Teleportation;
 /// </summary>
 public sealed partial class TeleportLocationsSystem : SharedTeleportLocationsSystem
 {
+<<<<<<< ours
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+||||||| base
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+=======
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -68,12 +77,18 @@ public sealed partial class TeleportLocationsSystem : SharedTeleportLocationsSys
 
         var allEnts = AllEntityQuery<WarpPointComponent>();
 
+        // Selecting suitable entities with the warpPoint component using whitelist
         while (allEnts.MoveNext(out var warpEnt, out var warpPointComp))
         {
-            if (_whitelist.IsWhitelistPass(warpPointComp.Blacklist, warpEnt) || string.IsNullOrWhiteSpace(warpPointComp.Location))
+
+            if (string.IsNullOrWhiteSpace(warpPointComp.Location))
                 continue;
 
-            ent.Comp.AvailableWarps.Add(new TeleportPoint(warpPointComp.Location, GetNetEntity(warpEnt)));
+            if (!_whitelist.CheckBoth(warpEnt, ent.Comp.Blacklist, ent.Comp.Whitelist))
+
+                continue;
+
+            ent.Comp.AvailableWarps.Add(new TeleportPoint(Loc.GetString(warpPointComp.Location), GetNetEntity(warpEnt)));
         }
 
         Dirty(ent);

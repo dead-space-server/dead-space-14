@@ -50,6 +50,18 @@
     {
       "name": "equipped-head-vulpkanin",
       "directions": 4
+    },
+    {
+      "name": "equipped-head-light",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-light-vox",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-light-reptilian",
+      "directions": 4
     }
   ]
 }

@@ -1,11 +1,11 @@
-using System.Linq;
-using Content.Server.Antag.Components;
-using Content.Shared.Actions;
 using Content.Shared.Changeling.Components;
+using System.Linq;
+using Content.Shared.Antag; // DS14
+using Content.Shared.Actions;
 using Content.Shared.Changeling.Systems;
+using Robust.Shared.GameStates;
 using Content.Shared.Cloning.Events;
 using Content.Shared.Store.Components;
-using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 
@@ -14,11 +14,11 @@ namespace Content.Server.Changeling.Systems;
 public sealed partial class ChangelingIdentitySystem : SharedChangelingIdentitySystem
 {
     // DS14-start
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
-    private static readonly EntProtoId ChangelingRule = "Changeling";
+    private static readonly ProtoId<AntagSpecifierPrototype> ChangelingAntag = "Changeling";
     // DS14-end
 
     public override void Initialize()
@@ -33,14 +33,13 @@ public sealed partial class ChangelingIdentitySystem : SharedChangelingIdentityS
     private void OnClone(Entity<ChangelingIdentityComponent> ent, ref CloningEvent args)
     {
         if (!args.Settings.EventComponents.Contains(Factory.GetRegistration<ChangelingIdentityComponent>().Name) ||
-            !_prototype.Index(ChangelingRule).TryGetComponent<AntagSelectionComponent>(out var selection, Factory) ||
-            selection.Definitions.Count == 0)
+            !_prototype.TryIndex(ChangelingAntag, out var antag))
         {
             return;
         }
 
         var clone = args.CloneUid;
-        EntityManager.AddComponents(clone, selection.Definitions[0].Components);
+        EntityManager.AddComponents(clone, antag.Components);
 
         var identity = Comp<ChangelingIdentityComponent>(clone);
         foreach (var initial in identity.ConsumedIdentities.ToArray())

@@ -6,10 +6,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Clothing.EntitySystems;
 
-public sealed class HideLayerClothingSystem : EntitySystem
+public sealed partial class HideLayerClothingSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+||||||| base
+    [Dependency] private readonly SharedHideableHumanoidLayersSystem _hideableHumanoidLayers = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+=======
+    [Dependency] private SharedHideableHumanoidLayersSystem _hideableHumanoidLayers = default!;
+    [Dependency] private IGameTiming _timing = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {

@@ -5,7 +5,6 @@ using Content.Shared.Store;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Audio; //DS14
 
 namespace Content.Shared.Revenant.Components;
@@ -18,36 +17,43 @@ public sealed partial class RevenantComponent : Component
     /// The total amount of Essence the revenant has. Functions
     /// as health and is regenerated.
     /// </summary>
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
-    [AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public FixedPoint2 Essence = 75;
 
-    [DataField("stolenEssenceCurrencyPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<CurrencyPrototype>))]
-    public string StolenEssenceCurrencyPrototype = "StolenEssence";
+    [DataField]
+    public ProtoId<CurrencyPrototype> StolenEssenceCurrencyPrototype = "StolenEssence";
 
     /// <summary>
     /// Prototype to spawn when the entity dies.
     /// </summary>
+<<<<<<< ours
     [DataField("spawnOnDeathPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string SpawnOnDeathPrototype = "Ectoplasm";
+||||||| base
+    [DataField("spawnOnDeathPrototype", customTypeSerializer:typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string SpawnOnDeathPrototype = "Ectoplasm";
+=======
+    [DataField]
+    public EntProtoId SpawnOnDeathPrototype = "Ectoplasm";
+>>>>>>> theirs
 
     /// <summary>
     /// The entity's current max amount of essence. Can be increased
     /// through harvesting player souls.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("maxEssence")]
+    [DataField("maxEssence")]
     public FixedPoint2 EssenceRegenCap = 75;
 
     /// <summary>
     /// The coefficient of damage taken to actual health lost.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("damageToEssenceCoefficient")]
+    [DataField]
     public float DamageToEssenceCoefficient = 0.75f;
 
     /// <summary>
     /// The amount of essence passively generated per second.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("essencePerSecond")]
+    [DataField]
     public FixedPoint2 EssencePerSecond = 0.5f;
 
     [ViewVariables]
@@ -62,7 +68,7 @@ public sealed partial class RevenantComponent : Component
     /// <summary>
     /// The duration of the soul search
     /// </summary>
-    [DataField("soulSearchDuration")]
+    [DataField]
     public float SoulSearchDuration = 2.5f;
 
     /// <summary>
@@ -70,13 +76,13 @@ public sealed partial class RevenantComponent : Component
     /// the first float corresponds to amount of time the entity is stunned.
     /// the second corresponds to the amount of time the entity is made solid.
     /// </summary>
-    [DataField("harvestDebuffs")]
+    [DataField]
     public Vector2 HarvestDebuffs = new(5, 5);
 
     /// <summary>
     /// The amount that is given to the revenant each time it's max essence is upgraded.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("maxEssenceUpgradeAmount")]
+    [DataField]
     public float MaxEssenceUpgradeAmount = 10;
     #endregion
 
@@ -86,7 +92,7 @@ public sealed partial class RevenantComponent : Component
     /// <summary>
     /// The amount of essence that is needed to use the ability.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("defileCost")]
+    [DataField]
     public FixedPoint2 DefileCost = 30;
 
     /// <summary>
@@ -94,26 +100,26 @@ public sealed partial class RevenantComponent : Component
     /// the first float corresponds to amount of time the entity is stunned.
     /// the second corresponds to the amount of time the entity is made solid.
     /// </summary>
-    [DataField("defileDebuffs")]
+    [DataField]
     public Vector2 DefileDebuffs = new(1, 4);
 
     /// <summary>
     /// The radius around the user that this ability affects
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("defileRadius")]
+    [DataField]
     public float DefileRadius = 3.5f;
 
     /// <summary>
     /// The amount of tiles that are uprooted by the ability
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("defileTilePryAmount")]
+    [DataField]
     public int DefileTilePryAmount = 15;
 
     /// <summary>
     /// The chance that an individual entity will have any of the effects
     /// happen to it.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("defileEffectChance")]
+    [DataField]
     public float DefileEffectChance = 0.5f;
     #endregion
 
@@ -121,7 +127,7 @@ public sealed partial class RevenantComponent : Component
     /// <summary>
     /// The amount of essence that is needed to use the ability.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("overloadCost")]
+    [DataField]
     public FixedPoint2 OverloadCost = 40;
 
     /// <summary>
@@ -129,19 +135,19 @@ public sealed partial class RevenantComponent : Component
     /// the first float corresponds to amount of time the entity is stunned.
     /// the second corresponds to the amount of time the entity is made solid.
     /// </summary>
-    [DataField("overloadDebuffs")]
+    [DataField]
     public Vector2 OverloadDebuffs = new(3, 8);
 
     /// <summary>
     /// The radius around the user that this ability affects
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("overloadRadius")]
+    [DataField]
     public float OverloadRadius = 5f;
 
     /// <summary>
     /// How close to the light the entity has to be in order to be zapped.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("overloadZapRadius")]
+    [DataField]
     public float OverloadZapRadius = 2f;
     #endregion
 
@@ -149,7 +155,7 @@ public sealed partial class RevenantComponent : Component
     /// <summary>
     /// The amount of essence that is needed to use the ability.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("blightCost")]
+    [DataField]
     public float BlightCost = 50;
 
     /// <summary>
@@ -157,13 +163,13 @@ public sealed partial class RevenantComponent : Component
     /// the first float corresponds to amount of time the entity is stunned.
     /// the second corresponds to the amount of time the entity is made solid.
     /// </summary>
-    [DataField("blightDebuffs")]
+    [DataField]
     public Vector2 BlightDebuffs = new(2, 5);
 
     /// <summary>
     /// The radius around the user that this ability affects
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("blightRadius")]
+    [DataField]
     public float BlightRadius = 3.5f;
     #endregion
 
@@ -171,7 +177,7 @@ public sealed partial class RevenantComponent : Component
     /// <summary>
     /// The amount of essence that is needed to use the ability.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("malfunctionCost")]
+    [DataField]
     public FixedPoint2 MalfunctionCost = 60;
 
     /// <summary>
@@ -179,13 +185,13 @@ public sealed partial class RevenantComponent : Component
     /// the first float corresponds to amount of time the entity is stunned.
     /// the second corresponds to the amount of time the entity is made solid.
     /// </summary>
-    [DataField("malfunctionDebuffs")]
+    [DataField]
     public Vector2 MalfunctionDebuffs = new(2, 8);
 
     /// <summary>
     /// The radius around the user that this ability affects
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("malfunctionRadius")]
+    [DataField]
     public float MalfunctionRadius = 3.5f;
 
     /// <summary>
@@ -243,15 +249,16 @@ public sealed partial class RevenantComponent : Component
     public ProtoId<AlertPrototype> EssenceAlert = "Essence";
 
     #region Visualizer
-    [DataField("state")]
+    [DataField]
     public string State = "idle";
-    [DataField("corporealState")]
+    [DataField]
     public string CorporealState = "active";
-    [DataField("stunnedState")]
+    [DataField]
     public string StunnedState = "stunned";
-    [DataField("harvestingState")]
+    [DataField]
     public string HarvestingState = "harvesting";
     #endregion
+<<<<<<< ours
 
     //DS14-Start
     #region Scream Ability
@@ -290,4 +297,20 @@ public sealed partial class RevenantComponent : Component
 
     #endregion
     //DS14-End
+||||||| base
+=======
+
+    /// <summary>
+    /// The scaling for passively chilling surroundings.
+    /// </summary>
+    [DataField]
+    public FixedPoint2 ChillScaling = 7000;
+
+    /// <summary>
+    /// The upper limit for essence when passively chilling surroundings.
+    /// Beyond this point, more essence will not cause more chilling.
+    /// </summary>
+    [DataField]
+    public FixedPoint2 ChillUpperBound = 500;
+>>>>>>> theirs
 }

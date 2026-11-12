@@ -19,8 +19,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Medical;
 
-public sealed class VomitSystem : EntitySystem
+public sealed partial class VomitSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementModStatusSystem _movementMod = default!;
@@ -32,6 +33,31 @@ public sealed class VomitSystem : EntitySystem
     [Dependency] private readonly SharedPuddleSystem _puddle = default!;
     [Dependency] private readonly SatiationSystem _satiation = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
+||||||| base
+    [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly HungerSystem _hunger = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly MovementModStatusSystem _movementMod = default!;
+    [Dependency] private readonly ThirstSystem _thirst = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedPuddleSystem _puddle = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
+=======
+    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementModStatusSystem _movementMod = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private ForensicsSystem _forensics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPuddleSystem _puddle = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -57,12 +83,22 @@ public sealed class VomitSystem : EntitySystem
         if (stomachList.Count == 0)
             return;
 
+<<<<<<< ours
         // Empty the stomach out into it
         foreach (var stomach in stomachList)
         {
             if (_solutionContainer.ResolveSolution(stomach.Owner, StomachSystem.DefaultSolutionName, ref stomach.Comp1.Solution, out var sol))
                 _solutionContainer.TryTransferSolution(stomach.Comp1.Solution.Value, args.Sol, sol.Volume); // DS14
         }
+||||||| base
+        // Empty stomach solution into the new vomit solution
+        args.Args.Sol.AddSolution(sol, _proto);
+        sol.RemoveAllSolution();
+=======
+        // Empty stomach solution into the new vomit solution
+        args.Args.Sol.AddSolution(sol, ProtoMan);
+        sol.RemoveAllSolution();
+>>>>>>> theirs
 
         args.Handled = true;
     }
@@ -104,7 +140,45 @@ public sealed class VomitSystem : EntitySystem
         // Bloodstream chemicals have already been absorbed and should not be removed by vomiting.
         if (TryComp<BloodstreamComponent>(uid, out var bloodStream))
         {
+<<<<<<< ours
             solution.AddReagent(new ReagentId(VomitPrototype, _bloodstream.GetEntityBloodData((uid, bloodStream))), solutionSize);
+||||||| base
+            var vomitAmount = solutionSize;
+
+            // Flushes small portion of the chemicals removed from the bloodstream stream
+            if (_solutionContainer.ResolveSolution(uid, bloodStream.BloodSolutionName, ref bloodStream.BloodSolution))
+            {
+                var vomitChemstreamAmount = _bloodstream.FlushChemicals((uid, bloodStream), vomitAmount);
+
+                if (vomitChemstreamAmount != null)
+                {
+                    vomitChemstreamAmount.ScaleSolution(ChemMultiplier);
+                    solution.AddSolution(vomitChemstreamAmount, _proto);
+                    vomitAmount -= (float)vomitChemstreamAmount.Volume;
+                }
+            }
+
+            // Makes a vomit solution the size of 90% of the chemicals removed from the chemstream
+            solution.AddReagent(new ReagentId(VomitPrototype, _bloodstream.GetEntityBloodData((uid, bloodStream))), vomitAmount);
+=======
+            var vomitAmount = solutionSize;
+
+            // Flushes small portion of the chemicals removed from the bloodstream stream
+            if (_solutionContainer.ResolveSolution(uid, bloodStream.BloodSolutionName, ref bloodStream.BloodSolution))
+            {
+                var vomitChemstreamAmount = _bloodstream.FlushChemicals((uid, bloodStream), vomitAmount);
+
+                if (vomitChemstreamAmount != null)
+                {
+                    vomitChemstreamAmount.ScaleSolution(ChemMultiplier);
+                    solution.AddSolution(vomitChemstreamAmount, ProtoMan);
+                    vomitAmount -= (float)vomitChemstreamAmount.Volume;
+                }
+            }
+
+            // Makes a vomit solution the size of 90% of the chemicals removed from the chemstream
+            solution.AddReagent(new ReagentId(VomitPrototype, _bloodstream.GetEntityBloodData((uid, bloodStream))), vomitAmount);
+>>>>>>> theirs
         }
         // DS14-end
 

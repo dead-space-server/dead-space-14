@@ -1,7 +1,9 @@
 using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Stylesheets;
+using Content.Client.Stylesheets.Palette;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.Atmos.Monitor;
 using Content.Shared.FixedPoint;
 using Content.Shared.Temperature;
@@ -23,6 +25,7 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
 
     private readonly IEntityManager _entManager;
     private readonly IResourceCache _cache;
+    private readonly SharedAtmosphereSystem _atmosphere;
 
     private Dictionary<AtmosAlarmType, string> _alarmStrings = new Dictionary<AtmosAlarmType, string>()
     {
@@ -38,6 +41,7 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
 
         _entManager = IoCManager.Resolve<IEntityManager>();
         _cache = IoCManager.Resolve<IResourceCache>();
+        _atmosphere = _entManager.System<SharedAtmosphereSystem>();
 
         NetEntity = uid;
         Coordinates = coordinates;
@@ -143,7 +147,13 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
                     {
                         Text = Loc.GetString("atmos-alerts-window-other-gases-value-nil"),
                         FontOverride = normalFont,
+<<<<<<< ours
                         FontColorOverride = DeadSpaceStylePalette.TextMuted, // DS14
+||||||| base
+                        FontColorOverride = StyleNano.DisabledFore,
+=======
+                        FontColorOverride = Palettes.Neutral.Base,
+>>>>>>> theirs
                         HorizontalAlignment = HAlignment.Center,
                         VerticalAlignment = VAlignment.Center,
                         HorizontalExpand = true,
@@ -160,7 +170,7 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
                     foreach ((var gas, (var mol, var percent, var alert)) in keyValuePairs)
                     {
                         FixedPoint2 gasPercent = percent * 100f;
-                        var gasAbbreviation = Atmospherics.GasAbbreviations.GetValueOrDefault(gas, Loc.GetString("gas-unknown-abbreviation"));
+                        var gasAbbreviation = Loc.GetString(_atmosphere.GetGas(gas).Abbreviation);
 
                         var gasLabel = new Label()
                         {
@@ -183,13 +193,13 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
 
     public void SetAsFocus()
     {
-        FocusButton.AddStyleClass(StyleNano.StyleClassButtonColorGreen);
+        FocusButton.AddStyleClass(StyleClass.Positive);
         ArrowTexture.TexturePath = "/Textures/Interface/Nano/inverted_triangle.svg.png";
     }
 
     public void RemoveAsFocus()
     {
-        FocusButton.RemoveStyleClass(StyleNano.StyleClassButtonColorGreen);
+        FocusButton.RemoveStyleClass(StyleClass.Positive);
         ArrowTexture.TexturePath = "/Textures/Interface/Nano/triangle_right.png";
         FocusContainer.Visible = false;
     }
@@ -199,13 +209,19 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
         switch (alarmType)
         {
             case AtmosAlarmType.Normal:
-                return StyleNano.GoodGreenFore;
+                return Palettes.Status.Good;
             case AtmosAlarmType.Warning:
-                return StyleNano.ConcerningOrangeFore;
+                return Palettes.Status.Warning;
             case AtmosAlarmType.Danger:
-                return StyleNano.DangerousRedFore;
+                return Palettes.Status.Critical;
         }
 
+<<<<<<< ours
         return DeadSpaceStylePalette.TextMuted; // DS14
+||||||| base
+        return StyleNano.DisabledFore;
+=======
+        return Palettes.Neutral.Base;
+>>>>>>> theirs
     }
 }

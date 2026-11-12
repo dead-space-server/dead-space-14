@@ -3,7 +3,6 @@ using Content.Shared.Inventory;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Clothing.Components;
 
@@ -24,7 +23,7 @@ public sealed partial class ToggleableClothingComponent : Component
     ///     Action used to toggle the clothing on or off.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public EntProtoId Action = "ActionToggleSuitPiece";
+    public EntProtoId? Action;
 
     [DataField, AutoNetworkedField]
     public EntityUid? ActionEntity;
@@ -33,7 +32,7 @@ public sealed partial class ToggleableClothingComponent : Component
     ///     Default clothing entity prototype to spawn into the clothing container.
     /// </summary>
     [DataField(required: true), AutoNetworkedField]
-    public EntProtoId ClothingPrototype = default!;
+    public EntProtoId ClothingPrototype;
 
     /// <summary>
     ///     The inventory slot that the clothing is equipped to.
@@ -92,7 +91,7 @@ public sealed partial class ToggleableClothingComponent : Component
     ///     Text shown in the toggle-clothing verb. Defaults to using the name of the <see cref="ActionEntity"/> action.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public string? VerbText;
+    public LocId VerbText = "toggle-clothing-verb-default";
 }
 
 // DS14

@@ -8,8 +8,8 @@ namespace Content.Shared.Tools.Systems;
 
 public sealed partial class SimpleToolUsageSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly SharedToolSystem _tools = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private SharedToolSystem _tools = default!;
 
     public override void Initialize()
     {
@@ -66,8 +66,13 @@ public sealed partial class SimpleToolUsageSystem : EntitySystem
         if (attemptEv.Cancelled)
             return;
 
+<<<<<<< ours
         // DS14: reuse the shared helper because this branch has no implicit ProtoMan property.
         var qualityName = _tools.GetQualitiesText([ent.Comp.Quality], true);
+||||||| base
+=======
+        var quality = Loc.GetString(ProtoMan.Index(ent.Comp.Quality).Name).ToLower();
+>>>>>>> theirs
         var doAfterArgs = new DoAfterArgs(EntityManager, user, ent.Comp.DoAfter, new SimpleToolDoAfterEvent(), ent, ent, tool)
         {
             BreakOnDamage = true,
@@ -75,7 +80,12 @@ public sealed partial class SimpleToolUsageSystem : EntitySystem
             BreakOnMove = true,
             BreakOnHandChange = true,
             NeedHand = true,
+<<<<<<< ours
             ExamineText = Loc.GetString("tool-component-doafter-examine", ("user", user), ("quality", qualityName), ("target", ent)),
+||||||| base
+=======
+            ExamineText = Loc.GetString("tool-component-target-doafter-examine", ("user", user), ("quality", quality), ("target", ent)),
+>>>>>>> theirs
         };
 
         _doAfterSystem.TryStartDoAfter(doAfterArgs);

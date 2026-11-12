@@ -1,5 +1,8 @@
-﻿guidebook-reagent-effect-description =
-    { $chance ->
+guidebook-reagent-effect-description =
+    {$quantity ->
+        [0] {""}
+        *[other] If there is at least {$quantity}u {$reagent},{" "}
+    }{$chance ->
         [1] { $effect }
        *[other] Имеет { NATURALPERCENT($chance, 2) } шанс { $effect }
     }{$quantity ->

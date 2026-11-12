@@ -127,28 +127,6 @@
       amount: 5
 
 - type: entity
-  parent: CrateGenericSteel
-  id: CrateEngineeringJetpack
-  name: jetpack crate
-  description: Two jetpacks for those who don't know how to use fire extinguishers.
-  components:
-  - type: StorageFill
-    contents:
-      - id: JetpackBlue
-        amount: 2
-
-- type: entity
-  parent: CrateGenericSteel
-  id: CrateEngineeringMiniJetpack
-  name: mini jetpack crate
-  description: Two mini jetpacks for those who want an extra challenge.
-  components:
-  - type: StorageFill
-    contents:
-      - id: JetpackMini
-        amount: 2
-
-- type: entity
   parent: CrateEngineering
   id: CrateAirlockKit
   name: airlock kit
@@ -160,19 +138,6 @@
       - id: CableApcStack
       - id: DoorElectronics
         amount: 6
-
-- type: entity
-  parent: CrateCommandSecure
-  id: CrateEvaKit
-  name: EVA kit
-  description: A set consisting of two prestigious EVA suits and helmets.
-  components:
-  - type: StorageFill
-    contents:
-      - id: ClothingHeadHelmetEVA
-        amount: 2
-      - id: ClothingOuterHardsuitEVA
-        amount: 2
 
 - type: entity
   parent: CrateEngineering

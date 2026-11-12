@@ -1,6 +1,7 @@
 using Content.Shared.Botany.Components;
 using Content.Shared.Botany.Systems;
 using Content.Shared.Botany.Traits.Components;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.EntityEffects.Effects.Botany.PlantAttributes;
@@ -11,17 +12,14 @@ namespace Content.Shared.EntityEffects.Effects.Botany.PlantAttributes;
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
 public sealed partial class PlantChangeTraitsEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantChangeTraits>
 {
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    // DS14-end
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantChangeTraits> args)
     {
         if (_plantHolder.IsDead(entity.Owner))
             return;
 
-        var traitType = _componentFactory.GetComponent(args.Effect.Trait);
+        var traitType = Factory.GetComponent(args.Effect.Trait);
         if (traitType is not PlantTraitsComponent)
         {
             Log.Error(
@@ -29,14 +27,23 @@ public sealed partial class PlantChangeTraitsEntityEffectSystem : EntityEffectSy
             return;
         }
 
-        // DS14-start - random mutations can toggle traits without changing the default idempotent add behavior.
-        if (args.Effect.Remove)
-            RemCompDeferred(entity.Owner, traitType.GetType());
-        else if (args.Effect.Toggle && HasComp(entity.Owner, traitType.GetType()))
-            RemCompDeferred(entity.Owner, traitType.GetType());
-        else if (!HasComp(entity.Owner, traitType.GetType()))
-            AddComp(entity.Owner, traitType);
-        // DS14-end
+        switch (args.Effect.Type)
+        {
+            case PlantChangeTraits.TraitModifyType.Add:
+                AddComp(entity.Owner, traitType);
+                break;
+            case PlantChangeTraits.TraitModifyType.Remove:
+                RemCompDeferred(entity.Owner, traitType.GetType());
+                break;
+            case PlantChangeTraits.TraitModifyType.Toggle:
+                if (HasComp(entity.Owner, traitType.GetType()))
+                    RemCompDeferred(entity.Owner, traitType.GetType());
+                else
+                    AddComp(entity.Owner, traitType);
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -50,17 +57,37 @@ public sealed partial class PlantChangeTraits : EntityEffectBase<PlantChangeTrai
     public string Trait;
 
     /// <summary>
-    /// If true, the trait is always removed and takes priority over <see cref="Toggle"/>.
-    /// Otherwise the trait is added, or toggled when <see cref="Toggle"/> is true.
+    /// Defines how the trait should be modified.
     /// </summary>
     [DataField]
-    public bool Remove;
+    public TraitModifyType Type = TraitModifyType.Toggle;
 
-    // DS14-start
-    /// <summary>
-    /// If true, an existing trait is removed and a missing trait is added.
-    /// </summary>
-    [DataField]
-    public bool Toggle;
-    // DS14-end
+    public enum TraitModifyType
+    {
+        /// <summary>
+        /// Adds the trait if it is not already present.
+        /// </summary>
+        Add,
+
+        /// <summary>
+        /// Removes the trait if it is present.
+        /// </summary>
+        Remove,
+
+        /// <summary>
+        /// Adds the trait if it is not present, or removes it if it is already present.
+        /// </summary>
+        Toggle
+    }
+
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+    {
+        var component = IoCManager.Resolve<IComponentFactory>().GetComponent(Trait);
+        if (component is not PlantTraitsComponent plantTrait || plantTrait.TraitName is not { } traitName)
+        {
+            return null;
+        }
+
+        return Loc.GetString("entity-effect-guidebook-plant-change-trait", [("change", Type.ToString()), ("chance", Probability), ("trait", Loc.GetString(traitName))]);
+    }
 }

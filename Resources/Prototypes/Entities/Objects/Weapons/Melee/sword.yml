@@ -129,7 +129,8 @@
   - type: PirateAccent
     # not putting a BlockMovement component here cause that's funny.
   - type: StealTarget
-    stealGroup: CaptainSword
+    stealGroup:
+    - CaptainSword
 
 - type: entity
   name: katana
@@ -164,12 +165,10 @@
 
 - type: entity
   name: energy katana
-  parent: Katana
+  parent: [ BaseHighlyIllegalContraband, Katana ]
   id: EnergyKatana
   description: A katana infused with strong energy.
   components:
-  - type: Contraband
-    severity: HighlyIllegal
   - type: Sprite
     sprite: Objects/Weapons/Melee/energykatana.rsi
 #DS14-start
@@ -296,7 +295,7 @@
       attackRate: 10
       damage:
         types:
-          Structural: 150
+          Structural: 60
           Slash: 20 #Horror
           Blunt: 20
           Heat: 20
@@ -310,6 +309,10 @@
     - type: Item
       size: Ginormous
       sprite: Objects/Weapons/Melee/Throngler-in-hand.rsi
+      shape:
+      - 0,0,3,3
+      - 1,4,2,6
+      storedRotation: -45
     - type: DisarmMalus
     - type: Grammar
       attributes:

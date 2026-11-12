@@ -11,8 +11,7 @@ namespace Content.Shared.Inventory;
 
 public partial class InventorySystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IViewVariablesManager _vvm = default!;
+    [Dependency] private IViewVariablesManager _vvm = default!;
 
     private void InitializeSlots()
     {
@@ -86,7 +85,7 @@ public partial class InventorySystem : EntitySystem
 
     protected virtual void UpdateInventoryTemplate(Entity<InventoryComponent> ent)
     {
-        if (!_prototypeManager.Resolve(ent.Comp.TemplateId, out var invTemplate))
+        if (!ProtoMan.Resolve(ent.Comp.TemplateId, out var invTemplate))
             return;
 
         // Remove any containers that aren't in the new template.
@@ -263,6 +262,10 @@ public partial class InventorySystem : EntitySystem
             _containers = containers;
         }
 
+        /// <summary>
+        /// Get the next ContainerSlot in this inventory.
+        /// The slot may not contain an item.
+        /// </summary>
         public bool MoveNext([NotNullWhen(true)] out ContainerSlot? container)
         {
             while (_nextIdx < _slots.Length)
@@ -281,6 +284,7 @@ public partial class InventorySystem : EntitySystem
             return false;
         }
 
+<<<<<<< ours
         /// <summary>
         /// Advances to the next slot and returns both its container and definition.
         /// </summary>
@@ -303,6 +307,33 @@ public partial class InventorySystem : EntitySystem
             return false;
         }
 
+||||||| base
+=======
+        /// <summary>
+        /// Get the next ContainerSlot in this inventory, along with the corresponding SlotDefinition.
+        /// The slot may not contain an item.
+        /// </summary>
+        public bool MoveNext([NotNullWhen(true)] out ContainerSlot? container, [NotNullWhen(true)] out SlotDefinition? slot)
+        {
+            while (_nextIdx < _slots.Length)
+            {
+                var i = _nextIdx++;
+                var slotCandidate = _slots[i];
+
+                if ((slotCandidate.SlotFlags & _flags) == 0)
+                    continue;
+
+                container = _containers[i];
+                slot = slotCandidate;
+                return true;
+            }
+
+            container = null;
+            slot = null;
+            return false;
+        }
+
+>>>>>>> theirs
         public bool NextItem(out EntityUid item)
         {
             while (_nextIdx < _slots.Length)

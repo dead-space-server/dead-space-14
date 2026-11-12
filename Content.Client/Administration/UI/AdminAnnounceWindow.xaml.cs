@@ -20,7 +20,7 @@ namespace Content.Client.Administration.UI
     [GenerateTypedNameReferences]
     public sealed partial class AdminAnnounceWindow : DefaultWindow
     {
-        [Dependency] private readonly ILocalizationManager _localization = default!;
+        [Dependency] private ILocalizationManager _localization = default!;
 
         // DS14-start
         private AnnouncementTemplatesWindow? _templatesWindow;

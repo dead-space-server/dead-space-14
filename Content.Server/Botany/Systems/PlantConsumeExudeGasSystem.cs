@@ -11,26 +11,17 @@ namespace Content.Server.Botany.Systems;
 
 public sealed partial class PlantConsumeExudeGasSystem : SharedPlantConsumeExudeGasSystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<PlantConsumeExudeGasComponent, PlantGrowEvent>(OnPlantGrow);
-        SubscribeLocalEvent<PlantConsumeExudeGasComponent, ComponentShutdown>(OnGasLogShutdown);
-    }
-    // DS14-end
-
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    // DS14-start
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly Dictionary<EntityUid, TimeSpan> _nextGasLog = new();
     private static readonly TimeSpan GasLogCooldown = TimeSpan.FromSeconds(60);
     // DS14-end
 
+    [SubscribeLocalEvent]
     private void OnPlantGrow(Entity<PlantConsumeExudeGasComponent> ent, ref PlantGrowEvent args)
     {
         if (!TryComp<PlantComponent>(ent.Owner, out var plant)
@@ -94,6 +85,7 @@ public sealed partial class PlantConsumeExudeGasSystem : SharedPlantConsumeExude
     }
 
     // DS14-start
+    [SubscribeLocalEvent]
     private void OnGasLogShutdown(Entity<PlantConsumeExudeGasComponent> ent, ref ComponentShutdown args)
     {
         _nextGasLog.Remove(ent.Owner);

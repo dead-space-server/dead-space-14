@@ -2,6 +2,7 @@ using Content.Server.Ghost.Roles.Components;
 using Content.Server.Popups;
 using Content.Shared.CombatMode;
 using Content.Shared.Hands;
+<<<<<<< ours
 using Content.Shared.Interaction.Events;
 using Content.Shared.Puppet;
 using Content.Shared.StatusEffectNew;
@@ -23,17 +24,50 @@ public sealed partial class VentriloquistPuppetSystem : SharedVentriloquistPuppe
     public override void Initialize()
     {
         base.Initialize();
+||||||| base
+using Content.Shared.Speech.Muting;
 
+namespace Content.Server.Puppet
+{
+    public sealed class VentriloquistPuppetSystem : SharedVentriloquistPuppetSystem
+    {
+        [Dependency] private readonly PopupSystem _popupSystem = default!;
+=======
+using Content.Shared.Interaction.Events;
+using Content.Shared.Puppet;
+using Content.Shared.StatusEffectNew;
+using Robust.Shared.Prototypes;
+>>>>>>> theirs
+
+<<<<<<< ours
         SubscribeLocalEvent<VentriloquistPuppetComponent, DroppedEvent>(OnDropped);
         SubscribeLocalEvent<VentriloquistPuppetComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<VentriloquistPuppetComponent, GotUnequippedHandEvent>(OnUnequippedHand);
     }
     // DS14-end
+||||||| base
+        public override void Initialize()
+        {
+            base.Initialize();
+=======
+namespace Content.Server.Puppet;
+>>>>>>> theirs
+
+/// <summary>
+/// A system for interactions with ventriloquist dummies, puppets that another player can talk through when equipped in a character's hand.
+/// </summary>
+public sealed partial class VentriloquistPuppetSystem : SharedVentriloquistPuppetSystem
+{
+    public static readonly EntProtoId MutedEffect = "StatusEffectVentriloquistPuppetMuted";
+
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     /// <summary>
     /// When used user inserts hand into dummy and the dummy can speak, when used again the user removes hand
     /// from dummy and the dummy cannot speak.
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnUseInHand(Entity<VentriloquistPuppetComponent> ent, ref UseInHandEvent args)
     {
         if (args.Handled)
@@ -69,6 +103,7 @@ public sealed partial class VentriloquistPuppetSystem : SharedVentriloquistPuppe
     /// <summary>
     /// When dropped the dummy is muted again.
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnDropped(Entity<VentriloquistPuppetComponent> ent, ref DroppedEvent args)
     {
         if (_statusEffects.HasStatusEffect(ent, MutedEffect))
@@ -76,6 +111,30 @@ public sealed partial class VentriloquistPuppetSystem : SharedVentriloquistPuppe
 
         _popupSystem.PopupEntity(Loc.GetString("ventriloquist-puppet-remove-hand"), ent, args.User);
         MuteDummy(ent);
+    }
+
+    /// <summary>
+    /// When unequipped from a hand slot the dummy is muted again.
+    /// </summary>
+    [SubscribeLocalEvent]
+    private void OnUnequippedHand(Entity<VentriloquistPuppetComponent> ent, ref GotUnequippedHandEvent args)
+    {
+        if (_statusEffects.HasStatusEffect(ent, MutedEffect))
+            return;
+
+        _popupSystem.PopupEntity(Loc.GetString("ventriloquist-puppet-remove-hand"), ent, args.User);
+        MuteDummy(ent);
+    }
+
+    /// <summary>
+    /// Mutes the dummy.
+    /// </summary>
+    private void MuteDummy(Entity<VentriloquistPuppetComponent> ent)
+    {
+        _popupSystem.PopupEntity(Loc.GetString("ventriloquist-puppet-removed-hand"), ent, ent);
+        _statusEffects.TrySetStatusEffectDuration(ent, MutedEffect);
+        RemComp<CombatModeComponent>(ent);
+        RemComp<GhostTakeoverAvailableComponent>(ent);
     }
 
     /// <summary>

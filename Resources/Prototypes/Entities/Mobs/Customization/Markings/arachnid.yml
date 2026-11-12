@@ -7,6 +7,10 @@
   sprites:
   - sprite: Mobs/Customization/Arachnid/chelicerae.rsi
     state: downwards
+  coloring:
+    default:
+      type:
+        !type:SkinColoring
 
 - type: marking
   id: ArachnidCheliceraeInwards
@@ -16,6 +20,10 @@
   sprites:
   - sprite: Mobs/Customization/Arachnid/chelicerae.rsi
     state: inwards
+  coloring:
+    default:
+      type:
+        !type:SkinColoring
 
 # Appendages
 - type: marking

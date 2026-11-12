@@ -4,10 +4,15 @@
   name: Revert
   description: Revert back into your original form.
   components:
-  - type: ConfirmableAction
-    popup: revert-polymorph-action-popup
   - type: InstantAction
     event: !type:RevertPolymorphActionEvent
+
+- type: entity
+  parent: ActionRevertPolymorph
+  id: ActionRevertPolymorphConfirm
+  components:
+  - type: ConfirmableAction
+    popup: revert-polymorph-action-popup
 
 - type: entity
   abstract: true
@@ -28,9 +33,10 @@
   components:
   - type: Magic # DS14
   - type: Action
-    icon:
-      sprite: Mobs/Animals/spider.rsi
-      state: tarantula
+  - type: Sprite
+    sprite: Mobs/Animals/Spiders/tarantulaspider.rsi
+    layers:
+    - state: idle
   - type: InstantAction
     event: !type:PolymorphActionEvent
       protoId: WizardSpider

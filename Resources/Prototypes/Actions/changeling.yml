@@ -1,22 +1,59 @@
 - type: entity
   parent: BaseAction
-  id: ActionRetractableItemArmBlade
-  name: Arm Blade
-  description: Shed your flesh and reform it into a fleshy blade.
+  id: ActionRetractableItemArmblade
+  name: Armblade
+  description: Shed your flesh and reform it into a fleshy blade. Can be toggled.
   components:
   - type: Action
     icon: { sprite: Interface/Actions/changeling.rsi, state: armblade }
     useDelay: 2
     raiseOnAction: true
     itemIconStyle: BigAction
+  - type: Sprite
+    sprite: Interface/Actions/changeling.rsi
+    layers:
+    - state: armblade
   - type: InstantAction
     event: !type:OnRetractableItemActionEvent
   - type: RetractableItemAction
-    spawnedPrototype: ArmBlade
+    spawnedPrototype: Armblade
     summonSounds:
       collection: gib # Placeholder
     retractSounds:
       collection: gib # Placeholder
+  - type: ChangelingHorrorDisable
+    toggleOff: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionChangelingBiodegrade
+  name: Biodegrade
+  description: "Vomit acid over your restraints, setting yourself free. \n\nRequires 20 Chemicals."
+  components:
+  - type: Action
+    useDelay: 10
+    raiseOnAction: true
+    checkCanInteract: false
+  - type: Sprite
+    sprite: Interface/Actions/changeling2.rsi
+    layers:
+    - state: biodegrade
+  - type: ActionRequirements
+    failPopup: changeling-not-enough-chemicals
+    failPopupType: SmallCaution
+    conditions:
+      Performer:
+      - !type:SatiationCondition
+        satiationType: Chemicals
+        min: 20
+    effects:
+      Performer:
+      - !type:Satiate
+        satiationType: Chemicals
+        factor: -20
+  - type: InstantAction
+    event: !type:ChangelingBiodegradeActionEvent
+  - type: ChangelingBiodegradeAbility
 
 - type: entity
   parent: BaseAction
@@ -43,11 +80,20 @@
   description: Consume the essence of your victims and subsume their identity and mind into your own.
   components:
   - type: Action
-    icon: { sprite: Interface/Actions/changeling.rsi, state: devour }
-    iconOn: { sprite: Interface/Actions/changeling.rsi, state: devour_on }
     itemIconStyle: BigAction
     priority: 1
-  - type: ActionRequireMouthUncovered
+  - type: Sprite
+    sprite: Interface/Actions/changeling.rsi
+    layers:
+    - state: "devour"
+      map: ["enum.ActionVisuals.Icon"]
+    - state: "devour_on"
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+  - type: ActionRequirements
+    conditions:
+      Performer:
+      - !type:MouthUncoveredCondition
   - type: TargetAction
   - type: EntityTargetAction
     event: !type:ChangelingDevourActionEvent
@@ -58,7 +104,10 @@
   description: Transform and assume the identities of those you have devoured.
   components:
   - type: Action
-    icon: { sprite: Interface/Actions/changeling.rsi, state: transform }
+  - type: Sprite
+    sprite: Interface/Actions/changeling.rsi
+    layers:
+    - state: "transform"
   - type: InstantAction
     event: !type:ChangelingTransformActionEvent
 

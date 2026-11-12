@@ -1,4 +1,5 @@
-﻿- type: entity
+- type: entity
+  parent: StructureHealthMachineWeak
   id: UnfinishedMachineFrame
   name: machine frame
   description: A machine under construction. Needs more parts.
@@ -68,6 +69,7 @@
     - type: GravityAffected #DS14
 
 - type: entity
+  parent: StructureHealthMachineWeak
   id: MachineFrame
   name: machine frame
   suffix: Ready
@@ -146,8 +148,8 @@
     - type: GravityAffected #DS14
 
 - type: entity
+  parent: [ BaseStructureDynamic, StructureHealthMachineFlimsy ]
   id: MachineFrameDestroyed
-  parent: BaseStructureDynamic
   name: destroyed machine frame
   placement:
     mode: SnapgridCenter

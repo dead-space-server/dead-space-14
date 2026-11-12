@@ -16,13 +16,11 @@ namespace Content.Client.Communications.UI.Widgets;
 [GenerateTypedNameReferences]
 public sealed partial class MessagingControls : TabContainer
 {
-    // DS14-start - the current engine still uses the pre-source-generator IoC pattern.
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    // DS14-end
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
-    private SharedAppearanceSystem _appearance = default!;
+    private SharedAppearanceSystem _appearance = default!; // DS14: render fixture ctor leaves it unset
     private readonly string[] _lineEndings = new[] { "\r\n", "\n" };
     private const int MaxScreenCharacters = 32;
 
@@ -81,6 +79,7 @@ public sealed partial class MessagingControls : TabContainer
         UpdateScreenText();
     }
 
+    // DS14-start
 #if DEBUG
     /// <summary>
     /// Loads the real control tree for the deterministic UI renderer without requiring an active game session.
@@ -95,6 +94,7 @@ public sealed partial class MessagingControls : TabContainer
         BroadcastButton.Disabled = false;
     }
 #endif
+    // DS14-end
 
     public void SetBroadcastDisplayEntity(EntProtoId broadcastEntityId)
     {

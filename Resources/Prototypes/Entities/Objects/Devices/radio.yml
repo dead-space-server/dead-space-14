@@ -13,6 +13,8 @@
   description: A handy handheld radio.
   parent: BaseItem
   id: RadioHandheld
+  name: handheld radio
+  description: A handy handheld radio.
   components:
   - type: TelecomExempt
   - type: RadioMicrophone
@@ -26,8 +28,25 @@
     sprite: Objects/Devices/communication.rsi
     layers:
     - state: walkietalkie
-    - state: walkietalkie-on
-    state: walkietalkie
+    - map: [enum.RadioDeviceVisualLayers.Broadcasting]
+      state: walkietalkie-on
+      shader: unshaded
+      visible: false
+    - map: [enum.RadioDeviceVisualLayers.Speaker]
+      state: walkietalkie-active
+      shader: unshaded
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RadioDeviceVisuals.Broadcasting:
+        enum.RadioDeviceVisualLayers.Broadcasting:
+          True: { visible: true }
+          False: { visible: false }
+      enum.RadioDeviceVisuals.Speaker:
+        enum.RadioDeviceVisualLayers.Speaker:
+          True: { visible: true }
+          False: { visible: false }
   - type: Item
     sprite: Objects/Devices/communication.rsi
     heldPrefix: walkietalkie
@@ -59,10 +78,10 @@
   # DS14-end
 
 - type: entity
-  name: security radio
-  description: A handy security radio.
   parent: [ RadioHandheld, BaseSecurityContraband ]
   id: RadioHandheldSecurity
+  name: security radio
+  description: A handy security radio.
   components:
   - type: RadioMicrophone
     broadcastChannel: Security

@@ -13,22 +13,12 @@ namespace Content.Shared.Forensics.Systems;
 /// </summary>
 public sealed partial class ForensicPadSystem : EntitySystem
 {
-    // DS14-start: current engine uses readonly IoC fields and explicit event subscriptions.
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
-    [Dependency] private readonly LabelSystem _label = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private ForensicsSystem _forensics = default!;
+    [Dependency] private LabelSystem _label = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<ForensicPadComponent, ExaminedEvent>(OnExamined);
-        SubscribeLocalEvent<ForensicPadComponent, AfterInteractEvent>(OnAfterInteract);
-        SubscribeLocalEvent<ForensicPadComponent, ForensicPadDoAfterEvent>(OnDoAfter);
-    }
-    // DS14-end
-
+    [SubscribeLocalEvent]
     private void OnExamined(Entity<ForensicPadComponent> pad, ref ExaminedEvent args)
     {
         if (!args.IsInDetailsRange)
@@ -43,6 +33,7 @@ public sealed partial class ForensicPadSystem : EntitySystem
         args.PushMarkup(Loc.GetString("forensic-pad-sample", ("sample", pad.Comp.Sample)));
     }
 
+    [SubscribeLocalEvent]
     private void OnAfterInteract(Entity<ForensicPadComponent> pad, ref AfterInteractEvent args)
     {
         if (!args.CanReach || args.Target == null || HasComp<ForensicScannerComponent>(args.Target))
@@ -106,6 +97,7 @@ public sealed partial class ForensicPadSystem : EntitySystem
         _doAfterSystem.TryStartDoAfter(doAfterEventArgs);
     }
 
+    [SubscribeLocalEvent]
     private void OnDoAfter(Entity<ForensicPadComponent> pad, ref ForensicPadDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled)

@@ -13,9 +13,9 @@ namespace Content.Client.Movement.Systems;
 
 public sealed partial class EyeCursorOffsetSystem : EntitySystem
 {
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly HandsSystem _handsSystem = default!; // DS14 - pre-v288 IoC
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private HandsSystem _handsSystem = default!;
 
     // This value is here to make sure the user doesn't have to move their mouse
     // all the way out to the edge of the screen to get the full offset.
@@ -36,6 +36,19 @@ public sealed partial class EyeCursorOffsetSystem : EntitySystem
         if (entity.Comp.UseActiveHand && _handsSystem.GetActiveItem((holder, null)) != entity.Owner)
             return;
         // DS14-End
+
+        var offset = OffsetAfterMouse(entity.Owner, null);
+        if (offset == null)
+            return;
+
+        args.Args.Offset += offset.Value;
+    }
+
+    [SubscribeLocalEvent]
+    private void OnHeldRelayedOffset(Entity<CursorOffsetInHandComponent> entity, ref HeldRelayedEvent<GetEyeOffsetRelayedEvent> args)
+    {
+        if (entity.Comp.UseActiveHand && (!_handsSystem.IsHeld(entity.Owner, out var holder) || _handsSystem.GetActiveItem(holder.Value) != entity))
+            return;
 
         var offset = OffsetAfterMouse(entity.Owner, null);
         if (offset == null)

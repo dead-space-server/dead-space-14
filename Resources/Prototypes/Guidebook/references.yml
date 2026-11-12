@@ -7,7 +7,6 @@
   - Chemicals
   - Drinks
   - FoodRecipes
-  - Writing
   - Lawsets
 
 - type: guideEntry
@@ -155,11 +154,6 @@
   name: guide-entry-secret-recipes
   text: "/ServerInfo/Guidebook/Service/SecretRecipes.xml"
   filterEnabled: True
-
-- type: guideEntry
-  id: Writing
-  name: guide-entry-writing
-  text: "/ServerInfo/Guidebook/Writing.xml"
 
 - type: guideEntry
   id: Lawsets

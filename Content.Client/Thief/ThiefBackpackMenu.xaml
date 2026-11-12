@@ -4,9 +4,15 @@
 	<BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
 		<!-- First Informational panel -->
 		<Label Name="Description" Margin="5 5"/>
+<<<<<<< ours
 		<!-- DS14-start -->
 		<controls:HLine StyleClasses="LowDivider" Thickness="2" Margin="0 5"/>
 		<!-- DS14-end -->
+||||||| base
+		<controls:HLine Color="#404040" Thickness="2" Margin="0 5"/>
+=======
+		<controls:Separator ColorOverride="#404040" Margin="0 5"/>
+>>>>>>> theirs
 		<Label Name="SelectedSets" Text="{Loc 'thief-backpack-window-selected'}" Margin="5 5"/>
 
 		<!-- Second sets panel -->

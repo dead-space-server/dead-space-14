@@ -31,17 +31,19 @@ public sealed partial class PassiveDamageComponent : Component
 
     // DS14-start: preserve the local healing cap on the networked component.
     /// <summary>
-    /// The maximum HP the damage will be given to. If 0, disabled.
+    /// The next time the damage should occur at.
     /// </summary>
+<<<<<<< ours
     [DataField, AutoNetworkedField]
     public FixedPoint2 DamageCap = 0;
     // DS14-end
-
-    /// <summary>
-    /// The next time the damage should occur at.
-    /// </summary>
+||||||| base
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public FixedPoint2 DamageCap = 0;
+=======
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan NextDamage;
+>>>>>>> theirs
 
     /// <summary>
     /// How long to pause the passive health change after damage has been taken.

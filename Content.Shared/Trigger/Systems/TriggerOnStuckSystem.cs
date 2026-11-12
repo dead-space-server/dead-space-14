@@ -4,7 +4,7 @@ using Content.Shared.Trigger.Components.Triggers;
 
 namespace Content.Shared.Trigger.Systems;
 
-public sealed class TriggerOnStuckSystem : TriggerOnXSystem
+public sealed partial class TriggerOnStuckSystem : TriggerOnXSystem
 {
     public override void Initialize()
     {

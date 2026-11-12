@@ -1,5 +1,6 @@
 # Tail Markings
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpTailFennec
   bodyPart: Tail
   markingCategory: Tail
@@ -11,6 +12,7 @@
       state: fennec-tip
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpTailFluffy
   bodyPart: Tail
   markingCategory: Tail
@@ -22,6 +24,7 @@
       state: fluffy-tip
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpTailHusky
   bodyPart: Tail
   markingCategory: Tail
@@ -35,6 +38,7 @@
       state: husky-outer
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpTailLong
   bodyPart: Tail
   markingCategory: Tail
@@ -46,6 +50,7 @@
       state: long-tip
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpTailVulp
   bodyPart: Tail
   markingCategory: Tail
@@ -57,6 +62,7 @@
       state: vulp-tip
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpTailVulpFade
   bodyPart: Tail
   markingCategory: Tail
@@ -69,106 +75,8 @@
 
 # DS14-start
 - type: marking
-  id: VulpTailTip
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp-tip
-
-- type: marking
-  id: VulpTailWag
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp_wag
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp_wag-tip
-
-- type: marking
-  id: VulpTailWagTip
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp_wag
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp_wag-tip
-
-- type: marking
-  id: VulpTailAlt
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp_alt
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp_alt-fade
-
-- type: marking
-  id: VulpTailAltTip
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp_alt
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: vulp_alt-tip
-
-- type: marking
-  id: VulpTailFox
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: fox
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: fox-fade
-
-- type: marking
-  id: VulpTailFoxTip
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: fox
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: fox-tip
-
-- type: marking
-  id: VulpTailFoxWag
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: fox_wag
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: fox_wag-fade
-
-- type: marking
-  id: VulpTailFoxWagTip
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [ Vulpkanin ]
-  sprites:
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: fox_wag
-    - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
-      state: fox_wag-tip
-
-- type: marking
-  id: VulpTailBushy
+  parent: [ VulpBaseMarkingClamped ]
+  id: VulpTailCoyote
   bodyPart: Tail
   markingCategory: Tail
   speciesRestriction: [ Vulpkanin ]
@@ -186,7 +94,8 @@
       state: bushfluff_wag
 
 - type: marking
-  id: VulpTailCoyote
+  parent: [ VulpBaseMarkingClamped ]
+  id: VulpTailFennecAnimated
   bodyPart: Tail
   markingCategory: Tail
   speciesRestriction: [ Vulpkanin ]
@@ -195,7 +104,8 @@
       state: coyote
 
 - type: marking
-  id: VulpTailCoyoteWag
+  parent: [ VulpBaseMarkingClamped ]
+  id: VulpTailFluffyAnimated
   bodyPart: Tail
   markingCategory: Tail
   speciesRestriction: [ Vulpkanin ]
@@ -204,7 +114,8 @@
       state: coyote_wag
 
 - type: marking
-  id: VulpTailCorgiWag
+  parent: [ VulpBaseMarkingClamped ]
+  id: VulpTailHuskyAnimated
   bodyPart: Tail
   markingCategory: Tail
   speciesRestriction: [ Vulpkanin ]
@@ -213,7 +124,8 @@
       state: corgi_wag
 
 - type: marking
-  id: VulpTailFox2
+  parent: [ VulpBaseMarkingClamped ]
+  id: VulpTailLongAnimated
   bodyPart: Tail
   markingCategory: Tail
   speciesRestriction: [ Vulpkanin ]
@@ -222,7 +134,8 @@
       state: fox2
 
 - type: marking
-  id: VulpTailFox3
+  parent: [ VulpBaseMarkingClamped ]
+  id: VulpTailVulpAnimated
   bodyPart: Tail
   markingCategory: Tail
   speciesRestriction: [ Vulpkanin ]
@@ -233,7 +146,8 @@
       state: fox3-tip
 
 - type: marking
-  id: VulpTailOtie
+  parent: [ VulpBaseMarkingClamped ]
+  id: VulpTailVulpFadeAnimated
   bodyPart: Tail
   markingCategory: Tail
   speciesRestriction: [ Vulpkanin ]
@@ -242,7 +156,8 @@
       state: otie
 
 - type: marking
-  id: VulpTailDalmatianWag
+  parent: [ VulpBaseMarkingClamped ]
+  id: VulpTailCoyoteAnimated
   bodyPart: Tail
   markingCategory: Tail
   speciesRestriction: [ Vulpkanin ]

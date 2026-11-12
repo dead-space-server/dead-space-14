@@ -4,7 +4,6 @@ using Content.Server.GameTicking;
 using Content.Server.Ghost;
 using Content.Server.Roles.Jobs;
 using Content.Shared.CCVar;
-using Content.Shared.Ghost;
 using Content.Shared.Mind.Components;
 using Content.Shared.Voting;
 using Robust.Server.Player;
@@ -14,21 +13,22 @@ using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using System.Threading.Tasks;
 using Content.Server.Players.Whitelist;
+using Content.Shared.GameTicking;
 using Content.Shared.Players.PlayTimeTracking;
+using Content.Shared.Ghost.Components;
 
 namespace Content.Server.Voting;
 
-public sealed class VotingSystem : EntitySystem
+public sealed partial class VotingSystem : EntitySystem
 {
-
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly JobSystem _jobs = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly ISharedPlaytimeManager _playtimeManager = default!;
-    [Dependency] private readonly WhitelistManager _whitelistManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private JobSystem _jobs = default!;
+    [Dependency] private ServerGameTicker _gameTicker = default!;
+    [Dependency] private ISharedPlaytimeManager _playtimeManager = default!;
+    [Dependency] private WhitelistManager _whitelistManager = default!;
 
     public override void Initialize()
     {

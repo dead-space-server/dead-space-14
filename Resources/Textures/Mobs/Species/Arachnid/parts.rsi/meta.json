@@ -65,6 +65,46 @@
     {
       "name": "template",
       "directions": 4
+    },
+    {
+      "name": "head",
+      "directions": 4
+    },
+    {
+      "name": "torso",
+      "directions": 4
+    },
+    {
+      "name": "eyelid-left-1",
+      "directions": 4
+    },
+    {
+      "name": "eyelid-left-2",
+      "directions": 4
+    },
+    {
+      "name": "eyelid-left-3",
+      "directions": 4
+    },
+    {
+      "name": "eyelid-left-4",
+      "directions": 4
+    },
+    {
+      "name": "eyelid-right-1",
+      "directions": 4
+    },
+    {
+      "name": "eyelid-right-2",
+      "directions": 4
+    },
+    {
+      "name": "eyelid-right-3",
+      "directions": 4
+    },
+    {
+      "name": "eyelid-right-4",
+      "directions": 4
     }
   ]
 }

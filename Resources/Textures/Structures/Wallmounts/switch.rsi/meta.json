@@ -60,6 +60,26 @@
           1
         ]
       ]
+    },
+    {
+      "name": "base",
+      "directions": 4
+    },
+    {
+      "name": "button",
+      "directions": 4
+    },
+    {
+      "name": "button-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "on-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "off-unshaded",
+      "directions": 4
     }
   ]
 }

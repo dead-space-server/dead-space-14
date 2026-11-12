@@ -6,6 +6,7 @@ using Content.Shared.DeadSpace.Actions; //DS-14
 using Content.Shared.Mapping;
 using Content.Shared.Maps;
 using JetBrains.Annotations;
+using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameStates;
@@ -17,23 +18,23 @@ using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
-using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
 
 namespace Content.Client.Actions
 {
     [UsedImplicitly]
-    public sealed class ActionsSystem : SharedActionsSystem
+    public sealed partial class ActionsSystem : SharedActionsSystem
     {
         public delegate void OnActionReplaced(EntityUid actionId);
 
-        [Dependency] private readonly ActionAvailabilitySystem _availability = default!; //DS-14
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IPrototypeManager _proto = default!;
-        [Dependency] private readonly IResourceManager _resources = default!;
-        [Dependency] private readonly MetaDataSystem _metaData = default!;
-        [Dependency] private readonly ISerializationManager _serialization = default!;
+        [Dependency] private ActionAvailabilitySystem _availability = default!; //DS-14
+        [Dependency] private SharedAppearanceSystem _appearance = default!; //DS-14
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IResourceManager _resources = default!;
+        [Dependency] private MetaDataSystem _metaData = default!;
+        [Dependency] private ISerializationManager _serialization = default!;
+        [Dependency] private SpriteSystem _sprite = default!;
 
         public event Action<EntityUid>? OnActionAdded;
         public event Action<EntityUid>? OnActionRemoved;
@@ -70,8 +71,7 @@ namespace Content.Client.Actions
 
         public override void UpdateAction(Entity<ActionComponent> ent)
         {
-            // TODO: Decouple this.
-            ent.Comp.IconColor = _availability.IsAvailable(ent) ? ent.Comp.OriginalIconColor : ent.Comp.DisabledIconColor; //DS-14
+            UpdateAvailabilityColor(ent); //DS-14
             base.UpdateAction(ent);
             if (_playerManager.LocalEntity != ent.Comp.AttachedEntity)
                 return;
@@ -79,6 +79,30 @@ namespace Content.Client.Actions
             ActionsUpdated?.Invoke();
             OnActionAdded?.Invoke(ent.Owner);
         }
+
+        // DS14-start
+        /// <summary>
+        /// Greys out the action icon while <see cref="ActionAvailabilitySystem"/> says it is unavailable
+        /// (gates, charges, custom availability checks). Restores the runtime tint or white otherwise.
+        /// </summary>
+        private void UpdateAvailabilityColor(Entity<ActionComponent> ent)
+        {
+            if (!TryComp<SpriteComponent>(ent, out var sprite))
+                return;
+
+            Color color;
+            if (!_availability.IsAvailable(ent))
+                color = Color.DimGray;
+            else if (!_appearance.TryGetData<Color>(ent.Owner, ActionState.Color, out color))
+                color = Color.White;
+
+            if (_sprite.LayerExists((ent.Owner, sprite), ActionVisuals.Icon))
+                _sprite.LayerSetColor((ent.Owner, sprite), ActionVisuals.Icon, color);
+
+            if (_sprite.LayerExists((ent.Owner, sprite), ActionVisuals.IconToggled))
+                _sprite.LayerSetColor((ent.Owner, sprite), ActionVisuals.IconToggled, color);
+        }
+        // DS14-end
 
         private void OnHandleState(Entity<ActionsComponent> ent, ref ComponentHandleState args)
         {
@@ -156,6 +180,16 @@ namespace Content.Client.Actions
             ActionsUpdated?.Invoke();
         }
 
+        /// <summary>
+        /// True if this action has a distinct sprite layer to show while toggled,
+        /// rather than just highlighting whatever slot displays it.
+        /// </summary>
+        public bool HasToggleIcon(EntityUid? actionId)
+        {
+            return TryComp<SpriteComponent>(actionId, out var sprite)
+                && _sprite.LayerExists((actionId.Value, sprite), ActionVisuals.IconToggled);
+        }
+
         public IEnumerable<Entity<ActionComponent>> GetClientActions()
         {
             if (_playerManager.LocalEntity is not { } user)
@@ -169,7 +203,7 @@ namespace Content.Client.Actions
             LinkAllActions(component);
         }
 
-        private void OnPlayerDetached(EntityUid uid, ActionsComponent component, LocalPlayerDetachedEvent? args = null)
+        private void OnPlayerDetached(EntityUid uid, ActionsComponent component, LocalPlayerDetachedEvent args)
         {
             UnlinkAllActions();
         }
@@ -258,12 +292,12 @@ namespace Content.Client.Actions
                 else if (map.TryGet<ValueDataNode>("entity", out var entityNode))
                 {
                     var id = new EntProtoId(entityNode.Value);
-                    var proto = _proto.Index(id);
+                    var proto = ProtoMan.Index(id);
                     actionId = Spawn(MappingEntityAction);
                     SetIcon(actionId, new SpriteSpecifier.EntityPrototype(id));
                     SetEvent(actionId, new StartPlacementActionEvent()
                     {
-                        PlacementOption = "SnapgridCenter",
+                        PlacementOption = proto.PlacementMode,
                         EntityType = id
                     });
                     _metaData.SetEntityName(actionId, proto.Name);
@@ -271,7 +305,7 @@ namespace Content.Client.Actions
                 else if (map.TryGet<ValueDataNode>("tileId", out var tileNode))
                 {
                     var id = new ProtoId<ContentTileDefinition>(tileNode.Value);
-                    var proto = _proto.Index(id);
+                    var proto = ProtoMan.Index(id);
                     actionId = Spawn(MappingEntityAction);
                     if (proto.Sprite is {} sprite)
                         SetIcon(actionId, new SpriteSpecifier.Texture(sprite));

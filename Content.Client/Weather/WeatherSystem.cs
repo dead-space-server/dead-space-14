@@ -1,7 +1,8 @@
 using System.Numerics;
-using Content.Client.Gameplay;
 using Content.Shared.CCVar;
+using Content.Client.Gameplay;
 using Content.Shared.Light.Components;
+using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Weather;
@@ -9,19 +10,19 @@ using Robust.Shared.Audio;
 using Robust.Client.Audio;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
+using Robust.Shared.Audio.Components;
 using Robust.Client.State;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
-using AudioComponent = Robust.Shared.Audio.Components.AudioComponent;
 
 namespace Content.Client.Weather;
 
-public sealed class WeatherSystem : SharedWeatherSystem
+public sealed partial class WeatherSystem : SharedWeatherSystem
 {
+<<<<<<< ours
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!; // DS14
@@ -31,10 +32,29 @@ public sealed class WeatherSystem : SharedWeatherSystem
 
     private float _ambienceVolume; // DS14
     private readonly HashSet<EntityUid> _activeWeatherStreams = new(); // DS14
+||||||| base
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly MapSystem _mapSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+=======
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+
+    [Dependency] private EntityQuery<AudioComponent> _audioQuery = default!;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<RoofComponent> _roofQuery = default!;
+
+    private float _weatherGain;
+>>>>>>> theirs
 
     public override void Initialize()
     {
         base.Initialize();
+<<<<<<< ours
         Subs.CVar(_cfg, CCVars.AmbienceVolume, SetAmbienceVolume, true); // DS14
         SubscribeLocalEvent<WeatherComponent, ComponentHandleState>(OnWeatherHandleState);
         // DS14-start
@@ -43,69 +63,122 @@ public sealed class WeatherSystem : SharedWeatherSystem
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         _state.OnStateChanged += OnStateChanged;
         // DS14-end
+||||||| base
+        SubscribeLocalEvent<WeatherComponent, ComponentHandleState>(OnWeatherHandleState);
+=======
+
+        Subs.CVar(_cfg, CCVars.AmbienceVolume, value => _weatherGain = value, true);
+        SubscribeLocalEvent<WeatherStatusEffectComponent, ComponentShutdown>(OnComponentShutdown);
+>>>>>>> theirs
     }
 
-    protected override void Run(EntityUid uid, WeatherData weather, WeatherPrototype weatherProto, float frameTime)
+    private void OnComponentShutdown(Entity<WeatherStatusEffectComponent> ent, ref ComponentShutdown args)
     {
-        base.Run(uid, weather, weatherProto, frameTime);
+        ent.Comp.Stream = _audio.Stop(ent.Comp.Stream);
+    }
 
+<<<<<<< ours
         if (!TryGetWeatherAudioTarget(uid, out var entXform)) // DS14
         {
             StopWeatherAudio(weather); // DS14
-            return;
-        }
+||||||| base
+        var ent = _playerManager.LocalEntity;
 
-        if (!Timing.IsFirstTimePredicted || weatherProto.Sound == null)
-            return;
-
-        weather.Stream ??= PlayWeatherAudio(weatherProto); // DS14
-
-        if (!TryComp(weather.Stream, out AudioComponent? comp))
+        if (ent == null)
             return;
 
-        var occlusion = 0f;
+        var mapUid = Transform(uid).MapUid;
+        var entXform = Transform(ent.Value);
 
-        // Work out tiles nearby to determine volume.
-        if (TryComp<MapGridComponent>(entXform.GridUid, out var grid))
+        // Maybe have the viewports manage this?
+        if (mapUid == null || entXform.MapUid != mapUid)
         {
-            TryComp(entXform.GridUid, out RoofComponent? roofComp);
-            var gridId = entXform.GridUid.Value;
-            // FloodFill to the nearest tile and use that for audio.
-            var seed = _mapSystem.GetTileRef(gridId, grid, entXform.Coordinates);
-            var frontier = new Queue<TileRef>();
-            frontier.Enqueue(seed);
-            // If we don't have a nearest node don't play any sound.
-            EntityCoordinates? nearestNode = null;
-            var visited = new HashSet<Vector2i>();
+            weather.Stream = _audio.Stop(weather.Stream);
+=======
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
 
-            while (frontier.TryDequeue(out var node))
+        if (!Timing.IsFirstTimePredicted)
+            return;
+
+        var player = _playerManager.LocalEntity;
+
+        if (player == null)
+>>>>>>> theirs
+            return;
+
+        var playerXform = Transform(player.Value);
+
+        var query = EntityQueryEnumerator<WeatherStatusEffectComponent, StatusEffectComponent>();
+        while (query.MoveNext(out var uid, out var weather, out var status))
+        {
+            if (weather.Sound == null || status.AppliedTo != playerXform.MapUid)
             {
-                if (!visited.Add(node.GridIndices))
-                    continue;
+                weather.Stream = _audio.Stop(weather.Stream);
+                continue;
+            }
 
-                if (!CanWeatherAffect(entXform.GridUid.Value, grid, node, roofComp))
+<<<<<<< ours
+        weather.Stream ??= PlayWeatherAudio(weatherProto); // DS14
+||||||| base
+        weather.Stream ??= _audio.PlayGlobal(weatherProto.Sound, Filter.Local(), true)?.Entity;
+=======
+            weather.Stream ??= _audio.PlayGlobal(weather.Sound, Filter.Local(), true)?.Entity;
+>>>>>>> theirs
+
+            if (!_audioQuery.TryComp(weather.Stream, out var audio))
+                continue;
+
+            var occlusion = 0f;
+
+            // Work out tiles nearby to determine volume.
+            if (_gridQuery.TryComp(playerXform.GridUid, out var grid))
+            {
+                _roofQuery.TryComp(playerXform.GridUid, out var roofComp);
+                var gridId = playerXform.GridUid.Value;
+                // FloodFill to the nearest tile and use that for audio.
+                var seed = _mapSystem.GetTileRef(gridId, grid, playerXform.Coordinates);
+                var frontier = new Queue<TileRef>();
+                frontier.Enqueue(seed);
+                // If we don't have a nearest node don't play any sound.
+                EntityCoordinates? nearestNode = null;
+                var visited = new HashSet<Vector2i>();
+
+                while (frontier.TryDequeue(out var node))
                 {
-                    // Add neighbors
-                    // TODO: Ideally we pick some deterministically random direction and use that
-                    // We can't just do that naively here because it will flicker between nearby tiles.
-                    for (var x = -1; x <= 1; x++)
-                    {
-                        for (var y = -1; y <= 1; y++)
-                        {
-                            if (Math.Abs(x) == 1 && Math.Abs(y) == 1 ||
-                                x == 0 && y == 0 ||
-                                (new Vector2(x, y) + node.GridIndices - seed.GridIndices).Length() > 3)
-                            {
-                                continue;
-                            }
+                    if (!visited.Add(node.GridIndices))
+                        continue;
 
-                            frontier.Enqueue(_mapSystem.GetTileRef(gridId, grid, new Vector2i(x, y) + node.GridIndices));
+                    if (!CanWeatherAffect((playerXform.GridUid.Value, grid, roofComp), node))
+                    {
+                        // Add neighbors
+                        // TODO: Ideally we pick some deterministically random direction and use that
+                        // We can't just do that naively here because it will flicker between nearby tiles.
+                        for (var x = -1; x <= 1; x++)
+                        {
+                            for (var y = -1; y <= 1; y++)
+                            {
+                                if (Math.Abs(x) == 1 && Math.Abs(y) == 1 ||
+                                    x == 0 && y == 0 ||
+                                    (new Vector2(x, y) + node.GridIndices - seed.GridIndices).Length() > 3)
+                                {
+                                    continue;
+                                }
+
+                                frontier.Enqueue(_mapSystem.GetTileRef(gridId, grid, new Vector2i(x, y) + node.GridIndices));
+                            }
                         }
+
+                        continue;
                     }
 
-                    continue;
+                    nearestNode = new EntityCoordinates(playerXform.GridUid.Value,
+                        node.GridIndices + grid.TileSizeHalfVector);
+                    break;
                 }
 
+<<<<<<< ours
                 nearestNode = new EntityCoordinates(entXform.GridUid.Value,
                     node.GridIndices + grid.TileSizeHalfVector);
                 break;
@@ -295,21 +368,81 @@ public sealed class WeatherSystem : SharedWeatherSystem
             {
                 EndWeather(uid, component, proto);
                 continue;
+||||||| base
+                nearestNode = new EntityCoordinates(entXform.GridUid.Value,
+                    node.GridIndices + grid.TileSizeHalfVector);
+                break;
             }
 
-            // Data update?
-            weather.StartTime = stateData.StartTime;
-            weather.EndTime = stateData.EndTime;
-            weather.State = stateData.State;
+            // Get occlusion to the targeted node if it exists, otherwise set a default occlusion.
+            if (nearestNode != null)
+            {
+                var entPos = _transform.GetMapCoordinates(entXform);
+                var nodePosition = _transform.ToMapCoordinates(nearestNode.Value).Position;
+                var delta = nodePosition - entPos.Position;
+                var distance = delta.Length();
+                occlusion = _audio.GetOcclusion(entPos, delta, distance);
+            }
+            else
+            {
+                occlusion = 3f;
+            }
         }
 
-        foreach (var (proto, weather) in state.Weather)
-        {
-            if (component.Weather.ContainsKey(proto))
-                continue;
+        var alpha = GetPercent(weather, uid);
+        alpha *= SharedAudioSystem.VolumeToGain(weatherProto.Sound.Params.Volume);
+        _audio.SetGain(weather.Stream, alpha, comp);
+        comp.Occlusion = occlusion;
+    }
 
-            // New weather
-            StartWeather(uid, component, ProtoMan.Index<WeatherPrototype>(proto), weather.EndTime);
+    protected override bool SetState(EntityUid uid, WeatherState state, WeatherComponent comp, WeatherData weather, WeatherPrototype weatherProto)
+    {
+        if (!base.SetState(uid, state, comp, weather, weatherProto))
+            return false;
+
+        if (!Timing.IsFirstTimePredicted)
+            return true;
+
+        // TODO: Fades (properly)
+        weather.Stream = _audio.Stop(weather.Stream);
+        weather.Stream = _audio.PlayGlobal(weatherProto.Sound, Filter.Local(), true)?.Entity;
+        return true;
+    }
+
+    private void OnWeatherHandleState(EntityUid uid, WeatherComponent component, ref ComponentHandleState args)
+    {
+        if (args.Current is not WeatherComponentState state)
+            return;
+
+        foreach (var (proto, weather) in component.Weather)
+        {
+            // End existing one
+            if (!state.Weather.TryGetValue(proto, out var stateData))
+            {
+                EndWeather(uid, component, proto);
+                continue;
+=======
+                // Get occlusion to the targeted node if it exists, otherwise set a default occlusion.
+                if (nearestNode != null)
+                {
+                    var entPos = _transform.GetMapCoordinates(playerXform);
+                    var nodePosition = _transform.ToMapCoordinates(nearestNode.Value).Position;
+                    var delta = nodePosition - entPos.Position;
+                    var distance = delta.Length();
+                    occlusion = _audio.GetOcclusion(entPos, delta, distance);
+                }
+                else
+                {
+                    occlusion = 3f;
+                }
+>>>>>>> theirs
+            }
+
+            var alpha = GetWeatherPercent((uid, status));
+            alpha *= SharedAudioSystem.VolumeToGain(weather.Sound.Params.Volume);
+            alpha *= _weatherGain;
+            _audio.SetGain(weather.Stream, alpha, audio);
+            audio.Occlusion = occlusion;
         }
     }
 

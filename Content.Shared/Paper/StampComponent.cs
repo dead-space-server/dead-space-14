@@ -39,6 +39,7 @@ public sealed partial class StampComponent : Component
     /// Per-prototype/custom stamp scale. Kept networked so client-side prediction uses
     /// the same stamp size as the authoritative server result.
     /// </summary>
+<<<<<<< ours
     [DataField("stampScale"), AutoNetworkedField]
     public float StampScale = 1.0f;
 
@@ -66,6 +67,13 @@ public sealed partial class StampComponent : Component
     /// </summary>
     [DataField("stampBackgroundText"), AutoNetworkedField]
     public string? StampBackgroundText;
+||||||| base
+    [DataField("stampedColor")]
+    public Color StampedColor = Color.FromHex("#BB3232"); // StyleNano.DangerousRedFore
+=======
+    [DataField("stampedColor")]
+    public Color StampedColor = Color.FromHex("#BB3232");
+>>>>>>> theirs
 
     /// <summary>
     /// Whether this stamp is allowed to receive the random paper UI rotation.

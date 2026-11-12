@@ -14,11 +14,21 @@ using Robust.Shared.GameObjects;
 namespace Content.Server.GameTicking.Commands
 {
     [AdminCommand(AdminFlags.Round)]
-    public sealed class ForceMapCommand : LocalizedCommands
+    public sealed partial class ForceMapCommand : LocalizedCommands
     {
+<<<<<<< ours
         [Dependency] private readonly IEntityManager _entityManager = default!; // DS14
         [Dependency] private readonly IGameMapManager _gameMapManager = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+||||||| base
+        [Dependency] private readonly IConfigurationManager _configurationManager = default!;
+        [Dependency] private readonly IGameMapManager _gameMapManager = default!;
+        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+=======
+        [Dependency] private IConfigurationManager _configurationManager = default!;
+        [Dependency] private IGameMapManager _gameMapManager = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+>>>>>>> theirs
 
         public override string Command => "forcemap";
 

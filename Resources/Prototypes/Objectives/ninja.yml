@@ -6,25 +6,25 @@
   - type: Objective
     # difficulty isn't used since all objectives are picked
     difficulty: 1.5
-    issuer: objective-issuer-spiderclan
+    issuer: SpiderClan
   - type: RoleRequirement
     roles:
     - NinjaRole
 
-# - type: entity
-#   parent: BaseNinjaObjective
-#   id: DoorjackObjective
-#   components:
-#   - type: Objective
-#     icon:
-#       sprite: Objects/Tools/emag.rsi
-#       state: icon
-#   - type: NumberObjective
-#     min: 5 # Corvax-MRP
-#     max: 25 # Corvax-MRP
-#     title: objective-condition-doorjack-title
-#     description: objective-condition-doorjack-description
-#   - type: DoorjackCondition
+- type: entity
+  parent: [BaseNinjaObjective, BaseCounterObjective]
+  id: DoorjackObjective
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Tools/emag.rsi
+      state: icon
+  - type: NumberObjective
+    min: 15
+    max: 40
+    title: objective-condition-doorjack-title
+    description: objective-condition-doorjack-description
+  - type: DoorjackCondition
 
 - type: entity
   parent: BaseNinjaObjective
@@ -51,10 +51,12 @@
       sprite: Objects/Weapons/Bombs/spidercharge.rsi
       state: icon
   - type: SpiderChargeCondition
+    whitelist:
+      tags:
+      - NinjaBombingTarget
     blacklist:
       tags:
-      - GhostOnlyWarp
-      - NinjaBombingTargetBlocker
+      - NinjaBombingTargetBlacklist
 
 - type: entity
   parent: [BaseNinjaObjective, BaseSurviveObjective]

@@ -108,8 +108,9 @@
 ## Death Squad (It's actually just MobHuman, unlike the other prototypes in this file, but randomHumanoidSettings will randomize appearance, and we need bald Urists)
 
 - type: entity
-  parent: MarkerBase
-  id: RandomHumanoidSpawnerDeathSquad # Not actualy RandomHumanoidSpawner ¯\_(ツ)_/¯
+  id: RandomHumanoidSpawnerDeathSquad
+  name: Death Squad Commando
+  suffix: ERTRole, Death Squad
   components:
   - type: Sprite
     layers:
@@ -958,7 +959,10 @@
       sprite: Mobs/Species/Human/parts.rsi
       state: full
     - type: RandomMetadata
-      nameSegments: [ NamesDeathCommando ]
+      nameSegments:
+      - NamesDeathCommandoFirst
+      - NamesDeathCommandoLast
+      nameFormat: name-format-standard
     - type: RandomHumanoidSpawner
       settings: SyndicateAgent
 

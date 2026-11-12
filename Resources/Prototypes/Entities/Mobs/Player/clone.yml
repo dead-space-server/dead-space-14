@@ -4,6 +4,30 @@
 # The datafields of the components copied using CopyComp.
 # Subscribe to CloningEvent instead if that is not enough.
 
+# Traits that root mentally or otherwise only affect you mentally.
+- type: cloningSettings
+  id: TraitsMental
+  components:
+  - Pacified
+  - Paracusia
+  - LightweightDrunk
+
+# Traits that root in physical things in your body.
+- type: cloningSettings
+  id: TraitsPhysical
+  components:
+  - BlackAndWhiteOverlay
+  - Narcolepsy
+  - ImpairedMobility
+  # - LegsParalyzed (you get healed)
+  - PermanentBlindness
+  - Snoring
+  - Unrevivable
+
+- type: cloningSettings
+  parent: [TraitsMental, TraitsPhysical]
+  id: Traits
+
 # for basic physical traits
 - type: cloningSettings
   id: Body
@@ -12,7 +36,11 @@
   - DetailExaminable
   - Dna
   - Fingerprint
+  - FootstepModifier # Footstep sounds!
   - Grammar # Pronouns
+  - HumanoidProfile # Age, Sex, Gender
+  - InnerBodyAnomalyVisuals # How you look with anomalies
+  - MeleeWeapon # Attack animation, damage and sound
   - NpcFactionMember
   # traits
   - BlackAndWhiteOverlay
@@ -59,7 +87,13 @@
   - SpanishAccent
   - StutteringAccent
   eventComponents:
+  - Damageable # Sprites and damage modifier
+  - Flammable # Displacements
+  - CreamPied # Displacements
+  - Hands # displacements
+  - Puller
   - Vocal # voice sounds
+  - EyeBlinking # for rsiPath and other blinking settings
 
 # for job-specific traits etc.
 - type: cloningSettings
@@ -80,16 +114,20 @@
   - Revolutionary
   - NukeOperative
 
-# a full clone with all traits and items, but no antag roles
 - type: cloningSettings
-  id: BaseClone
-  parent: [Body, Special]
-  blacklist:
+  abstract: true
+  id: BaseEquipmentBlacklist
+  equipmentBlacklist:
     components:
     - AttachedClothing # helmets, which are part of the suit
     - HumanoidAppearance # will cause problems for downstream felinids getting cloned as Urists
     - Implanter # they will spawn full again, but you already get the implant. And we can't do item slot copying yet
     - VirtualItem
+
+# a full clone with all traits and items, but no antag roles
+- type: cloningSettings
+  id: BaseClone
+  parent: [Body, Special, Traits, BaseEquipmentBlacklist]
 
 # for cloning pods
 - type: cloningSettings
@@ -114,7 +152,7 @@
 # changeling identity copying
 - type: cloningSettings
   id: ChangelingCloningSettings
-  parent: Body
+  parent: [Body, TraitsPhysical, BaseEquipmentBlacklist]
   statusEffectWhitelist:
     components:
     - ChangelingCloneableStatusEffect
@@ -129,6 +167,13 @@
   - TemperatureProtection
   - TypingIndicator
   - ScaleVisuals # for dwarf height
+  # - for horror form
+  - ChangelingHorror
+  - SlowOnDamage
+  - PassiveDamage
+  - Crawler
+  - PermanentStatusEffects
+  - Tag
   eventComponents:
   # these need special treatment in the event subscription
   - Inventory # arachnid pockets and diona feet
@@ -149,6 +194,8 @@
   # DS14-end
   copyInternalStorage: false
   copyImplants: false
+  raiseEntityRenamedEvent: false
+
 
 # spawner
 - type: entity

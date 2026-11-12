@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: MobStatusEffectBase
   id: BloodstreamStatusEffectBase
   abstract: true
@@ -24,8 +24,9 @@
   - type: DrunkStatusEffect
 
 - type: entity
+  abstract: true
   parent: MobStatusEffectBase
-  id: PainNumbnessTraitStatusEffect
+  id: PainNumbnessStatusEffectBase
   components:
   - type: CloneableStatusEffect
   - type: StatusEffect
@@ -34,14 +35,6 @@
       - MobState
       - MobThresholds
   - type: PainNumbnessStatusEffect
-
-- type: entity
-  parent: BloodstreamStatusEffectBase
-  id: StatusEffectHemophiliaTrait
-  components:
-  - type: CloneableStatusEffect
-  - type: ChangelingCloneableStatusEffect
-  - type: HemophiliaStatusEffect
 
 - type: entity
   parent: BloodstreamStatusEffectDebuff
@@ -62,7 +55,7 @@
     bleedAmountMultiplier: 1.33
 
 - type: entity
-  parent: [ PainNumbnessTraitStatusEffect, MobStatusEffectDebuff ]
+  parent: [ PainNumbnessStatusEffectBase, MobStatusEffectDebuff ]
   id: StatusEffectPainNumbness
   name: pain numbness
 
@@ -77,6 +70,7 @@
     alert: Adrenaline
   - type: ExaminableStatusEffect
     messageId: status-effect-examine-adrenaline
+    requiresConciousness: true
 
 - type: entity
   parent: MobStatusEffectBase
@@ -100,3 +94,11 @@
   components:
   - type: StaminaModifierStatusEffect
     modifier: 1.5
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectNightVision
+  name: Night Vision
+  components:
+    - type: NightVision
+      relayOverlay: True

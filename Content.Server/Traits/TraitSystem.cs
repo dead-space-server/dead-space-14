@@ -5,15 +5,13 @@ using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.Traits;
 using Content.Shared.Whitelist;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.Traits;
 
-public sealed class TraitSystem : EntitySystem
+public sealed partial class TraitSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedHandsSystem _sharedHandsSystem = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private SharedHandsSystem _sharedHandsSystem = default!;
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
     public override void Initialize()
     {
@@ -32,7 +30,7 @@ public sealed class TraitSystem : EntitySystem
     {
         // Check if player's job allows to apply traits
         if (jobId == null ||
-            !_prototypeManager.Resolve<JobPrototype>(jobId.Value, out var protoJob) ||
+            !ProtoMan.Resolve<JobPrototype>(jobId.Value, out var protoJob) ||
             !protoJob.ApplyTraits)
         {
             return;
@@ -40,7 +38,7 @@ public sealed class TraitSystem : EntitySystem
 
         foreach (var traitId in profile.TraitPreferences)
         {
-            if (!_prototypeManager.TryIndex<TraitPrototype>(traitId, out var traitPrototype))
+            if (!ProtoMan.TryIndex<TraitPrototype>(traitId, out var traitPrototype))
             {
                 Log.Error($"No trait found with ID {traitId}!");
                 return;
@@ -51,8 +49,10 @@ public sealed class TraitSystem : EntitySystem
                 continue;
 
             // Add all components required by the prototype
+#pragma warning disable CS0618 // Enabling compatibility behaviour for TraitPrototype.Components
             if (traitPrototype.Components.Count > 0)
                 EntityManager.AddComponents(mob, traitPrototype.Components, false);
+#pragma warning restore CS0618
 
             // Add all JobSpecials required by the prototype
             foreach (var special in traitPrototype.Specials)

@@ -1,6 +1,5 @@
-﻿<controls:FancyWindow xmlns="https://spacestation14.io"
+<controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                      xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
                       Title="{Loc 'research-console-menu-title'}"
                       MinSize="700 400"
                       SetSize="980 550"> <!-- DeadSpace-Localization -->
@@ -35,7 +34,7 @@
                 <!-- DS14-start -->
                 <Label Text="{Loc 'research-console-available-text'}" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle"/>
                 <!-- DS14-end -->
-                <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
+                <controls:Separator StyleClasses="LowDivider" Margin="0 0 0 10"/>
                 <!-- DS14-start -->
                 <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
                     <ScrollContainer
@@ -54,7 +53,7 @@
                 <!-- DS14-start -->
                 <Label Text="{Loc 'research-console-unlocked-text'}" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle"/>
                 <!-- DS14-end -->
-                <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
+                <controls:Separator StyleClasses="LowDivider" Margin="0 0 0 10"/>
                 <!-- DS14-start -->
                 <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
                     <ScrollContainer

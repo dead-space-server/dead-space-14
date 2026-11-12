@@ -1,5 +1,5 @@
 - type: cargoProduct
-  id: ServiceJanitorial
+  id: ServiceBarSupply
   icon:
     sprite: Objects/Specific/Janitorial/spray_bottle.rsi
     state: cleaner
@@ -29,32 +29,32 @@
   group: service # DS14
 
 - type: cargoProduct
-  id: ServiceLightsHoliday
+  id: ServiceCook
   icon:
-    sprite: Objects/Power/light_bulb.rsi
-    state: normal
-  product: CrateServiceHolidayLights
-  cost: 800
+    sprite: Objects/Consumable/Food/ingredients.rsi
+    state: flour-big
+  product: CrateServiceCooking
+  cost: 750
   category: cargoproduct-category-name-service
   group: service # DS14
 
 - type: cargoProduct
-  id: ServiceLightsColorful
+  id: ServiceCookGetmore
   icon:
-    sprite: Objects/Power/light_bulb.rsi
-    state: normal
-  product: CrateServiceColorfulLights
-  cost: 800
+    sprite: Objects/Consumable/Food/snacks.rsi
+    state: raisins
+  product: CrateServiceGetMore
+  cost: 750
   category: cargoproduct-category-name-service
   group: service # DS14
 
 - type: cargoProduct
-  id: MousetrapBoxes
+  id: ServiceDinnerware
   icon:
-    sprite: Objects/Devices/mousetrap.rsi
-    state: mousetrap
-  product: CrateMousetrapBoxes
-  cost: 500
+    sprite: Objects/Consumable/Food/plates.rsi
+    state: tin
+  product: CrateServiceDinnerware
+  cost: 750
   category: cargoproduct-category-name-service
   group: service # DS14
 

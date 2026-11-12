@@ -18,6 +18,7 @@ namespace Content.Shared.Changeling.Systems;
 
 public sealed partial class ChangelingClonerSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -31,6 +32,30 @@ public sealed partial class ChangelingClonerSystem : EntitySystem
     [Dependency] private readonly SharedForensicsSystem _forensics = default!;
     [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoidAppearance = default!;
     // DS14-end
+||||||| base
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedCloningSystem _cloning = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly SharedChangelingIdentitySystem _changelingIdentity = default!;
+    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
+    [Dependency] private readonly SharedVisualBodySystem _visualBody = default!;
+=======
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedCloningSystem _cloning = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedChangelingIdentitySystem _changelingIdentity = default!;
+    [Dependency] private ForensicsSystem _forensics = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -47,7 +72,7 @@ public sealed partial class ChangelingClonerSystem : EntitySystem
     private void OnShutDown(Entity<ChangelingClonerComponent> ent, ref ComponentShutdown args)
     {
         // Delete the stored clone.
-        PredictedQueueDel(ent.Comp.ClonedBackup);
+        QueueDel(ent.Comp.ClonedBackup);
     }
 
     private void OnExamine(Entity<ChangelingClonerComponent> ent, ref ExaminedEvent args)
@@ -240,7 +265,7 @@ public sealed partial class ChangelingClonerSystem : EntitySystem
         if (!HasComp<HumanoidAppearanceComponent>(target))
             return; // cloning only works for humanoids at the moment
 
-        if (!_prototype.Resolve(ent.Comp.Settings, out var settings))
+        if (!ProtoMan.Resolve(ent.Comp.Settings, out var settings))
             return;
 
         _audio.PlayPredicted(ent.Comp.InjectSound, target, user);
@@ -276,7 +301,7 @@ public sealed partial class ChangelingClonerSystem : EntitySystem
             return;
 
         // Delete the stored clone.
-        PredictedQueueDel(ent.Comp.ClonedBackup);
+        QueueDel(ent.Comp.ClonedBackup);
         ent.Comp.ClonedBackup = null;
         ent.Comp.State = ChangelingClonerState.Empty;
         _appearance.SetData(ent.Owner, ChangelingClonerVisuals.State, ChangelingClonerState.Empty);

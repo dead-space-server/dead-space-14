@@ -1,6 +1,7 @@
 
 # Ears Markings
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEar
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -12,6 +13,7 @@
       state: vulp-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarSharp
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -25,6 +27,7 @@
       state: vulp-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarFade
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -38,6 +41,7 @@
       state: vulp-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarJackal
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -49,6 +53,7 @@
       state: jackal-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarTerrier
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -60,6 +65,7 @@
       state: terrier-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarFennec
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -71,6 +77,7 @@
       state: fennec-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarFox
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -82,6 +89,7 @@
       state: fox-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarOtie
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -93,6 +101,7 @@
       state: otie-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarShock
   bodyPart: HeadTop
   markingCategory: HeadTop
@@ -104,6 +113,7 @@
       state: shock-inner
 
 - type: marking
+  parent: [ VulpBaseMarkingClamped ]
   id: VulpEarCoyote
   bodyPart: HeadTop
   markingCategory: HeadTop

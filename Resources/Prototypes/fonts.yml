@@ -27,10 +27,6 @@
   path: /Fonts/Boxfont-round/Boxfont Round.ttf
 
 - type: font
-  id: OpenLukyanov
-  path: /Fonts/OpenLukyanov/OpenLukyanov.otf
-
-- type: font
   id: Monospace
   path: /EngineFonts/NotoSans/NotoSansMono-Regular.ttf
 

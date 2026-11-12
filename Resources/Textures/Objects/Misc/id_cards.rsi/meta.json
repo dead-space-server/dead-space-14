@@ -338,6 +338,23 @@
     },
     {
       "name": "idiaaofficer"
+    },
+    {
+      "name": "makeshift"
+    },
+    {
+      "name": "makeshift_base"
+    },
+    {
+      "name": "makeshift_soldered"
+    },
+    {
+      "name": "makeshift-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "makeshift-inhand-right",
+      "directions": 4
     }
   ]
 }

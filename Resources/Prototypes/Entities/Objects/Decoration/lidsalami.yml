@@ -10,6 +10,8 @@
       - state: icon
   - type: Item
     size: Ginormous
+    shape:
+    - 0,0,16,8
   - type: StaticPrice
     price: 0
   #DS14-Start

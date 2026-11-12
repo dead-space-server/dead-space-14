@@ -108,7 +108,7 @@
     walkModifier: 0.9
     sprintModifier: 0.9
   - type: GasTank
-    outputPressure: 42.6
+    releasePressure: 42.6
     air:
       # 2 minutes of thrust
       volume: 0.75
@@ -123,76 +123,7 @@
     price: 1500
 
 - type: entity
-  parent: [ClothingShoesBootsMag, BaseCentcommContraband ]
-  id: ADTClothingShoesBootsMagERT
-  name: magboots
-  description: Magnetic boots, often used during extravehicular activity to ensure the user remains safely attached to the vehicle.
-  components:
-  - type: Sprite
-    sprite: _ADT/Clothing/Shoes/Boots/magboots-ert.rsi
-    state: icon
-  - type: Clothing
-    sprite: _ADT/Clothing/Shoes/Boots/magboots-ert.rsi
-  - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
-  - type: ComponentToggler
-    components:
-    - type: NoSlip
-    - type: RenegadeCANTRenegadeForce
-  - type: ContainerContainer
-    containers:
-      item: !type:ContainerSlot
-  - type: ItemSlots
-    slots:
-      item:
-        startingItem: CombatKnife
-        name: clothing-military-boots-sidearm
-        whitelist:
-          tags:
-          - Knife
-          - Sidearm
-  - type: ClothingSlowOnDamageModifier
-    modifier: 0.3
-
-- type: entity
-  parent: [ClothingShoesBootsMagBase, BaseJetpack, BaseSyndicateContraband]
-  id: ADTClothingShoesBootsMagAdvSynd
-  name: advanced syndicate magboots
-  description: State-of-the-art magnetic boots that do not slow down their wearer. Made by gorlax for gorlax.
-  suffix: Syndicate
-  components:
-  - type: Sprite
-    sprite: _ADT/Clothing/Shoes/Boots/advanced.rsi
-    state: icon
-  - type: Clothing
-    sprite: _ADT/Clothing/Shoes/Boots/advanced.rsi
-  - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
-  - type: GasTank
-    outputPressure: 42.6
-    air:
-      # 2 minutes of thrust
-      volume: 0.75
-      temperature: 293.15
-      moles:
-      - 0.153853429 # oxygen
-      - 0.153853429 # nitrogen
-  - type: Item
-    sprite: null
-    size: Normal
-  - type: MovementSpeedModifier
-    weightlessAcceleration: 1
-    weightlessFriction: 0.3
-    weightlessModifier: 1.2
-  - type: StaticPrice
-    price: 5000
-  - type: ClothingSlowOnDamageModifier
-    modifier: 0.3
-
-- type: entity
-  parent: [BaseCentcommContraband, ClothingShoesBootsMagSyndie]
+  parent: [ BaseTaskForceContraband, ClothingShoesBootsMagSyndie ]
   id: ClothingShoesBootsMagERT
   name: ERT magboots
   description: Upgraded magnetic boots utilized by Nanotrasen's Emergency Response Teams, they have a heavy magnetic pull and integrated thrusters. It can hold 0.75 L of gas.
@@ -204,12 +135,10 @@
     sprite: Clothing/Shoes/Boots/magboots-ert.rsi
 
 - type: entity
-  parent: BaseAction
+  parent: BaseToggleAction
   id: ActionToggleMagboots
   name: Toggle Magboots
   description: Toggles the magboots on and off.
   components:
   - type: Action
     itemIconStyle: BigItem
-  - type: InstantAction
-    event: !type:ToggleActionEvent

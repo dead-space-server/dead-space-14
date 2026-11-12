@@ -43,20 +43,17 @@
   showInAdminVote: true # DS14
   voteType: rdm # DS14
   rules:
-  - WageScheduler # backmen: currency
-  - Nukeops
-  - Traitor
-  - Revolutionary
-  - Zombie
-  - BlobGameMode
-  - SpiderTerror
-  - Wizard
-  - Xenoborgs
-  - Changeling
-  - KesslerSyndromeScheduler
-  - RampingStationEventScheduler
-  - SpaceTrafficControlEventScheduler
-  - BasicRoundstartVariation
+    - Nukeops
+    - Traitor
+    - Revolutionary
+    - Zombie
+    - Wizard
+    - Xenoborgs
+    - Changeling
+    - KesslerSyndromeScheduler
+    - RampingStationEventScheduler
+    - SpaceTrafficControlEventScheduler
+    - BasicRoundstartVariation
 
 - type: gamePreset
   id: AllerAtOnce

@@ -4,19 +4,20 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.EntityEffects.Effects;
 
 /// <summary>
-/// Disarms the affected entity.
+/// Disarms the entity.
 /// </summary>
+/// <inheritdoc cref="EntityEffectSystem{T, TEffect}"/>
 public sealed partial class DisarmEntityEffectSystem : EntityEffectSystem<MetaDataComponent, Disarm>
 {
     protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<Disarm> args)
     {
-        var disarm = new DisarmedEvent(entity.Owner, entity.Owner, 0f);
-        RaiseLocalEvent(entity.Owner, ref disarm);
+        var dis = new DisarmedEvent(entity.Owner, entity.Owner, 0f);
+        RaiseLocalEvent(entity.Owner, ref dis);
     }
 }
 
+/// <inheritdoc cref="EntityEffect"/>
 public sealed partial class Disarm : EntityEffectBase<Disarm>
 {
-    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
-        => Loc.GetString("entity-effect-disarm", ("chance", Probability));
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("entity-effect-disarm", ("chance", Probability)); // DS14: upstream key is not defined in locale
 }

@@ -1,0 +1,49 @@
+- type: job
+  id: Librarian
+  name: job-name-librarian
+  description: job-description-librarian
+  playTimeTracker: JobLibrarian
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Civilian
+      time: 3600 # 1 hour
+  startingGear: LibrarianGear
+  icon: "JobIconLibrarian"
+  supervisors: job-supervisors-hop
+  guides: [ Service ] # TODO: should have a more specific guidebook page instead of using the department itself
+  access:
+  - Service
+  - Maintenance
+  #start-backmen: currency
+  minBankBalance: 250 # DS14-value
+  maxBankBalance: 350 # DS14-value
+  wageDepartment: Civilian
+  wage: 100 # DS14-value
+  #end-backmen: currency
+
+- type: startingGear
+  id: LibrarianGear
+  equipment:
+    shoes: ClothingShoesBootsLaceup
+    id: LibrarianPDA
+    ears: ClothingHeadsetService
+    pocket1: d20Dice
+    belt: BooksBag
+    pocket2: HandLabeler # for making named bestsellers
+    socks: ClothingUnderwearSocksLibrarian
+  inhand:
+    - BriefcaseBrownFilled
+  storage:
+    back:
+    - BookRandom
+
+- type: chameleonOutfit
+  id: LibrarianChameleonOutfit
+  job: Librarian
+  equipment:
+    head: ClothingHeadHatCanadaBeanie
+    eyes: ClothingEyesGlassesJamjar
+    mask: ClothingMaskGas
+    neck: ClothingNeckScarfStripedGreen
+    outerClothing: ClothingOuterWinterColorGreen
+    gloves: ClothingHandsGlovesColorBlack

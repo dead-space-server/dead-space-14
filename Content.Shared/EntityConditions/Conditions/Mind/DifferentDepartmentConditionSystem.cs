@@ -1,13 +1,16 @@
 using System.Linq;
 using Content.Shared.Mind;
+using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
+using Content.Shared.Throwing;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.EntityConditions.Conditions.Mind;
 
 public sealed partial class DifferentDepartmentConditionSystem : EntityConditionSystem<MindComponent, DifferentDepartmentCondition>
 {
-    [Dependency] private readonly SharedJobSystem _jobSystem = default!;
+    [Dependency] private SharedRoleSystem _roleSystem = default!;
+    [Dependency] private SharedJobSystem _jobSystem = default!;
 
     protected override void Condition(Entity<MindComponent> entity, ref EntityConditionEvent<DifferentDepartmentCondition> args)
     {
@@ -52,3 +55,4 @@ public sealed partial class DifferentDepartmentCondition : EntityConditionBase<D
         return string.Empty;
     }
 }
+

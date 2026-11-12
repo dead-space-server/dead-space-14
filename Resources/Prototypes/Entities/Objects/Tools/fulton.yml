@@ -38,13 +38,6 @@
     - type: Clickable
     - type: InteractionOutline
     - type: FultonBeacon
-    - type: Appearance
-    - type: GenericVisualizer
-      visuals:
-        enum.FoldedVisuals.State:
-          foldedLayer:
-            True: { state: folded_extraction }
-            False: { state: extraction_point }
     - type: Sprite
       sprite: Objects/Tools/fulton.rsi
       drawdepth: SmallObjects
@@ -65,10 +58,10 @@
     #DS14-End
 
 - type: entity
+  parent: [ BaseItem, BaseItemDestructible ]
   id: Fulton
-  parent: BaseItem
-  suffix: Full
   name: fulton
+  suffix: Full
   description: Used to extract containers, items, or forcibly recruit people into your base of operations.
   components:
   - type: Fulton

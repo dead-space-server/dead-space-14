@@ -242,6 +242,12 @@
     {
       "name": "x4-equipped-BELT",
       "directions": 4
+    },
+    {
+      "name": "trashbag_holding"
+    },
+    {
+      "name": "wire_brush"
     }
   ]
 }

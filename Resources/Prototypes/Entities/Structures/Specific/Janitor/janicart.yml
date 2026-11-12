@@ -1,8 +1,8 @@
 # Mop Bucket
 - type: entity
-  name: mop bucket
+  parent: [SolutionGinormous, SolutionTank, BaseStructureDynamic, StructureWheeled, StructureHealthContainerWeak]
   id: MopBucket
-  parent: [BaseStructureDynamic, StructureWheeled]
+  name: mop bucket
   description: Holds water and the tears of the janitor.
   components:
   - type: Clickable
@@ -16,20 +16,18 @@
       visible: false
     drawdepth: Objects
   - type: InteractionOutline
-  - type: SolutionContainerManager
-    solutions:
-      bucket:
-        maxVol: 600
   - type: Spillable
-    solution: bucket
+    solution: tank
     spillDelay: 3.0
     spillWhenThrown: false
   - type: DrainableSolution
-    solution: bucket
+    solution: tank
   - type: RefillableSolution
-    solution: bucket
+    solution: tank
   - type: ExaminableSolution
-    solution: bucket
+    solution: tank
+  - type: DrawableSolution
+    solution: tank
   - type: ItemMapper
     mapLayers:
       mopbucket_shark_blue:
@@ -76,11 +74,11 @@
             - Rehydratable
         priority: 3 # Higher than drinking priority
   - type: ReactiveContainer
-    solution: bucket
+    solution: tank
     container: item_slot
   - type: Edible
     edible: Drink
-    solution: bucket
+    solution: tank
     destroyOnEmpty: false
     utensil: Spoon
   - type: Appearance
@@ -96,15 +94,23 @@
     guides:
     - Janitorial
   - type: Damageable
-    damageContainer: Inorganic
+    damageModifierSet: PlasticMod
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 70
+        damage: 60
       behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -3
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetPlastic1:
+            min: 0
+            max: 2
   - type: DnaSubstanceTrace
   - type: Fixtures
     fixtures:
@@ -122,18 +128,16 @@
   parent: MopBucket
   suffix: full
   components:
-    - type: Sprite
-      layers:
-        - state: mopbucket
-        - state: mopbucket_water-3
-          map: [ "enum.SolutionContainerLayers.Fill" ]
-    - type: SolutionContainerManager
-      solutions:
-        bucket:
-          maxVol: 600
-          reagents:
-            - ReagentId: Water
-              Quantity: 600
+  - type: Sprite
+    layers:
+      - state: mopbucket
+      - state: mopbucket_water-3
+        map: [ "enum.SolutionContainerLayers.Fill" ]
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Water
+        Quantity: 960
 
 - type: entity
   parent: BaseWrappedCube
@@ -149,9 +153,9 @@
 
 # Janicart
 - type: entity
-  name: janitorial trolley
+  parent: [SolutionGinormous, SolutionTank, BaseStructureDynamic, StructureWheeled, StructureHealthContainer]
   id: JanitorialTrolley
-  parent: [BaseStructureDynamic, StructureWheeled]
+  name: janitorial trolley
   description: This is the alpha and omega of sanitation.
   components:
     - type: Sprite

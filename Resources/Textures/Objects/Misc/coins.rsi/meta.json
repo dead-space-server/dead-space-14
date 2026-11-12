@@ -21,6 +21,42 @@
     },
     {
       "name": "coin_adamantine"
+    },
+    {
+      "name": "coinSilver_1"
+    },
+    {
+      "name": "coinSilver_2"
+    },
+    {
+      "name": "coinGold_1"
+    },
+    {
+      "name": "coinGold_2"
+    },
+    {
+      "name": "coinIron_1"
+    },
+    {
+      "name": "coinIron_2"
+    },
+    {
+      "name": "coinDiamond_1"
+    },
+    {
+      "name": "coinDiamond_2"
+    },
+    {
+      "name": "coinAdamantine_1"
+    },
+    {
+      "name": "coinAdamantine_2"
+    },
+    {
+      "name": "d2_1"
+    },
+    {
+      "name": "d2_2"
     }
   ]
 }

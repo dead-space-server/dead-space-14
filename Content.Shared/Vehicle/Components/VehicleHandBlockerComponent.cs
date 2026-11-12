@@ -1,4 +1,4 @@
-using Content.Shared.Vehicle; // DS14 - VehicleSystem remains in the current engine-compatible namespace.
+using Content.Shared.Vehicle.Systems;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.Vehicle.Components;

@@ -51,7 +51,7 @@
             "name": "cart_spray",
             "directions": 4
         },
-		{
+        {
             "name": "cart_plunger",
             "directions": 4
         },
@@ -143,6 +143,10 @@
                     0.2
                 ]
             ]
+        },
+        {
+            "name": "cart_garbage_holding",
+            "directions": 4
         }
     ]
 }

@@ -732,6 +732,15 @@
         {
             "name": "ironsand-inhand-left",
             "directions": 4
+        },
+        {
+            "name": "dark-plastic"
+        },
+        {
+            "name": "steel-plastic"
+        },
+        {
+            "name": "white-plastic"
         }
     ]
 }

@@ -118,6 +118,7 @@ public struct HitscanRaycastStrikeEvent
     public HitscanRaycastFiredData Data;
 }
 
+
 /// <summary>
 /// Results of a hitscan raycast and will be raised on the raycast entity on itself. Stuff like the damage system should
 /// listen for this. At this point we KNOW the laser hit the entity.

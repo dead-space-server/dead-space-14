@@ -351,13 +351,6 @@
     layers:
     - state: folder-centcom
     - state: folder-base
-  - type: Storage
-    maxItemSize: Small
-    grid:
-    - 0,0,13,5
-    whitelist:
-      tags:
-      - Document
   - type: Item
     inhandVisuals:
       left:
@@ -585,4 +578,5 @@
     - Folder
     - HighRiskItem
   - type: StealTarget
-    stealGroup: BoxFolderQmClipboard
+    stealGroup:
+    - BoxFolderQmClipboard

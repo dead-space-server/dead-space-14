@@ -1,9 +1,11 @@
 using Content.Client.DeadSpace.CameraArchives; //DS-14
 using Content.Client.Eye;
+using Content.Shared.DeviceNetwork;
 using Content.Shared.DeadSpace.CameraArchives; //DS-14
 using Content.Shared.SurveillanceCamera;
-using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
+using Robust.Shared.Prototypes;
+
 namespace Content.Client.SurveillanceCamera.UI;
 
 public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInterface
@@ -51,20 +53,14 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         _window.ArchiveView.PrintPressed += OnArchivePrint;
         _window.ArchiveView.SearchChanged += _ => ShowArchiveList();
         //DS-14 end
-
-        var xform = EntMan.GetComponent<TransformComponent>(Owner);
-        var gridUid = xform.GridUid ?? xform.MapUid;
-
-        if (gridUid is not null)
-            _window?.SetMap(gridUid.Value);
     }
 
-    private void OnCameraSelected(string address, string? subnet)
+    private void OnCameraSelected(DeviceAddress address, ProtoId<DeviceFrequencyPrototype>? subnet)
     {
         SendMessage(new SurveillanceCameraMonitorSwitchMessage(address, subnet));
     }
 
-    private void OnSubnetRequest(string subnet)
+    private void OnSubnetRequest(ProtoId<DeviceFrequencyPrototype> subnet)
     {
         SendMessage(new SurveillanceCameraMonitorSubnetRequestMessage(subnet));
     }
@@ -243,6 +239,17 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
                 _window.UpdateState(eye.Eye, cast.Subnets, cast.ActiveAddress, cast.ActiveSubnet, cast.Cameras);
             }
         }
+    }
+
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+
+        if (_window is null || message is not SurveillanceCameraMonitorMapUpdateMessage mapMessage)
+            return;
+
+        _window.SetMap(EntMan.GetEntity(mapMessage.Map));
+        _window.SetCameraMarkers(mapMessage.CameraMarkers);
     }
 
     protected override void Dispose(bool disposing)

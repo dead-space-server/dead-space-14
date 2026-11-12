@@ -10,10 +10,57 @@ namespace Content.Client.VendingMachines;
 public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]
-    private VendingMachineKeypadMenu? _keypadMenu; // DS-14
+    private VendingMachineMenu? _menu;
 
     [ViewVariables]
     private List<VendingMachineInventoryEntry> _cachedInventory = new();
+
+    protected override void Open()
+    {
+        base.Open();
+
+<<<<<<< ours
+public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
+{
+    [ViewVariables]
+    private VendingMachineKeypadMenu? _keypadMenu; // DS-14
+||||||| base
+            _menu = this.CreateWindowCenteredLeft<VendingMachineMenu>();
+            _menu.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
+            _menu.OnItemSelected += OnItemSelected;
+            Refresh();
+        }
+
+        public void Refresh()
+        {
+            var enabled = EntMan.TryGetComponent(Owner, out VendingMachineComponent? bendy) && !bendy.Ejecting;
+
+            var system = EntMan.System<VendingMachineSystem>();
+            _cachedInventory = system.GetAllInventory(Owner);
+
+            _menu?.Populate(_cachedInventory, enabled);
+        }
+=======
+        _menu = this.CreateWindowCenteredLeft<VendingMachineMenu>();
+        _menu.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
+        _menu.OnItemSelected += OnItemSelected;
+        Refresh();
+    }
+
+    public void Refresh()
+    {
+        var enabled = EntMan.TryGetComponent(Owner, out VendingMachineEjectComponent? eject) && !eject.Ejecting;
+
+        var system = EntMan.System<VendingMachineSystem>();
+        _cachedInventory = system.GetAllInventory(Owner);
+
+        _menu?.Populate(_cachedInventory, enabled);
+    }
+>>>>>>> theirs
+
+    public void UpdateAmounts()
+    {
+        var enabled = EntMan.TryGetComponent(Owner, out VendingMachineEjectComponent? eject) && !eject.Ejecting;
 
     protected override void Open()
     {
@@ -59,6 +106,7 @@ public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey
     }
     // DS-14-end
 
+<<<<<<< ours
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
@@ -71,5 +119,33 @@ public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey
             _keypadMenu.Dispose();
         }
         // DS-14-end
+||||||| base
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (!disposing)
+                return;
+
+            if (_menu == null)
+                return;
+
+            _menu.OnItemSelected -= OnItemSelected;
+            _menu.OnClose -= Close;
+            _menu.Dispose();
+        }
+=======
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (!disposing)
+            return;
+
+        if (_menu == null)
+            return;
+
+        _menu.OnItemSelected -= OnItemSelected;
+        _menu.OnClose -= Close;
+        _menu.Dispose();
+>>>>>>> theirs
     }
 }

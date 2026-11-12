@@ -22,9 +22,10 @@ namespace Content.Server.Anomaly;
 /// </summary>
 public sealed partial class AnomalySystem
 {
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IdCardSystem _idCardSystem = default!; // DS14
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IdCardSystem _idCardSystem = default!; // DS14
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 
     private void InitializeGenerator()
     {
@@ -79,11 +80,14 @@ public sealed partial class AnomalySystem
 
         var generating = EnsureComp<GeneratingAnomalyGeneratorComponent>(uid);
         generating.EndTime = Timing.CurTime + component.GenerationLength;
-        generating.AudioStream = Audio.PlayPvs(component.GeneratingSound, uid, AudioParams.Default.WithLoop(true))?.Entity;
+        var audioParams = component.GeneratingSound?.Params ?? AudioParams.Default;
+        audioParams = audioParams.WithLoop(true);
+        generating.AudioStream = Audio.PlayPvs(component.GeneratingSound, uid, audioParams)?.Entity;
 
+        // DS14-start
         if (HasComp<HumanoidAppearanceComponent>(author) && _idCardSystem.TryFindIdCard(author, out var idCard))
             generating.Author = $"{idCard.Comp.FullName}";
-
+        // DS14-end
         component.CooldownEndTime = Timing.CurTime + component.CooldownLength;
         UpdateGeneratorUi(uid, component);
     }
@@ -113,13 +117,12 @@ public sealed partial class AnomalySystem
             }
 
             // don't spawn inside of solid objects
-            var physQuery = GetEntityQuery<PhysicsComponent>();
             var valid = true;
 
             // TODO: This should be using static lookup.
             foreach (var ent in _mapSystem.GetAnchoredEntities(grid, gridComp, tile))
             {
-                if (!physQuery.TryGetComponent(ent, out var body))
+                if (!_physicsQuery.TryGetComponent(ent, out var body))
                     continue;
                 if (body.BodyType != BodyType.Static ||
                     !body.Hard ||
@@ -184,14 +187,16 @@ public sealed partial class AnomalySystem
         Appearance.SetData(uid, AnomalyGeneratorVisuals.Generating, false);
         Audio.PlayPvs(component.GeneratingFinishedSound, uid);
 
+        // DS14-start
         if (author.Length == 0)
             author = Loc.GetString("anomaly-generator-announcement-author-unknown");
 
         var messageScience = Loc.GetString("anomaly-generator-announcement-science", ("author", author));
         var messageCommon = Loc.GetString("anomaly-generator-announcement");
 
-        _radio.SendRadioMessage(uid, messageScience, _prototype.Index<RadioChannelPrototype>(component.ScienceChannel), uid);
-        _radio.SendRadioMessage(uid, messageCommon, _prototype.Index<RadioChannelPrototype>(component.CommonChannel), uid);
+        _radio.SendRadioMessage(uid, messageScience, ProtoMan.Index<RadioChannelPrototype>(component.ScienceChannel), uid);
+        _radio.SendRadioMessage(uid, messageCommon, ProtoMan.Index<RadioChannelPrototype>(component.CommonChannel), uid);
+        // DS14-end
     }
 
     private void UpdateGenerator()

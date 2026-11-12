@@ -1,3 +1,4 @@
+using Content.Client.Graphics;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StepTrigger.Systems;
@@ -7,20 +8,17 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Movement.Systems;
 
-public sealed class FloorOcclusionSystem : SharedFloorOcclusionSystem
+public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
 {
     private static readonly ProtoId<ShaderPrototype> HorizontalCut = "HorizontalCut";
 
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly StepTriggerSystem _stepTrigger = default!; //DS-14
-
-    private EntityQuery<SpriteComponent> _spriteQuery;
+    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private StepTriggerSystem _stepTrigger = default!; //DS-14
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _spriteQuery = GetEntityQuery<SpriteComponent>();
 
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentStartup>(OnOcclusionStartup);
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentShutdown>(OnOcclusionShutdown);
@@ -52,7 +50,6 @@ public sealed class FloorOcclusionSystem : SharedFloorOcclusionSystem
     {
         base.Update(frameTime);
 
-        var shader = _proto.Index(HorizontalCut).Instance();
         var query = EntityQueryEnumerator<FloorOcclusionComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var occlusion, out var sprite))
         {
@@ -60,7 +57,7 @@ public sealed class FloorOcclusionSystem : SharedFloorOcclusionSystem
                 continue;
 
             var enabled = ShouldOcclude(occlusion);
-            if ((sprite.PostShader == shader) == enabled)
+            if (_sprite.HasPostShader((uid, sprite), ContentPostShaderIds.FloorOcclusion) == enabled)
                 continue;
 
             SetShader(uid, enabled);
@@ -86,18 +83,18 @@ public sealed class FloorOcclusionSystem : SharedFloorOcclusionSystem
         if (!_spriteQuery.Resolve(sprite.Owner, ref sprite.Comp, false))
             return;
 
-        var shader = _proto.Index(HorizontalCut).Instance();
-
-        if (sprite.Comp.PostShader is not null && sprite.Comp.PostShader != shader)
-            return;
+        var shader = ProtoMan.Index(HorizontalCut).Instance();
 
         if (enabled)
         {
-            sprite.Comp.PostShader = shader;
+            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ContentPostShaderIds.FloorOcclusion, shader)
+            {
+                Before = ContentPostShaderIds.BeforeOutlines,
+            });
         }
         else
         {
-            sprite.Comp.PostShader = null;
+            _sprite.RemovePostShader(sprite, ContentPostShaderIds.FloorOcclusion);
         }
     }
 }

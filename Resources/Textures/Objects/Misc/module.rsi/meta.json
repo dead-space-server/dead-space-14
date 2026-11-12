@@ -353,6 +353,18 @@
     },
     {
       "name": "supply"
+    },
+    {
+      "name": "datadisk_t2_marks"
+    },
+    {
+      "name": "datadisk_t3_marks"
+    },
+    {
+      "name": "datadisk_t2_border"
+    },
+    {
+      "name": "datadisk_t3_border"
     }
   ]
 }

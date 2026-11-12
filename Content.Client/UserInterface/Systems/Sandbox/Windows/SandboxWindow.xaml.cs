@@ -1,4 +1,4 @@
-﻿using Content.Client.DeadSpace.DeviceLinkVis; //DS-14
+using Content.Client.DeadSpace.DeviceLinkVis; //DS-14
 using Content.Client.Markers;
 using Content.Client.SubFloor;
 using Content.Client.Stylesheets;
@@ -16,9 +16,9 @@ namespace Content.Client.UserInterface.Systems.Sandbox.Windows;
 [GenerateTypedNameReferences]
 public sealed partial class SandboxWindow : DefaultWindow
 {
-    [Dependency] private readonly IEntityManager _entManager = null!;
-    [Dependency] private readonly ILightManager _lightManager = null!;
-    [Dependency] private readonly IPlayerManager _playerManager = null!;
+    [Dependency] private IEntityManager _entManager = null!;
+    [Dependency] private ILightManager _lightManager = null!;
+    [Dependency] private IPlayerManager _playerManager = null!;
     private readonly DebugPhysicsSystem _debugPhysicsSystem;
     private readonly MarkerSystem _markerSystem;
     private readonly SubFloorHideSystem _subFloorSystem;

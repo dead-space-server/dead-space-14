@@ -3,10 +3,33 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.Humanoid.Prototypes;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
+<<<<<<< ours
 namespace Content.Shared.Humanoid.Markings
+||||||| base
+namespace Content.Shared.Humanoid.Markings;
+
+/// <summary>
+/// Manager responsible for sharing the logic of markings between in-simulation bodies and out-of-simulation profile editing
+/// </summary>
+public sealed class MarkingManager
+=======
+namespace Content.Shared.Humanoid.Markings;
+
+/// <summary>
+/// Manager responsible for sharing the logic of markings between in-simulation bodies and out-of-simulation profile editing
+/// </summary>
+public sealed partial class MarkingManager
+>>>>>>> theirs
 {
-    public sealed class MarkingManager
+    [Dependency] private IComponentFactory _component = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+
+    private FrozenDictionary<HumanoidVisualLayers, FrozenDictionary<string, MarkingPrototype>> _categorizedMarkings = default!;
+    private FrozenDictionary<string, MarkingPrototype> _markings = default!;
+
+    public void Initialize()
     {
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
@@ -72,16 +95,51 @@ namespace Content.Shared.Humanoid.Markings
                     continue;
                 }
 
+<<<<<<< ours
                 if (marking.SpeciesRestrictions != null && !marking.SpeciesRestrictions.Contains(species))
+||||||| base
+                if (marking.Sprites.Count != markings[i].MarkingColors.Count)
+=======
+                var existingColors = markings[i].MarkingColors;
+                var markingColorCount = marking.GetColorCount();
+
+                // If there are less colors than sprites, fill missing spots with the last existing color,
+                // or white, if there are no existing colors
+                // This will occur if an existing marking is edited to have additional layers
+                if (existingColors.Count < markingColorCount)
                 {
-                    continue;
+                    var numMissingColors = markingColorCount - existingColors.Count;
+                    var lastColor = existingColors.Count > 0
+                        ? existingColors[^1] // Last color in the list
+                        : Color.White; // White, if none
+
+                    var missingColors = Enumerable.Repeat(lastColor, numMissingColors);
+                    markings[i] = new Marking(marking.ID, existingColors.Concat(missingColors));
                 }
-                res.Add(key, marking);
+                // If there are more colors than sprites, drop the extras
+                else if (marking.Sprites.Count < existingColors.Count)
+                {
+                    markings[i] = new Marking(marking.ID, existingColors.Take(marking.Sprites.Count));
+                }
+
+                // Ensure the colors are clamped properly
+                if (marking.Strategy == null)
+                    continue;
+
+                var clampedColors = new List<Color>();
+                foreach (var color in markings[i].MarkingColors)
+>>>>>>> theirs
+                {
+                    clampedColors.Add(marking.Strategy.EnsureVerified(color));
+                }
+
+                markings[i] =  new Marking(marking.ID, clampedColors);
             }
 
             return res;
         }
 
+<<<<<<< ours
         /// <summary>
         ///     Markings by category and sex.
         /// </summary>
@@ -94,6 +152,21 @@ namespace Content.Shared.Humanoid.Markings
         /// <returns></returns>
         public IReadOnlyDictionary<string, MarkingPrototype> MarkingsByCategoryAndSex(MarkingCategories category,
             Sex sex)
+||||||| base
+    /// <summary>
+    /// Ensures that the <see cref="markingSets"/> only belong to the <see cref="layers"/>
+    /// </summary>
+    public void EnsureValidLayers(Dictionary<HumanoidVisualLayers, List<Marking>> markingSets, HashSet<HumanoidVisualLayers> layers)
+    {
+        foreach (var markings in markingSets.Values)
+=======
+    /// <summary>
+    /// Ensures that the <see cref="markingSets"/> only belong to the <see cref="layers"/>
+    /// </summary>
+    public void EnsureValidLayers(Dictionary<HumanoidVisualLayers, List<Marking>> markingSets, HashSet<HumanoidVisualLayers> layers)
+    {
+        foreach (var (markingSet, markings) in markingSets)
+>>>>>>> theirs
         {
             var res = new Dictionary<string, MarkingPrototype>();
 
@@ -106,6 +179,17 @@ namespace Content.Shared.Humanoid.Markings
 
                 res.Add(key, marking);
             }
+<<<<<<< ours
+||||||| base
+        }
+    }
+=======
+
+            if (markings.Count == 0)
+                markingSets.Remove(markingSet);
+        }
+    }
+>>>>>>> theirs
 
             return res;
         }
@@ -145,7 +229,7 @@ namespace Content.Shared.Humanoid.Markings
                     continue;
                 }
 
-                res.Add(key, marking);
+                counts[marking.BodyPart] = count + 1;
             }
 
             return res;
@@ -171,12 +255,44 @@ namespace Content.Shared.Humanoid.Markings
                 return false;
             }
 
+<<<<<<< ours
             if (proto.MarkingCategory != category ||
                 proto.SpeciesRestrictions != null && !proto.SpeciesRestrictions.Contains(species) ||
                 proto.SexRestriction != null && proto.SexRestriction != sex)
             {
                 return false;
             }
+||||||| base
+        if (!appearancePrototype.TryGetComponent<InitialBodyComponent>(out var initialBody, _component))
+            return new();
+
+        return initialBody.Organs;
+    }
+
+    /// <summary>
+    /// Looks up the expected set of <see cref="OrganMarkingData" /> for the species to have
+    /// </summary>
+    /// <param name="species">The species to look up the usual organs of.</param>
+    /// <returns>A dictionary of organ categories to their usual organ marking data within a species.</returns>
+    public Dictionary<ProtoId<OrganCategoryPrototype>, OrganMarkingData> GetMarkingData(ProtoId<SpeciesPrototype> species)
+    {
+        var ret = new Dictionary<ProtoId<OrganCategoryPrototype>, OrganMarkingData>();
+=======
+        if (!appearancePrototype.TryComp<InitialBodyComponent>(out var initialBody, _component))
+            return new();
+
+        return initialBody.Organs;
+    }
+
+    /// <summary>
+    /// Looks up the expected set of <see cref="OrganMarkingData" /> for the species to have
+    /// </summary>
+    /// <param name="species">The species to look up the usual organs of.</param>
+    /// <returns>A dictionary of organ categories to their usual organ marking data within a species.</returns>
+    public Dictionary<ProtoId<OrganCategoryPrototype>, OrganMarkingData> GetMarkingData(ProtoId<SpeciesPrototype> species)
+    {
+        var ret = new Dictionary<ProtoId<OrganCategoryPrototype>, OrganMarkingData>();
+>>>>>>> theirs
 
             if (marking.MarkingColors.Count != proto.Sprites.Count)
             {
@@ -192,9 +308,59 @@ namespace Content.Shared.Humanoid.Markings
                 CachePrototypes();
         }
 
+<<<<<<< ours
         public bool CanBeApplied(string species, Sex sex, Marking marking, IPrototypeManager? prototypeManager = null)
         {
             IoCManager.Resolve(ref prototypeManager);
+||||||| base
+        return ret;
+    }
+
+    /// <summary>
+    /// Gets the <see cref="OrganMarkingData" /> for the entity prototype corresponding to an organ
+    /// </summary>
+    /// <param name="organ">The ID of the organ entity prototype to look up</param>
+    /// <param name="organData">The marking data for the organ if it exists</param>
+    /// <returns>Whether the provided entity prototype ID corresponded to organ marking data that could be returned</returns>
+    public bool TryGetMarkingData(EntProtoId organ, [NotNullWhen(true)] out OrganMarkingData? organData)
+    {
+        organData = null;
+
+        if (!_prototype.TryIndex(organ, out var organProto))
+            return false;
+
+        if (!organProto.TryGetComponent<VisualOrganMarkingsComponent>(out var comp, _component))
+            return false;
+
+        organData = comp.MarkingData;
+
+        return true;
+    }
+=======
+        return ret;
+    }
+
+    /// <summary>
+    /// Gets the <see cref="OrganMarkingData" /> for the entity prototype corresponding to an organ
+    /// </summary>
+    /// <param name="organ">The ID of the organ entity prototype to look up</param>
+    /// <param name="organData">The marking data for the organ if it exists</param>
+    /// <returns>Whether the provided entity prototype ID corresponded to organ marking data that could be returned</returns>
+    public bool TryGetMarkingData(EntProtoId organ, [NotNullWhen(true)] out OrganMarkingData? organData)
+    {
+        organData = null;
+
+        if (!_prototype.TryIndex(organ, out var organProto))
+            return false;
+
+        if (!organProto.TryComp<VisualOrganMarkingsComponent>(out var comp, _component))
+            return false;
+
+        organData = comp.MarkingData;
+
+        return true;
+    }
+>>>>>>> theirs
 
             var speciesProto = prototypeManager.Index<SpeciesPrototype>(species);
             var onlyWhitelisted = prototypeManager.Index(speciesProto.MarkingPoints).OnlyWhitelisted;

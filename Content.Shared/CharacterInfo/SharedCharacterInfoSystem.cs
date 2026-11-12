@@ -24,11 +24,17 @@ public sealed class CharacterInfoEvent : EntityEventArgs
     public readonly Dictionary<string, List<ObjectiveInfo>> Objectives;
     public readonly string? Briefing;
 
+<<<<<<< ours
     public CharacterInfoEvent(
         NetEntity netEntity,
         Dictionary<string, List<ObjectiveInfo>> objectives,
         string? briefing,
         ProtoId<JobPrototype>? job)
+||||||| base
+    public CharacterInfoEvent(NetEntity netEntity, string jobTitle, Dictionary<string, List<ObjectiveInfo>> objectives, string? briefing)
+=======
+    public CharacterInfoEvent(NetEntity netEntity, Dictionary<string, List<ObjectiveInfo>> objectives, string? briefing, ProtoId<JobPrototype>? job)
+>>>>>>> theirs
     {
         NetEntity = netEntity;
         Objectives = objectives;

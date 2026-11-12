@@ -8,14 +8,24 @@ using Robust.Shared.Player;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class PlayerPanelCommand : LocalizedCommands
+public sealed partial class PlayerPanelCommand : LocalizedCommands
 {
+<<<<<<< ours
     [Dependency] private readonly IPlayerLocator _locator = default!;
     [Dependency] private readonly EuiManager _euis = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IEntityManager _entities = default!; // DS14
+||||||| base
+    [Dependency] private readonly IPlayerLocator _locator = default!;
+    [Dependency] private readonly EuiManager _euis = default!;
+    [Dependency] private readonly IPlayerManager _players = default!;
+=======
+    [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private EuiManager _euis = default!;
+    [Dependency] private IPlayerManager _players = default!;
+>>>>>>> theirs
 
-    public override string Command => "playerpanel";
+    public override string Command => AdminCommandSyntax.NamePlayerPanel;
 
     public override async void Execute(IConsoleShell shell, string argStr, string[] args)
     {

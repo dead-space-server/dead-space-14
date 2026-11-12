@@ -13,10 +13,8 @@ namespace Content.Shared.EntityEffects.Effects.Botany;
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
 public sealed partial class PlantMutateSpeciesChangeEntityEffectSystem : EntityEffectSystem<PlantDataComponent, PlantMutateSpeciesChange>
 {
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PlantMutationSystem _mutation = default!;
-    // DS14-end
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private PlantMutationSystem _mutation = default!;
 
     protected override void Effect(Entity<PlantDataComponent> entity, ref EntityEffectEvent<PlantMutateSpeciesChange> args)
     {

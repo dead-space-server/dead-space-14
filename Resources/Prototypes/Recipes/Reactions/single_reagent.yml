@@ -67,10 +67,9 @@
   reactants:
     LivingTissue:
       amount: 1
-    Licoxide:
+    Histamine:
       amount: 1
     Impedrezene:
       amount: 1
   products:
     Hivarol: 1
-    Blood: 1

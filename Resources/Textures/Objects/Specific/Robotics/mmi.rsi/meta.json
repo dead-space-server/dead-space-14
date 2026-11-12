@@ -77,6 +77,15 @@
           0.1
         ]
       ]
+    },
+    {
+      "name": "empty"
+    },
+    {
+      "name": "mmi_on"
+    },
+    {
+      "name": "mmi_light"
     }
   ]
 }

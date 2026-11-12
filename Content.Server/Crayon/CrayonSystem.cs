@@ -13,20 +13,18 @@ using Content.Shared.Nutrition.EntitySystems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Prototypes;
 using Content.Server.DeadSpace.Hooligan.Objectives; // DS14
 
 namespace Content.Server.Crayon;
 
-public sealed class CrayonSystem : SharedCrayonSystem
+public sealed partial class CrayonSystem : SharedCrayonSystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly DecalSystem _decals = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedChargesSystem _charges = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private DecalSystem _decals = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedChargesSystem _charges = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
 
     public override void Initialize()
     {
@@ -45,7 +43,7 @@ public sealed class CrayonSystem : SharedCrayonSystem
     private void OnMapInit(Entity<CrayonComponent> ent, ref MapInitEvent args)
     {
         // Get the first one from the catalog and set it as default
-        var decal = _prototypeManager.EnumeratePrototypes<DecalPrototype>().FirstOrDefault(x => x.Tags.Contains("crayon"));
+        var decal = ProtoMan.EnumeratePrototypes<DecalPrototype>().FirstOrDefault(x => x.Tags.Contains("crayon"));
         ent.Comp.SelectedState = decal?.ID ?? string.Empty;
         Dirty(ent);
     }
@@ -87,7 +85,11 @@ public sealed class CrayonSystem : SharedCrayonSystem
             return;
 
         if (component.UseSound != null)
-            _audio.PlayPvs(component.UseSound, uid, AudioParams.Default.WithVariation(0.125f));
+        {
+            var audioParams = component.UseSound?.Params ?? AudioParams.Default;
+            audioParams = audioParams.WithVariation(0.125f);
+            _audio.PlayPvs(component.UseSound, uid, audioParams);
+        }
 
         _charges.TryUseCharge(uid);
 
@@ -122,7 +124,7 @@ public sealed class CrayonSystem : SharedCrayonSystem
     private void OnCrayonBoundUI(EntityUid uid, CrayonComponent component, CrayonSelectMessage args)
     {
         // Check if the selected state is valid
-        if (!_prototypeManager.TryIndex<DecalPrototype>(args.State, out var prototype) || !prototype.Tags.Contains("crayon"))
+        if (!ProtoMan.TryIndex<DecalPrototype>(args.State, out var prototype) || !prototype.Tags.Contains("crayon"))
             return;
 
         component.SelectedState = args.State;

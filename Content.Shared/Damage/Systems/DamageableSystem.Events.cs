@@ -1,4 +1,5 @@
 using Content.Shared.CCVar;
+using Content.Shared.Cloning.Events;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -18,9 +19,9 @@ public sealed partial class DamageableSystem
         SubscribeLocalEvent<DamageableComponent, ComponentGetState>(DamageableGetState);
         SubscribeLocalEvent<DamageableComponent, OnIrradiatedEvent>(OnIrradiated);
         SubscribeLocalEvent<DamageableComponent, RejuvenateEvent>(OnRejuvenate);
-
-        _appearanceQuery = GetEntityQuery<AppearanceComponent>();
-        _damageableQuery = GetEntityQuery<DamageableComponent>();
+        SubscribeLocalEvent<DamageableComponent, ComponentHandleState>(DamageableHandleState);
+        SubscribeLocalEvent<DamageableComponent, ComponentGetState>(DamageableGetState);
+        SubscribeLocalEvent<InjurableComponent, DamageDealtEvent>(OnDamageDealt);
 
         // Damage modifier CVars are updated and stored here to be queried in other systems.
         Subs.CVar(
@@ -110,10 +111,20 @@ public sealed partial class DamageableSystem
     /// </summary>
     private void DamageableInit(Entity<DamageableComponent> ent, ref ComponentInit _)
     {
+<<<<<<< ours
         if (
             ent.Comp.DamageContainerID is null ||
             !_prototypeManager.Resolve(ent.Comp.DamageContainerID, out var damageContainerPrototype)
         )
+||||||| base
+        _supportedTypesByContainer.Clear();
+
+        foreach (var proto in _prototypeManager.EnumeratePrototypes<DamageContainerPrototype>())
+=======
+        _supportedTypesByContainer.Clear();
+
+        foreach (var proto in ProtoMan.EnumeratePrototypes<DamageContainerPrototype>())
+>>>>>>> theirs
         {
             // No DamageContainerPrototype was given. So we will allow the container to support all damage types
             foreach (var type in _prototypeManager.EnumeratePrototypes<DamageTypePrototype>())
@@ -132,7 +143,7 @@ public sealed partial class DamageableSystem
 
             foreach (var groupId in damageContainerPrototype.SupportedGroups)
             {
-                var group = _prototypeManager.Index(groupId);
+                var group = ProtoMan.Index(groupId);
                 foreach (var type in group.DamageTypes)
                 {
                     ent.Comp.Damage.DamageDict.TryAdd(type, FixedPoint2.Zero);
@@ -140,7 +151,12 @@ public sealed partial class DamageableSystem
             }
         }
 
-        ent.Comp.Damage.GetDamagePerGroup(_prototypeManager, ent.Comp.DamagePerGroup);
+    /// <summary>
+    ///     Initialize a damageable component
+    /// </summary>
+    private void DamageableInit(Entity<DamageableComponent> ent, ref ComponentInit _)
+    {
+        ent.Comp.Damage.GetDamagePerGroup(ProtoMan, ent.Comp.DamagePerGroup);
         ent.Comp.TotalDamage = ent.Comp.Damage.GetTotal();
     }
 
@@ -165,6 +181,7 @@ public sealed partial class DamageableSystem
         ClearAllDamage(ent.AsNullable());
         _mobThreshold.SetAllowRevives(ent, false);
     }
+<<<<<<< ours
 
     private void DamageableHandleState(Entity<DamageableComponent> ent, ref ComponentHandleState args)
     {
@@ -187,6 +204,67 @@ public sealed partial class DamageableSystem
 
         OnEntityDamageChanged(ent, delta);
     }
+||||||| base
+=======
+
+    private void DamageableGetState(Entity<DamageableComponent> ent, ref ComponentGetState args)
+    {
+        args.State = new DamageableComponentState(
+            _netMan.IsServer ? ent.Comp.Damage : ent.Comp.Damage.Clone(),
+            ent.Comp.DamageModifierSetId,
+            ent.Comp.Displacement
+        );
+    }
+
+    private void DamageableHandleState(Entity<DamageableComponent> ent, ref ComponentHandleState args)
+    {
+        if (args.Current is not DamageableComponentState state)
+            return;
+
+        ent.Comp.DamageModifierSetId = state.ModifierSetId;
+        ent.Comp.Displacement = state.Displacement;
+
+        // Has the damage actually changed?
+        var newDamage = state.Damage.Clone();
+        var delta = newDamage - ent.Comp.Damage;
+        delta.TrimZeros();
+
+        if (delta.Empty)
+            return;
+
+        ent.Comp.Damage = newDamage;
+
+        OnEntityDamageChanged(ent, delta);
+    }
+
+    private void OnDamageDealt(Entity<InjurableComponent> ent, ref DamageDealtEvent args)
+    {
+        if (!_damageableQuery.TryGetComponent(ent, out var damageable))
+            return;
+
+        var damageDone = new DamageSpecifier();
+
+        damageDone.DamageDict.EnsureCapacity(args.Damage.DamageDict.Count);
+
+        var dict = damageable.Damage.DamageDict;
+        foreach (var (type, value) in args.Damage.DamageDict)
+        {
+            if (!SupportsType(ent.Comp.DamageContainer, type))
+                continue;
+
+            var oldValue = dict.GetValueOrDefault(type);
+            var newValue = FixedPoint2.Max(FixedPoint2.Zero, oldValue + value);
+            if (newValue == oldValue)
+                continue;
+
+            dict[type] = newValue;
+            damageDone.DamageDict[type] = newValue - oldValue;
+        }
+
+        if (!damageDone.Empty)
+            OnEntityDamageChanged((ent, damageable), damageDone, args.InterruptsDoAfters, args.Origin);
+    }
+>>>>>>> theirs
 }
 
 /// <summary>
@@ -228,6 +306,16 @@ public sealed class DamageModifyEvent(DamageSpecifier damage, EntityUid? origin 
     public readonly EntityUid? Origin = origin;
 }
 
+/// <summary>
+/// Event raised when an entity with <see cref="DamageableComponent" /> has taken some amount of damage.
+/// </summary>
+/// <param name="Damage">The amount of damage the entity is being subject to.</param>
+/// <param name="Origin">The originator of the damage</param>
+/// <param name="InterruptsDoAfters">If the damage being dealt will interrupt do-afters</param>
+[ByRefEvent]
+public readonly record struct DamageDealtEvent(DamageSpecifier Damage, EntityUid? Origin, bool InterruptsDoAfters);
+
+[Obsolete("Will be replaced with damage-model specific events; general 'took damage' can be served by DamageDealtEvent")]
 public sealed class DamageChangedEvent : EntityEventArgs
 {
     /// <summary>

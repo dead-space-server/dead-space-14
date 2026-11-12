@@ -12,14 +12,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Content.Shared.Silicons.StationAi;
 
+// Interaction handlers between the AI's held entity (its player-controlled entity within the frame) and the world.
 public abstract partial class SharedStationAiSystem
 {
     /*
      * Added when an entity is inserted into a StationAiCore.
      */
-
-    //TODO: Fix this, please
-    private const string JobNameLocId = "job-name-station-ai";
 
     private void InitializeHeld()
     {
@@ -31,23 +29,23 @@ public abstract partial class SharedStationAiSystem
         SubscribeLocalEvent<StationAiHeldComponent, AttemptRelayActionComponentChangeEvent>(OnHeldRelay);
         SubscribeLocalEvent<StationAiHeldComponent, JumpToCoreEvent>(OnCoreJump);
 
+<<<<<<< ours
         SubscribeLocalEvent<TryGetIdentityShortInfoEvent>(OnTryGetIdentityShortInfo);
 
         SubscribeLocalEvent<StationAiHeldComponent, AIEyeCamerasActionEvent>(OnOpenUiCams);
+||||||| base
+        SubscribeLocalEvent<TryGetIdentityShortInfoEvent>(OnTryGetIdentityShortInfo);
+=======
+        SubscribeLocalEvent<StationAiHeldComponent, TryGetIdentityShortInfoEvent>(OnTryGetIdentityShortInfo);
+>>>>>>> theirs
     }
 
-    private void OnTryGetIdentityShortInfo(TryGetIdentityShortInfoEvent args)
+    private void OnTryGetIdentityShortInfo(Entity<StationAiHeldComponent> ent, ref TryGetIdentityShortInfoEvent args)
     {
         if (args.Handled)
-        {
             return;
-        }
 
-        if (!HasComp<StationAiHeldComponent>(args.ForActor))
-        {
-            return;
-        }
-        args.Title = $"{Name(args.ForActor)} ({Loc.GetString(JobNameLocId)})";
+        args.Title = $"{Name(args.Target)} ({Loc.GetString("job-name-station-ai")})";
         args.Handled = true;
     }
 
@@ -129,7 +127,7 @@ public abstract partial class SharedStationAiSystem
             return;
 
         ev.Event.User = ev.Actor;
-        RaiseLocalEvent(target.Value, (object) ev.Event);
+        RaiseLocalEvent(target.Value, (object)ev.Event);
     }
 
     private void OnMessageAttempt(Entity<StationAiWhitelistComponent> ent, ref BoundUserInterfaceMessageAttempt ev)
@@ -236,7 +234,7 @@ public abstract partial class SharedStationAiSystem
 
     private void ShowDeviceNotRespondingPopup(EntityUid toEntity)
     {
-        _popup.PopupClient(Loc.GetString("ai-device-not-responding"), toEntity, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("ai-device-not-responding"), toEntity, toEntity, PopupType.MediumCaution);
     }
 
     private void OnOpenUiCams(Entity<StationAiHeldComponent> ent, ref AIEyeCamerasActionEvent args)
@@ -249,7 +247,7 @@ public abstract partial class SharedStationAiSystem
 
     private void ShowDeviceNoAccessPopup(EntityUid toEntity)
     {
-        _popup.PopupClient(Loc.GetString("ai-device-no-access"), toEntity, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("ai-device-no-access"), toEntity, toEntity, PopupType.MediumCaution);
     }
 }
 
@@ -269,13 +267,31 @@ public sealed class StationAiRadialMessage : BoundUserInterfaceMessage
 /// </summary>
 public sealed class StationAiRadial : BaseStationAiAction
 {
+    /// <summary>
+    /// The sprite to use as the icon for this menu item.
+    /// </summary>
     public SpriteSpecifier? Sprite;
 
+    /// <summary>
+    /// The string to display when the item is selected.
+    /// </summary>
     public string? Tooltip;
 
+    /// <summary>
+    /// The event type to raise when this action is selected.
+    /// </summary>
     public BaseStationAiAction Event = default!;
+<<<<<<< ours
 
     public int? Order; // DS14
+||||||| base
+=======
+
+    /// <summary>
+    /// The relative order to show this item in the menu.
+    /// </summary>
+    public int? Order;
+>>>>>>> theirs
 }
 
 /// <summary>
@@ -285,20 +301,26 @@ public sealed class StationAiRadial : BaseStationAiAction
 [Serializable, NetSerializable]
 public abstract class BaseStationAiAction
 {
-    [field:NonSerialized]
+    [field: NonSerialized]
     public EntityUid User { get; set; }
 }
 
-// No idea if there's a better way to do this.
 /// <summary>
 /// Grab actions possible for an AI on the target entity.
 /// </summary>
 [ByRefEvent]
 public record struct GetStationAiRadialEvent()
 {
+    /// <summary>
+    /// The actions this interaction supports.
+    /// Handlers should add their own actions here.
+    /// </summary>
     public List<StationAiRadial> Actions = new();
 }
 
+/// <summary>
+/// Interface keys for the radial AI menu.
+/// </summary>
 [Serializable, NetSerializable]
 public enum AiUi : byte
 {

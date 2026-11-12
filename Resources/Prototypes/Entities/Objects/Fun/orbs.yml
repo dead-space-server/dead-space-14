@@ -135,7 +135,7 @@
     deviceNetId: Wired
     receiveFrequencyId: SurveillanceCamera
     transmitFrequencyId: SurveillanceCamera
-  - type: WiredNetworkConnection
+  - type: WiredNetwork
   - type: SurveillanceCameraMonitor
 
 - type: entity
@@ -162,19 +162,18 @@
   - type: DeviceNetwork
     deviceNetId: Wireless
     receiveFrequencyId: BasicDevice
-  - type: WirelessNetworkConnection
+  - type: WirelessNetwork
     range: 20
   - type: DeviceLinkSink
     ports:
     - Trigger
-  - type: SolutionContainerManager
-    solutions:
-      magic9ball:
-        maxVol: 20
-        reagents:
-        - ReagentId: Ethanol
-          Quantity: 20
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Ethanol
+        Quantity: 30
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: DamageOnLand
     damage:
@@ -187,12 +186,6 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 100
-      behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-    - trigger:
-        !type:DamageTrigger
         damage: 20
       behaviors:
       - !type:PlaySoundBehavior
@@ -201,7 +194,7 @@
           params:
             volume: -4
       - !type:SpillBehavior
-        solution: magic9ball
+        solution: solution
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: PhysicalComposition

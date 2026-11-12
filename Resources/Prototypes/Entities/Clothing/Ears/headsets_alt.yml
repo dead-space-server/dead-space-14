@@ -99,9 +99,8 @@
   - type: Clothing
     sprite: Clothing/Ears/Headsets/medical.rsi
   - type: StealTarget
-    stealGroup: ClothingHeadsetAltMedical
-  - type: Headset
-    color: "#57b8f0"
+    stealGroup:
+    - ClothingHeadsetAltMedical
 
 - type: entity
   parent: [ClothingHeadsetAlt, BaseCommandContraband]

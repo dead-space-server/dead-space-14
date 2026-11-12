@@ -1,17 +1,9 @@
 - type: entity
+  parent: [ BaseAirlockIndestructible, StructureHealthDoorStrong ]
   id: HighSecDoor
-  parent: BaseStructure
   name: high security door
   description: Keeps the bad out and keeps the good in.
-  placement:
-    mode: SnapgridCenter
   components:
-  - type: Anchorable
-    flags:
-    - Anchorable
-  - type: Rotatable
-  - type: StationAiWhitelist
-  - type: InteractionOutline
   - type: Sprite
     snapCardinals: true
     sprite: Structures/Doors/Airlocks/highsec/highsec.rsi
@@ -70,66 +62,39 @@
     crushDamage:
       types:
         Blunt: 50
-    openSound:
-      path: /Audio/Machines/airlock_open.ogg
-    closeSound:
-      path: /Audio/Machines/airlock_close.ogg
-    denySound:
-      path: /Audio/Machines/airlock_deny.ogg
   - type: Weldable
     fuel: 10
     time: 10
-  - type: Airlock
-    openUnlitVisible: true # Corvax-Resprite-Airlocks
-  - type: NavMapDoor
-  - type: DoorBolt
-  - type: AccessReader
-    containerAccessProvider: board
-  - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.ElectrifiedVisuals.ShowSparks:
-        enum.ElectrifiedLayers.Sparks:
-          True: { visible: True }
-          False: { visible: False }
-  - type: WiresVisuals
-  - type: ElectrocutionHUDVisuals
-  - type: ApcPowerReceiver
-    powerLoad: 20
-  - type: ExtensionCableReceiver
-  - type: Electrified
-    enabled: false
-    usesApcPower: true
-  - type: WiresPanel
   - type: WiresPanelSecurity
     securityLevel: maxSecurity
   - type: Wires
     boardName: wires-board-name-highsec
     layoutId: HighSec
     alwaysRandomize: true
-  - type: UserInterface
-    interfaces:
-      enum.AiUi.Key:
-        type: StationAiBoundUserInterface
-      enum.WiresUiKey.Key:
-        type: WiresBoundUserInterface
-  - type: Airtight
-  - type: Occluder
   - type: Damageable
-    damageContainer: StructuralInorganic
-    damageModifierSet: StrongMetallic
+    damageModifierSet: PlasteelStaticMod
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 1500
+        damage: 350
       behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetPlasteel1:
+            min: 1
+            max: 2
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: -4
   - type: Construction
     graph: Airlock
     node: highSecDoor
   - type: Tag
     tags:
-      - HighSecDoor
-      # This tag is used to nagivate the Airlock construction graph. It's needed because this construction graph is shared between Airlock, AirlockGlass, and HighSecDoor
+    - HighSecDoor
+    # This tag is used to nagivate the Airlock construction graph. It's needed because this construction graph is shared between Airlock, AirlockGlass, and HighSecDoor
+    - DoorRemoteWhitelist
+    # This tag is used by door remotes to allow or not a door remote to normally be able to interact with a door

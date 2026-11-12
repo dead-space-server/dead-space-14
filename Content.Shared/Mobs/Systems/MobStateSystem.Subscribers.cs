@@ -1,8 +1,8 @@
+using Content.Shared.Actions.Events;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Cuffs;
-using Content.Shared.Damage;
 using Content.Shared.Damage.ForceSay;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Emoting;
@@ -25,8 +25,10 @@ using Content.Shared.Speech;
 using Content.Shared.Standing;
 using Content.Shared.Strip.Components;
 using Content.Shared.Throwing;
+using Content.Shared.Tools.Systems;
+using System.Linq;
+using Content.Shared.Popups;
 using Content.Shared.Weapons.Misc;
-using Robust.Shared.Physics.Components;
 
 namespace Content.Shared.Mobs.Systems;
 
@@ -38,21 +40,17 @@ public partial class MobStateSystem
     //General purpose event subscriptions. If you can avoid it register these events inside their own systems
     private void SubscribeEvents()
     {
-        SubscribeLocalEvent<MobStateComponent, BeforeGettingStrippedEvent>(OnGettingStripped);
         SubscribeLocalEvent<MobStateComponent, ChangeDirectionAttemptEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, UseAttemptEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, AttackAttemptEvent>(CheckAct);
-        SubscribeLocalEvent<MobStateComponent, ConsciousAttemptEvent>(CheckConcious);
         SubscribeLocalEvent<MobStateComponent, ThrowAttemptEvent>(CheckAct);
-        SubscribeLocalEvent<MobStateComponent, SpeakAttemptEvent>(OnSpeakAttempt);
-        SubscribeLocalEvent<MobStateComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<MobStateComponent, EmoteAttemptEvent>(CheckAct);
-        SubscribeLocalEvent<MobStateComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
         SubscribeLocalEvent<MobStateComponent, DropAttemptEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, PickupAttemptEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, StartPullAttemptEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, UpdateCanMoveEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, StandAttemptEvent>(CheckAct);
+<<<<<<< ours
         SubscribeLocalEvent<MobStateComponent, PointAttemptEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, TryingToSleepEvent>(OnSleepAttempt);
         SubscribeLocalEvent<MobStateComponent, CombatModeShouldHandInteractEvent>(OnCombatModeShouldHandInteract);
@@ -68,8 +66,20 @@ public partial class MobStateSystem
         SubscribeLocalEvent<MobStateComponent, AfterAutoHandleStateEvent>(OnAfterAutoHandleState); // DS14
         // DS14 - current engine baseline requires explicit event subscriptions.
         SubscribeLocalEvent<MobStateComponent, CheckIncapacitatedCuffEvent>(OnIncapCuffCheck);
+||||||| base
+        SubscribeLocalEvent<MobStateComponent, PointAttemptEvent>(CheckAct);
+        SubscribeLocalEvent<MobStateComponent, TryingToSleepEvent>(OnSleepAttempt);
+        SubscribeLocalEvent<MobStateComponent, CombatModeShouldHandInteractEvent>(OnCombatModeShouldHandInteract);
+        SubscribeLocalEvent<MobStateComponent, AttemptPacifiedAttackEvent>(OnAttemptPacifiedAttack);
+        SubscribeLocalEvent<MobStateComponent, DamageModifyEvent>(OnDamageModify);
+
+        SubscribeLocalEvent<MobStateComponent, UnbuckleAttemptEvent>(OnUnbuckleAttempt);
+=======
+        SubscribeLocalEvent<MobStateComponent, PointAttemptEvent>(OnPointAttempt);
+>>>>>>> theirs
     }
 
+    [SubscribeLocalEvent]
     private void OnUnbuckleAttempt(Entity<MobStateComponent> ent, ref UnbuckleAttemptEvent args)
     {
         // TODO is this necessary?
@@ -85,6 +95,7 @@ public partial class MobStateSystem
         RaiseLocalEvent(target, ref ev);
     }
 
+<<<<<<< ours
     // DS14-start
     private bool IsBuckledToDownStrap(EntityUid target)
     {
@@ -99,6 +110,10 @@ public partial class MobStateSystem
     }
     // DS14-end
 
+||||||| base
+=======
+    [SubscribeLocalEvent]
+>>>>>>> theirs
     private void CheckConcious(Entity<MobStateComponent> ent, ref ConsciousAttemptEvent args)
     {
         switch (ent.Comp.CurrentState)
@@ -198,8 +213,18 @@ public partial class MobStateSystem
         }
     }
 
+    [SubscribeLocalEvent]
+    private void OnAttemptToolRefine(Entity<MobStateComponent> ent, ref AttemptToolRefineEvent args)
+    {
+        if (!IsDead(ent, ent))
+        {
+            args = args with { IsCancelled = true, BlockCause = Loc.GetString("refined-slice-verb-target-isnt-dead") };
+        }
+    }
+
     #region Event Subscribers
 
+<<<<<<< ours
     // DS14-start
     // Adapted to the explicit subscription model used by this branch.
     private void OnAfterAutoHandleState(Entity<MobStateComponent> ent, ref AfterAutoHandleStateEvent args)
@@ -214,12 +239,17 @@ public partial class MobStateSystem
     }
     // DS14-end
 
+||||||| base
+=======
+    [SubscribeLocalEvent]
+>>>>>>> theirs
     private void OnSleepAttempt(EntityUid target, MobStateComponent component, ref TryingToSleepEvent args)
     {
         if (IsDead(target, component))
             args.Cancelled = true;
     }
 
+    [SubscribeLocalEvent]
     private void OnGettingStripped(EntityUid target, MobStateComponent component, BeforeGettingStrippedEvent args)
     {
         // Incapacitated or dead targets get stripped two or three times as fast. Makes stripping corpses less tedious.
@@ -229,6 +259,7 @@ public partial class MobStateSystem
             args.Multiplier /= 2;
     }
 
+    [SubscribeLocalEvent]
     private void OnSpeakAttempt(EntityUid uid, MobStateComponent component, SpeakAttemptEvent args)
     {
         if (HasComp<AllowNextCritSpeechComponent>(uid))
@@ -251,20 +282,35 @@ public partial class MobStateSystem
         }
     }
 
+    private void OnPointAttempt(Entity<MobStateComponent> ent, ref PointAttemptEvent args)
+    {
+        switch (ent.Comp.CurrentState)
+        {
+            case MobState.Dead:
+            case MobState.Critical:
+                args.Cancel();
+                break;
+        }
+    }
+
+    [SubscribeLocalEvent]
+
     private void OnEquipAttempt(EntityUid target, MobStateComponent component, IsEquippingAttemptEvent args)
     {
         // is this a self-equip, or are they being stripped?
-        if (args.Equipee == target)
+        if (args.User == target)
             CheckAct(target, component, args);
     }
 
+    [SubscribeLocalEvent]
     private void OnUnequipAttempt(EntityUid target, MobStateComponent component, IsUnequippingAttemptEvent args)
     {
         // is this a self-equip, or are they being stripped?
-        if (args.Unequipee == target)
+        if (args.User == target)
             CheckAct(target, component, args);
     }
 
+    [SubscribeLocalEvent]
     private void OnCombatModeShouldHandInteract(EntityUid uid, MobStateComponent component, ref CombatModeShouldHandInteractEvent args)
     {
         // Disallow empty-hand-interacting in combat mode
@@ -273,16 +319,19 @@ public partial class MobStateSystem
             args.Cancelled = true;
     }
 
+    [SubscribeLocalEvent]
     private void OnAttemptPacifiedAttack(Entity<MobStateComponent> ent, ref AttemptPacifiedAttackEvent args)
     {
         args.Cancelled = true;
     }
 
+    [SubscribeLocalEvent]
     private void OnDamageModify(Entity<MobStateComponent> ent, ref DamageModifyEvent args)
     {
         args.Damage *= _damageable.UniversalMobDamageModifier;
     }
 
+<<<<<<< ours
     private void OnJetpackAttempt(Entity<MobStateComponent> ent, ref AttemptActivateJetpackHandledEvent args)
     {
         if (!args.Enabled || ent.Comp.CurrentState != MobState.PreCritical)
@@ -369,5 +418,15 @@ public partial class MobStateSystem
             args.Incapacitated = true;
     }
 
+||||||| base
+=======
+    [SubscribeLocalEvent]
+    private void OnIncapCuffCheck(Entity<MobStateComponent> ent, ref CheckIncapacitatedCuffEvent args)
+    {
+        if (IsIncapacitated(ent, ent.Comp))
+            args.Incapacitated = true;
+    }
+
+>>>>>>> theirs
     #endregion
 }

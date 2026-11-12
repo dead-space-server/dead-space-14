@@ -12,12 +12,11 @@ namespace Content.Shared.EntityEffects.Effects.Botany.PlantAttributes;
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
 public sealed partial class PlantCryoxadoneEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantCryoxadone>
 {
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly PlantHarvestSystem _plantHarvest = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    // DS14-end
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantHarvestSystem _plantHarvest = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private BotanySystem _botany = default!;
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantCryoxadone> args)
     {
@@ -31,8 +30,14 @@ public sealed partial class PlantCryoxadoneEntityEffectSystem : EntityEffectSyst
         var deviation = plantHolder.Age > entity.Comp.Maturation
             ? (int)Math.Max(entity.Comp.Maturation - 1, plantHolder.Age - random.Next(7, 10))
             : (int)(entity.Comp.Maturation / entity.Comp.GrowthStages);
+        if (plantHolder.Age - deviation < 0)
+        {
+            _botany.TryRevertPlantToSeed(entity.Owner);
+            return;
+        }
 
-        _plantHarvest.AffectGrowth(entity.Owner, -deviation);
+        _plantHolder.AdjustsAge((entity.Owner, plantHolder), -deviation);
+        _plantHarvest.ResetHarvestProgress((entity.Owner, plantHolder));
         _plant.ForceUpdate(entity.AsNullable());
     }
 }

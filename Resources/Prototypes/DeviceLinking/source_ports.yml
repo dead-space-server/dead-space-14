@@ -47,6 +47,11 @@
   defaultLinks: [ DoorBolt ]
 
 - type: sourcePort
+  id: DoorBoltStatus
+  name: signal-port-name-doorboltstatus
+  description: signal-port-description-doorboltstatus
+
+- type: sourcePort
   id: DockStatus
   name: signal-port-name-dockstatus
   description: signal-port-description-dockstatus
@@ -82,6 +87,12 @@
   description: signal-port-description-artifact-analyzer-sender
   defaultLinks: [ ShuttleConsoleReceiver ]
   # DS14-end
+
+- type: sourcePort
+  id: TargetSource
+  name: signal-port-name-target-source
+  description: signal-port-description-target-source
+  defaultLinks: [ TargetReceiver ]
 
 - type: sourcePort
   id: TargetSource

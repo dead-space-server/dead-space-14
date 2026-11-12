@@ -13,9 +13,16 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Clothing.EntitySystems;
 
+<<<<<<< ours
 // DS14 - pre-v288 engine
 public sealed class MaskSystem : EntitySystem
+||||||| base
+public sealed class MaskSystem : EntitySystem
+=======
+public sealed partial class MaskSystem : EntitySystem
+>>>>>>> theirs
 {
+<<<<<<< ours
     // DS14-start: readonly dependencies and explicit subscriptions for the pre-v288 engine.
     [Dependency] private readonly IGameTiming _timingSystem = default!;
     [Dependency] private readonly SharedActionsSystem _actionSystem = default!;
@@ -23,35 +30,54 @@ public sealed class MaskSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+||||||| base
+    [Dependency] private readonly SharedActionsSystem _actionSystem = default!;
+    [Dependency] private readonly InventorySystem _inventorySystem = default!;
+    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly ClothingSystem _clothing = default!;
+=======
+    [Dependency] private IGameTiming _timingSystem = default!;
+    [Dependency] private SharedActionsSystem _actionSystem = default!;
+    [Dependency] private ClothingSystem _clothingSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private InventorySystem _inventorySystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<MaskComponent, GotUnequippedEvent>(OnGotUnequipped);
-        SubscribeLocalEvent<MaskComponent, GetItemActionsEvent>(OnGetActions);
-        SubscribeLocalEvent<MaskComponent, ToggleMaskEvent>(OnToggleMaskAction);
-        SubscribeLocalEvent<MaskComponent, GetVerbsEvent<EquipmentVerb>>(OnGetInteractionVerbs);
-        SubscribeLocalEvent<MaskComponent, ToggleMaskDoAfterEvent>(OnToggleMaskDoAfterEvent);
-        SubscribeLocalEvent<MaskComponent, FoldedEvent>(OnFolded);
-    }
-    // DS14-end
-
+    [SubscribeLocalEvent]
     private void OnGotUnequipped(Entity<MaskComponent> mask, ref GotUnequippedEvent args)
     {
         ToggleMask(mask, false);
     }
+>>>>>>> theirs
 
+    [SubscribeLocalEvent]
     private void OnGetActions(Entity<MaskComponent> mask, ref GetItemActionsEvent args)
     {
         if (!_inventorySystem.InSlotWithFlags(mask.Owner, SlotFlags.MASK)
             || !mask.Comp.IsToggleable)
             return;
 
+<<<<<<< ours
+        SubscribeLocalEvent<MaskComponent, GotUnequippedEvent>(OnGotUnequipped);
+        SubscribeLocalEvent<MaskComponent, GetItemActionsEvent>(OnGetActions);
+        SubscribeLocalEvent<MaskComponent, ToggleMaskEvent>(OnToggleMaskAction);
+        SubscribeLocalEvent<MaskComponent, GetVerbsEvent<EquipmentVerb>>(OnGetInteractionVerbs);
+        SubscribeLocalEvent<MaskComponent, ToggleMaskDoAfterEvent>(OnToggleMaskDoAfterEvent);
+        SubscribeLocalEvent<MaskComponent, FoldedEvent>(OnFolded);
+||||||| base
+        SubscribeLocalEvent<MaskComponent, ToggleMaskEvent>(OnToggleMask);
+        SubscribeLocalEvent<MaskComponent, GetItemActionsEvent>(OnGetActions);
+        SubscribeLocalEvent<MaskComponent, GotUnequippedEvent>(OnGotUnequipped);
+        SubscribeLocalEvent<MaskComponent, FoldedEvent>(OnFolded);
+=======
         args.AddAction(ref mask.Comp.ToggleActionEntity, mask.Comp.ToggleAction);
         Dirty(mask);
+>>>>>>> theirs
     }
+    // DS14-end
 
+    [SubscribeLocalEvent]
     private void OnToggleMaskAction(Entity<MaskComponent> mask, ref ToggleMaskEvent args)
     {
         if (args.Handled
@@ -65,6 +91,7 @@ public sealed class MaskSystem : EntitySystem
         args.Handled = true;
     }
 
+    [SubscribeLocalEvent]
     private void OnGetInteractionVerbs(Entity<MaskComponent> mask, ref GetVerbsEvent<EquipmentVerb> args)
     {
         var evArgs = args;
@@ -89,6 +116,7 @@ public sealed class MaskSystem : EntitySystem
         evArgs.Verbs.Add(verb);
     }
 
+    [SubscribeLocalEvent]
     private void OnToggleMaskDoAfterEvent(Entity<MaskComponent> mask, ref ToggleMaskDoAfterEvent args)
     {
         if (_timingSystem.ApplyingState || args.Handled || args.Cancelled)
@@ -112,6 +140,7 @@ public sealed class MaskSystem : EntitySystem
         args.Handled = true;
     }
 
+    [SubscribeLocalEvent]
     private void OnFolded(Entity<MaskComponent> mask, ref FoldedEvent args)
     {
         // See FoldableClothingComponent
@@ -144,12 +173,38 @@ public sealed class MaskSystem : EntitySystem
         {
             delay = TimeSpan.Zero;
 
+<<<<<<< ours
             var message = Loc.GetString($"action-mask-pull-{dir}-popup-message", ("mask", mask));
             _popupSystem.PopupClient(message, wearer, wearer); // DS14: avoid duplicate predicted popups.
         }
         else
         {
             delay = mask.Comp.Delay;
+
+            var message = Loc.GetString($"verb-mask-pull-{dir}-popup-message", ("puller", Identity.Entity(puller, EntityManager)), ("mask", mask));
+            _popupSystem.PopupEntity(message, wearer, wearer, PopupType.Medium);
+        }
+
+        var doAfterEv = new ToggleMaskDoAfterEvent(state, force, puller != wearer);
+        _doAfterSystem.TryStartDoAfter(
+            new DoAfterArgs(EntityManager, puller, delay, doAfterEv, mask, target: wearer)
+            {
+                BreakOnDamage = true,
+                BreakOnMove = true,
+                MovementThreshold = 0.1f,
+            });
+    }
+||||||| base
+        if (!force && !mask.Comp.IsToggleable)
+            return;
+=======
+            var message = Loc.GetString($"action-mask-pull-{dir}-popup-message", ("mask", mask));
+            _popupSystem.PopupEntity(message, wearer, wearer);
+        }
+        else
+        {
+            delay = mask.Comp.Delay;
+>>>>>>> theirs
 
             var message = Loc.GetString($"verb-mask-pull-{dir}-popup-message", ("puller", Identity.Entity(puller, EntityManager)), ("mask", mask));
             _popupSystem.PopupEntity(message, wearer, wearer, PopupType.Medium);

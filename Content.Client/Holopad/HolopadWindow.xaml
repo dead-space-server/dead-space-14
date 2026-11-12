@@ -8,8 +8,18 @@
         <BoxContainer Name="ControlsLockOutContainer" Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True" ReservesSpace="False" Visible="False">
             <!-- Header text -->
             <controls:StripeBack>
+<<<<<<< ours
                 <RichTextLabel Name="EmergencyBroadcastText" VerticalAlignment="Center" HorizontalAlignment="Center"
                                Margin="10 10 10 10" ReservesSpace="False"/> <!-- DS14 -->
+||||||| base
+                <PanelContainer>
+                    <RichTextLabel Name="EmergencyBroadcastText" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10 10 10 10" ReservesSpace="False"/>
+                </PanelContainer>
+=======
+                <PanelContainer>
+                    <RichTextLabel Text="{Loc 'holopad-window-emergency-broadcast-in-progress'}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10 10 10 10" ReservesSpace="False"/>
+                </PanelContainer>
+>>>>>>> theirs
             </controls:StripeBack>
             
             <Label Text="{Loc 'holopad-window-controls-locked-out'}" HorizontalAlignment="Center" Margin="10 5 10 0" ReservesSpace="False"/>
@@ -48,10 +58,26 @@
             <BoxContainer Name="CallPlacementControlsContainer" Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True" ReservesSpace="False">
 
                 <controls:StripeBack>
+<<<<<<< ours
                     <BoxContainer Orientation="Vertical"> <!-- DS14 -->
                         <RichTextLabel Name="SubtitleText" HorizontalAlignment="Center" Margin="0 5 0 0"/>
                         <RichTextLabel Name="OptionsText" HorizontalAlignment="Center" Margin="0 0 0 5"/>
                     </BoxContainer>
+||||||| base
+                    <PanelContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <RichTextLabel Name="SubtitleText" HorizontalAlignment="Center" Margin="0 5 0 0"/>
+                            <RichTextLabel Name="OptionsText" HorizontalAlignment="Center" Margin="0 0 0 5"/>
+                        </BoxContainer>
+                    </PanelContainer>
+=======
+                    <PanelContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <RichTextLabel Text="{Loc 'holopad-window-subtitle'}" HorizontalAlignment="Center" Margin="0 5 0 0"/>
+                            <RichTextLabel Text="{Loc 'holopad-window-options'}" HorizontalAlignment="Center" Margin="0 0 0 5"/>
+                        </BoxContainer>
+                    </PanelContainer>
+>>>>>>> theirs
                 </controls:StripeBack>
 
                 <!-- Request the station AI or activate the holopad projector (only one of these should be active at a time) -->
@@ -99,7 +125,13 @@
 
         <!-- Footer -->
         <BoxContainer Orientation="Vertical">
+<<<<<<< ours
             <PanelContainer StyleClasses="DeadSpaceAccentDim" /> <!-- DS14 -->
+||||||| base
+            <PanelContainer StyleClasses="LowDivider" />
+=======
+            <controls:Separator StyleClasses="LowDivider"/>
+>>>>>>> theirs
             <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
                 <Label Text="{Loc 'holopad-window-flavor-left'}" StyleClasses="WindowFooterText" />
                 <Label Text="{Loc 'holopad-window-flavor-right'}" StyleClasses="WindowFooterText"

@@ -1,6 +1,7 @@
 - type: gas
   id: HyperNoblium
   name: gases-hyper-noblium
+  abbreviation: gas-hyper-noblium-abbreviation
   specificHeat: 2000
   heatCapacityRatio: 1.66
   molarMass: 293
@@ -14,6 +15,7 @@
 - type: gas
   id: ProtoNitrate
   name: gases-proto-nitrate
+  abbreviation: gas-proto-nitrate-abbreviation
   specificHeat: 30
   heatCapacityRatio: 1.3
   molarMass: 60
@@ -27,6 +29,7 @@
 - type: gas
   id: Helium
   name: gases-helium
+  abbreviation: gas-helium-abbreviation
   specificHeat: 80
   heatCapacityRatio: 1.66
   molarMass: 4
@@ -37,6 +40,7 @@
 - type: gas
   id: Halon
   name: gases-halon
+  abbreviation: gas-halon-abbreviation
   specificHeat: 35
   heatCapacityRatio: 1.3
   molarMass: 200
@@ -47,6 +51,7 @@
 - type: gas
   id: Zauker
   name: gases-zauker
+  abbreviation: gas-zauker-abbreviation
   specificHeat: 30
   heatCapacityRatio: 1.3
   molarMass: 90
@@ -60,6 +65,7 @@
 - type: gas
   id: Antinoblium # Потом сделать рецепт через электролизёр газов или термояд
   name: gases-antinoblium
+  abbreviation: gas-antinoblium-abbreviation
   specificHeat: 1
   heatCapacityRatio: 1.66
   molarMass: 293
@@ -73,6 +79,7 @@
 - type: gas
   id: Psychogen
   name: gases-psychogen
+  abbreviation: gas-psychogen-abbreviation
   specificHeat: 40
   heatCapacityRatio: 1.33
   molarMass: 30

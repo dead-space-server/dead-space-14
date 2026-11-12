@@ -38,8 +38,8 @@
                         HorizontalAlignment="Left" />
                 <Control HorizontalExpand="True" />
                 <Button Visible="False"
-                        Name="Bans"
-                        Text="{Loc 'admin-player-actions-bans'}" />
+                        Name="PlayerLogs"
+                        Text="{Loc 'admin-player-actions-logs'}" />
                 <Button Visible="False"
                         Access="Public"
                         Name="Notes"

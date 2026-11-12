@@ -7,10 +7,9 @@
 # Large Plate
 
 - type: entity
-  name: large plate
+  abstract: true
   parent: BaseItem
-  id: FoodPlate
-  description: A large plate, excellent for bread.
+  id: BaseFoodPlate
   components:
   - type: Sprite
     sprite: Objects/Consumable/Food/plates.rsi
@@ -55,6 +54,7 @@
       types:
         Blunt: 5
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -77,7 +77,37 @@
         acts: [ "Destruction" ]
   - type: Tag
     tags:
+    - Dinnerware
     - Trash
+  - type: SpaceGarbage
+
+- type: entity
+  parent: BaseFoodPlate
+  id: FoodPlate
+  name: large plate
+  description: A large plate, excellent for bread.
+  components:
+  - type: Sprite
+    sprite: Objects/Consumable/Food/plates.rsi
+    state: plate
+  - type: Item
+    storedOffset: 0,-6
+    inhandVisuals:
+      left:
+      - state: plate-inhand-left
+      right:
+      - state: plate-inhand-right
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          FoodPlateTrash:
+            min: 1
+            max: 1
   - type: PhysicalComposition
     materialComposition:
       Glass: 50
@@ -95,9 +125,9 @@
   #DS14-End
 
 - type: entity
-  name: broken plate
   parent: BaseItem
   id: FoodPlateTrash
+  name: broken plate
   description: A broken plate. Useless.
   components:
   - type: Sprite
@@ -126,9 +156,9 @@
 # Small Plate
 
 - type: entity
-  name: small plate
-  parent: FoodPlate
+  parent: BaseFoodPlate
   id: FoodPlateSmall
+  name: small plate
   description: A small plate. Delicate.
   components:
   - type: Sprite
@@ -169,8 +199,6 @@
           FoodPlateSmallTrash:
             min: 1
             max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
   - type: PhysicalComposition
     materialComposition:
       Glass: 25
@@ -188,7 +216,7 @@
 # Plastic Plate
 
 - type: entity
-  parent: BaseItem
+  parent: BaseFoodPlate
   id: FoodPlatePlastic
   name: large plastic plate
   description: A large blue plastic plate, excellent for a birthday cake.
@@ -229,6 +257,7 @@
   # DS14-end
   - type: Tag
     tags:
+    - Dinnerware
     - Trash
   #DS14-Start
   - type: EmitSoundOnPickup
@@ -243,7 +272,7 @@
   #DS14-End
 
 - type: entity
-  parent: BaseItem
+  parent: BaseFoodPlate
   id: FoodPlateSmallPlastic
   name: small plastic plate
   description: A blue plastic plate, excellent for slices of birthday cake.
@@ -284,6 +313,7 @@
   # DS14-end
   - type: Tag
     tags:
+    - Dinnerware
     - Trash
   #DS14-Start
   - type: EmitSoundOnPickup
@@ -300,9 +330,9 @@
 # Pie Tin
 
 - type: entity
-  name: pie tin
   parent: BaseItem
   id: FoodPlateTin
+  name: pie tin
   description: A cheap foil tin for pies.
   components:
   - type: Sprite
@@ -335,6 +365,7 @@
   # DS14-end
   - type: Tag
     tags:
+    - Cookware
     - Trash
   - type: PhysicalComposition
     materialComposition:
@@ -390,6 +421,7 @@
   # DS14-end
   - type: Tag
     tags:
+    - Cookware
     - Trash
   - type: PhysicalComposition
     materialComposition:

@@ -1,4 +1,4 @@
-﻿<Control xmlns="https://spacestation14.io"
+<Control xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
@@ -9,6 +9,8 @@
                        StyleClasses="DeadSpaceSectionTitle"/>
                 <!-- DS14-end -->
                 <BoxContainer Orientation="Vertical" Margin="0 3 0 0">
+                    <ui:OptionDropDown Name="DropDownAudioDevice" Title="{Loc 'ui-options-audio-device'}"
+                                       Margin="0 0 0 8" />
                     <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'ui-options-master-volume'}"
                                      Margin="0 0 0 8" />
                     <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'ui-options-midi-volume'}" />
@@ -37,6 +39,8 @@
                     <CheckBox Name="AdminSoundsCheckBox" Text="{Loc 'ui-options-admin-sounds'}" />
                     <CheckBox Name="BwoinkSoundCheckBox" Text="{Loc 'ui-options-bwoink-sound'}" />
                     <CheckBox Name="RadioTTSSoundsCheckBox" Text="{Loc 'ui-options-radio-tts-sounds'}" />
+                    <CheckBox Name="AudioHrtfCheckBox" Text="{Loc 'ui-options-audio-hrtf'}" />
+                    <CheckBox Name="MuteUnfocusedCheckBox" Text="{Loc 'ui-options-mute-unfocused'}" />
                     <!-- DS14-start -->
                     <Label Text="{Loc 'ui-options-audio-environment'}" StyleClasses="DeadSpaceSectionTitle" Margin="0 12 0 4" />
                     <CheckBox Name="AreaEchoCheckBox" Text="{Loc 'ui-options-audio-room-echo'}" />

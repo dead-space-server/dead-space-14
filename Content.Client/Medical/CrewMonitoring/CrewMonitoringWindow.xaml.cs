@@ -5,7 +5,7 @@ using Content.Client.DeadSpace.StationAI;
 using Content.Client.Pinpointer.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
-using Content.Shared.Medical.SuitSensor;
+using Content.Shared.Medical.SuitSensors;
 using Content.Shared.Silicons.StationAi;
 using Content.Shared.StatusIcon;
 using Content.Shared.Medical.CrewMonitoring;
@@ -27,10 +27,18 @@ namespace Content.Client.Medical.CrewMonitoring;
 [GenerateTypedNameReferences]
 public sealed partial class CrewMonitoringWindow : FancyWindow
 {
+<<<<<<< ours
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!; // DS14
     [Dependency] private readonly IGameTiming _timing = default!; // DS14
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+||||||| base
+    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+=======
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+>>>>>>> theirs
     private readonly SharedTransformSystem _transformSystem;
     private readonly SpriteSystem _spriteSystem;
 
@@ -159,8 +167,9 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
         var uniqueSensors = uniqueSensorsMap.Values.ToList();
 
         // Order sensor data
-        var orderedSensors = uniqueSensors.OrderBy(n => n.Name).OrderBy(j => j.Job);
-        var assignedSensors = new HashSet<SuitSensorStatus>();
+        // TODO too much evil LINQ going on here
+        var orderedSensors = uniqueSensors.OrderBy(n => n.Name).ThenBy(j => j.Job);
+        var assignedSensors = new List<SuitSensorStatus>();
         var departments = uniqueSensors.SelectMany(d => d.JobDepartments).Distinct().OrderBy(n => n);
         var showAiCameraButtons = CanTrackWithAiCameras(); // DS14
 

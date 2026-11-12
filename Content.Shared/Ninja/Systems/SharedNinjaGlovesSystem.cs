@@ -18,8 +18,9 @@ namespace Content.Shared.Ninja.Systems;
 /// <summary>
 /// Provides the toggle action and handles examining and unequipping.
 /// </summary>
-public abstract class SharedNinjaGlovesSystem : EntitySystem
+public abstract partial class SharedNinjaGlovesSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
@@ -29,6 +30,21 @@ public abstract class SharedNinjaGlovesSystem : EntitySystem
     //DS14-start
     [Dependency] private readonly InventorySystem _inventory = default!;
     //DS14-end
+||||||| base
+    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private readonly ItemToggleSystem _toggle = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedSpaceNinjaSystem _ninja = default!;
+=======
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSpaceNinjaSystem _ninja = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -126,7 +142,7 @@ public abstract class SharedNinjaGlovesSystem : EntitySystem
             return;
 
         var message = Loc.GetString(args.Activated ? "ninja-gloves-on" : "ninja-gloves-off");
-        _popup.PopupClient(message, user, user);
+        _popup.PopupEntity(message, user, user);
 
         if (args.Activated && _ninja.NinjaQuery.TryComp(user, out var ninja))
             EnableGloves(ent, (user, ninja));

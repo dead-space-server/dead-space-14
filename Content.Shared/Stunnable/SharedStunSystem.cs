@@ -1,3 +1,4 @@
+using System.Globalization;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
@@ -30,6 +31,7 @@ public abstract partial class SharedStunSystem : EntitySystem
 {
     public static readonly EntProtoId StunId = "StatusEffectStunned";
 
+<<<<<<< ours
     [Dependency] protected readonly IGameTiming GameTiming = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] protected readonly ActionBlockerSystem Blocker = default!;
@@ -42,6 +44,31 @@ public abstract partial class SharedStunSystem : EntitySystem
     [Dependency] protected readonly SharedStaminaSystem Stamina = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+||||||| base
+    [Dependency] protected readonly IGameTiming GameTiming = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] protected readonly ActionBlockerSystem Blocker = default!;
+    [Dependency] protected readonly AlertsSystem Alerts = default!;
+    [Dependency] private readonly EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
+    [Dependency] protected readonly SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected readonly SharedStaminaSystem Stamina = default!;
+    [Dependency] private readonly StatusEffectsSystem _status = default!;
+=======
+    [Dependency] protected IGameTiming GameTiming = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] protected ActionBlockerSystem Blocker = default!;
+    [Dependency] protected AlertsSystem Alerts = default!;
+    [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] protected SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected SharedStaminaSystem Stamina = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -175,7 +202,7 @@ public abstract partial class SharedStunSystem : EntitySystem
     }
 
     // TODO STUN: Make events for different things. (Getting modifiers, attempt events, informative events...)
-    public bool TryAddStunDuration(EntityUid uid, TimeSpan duration)
+    public bool TryAddStunDuration(EntityUid uid, TimeSpan duration, bool visualized = false)
     {
         if (HasComp<StunImmuneComponent>(uid))
             return false;
@@ -183,11 +210,17 @@ public abstract partial class SharedStunSystem : EntitySystem
         if (!_status.TryAddStatusEffectDuration(uid, StunId, duration))
             return false;
 
-        OnStunnedSuccessfully(uid, duration);
+        OnStunnedSuccessfully(uid, duration, visualized);
         return true;
     }
 
+<<<<<<< ours
     public bool TryUpdateStunDuration(EntityUid uid, TimeSpan? duration, bool drop = true) // DS14
+||||||| base
+    public bool TryUpdateStunDuration(EntityUid uid, TimeSpan? duration)
+=======
+    public bool TryUpdateStunDuration(EntityUid uid, TimeSpan? duration, bool visualized = false)
+>>>>>>> theirs
     {
         if (HasComp<StunImmuneComponent>(uid))
             return false;
@@ -195,11 +228,23 @@ public abstract partial class SharedStunSystem : EntitySystem
         if (!_status.TryUpdateStatusEffectDuration(uid, StunId, duration))
             return false;
 
+<<<<<<< ours
         OnStunnedSuccessfully(uid, duration, drop); // DS14
+||||||| base
+        OnStunnedSuccessfully(uid, duration);
+=======
+        OnStunnedSuccessfully(uid, duration, visualized);
+>>>>>>> theirs
         return true;
     }
 
+<<<<<<< ours
     private void OnStunnedSuccessfully(EntityUid uid, TimeSpan? duration, bool drop = true) // DS14
+||||||| base
+    private void OnStunnedSuccessfully(EntityUid uid, TimeSpan? duration)
+=======
+    private void OnStunnedSuccessfully(EntityUid uid, TimeSpan? duration, bool visualized)
+>>>>>>> theirs
     {
         var ev = new StunnedEvent(); // todo: rename event or change how it is raised - this event is raised each time duration of stun was externally changed
         RaiseLocalEvent(uid, ref ev);
@@ -210,8 +255,11 @@ public abstract partial class SharedStunSystem : EntitySystem
             RaiseLocalEvent(uid, ref evDropHands);
         }
 
+        if (visualized)
+            TrySeeingStars(uid);
+
         var timeForLogs = duration.HasValue
-            ? duration.Value.Seconds.ToString()
+            ? duration.Value.TotalSeconds.ToString(CultureInfo.CurrentCulture)
             : "Infinite";
         _adminLogger.Add(LogType.Stamina, LogImpact.Medium, $"{ToPrettyString(uid):user} stunned for {timeForLogs} seconds");
     }
@@ -345,7 +393,7 @@ public abstract partial class SharedStunSystem : EntitySystem
         if (time != null)
         {
             UpdateKnockdownTime((uid, component), time.Value, refresh);
-            _adminLogger.Add(LogType.Stamina, LogImpact.Medium, $"{ToPrettyString(uid):user} was knocked down for {time.Value.Seconds} seconds");
+            _adminLogger.Add(LogType.Stamina, LogImpact.Medium, $"{ToPrettyString(uid):user} was knocked down for {time.Value.TotalSeconds} seconds");
         }
         else
         {
@@ -354,7 +402,13 @@ public abstract partial class SharedStunSystem : EntitySystem
         }
     }
 
+<<<<<<< ours
     public bool TryAddParalyzeDuration(EntityUid uid, TimeSpan? duration, bool drop = true) // DS14
+||||||| base
+    public bool TryAddParalyzeDuration(EntityUid uid, TimeSpan? duration)
+=======
+    public bool TryAddParalyzeDuration(EntityUid uid, TimeSpan? duration, bool visualized = false)
+>>>>>>> theirs
     {
         if (HasComp<StunImmuneComponent>(uid))
             return false;
@@ -366,13 +420,27 @@ public abstract partial class SharedStunSystem : EntitySystem
             return false;
 
         // We can't exit knockdown when we're stunned, so this prevents knockdown lasting longer than the stun.
+<<<<<<< ours
         Knockdown(uid, null, false, true, drop); // DS14
         OnStunnedSuccessfully(uid, duration, drop); // DS14
+||||||| base
+        Knockdown(uid, null, false, true, true);
+        OnStunnedSuccessfully(uid, duration);
+=======
+        Knockdown(uid, null, false, true, true);
+        OnStunnedSuccessfully(uid, duration, visualized);
+>>>>>>> theirs
 
         return true;
     }
 
+<<<<<<< ours
     public bool TryUpdateParalyzeDuration(EntityUid uid, TimeSpan? duration, bool drop = true) // DS14
+||||||| base
+    public bool TryUpdateParalyzeDuration(EntityUid uid, TimeSpan? duration)
+=======
+    public bool TryUpdateParalyzeDuration(EntityUid uid, TimeSpan? duration, bool visualized = false)
+>>>>>>> theirs
     {
         if (HasComp<StunImmuneComponent>(uid))
             return false;
@@ -381,8 +449,16 @@ public abstract partial class SharedStunSystem : EntitySystem
             return false;
 
         // We can't exit knockdown when we're stunned, so this prevents knockdown lasting longer than the stun.
+<<<<<<< ours
         Knockdown(uid, null, false, true, drop); // DS14
         OnStunnedSuccessfully(uid, duration, drop); // DS14
+||||||| base
+        Knockdown(uid, null, false, true, true);
+        OnStunnedSuccessfully(uid, duration);
+=======
+        Knockdown(uid, null, false, true, true);
+        OnStunnedSuccessfully(uid, duration, visualized);
+>>>>>>> theirs
 
         return true;
     }
@@ -477,14 +553,14 @@ public abstract partial class SharedStunSystem : EntitySystem
     private void OnEquipAttempt(EntityUid uid, StunnedComponent stunned, IsEquippingAttemptEvent args)
     {
         // is this a self-equip, or are they being stripped?
-        if (args.Equipee == uid)
+        if (args.User == uid)
             args.Cancel();
     }
 
     private void OnUnequipAttempt(EntityUid uid, StunnedComponent stunned, IsUnequippingAttemptEvent args)
     {
         // is this a self-equip, or are they being stripped?
-        if (args.Unequipee == uid)
+        if (args.User == uid)
             args.Cancel();
     }
 

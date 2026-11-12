@@ -14,6 +14,7 @@ using Content.Shared.DeadSpace.CCCCVars; // DS14
 using Content.Shared.DeadSpace.Storage; // DS14
 using Content.Shared.Input;
 using Content.Shared.Interaction;
+using Content.Shared.Pointing;
 using Content.Shared.Storage;
 using Robust.Client.GameObjects;
 using Robust.Client.Input;
@@ -28,7 +29,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.UserInterface.Systems.Storage;
 
-public sealed class StorageUIController : UIController, IOnSystemChanged<StorageSystem>
+public sealed partial class StorageUIController : UIController, IOnSystemChanged<StorageSystem>
 {
     /*
      * Things are a bit over the shop but essentially
@@ -39,12 +40,13 @@ public sealed class StorageUIController : UIController, IOnSystemChanged<Storage
      * - StorageSystem handles any sim stuff around open windows.
      */
 
-    [Dependency] private readonly IConfigurationManager _configuration = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly CloseRecentWindowUIController _closeRecentWindowUIController = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private CloseRecentWindowUIController _closeRecentWindowUIController = default!;
     [UISystemDependency] private readonly StorageSystem _storage = default!;
     [UISystemDependency] private readonly UserInterfaceSystem _ui = default!;
+    [UISystemDependency] private readonly Pointing.PointingSystem _pointing = default!;
 
     private readonly DragDropHelper<ItemGridPiece> _menuDragHelper;
 
@@ -173,7 +175,8 @@ public sealed class StorageUIController : UIController, IOnSystemChanged<Storage
         else
         {
             // Open at parent position if it's open.
-            if (_ui.TryGetOpenUi<StorageBoundUserInterface>(EntityManager.GetComponent<TransformComponent>(sBui.Owner).ParentUid,
+            if (_storage.TryGetContainingStorage(sBui.Owner, out var parentStorage) &&
+                _ui.TryGetOpenUi<StorageBoundUserInterface>(parentStorage.Value.Owner,
                     StorageComponent.StorageUiKey.Key, out var bui) && bui.Position != null)
             {
                 window.Open(bui.Position.Value);
@@ -311,6 +314,11 @@ public sealed class StorageUIController : UIController, IOnSystemChanged<Storage
             EntityManager.RaisePredictiveEvent(new InteractInventorySlotEvent(EntityManager.GetNetEntity(control.Entity), altInteract: true));
             args.Handle();
         }
+        else if (args.Function == ContentKeyFunctions.Point)
+        {
+            _pointing.TryPointAtEntity(control.Entity);
+            args.Handle();
+        }
 
         window.FlagDirty();
     }
@@ -430,8 +438,8 @@ public sealed class StorageUIController : UIController, IOnSystemChanged<Storage
 
         // If the attached storage is closed then stop dragging
         if (player == null ||
-            !_storage.TryGetStorageLocation(DraggingGhost.Entity, out var container, out _, out _) ||
-            !_ui.IsUiOpen(container.Owner, StorageComponent.StorageUiKey.Key, player.Value))
+            !_storage.TryGetContainingStorage(DraggingGhost.Entity, out var storage) ||
+            !_ui.IsUiOpen(storage.Value.Owner, StorageComponent.StorageUiKey.Key, player.Value))
         {
             DraggingGhost.Orphan();
             return false;

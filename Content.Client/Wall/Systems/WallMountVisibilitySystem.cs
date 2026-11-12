@@ -10,13 +10,15 @@ namespace Content.Client.Wall.Systems;
 /// <summary>
 /// Manages the directional visibility overlay for wall-mounted entities.
 /// </summary>
-// DS14: Current engine uses explicit event subscriptions without system source generation.
-public sealed class WallMountVisibilitySystem : EntitySystem
+public sealed partial class WallMountVisibilitySystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+
+    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery;
+    [Dependency] private EntityQuery<WallComponent> _wallQuery;
 
     private WallMountVisibilityOverlay _overlayInstance = default!;
 
@@ -35,11 +37,6 @@ public sealed class WallMountVisibilitySystem : EntitySystem
         base.Initialize();
 
         _overlayInstance = new WallMountVisibilityOverlay();
-
-        // DS14-start: Current engine does not support source-generated event subscriptions.
-        SubscribeLocalEvent<WallMountComponent, ComponentShutdown>(OnWallMountShutdown);
-        SubscribeLocalEvent<WallMountComponent, AfterAutoHandleStateEvent>(OnWallMountAfterHandleState);
-        // DS14-end
 
         Subs.CVar(_cfg, CCVars.WallMountDirectionalVisibility, OnDirectionalVisibilityChanged, true);
         Subs.CVar(_cfg, CCVars.WallMountFade, OnFadeChanged, true);
@@ -73,12 +70,13 @@ public sealed class WallMountVisibilitySystem : EntitySystem
     /// <summary>
     /// Makes the entity visible again on component shutdown.
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnWallMountShutdown(Entity<WallMountComponent> ent, ref ComponentShutdown args)
     {
         if (TerminatingOrDeleted(ent))
             return;
 
-        if (!TryComp<SpriteComponent>(ent, out var sprite))
+        if (!_spriteQuery.TryComp(ent, out var sprite))
             return;
 
         _sprite.SetVisible((ent, sprite), true);
@@ -87,12 +85,13 @@ public sealed class WallMountVisibilitySystem : EntitySystem
     /// <summary>
     /// Makes the entity visible again if directional visibility is disabled for this mount.
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnWallMountAfterHandleState(Entity<WallMountComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         if (ent.Comp.DirectionalVisibility)
             return;
 
-        if (!TryComp<SpriteComponent>(ent, out var sprite))
+        if (!_spriteQuery.TryComp(ent, out var sprite))
             return;
 
         _sprite.SetVisible((ent, sprite), true);
@@ -103,10 +102,10 @@ public sealed class WallMountVisibilitySystem : EntitySystem
     /// </summary>
     public bool IsTileBlocked(Entity<MapGridComponent> grid, Vector2i tile)
     {
-        var enumerator = _map.GetAnchoredEntitiesEnumerator(grid.Owner, grid, tile);
+        var enumerator = _map.GetAnchoredEntities(grid.Owner, grid, tile);
         while (enumerator.MoveNext(out var anchored))
         {
-            if (!HasComp<WallComponent>(anchored.Value))
+            if (!_wallQuery.HasComp(anchored.Value))
                 continue;
 
             return true;

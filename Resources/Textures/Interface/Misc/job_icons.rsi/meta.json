@@ -310,9 +310,17 @@
         {
             "name": "Zombie"
         },
-	{
-      	    "name": "IAAOfficer"
-    	}
-
+        {
+            "name": "IAAOfficer"
+        },
+        {
+            "name": "SeniorCourier"
+        },
+        {
+            "name": "Sus"
+        },
+        {
+            "name": "TramDriver"
+        }
     ]
 }

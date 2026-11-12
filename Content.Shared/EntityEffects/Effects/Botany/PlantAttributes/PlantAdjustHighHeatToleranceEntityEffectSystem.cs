@@ -9,10 +9,8 @@ namespace Content.Shared.EntityEffects.Effects.Botany.PlantAttributes;
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
 public sealed partial class PlantAdjustHighHeatToleranceEntityEffectSystem : EntityEffectSystem<PlantAtmosphericComponent, PlantAdjustHighHeatTolerance>
 {
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly SharedPlantAtmosphericSystem _plantAtmospheric = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    // DS14-end
+    [Dependency] private SharedPlantAtmosphericSystem _plantAtmospheric = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
 
     protected override void Effect(Entity<PlantAtmosphericComponent> entity, ref EntityEffectEvent<PlantAdjustHighHeatTolerance> args)
     {

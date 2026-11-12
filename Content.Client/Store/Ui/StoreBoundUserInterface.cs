@@ -1,8 +1,7 @@
+using System.Linq;
 using Content.Shared.Store;
 using JetBrains.Annotations;
-using System.Linq;
 using Content.Shared.Backmen.Store;
-using Content.Shared.Store.Components;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
 
@@ -11,7 +10,14 @@ namespace Content.Client.Store.Ui;
 [UsedImplicitly]
 public sealed class StoreBoundUserInterface : BoundUserInterface
 {
+<<<<<<< ours
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14
+||||||| base
+    private IPrototypeManager _prototypeManager = default!;
+=======
+    private IPrototypeManager _prototypeManager = default!;
+    private readonly StoreSystem _storeSystem = default!;
+>>>>>>> theirs
 
     [ViewVariables]
     private StoreMenu? _menu;
@@ -27,7 +33,12 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
 
     public StoreBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
+<<<<<<< ours
         IoCManager.InjectDependencies(this); // DS14
+||||||| base
+=======
+        _storeSystem = EntMan.System<StoreSystem>();
+>>>>>>> theirs
     }
 
     protected override void Open()
@@ -35,12 +46,12 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
         base.Open();
 
         _menu = this.CreateWindow<StoreMenu>();
-        if (EntMan.TryGetComponent<StoreComponent>(Owner, out var store))
-            _menu.Title = Loc.GetString(store.Name);
+        if (_storeSystem.TryGetStore(Owner, out var store))
+            _menu.Title = Loc.GetString(store.Value.Comp.Name);
 
         _menu.OnListingButtonPressed += (_, listing) =>
         {
-            SendMessage(new StoreBuyListingMessage(listing.ID));
+            SendMessage(new StoreBuyListingMessage(listing.ID, EntMan.GetNetEntity(Owner)));
         };
 
         _menu.OnCategoryButtonPressed += (_, category) =>

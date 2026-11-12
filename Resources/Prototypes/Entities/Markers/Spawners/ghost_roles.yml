@@ -38,7 +38,7 @@
     sprite: Markers/jobs.rsi
     layers:
       - state: green
-      - sprite: Mobs/Animals/regalrat.rsi
+      - sprite: Mobs/Animals/Rodents/regalrat.rsi
         state: icon
   #DS14-start
   - type: GhostRoleNotifys
@@ -107,7 +107,7 @@
   parent: MarkerBase
   components:
   - type: GhostRole
-    rules: ghost-role-information-rules-default-team-antagonist
+    rules: ghost-role-information-nukeop-rules
     mindRoles:
     - MindRoleNukeops
     requirements:
@@ -173,7 +173,7 @@
   - type: GhostRole
     name: roles-antag-nuclear-operative-commander-name
     description: roles-antag-nuclear-operative-commander-objective
-    rules: ghost-role-information-rules-default-team-antagonist
+    rules: ghost-role-information-nukeop-rules
     mindRoles:
     - MindRoleNukeopsCommander
     requirements:
@@ -199,7 +199,7 @@
   - type: GhostRole
     name: roles-antag-nuclear-operative-agent-name
     description: roles-antag-nuclear-operative-agent-objective
-    rules: ghost-role-information-rules-default-team-antagonist
+    rules: ghost-role-information-nukeop-rules
     mindRoles:
     - MindRoleNukeopsMedic
     requirements:
@@ -225,7 +225,7 @@
   - type: GhostRole
     name: roles-antag-nuclear-operative-name
     description: roles-antag-nuclear-operative-objective
-    rules: ghost-role-information-rules-default-team-antagonist
+    rules: ghost-role-information-nukeop-rules
     mindRoles:
     - MindRoleNukeops
   #DS14-start
@@ -290,6 +290,26 @@
   - type: GhostRoleNotifys
     groupPrototype: Nijaping
   #DS14-end
+
+- type: entity
+  categories: [ HideSpawnMenu, Spawner ]
+  parent: BaseAntagSpawner
+  id: SpawnPointGhostSpaceChangeling
+  components:
+  - type: GhostRole
+    name: ghost-role-information-space-changeling-name
+    description: ghost-role-information-space-changeling-description
+    rules: ghost-role-information-antagonist-rules
+    mindRoles:
+    - MindRoleChangeling
+    raffle:
+      settings: default
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green
+    - sprite: Objects/Weapons/Melee/armblade.rsi
+      state: icon
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -478,7 +498,7 @@
     sprite: Markers/jobs.rsi
     layers:
     - state: green
-    - sprite: Clothing/Head/Hats/wizardhat.rsi
+    - sprite: Clothing/Head/Hats/wizard_blue.rsi
       state: icon
   #DS14-start
   - type: GhostRoleNotifys

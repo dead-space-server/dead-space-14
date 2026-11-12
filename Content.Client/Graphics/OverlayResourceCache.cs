@@ -1,4 +1,10 @@
+<<<<<<< ours
 ﻿﻿using Robust.Client.Graphics;
+||||||| base
+﻿using Robust.Client.Graphics;
+=======
+using Robust.Client.Graphics;
+>>>>>>> theirs
 
 namespace Content.Client.Graphics;
 

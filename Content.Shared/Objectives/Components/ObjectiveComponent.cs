@@ -1,5 +1,5 @@
 using Content.Shared.Mind;
-using Content.Shared.Objectives;
+using Content.Shared.Objectives.Prototypes;
 using Content.Shared.Objectives.Systems;
 using Robust.Shared.Utility;
 using Robust.Shared.Prototypes;
@@ -22,11 +22,22 @@ public sealed partial class ObjectiveComponent : Component
     /// <summary>
     /// Organisation that issued this objective, used for grouping and as a header above common objectives.
     /// </summary>
+<<<<<<< ours
     [DataField("issuer", required: true)]
     public LocId Issuer { get; set; } // DS14: dynamic corporation issuers.
 
     [ViewVariables(VVAccess.ReadOnly)]
     public string LocIssuer => Loc.GetString(Issuer);
+||||||| base
+    [DataField("issuer", required: true)]
+    private LocId Issuer { get; set; }
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public string LocIssuer => Loc.GetString(Issuer);
+=======
+    [DataField(required: true)]
+    public ProtoId<ObjectiveIssuerPrototype> Issuer = "Unknown";
+>>>>>>> theirs
 
     /// <summary>
     /// Unique objectives can only have 1 per prototype id.

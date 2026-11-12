@@ -18,8 +18,9 @@ namespace Content.Server.Ninja.Systems;
 /// Handles power cell upgrading and actions.
 /// TODO: Move all of this to shared and predict it
 /// </summary>
-public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
+public sealed partial class NinjaSuitSystem : SharedNinjaSuitSystem
 {
+<<<<<<< ours
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SpaceNinjaSystem _ninja = default!;
     [Dependency] private readonly PowerCellSystem _powerCell = default!;
@@ -29,6 +30,25 @@ public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly AutoDustSystem _autoDust = default!;
     //DS14-end
+||||||| base
+    [Dependency] private readonly SharedEmpSystem _emp = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SpaceNinjaSystem _ninja = default!;
+    [Dependency] private readonly PowerCellSystem _powerCell = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+
+    // How much the cell score should be increased per 1 AutoRechargeRate.
+    private const int AutoRechargeValue = 100;
+=======
+    [Dependency] private SharedEmpSystem _emp = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SpaceNinjaSystem _ninja = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+
+    // How much the cell score should be increased per 1 AutoRechargeRate.
+    private const int AutoRechargeValue = 100;
+>>>>>>> theirs
 
     public override void Initialize()
     {

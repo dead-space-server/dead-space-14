@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: [ BaseItem, StorePresetUplink ] #PDA's have uplinks so they have to inherit the data.
+  parent: [ BaseItem ]
   id: BasePDA
   name: PDA
   description: Personal Data Assistant.
@@ -97,7 +97,8 @@
       PDA-pai: !type:ContainerSlot {}
       PDA-tool: !type:ContainerSlot {}
       Cartridge-Slot: !type:ContainerSlot {}
-      program-container: !type:Container
+      preinstalled-program-container: !type:Container
+      removable-program-container: !type:Container
   - type: ItemSlots
   - type: Clothing
     quickEquip: false
@@ -118,7 +119,7 @@
     receiveFrequencyId: PDA
     prefix: device-address-prefix-console
     savableAddress: false
-  - type: WirelessNetworkConnection
+  - type: WirelessNetwork
     range: 500
   - type: CartridgeLoader
     uiKey: enum.PdaUiKey.Key
@@ -132,13 +133,21 @@
       - BankCartridge
       - PdaGamesCartridge
     cartridgeSlot:
-      priority: -1
       name: device-pda-slot-component-slot-name-cartridge
+      priority: 1
       ejectSound: /Audio/Machines/id_swipe.ogg
       insertSound: /Audio/Machines/id_insert.ogg
       whitelist:
         components:
           - Cartridge
+  - type: EntityTableContainerFill
+    containers:
+      preinstalled-program-container: !type:AllSelector
+        children:
+        - id: CrewManifestCartridge
+        - id: NotekeeperCartridge
+        - id: NanoTaskCartridge
+        - id: NewsReaderCartridge
   - type: ActivatableUI
     key: enum.PdaUiKey.Key
     singleUser: true
@@ -154,6 +163,7 @@
         type: InstrumentBoundUserInterface
       enum.HealthAnalyzerUiKey.Key:
         type: HealthAnalyzerBoundUserInterface
+  - type: RemoteStore # PDAs can access uplinks so they need this component.
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -467,7 +477,7 @@
         components:
         - IdCard
     penSlot:
-      startingItem: Pen
+      startingItem: CrayonMime
       priority: -1
       whitelist:
         tags:
@@ -476,6 +486,7 @@
       insertSound: null
   - type: CartridgeLoader
     cartridgeSlot:
+      priority: 1
       ejectSound: null
       insertSound: null
       whitelist:
@@ -495,6 +506,12 @@
     accentHColor: "#333333"
   - type: Icon
     state: pda-mime
+  - type: EntityTableContainerFill
+    containers:
+      preinstalled-program-container: !type:AllSelector
+        children:
+        - id: CrewManifestCartridge
+        - id: NewsReaderCartridge
   - type: PermanentStatusEffects # for random sentience event
     statusEffects:
     - TraitStatusEffectMuted
@@ -1055,7 +1072,6 @@
     scanDelay: 0
     silent: true
   - type: CartridgeLoader
-    uiKey: enum.PdaUiKey.Key
     notificationsEnabled: false
     preinstalled:
       - CrewManifestCartridge
@@ -1188,7 +1204,16 @@
 
 - type: entity
   parent: ClearPDA
+  id: PrisonerPDA # This mostly just exists for the sake of the chameleon UI giving a clear PDA with a prisoner ID
+  suffix: Prisoner
+  components:
+  - type: Pda
+    id: PrisonerIDCard
+
+- type: entity
+  parent: ClearPDA
   id: VisitorPDA
+  suffix: Visitor
   components:
   - type: Pda
     id: VisitorIDCard
@@ -1402,6 +1427,25 @@
     accentVColor: "#12445b" # DS14
   - type: Icon
     state: pda-medical
+
+- type: entity
+  parent: BasePDA
+  id: TramDriverPDA
+  name: tram driver PDA
+  description: A serious driver will always arrive on time.
+  components:
+  - type: Pda
+    id: TramDriverIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-tramdriver
+  - type: PdaBorderColor
+    borderColor: "#454a50"
+    accentVColor: "#ffc500"
+  - type: Icon
+    state: pda-tramdriver
 
 - type: entity
   parent: BasePDA
@@ -1721,6 +1765,14 @@
     id: AgentIDCard
 
 - type: entity
+  parent: PassengerPDA
+  id: SyndiCovertPDA
+  suffix: Adaptive
+  components:
+  - type: Pda
+    id: SyndicateIDCardAdaptivePassenger
+
+- type: entity
   parent: BaseWidePDA
   id: WizardPDA
   name: wizard PDA
@@ -1747,6 +1799,7 @@
 - type: entity
   parent: ClearPDA
   id: ScurretPDA
+  suffix: Scurret
   description: A temporary PDA granted to scurret temps. Doesn't do much. Wawa!
   components:
   - type: Pda

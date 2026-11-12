@@ -11,6 +11,10 @@ public sealed class PanelSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet,
 {
     public override StyleRule[] GetRules(T sheet, object config)
     {
+        var box = new StyleBoxFlat
+        {
+            BackgroundColor = sheet.SecondaryPalette.Background
+        };
         var boxLight = new StyleBoxFlat
         {
             BackgroundColor = sheet.SecondaryPalette.BackgroundLight
@@ -18,6 +22,12 @@ public sealed class PanelSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet,
         var boxDark = new StyleBoxFlat
         {
             BackgroundColor = sheet.SecondaryPalette.BackgroundDark
+        };
+        var boxInsetDark = new StyleBoxFlat
+        {
+            BackgroundColor = sheet.SecondaryPalette.BackgroundDark,
+            BorderColor = sheet.PrimaryPalette.Background,
+            BorderThickness = new Thickness(2f)
         };
         var boxDeep = new StyleBoxFlat
         {
@@ -36,9 +46,12 @@ public sealed class PanelSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet,
 
         return
         [
+            E<PanelContainer>().Class(StyleClass.Panel).Panel(box),
             E<PanelContainer>().Class(StyleClass.PanelLight).Panel(boxLight),
             E<PanelContainer>().Class(StyleClass.PanelDark).Panel(boxDark),
             E<PanelContainer>().Class(StyleClass.PanelDeep).Panel(boxDeep),
+            E<PanelContainer>().Class(StyleClass.PanelDropTarget).Panel(boxDropTarget),
+            E<PanelContainer>().Class(StyleClass.PanelInsetDark).Panel(boxInsetDark),
             E<PanelContainer>().Class(StyleClass.PanelInsetDeep).Panel(boxInsetDeep),
 
             E<PanelContainer>().Class(StyleClass.Positive).Panel(boxPositive),

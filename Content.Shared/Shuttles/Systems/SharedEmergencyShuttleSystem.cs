@@ -7,13 +7,26 @@ using Robust.Shared.Configuration;
 
 namespace Content.Shared.Shuttles.Systems;
 
-public abstract class SharedEmergencyShuttleSystem : EntitySystem
+public abstract partial class SharedEmergencyShuttleSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] protected readonly AccessReaderSystem AccessReader = default!; // DS14
     [Dependency] protected readonly IConfigurationManager ConfigManager = default!;
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
+||||||| base
+    [Dependency] protected readonly IConfigurationManager ConfigManager = default!;
+    [Dependency] protected readonly SharedPopupSystem Popup = default!;
+=======
+    [Dependency] protected IConfigurationManager ConfigManager = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+>>>>>>> theirs
 
     protected bool EmergencyEarlyLaunchAllowed; // DS14
+
+    /// <summary>
+    /// Has the emergency shuttle arrived?
+    /// </summary>
+    public bool EmergencyShuttleArrived { get; protected set; }
 
     public override void Initialize()
     {
@@ -33,9 +46,24 @@ public abstract class SharedEmergencyShuttleSystem : EntitySystem
             return;
 
         if (!args.Silent)
+<<<<<<< ours
             Popup.PopupEntity(Loc.GetString("emergency-shuttle-console-denied"), ent, args.User);
 
         args.Cancel();
         // DS14-end
+||||||| base
+            Popup.PopupClient(Loc.GetString("emergency-shuttle-console-no-early-launches"), ent, args.User);
+=======
+            Popup.PopupEntity(Loc.GetString("emergency-shuttle-console-no-early-launches"), ent, args.User);
+    }
+
+    /// <summary>
+    ///     Attempts to get the EntityUid of the emergency shuttle
+    /// </summary>
+    public EntityUid? GetShuttle()
+    {
+        AllEntityQuery<EmergencyShuttleComponent>().MoveNext(out var shuttle, out _);
+        return shuttle;
+>>>>>>> theirs
     }
 }

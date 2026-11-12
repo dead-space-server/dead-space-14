@@ -7,8 +7,16 @@ import subprocess
 import time
 from typing import Iterable
 
+<<<<<<< ours
 PUBLISH_TOKEN = os.environ["PUBLISH_TOKEN"]
 VERSION = os.environ.get("PUBLISH_VERSION") or os.environ["GITHUB_SHA"]
+||||||| base
+PUBLISH_TOKEN = os.environ["PUBLISH_TOKEN"]
+VERSION = os.environ["GITHUB_SHA"]
+=======
+DRY_RUN = os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")
+VERSION = os.environ["GITHUB_SHA"]
+>>>>>>> theirs
 
 RELEASE_DIR = "release"
 PROGRESS_INTERVAL_SECONDS = 60
@@ -56,6 +64,23 @@ class ProgressFileReader:
         return chunk
 
 
+def get_publish_token() -> str:
+    try:
+        return os.environ["PUBLISH_TOKEN"]
+    except KeyError:
+        raise RuntimeError("PUBLISH_TOKEN is not set")
+
+
+def simulate_publish(fork_id: str, version: str) -> None:
+    print(f"[DRY RUN] Would publish version {version} to Robust.CDN fork '{fork_id}'")
+    print(f"[DRY RUN]   engine version: {get_engine_version()}")
+    files = list(get_files_to_publish())
+    print(f"[DRY RUN]   files to upload ({len(files)}):")
+    for file in files:
+        print(f"[DRY RUN]     - {file}")
+    print("[DRY RUN] Skipping all network calls to Robust.CDN.")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--fork-id", default=FORK_ID)
@@ -63,9 +88,14 @@ def main():
     args = parser.parse_args()
     fork_id = args.fork_id
 
+
+    if DRY_RUN:
+        simulate_publish(fork_id, VERSION)
+        return
+
     session = requests.Session()
     session.headers = {
-        "Authorization": f"Bearer {PUBLISH_TOKEN}",
+        "Authorization": f"Bearer {get_publish_token()}",
     }
 
     engine_version = get_engine_version()

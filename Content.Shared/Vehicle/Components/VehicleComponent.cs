@@ -4,12 +4,12 @@
  */
 
 using Content.Shared.Damage;
+using Content.Shared.Vehicle.Systems;
 using Content.Shared.Whitelist;
-using JetBrains.Annotations;
-using Robust.Shared.Audio;
-using Robust.Shared.Prototypes;
+using Robust.Shared.Audio; // DS14
 using Robust.Shared.GameStates;
-using Robust.Shared.Map;
+using Robust.Shared.Map; // DS14
+using Robust.Shared.Prototypes; // DS14
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Vehicle.Components;
@@ -19,14 +19,14 @@ namespace Content.Shared.Vehicle.Components;
 /// The details of when the vehicle can operate and who the operator is are not defined here.
 /// This simply contains the baseline behavior of the vehicle itself.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
 [Access(typeof(VehicleSystem))]
 public sealed partial class VehicleComponent : Component
 {
     /// <summary>
     /// The driver of this vehicle.
     /// </summary>
-    [ViewVariables, AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public EntityUid? Operator;
 
     /// <summary>
@@ -124,30 +124,3 @@ public enum VehicleVisuals : byte
     HasOperator,    // The vehicle has a valid operator
     CanRun          // The vehicle can be moved by the operator (turned on :flushed:)
 }
-
-/// <summary>
-/// Event raised on operator when they begin to operate a vehicle
-/// Values are configured before this event is raised.
-/// </summary>
-[ByRefEvent, UsedImplicitly]
-public readonly record struct OnVehicleEnteredEvent(Entity<VehicleComponent> Vehicle, EntityUid Operator);
-
-/// <summary>
-/// Event raised on operator when they stop operating a vehicle.
-/// Values are configured after this event is raised.
-/// </summary>
-[ByRefEvent, UsedImplicitly]
-public readonly record struct OnVehicleExitedEvent(Entity<VehicleComponent> Vehicle, EntityUid Operator);
-
-/// <summary>
-/// Event raised on the vehicle after an operator is set.
-/// New operator can be null.
-/// </summary>
-[ByRefEvent, UsedImplicitly]
-public readonly record struct VehicleOperatorSetEvent(EntityUid? NewOperator, EntityUid? OldOperator);
-
-/// <summary>
-/// Event raised on a vehicle to check if it can run/move around.
-/// </summary>
-[ByRefEvent, UsedImplicitly]
-public readonly record struct VehicleCanRunEvent(Entity<VehicleComponent> Vehicle, bool CanRun = true);

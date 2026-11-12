@@ -14,16 +14,7 @@ namespace Content.Client.Overlays;
 /// </summary>
 public sealed partial class ShowSatiationIconsSystem : EquipmentHudSystem<ShowSatiationIconsComponent>
 {
-    // DS14-start: current engine uses explicit event subscriptions.
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<SatiationComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
-    }
-    // DS14-end
-
-    [Dependency] private readonly SatiationSystem _satiation = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
 
     private HashSet<ProtoId<SatiationTypePrototype>> _types = [];
 
@@ -47,6 +38,7 @@ public sealed partial class ShowSatiationIconsSystem : EquipmentHudSystem<ShowSa
         _types.Clear();
     }
 
+    [SubscribeLocalEvent]
     private void OnGetStatusIconsEvent(Entity<SatiationComponent> entity, ref GetStatusIconsEvent args)
     {
         if (!IsActive)

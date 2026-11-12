@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/5a73e8f825ff279e82949b9329783a9e3070e2da, resprite by inspector_jeleshka (discord), equipped-EYES-dog by inspector_jeleshka (discord) for Space Station 14 server \u0420\u045a\u0421\u2018\u0421\u0402\u0421\u201a\u0420\u0406\u0421\u2039\u0420\u2116 \u0420\u0459\u0420\u0455\u0421\u0403\u0420\u0458\u0420\u0455\u0421\u0403 Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/5a73e8f825ff279e82949b9329783a9e3070e2da. Equipped-EYES-arachnid and equipped-EYES-moth modified from equipped-EYES by HTMLSystem.",
+    "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/5a73e8f825ff279e82949b9329783a9e3070e2da, resprite by inspector_jeleshka (discord), equipped-EYES-dog by inspector_jeleshka (discord) for Space Station 14 server РњС‘СЂС‚РІС‹Р№ РљРѕСЃРјРѕСЃ Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/5a73e8f825ff279e82949b9329783a9e3070e2da. Equipped-EYES-arachnid and equipped-EYES-moth modified from equipped-EYES by HTMLSystem.",
     "size": {
         "x": 32,
         "y": 32
@@ -32,6 +32,10 @@
         },
         {
             "name": "inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "equipped-EYES-arachnid",
             "directions": 4
         }
     ]

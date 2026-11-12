@@ -13,6 +13,7 @@ using Content.Shared.Actions;
 using Content.Shared.DeadSpace.HardsuitIdentification;
 using Content.Shared.Interaction.Components;
 using Content.Server.Speech.EntitySystems;
+using Content.Shared.Speech.EntitySystems; // DS14: VocalSystem moved to Shared
 using Content.Shared.Chat;
 using Content.Shared.Emag.Systems;
 using Robust.Shared.Audio.Systems;

@@ -1,4 +1,5 @@
 - type: entity
+  parent: StructureHealthMachineWeak
   id: Morgue
   name: morgue
   description: Used to store bodies until someone fetches them. Includes a high-tech alert system for false-positives!
@@ -34,7 +35,7 @@
         mask:
         - MachineMask
         layer:
-        - HalfWallLayer
+        - MachineLayer
   - type: EntityStorage
     isCollidableWhenOpen: true
     showContents: false
@@ -119,6 +120,7 @@
 # DS14-end
 
 - type: entity
+  parent: StructureHealthMachineWeak
   id: Crematorium
   name: crematorium
   description: A human incinerator. Works well on barbecue nights.

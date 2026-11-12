@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.Changeling.Components;
 using Content.Shared.Cloning;
@@ -15,6 +15,7 @@ namespace Content.Shared.Changeling.Systems;
 
 public abstract partial class SharedChangelingIdentitySystem : EntitySystem
 {
+<<<<<<< ours
     // DS14-start: pre-v288 dependency injection uses readonly fields.
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
@@ -24,6 +25,24 @@ public abstract partial class SharedChangelingIdentitySystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedJobSystem _job = default!;
     // DS14-end
+||||||| base
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly MetaDataSystem _metaSystem = default!;
+    [Dependency] private readonly NameModifierSystem _nameMod = default!;
+    [Dependency] private readonly SharedCloningSystem _cloningSystem = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private readonly SharedVisualBodySystem _visualBody = default!;
+    [Dependency] private readonly SharedPvsOverrideSystem _pvsOverrideSystem = default!;
+=======
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MetaDataSystem _metaSystem = default!;
+    [Dependency] private SharedCloningSystem _cloningSystem = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPvsOverrideSystem _pvsOverrideSystem = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedJobSystem _job = default!;
+>>>>>>> theirs
 
     public MapId? PausedMapId;
 
@@ -250,6 +269,25 @@ public abstract partial class SharedChangelingIdentitySystem : EntitySystem
     }
 
     /// <summary>
+    /// Returns the amount of safe identities a changeling has - a "safe" identity is an identity that may be returned to at all times
+    /// </summary>
+    /// <returns></returns>
+    public int GetSafeIdentityCount(Entity<ChangelingIdentityComponent> ent)
+    {
+        return ent.Comp.ConsumedIdentities.Count((e) => e.Identity != null && IsSafe(e.Identity.Value));
+    }
+
+    /// <summary>
+    /// Returns true if the identity is "safe" (see <see cref="GetSafeIdentityCount"/>)
+    /// </summary>
+    public bool IsSafe(EntityUid ent)
+    {
+        var ev = new IsIdentitySafeEvent();
+        RaiseLocalEvent(ent, ref ev);
+        return ev.IsSafe;
+    }
+
+    /// <summary>
     /// Drop a stored identity from the changeling's storage.
     /// </summary>
     public void DropStoredIdentity(Entity<ChangelingIdentityComponent?> ent, EntityUid identity)
@@ -260,7 +298,10 @@ public abstract partial class SharedChangelingIdentitySystem : EntitySystem
         if (!HasComp<ChangelingStoredIdentityComponent>(identity))
             return; // Not a stored identity.
 
-        var toDrop = ent.Comp.ConsumedIdentities.Where(data => data.Identity == identity).ToList();
+        if (GetSafeIdentityCount((ent.Owner, ent.Comp)) <= 1)
+            return; // Cant be left with only the horror form
+
+        var toDrop = ent.Comp.ConsumedIdentities.Where(data => data.Identity == identity && !HasComp<ChangelingUnremovableIdentityComponent>(data.Identity)).ToList();
 
         foreach (var dropped in toDrop)
         {
@@ -273,7 +314,7 @@ public abstract partial class SharedChangelingIdentitySystem : EntitySystem
             dropped.Identity = null;
         }
 
-        PredictedQueueDel(identity);
+        QueueDel(identity);
 
         if (toDrop.Count > 0)
         {
@@ -334,7 +375,7 @@ public abstract partial class SharedChangelingIdentitySystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        return ent.Comp.ConsumedIdentities.Count(data => data.Identity != null) < ent.Comp.MaxStoredDisguises;
+        return ent.Comp.ConsumedIdentities.Where(k => !HasComp<ChangelingUncountedIdentityComponent>(k.Identity)).Count(data => data.Identity != null) < ent.Comp.MaxStoredDisguises;
     }
 
     /// <summary>
@@ -453,4 +494,13 @@ public abstract partial class SharedChangelingIdentitySystem : EntitySystem
 
         return identityData != null;
     }
+}
+
+[ByRefEvent]
+public struct IsIdentitySafeEvent()
+{
+    /// <summary>
+    /// A safe identity is one that may be transformed into at all times - that is, an identity which has no transformation conditions.
+    /// </summary>
+    public bool IsSafe = true;
 }

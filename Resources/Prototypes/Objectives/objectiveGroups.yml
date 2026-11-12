@@ -6,6 +6,8 @@
     TraitorObjectiveGroupKill: 1
     TraitorObjectiveGroupState: 1 #As in, something about your character. Alive, dead, arrested, gained an ability...
     TraitorObjectiveGroupSocial: 1 #Involves helping/harming others without killing them or stealing their stuff
+    TraitorObjectiveGroupSabotage: 1
+    TraitorObjectiveGroupOther: 1
 
 # DS14-start
 - type: weightedRandom
@@ -58,6 +60,7 @@
   id: TraitorObjectiveGroupKill
   weights:
     KillRandomPersonObjective: 1
+    KillStationAiObjective: 0.25
     KillRandomHeadObjective: 0.25
 
 # DS14-start
@@ -82,6 +85,19 @@
 #    RandomTraitorAliveObjective: 1 - Removed because the objective was boring and didn't progress the round.
     RandomTraitorProgressObjective: 1
 
+- type: weightedRandom
+  id: TraitorObjectiveGroupSabotage
+  weights:
+    SupercritAnomaliesObjective: 1
+
+#misc objectives that don't fall other another category
+- type: weightedRandom
+  id: TraitorObjectiveGroupOther
+  weights:
+    HijackTradeStationObjective: 1
+    MailFraudObjective: 1
+
+
 #Thief groups
 - type: weightedRandom
   id: ThiefObjectiveGroups
@@ -100,6 +116,7 @@
   weights:
     HeadCloakStealCollectionObjective: 1                #command
     HeadBedsheetStealCollectionObjective: 1
+    HeadHardsuitStealCollectionObjective: 1
     StampStealCollectionObjective: 1
     DoorRemoteStealCollectionObjective: 1
     OfficerHandgunsStealCollectionObjective: 1         #sec
@@ -165,8 +182,9 @@
   id: ThiefObjectiveGroupEscape
   weights:
     EscapeThiefShuttleObjective: 1
+
 # Changeling
-- type: weightedRandom
+- type: weightedRandom # we need these dummy groups since its shitty code that won't stand having less than two groups before the objectives themselves
   id: ChangelingObjectiveGroupDevourDummy
   weights:
     ChangelingObjectiveGroupDevour: 1

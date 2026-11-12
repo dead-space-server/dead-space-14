@@ -8,13 +8,14 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.EntityEffects.Effects.Body;
 
 /// <summary>
-/// Adds a reagent directly to the target's bloodstream. Quantity is modified by scale.
+/// Adds a reagent directly to the target's bloodstream.
+/// Quantity is modified by scale.
 /// </summary>
-public sealed partial class AddReagentToBloodstreamEntityEffectSystem
-    : EntityEffectSystem<BloodstreamComponent, AddReagentToBloodstream>
+/// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
+public sealed partial class AddReagentToBloodstreamEntityEffectSystem : EntityEffectSystem<BloodstreamComponent, AddReagentToBloodstream>
 {
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly ReactiveSystem _reactive = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private ReactiveSystem _reactive = default!;
 
     protected override void Effect(Entity<BloodstreamComponent> entity, ref EntityEffectEvent<AddReagentToBloodstream> args)
     {
@@ -22,26 +23,29 @@ public sealed partial class AddReagentToBloodstreamEntityEffectSystem
         solution.AddReagent(args.Effect.Reagent, args.Effect.Quantity * args.Scale);
 
         _bloodstream.TryAddToBloodstream(entity.AsNullable(), solution);
-        _reactive.DoEntityReaction(entity, solution, ReactionMethod.Injection);
+        _reactive.DoEntityReaction(entity, solution, ReactionMethod.Injection); // TODO: This should be part of TryAddToBloodstream
     }
 }
 
+/// <inheritdoc cref="EntityEffect"/>
 public sealed partial class AddReagentToBloodstream : EntityEffectBase<AddReagentToBloodstream>
 {
+    /// <summary>
+    /// Prototype of the reagent we're adding.
+    /// </summary>
     [DataField(required: true)]
     public ProtoId<ReagentPrototype> Reagent;
 
+    /// <summary>
+    /// Amount of reagent to add to the bloodstream.
+    /// </summary>
     [DataField]
-    public FixedPoint2 Quantity = 1;
+    public FixedPoint2 Quantity = 1.0;
 
     public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
-        return prototype.Resolve(Reagent, out var reagent)
-            ? Loc.GetString(
-                "entity-effect-guidebook-add-reagent-to-bloodstream",
-                ("chance", Probability),
-                ("reagent", reagent.LocalizedName),
-                ("quantity", Quantity))
+        return prototype.Resolve(Reagent, out var proto)
+            ? Loc.GetString("entity-effect-guidebook-add-reagent-to-bloodstream", ("chance", Probability), ("reagent", proto.LocalizedName), ("quantity", Quantity))
             : null;
     }
 }

@@ -1,8 +1,18 @@
+<<<<<<< ours
 <Control xmlns="https://spacestation14.io">
     <!-- DS14-start -->
     <PanelContainer Name="BackgroundColorPlaytimePanel"
                     Access="Public"
                     StyleClasses="DeadSpaceListHeader"/>
+||||||| base
+<Control xmlns="https://spacestation14.io"
+                 xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls">
+    <PanelContainer Name="BackgroundColorPlaytimePanel" Access="Public"/>
+=======
+<Control xmlns="https://spacestation14.io"
+         xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
+    <PanelContainer Name="BackgroundColorPlaytimePanel" Access="Public"/>
+>>>>>>> theirs
     <BoxContainer Orientation="Vertical"
                   HorizontalExpand="True">
         <BoxContainer Orientation="Horizontal"
@@ -14,8 +24,16 @@
                    ClipText="True"
                    Text="{Loc ui-playtime-header-role-type}"
                    MouseFilter="Pass"
+<<<<<<< ours
                    Margin="5"
                    StyleClasses="DeadSpaceListHeader"/>
+||||||| base
+                   Margin="5,5,5,5"/>
+            <customControls:VSeparator/>
+=======
+                   Margin="5,5,5,5"/>
+            <controls:Separator StyleClasses="LowDivider" Orientation="Vertical" MinHeight="5"/>
+>>>>>>> theirs
             <Label Name="PlaytimeLabel"
                    SizeFlagsStretchRatio="3"
                    HorizontalExpand="True"
@@ -25,6 +43,14 @@
                    Margin="5"
                    StyleClasses="DeadSpaceListHeader"/>
         </BoxContainer>
+<<<<<<< ours
+||||||| base
+        <!-- Horizontal Separator -->
+        <customControls:HSeparator/>
+=======
+        <!-- Horizontal Separator -->
+        <controls:Separator StyleClasses="LowDivider"/>
+>>>>>>> theirs
     </BoxContainer>
     <!-- DS14-end -->
 </Control>

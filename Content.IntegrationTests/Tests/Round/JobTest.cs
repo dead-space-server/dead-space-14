@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Pair;
 using Content.Server.Administration.Managers;
 using Content.Server.GameTicking;
@@ -22,7 +23,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests.Round;
 
 [TestFixture]
-public sealed class JobTest
+public sealed class JobTest : GameTest
 {
     private static readonly ProtoId<JobPrototype> Passenger = "Passenger";
     private static readonly ProtoId<JobPrototype> Engineer = "StationEngineer";
@@ -75,12 +76,19 @@ public sealed class JobTest
     {Passenger}: 30
 ";
 
+    public override PoolSettings PoolSettings => new()
+    {
+        DummyTicker = false,
+        Connected = true,
+        InLobby = true
+    };
+
     private void AssertJob(TestPair pair, ProtoId<JobPrototype> job, NetUserId? user = null, bool isAntag = false)
     {
         var jobSys = pair.Server.System<SharedJobSystem>();
         var mindSys = pair.Server.System<MindSystem>();
         var roleSys = pair.Server.System<RoleSystem>();
-        var ticker = pair.Server.System<GameTicker>();
+        var ticker = pair.Server.System<ServerGameTicker>();
 
         user ??= pair.Client.User!.Value;
 
@@ -102,15 +110,10 @@ public sealed class JobTest
     [Test]
     public async Task StartRoundTest()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            DummyTicker = false,
-            Connected = true,
-            InLobby = true
-        });
+        var pair = Pair;
 
         pair.Server.CfgMan.SetCVar(CCVars.GameMap, _map);
-        var ticker = pair.Server.System<GameTicker>();
+        var ticker = pair.Server.System<ServerGameTicker>();
 
         // Initially in the lobby
         Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.PreRoundLobby));
@@ -126,7 +129,6 @@ public sealed class JobTest
         AssertJob(pair, Passenger);
 
         await pair.Server.WaitPost(() => ticker.RestartRound());
-        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -135,15 +137,10 @@ public sealed class JobTest
     [Test]
     public async Task JobPreferenceTest()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            DummyTicker = false,
-            Connected = true,
-            InLobby = true
-        });
+        var pair = Pair;
 
         pair.Server.CfgMan.SetCVar(CCVars.GameMap, _map);
-        var ticker = pair.Server.System<GameTicker>();
+        var ticker = pair.Server.System<ServerGameTicker>();
         Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.PreRoundLobby));
         Assert.That(pair.Client.AttachedEntity, Is.Null);
 
@@ -164,7 +161,6 @@ public sealed class JobTest
         AssertJob(pair, Passenger);
 
         await pair.Server.WaitPost(() => ticker.RestartRound());
-        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -174,19 +170,14 @@ public sealed class JobTest
     [Test]
     public async Task JobWeightTest()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            DummyTicker = false,
-            Connected = true,
-            InLobby = true
-        });
+        var pair = Pair;
 
         pair.Server.CfgMan.SetCVar(CCVars.GameMap, _map);
-        var ticker = pair.Server.System<GameTicker>();
+        var ticker = pair.Server.System<ServerGameTicker>();
         Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.PreRoundLobby));
         Assert.That(pair.Client.AttachedEntity, Is.Null);
 
-        var stationJobs = pair.Server.System<StationJobsSystem>();
+        var stationJobs = pair.Server.System<ServerStationJobsSystem>();
         var captain = pair.Server.ProtoMan.Index(Captain);
         var engineer = pair.Server.ProtoMan.Index(Engineer);
         var passenger = pair.Server.ProtoMan.Index(Passenger);
@@ -204,7 +195,6 @@ public sealed class JobTest
         AssertJob(pair, Captain);
 
         await pair.Server.WaitPost(() => ticker.RestartRound());
-        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -213,18 +203,11 @@ public sealed class JobTest
     [Test]
     public async Task MapJobWeightOverrideTest()
     {
-        // DS14-start - adapt the upstream test to the pooled integration harness.
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            DummyTicker = false,
-            Connected = true,
-            InLobby = true
-        });
-        // DS14-end
+        var pair = Pair;
         pair.Server.CfgMan.SetCVar(CCVars.GameMap, JobWeightOverrideMap);
-        var ticker = pair.Server.System<GameTicker>();
+        var ticker = pair.Server.System<ServerGameTicker>();
 
-        var stationJobs = pair.Server.System<StationJobsSystem>();
+        var stationJobs = pair.Server.System<ServerStationJobsSystem>();
         var passenger = pair.Server.ProtoMan.Index(Passenger);
         var engineer = pair.Server.ProtoMan.Index(Engineer);
         var captain = pair.Server.ProtoMan.Index(Captain);
@@ -265,7 +248,6 @@ public sealed class JobTest
         AssertJob(pair, Engineer, players[2]);
 
         await pair.Server.WaitPost(() => ticker.RestartRound());
-        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -274,15 +256,10 @@ public sealed class JobTest
     [Test]
     public async Task JobPriorityTest()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            DummyTicker = false,
-            Connected = true,
-            InLobby = true
-        });
+        var pair = Pair;
 
         pair.Server.CfgMan.SetCVar(CCVars.GameMap, _map);
-        var ticker = pair.Server.System<GameTicker>();
+        var ticker = pair.Server.System<ServerGameTicker>();
         Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.PreRoundLobby));
         Assert.That(pair.Client.AttachedEntity, Is.Null);
 
@@ -313,7 +290,6 @@ public sealed class JobTest
         });
 
         await pair.Server.WaitPost(() => ticker.RestartRound());
-        await pair.CleanReturnAsync();
     }
 
     // DS14-start
@@ -330,7 +306,7 @@ public sealed class JobTest
 
         var server = pair.Server;
         server.CfgMan.SetCVar(CCVars.GameMap, _map);
-        var ticker = server.System<GameTicker>();
+        var ticker = server.System<ServerGameTicker>();
         var player = server.PlayerMan.Sessions.Single();
 
         await server.WaitPost(() => ticker.StartRound(true));
@@ -351,7 +327,7 @@ public sealed class JobTest
         Assert.That(player.AttachedEntity, Is.Not.Null);
         Assert.That(
             server.EntMan.GetComponent<MetaDataComponent>(player.AttachedEntity.Value).EntityPrototype?.ID,
-            Is.EqualTo(GameTicker.AdminObserverPrototypeName));
+            Is.EqualTo(ServerGameTicker.AdminObserverPrototypeName.Id));
 
         await server.WaitPost(() => ticker.RestartRound());
         await pair.CleanReturnAsync();

@@ -50,19 +50,19 @@
     },
     {
       "name": "timpani",
-	  "directions": 4
+      "directions": 4
     },
     {
       "name": "toms",
-	  "directions": 4
+      "directions": 4
     },
     {
       "name": "marimba",
-	  "directions": 4
+      "directions": 4
     },
     {
       "name": "vibraphone",
-	  "directions": 4
+      "directions": 4
     },
     {
       "name": "tuba"
@@ -85,6 +85,10 @@
           0.3
         ]
       ]
+    },
+    {
+      "name": "drum",
+      "directions": 4
     }
   ]
 }

@@ -6,24 +6,17 @@ using Content.Shared.Examine;
 
 namespace Content.Shared.Atmos.Piping.Trinary.EntitySystems;
 
-// DS14: Current engine uses explicit event subscriptions without system source generation.
-public abstract class SharedGasFilterSystem : EntitySystem
+public abstract partial class SharedGasFilterSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAtmosphereSystem _atmosphereSystem = default!; // DS14 - readonly IoC on current engine baseline
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAtmosphereSystem _atmosphereSystem = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<GasFilterComponent, ExaminedEvent>(OnExamined);
-
-        // DS14-start: Current engine does not support source-generated event subscriptions.
-        SubscribeLocalEvent<GasFilterComponent, GasFilterToggleStatusMessage>(OnToggleStatusMessage);
-        SubscribeLocalEvent<GasFilterComponent, GasFilterChangeRateMessage>(OnTransferRateChangeMessage);
-        SubscribeLocalEvent<GasFilterComponent, GasFilterSelectGasMessage>(OnSelectGasMessage);
-        // DS14-end
     }
 
     private void OnExamined(Entity<GasFilterComponent> ent, ref ExaminedEvent args)
@@ -54,6 +47,7 @@ public abstract class SharedGasFilterSystem : EntitySystem
         }
     }
 
+    [SubscribeLocalEvent]
     private void OnToggleStatusMessage(Entity<GasFilterComponent> ent, ref GasFilterToggleStatusMessage args)
     {
         ent.Comp.Enabled = args.Enabled;
@@ -65,6 +59,7 @@ public abstract class SharedGasFilterSystem : EntitySystem
         UpdateAppearance(ent);
     }
 
+    [SubscribeLocalEvent]
     private void OnTransferRateChangeMessage(Entity<GasFilterComponent> ent, ref GasFilterChangeRateMessage args)
     {
         ent.Comp.TransferRate = Math.Clamp(args.Rate, 0f, ent.Comp.MaxTransferRate);
@@ -75,6 +70,7 @@ public abstract class SharedGasFilterSystem : EntitySystem
         UpdateUi(ent);
     }
 
+    [SubscribeLocalEvent]
     private void OnSelectGasMessage(Entity<GasFilterComponent> ent, ref GasFilterSelectGasMessage args)
     {
         if (args.Gas.HasValue)

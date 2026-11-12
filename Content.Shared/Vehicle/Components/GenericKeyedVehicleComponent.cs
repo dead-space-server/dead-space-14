@@ -3,6 +3,7 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
+using Content.Shared.Vehicle.Systems;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 
@@ -11,7 +12,7 @@ namespace Content.Shared.Vehicle.Components;
 /// <summary>
 /// This is used for a vehicle which can only be operated when a specific key matching a whitelist is inserted.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState] // DS14 - AutoGenerateComponentState
 [Access(typeof(VehicleSystem))]
 public sealed partial class GenericKeyedVehicleComponent : Component
 {

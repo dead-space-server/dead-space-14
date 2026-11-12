@@ -15,19 +15,19 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Bed;
 
-public sealed class BedSystem : EntitySystem
+public sealed partial class BedSystem : EntitySystem
 {
-    [Dependency] private readonly ActionContainerSystem _actConts = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly EmagSystem _emag = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedMetabolizerSystem _metabolizer = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _powerReceiver = default!;
-    [Dependency] private readonly SleepingSystem _sleepingSystem = default!;
+    [Dependency] private ActionContainerSystem _actConts = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private EmagSystem _emag = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedMetabolizerSystem _metabolizer = default!; // DS14: no upstream Shared MetabolizerSystem in our tree
+    [Dependency] private MobStateSystem _mobStateSystem = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedPowerReceiverSystem _powerReceiver = default!;
+    [Dependency] private SleepingSystem _sleepingSystem = default!;
 
-    private EntityQuery<SleepingComponent> _sleepingQuery;
+    [Dependency] private EntityQuery<SleepingComponent> _sleepingQuery = default!;
 
     public override void Initialize()
     {
@@ -43,8 +43,6 @@ public sealed class BedSystem : EntitySystem
         SubscribeLocalEvent<StasisBedComponent, PowerChangedEvent>(OnPowerChanged);
         SubscribeLocalEvent<StasisBedBuckledComponent, GetMetabolicMultiplierEvent>(OnStasisGetMetabolicMultiplier);
         SubscribeLocalEvent<StasisBedBuckledComponent, GetRotMultiplierEvent>(OnStasisGetRotMultiplier); //DS14
-
-        _sleepingQuery = GetEntityQuery<SleepingComponent>();
     }
 
     private void OnHealMapInit(Entity<HealOnBuckleComponent> ent, ref MapInitEvent args)

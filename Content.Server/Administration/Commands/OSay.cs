@@ -8,11 +8,19 @@ using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands;
 
+<<<<<<< ours
 [AdminCommand(AdminFlags.Server)] // DS14
 public sealed class OSay : LocalizedCommands
+||||||| base
+[AdminCommand(AdminFlags.Admin)]
+public sealed class OSay : LocalizedCommands
+=======
+[AdminCommand(AdminFlags.Admin)]
+public sealed partial class OSay : LocalizedCommands
+>>>>>>> theirs
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public override string Command => "osay";
 

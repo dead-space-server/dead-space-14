@@ -1,0 +1,59 @@
+- type: job
+  id: Janitor
+  name: job-name-janitor
+  description: job-description-janitor
+  playTimeTracker: JobJanitor
+  requirements:
+    - !type:OverallPlaytimeRequirement
+        time: 3600 # 1 hour
+  startingGear: JanitorGear
+  icon: "JobIconJanitor"
+  supervisors: job-supervisors-hop
+  guides: [ Janitorial ]
+  access:
+  - Service
+  - Janitor
+  - Maintenance
+  #start-backmen: currency
+  minBankBalance: 250 # DS14-value
+  maxBankBalance: 350 # DS14-value
+  wageDepartment: Civilian
+  wage: 100 # DS14-value
+  #end-backmen: currency
+
+- type: startingGear
+  id: JanitorGear
+  equipment:
+    id: JanitorPDA
+    ears: ClothingHeadsetService
+    belt: ClothingBeltJanitorFilled
+    socks: ClothingUnderwearSocksJanitor
+#DS14-Start
+  storage:
+    back:
+    - VehicleJanicartFlatpack
+    - Multitool
+    - VehicleKeyJanicart
+#DS14-End
+
+- type: startingGear
+  id: JanitorMaidGear
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtJanimaid
+    id: JanitorPDA
+    gloves: ClothingHandsGlovesJanitor
+    head: ClothingHeadHatCatEars
+    ears: ClothingHeadsetService
+    belt: ClothingBeltJanitorFilled
+    socks: ClothingUnderwearSocksJanitor
+
+- type: chameleonOutfit
+  id: JanitorChameleonOutfit
+  job: Janitor
+  equipment:
+    head: ClothingHeadHatPurplesoft
+    eyes: ClothingEyesGlassesCheapSunglasses
+    mask: ClothingMaskGas
+    neck: ClothingNeckScarfStripedPurple
+    outerClothing: ClothingOuterWinterJani
+    gloves: ClothingHandsGlovesJanitor

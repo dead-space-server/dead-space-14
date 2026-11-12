@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Content.Server.Administration.Managers;
 using Content.Server.Afk;
 using Content.Shared.Administration;
@@ -7,11 +7,19 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Administration.Commands;
 
+<<<<<<< ours
 [AnyCommand] // Corvax: Allow use to everyone
 public sealed class AdminWhoCommand : LocalizedCommands
+||||||| base
+[AdminCommand(AdminFlags.AdminWho)]
+public sealed class AdminWhoCommand : LocalizedCommands
+=======
+[AdminCommand(AdminFlags.AdminWho)]
+public sealed partial class AdminWhoCommand : LocalizedCommands
+>>>>>>> theirs
 {
-    [Dependency] private readonly IAfkManager _afkManager = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
+    [Dependency] private IAfkManager _afkManager = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
 
     public override string Command => "adminwho";
 

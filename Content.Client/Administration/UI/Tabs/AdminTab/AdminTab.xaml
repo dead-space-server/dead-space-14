@@ -13,6 +13,7 @@
             <cc:CommandButton Command="announceui" Text="{Loc admin-player-actions-window-announce}"/>
             <cc:UICommandButton Command="callshuttle" Text="{Loc admin-player-actions-window-shuttle}" WindowType="{x:Type at:AdminShuttleWindow}"/>
             <cc:UICommandButton Command="ertui" Text="{Loc admin-player-actions-window-ert}" WindowType="{x:Type at:ERTCallWindow}"/>
+            <cc:CommandButton Command="eventlog" Text="{Loc admin-player-actions-window-event-log}"/>
             <cc:CommandButton Command="adminlogs" Text="{Loc admin-player-actions-window-admin-logs}"/>
             <cc:CommandButton Command="playglobalsoundui" Text="{Loc admin-global-sound-open}"/>
             <cc:CommandButton Command="faxui" Text="{Loc admin-player-actions-window-admin-fax}"/>

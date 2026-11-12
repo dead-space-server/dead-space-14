@@ -263,7 +263,12 @@
         {
             "name": "base-stripes-inhand-right",
             "directions": 4
+        },
+        {
+            "name": "icon-botany"
+        },
+        {
+            "name": "icon-cooking"
         }
     ]
-
 }

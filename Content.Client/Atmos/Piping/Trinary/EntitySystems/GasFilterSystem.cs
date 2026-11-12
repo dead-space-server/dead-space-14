@@ -4,10 +4,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.Atmos.Piping.Trinary.EntitySystems;
 
-// DS14: Current engine uses explicit subscriptions without system source generation.
-public sealed class GasFilterSystem : SharedGasFilterSystem
+public sealed partial class GasFilterSystem : SharedGasFilterSystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

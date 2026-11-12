@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
@@ -17,13 +17,13 @@ using static Content.Shared.Administration.Logs.AdminLogsEuiMsg;
 
 namespace Content.Server.Administration.Logs;
 
-public sealed class AdminLogsEui : BaseEui
+public sealed partial class AdminLogsEui : BaseEui
 {
-    [Dependency] private readonly IAdminLogManager _adminLogs = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IConfigurationManager _configuration = default!;
-    [Dependency] private readonly IEntityManager _e = default!;
+    [Dependency] private IAdminLogManager _adminLogs = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private IEntityManager _e = default!;
 
     private readonly ISawmill _sawmill;
 
@@ -52,7 +52,7 @@ public sealed class AdminLogsEui : BaseEui
         };
     }
 
-    private int CurrentRoundId => _e.System<GameTicker>().RoundId;
+    private int CurrentRoundId => _e.System<ServerGameTicker>().RoundId;
 
     public override async void Opened()
     {
@@ -131,47 +131,79 @@ public sealed class AdminLogsEui : BaseEui
                 var roundId = filter.Round ??= CurrentRoundId; // DS14
                 await LoadFromDb(roundId);
 
+<<<<<<< ours
                 // DS14-start
                 if (filter.CancellationToken.IsCancellationRequested)
                     break;
 
                 await SendLogs(true, filter);
                 // DS14-end
+||||||| base
+                SendLogs(true);
+=======
+                SendLogs(true, _filter);
+>>>>>>> theirs
                 break;
             }
             case NextLogsRequest:
             {
                 _sawmill.Info($"Admin log next batch request from admin with id {Player.UserId.UserId} and name {Player.Name}");
 
+<<<<<<< ours
                 // DS14-start
                 var filter = _filter;
                 await SendLogs(false, filter);
                 // DS14-end
+||||||| base
+                SendLogs(false);
+=======
+                SendLogs(false, _filter);
+>>>>>>> theirs
                 break;
             }
         }
     }
 
-    public void SetLogFilter(string? search = null, bool invertTypes = false, HashSet<LogType>? types = null)
+    public void SetLogFilter(string? search = null, List<Guid>? players = null, bool invertTypes = false, HashSet<LogType>? types = null)
     {
         var message = new SetLogFilter(
             search,
+            players,
             invertTypes,
             types);
 
         SendMessage(message);
     }
 
+<<<<<<< ours
     private async Task SendLogs(bool replace, LogFilter filter) // DS14
+||||||| base
+    private async void SendLogs(bool replace)
+=======
+    private async void SendLogs(bool replace, LogFilter filter)
+>>>>>>> theirs
     {
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
+<<<<<<< ours
         // DS14-start
         List<SharedAdminLog>? logs = null;
         List<SharedAdminLog>? pooledLogs = null;
         try
+||||||| base
+        var logs = await Task.Run(async () => await _adminLogs.All(_filter, _adminLogListPool.Get),
+            _filter.CancellationToken);
+
+        if (logs.Count > 0)
+=======
+        var logs = await Task.Run(async () => await _adminLogs.All(filter, _adminLogListPool.Get),
+            filter.CancellationToken);
+
+        if (logs.Count > 0)
+>>>>>>> theirs
         {
+<<<<<<< ours
             logs = await Task.Run(async () => await _adminLogs.All(filter, () =>
             {
                 var pooled = _adminLogListPool.Get();
@@ -181,20 +213,26 @@ public sealed class AdminLogsEui : BaseEui
 
             if (filter.CancellationToken.IsCancellationRequested || !ReferenceEquals(filter, _filter))
                 return;
+||||||| base
+            _filter.LogsSent += logs.Count;
+=======
+            filter.LogsSent += logs.Count;
+>>>>>>> theirs
 
-            if (logs.Count > 0)
+            var largestId = filter.DateOrder switch
             {
-                filter.LogsSent += logs.Count;
+                DateOrder.Ascending => 0,
+                DateOrder.Descending => ^1,
+                _ => throw new ArgumentOutOfRangeException(nameof(filter.DateOrder), filter.DateOrder, null)
+            };
 
-                var largestId = filter.DateOrder switch
-                {
-                    DateOrder.Ascending => 0,
-                    DateOrder.Descending => ^1,
-                    _ => throw new ArgumentOutOfRangeException(nameof(filter.DateOrder), filter.DateOrder, null)
-                };
+            filter.LastLogId = logs[largestId].Id;
+        }
 
-                filter.LastLogId = logs[largestId].Id;
-            }
+        var message = new NewLogs(logs, replace, logs.Count >= filter.Limit);
+
+        if (filter.CancellationToken.IsCancellationRequested)
+            return;
 
             var message = new NewLogs(logs, replace, logs.Count >= filter.Limit);
 

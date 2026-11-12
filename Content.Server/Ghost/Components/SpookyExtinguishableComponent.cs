@@ -1,15 +1,15 @@
-using Content.Shared.Atmos.Components;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Audio;
 
 namespace Content.Server.Ghost.Components;
 
 /// <summary>
-/// Causes an entity to react to a ghost's "Boo!" action by extinguishing.
+/// Causes an entity to react to ghost player using the "Boo!" action by
+/// extinguishing the entity.
 /// </summary>
 /// <seealso cref="FlammableComponent"/>
 /// <seealso cref="GhostBooEvent"/>
 [RegisterComponent]
-// DS14: the current GhostBooEvent keeps its legacy handled/target-count budget, so no intensity field is used.
 public sealed partial class SpookyExtinguishableComponent : Component
 {
     /// <summary>
@@ -19,7 +19,16 @@ public sealed partial class SpookyExtinguishableComponent : Component
     public float ExtinguishChance = 0.8f;
 
     /// <summary>
-    /// An optional sound that plays when this entity is extinguished.
+    /// The intensity of this response.
+    /// </summary>
+    /// <remarks>
+    /// Extinguishing a candle, for example, is less distracting than a flickering light, so the default is Subtle.
+    /// </remarks>
+    [DataField]
+    public GhostBooIntensity Intensity = GhostBooIntensity.Subtle;
+
+    /// <summary>
+    /// An optional sound that should play when this is extinguished.
     /// </summary>
     [DataField]
     public SoundSpecifier? ExtinguishSound = new SoundPathSpecifier("/Audio/Effects/quick_exhale.ogg");

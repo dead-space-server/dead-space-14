@@ -176,6 +176,134 @@
     },
     {
       "name": "tube-y"
+    },
+    {
+      "name": "airlock-1-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "airlock-1-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "airlock-3-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "airlock-3-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "bucket-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bucket-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "camera-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "camera-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "canister-1-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "canister-1-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "canister-2-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "canister-2-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "firelock-3-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "firelock-3-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "extinguisher-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "extinguisher-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "fax-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "fax-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "gold-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "gold-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "intercom-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "intercom-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "medkit-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "medkit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "mop-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "mop-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "pai-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "pai-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "target-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "target-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "tube-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "tube-inhand-right",
+      "directions": 4
     }
   ]
 }

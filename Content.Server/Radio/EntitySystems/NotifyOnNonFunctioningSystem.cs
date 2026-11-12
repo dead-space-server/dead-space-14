@@ -1,10 +1,10 @@
-using Content.Server.Pinpointer;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Radio.Components;
 using Content.Shared.Construction;
 using Content.Shared.Destructible;
 using Content.Shared.Lock;
+using Content.Shared.Pinpointer;
 using Content.Shared.Power.EntitySystems;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -15,29 +15,18 @@ namespace Content.Server.Radio.EntitySystems;
 /// System for sending radio notification upon entity becoming
 /// non-functioning - unpowered / deconstructed / destroyed.
 /// </summary>
-// DS14 - pre-v288 engine
-public sealed class NotifyOnNonFunctioningSystem : EntitySystem
+public sealed partial class NotifyOnNonFunctioningSystem : EntitySystem
 {
-    // DS14-start: readonly dependencies and explicit subscriptions for the pre-v288 engine.
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly NavMapSystem _navMap = default!;
-    [Dependency] private readonly PowerStateSystem _powerState = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private NavMapSystem _navMap = default!;
+    [Dependency] private PowerStateSystem _powerState = default!;
+    [Dependency] private RadioSystem _radio = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<NotifyOnNonFunctioningComponent, DestructionEventArgs>(OnDestruction);
-        SubscribeLocalEvent<NotifyOnNonFunctioningComponent, MachineDeconstructedEvent>(OnDeconstructed);
-        SubscribeLocalEvent<NotifyOnNonFunctioningComponent, LockToggledEvent>(OnLockToggled);
-        SubscribeLocalEvent<NotifyOnNonFunctioningComponent, PowerStateChanged>(OnIsWorkingChanges);
-        SubscribeLocalEvent<NotifyOnNonFunctioningComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);
-        SubscribeLocalEvent<NotifyOnNonFunctioningComponent, PowerConsumerReceivedChanged>(ReceivedChanged);
-    }
-    // DS14-end
+    [Dependency] private EntityQuery<ApcPowerReceiverComponent> _powerReceiverQuery = default!;
+    [Dependency] private EntityQuery<PowerConsumerComponent> _powerConsumerQuery = default!;
 
     /// <summary> Notify on entity destruction. </summary>
+    [SubscribeLocalEvent]
     private void OnDestruction(Entity<NotifyOnNonFunctioningComponent> ent, ref DestructionEventArgs args)
     {
         if (ent.Comp.LocDestroyed.HasValue)
@@ -45,6 +34,7 @@ public sealed class NotifyOnNonFunctioningSystem : EntitySystem
     }
 
     /// <summary> Notify on deconstruction. </summary>
+    [SubscribeLocalEvent]
     private void OnDeconstructed(Entity<NotifyOnNonFunctioningComponent> ent, ref MachineDeconstructedEvent args)
     {
         if (ent.Comp.LocDeconstructed.HasValue)
@@ -52,6 +42,7 @@ public sealed class NotifyOnNonFunctioningSystem : EntitySystem
     }
 
     /// <summary> Notify on unlocking already locked entity. </summary>
+    [SubscribeLocalEvent]
     private void OnLockToggled(Entity<NotifyOnNonFunctioningComponent> ent, ref LockToggledEvent args)
     {
         if (args.Locked || !ent.Comp.LocUnlocked.HasValue)
@@ -61,16 +52,18 @@ public sealed class NotifyOnNonFunctioningSystem : EntitySystem
     }
 
     /// <summary> Notify on turning off. </summary>
-    private void OnIsWorkingChanges(Entity<NotifyOnNonFunctioningComponent> ent, ref PowerStateChanged args)
+    [SubscribeLocalEvent]
+    private void OnTurnedOnChanges(Entity<NotifyOnNonFunctioningComponent> ent, ref TurnedOnStateChanged args)
     {
         // deleted entity is working change should be handled during other events
-        if (args.IsWorking || !ent.Comp.LocTurnedOff.HasValue || TerminatingOrDeleted(ent))
+        if (args.IsTurnedOn || !ent.Comp.LocTurnedOff.HasValue || TerminatingOrDeleted(ent))
             return;
 
         AlertRadio(ent, ent.Comp.LocTurnedOff);
     }
 
     /// <summary> Notify on unanchoring. </summary>
+    [SubscribeLocalEvent]
     private void OnAnchorStateChanged(Entity<NotifyOnNonFunctioningComponent> ent, ref AnchorStateChangedEvent args)
     {
         if (args.Anchored || !ent.Comp.LocUnanchored.HasValue || TerminatingOrDeleted(ent))
@@ -79,23 +72,23 @@ public sealed class NotifyOnNonFunctioningSystem : EntitySystem
         AlertRadioIfWasWorking(ent, ent.Comp.LocUnanchored);
     }
 
+    [SubscribeLocalEvent]
     private void ReceivedChanged(Entity<NotifyOnNonFunctioningComponent> ent, ref PowerConsumerReceivedChanged args)
     {
         if (!ent.Comp.LocUnpowered.HasValue || !_powerState.GetWorkingState(ent.Owner))
             return;
 
-        if (args.ReceivedPower >= args.DrawRate || _gameTiming.CurTime < ent.Comp.NextUnpoweredAlert)
+        // DS14-start - unstable power must not spam the engineering radio.
+        if (args.ReceivedPower >= args.DrawRate || _timing.CurTime < ent.Comp.NextUnpoweredAlert)
             return;
 
-        // DS14-start - unstable power must not spam the engineering radio.
-        ent.Comp.NextUnpoweredAlert = _gameTiming.CurTime + ent.Comp.UnpoweredAlertCooldown;
+        ent.Comp.NextUnpoweredAlert = _timing.CurTime + ent.Comp.UnpoweredAlertCooldown;
         AlertRadioIfWasWorking(ent, ent.Comp.LocUnpowered, true);
         // DS14-end
     }
 
     private void AlertRadioIfWasWorking(Entity<NotifyOnNonFunctioningComponent> ent, string locString, bool ignorePower = false)
     {
-
         if (!_powerState.GetWorkingState(ent.Owner))
             return;
 
@@ -104,17 +97,22 @@ public sealed class NotifyOnNonFunctioningSystem : EntitySystem
 
     private void AlertRadio(Entity<NotifyOnNonFunctioningComponent> ent, string locString, bool ignorePower = false)
     {
+        // Are we rate-limited?
+        if (ent.Comp.NextMessage > _timing.CurTime)
+            return;
+
         if (ent.Comp.RequirePowered && !ignorePower)
         {
-            if (TryComp<ApcPowerReceiverComponent>(ent, out var apc) && !apc.Powered)
+            if (_powerReceiverQuery.TryComp(ent, out var apc) && !apc.Powered)
                 return;
 
-            if (TryComp<PowerConsumerComponent>(ent, out var consumer) && consumer.DrawRate > consumer.ReceivedPower)
+            if (_powerConsumerQuery.TryComp(ent, out var consumer) && consumer.DrawRate > consumer.ReceivedPower)
                 return;
         }
 
         var locationInfo = FormattedMessage.RemoveMarkupOrThrow(_navMap.GetNearestBeaconString(ent.Owner));
         var message = Loc.GetString(locString, ("location", locationInfo));
         _radio.SendRadioMessage(ent.Owner, message, ent.Comp.RadioChannel, ent.Owner);
+        ent.Comp.NextMessage = _timing.CurTime + ent.Comp.NextMessageDelay;
     }
 }

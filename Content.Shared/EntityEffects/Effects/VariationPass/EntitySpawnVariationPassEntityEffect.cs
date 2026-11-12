@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared.EntityTable;
 using Content.Shared.EntityTable.EntitySelectors;
 using Content.Shared.Physics;
@@ -13,14 +13,12 @@ namespace Content.Shared.EntityEffects.Effects.VariationPass;
 /// Used for spawning entities randomly dotted around the grid.
 /// </summary>
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
-public sealed class EntitySpawnVariationPassEntityEffectSystem : EntityEffectSystem<MapGridComponent, EntitySpawnVariationPass> // DS14 - pre-v288 engine
+public sealed partial class EntitySpawnVariationPassEntityEffectSystem : EntityEffectSystem<MapGridComponent, EntitySpawnVariationPass>
 {
-    // DS14-start - pre-v288 engine
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly EntityTableSystem _tables = default!;
-    // DS14-end
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private EntityTableSystem _tables = default!;
 
     protected override void Effect(Entity<MapGridComponent> entity, ref EntityEffectEvent<EntitySpawnVariationPass> args)
     {
@@ -34,7 +32,7 @@ public sealed class EntitySpawnVariationPassEntityEffectSystem : EntityEffectSys
         {
             if (TryFindRandomTile(entity, tiles, out var coords))
             {
-                var ents = _tables.GetSpawns(args.Effect.Table, _random.GetRandom()); // DS14 - current entity tables accept System.Random.
+                var ents = _tables.GetSpawns(args.Effect.Table, _random);
                 foreach (var spawn in ents)
                 {
                     SpawnAtPosition(spawn, coords);

@@ -1,11 +1,15 @@
 - type: entity
-  name: BaseWeaponLauncher
+  abstract: true
   parent: [ BaseItem, BaseGunWieldable ]
   id: BaseWeaponLauncher
+  name: BaseWeaponLauncher
   description: A rooty tooty point and shooty.
-  abstract: true
   components:
   - type: Sprite
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
   - type: Clothing
     sprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
     quickEquip: false
@@ -13,12 +17,10 @@
     - Back
   - type: Item
     size: Ginormous
+    shape:
+      - 0,0,6,3
   - type: StaticPrice
     price: 500
-  - type: ContainerContainer
-    containers:
-      ballistic-ammo: !type:Container
-        ents: []
   - type: Gun
     fireRate: 1
     projectileSpeed: 25 # Slower than a bullet, same speed as our old projectile limit.
@@ -40,30 +42,30 @@
   #DS14-End
 
 - type: entity
-  name: china lake
-  parent: [BaseWeaponLauncher, BaseSyndicateContraband]
+  parent: [ BaseWeaponLauncher, BaseSyndicateContraband ]
   id: WeaponLauncherChinaLake
+  name: China Lake
   description: PLOOP.
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
     layers:
-      - state: icon
-        map: ["enum.GunVisualLayers.Base"]
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,2
   - type: Clothing
     sprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
     slots:
     - Back
     - suitStorage
-  - type: Item
-    size: Huge
-    shape:
-    - 0,0,4,2
   - type: AmmoCounter
   - type: BallisticAmmoProvider
     whitelist:
       tags:
-        - Grenade
+      - Grenade
     capacity: 3
     proto: GrenadeFrag
     soundInsert:
@@ -86,18 +88,18 @@
     layers:
     - state: icon
       map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+  - type: ContainerContainer
+    containers:
+      revolver-ammo: !type:Container
   - type: Clothing
     sprite: Objects/Weapons/Guns/Launchers/hydra_launcher.rsi
     slots:
     - Back
     - suitStorage
-  - type: Item
-    size: Huge
   - type: AmmoCounter
   - type: GunRequiresWield
-  - type: ContainerContainer
-    containers:
-      revolver-ammo: !type:Container
   - type: RevolverAmmoProvider
     whitelist:
       tags:
@@ -153,18 +155,18 @@
     proto: GrenadeFrag
 
 - type: entity
-  name: RPG-7
   parent: [ BaseWeaponLauncher, BaseMajorContraband ]
   id: WeaponLauncherRocket
+  name: RPG-7
   description: A modified ancient rocket-propelled grenade launcher.
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Launchers/rocket.rsi
     layers:
-      - state: base
-        map: ["enum.GunVisualLayers.Base"]
-      - state: mag-0
-        map: ["enum.GunVisualLayers.Mag"]
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
     sprite: Objects/Weapons/Guns/Launchers/rocket.rsi
   - type: Gun
@@ -174,7 +176,7 @@
   - type: BallisticAmmoProvider
     whitelist:
       tags:
-        - CartridgeRocket
+      - CartridgeRocket
     proto: CartridgeRocket
     capacity: 1
     soundInsert:
@@ -186,9 +188,9 @@
   - type: Appearance
 
 - type: entity
-  parent: [ BaseWeaponLauncher, BaseXenoborgContraband ]
-  id: WeaponXenoborgGuidedMissileLauncher
-  name: XB GML-78
+  parent: [ BaseItem, BaseXenoborgContraband ]
+  id: WeaponGuidedMissileLauncherXenoborg
+  name: XB GML-78 # Xenoborg Guided Missile Launcher 78
   description: A guided missile launcher.
   components:
   - type: Sprite
@@ -203,6 +205,10 @@
     magState: mag
     steps: 4
     zeroVisible: false
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
   - type: Gun
     fireRate: 2
     projectileSpeed: 6 # needs to be the same as the speed of the chasing walk component of the projectile
@@ -212,6 +218,7 @@
   - type: BallisticAmmoProvider
     proto: BulletGuidedXenoborgMissile
     capacity: 3
+    cycleable: false
   - type: BallisticAmmoSelfRefiller
     autoRefillRate: 17s # takes a while to get a new one
   - type: TargetAssign
@@ -230,23 +237,23 @@
   - type: Sprite
     sprite: Objects/Weapons/Guns/Launchers/rocket.rsi
     layers:
-      - state: base
-        map: ["enum.GunVisualLayers.Base"]
-      - state: mag-0
-        map: ["enum.GunVisualLayers.Mag"]
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
     sprite: Objects/Weapons/Guns/Launchers/rocket.rsi
   - type: Gun
     fireRate: 6
     selectedMode: FullAuto
     availableModes:
-      - FullAuto
+    - FullAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
   - type: BallisticAmmoProvider
     whitelist:
       tags:
-        - CartridgeRocket
+      - CartridgeRocket
     proto: CartridgeRocketSlow
     soundInsert:
       path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
@@ -257,87 +264,10 @@
   - type: Appearance
 
 - type: entity
-  parent: BaseItem
+  parent: [ BaseItem, BaseXenoborgContraband ]
   id: WeaponRocketLauncherXenoborg
   name: XB MRL-97-D # Xenoborg Multi Rocket Launcher 97 D (Demolition)
   description: A alien rocket launcher fitted with special demolition rockets.
-  components:
-  - type: Sprite
-    sprite: Objects/Weapons/Guns/Launchers/xb_mlr.rsi
-    layers:
-    - state: mlr
-      map: [ "enum.GunVisualLayers.Base" ]
-    - state: mag-6
-      map: [ "enum.GunVisualLayers.Mag" ]
-  - type: ContainerContainer
-    containers:
-      ballistic-ammo: !type:Container
-        ents: []
-  - type: Gun
-    burstFireRate: 12.5
-    selectedMode: Burst
-    availableModes:
-    - Burst
-    shotsPerBurst: 6
-    minAngle: 10
-    angleIncrease: 10
-    maxAngle: 50
-    projectileSpeed: 12.5
-    soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/rocket1.ogg
-  - type: BallisticAmmoProvider
-    capacity: 6
-    proto: BulletXenoborgMechadermisRocket
-    cycleable: false
-    soundInsert:
-      path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
-  - type: BallisticAmmoSelfRefiller
-    autoRefillRate: 17s
-  - type: MagazineVisuals
-    magState: mag
-    steps: 7
-    zeroVisible: false
-  - type: Appearance
-
-- type: entity
-  parent: BaseWeaponLauncher
-  id: WeaponLauncherPirateCannon
-  name: pirate cannon
-  description: Kaboom!
-  components:
-    - type: Sprite
-      sprite: Objects/Weapons/Guns/Launchers/pirate_cannon.rsi
-      layers:
-        - state: icon
-          map: ["enum.GunVisualLayers.Base"]
-    - containers:
-        balistic-ammo: !type:Container
-          ents: []
-        ballistic-ammo: !type:Container
-          ents: []
-      type: ContainerContainer
-    - type: Clothing
-      sprite: Objects/Weapons/Guns/Launchers/pirate_cannon.rsi
-    - type: Gun
-      fireRate: 1
-      soundGunshot:
-        path: /Audio/Weapons/Guns/Gunshots/mateba.ogg
-    - type: BallisticAmmoProvider
-      whitelist:
-        tags:
-          - CannonBall
-      capacity: 1
-      proto: CannonBall
-      soundInsert:
-        path: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
-
-- type: entity
-  name: tether gun
-  parent:
-  - BaseItem
-  - PowerCellSlotMediumItem
-  id: WeaponTetherGun
-  description: Manipulates gravity around objects to fling them at high velocities.
   components:
     - type: Item
       size: Normal
@@ -385,12 +315,10 @@
     #DS14-End
 
 - type: entity
-  name: force gun
-  parent:
-    - BaseItem
-    - PowerCellSlotMediumItem
-  id: WeaponForceGun
-  description: Manipulates gravity around objects to fling them at high velocities.
+  parent: BaseWeaponLauncher
+  id: WeaponLauncherPirateCannon
+  name: pirate cannon
+  description: Kaboom!
   components:
     - type: Item
       size: Normal
@@ -444,9 +372,9 @@
     #DS14-End
 
 - type: entity
-  name: grappling gun
   parent: BaseItem
   id: WeaponGrapplingGun
+  name: grappling gun
   components:
     - type: Item
       size: Small
@@ -604,6 +532,7 @@
   name: meteor launcher
   parent: WeaponLauncherMultipleRocket
   id: WeaponLauncherAdmemeMeteorLarge
+  name: meteor launcher
   suffix: Admeme
   description: It fires large meteors.
   components:
@@ -611,9 +540,9 @@
     proto: MeteorMedium
 
 - type: entity
-  name: immovable rod launcher
   parent: WeaponLauncherAdmemeMeteorLarge
   id: WeaponLauncherAdmemeImmovableRodSlow
+  name: immovable rod launcher
   suffix: Admeme
   description: It fires slow immovable rods.
   components:

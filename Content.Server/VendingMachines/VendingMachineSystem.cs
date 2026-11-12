@@ -15,27 +15,13 @@ using Robust.Shared.Random;
 
 namespace Content.Server.VendingMachines;
 
-public sealed class VendingMachineSystem : SharedVendingMachineSystem
+public sealed partial class VendingMachineSystem : SharedVendingMachineSystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly PricingSystem _pricing = default!;
-    [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14 - old engine compatibility
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private PricingSystem _pricing = default!;
+    [Dependency] private ThrowingSystem _throwingSystem = default!;
 
     private const float WallVendEjectDistanceFromWall = 1f;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        // DS14 start - old engine compatibility
-        SubscribeLocalEvent<VendingMachineComponent, PriceCalculationEvent>(OnVendingPrice);
-        SubscribeLocalEvent<VendingMachineComponent, DamageChangedEvent>(OnDamageChanged);
-        SubscribeLocalEvent<VendingMachineComponent, VendingMachineSelfDispenseEvent>(OnSelfDispense);
-        SubscribeLocalEvent<VendingMachineRestockComponent, PriceCalculationEvent>(OnPriceCalculation);
-        SubscribeLocalEvent<VendingMachineComponent, TryVocalizeEvent>(OnTryVocalize);
-        // DS14 end
-    }
 
     protected override bool ShouldThrowVendItem(Entity<VendingMachineEjectComponent> entity)
     {
@@ -104,13 +90,14 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
         }
     }
 
+    [SubscribeLocalEvent]
     private void OnVendingPrice(Entity<VendingMachineComponent> entity, ref PriceCalculationEvent args)
     {
         var price = 0.0;
 
         foreach (var entry in entity.Comp.Inventory.Values)
         {
-            if (!_prototypeManager.TryIndex<EntityPrototype>(entry.ID, out var proto))
+            if (!ProtoMan.TryIndex<EntityPrototype>(entry.ID, out var proto))
             {
                 Log.Error($"Unable to find entity prototype {entry.ID} on {ToPrettyString(entity)} vending.");
                 continue;
@@ -122,6 +109,7 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
         args.Price += price;
     }
 
+    [SubscribeLocalEvent]
     private void OnDamageChanged(Entity<VendingMachineComponent> entity, ref DamageChangedEvent args)
     {
         if (!args.DamageIncreased && entity.Comp.Broken)
@@ -148,6 +136,7 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
         EjectRandom((entity.Owner, entity.Comp), throwItem: true, forceEject: true);
     }
 
+    [SubscribeLocalEvent]
     private void OnSelfDispense(Entity<VendingMachineComponent> entity, ref VendingMachineSelfDispenseEvent args)
     {
         if (args.Handled)
@@ -157,6 +146,7 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
         EjectRandom((entity.Owner, entity.Comp), throwItem: true, forceEject: false);
     }
 
+    [SubscribeLocalEvent]
     private void OnPriceCalculation(Entity<VendingMachineRestockComponent> entity, ref PriceCalculationEvent args)
     {
         List<double> priceSets = new();
@@ -166,11 +156,11 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
         {
             double total = 0;
 
-            if (_prototypeManager.TryIndex(vendingInventory, out VendingMachineInventoryPrototype? inventoryPrototype))
+            if (ProtoMan.TryIndex(vendingInventory, out VendingMachineInventoryPrototype? inventoryPrototype))
             {
                 foreach (var (item, amount) in inventoryPrototype.StartingInventory)
                 {
-                    if (_prototypeManager.TryIndex(item, out EntityPrototype? prototype))
+                    if (ProtoMan.TryIndex(item, out EntityPrototype? prototype))
                         total += _pricing.GetEstimatedPrice(prototype) * amount;
                 }
             }
@@ -181,6 +171,7 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
         args.Price += priceSets.Max();
     }
 
+    [SubscribeLocalEvent]
     private void OnTryVocalize(Entity<VendingMachineComponent> ent, ref TryVocalizeEvent args)
     {
         args.Cancelled |= ent.Comp.Broken;

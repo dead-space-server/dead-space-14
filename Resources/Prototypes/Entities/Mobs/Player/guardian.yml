@@ -73,6 +73,7 @@
           layer:
             - Opaque
     - type: Damageable
+    - type: Injurable
       damageContainer: Biological
     - type: MobState
       allowedStates:
@@ -252,6 +253,9 @@
     - type: Inventory
       templateId: holoclown
     - type: Hands
+      startingHands:
+        hand_left:
+          location: Left
     - type: ComplexInteraction
     - type: MeleeWeapon
       angle: 30
@@ -282,7 +286,9 @@
   description: Either manifests the guardian or recalls it back into your body
   components:
   - type: Action
-    icon: Interface/Actions/manifest.png
     useDelay: 2
+  - type: Sprite
+    layers:
+    - texture: Interface/Actions/manifest.png
   - type: InstantAction
     event: !type:GuardianToggleActionEvent

@@ -27,6 +27,9 @@
     },
     {
       "name": "walkietalkie-on"
+    },
+    {
+      "name": "walkietalkie-active"
     }
   ]
 }

@@ -124,6 +124,7 @@ public sealed partial class RCDPrototype : IPrototype
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public RcdRotation Rotation { get; private set; } = RcdRotation.User;
+<<<<<<< ours
 
     // DS14-start
     /// <summary>
@@ -132,6 +133,17 @@ public sealed partial class RCDPrototype : IPrototype
     [DataField]
     public int? MenuOrder { get; private set; }
     // DS14-end
+||||||| base
+=======
+
+    /// <summary>
+    /// The relative order to use in the rotary menu.
+    /// Lower numbers appear before higher numbers, which appear before null.
+    /// Defaults to null.
+    /// </summary>
+    [DataField]
+    public int? MenuOrder { get; private set; }
+>>>>>>> theirs
 }
 
 public enum RcdMode : byte

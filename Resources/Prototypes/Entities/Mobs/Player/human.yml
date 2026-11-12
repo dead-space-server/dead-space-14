@@ -19,8 +19,9 @@
     roleLoadout: [ RoleSurvivalSyndicate ]
   - type: RandomMetadata
     nameSegments:
-    - NamesFirstMale
-    - NamesLastMale
+    - NamesDeathCommandoFirst
+    - NamesDeathCommandoLast
+    nameFormat: name-format-standard
   - type: NpcFactionMember
     factions:
     - Syndicate
@@ -40,16 +41,27 @@
     profile: TraitorReinforcement
 
 - type: entity
-  parent: MobHumanSyndicateAgent
+  abstract: true
+  parent: MobHuman
+  id: MobHumanSyndicateReinforcement
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: true
+  - type: NpcFactionMember
+    factions:
+    - Syndicate
+
+- type: entity
+  parent: MobHumanSyndicateReinforcement
   id: MobHumanSyndicateAgentMedic
-  name: syndicate medic
+  name: syndicate combat medic
   components:
   - type: Loadout
     prototypes: [SyndicateReinforcementMedic]
     roleLoadout: [ RoleSurvivalSyndicate ]
 
 - type: entity
-  parent: MobHumanSyndicateAgent
+  parent: MobHumanSyndicateReinforcement
   id: MobHumanSyndicateAgentSpy
   name: syndicate spy
   components:
@@ -58,7 +70,7 @@
     roleLoadout: [ RoleSurvivalSyndicate ]
 
 - type: entity
-  parent: MobHumanSyndicateAgent
+  parent: MobHumanSyndicateReinforcement
   id: MobHumanSyndicateAgentThief
   name: syndicate thief
   components:

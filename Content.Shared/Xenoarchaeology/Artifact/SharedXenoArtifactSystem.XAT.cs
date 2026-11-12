@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Shared.Chemistry;
-using Content.Shared.Damage;
 using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Electrocution;
@@ -21,9 +20,15 @@ public abstract partial class SharedXenoArtifactSystem
 {
     private void InitializeXAT()
     {
+<<<<<<< ours
         // DS14-start: the pinned engine still exposes damage changes through DamageChangedEvent.
         XATRelayLocalEvent<DamageChangedEvent>();
         // DS14-end
+||||||| base
+        XATRelayLocalEvent<DamageChangedEvent>();
+=======
+        XATRelayLocalEvent<DamageDealtEvent>();
+>>>>>>> theirs
         XATRelayLocalEvent<InteractUsingEvent>();
         XATRelayLocalEvent<PullStartedMessage>();
         XATRelayLocalEvent<AttackedEvent>();
@@ -31,12 +36,12 @@ public abstract partial class SharedXenoArtifactSystem
         XATRelayLocalEvent<InteractHandEvent>();
         XATRelayLocalEvent<ReactionEntityEvent>();
         XATRelayLocalEvent<LandEvent>();
+        XATRelayLocalEvent<BeingMicrowavedEvent>();
         XATRelayLocalEvent<XATInteractWithDoAfterEvent>();
         XATRelayLocalEvent<ElectrocutionAttemptEvent>();
         XATRelayLocalEvent<StartCollideEvent>();
         XATRelayLocalEvent<HitscanRaycastStrikeEvent>();
         XATRelayLocalEvent<BeforeStaminaDamageEvent>();
-        XATRelayLocalEvent<BeingMicrowavedEvent>();
 
         // special case this one because we need to order the messages
         SubscribeLocalEvent<XenoArtifactComponent, ExaminedEvent>(OnExamined);
@@ -88,8 +93,9 @@ public abstract partial class SharedXenoArtifactSystem
             unlockingComp.EndTime = _timing.CurTime + ent.Comp.UnlockStateDuration;
             Log.Debug($"{ToPrettyString(ent)} entered unlocking state");
 
-            if (_net.IsServer)
-                _popup.PopupEntity(Loc.GetString("artifact-unlock-state-begin"), ent);
+            if (ent.Comp.UnlockBeginMsg != null)
+                _popup.PopupEntity(Loc.GetString(ent.Comp.UnlockBeginMsg), ent);
+
             Dirty(ent);
             if (node != null && unlockingComp.TriggeredNodeIndexes.Add(GetIndex(ent, node.Value)))
                 Dirty(ent, unlockingComp);
@@ -116,11 +122,14 @@ public abstract partial class SharedXenoArtifactSystem
                         // This is an unlockable node, check if is failed
                         var predecessorNodeIndices = GetPredecessorNodes((ent, ent), GetIndex(ent, nodeEnt.Owner));
                         // Remember that triggering the unlockable node shouldn't count as failing the unlock!
-                        predecessorNodeIndices.Add(GetIndex(ent, nodeEnt.Owner));
+                        predecessorNodeIndices.Add(GetIndex(ent, nodeEnt.Owner)); 
                         if (unlockingComp.TriggeredNodeIndexes.All(x => predecessorNodeIndices.Contains(x)))
                         {
                             // We have found an unlockable node that is still possible to unlock - it contains all triggers in its predecessors
-                            unlockingComp.EndTime += ent.Comp.UnlockStateIncrementPerNode;
+                            unlockingComp.EndTime += ent.Comp.UnlockStateIncrementPerNode; 
+
+                            if (ent.Comp.UnlockContinueMsg != null)
+                                _popup.PopupEntity(Loc.GetString(ent.Comp.UnlockContinueMsg), ent);
                             break;
                         }
                     }

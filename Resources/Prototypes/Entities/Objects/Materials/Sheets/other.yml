@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: BaseItem
+  parent: BaseSheet
   id: SheetOtherBase
   description: A sheet of material, used often on the station in various applications.
   components:
@@ -8,25 +8,6 @@
     sprite: Objects/Materials/Sheets/other.rsi
   - type: Item
     sprite: Objects/Materials/Sheets/other.rsi
-    size: Normal
-  - type: Tag
-    tags:
-    - Sheet
-    - ConstructionMaterial
-  - type: Damageable
-    damageContainer: Inorganic
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 100
-      behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-  - type: SolutionContainerManager
-    solutions:
-      paper:
-        canReact: false
 
 - type: entity
   parent: SheetOtherBase
@@ -41,7 +22,6 @@
     - paper
     - paper_2
     - paper_3
-  - type: Material
   - type: PhysicalComposition
     materialComposition:
       Paper: 100
@@ -90,7 +70,6 @@
   name: plasma
   suffix: Full
   components:
-  - type: Material
   - type: PhysicalComposition
     materialComposition:
       Plasma: 100
@@ -162,7 +141,6 @@
     - Plastic
     - Sheet
     - ConstructionMaterial
-  - type: Material
   - type: PhysicalComposition
     materialComposition:
       Plastic: 100
@@ -227,14 +205,14 @@
     count: 1
 
 - type: entity
-  parent: [SheetOtherBase, EdibleBase]
+  parent: [SheetOtherBase, FoodBase]
   id: SheetUranium
   name: uranium
   suffix: Full
   components:
-  - type: Material
   - type: Edible
     transferAmount: 10
+    solution: composite
   - type: BadFood
   - type: PhysicalComposition
     materialComposition:
@@ -251,7 +229,6 @@
     layers:
     - state: uranium_3
       map: ["base"]
-  - type: Appearance
   - type: Item
     heldPrefix: uranium
   - type: Extractable

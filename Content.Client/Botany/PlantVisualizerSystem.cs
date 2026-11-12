@@ -8,25 +8,12 @@ namespace Content.Client.Botany;
 
 public sealed partial class PlantVisualizerSystem : VisualizerSystem<PlantVisualsComponent>
 {
-    // DS14-start: current engine uses explicit event subscriptions.
-    public override void Initialize()
-    {
-        base.Initialize();
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantTrayVisualizerSystem _plantTrayVisualizer = default!;
+    [Dependency] private PlantAnalyzerSystem _plantAnalyzer = default!;
 
-        SubscribeLocalEvent<PlantVisualsComponent, ComponentInit>(OnComponentInit);
-        SubscribeLocalEvent<PlantVisualsComponent, ComponentStartup>(OnComponentStartup);
-        SubscribeLocalEvent<PlantComponent, AfterAutoHandleStateEvent>(OnPlantState);
-        SubscribeLocalEvent<PlantHolderComponent, AfterAutoHandleStateEvent>(OnHolderState);
-        SubscribeLocalEvent<EntityUid>(UpdateSprite);
-    }
-    // DS14-end
-
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly PlantTrayVisualizerSystem _plantTrayVisualizer = default!;
-    // DS14-end
-
+    [SubscribeLocalEvent]
     private void OnComponentInit(EntityUid uid, PlantVisualsComponent component, ComponentInit args)
     {
         if (!TryComp<SpriteComponent>(uid, out var sprite))
@@ -38,27 +25,57 @@ public sealed partial class PlantVisualizerSystem : VisualizerSystem<PlantVisual
         SpriteSystem.LayerSetVisible((uid, sprite), PlantLayers.Plant, false);
     }
 
+    [SubscribeLocalEvent]
     private void OnComponentStartup(Entity<PlantVisualsComponent> ent, ref ComponentStartup args)
     {
         UpdateSprite(ent.Owner);
     }
 
+    [SubscribeLocalEvent]
     private void OnPlantState(Entity<PlantComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         UpdateSprite(ent.Owner);
+        _plantAnalyzer.UpdatePlantUi(ent.Owner);
     }
 
+    [SubscribeLocalEvent]
     private void OnHolderState(Entity<PlantHolderComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         UpdateSprite(ent.Owner);
+        _plantAnalyzer.UpdatePlantUi(ent.Owner);
         if (_plant.TryGetTray(ent.Owner, out var trayEnt))
             _plantTrayVisualizer.UpdateTrayWarnings(trayEnt.AsNullable());
     }
 
+    [SubscribeLocalEvent]
+    private void OnChemicalsState(Entity<PlantChemicalsComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        _plantAnalyzer.UpdatePlantUi(ent.Owner);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnGrowthState(Entity<PlantGrowthComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        _plantAnalyzer.UpdatePlantUi(ent.Owner);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnAtmosphericState(Entity<PlantAtmosphericComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        _plantAnalyzer.UpdatePlantUi(ent.Owner);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnGasState(Entity<PlantConsumeExudeGasComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        _plantAnalyzer.UpdatePlantUi(ent.Owner);
+    }
+
+    [SubscribeLocalEvent]
     private void UpdateSprite(EntityUid plantUid)
     {
         if (!HasComp<PlantVisualsComponent>(plantUid)
-            || !TryComp<PlantHolderComponent>(plantUid, out var holder) // DS14
+            || !TryComp<PlantHolderComponent>(plantUid, out var holder)
             || !TryComp<SpriteComponent>(plantUid, out var sprite))
         {
             return;
@@ -67,7 +84,7 @@ public sealed partial class PlantVisualizerSystem : VisualizerSystem<PlantVisual
         string state;
 
         var dead = _plantHolder.IsDead(plantUid);
-        var harvestReady = holder.ReadyForHarvest; // DS14
+        var harvestReady = holder.ReadyForHarvest;
         var growthStage = _plant.GetGrowthStageValue(plantUid);
 
         if (dead)

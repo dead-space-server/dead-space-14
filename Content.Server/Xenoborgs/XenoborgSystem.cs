@@ -1,29 +1,26 @@
-using Content.Server.Antag;
 using Content.Server.DeadSpace.Prison;
 using Content.Server.GameTicking.Rules;
-using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Silicons.Borgs;
+using Content.Shared.Antag;
 using Content.Shared.Destructible;
-using Content.Shared.Mind;
+using Content.Shared.GameTicking.Rules.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Roles;
-using Content.Shared.Roles.Components;
 using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.Xenoborgs.Components;
-using Robust.Shared.Audio;
 using Robust.Shared.Player;
 
 namespace Content.Server.Xenoborgs;
 
 public sealed partial class XenoborgSystem : EntitySystem
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly BorgSystem _borg = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!; // DS14
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly XenoborgsRuleSystem _xenoborgsRule = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private BorgSystem _borg = default!;
+    [Dependency] private PrisonSystem _prison = default!; // DS14
+    [Dependency] private MobStateSystem _mobState = default!; // DS14
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private ServerXenoborgsRuleSystem _xenoborgsRule = default!;
 
     private static readonly Color XenoborgBriefingColor = Color.BlueViolet;
 
@@ -141,6 +138,8 @@ public sealed partial class XenoborgSystem : EntitySystem
 
     private void OnXenoborgMindRemoved(EntityUid ent, XenoborgComponent comp, BeforeMindRemovedMessage args) // DS14
     {
-        _roles.MindRemoveRole(args.Mind.Owner, comp.MindRole);
+        // We don't need to update the mind if the mind is being fully detached!
+        if (args.TransferEntity != null)
+            _roles.MindRemoveRole(args.Mind.Owner, comp.MindRole);
     }
 }

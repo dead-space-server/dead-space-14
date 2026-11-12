@@ -5,44 +5,51 @@ using Content.Server.Chat;
 using Content.Server.Chat.Managers;
 using Content.Server.DeadSpace.Prison;
 using Content.Server.Ghost;
-using Content.Server.Ghost.Roles.Components;
-using Content.Server.Humanoid;
+using Content.Server.Humanoid; // DS14
+using Content.Server.Inventory;
 using Content.Server.Mind;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
 using Content.Server.StationEvents.Components;
-using Content.Server.Speech.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.CombatMode.Pacification;
-using Content.Shared.Hands.Components;
+using Content.Shared.Cuffs;
+using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction.Components;
+using Content.Shared.Metabolism;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.NameModifier.EntitySystems;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Nutrition.AnimalHusbandry;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Popups;
+using Content.Shared.Prying.Components;
+using Content.Shared.Roles;
+using Content.Shared.Speech.EntitySystems;
+using Content.Shared.StatusEffectNew;
+using Content.Shared.StatusEffectNew.Components;
+using Content.Shared.Tag;
+using Content.Shared.Temperature.Components;
+using Content.Shared.Traits.Assorted;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Zombies;
-using Content.Shared.Prying.Components;
-using Content.Shared.Traits.Assorted;
 using Robust.Shared.Audio.Systems;
-using Content.Shared.Ghost.Roles.Components;
-using Content.Shared.IdentityManagement;
-using Content.Shared.Tag;
+using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Languages.Components;
 using Content.Shared.DeadSpace.Languages.Prototypes;
-using Content.Shared.NPC.Prototypes;
-using Content.Shared.Roles;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.DeadSpace.Virus.Components;
 using Content.Server.DeadSpace.Virus.Systems;
@@ -50,7 +57,6 @@ using Content.Server.DeadSpace.Languages;
 using Content.Shared.NPC.Components; // DS14
 using System.Linq; // DS14
 using Content.Shared.Cuffs.Components; // DS14
-using Content.Shared.Temperature.Components;
 using Content.Shared.StatusEffectNew; // DS14
 using Content.Shared.NPC; //DS14
 
@@ -64,25 +70,30 @@ namespace Content.Server.Zombies;
 /// </remarks>
 public sealed partial class ZombieSystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IBanManager _ban = default!;
-    [Dependency] private readonly IChatManager _chatMan = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearance = default!;
-    [Dependency] private readonly IdentitySystem _identity = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
-    [Dependency] private readonly NameModifierSystem _nameMod = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
-    [Dependency] private readonly VirusSystem _virus = default!; // DS14
-    [Dependency] private readonly LanguageSystem _language = default!; // DS14
-    [Dependency] private readonly StatusEffectsSystem _newStatusEffects = default!; // DS14
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IBanManager _ban = default!;
+    [Dependency] private IChatManager _chatMan = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoidAppearance = default!; // DS14: no VisualBody
+    [Dependency] private IdentitySystem _identity = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private NameModifierSystem _nameMod = default!;
+    [Dependency] private ReplacementAccentSystem _replacementAccent = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private BodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private SharedCuffableSystem _cuffable = default!;
+    [Dependency] private PrisonSystem _prison = default!;
+    [Dependency] private VirusSystem _virus = default!; // DS14
+    [Dependency] private LanguageSystem _language = default!; // DS14
+    [Dependency] private StatusEffectsSystem _newStatusEffects = default!; // DS14
 
     private static readonly ProtoId<TagPrototype> InvalidForGlobalSpawnSpellTag = "InvalidForGlobalSpawnSpell";
     private static readonly ProtoId<TagPrototype> CannotSuicideTag = "CannotSuicide";
@@ -91,6 +102,7 @@ public sealed partial class ZombieSystem
     private static readonly ProtoId<NpcFactionPrototype> ZombieFaction = "Zombie";
     private static readonly string MindRoleZombie = "MindRoleZombie";
     private static readonly List<ProtoId<AntagPrototype>> BannableZombiePrototypes = ["Zombie"];
+    private static readonly EntProtoId<StatusEffectComponent> ClumsyZombieStatus = "StatusEffectClumsyZombie";
 
     /// <summary>
     /// Handles an entity turning into a zombie when they die or go into crit
@@ -185,6 +197,13 @@ public sealed partial class ZombieSystem
             });
         }
 
+        // remove the metabolizer from all the body's organs. they're an undead.
+        var metabolizerOrgans = _body.EnumerateOrgans<MetabolizerComponent>(target);
+        foreach(var organ in metabolizerOrgans)
+        {
+            RemComp<MetabolizerComponent>(organ);
+        }
+
         //funny voice
         // var accentType = "zombie";
         // if (TryComp<ZombieAccentOverrideComponent>(target, out var accent))
@@ -240,7 +259,11 @@ public sealed partial class ZombieSystem
             zombiecomp.BeforeZombifiedEyeColor = huApComp.EyeColor;
             zombiecomp.BeforeZombifiedCustomBaseLayers = new(huApComp.CustomBaseLayers);
             if (TryComp<BloodstreamComponent>(target, out var stream) && stream.BloodReferenceSolution is { } reagents)
+            {
                 zombiecomp.BeforeZombifiedBloodReagents = reagents.Clone();
+                // Store the blood refresh amount for cloning later.
+                zombiecomp.BeforeZombifiedBloodRefresh = stream.BloodRefreshAmount;
+            }
 
             _humanoidAppearance.SetSkinColor(target, zombiecomp.SkinColor, verify: false, humanoid: huApComp);
 
@@ -275,9 +298,15 @@ public sealed partial class ZombieSystem
         _bloodstream.SetBloodLossThreshold(target, 0f);
         //Give them zombie blood
         _bloodstream.ChangeBloodReagents(target, zombiecomp.NewBloodReagents);
+        //Stop their blood from automatically regenerating
+        _bloodstream.ChangeBloodRefreshAmount(target, 0f);
+        _bloodstream.ChangeBloodIncreaseEnabled(target, false);
 
         //popup
-        _popup.PopupEntity(Loc.GetString("zombie-transform", ("target", target)), target, PopupType.LargeCaution);
+        _popup.PopupEntity(
+            Loc.GetString("zombie-transform", ("target", Identity.Entity(target, EntityManager))),
+            target,
+            PopupType.LargeCaution);
 
         //Make it sentient if it's an animal or something
         _mind.MakeSentient(target);
@@ -332,19 +361,22 @@ public sealed partial class ZombieSystem
 
         if (!HasComp<GhostRoleMobSpawnerComponent>(target) && !hasMind) //this specific component gives build test trouble so pop off, ig
         {
-            //yet more hardcoding. Visit zombie.ftl for more information.
-            var ghostRole = EnsureComp<GhostRoleComponent>(target);
-            EnsureComp<GhostTakeoverAvailableComponent>(target);
-            ghostRole.RoleName = Loc.GetString("zombie-generic");
-            ghostRole.RoleDescription = Loc.GetString("zombie-role-desc");
-            ghostRole.RoleRules = Loc.GetString("zombie-role-rules");
-            ghostRole.MindRoles.Add(MindRoleZombie);
+            MakeGhostRole(target);
         }
 
-        if (TryComp<HandsComponent>(target, out var handsComp))
+        // Uncuffing the zombie
+        foreach (var cuff in _cuffable.GetAllCuffs(target))
         {
-            _hands.RemoveHands(target);
-            RemComp(target, handsComp);
+            _cuffable.Uncuff(target, null, cuff);
+        }
+
+        // forcibly empties hands (even if they contain something sticky/unremovable)
+        _hands.DropAll(target); // TODO refactor to force drop all if #45844 gets merged
+        // temp backup to get rid of unremovable items
+        foreach (var hand in _hands.EnumerateHands(target))
+        {
+            if (_containerSystem.TryGetContainer(target, hand, out var handContainer))
+                _containerSystem.EmptyContainer(handContainer, true);
         }
 
         // DS14-start
@@ -353,6 +385,9 @@ public sealed partial class ZombieSystem
             RemComp(target, cuffs);
         }
         // DS14-end
+
+        // the zombie is now clumsy. it will drop anything handed to it.
+        _statusEffects.TrySetStatusEffectDuration(target, ClumsyZombieStatus);
 
         // Sloth: What the fuck?
         // How long until compregistry lmao.
@@ -365,7 +400,7 @@ public sealed partial class ZombieSystem
         //zombie gamemode stuff
         var ev = new EntityZombifiedEvent(target);
         RaiseLocalEvent(target, ref ev, true);
-        //zombies get slowdown once they convert
+        //zombies revert to their default movement speed.
         _movementSpeedModifier.RefreshMovementSpeedModifiers(target);
 
         //Need to prevent them from getting an item, they have no hands.

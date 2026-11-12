@@ -1,6 +1,6 @@
-﻿- type: entity
+- type: entity
   name: emergency flare
-  parent: BaseItem
+  parent: [SolutionComposite, SolutionTiny, BaseItem]
   id: Flare
   description: A flare that produces a very bright light for a short while. Point the flame away from yourself.
   components:
@@ -12,7 +12,6 @@
   - type: ExpendableLight
     glowDuration: 225
     fadeOutDuration: 15
-    iconStateOn: flare_unlit
     iconStateSpent: flare_spent
     turnOnBehaviourID: turn_on
     fadeOutBehaviourID: fade_out

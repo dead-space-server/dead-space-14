@@ -9,8 +9,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
 
-public sealed class RechargeBasicEntityAmmoSystem : EntitySystem
+public sealed partial class RechargeBasicEntityAmmoSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly MetaDataSystem _metadata = default!;
@@ -19,6 +20,19 @@ public sealed class RechargeBasicEntityAmmoSystem : EntitySystem
     [Dependency] private readonly Content.Shared.Weapons.Ranged.Upgrades.GunUpgradeSystem _gunUpgrade = default!; // DS14
 
     private EntityQuery<EmpDisabledComponent> _empDisabledQuery;
+||||||| base
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private readonly MetaDataSystem _metadata = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
+=======
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {

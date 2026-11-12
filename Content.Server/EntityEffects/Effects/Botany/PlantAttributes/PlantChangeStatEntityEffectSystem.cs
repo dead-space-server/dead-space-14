@@ -12,12 +12,21 @@ namespace Content.Server.EntityEffects.Effects.Botany.PlantAttributes;
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
 public sealed partial class PlantChangeStatEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantChangeStat>
 {
+<<<<<<< ours
     // DS14-start: current engine uses readonly IoC fields.
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
     [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
     // DS14-end
+||||||| base
+    // TODO: This is awful. I do not have the strength to refactor this. I want it gone.
+    [Dependency] private readonly IRobustRandom _random = default!;
+=======
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
+>>>>>>> theirs
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantChangeStat> args)
     {
@@ -27,13 +36,20 @@ public sealed partial class PlantChangeStatEntityEffectSystem : EntityEffectSyst
         var targetDataField = args.Effect.TargetDataField;
         var targetComponent = args.Effect.TargetComponent;
 
-        if (!_componentFactory.TryGetRegistration(targetComponent, out var registration))
+        if (!Factory.TryGetRegistration(targetComponent, out var registration))
         {
             Log.Error($"{nameof(PlantChangeStat)} Error: Component '{targetComponent}' is not a valid component name.");
             return;
         }
 
+<<<<<<< ours
         if (!EntityManager.TryGetComponent(entity.Owner, registration.Type, out var plantComp)) // DS14 - current engine exposes non-generic lookups through EntityManager.
+||||||| base
+        var currentValObj = member.GetValue(entity.Comp.Seed);
+        if (currentValObj == null)
+=======
+        if (!TryComp(entity.Owner, registration.Type, out var plantComp))
+>>>>>>> theirs
             return;
 
         var field = registration.Type.GetField(targetDataField);

@@ -5,6 +5,7 @@ namespace Content.Shared.Mech.EntitySystems;
 
 public abstract partial class SharedMechSystem
 {
+    [SubscribeLocalEvent]
     private void OnGettingAttackedAttempt(Entity<MechComponent> ent, ref GettingAttackedAttemptEvent args)
     {
         RelayRefToPilot(ent, ref args);

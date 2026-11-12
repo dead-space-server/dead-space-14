@@ -10,7 +10,6 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Controls
 {
-    [Virtual]
     public abstract class SlotControl : Control, IEntityControl
     {
         public static int DefaultButtonSize = 64;
@@ -39,7 +38,7 @@ namespace Content.Client.UserInterface.Controls
                 //this auto registers the button with it's parent container when it's set
                 if (_slotNameSet)
                 {
-                    Logger.Warning("Tried to set slotName after init for:" + Name);
+                    Log.Warning("Tried to set slotName after init for:" + Name);
                     return;
                 }
                 _slotNameSet = true;
@@ -235,6 +234,7 @@ namespace Content.Client.UserInterface.Controls
         }
 
         /// <summary>
+<<<<<<< ours
         /// Adds an overlay to the administrative overlay layer.
         /// </summary>
         /// <param name="texturePath">The texture path to overlay.</param>
@@ -245,6 +245,19 @@ namespace Content.Client.UserInterface.Controls
         }
 
         /// <summary>
+||||||| base
+=======
+        /// Add an overlay to in the admin overlays location
+        /// </summary>
+        /// <param name="texturePath">The texture path to overlay.</param>
+        /// <param name="color">Color to modulate the texture with - if null no modulation.</param>
+        public void AddAdminOverlay(ResPath texturePath, Color? color = null)
+        {
+            AdminOverlays.AddChild(new SimpleSlotOverlay(texturePath.CanonPath, color));
+        }
+
+        /// <summary>
+>>>>>>> theirs
         /// Causes the control to display a placeholder prototype, optionally faded
         /// </summary>
         public void SetPrototype(EntProtoId? proto, bool fade)

@@ -46,7 +46,16 @@
             </SpriteView>
         </BoxContainer>
         <BoxContainer VerticalExpand="True" Margin="10 0 10 10" Orientation="Vertical">
+<<<<<<< ours
             <PanelContainer VerticalExpand="True" MinSize="0 200" StyleClasses="DeadSpaceSurfaceDark"> <!-- DS14 -->
+||||||| base
+            <PanelContainer VerticalExpand="True" MinSize="0 200">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />
+                </PanelContainer.PanelOverride>
+=======
+            <PanelContainer VerticalExpand="True" MinSize="0 200" StyleClasses="PanelDeep">
+>>>>>>> theirs
                 <ScrollContainer
                     HScrollEnabled="False"
                     HorizontalExpand="True"

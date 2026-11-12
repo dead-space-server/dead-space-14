@@ -1,15 +1,24 @@
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Server.Power.Components;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Power;
 
+<<<<<<< ours
 [TestFixture, TestOf(typeof(SharedPowerStateSystem))]
 // DS14-start: use the pre-v288 PoolManager integration-test fixture API.
 public sealed class PowerStatePrototypeTest
+||||||| base
+[TestFixture, TestOf(typeof(SharedPowerStateSystem))]
+public sealed class PowerStatePrototypeTest
+=======
+[TestFixture, TestOf(typeof(PowerStateSystem))]
+public sealed class PowerStatePrototypeTest : GameTest
+>>>>>>> theirs
 {
     /// <summary>
     /// Asserts that the power load is the same
@@ -17,31 +26,34 @@ public sealed class PowerStatePrototypeTest
     /// depending on the current power state.
     /// </summary>
     [Test]
+    [RunOnSide(Side.Server)]
     public async Task AssertApcPowerMatchesPowerState()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        var protoMan = server.ResolveDependency<IPrototypeManager>();
-        var entMan = server.ResolveDependency<IEntityManager>();
-
-        await server.WaitAssertion(() =>
+        using (Assert.EnterMultipleScope())
         {
-            Assert.Multiple(delegate
+            var nonTestEntityPrototypes = SProtoMan.EnumeratePrototypes<EntityPrototype>()
+                                                   .Where(p => !p.Abstract)
+                                                   .Where(p => !Pair.IsTestPrototype(p));
+
+            foreach (var prototype in nonTestEntityPrototypes)
             {
-                foreach (var prototype in protoMan.EnumeratePrototypes<EntityPrototype>()
-                             .Where(p => !p.Abstract)
-                             .Where(p => !pair.IsTestPrototype(p)))
+                if (!prototype.TryComp<PowerStateComponent>(out var powerStateComp, SEntMan.ComponentFactory))
+                    continue;
+
+                // LESSON LEARNED:
+                // ENSURE THAT THE COMPONENT YOU ARE TRYING TO GET IS THE SERVER-SIDE VARIANT
+                if (powerStateComp.EnsureApc && !prototype.HasComp<ApcPowerReceiverComponent>(SEntMan.ComponentFactory))
                 {
-                    if (!prototype.TryGetComponent<PowerStateComponent>(out var powerStateComp, entMan.ComponentFactory))
-                        continue;
+                    Assert.Fail(
+                        $"Entity prototype '{prototype.ID}' has a PowerStateComponent but is missing the required ApcPowerReceiverComponent.");
+                }
+                
+                var expectedLoad = powerStateComp.IsTurnedOn
+                    ? powerStateComp.WorkingPowerDraw
+                    : powerStateComp.IdlePowerDraw;
 
-                    // LESSON LEARNED:
-                    // ENSURE THAT THE COMPONENT YOU ARE TRYING TO GET IS THE SERVER-SIDE VARIANT
-                    var expectedLoad = powerStateComp.IsWorking
-                        ? powerStateComp.WorkingPowerDraw
-                        : powerStateComp.IdlePowerDraw;
 
+<<<<<<< ours
                     // We have either an APC component and work with an APC network, or have a PowerConsumer
                     // component and work with a higher voltage network.
                     if (prototype.TryGetComponent<ApcPowerReceiverComponent>(out var powerReceiverComp, entMan.ComponentFactory))
@@ -65,11 +77,29 @@ public sealed class PowerStatePrototypeTest
                             Is.EqualTo(expectedLoad),
                             $"Entity prototype '{prototype.ID}' has mismatched power draw between PowerStateComponent and PowerConsumerComponent.");
                     }
+||||||| base
+                    Assert.That(powerReceiverComp.Load,
+                        Is.EqualTo(expectedLoad),
+                        $"Entity prototype '{prototype.ID}' has mismatched power draw between PowerStateComponent and SharedApcPowerReceiverComponent.");
+=======
+                // we have either APC comp and work with APC network, or have PowerConsumer comp and work with higher voltage network
+                prototype.TryComp(out ApcPowerReceiverComponent powerReceiverComp, SEntMan.ComponentFactory);
+                if (powerReceiverComp != null)
+                {
+                    Assert.That(powerReceiverComp.Load,
+                        Is.EqualTo(expectedLoad),
+                        $"Entity prototype '{prototype.ID}' has mismatched power draw between PowerStateComponent and SharedApcPowerReceiverComponent.");
+>>>>>>> theirs
                 }
-            });
-        });
-
-        await pair.CleanReturnAsync();
+                else
+                {
+                    Assert.That(prototype.TryComp<PowerConsumerComponent>(out var powerConsumer, SEntMan.ComponentFactory), Is.True);
+                    Assert.That(powerConsumer!.DrawRate,
+                        Is.EqualTo(expectedLoad),
+                        $"Entity prototype '{prototype.ID}' has mismatched power draw between PowerStateComponent and SharedApcPowerReceiverComponent.");
+                }
+            }
+        }
     }
 }
 // DS14-end

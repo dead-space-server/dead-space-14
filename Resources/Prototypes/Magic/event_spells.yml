@@ -8,9 +8,10 @@
   - type: Action
     useDelay: 120
     itemIconStyle: BigAction
-    icon:
-      sprite: Mobs/Ghosts/ghost_human.rsi
-      state: icon
+  - type: Sprite
+    sprite: Mobs/Ghosts/ghost_human.rsi
+    layers:
+    - state: icon
   - type: InstantAction
     event: !type:ToggleGhostVisibilityToAllEvent
 
@@ -26,9 +27,10 @@
   - type: Action
     useDelay: 300
     itemIconStyle: BigAction
-    icon:
-      sprite: Objects/Weapons/Guns/Rifles/ak.rsi
-      state: base
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    layers:
+    - state: base
   - type: InstantAction
     event: !type:RandomGlobalSpawnSpellEvent
       makeSurvivorAntagonist: true
@@ -52,8 +54,6 @@
       - id: WeaponRevolverPirate
         orGroup: Guns
       - id: WeaponRifleAk
-        orGroup: Guns
-      - id: WeaponRifleM90GrenadeLauncher
         orGroup: Guns
       - id: WeaponRifleLecter
         orGroup: Guns
@@ -178,9 +178,10 @@
   - type: Action
     useDelay: 300
     itemIconStyle: BigAction
-    icon:
-      sprite: Objects/Magic/magicactions.rsi
-      state: magicmissile
+  - type: Sprite
+    sprite: Objects/Magic/magicactions.rsi
+    layers:
+    - state: magicmissile
   - type: InstantAction
     event: !type:RandomGlobalSpawnSpellEvent
       makeSurvivorAntagonist: true
@@ -200,8 +201,6 @@
       - id: WeaponWandPolymorphMonkey
         orGroup: Magics
       - id: WeaponWandFireball
-        orGroup: Magics
-      - id: WeaponWandPolymorphDoor
         orGroup: Magics
       - id: WeaponWandCluwne
         orGroup: Magics

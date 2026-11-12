@@ -1,4 +1,4 @@
-﻿{
+{
     "version": 1,
     "license": "CC-BY-SA-3.0",
     "copyright": "Made by TheShuEd",
@@ -13,6 +13,22 @@
         {
             "name": "jumpsuit-female",
             "directions": 4
+        },
+        {
+            "name": "dwarfism",
+            "directions": 4
+        },
+        {
+            "name": "dwarfism_hand_left",
+            "directions": 4
+        },
+        {
+            "name": "dwarfism_hand_right",
+            "directions": 4
+        },
+        {
+            "name": "dwarfism_vertical",
+            "directions": 1
         }
     ]
 }

@@ -1,4 +1,4 @@
-﻿# Donut
+# Donut
 
 # There is a newer, better version of the donutbox from tgstation included in the
 # donut.rsi. The reason it isn't implemented is it requires a StackVisuals offsetting
@@ -184,15 +184,11 @@
   id: EggBoxBroken
   suffix: Broken
   components:
-  - type: StorageFill
-    contents:
-    - id: Eggshells
-      amount: 12
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 10
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: Eggshells
+        amount: 12
 
 # Pizza
 

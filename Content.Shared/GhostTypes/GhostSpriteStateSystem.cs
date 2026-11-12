@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Random.Helpers;
 using Robust.Shared.Prototypes;
@@ -9,11 +9,22 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.GhostTypes;
 
-public sealed class GhostSpriteStateSystem : EntitySystem
+public sealed partial class GhostSpriteStateSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+||||||| base
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+=======
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IGameTiming _timing = default!;
+>>>>>>> theirs
 
     /// <summary>
     /// It goes through an entity damage and assigns them a sprite according to the highest damage type/s
@@ -62,7 +73,7 @@ public sealed class GhostSpriteStateSystem : EntitySystem
 
         if (specialCase != null)  // Possible special cases like death by an explosion
         {
-            var prototype = _proto.Index(specialCase);
+            var prototype = ProtoMan.Index(specialCase);
             spriteState = specialCase + rand.Next(prototype.NumOfStates);
         }
         else if (ent.Comp.DamageMap.TryGetValue(highestType, out var spriteAmount))

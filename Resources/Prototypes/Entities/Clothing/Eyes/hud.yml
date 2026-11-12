@@ -140,8 +140,8 @@
     - WhitelistChameleon
 
 - type: entity
-  parent: ClothingEyesHudBase
-  id: ClothingEyesHudFriedOnion
+  parent: [SolutionFood, SolutionSmall, ClothingEyesHudBase]
+  id: ClothingEyesHudFriedOnion # It's been too long since I've had good onion rings...
   name: fried onion goggles
   description: Filler
   components:
@@ -153,13 +153,11 @@
     shownTypes:
     - Hunger
   - type: Edible
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 3
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 30
   - type: FlavorProfile
     flavors:
       - onion
@@ -256,7 +254,6 @@
     damageContainers:
     - Biological
     - Inorganic
-    - Silicon
   - type: ShowSatiationIcons
     shownTypes:
     - Hunger
@@ -302,7 +299,8 @@
   suffix: Syndicate
   components:
   - type: StealTarget
-    stealGroup: ClothingEyesHuds
+    stealGroup:
+    - ClothingEyesHuds
 
 - type: entity
   parent: [ClothingEyesHudMedical, ClothingHeadEyeBaseFlippable]

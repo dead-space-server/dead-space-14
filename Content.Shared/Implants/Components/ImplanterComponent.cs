@@ -2,11 +2,13 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Whitelist;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Implants.Components;
+
 /// <summary>
 /// Implanters are used to implant or extract implants from an entity.
 /// Some can be single use (implant only) or some can draw out an implant
@@ -40,8 +42,7 @@ public sealed partial class ImplanterComponent : Component
     /// <summary>
     /// The time it takes to implant someone else
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float ImplantTime = 5f;
 
     // DS14-start
@@ -63,8 +64,7 @@ public sealed partial class ImplanterComponent : Component
     /// The time it takes to extract an implant from someone
     /// It's excessively long to deter from implant checking any antag
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float DrawTime = 12.5f; // DS14-Value
 
     /// <summary>
@@ -83,13 +83,13 @@ public sealed partial class ImplanterComponent : Component
     /// <summary>
     /// The name and description of the implant to show on the implanter
     /// </summary>
-    [DataField]
-    public (string, string) ImplantData;
+    [DataField, AutoNetworkedField]
+    public (string, string) ImplantData = ("", "");
 
     /// <summary>
     /// Determines if the same type of implant can be implanted into an entity multiple times.
     /// </summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool AllowMultipleImplants = false;
 
     /// <summary>
@@ -101,11 +101,12 @@ public sealed partial class ImplanterComponent : Component
     /// <summary>
     /// If true, the implanter may be used to remove all kinds of (deimplantable) implants without selecting any.
     /// </summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool AllowDeimplantAll = false;
 
     /// <summary>
     /// The subdermal implants that may be removed via this implanter
+    /// TODO: This should be a EntityWhitelist! Don't use protoIds for whitelisting purposes.
     /// </summary>
     [DataField]
     public List<EntProtoId> DeimplantWhitelist = new();
@@ -119,12 +120,23 @@ public sealed partial class ImplanterComponent : Component
     /// <summary>
     /// Chosen implant to remove, if necessary.
     /// </summary>
-    [AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public EntProtoId? DeimplantChosen = null;
 
+    /// <summary>
+    /// The sound to be played when an implanter catastrophically fails.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier ImplanterDrawFailSound  = new SoundPathSpecifier("/Audio/Effects/Fluids/splat.ogg");
+
+    [ViewVariables]
     public bool UiUpdateNeeded;
 }
 
+/// <summary>
+/// Indicates if the implanter is set to implant removal
+/// or to implanting mode.
+/// </summary>
 [Serializable, NetSerializable]
 public enum ImplanterToggleMode : byte
 {

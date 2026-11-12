@@ -6,25 +6,15 @@ using Robust.Shared.Random;
 
 namespace Content.Client.Animations;
 
-public sealed class SineWaveAnimationSystem : EntitySystem // DS14 - pre-v288 event/IoC style
+public sealed partial class SineWaveAnimationSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!; // DS14 - pre-v288 IoC
-    [Dependency] private readonly IRobustRandom _random = default!; // DS14 - pre-v288 IoC
-    [Dependency] private readonly SpriteSystem _sprite = default!; // DS14 - pre-v288 IoC
+    [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private readonly string _sineWaveAnimationKey = "sinWave";
 
-    // DS14-Start - pre-v288 explicit event subscriptions
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<SineWaveAnimationComponent, ComponentStartup>(OnStartup);
-        SubscribeLocalEvent<SineWaveAnimationComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<SineWaveAnimationComponent, AnimationCompletedEvent>(OnAnimationCompleted);
-    }
-    // DS14-End
-
+    [SubscribeLocalEvent]
     private void OnStartup(Entity<SineWaveAnimationComponent> ent, ref ComponentStartup args)
     {
         var sprite = Comp<SpriteComponent>(ent);
@@ -37,6 +27,7 @@ public sealed class SineWaveAnimationSystem : EntitySystem // DS14 - pre-v288 ev
         _animationPlayer.Play((ent, animationPlayer), GetAnimation(ent.Comp, sprite), _sineWaveAnimationKey);
     }
 
+    [SubscribeLocalEvent]
     private void OnShutdown(Entity<SineWaveAnimationComponent> ent, ref ComponentShutdown args)
     {
         TryResetFields(ent);
@@ -45,6 +36,7 @@ public sealed class SineWaveAnimationSystem : EntitySystem // DS14 - pre-v288 ev
         _animationPlayer.Stop(ent, animationPlayer, _sineWaveAnimationKey);
     }
 
+    [SubscribeLocalEvent]
     private void OnAnimationCompleted(Entity<SineWaveAnimationComponent> ent, ref AnimationCompletedEvent args)
     {
         if (args.Key != _sineWaveAnimationKey || !args.Finished || !ent.Comp.Repeat)

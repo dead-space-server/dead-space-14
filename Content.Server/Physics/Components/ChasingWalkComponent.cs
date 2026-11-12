@@ -1,5 +1,5 @@
-
-using Content.Server.Administration.Systems;
+using Content.Server.Administration.Systems; // DS14
+using Content.Server.EntityEffects.Effects.Smite;
 using Content.Server.DeadSpace.Weapons.Smart; // DS14
 using Content.Server.Physics.Controllers;
 using Content.Server.Weapons.Ranged.Systems;
@@ -11,7 +11,7 @@ namespace Content.Server.Physics.Components;
 /// <summary>
 /// A component which makes its entity chasing entity with selected component.
 /// </summary>
-[RegisterComponent, Access(typeof(ChasingWalkSystem), typeof(AdminVerbSystem), typeof(GunSystem), typeof(SmartWeaponServerSystem)), AutoGenerateComponentPause] // DS14: added SmartWeaponServerSystem access
+[RegisterComponent, Access(typeof(ChasingWalkSystem), typeof(AdminVerbSystem), typeof(HomingRodEntityEffectSystem), typeof(GunSystem), typeof(SmartWeaponServerSystem)), AutoGenerateComponentPause] // DS14: added SmartWeaponServerSystem access, kept AdminVerbSystem
 public sealed partial class ChasingWalkComponent : Component
 {
     /// <summary>

@@ -28,6 +28,9 @@
     {
       "name": "super-inhand-right",
       "directions": 4
+    },
+    {
+      "name": "randomsynth"
     }
   ]
 }

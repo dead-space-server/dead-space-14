@@ -31,7 +31,7 @@
   rotation: Camera
   fx: EffectRCDDeconstruct4
 
-# Flooring
+# region Walls and Flooring
 - type: rcd
   id: Plating
   name: rcd-component-plating
@@ -78,7 +78,6 @@
   fx: EffectRCDConstruct1
   menuOrder: 2 # DS14
 
-# Walls
 - type: rcd
   id: WallSolid
   category: WallsAndFlooring
@@ -92,6 +91,7 @@
   fx: EffectRCDConstruct2
   menuOrder: 3 # DS14
 
+# region Windows and Grilles
 - type: rcd
   id: Grille
   category: WindowsAndGrilles
@@ -105,7 +105,6 @@
   fx: EffectRCDConstruct2
   menuOrder: 0 # DS14
 
-# Windows
 - type: rcd
   id: Window
   category: WindowsAndGrilles
@@ -122,6 +121,22 @@
   menuOrder: 1 # DS14
 
 - type: rcd
+  id: ReinforcedWindow
+  category: WindowsAndGrilles
+  sprite: /Textures/Interface/Radial/RCD/window_reinforced.png
+  mode: ConstructObject
+  prototype: ReinforcedWindow
+  cost: 4
+  delay: 3
+  collisionMask: Impassable
+  rules:
+    - IsWindow
+  rotation: User
+  fx: EffectRCDConstruct1
+  allowMultiDirection: true
+  menuOrder: 2 # DS14
+
+- type: rcd
   id: WindowDirectional
   category: WindowsAndGrilles
   sprite: /Textures/Interface/Radial/RCD/directional.png
@@ -131,22 +146,6 @@
   delay: 1
   collisionMask: Impassable
   collisionBounds: "-0.23,-0.49,0.23,-0.36"
-  rules:
-    - IsWindow
-  rotation: User
-  fx: EffectRCDConstruct1
-  allowMultiDirection: true
-  menuOrder: 2 # DS14
-
-- type: rcd
-  id: ReinforcedWindow
-  category: WindowsAndGrilles
-  sprite: /Textures/Interface/Radial/RCD/window_reinforced.png
-  mode: ConstructObject
-  prototype: ReinforcedWindow
-  cost: 4
-  delay: 3
-  collisionMask: Impassable
   rules:
     - IsWindow
   rotation: User
@@ -170,7 +169,7 @@
   allowMultiDirection: true
   menuOrder: 4 # DS14
 
-# Airlocks
+# region Airlocks
 - type: rcd
   id: Airlock
   category: Airlocks
@@ -210,7 +209,7 @@
   fx: EffectRCDConstruct3
   menuOrder: 2 # DS14
 
-# Lighting
+# region Lighting
 - type: rcd
   id: TubeLight
   category: Lighting
@@ -241,7 +240,7 @@
   allowMultiDirection: true
   menuOrder: 1 # DS14
 
-# Electrical
+# region Electrical
 - type: rcd
   id: LVCable
   category: Electrical

@@ -1,13 +1,13 @@
 using Content.Shared.NameModifier.EntitySystems;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.NameIdentifier;
 
 /// <summary>
 ///     Handles unique name identifiers for entities e.g. `monkey (MK-912)`
 /// </summary>
-public abstract class SharedNameIdentifierSystem : EntitySystem
+public abstract partial class SharedNameIdentifierSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
     // DS14-start: retain explicit subscriptions used by the current shared system layout.
@@ -19,6 +19,19 @@ public abstract class SharedNameIdentifierSystem : EntitySystem
     }
     // DS14-end
 
+||||||| base
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<NameIdentifierComponent, RefreshNameModifiersEvent>(OnRefreshNameModifiers);
+    }
+
+=======
+    [SubscribeLocalEvent]
+>>>>>>> theirs
     private void OnRefreshNameModifiers(Entity<NameIdentifierComponent> ent, ref RefreshNameModifiersEvent args)
     {
         if (ent.Comp.Group is null)
@@ -32,7 +45,7 @@ public abstract class SharedNameIdentifierSystem : EntitySystem
         if (ent.Comp.LifeStage > ComponentLifeStage.Running)
             return;
 
-        if (!_prototypeManager.Resolve(ent.Comp.Group, out var group))
+        if (!ProtoMan.Resolve(ent.Comp.Group, out var group))
             return;
 
         var format = "name-identifier-format-full";

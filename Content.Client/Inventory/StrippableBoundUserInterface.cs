@@ -1,10 +1,10 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.Administration.Managers;
 using Content.Client.Examine;
 using Content.Client.Hands.Systems;
 using Content.Client.Strip;
 using Content.Client.DeadSpace.Ninja.Systems; //DS-14
-using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Hands.Controls;
 using Content.Client.Verbs.UI;
@@ -12,7 +12,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Contraband;
 using Content.Shared.Cuffs;
-using Content.Shared.Cuffs.Components;
+using Content.Shared.Ensnaring;
 using Content.Shared.DeadSpace.Administration;
 using Content.Shared.Ensnaring.Components;
 using Content.Shared.Hands.Components;
@@ -38,20 +38,32 @@ using Robust.Shared.Containers; //DS-14
 namespace Content.Client.Inventory
 {
     [UsedImplicitly]
-    public sealed class StrippableBoundUserInterface : BoundUserInterface
+    public sealed partial class StrippableBoundUserInterface : BoundUserInterface
     {
+<<<<<<< ours
         [Dependency] private readonly IPlayerManager _player = default!;
         [Dependency] private readonly IUserInterfaceManager _ui = default!;
         // DS14-start - the current engine still uses the pre-source-generator IoC pattern.
         [Dependency] private readonly IPrototypeManager _proto = default!;
         [Dependency] private readonly IConfigurationManager _cvar = default!;
         // DS14-end
+||||||| base
+        [Dependency] private readonly IPlayerManager _player = default!;
+        [Dependency] private readonly IUserInterfaceManager _ui = default!;
+=======
+        [Dependency] private IPlayerManager _player = default!;
+        [Dependency] private IUserInterfaceManager _ui = default!;
+        [Dependency] private IClientAdminManager _admin = default!;
+        [Dependency] private IPrototypeManager _proto = default!;
+        [Dependency] private IConfigurationManager _cvar = default!;
+>>>>>>> theirs
 
         private readonly ExamineSystem _examine;
         private readonly HandsSystem _hands;
         private readonly InventorySystem _inv;
         private readonly SharedCuffableSystem _cuffable;
         private readonly StrippableSystem _strippable;
+<<<<<<< ours
         private readonly ContrabandSystem _contraband;
 
         // Is the BUI in admin view? If in admin view, has custom UI elements to help admins see things
@@ -80,6 +92,33 @@ namespace Content.Client.Inventory
             new("/Textures/Interface/Default/Slots/ContrabandOverlay/contra.png");
 
         #endregion
+||||||| base
+=======
+        private readonly SharedEnsnareableSystem _snare;
+        private readonly ContrabandSystem _contraband;
+
+        // Is the BUI in admin view? If in admin view, has custom UI elements to help admins see things
+        // (E.g contraband status icon, is the item chameleon etc...)
+        private bool _isAdminView;
+
+        #region Admin overlay vars
+
+        private readonly ResPath _chameleonClothingTexturePath =
+            new("/Textures/Interface/Default/Slots/ContrabandOverlay/camo.png");
+
+        private readonly Color _chameleonColor = new(147, 112, 219);
+
+        private readonly string _hasContrabandTexturePathBeginning =
+            "/Textures/Interface/Default/Slots/ContrabandOverlay/has_contra";
+
+        private readonly string _hasContrabandTexturePathEnding = ".png";
+        private readonly int _hasContrabandMaximumValue = 9;
+
+        private readonly ResPath _contrabandTexturePath =
+            new("/Textures/Interface/Default/Slots/ContrabandOverlay/contra.png");
+
+        #endregion
+>>>>>>> theirs
 
         [ViewVariables]
         private const int ButtonSeparation = 4;
@@ -118,6 +157,7 @@ namespace Content.Client.Inventory
             _cuffable = EntMan.System<SharedCuffableSystem>();
             _strippable = EntMan.System<StrippableSystem>();
             _contraband = EntMan.System<ContrabandSystem>();
+            _snare = EntMan.System<SharedEnsnareableSystem>();
 
             _virtualHiddenEntity = EntMan.SpawnEntity(HiddenPocketEntityId, MapCoordinates.Nullspace);
 
@@ -208,17 +248,36 @@ namespace Content.Client.Inventory
             }
 
             // snare-removal button. This is just the old button before the change to item slots. It is pretty out of place.
-            if (EntMan.TryGetComponent<EnsnareableComponent>(Owner, out var snare) && snare.IsEnsnared)
+            if (EntMan.TryGetComponent<EnsnareableComponent>(Owner, out var snare) && _snare.IsEnsnared((Owner, snare)))
             {
                 var button = new Button()
                 {
                     Text = Loc.GetString("strippable-bound-user-interface-stripping-menu-ensnare-button"),
-                    StyleClasses = { StyleClass.ButtonOpenRight }
                 };
 
                 button.OnPressed += (_) => SendPredictedMessage(new StrippingEnsnareButtonPressed());
 
-                _strippingMenu.SnareContainer.AddChild(button);
+                _strippingMenu.ButtonContainer.AddChild(button);
+            }
+
+            if (_admin.IsAdmin())
+            {
+                var adminButton = new Button()
+                {
+                    Text = Loc.GetString("strippable-bound-user-interface-stripping-menu-admin-button"),
+                    ToggleMode = true,
+                    Pressed = _isAdminView,
+                    ToolTip = Loc.GetString("strippable-bound-user-interface-stripping-menu-admin-button-tooltip")
+                };
+
+                adminButton.OnToggled += args =>
+                {
+                    _isAdminView = !_isAdminView;
+                    args.Button.Pressed = _isAdminView;
+                    UpdateMenu();
+                };
+
+                _strippingMenu.ButtonContainer.AddChild(adminButton);
             }
 
             if (IsAdminGhost) // DS14
@@ -254,6 +313,7 @@ namespace Content.Client.Inventory
             // +20 horizontally and vertically from the ContentsContainer margin
             // +16 vertically from the BoxContainer margin
             // +27 vertically from the window header
+<<<<<<< ours
             var horizontalMenuSize = Math.Max(200,
                 Math.Max(_handCount, _inventoryDimensions.X + 1) * (SlotControl.DefaultButtonSize + ButtonSeparation) +
                 20);
@@ -262,6 +322,20 @@ namespace Content.Client.Inventory
                 (SlotControl.DefaultButtonSize + ButtonSeparation) + 53);
             // DS14: account for the fork's styled auxiliary-button container.
             verticalMenuSize += 25 * _strippingMenu.SnareContainer.Children.Count();
+||||||| base
+            var horizontalMenuSize = Math.Max(200, Math.Max(_handCount, _inventoryDimensions.X + 1) * (SlotControl.DefaultButtonSize + ButtonSeparation) + 20);
+            var verticalMenuSize = Math.Max(200, (_inventoryDimensions.Y + (_handCount > 0 ? 2 : 1)) * (SlotControl.DefaultButtonSize + ButtonSeparation) + 53);
+            if (snare?.IsEnsnared == true)
+                verticalMenuSize += 20;
+=======
+            var horizontalMenuSize = Math.Max(200,
+                Math.Max(_handCount, _inventoryDimensions.X + 1) * (SlotControl.DefaultButtonSize + ButtonSeparation) +
+                20);
+            var verticalMenuSize = Math.Max(200,
+                (_inventoryDimensions.Y + (_handCount > 0 ? 2 : 1)) *
+                (SlotControl.DefaultButtonSize + ButtonSeparation) + 53);
+            verticalMenuSize += 25 * _strippingMenu.ButtonContainer.Children.Count();
+>>>>>>> theirs
             _strippingMenu.SetSize = new Vector2(horizontalMenuSize, verticalMenuSize);
         }
 
@@ -279,8 +353,9 @@ namespace Content.Client.Inventory
                     button.BlockedRect.MouseFilter = MouseFilterMode.Ignore;
             }
 
-            UpdateEntityIcon(button, heldEntity);
             _strippingMenu!.HandsContainer.AddChild(button);
+
+            UpdateEntityIcon(button, heldEntity);
 
             LayoutContainer.SetPosition(button,
                 new Vector2i(_handCount, 0) * (SlotControl.DefaultButtonSize + ButtonSeparation));
@@ -390,6 +465,7 @@ namespace Content.Client.Inventory
                 return;
 
             button.SetEntity(viewEnt);
+<<<<<<< ours
 
             if (IsAdminGhost && _isAdminView) // DS14
             {
@@ -423,6 +499,42 @@ namespace Content.Client.Inventory
 
                 // more overlays can be added if needed...
             }
+||||||| base
+=======
+
+            if (_admin.IsAdmin() && _isAdminView)
+            {
+                // overlay for chameleon clothing
+                if (EntMan.HasComponent<ChameleonClothingComponent>(entity))
+                {
+                    button.AddAdminOverlay(_chameleonClothingTexturePath, _chameleonColor);
+                }
+
+                // if the item has contraband, add a blue dotted outline (under the main contraband overlay if there is one)
+                if (_contraband.ContainerHasContraband(entity.Value, Owner, out var contraList))
+                {
+                    // Get the color of the "most important" contraband using O(n) shenanigans
+                    var hasContraColor = contraList
+                        .Select(x => _proto.Index(x))
+                        .MaxBy(x => x.Priority)!
+                        .Color;
+
+                    var path = new ResPath(_hasContrabandTexturePathBeginning +
+                                           Math.Min(_hasContrabandMaximumValue, contraList.Count) +
+                                           _hasContrabandTexturePathEnding);
+
+                    button.AddAdminOverlay(path, hasContraColor);
+                }
+
+                // overlay for items that are themselves contraband
+                if (_contraband.IsContraband(entity.Value, Owner, out var contraProtoId))
+                {
+                    button.AddAdminOverlay(_contrabandTexturePath, _proto.Index(contraProtoId).Color);
+                }
+
+                // more overlays can be added if needed...
+            }
+>>>>>>> theirs
         }
     }
 }

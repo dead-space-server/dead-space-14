@@ -19,6 +19,7 @@ namespace Content.Shared.Movement.Systems;
 
 public sealed partial class SharedJumpAbilitySystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
@@ -32,6 +33,23 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
     [Dependency] private readonly RayCastSystem _rayCast = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     // DS14-end
+||||||| base
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedGravitySystem _gravity = default!;
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly StandingStateSystem _standing = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+=======
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -99,7 +117,7 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         if (_gravity.IsWeightless(args.Performer) || _standing.IsDown(args.Performer))
         {
             if (entity.Comp.JumpFailedPopup != null)
-                _popup.PopupClient(Loc.GetString(entity.Comp.JumpFailedPopup.Value), args.Performer, args.Performer);
+                _popup.PopupEntity(Loc.GetString(entity.Comp.JumpFailedPopup.Value), args.Performer, args.Performer);
             return;
         }
 
@@ -183,6 +201,7 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         if (!args.Settings.EventComponents.Contains(Factory.GetRegistration(ent.Comp.GetType()).Name))
             return;
 
+<<<<<<< ours
         // DS14-start: preserve a live action when changing between identities of the same species.
         // var targetComp = Factory.GetComponent<JumpAbilityComponent>();
         var targetComp = EnsureComp<JumpAbilityComponent>(args.CloneUid);
@@ -192,12 +211,16 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
             targetComp.ActionEntity = null;
         }
         // DS14-end
+||||||| base
+        var targetComp = Factory.GetComponent<JumpAbilityComponent>();
+=======
+        // Make sure to set the datafields before adding the component so that the correct action gets spawned on map init.
+        var targetComp = Factory.GetComponent<JumpAbilityComponent>();
+>>>>>>> theirs
         targetComp.Action = ent.Comp.Action;
-        targetComp.CanCollide = ent.Comp.CanCollide;
-        targetComp.JumpSound = ent.Comp.JumpSound;
-        targetComp.CollideKnockdown = ent.Comp.CollideKnockdown;
         targetComp.JumpDistance = ent.Comp.JumpDistance;
         targetComp.JumpThrowSpeed = ent.Comp.JumpThrowSpeed;
+<<<<<<< ours
         targetComp.RequireUnobstructedPath = ent.Comp.RequireUnobstructedPath; // DS14
         // DS14-start: MapInit may have run before Actions existed or with the default action prototype.
         targetComp.JumpFailedPopup = ent.Comp.JumpFailedPopup;
@@ -205,5 +228,14 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         _actions.AddAction(args.CloneUid, ref targetComp.ActionEntity, targetComp.Action);
         Dirty(args.CloneUid, targetComp);
         // DS14-end
+||||||| base
+        AddComp(args.CloneUid, targetComp, true);
+=======
+        targetComp.CanCollide = ent.Comp.CanCollide;
+        targetComp.CollideKnockdown = ent.Comp.CollideKnockdown;
+        targetComp.JumpSound = ent.Comp.JumpSound;
+        targetComp.JumpFailedPopup = ent.Comp.JumpFailedPopup;
+        AddComp(args.CloneUid, targetComp, true);
+>>>>>>> theirs
     }
 }

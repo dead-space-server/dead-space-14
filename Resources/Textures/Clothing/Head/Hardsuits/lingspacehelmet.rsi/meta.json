@@ -29,6 +29,17 @@
     {
       "name": "equipped-HELMET-vulpkanin",
       "directions": 4
+    },
+    {
+      "name": "icon-unshaded"
+    },
+    {
+      "name": "equipped-head",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-unshaded",
+      "directions": 4
     }
   ]
 }

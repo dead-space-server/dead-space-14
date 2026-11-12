@@ -1,9 +1,17 @@
+<<<<<<< ours
+||||||| base
+using Content.Shared.Damage.Systems;
+
+namespace Content.Server.Chat.Systems;
+
+=======
+using Content.Shared.Damage.Systems;
+>>>>>>> theirs
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Speech.Muting;
 using Content.Shared.Traits.Assorted;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -11,13 +19,26 @@ using Content.Shared.StatusEffectNew; // DS14
 
 namespace Content.Server.Chat.Systems;
 
-public sealed class EmoteOnDamageSystem : EntitySystem
+namespace Content.Server.Chat.Systems;
+
+public sealed partial class EmoteOnDamageSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!; // DS14
+||||||| base
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ChatSystem _chatSystem = default!;
+=======
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -81,7 +102,7 @@ public sealed class EmoteOnDamageSystem : EntitySystem
             return false;
 
         DebugTools.Assert(emoteOnDamage.LifeStage <= ComponentLifeStage.Running);
-        DebugTools.Assert(_prototypeManager.HasIndex<EmotePrototype>(emotePrototypeId), "Prototype not found. Did you make a typo?");
+        DebugTools.Assert(ProtoMan.HasIndex<EmotePrototype>(emotePrototypeId), "Prototype not found. Did you make a typo?");
 
         return emoteOnDamage.Emotes.Add(emotePrototypeId);
     }
@@ -94,7 +115,7 @@ public sealed class EmoteOnDamageSystem : EntitySystem
         if (!Resolve(uid, ref emoteOnDamage, logMissing: false))
             return false;
 
-        DebugTools.Assert(_prototypeManager.HasIndex<EmotePrototype>(emotePrototypeId), "Prototype not found. Did you make a typo?");
+        DebugTools.Assert(ProtoMan.HasIndex<EmotePrototype>(emotePrototypeId), "Prototype not found. Did you make a typo?");
 
         if (!emoteOnDamage.Emotes.Remove(emotePrototypeId))
             return false;

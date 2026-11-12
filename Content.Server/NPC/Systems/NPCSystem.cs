@@ -22,12 +22,13 @@ namespace Content.Server.NPC.Systems
     /// <summary>
     ///     Handles NPCs running every tick.
     /// </summary>
-    public sealed partial class NPCSystem : EntitySystem
+    public sealed partial class NPCSystem : SharedNPCSystem
     {
         private static readonly Gauge ActiveGauge = Metrics.CreateGauge(
             "npc_active_count",
             "Amount of NPCs that are actively processing");
 
+<<<<<<< ours
         [Dependency] private readonly IConfigurationManager _configurationManager = default!;
         [Dependency] private readonly HTNSystem _htn = default!;
         [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -47,6 +48,15 @@ namespace Content.Server.NPC.Systems
         private readonly HashSet<EntityUid> _proximitySleeping = new();
         private TimeSpan _nextProximitySleepScan;
         // DS14-End
+||||||| base
+        [Dependency] private readonly IConfigurationManager _configurationManager = default!;
+        [Dependency] private readonly HTNSystem _htn = default!;
+        [Dependency] private readonly MobStateSystem _mobState = default!;
+=======
+        [Dependency] private IConfigurationManager _configurationManager = default!;
+        [Dependency] private HTNSystem _htn = default!;
+        [Dependency] private MobStateSystem _mobState = default!;
+>>>>>>> theirs
 
         /// <summary>
         /// Whether any NPCs are allowed to run at all.
@@ -106,6 +116,11 @@ namespace Content.Server.NPC.Systems
             _lastPlayerNearby.Remove(uid);
             _proximitySleeping.Remove(uid);
             // DS14-end
+        }
+
+        public override bool IsNpc(EntityUid uid)
+        {
+            return HasComp<HTNComponent>(uid);
         }
 
         /// <summary>

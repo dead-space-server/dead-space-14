@@ -1,0 +1,578 @@
+# Апстрим визов (ноябрь 2026): что осталось доделать
+
+Ветка `upstream-nov2026` — слияние `space-wizards/space-station-14` master (e10ad24079) в наш master (d2b60027d2).
+Это промежуточный (WIP) коммит: часть файлов ещё содержит маркеры конфликтов. Не мержить в master, пока список ниже не пуст и сборка не проходит.
+
+## Правила слияния
+
+1. Спрайты, которые уже есть в нашей сборке, остаются нашими. Новые состояния апстрима дописаны в meta.json вместе с их png.
+2. В прототипах области с метками DS14 / dead-space не трогаем, наш баланс сохраняется. Остальное идёт за апстримом.
+3. Nubody (новую систему тела визов) не вносим, системы тела остаются нашими.
+4. Карты не трогаем: все наши карты в `Resources/Maps` и прототипы карт остались как были. Новые карты визов добавлены файлами, но в пулы не входят.
+5. Там, где визы сменили формат спрайтов (шлюзы, стены и окна на IconSmooth 2.0, шкафы), берём их формат, а наши спрайты потом перенарезаем под него — только перестановкой кадров, без новых пикселей.
+6. При разрешении конфликта в C# код апстрима — основа; наши правки (`// DS14`, `// DS14-start/end`) переносим поверх и сохраняем метки.
+
+## Движок
+
+Сабмодуль `RobustToolbox` указывает на коммит `56c87bfec` ветки `upstream-v295` в нашем форке движка: v295.0.2 визов + наши оптимизации. Ветку движка нужно запушить вместе с этой, иначе сабмодуль не скачается.
+
+## 1. Файлы с маркерами конфликтов (401 файлов, 812 кусков)
+
+Маркеры в стиле diff3: `<<<<<<< ours` / `||||||| base` / `=======` / `>>>>>>> theirs`. Проверка: `git grep -n "^<<<<<<< "`.
+
+- [ ] `.github/CODEOWNERS` (1)
+- [ ] `.github/PULL_REQUEST_TEMPLATE.md` (3)
+- [ ] `Content.Client/Atmos/Consoles/AtmosAlarmEntryContainer.xaml.cs` (2)
+- [ ] `Content.Client/Atmos/Consoles/AtmosMonitoringEntryContainer.xaml.cs` (4)
+- [ ] `Content.Client/Audio/Jukebox/JukeboxSystem.cs` (2)
+- [ ] `Content.Client/Chemistry/EntitySystems/ChemistryGuideDataSystem.cs` (1)
+- [ ] `Content.Client/Clothing/ClientClothingSystem.cs` (1)
+- [ ] `Content.Client/Disposal/Unit/DisposalUnitBoundUserInterface.cs` (2)
+- [ ] `Content.Client/Disposal/Unit/DisposalUnitSystem.cs` (1)
+- [ ] `Content.Client/Effects/ScreechShockWaveSystem.cs` (1)
+- [ ] `Content.Client/Gameplay/GameplayStateBase.cs` (1)
+- [ ] `Content.Client/Graphics/OverlayResourceCache.cs` (1)
+- [ ] `Content.Client/Guidebook/Controls/GuideMicrowaveEmbed.xaml.cs` (1)
+- [ ] `Content.Client/Guidebook/Controls/GuideReagentReaction.xaml` (1)
+- [ ] `Content.Client/Guidebook/Controls/GuideTechnologyEmbed.xaml` (1)
+- [ ] `Content.Client/Guidebook/Controls/GuidebookWindow.xaml` (1)
+- [ ] `Content.Client/Hands/Systems/HandsSystem.cs` (1)
+- [ ] `Content.Client/HealthAnalyzer/UI/HealthAnalyzerBoundUserInterface.cs` (1)
+- [ ] `Content.Client/HealthAnalyzer/UI/HealthAnalyzerControl.xaml` (3)
+- [ ] `Content.Client/HealthAnalyzer/UI/HealthAnalyzerControl.xaml.cs` (14)
+- [ ] `Content.Client/Holopad/HolopadWindow.xaml` (3)
+- [ ] `Content.Client/IconSmoothing/IconSmoothSystem.cs` (8)
+- [ ] `Content.Client/Info/PlaytimeStats/PlaytimeStatsEntry.xaml` (2)
+- [ ] `Content.Client/Info/PlaytimeStats/PlaytimeStatsHeader.xaml` (3)
+- [ ] `Content.Client/Info/PlaytimeStats/PlaytimeStatsWindow.xaml` (2)
+- [ ] `Content.Client/Inventory/StrippableBoundUserInterface.cs` (4)
+- [ ] `Content.Client/Lathe/UI/LatheMenu.xaml` (2)
+- [ ] `Content.Client/Lobby/ClientPreferencesManager.cs` (1)
+- [ ] `Content.Client/Lobby/LobbyState.cs` (1)
+- [ ] `Content.Client/Lobby/LobbyUIController.cs` (1)
+- [ ] `Content.Client/Lobby/UI/CharacterSetupGui.xaml.cs` (1)
+- [ ] `Content.Client/Lobby/UI/HumanoidProfileEditor.xaml` (3)
+- [ ] `Content.Client/Lobby/UI/HumanoidProfileEditor.xaml.cs` (2)
+- [ ] `Content.Client/Lobby/UI/Loadouts/LoadoutContainer.xaml` (1)
+- [ ] `Content.Client/Lobby/UI/Loadouts/LoadoutWindow.xaml` (1)
+- [ ] `Content.Client/Lobby/UI/LobbyGui.xaml` (1)
+- [ ] `Content.Client/Lobby/UI/LobbyGui.xaml.cs` (1)
+- [ ] `Content.Client/MainMenu/UI/MainMenuControl.xaml` (1)
+- [ ] `Content.Client/Materials/UI/OreSiloMenu.xaml` (2)
+- [ ] `Content.Client/Mech/Ui/MechMenu.xaml` (1)
+- [ ] `Content.Client/Medical/CrewMonitoring/CrewMonitoringWindow.xaml.cs` (1)
+- [ ] `Content.Client/Medical/Cryogenics/CryoPodWindow.xaml` (1)
+- [ ] `Content.Client/NetworkConfigurator/NetworkConfiguratorLinkMenu.xaml.cs` (1)
+- [ ] `Content.Client/Ninja/Systems/NinjaSuitSystem.cs` (1)
+- [ ] `Content.Client/RCD/RCDMenuBoundUserInterface.cs` (8)
+- [ ] `Content.Client/RoundEnd/RoundEndSummaryWindow.cs` (19)
+- [ ] `Content.Client/Sandbox/SandboxSystem.cs` (2)
+- [ ] `Content.Client/Silicons/Borgs/BorgMenu.xaml` (2)
+- [ ] `Content.Client/Silicons/Borgs/BorgSelectTypeMenu.xaml.cs` (1)
+- [ ] `Content.Client/Silicons/Borgs/BorgSystem.cs` (2)
+- [ ] `Content.Client/Store/Ui/StoreBoundUserInterface.cs` (2)
+- [ ] `Content.Client/Store/Ui/StoreMenu.xaml` (2)
+- [ ] `Content.Client/Thief/ThiefBackpackMenu.xaml` (1)
+- [ ] `Content.Client/Thief/ThiefBackpackSet.xaml` (1)
+- [ ] `Content.Client/UserInterface/Controls/RadialMenuOptionComparer.cs` (1)
+- [ ] `Content.Client/UserInterface/Controls/SimpleRadialMenu.xaml.cs` (6)
+- [ ] `Content.Client/UserInterface/Controls/SimpleSlotOverlay.cs` (1)
+- [ ] `Content.Client/UserInterface/Controls/SlotControl.cs` (1)
+- [ ] `Content.Client/VendingMachines/UI/VendingMachineMenu.xaml.cs` (7)
+- [ ] `Content.Client/VendingMachines/VendingMachineBoundUserInterface.cs` (2)
+- [ ] `Content.Client/VendingMachines/VendingMachineSystem.cs` (2)
+- [ ] `Content.Client/VoiceMask/VoiceMaskBoundUserInterface.cs` (1)
+- [ ] `Content.Client/Weapons/Ranged/Systems/GunSystem.MagazineVisuals.cs` (3)
+- [ ] `Content.Client/Weapons/Ranged/Systems/GunSystem.cs` (3)
+- [ ] `Content.Client/Weather/WeatherSystem.cs` (5)
+- [ ] `Content.Client/Xenoarchaeology/Ui/AnalysisConsoleMenu.xaml.cs` (1)
+- [ ] `Content.IntegrationTests/Tests/Clumsy/ClumsyStatusTest.cs` (1)
+- [ ] `Content.IntegrationTests/Tests/EntityTest.cs` (1)
+- [ ] `Content.IntegrationTests/Tests/Fluids/FluidSpillTest.cs` (1)
+- [ ] `Content.IntegrationTests/Tests/GameRules/NukeOpsTest.cs` (2)
+- [ ] `Content.IntegrationTests/Tests/GameRules/RuleMaxTimeRestartTest.cs` (2)
+- [ ] `Content.IntegrationTests/Tests/NameIdentifier/NameIdentifierTest.cs` (1)
+- [ ] `Content.IntegrationTests/Tests/Nutrition/SatiationTest.cs` (1)
+- [ ] `Content.IntegrationTests/Tests/Power/PowerStatePrototypeTest.cs` (2)
+- [ ] `Content.IntegrationTests/Tests/Power/PowerStateTest.cs` (1)
+- [ ] `Content.IntegrationTests/Tests/Power/StationPowerTests.cs` (3)
+- [ ] `Content.IntegrationTests/Tests/Station/StationJobsTest.cs` (7)
+- [ ] `Content.IntegrationTests/Tests/XenoArtifactTest.cs` (7)
+- [ ] `Content.Server/Access/Systems/IdCardConsoleSystem.cs` (9)
+- [ ] `Content.Server/Access/Systems/PresetIdCardSystem.cs` (3)
+- [ ] `Content.Server/Administration/BanPanelEui.cs` (1)
+- [ ] `Content.Server/Administration/Commands/AdminWhoCommand.cs` (1)
+- [ ] `Content.Server/Administration/Commands/DepartmentBanCommand.cs` (1)
+- [ ] `Content.Server/Administration/Commands/OSay.cs` (1)
+- [ ] `Content.Server/Administration/Commands/PardonCommand.cs` (2)
+- [ ] `Content.Server/Administration/Commands/PlayTimeCommands.cs` (2)
+- [ ] `Content.Server/Administration/Commands/PlayerPanelCommand.cs` (1)
+- [ ] `Content.Server/Administration/Commands/ThrowScoreboardCommand.cs` (1)
+- [ ] `Content.Server/Administration/Logs/AdminLogManager.cs` (1)
+- [ ] `Content.Server/Administration/Logs/AdminLogsEui.cs` (5)
+- [ ] `Content.Server/Administration/ServerApi.cs` (2)
+- [ ] `Content.Server/Administration/Systems/AdminVerbSystem.Tools.cs` (1)
+- [ ] `Content.Server/Administration/Systems/AdminVerbSystem.cs` (3)
+- [ ] `Content.Server/Administration/Systems/BwoinkSystem.cs` (3)
+- [ ] `Content.Server/Administration/Systems/SuperBonkSystem.cs` (3)
+- [ ] `Content.Server/Antag/AntagRandomSpawnRule.cs` (1)
+- [ ] `Content.Server/CharacterInfo/CharacterInfoSystem.cs` (1)
+- [ ] `Content.Server/Chat/Commands/OOCCommand.cs` (1)
+- [ ] `Content.Server/Chat/EmoteOnDamageComponent.cs` (1)
+- [ ] `Content.Server/Chat/Systems/ChatSystem.cs` (2)
+- [ ] `Content.Server/Chat/Systems/EmoteOnDamageSystem.cs` (2)
+- [ ] `Content.Server/Chemistry/EntitySystems/ChemMasterSystem.cs` (1)
+- [ ] `Content.Server/Chemistry/TileReactions/CleanDecalsReaction.cs` (1)
+- [ ] `Content.Server/Clothing/Systems/ChameleonClothingSystem.cs` (1)
+- [ ] `Content.Server/Clothing/Systems/OutfitSystem.cs` (1)
+- [ ] `Content.Server/Communications/CommsHackerSystem.cs` (2)
+- [ ] `Content.Server/Connection/ConnectionManager.cs` (1)
+- [ ] `Content.Server/CriminalRecords/Systems/CriminalRecordsConsoleSystem.cs` (2)
+- [ ] `Content.Server/CriminalRecords/Systems/CriminalRecordsHackerSystem.cs` (1)
+- [ ] `Content.Server/Destructible/DestructibleSystem.cs` (2)
+- [ ] `Content.Server/Dragon/DragonRiftSystem.cs` (3)
+- [ ] `Content.Server/EntityEffects/Effects/Botany/PlantAttributes/PlantChangeStatEntityEffectSystem.cs` (2)
+- [ ] `Content.Server/EntityEffects/Effects/MakeSentientEntityEffectSystem.cs` (2)
+- [ ] `Content.Server/Explosion/EntitySystems/ExplosionSystem.Processing.cs` (2)
+- [ ] `Content.Server/Fluids/EntitySystems/PuddleSystem.cs` (2)
+- [ ] `Content.Server/GameTicking/Commands/ForceMapCommand.cs` (1)
+- [ ] `Content.Server/GameTicking/Commands/ObserveCommand.cs` (1)
+- [ ] `Content.Server/GameTicking/Rules/ServerRevolutionaryRuleSystem.cs` (12)
+- [ ] `Content.Server/GameTicking/ServerGameTicker.Spawning.cs` (3)
+- [ ] `Content.Server/Ghost/GhostSystem.cs` (2)
+- [ ] `Content.Server/Ghost/Roles/GhostRoleSystem.cs` (2)
+- [ ] `Content.Server/Holopad/HolopadSystem.cs` (4)
+- [ ] `Content.Server/Humanoid/Systems/RandomHumanoidAppearanceSystem.cs` (1)
+- [ ] `Content.Server/Humanoid/Systems/RandomHumanoidSystem.cs` (1)
+- [ ] `Content.Server/Light/EntitySystems/PoweredLightSystem.cs` (1)
+- [ ] `Content.Server/Light/EntitySystems/SpaceLightSystem.cs` (1)
+- [ ] `Content.Server/Medical/CrewMonitoring/CrewMonitoringConsoleComponent.cs` (1)
+- [ ] `Content.Server/Medical/CrewMonitoring/CrewMonitoringConsoleSystem.cs` (3)
+- [ ] `Content.Server/Medical/CrewMonitoring/CrewMonitoringServerSystem.cs` (1)
+- [ ] `Content.Server/Medical/MedicalScannerSystem.cs` (1)
+- [ ] `Content.Server/Medical/SuitSensors/SuitSensorSystem.cs` (1)
+- [ ] `Content.Server/Mobs/CritMobActionsSystem.cs` (1)
+- [ ] `Content.Server/Mobs/DeathgaspSystem.cs` (3)
+- [ ] `Content.Server/NPC/HTN/Preconditions/SatiationPrecondition.cs` (1)
+- [ ] `Content.Server/NPC/HTN/PrimitiveTasks/Operators/Specific/PickNearbyInjectableOperator.cs` (3)
+- [ ] `Content.Server/NPC/Systems/NPCCombatSystem.Ranged.cs` (1)
+- [ ] `Content.Server/NPC/Systems/NPCCombatSystem.cs` (1)
+- [ ] `Content.Server/NPC/Systems/NPCSystem.cs` (1)
+- [ ] `Content.Server/NPC/Systems/NPCUtilitySystem.cs` (5)
+- [ ] `Content.Server/NameIdentifier/NameIdentifierSystem.cs` (5)
+- [ ] `Content.Server/Ninja/Systems/NinjaSuitSystem.cs` (1)
+- [ ] `Content.Server/NukeOps/WarDeclaratorSystem.cs` (1)
+- [ ] `Content.Server/Nutrition/EntitySystems/AnimalHusbandrySystem.cs` (3)
+- [ ] `Content.Server/Nutrition/EntitySystems/FatExtractorSystem.cs` (1)
+- [ ] `Content.Server/Nutrition/EntitySystems/SmokingSystem.cs` (1)
+- [ ] `Content.Server/Objectives/Systems/ChangelingEscapeDepartmentConditionSystem.cs` (1)
+- [ ] `Content.Server/Objectives/Systems/ChangelingEscapeIdentityConditionSystem.cs` (1)
+- [ ] `Content.Server/Objectives/Systems/ChangelingObjectiveSystem.cs` (1)
+- [ ] `Content.Server/Objectives/Systems/HijackShuttleConditionSystem.cs` (1)
+- [ ] `Content.Server/Objectives/Systems/KillPersonConditionSystem.cs` (1)
+- [ ] `Content.Server/PDA/PdaSystem.cs` (1)
+- [ ] `Content.Server/Pinpointer/ServerNavMapSystem.cs` (1)
+- [ ] `Content.Server/Placement/PlacementLoggerSystem.cs` (2)
+- [ ] `Content.Server/Players/Whitelist/WhitelistManager.cs` (1)
+- [ ] `Content.Server/Polymorph/Systems/PolymorphSystem.cs` (1)
+- [ ] `Content.Server/Power/Nodes/CableDeviceNode.cs` (2)
+- [ ] `Content.Server/Power/Nodes/CableNode.cs` (2)
+- [ ] `Content.Server/Power/Nodes/CableTerminalNode.cs` (2)
+- [ ] `Content.Server/Power/Nodes/CableTerminalPortNode.cs` (2)
+- [ ] `Content.Server/Preferences/Managers/ServerPreferencesManager.cs` (6)
+- [ ] `Content.Server/Procedural/DungeonJob/DungeonJob.AutoCabling.cs` (1)
+- [ ] `Content.Server/Procedural/DungeonJob/DungeonJob.EntityTableDunGen.cs` (1)
+- [ ] `Content.Server/Projectiles/ProjectileSystem.cs` (1)
+- [ ] `Content.Server/Puppet/VentriloquistPuppetSystem.cs` (2)
+- [ ] `Content.Server/Radio/Components/NotifyOnNonFunctioningComponent.cs` (1)
+- [ ] `Content.Server/RatKing/RatKingSystem.cs` (3)
+- [ ] `Content.Server/Research/Disk/ResearchDiskSystem.cs` (1)
+- [ ] `Content.Server/Revenant/EntitySystems/RevenantSystem.Abilities.cs` (2)
+- [ ] `Content.Server/Revenant/EntitySystems/RevenantSystem.cs` (1)
+- [ ] `Content.Server/Robotics/Systems/RoboticsConsoleSystem.cs` (2)
+- [ ] `Content.Server/RoundEnd/RoundEndSystem.cs` (3)
+- [ ] `Content.Server/Shuttles/Systems/ShuttleSystem.FasterThanLight.cs` (9)
+- [ ] `Content.Server/Shuttles/Systems/ShuttleSystem.Impact.cs` (2)
+- [ ] `Content.Server/Silicons/StationAi/StationAiSystem.cs` (3)
+- [ ] `Content.Server/Species/Systems/NymphSystem.cs` (1)
+- [ ] `Content.Server/Spreader/KudzuSystem.cs` (6)
+- [ ] `Content.Server/Stack/StackSystem.cs` (1)
+- [ ] `Content.Server/StationEvents/EventManagerSystem.cs` (1)
+- [ ] `Content.Server/StationEvents/Events/VentCrittersRule.cs` (4)
+- [ ] `Content.Server/StationEvents/RampingStationEventSchedulerSystem.cs` (1)
+- [ ] `Content.Server/Suicide/SuicideSystem.cs` (1)
+- [ ] `Content.Server/Teleportation/TeleportLocationsSystem.cs` (1)
+- [ ] `Content.Server/Thief/Systems/ThiefUndeterminedBackpackSystem.cs` (1)
+- [ ] `Content.Server/Zombies/ZombieSystem.cs` (2)
+- [ ] `Content.Shared/Actions/ConfirmableActionSystem.cs` (2)
+- [ ] `Content.Shared/Actions/EntityEffectActionSystem.cs` (1)
+- [ ] `Content.Shared/Actions/PopupOnActionSystem.cs` (1)
+- [ ] `Content.Shared/Blocking/BlockingSystem.cs` (5)
+- [ ] `Content.Shared/Body/Systems/BloodstreamSystem.cs` (9)
+- [ ] `Content.Shared/Body/Systems/BrainSystem.cs` (1)
+- [ ] `Content.Shared/Body/Systems/SharedInternalsSystem.cs` (1)
+- [ ] `Content.Shared/Body/Systems/StomachSystem.cs` (5)
+- [ ] `Content.Shared/Botany/Systems/BotanySystem.Produce.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/BotanySystem.Seed.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/MutationSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/PlantChemicalsSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/PlantGrowthSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/PlantHarvestSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/PlantHolderSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/PlantSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/PlantToxinsSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/PlantTraySystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/PlantWeedPestSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/SeedExtractorSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/SharedPlantAtmosphericSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Systems/SharedPlantConsumeExudeGasSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Traits/Components/PlantTraitUnviableComponent.cs` (1)
+- [ ] `Content.Shared/Botany/Traits/Systems/PlantTraitKudzuSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Traits/Systems/PlantTraitLigneousSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Traits/Systems/PlantTraitSampledSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Traits/Systems/PlantTraitScreamSystem.cs` (1)
+- [ ] `Content.Shared/Botany/Traits/Systems/PlantTraitUnviableSystem.cs` (1)
+- [ ] `Content.Shared/CCVar/CCVars.Accessibility.cs` (1)
+- [ ] `Content.Shared/CCVar/CCVars.Admin.Ahelp.cs` (1)
+- [ ] `Content.Shared/CCVar/CCVars.Misc.cs` (1)
+- [ ] `Content.Shared/CartridgeLoader/Cartridges/NotekeeperCartridgeSystem.cs` (1)
+- [ ] `Content.Shared/Changeling/Systems/ChangelingAbilitySystem.cs` (1)
+- [ ] `Content.Shared/Changeling/Systems/ChangelingClonerSystem.cs` (1)
+- [ ] `Content.Shared/Changeling/Systems/ChangelingDevourSystem.cs` (5)
+- [ ] `Content.Shared/Changeling/Systems/ChangelingTransformSystem.cs` (4)
+- [ ] `Content.Shared/Changeling/Systems/DestructionResistanceSystem.cs` (1)
+- [ ] `Content.Shared/Changeling/Systems/RegenerativeStasisSystem.cs` (1)
+- [ ] `Content.Shared/Changeling/Systems/SharedChangelingIdentitySystem.cs` (1)
+- [ ] `Content.Shared/CharacterInfo/SharedCharacterInfoSystem.cs` (1)
+- [ ] `Content.Shared/Chasm/ChasmComponent.cs` (1)
+- [ ] `Content.Shared/Chasm/ChasmSystem.cs` (8)
+- [ ] `Content.Shared/Chat/SharedChatEvents.cs` (1)
+- [ ] `Content.Shared/Cloning/CloningSettingsPrototype.cs` (1)
+- [ ] `Content.Shared/Clothing/Components/ChameleonClothingComponent.cs` (1)
+- [ ] `Content.Shared/Clothing/Components/FleetingClothingComponent.cs` (1)
+- [ ] `Content.Shared/Clothing/EntitySystems/FleetingClothingSystem.cs` (1)
+- [ ] `Content.Shared/Clothing/EntitySystems/HideLayerClothingSystem.cs` (1)
+- [ ] `Content.Shared/Clothing/EntitySystems/MaskSystem.cs` (4)
+- [ ] `Content.Shared/Clothing/EntitySystems/ToggleableClothingSystem.cs` (3)
+- [ ] `Content.Shared/Clothing/MagbootsSystem.cs` (2)
+- [ ] `Content.Shared/Clumsy/ClumsyStatusEffectSystem.cs` (1)
+- [ ] `Content.Shared/CombatMode/SharedCombatModeSystem.cs` (1)
+- [ ] `Content.Shared/Communications/SharedCommunicationsConsoleComponent.cs` (3)
+- [ ] `Content.Shared/Containers/ContainerFillSystem.cs` (2)
+- [ ] `Content.Shared/Containers/EntityTableContainerFillComponent.cs` (1)
+- [ ] `Content.Shared/Contraband/ContrabandSeverityPrototype.cs` (1)
+- [ ] `Content.Shared/Contraband/ContrabandSystem.cs` (1)
+- [ ] `Content.Shared/Damage/Components/DamageableComponent.cs` (2)
+- [ ] `Content.Shared/Damage/Components/PassiveDamageComponent.cs` (1)
+- [ ] `Content.Shared/Damage/DamageModifierSet.cs` (1)
+- [ ] `Content.Shared/Damage/Systems/DamageContactsSystem.cs` (1)
+- [ ] `Content.Shared/Damage/Systems/DamageExamineSystem.cs` (1)
+- [ ] `Content.Shared/Damage/Systems/DamageableSystem.API.cs` (3)
+- [ ] `Content.Shared/Damage/Systems/DamageableSystem.Events.cs` (2)
+- [ ] `Content.Shared/Damage/Systems/DamageableSystem.cs` (1)
+- [ ] `Content.Shared/Damage/Systems/PassiveDamageSystem.cs` (4)
+- [ ] `Content.Shared/Damage/Systems/SharedStaminaSystem.cs` (1)
+- [ ] `Content.Shared/Damage/Systems/SlowOnDamageSystem.cs` (4)
+- [ ] `Content.Shared/Destructible/Thresholds/MinMax.cs` (1)
+- [ ] `Content.Shared/DeviceNetwork/Systems/SingletonDeviceNetServerSystem.cs` (3)
+- [ ] `Content.Shared/Devour/DevourSystem.cs` (1)
+- [ ] `Content.Shared/Disposal/Unit/SharedDisposalUnitSystem.cs` (15)
+- [ ] `Content.Shared/Doors/Systems/SharedAirlockSystem.cs` (1)
+- [ ] `Content.Shared/Doors/Systems/SharedDoorSystem.Bolts.cs` (1)
+- [ ] `Content.Shared/Doors/Systems/SharedDoorSystem.cs` (6)
+- [ ] `Content.Shared/EntityConditions/SharedEntityConditionsSystem.cs` (2)
+- [ ] `Content.Shared/EntityEffects/Effects/StatusEffects/MovementSpeedModifierEntityEffectSystem.cs` (3)
+- [ ] `Content.Shared/Explosion/Components/ExplosionResistanceComponent.cs` (1)
+- [ ] `Content.Shared/Fluids/SharedPuddleSystem.Evaporation.cs` (2)
+- [ ] `Content.Shared/Fluids/SharedPuddleSystem.cs` (2)
+- [ ] `Content.Shared/GameTicking/Rules/Components/ZombieRuleComponent.cs` (1)
+- [ ] `Content.Shared/GameTicking/Rules/ParadoxCloneRuleSystem.cs` (4)
+- [ ] `Content.Shared/GhostTypes/GhostSpriteStateSystem.cs` (1)
+- [ ] `Content.Shared/Hands/Components/HandsComponent.cs` (2)
+- [ ] `Content.Shared/Hands/EntitySystems/SharedHandsSystem.Drop.cs` (2)
+- [ ] `Content.Shared/Humanoid/HumanoidCharacterAppearance.cs` (6)
+- [ ] `Content.Shared/Humanoid/Markings/MarkingColoring.cs` (3)
+- [ ] `Content.Shared/Humanoid/Markings/MarkingManager.cs` (6)
+- [ ] `Content.Shared/Humanoid/Markings/MarkingPrototype.cs` (3)
+- [ ] `Content.Shared/Humanoid/Sex.cs` (1)
+- [ ] `Content.Shared/Implants/SharedImplanterSystem.cs` (3)
+- [ ] `Content.Shared/Interaction/SmartEquipSystem.cs` (1)
+- [ ] `Content.Shared/Inventory/Events/BeforeUnequipEvents.cs` (1)
+- [ ] `Content.Shared/Inventory/InventorySystem.Equip.cs` (1)
+- [ ] `Content.Shared/Inventory/InventorySystem.Relay.cs` (1)
+- [ ] `Content.Shared/Inventory/InventorySystem.Slots.cs` (1)
+- [ ] `Content.Shared/Item/ItemToggle/ItemToggleSystem.cs` (4)
+- [ ] `Content.Shared/Item/SharedItemSystem.cs` (2)
+- [ ] `Content.Shared/Light/EntitySystems/LightReplacerSystem.cs` (1)
+- [ ] `Content.Shared/Light/EntitySystems/RandomPointLightSystem.cs` (1)
+- [ ] `Content.Shared/Magic/SharedMagicSystem.cs` (1)
+- [ ] `Content.Shared/MassMedia/Components/StationNewsComponent.cs` (1)
+- [ ] `Content.Shared/Mech/EntitySystems/SharedMechSystem.cs` (1)
+- [ ] `Content.Shared/Medical/Cryogenics/SharedCryoPodSystem.cs` (1)
+- [ ] `Content.Shared/Medical/Healing/HealingSystem.cs` (2)
+- [ ] `Content.Shared/Medical/HealthAnalyzer/HealthAnalyzerComponent.cs` (1)
+- [ ] `Content.Shared/Medical/SharedDefibrillatorSystem.cs` (3)
+- [ ] `Content.Shared/Medical/VomitSystem.cs` (3)
+- [ ] `Content.Shared/MedicalScanner/HealthAnalyzerUIState.cs` (1)
+- [ ] `Content.Shared/Mobs/Components/MobStateComponent.cs` (2)
+- [ ] `Content.Shared/Mobs/Systems/MobStateSystem.StateMachine.cs` (1)
+- [ ] `Content.Shared/Mobs/Systems/MobStateSystem.Subscribers.cs` (4)
+- [ ] `Content.Shared/Movement/Components/JetpackComponent.cs` (3)
+- [ ] `Content.Shared/Movement/Systems/MovementSpeedModifierSystem.cs` (2)
+- [ ] `Content.Shared/Movement/Systems/SharedJetpackSystem.cs` (2)
+- [ ] `Content.Shared/Movement/Systems/SharedJumpAbilitySystem.cs` (3)
+- [ ] `Content.Shared/Movement/Systems/SharedMoverController.cs` (3)
+- [ ] `Content.Shared/Movement/Systems/SpeedModifierContactsSystem.cs` (1)
+- [ ] `Content.Shared/Movement/Systems/WormSystem.cs` (1)
+- [ ] `Content.Shared/NameIdentifier/SharedNameIdentifierSystem.cs` (1)
+- [ ] `Content.Shared/NameModifier/EntitySystems/NameModifierSystem.cs` (1)
+- [ ] `Content.Shared/Ninja/Systems/SharedNinjaGlovesSystem.cs` (1)
+- [ ] `Content.Shared/Ninja/Systems/SharedNinjaSuitSystem.cs` (2)
+- [ ] `Content.Shared/Ninja/Systems/SharedSpaceNinjaSystem.cs` (5)
+- [ ] `Content.Shared/Nutrition/Components/IngestionBlockerComponent.cs` (2)
+- [ ] `Content.Shared/Nutrition/Components/SatiationComponent.cs` (1)
+- [ ] `Content.Shared/Nutrition/Components/SatiationCounterAlertComponent.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/BaseSatiationEffectSystem.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/ExaminableSatiationSystem.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/IngestionSystem.API.cs` (2)
+- [ ] `Content.Shared/Nutrition/EntitySystems/IngestionSystem.Blockers.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/IngestionSystem.Utensils.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/IngestionSystem.cs` (3)
+- [ ] `Content.Shared/Nutrition/EntitySystems/SatiationDamageSystem.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/SatiationGrantSystem.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/SatiationSpeedModifierSystem.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/SatiationSystem.Proxy.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/SatiationSystem.cs` (1)
+- [ ] `Content.Shared/Nutrition/EntitySystems/SharedCreamPieSystem.cs` (1)
+- [ ] `Content.Shared/Objectives/Components/ObjectiveComponent.cs` (1)
+- [ ] `Content.Shared/Paper/PaperSystem.cs` (2)
+- [ ] `Content.Shared/Paper/StampComponent.cs` (1)
+- [ ] `Content.Shared/Preferences/HumanoidCharacterProfile.cs` (4)
+- [ ] `Content.Shared/Projectiles/SharedProjectileSystem.cs` (3)
+- [ ] `Content.Shared/RCD/RCDPrototype.cs` (1)
+- [ ] `Content.Shared/Repairable/RepairableSystem.cs` (1)
+- [ ] `Content.Shared/Research/TechnologyDisk/Systems/TechnologyDiskSystem.cs` (1)
+- [ ] `Content.Shared/RetractableItemAction/RetractableItemActionSystem.cs` (2)
+- [ ] `Content.Shared/Revenant/Components/RevenantComponent.cs` (2)
+- [ ] `Content.Shared/Revenant/EntitySystems/SharedCorporealSystem.cs` (2)
+- [ ] `Content.Shared/Revolutionary/Components/AlwaysRevolutionaryConvertibleComponent.cs` (1)
+- [ ] `Content.Shared/Revolutionary/Components/HeadRevolutionaryComponent.cs` (2)
+- [ ] `Content.Shared/Revolutionary/Components/RevolutionaryComponent.cs` (2)
+- [ ] `Content.Shared/Revolutionary/Components/RevolutionaryImmuneComponent.cs` (1)
+- [ ] `Content.Shared/Revolutionary/RevolutionarySystem.cs` (4)
+- [ ] `Content.Shared/Roles/AntagPrototype.cs` (1)
+- [ ] `Content.Shared/Roles/JobPrototype.cs` (1)
+- [ ] `Content.Shared/Roles/Jobs/SharedJobSystem.cs` (1)
+- [ ] `Content.Shared/Rootable/RootableSystem.cs` (1)
+- [ ] `Content.Shared/Sericulture/SericultureSystem.cs` (1)
+- [ ] `Content.Shared/Shuttles/Systems/SharedEmergencyShuttleSystem.cs` (2)
+- [ ] `Content.Shared/Silicons/StationAi/SharedStationAiSystem.Held.cs` (2)
+- [ ] `Content.Shared/Sound/SharedEmitSoundSystem.cs` (1)
+- [ ] `Content.Shared/Speech/EntitySystems/ListeningSystem.cs` (1)
+- [ ] `Content.Shared/Speech/EntitySystems/LizardAccentSystem.cs` (3)
+- [ ] `Content.Shared/Speech/EntitySystems/MobsterAccentSystem.cs` (1)
+- [ ] `Content.Shared/Speech/EntitySystems/MonkeyAccentSystem.cs` (2)
+- [ ] `Content.Shared/Speech/EntitySystems/RussianAccentSystem.cs` (1)
+- [ ] `Content.Shared/Speech/Muting/MutedStatusEffectSystem.cs` (1)
+- [ ] `Content.Shared/SprayPainter/SharedSprayPainterSystem.cs` (2)
+- [ ] `Content.Shared/Stacks/SharedStackSystem.API.cs` (1)
+- [ ] `Content.Shared/Station/Components/StationSpawningComponent.cs` (1)
+- [ ] `Content.Shared/StatusEffectNew/ExaminableStatusEffectSystem.cs` (1)
+- [ ] `Content.Shared/StatusEffectNew/PermanentStatusEffectsSystem.cs` (1)
+- [ ] `Content.Shared/StatusEffectNew/StatusEffectSystem.Relay.cs` (1)
+- [ ] `Content.Shared/StepTrigger/Systems/StepTriggerSystem.cs` (1)
+- [ ] `Content.Shared/Storage/EntitySystems/EntityProviderSystem.API.cs` (1)
+- [ ] `Content.Shared/Storage/EntitySystems/EntityProviderSystem.cs` (1)
+- [ ] `Content.Shared/Storage/EntitySystems/MagnetPickupSystem.cs` (3)
+- [ ] `Content.Shared/Storage/EntitySystems/SharedStorageSystem.cs` (2)
+- [ ] `Content.Shared/Strip/SharedStrippableSystem.cs` (5)
+- [ ] `Content.Shared/Stunnable/SharedStunSystem.Knockdown.cs` (1)
+- [ ] `Content.Shared/Stunnable/SharedStunSystem.cs` (8)
+- [ ] `Content.Shared/Teleportation/Systems/SharedTeleportLocationsSystem.cs` (2)
+- [ ] `Content.Shared/Tools/Systems/SharedToolSystem.Tile.cs` (1)
+- [ ] `Content.Shared/Tools/Systems/SharedToolSystem.cs` (2)
+- [ ] `Content.Shared/Tools/Systems/SimpleToolUsageSystem.cs` (2)
+- [ ] `Content.Shared/Trigger/Systems/DnaScrambleOnTriggerSystem.cs` (2)
+- [ ] `Content.Shared/UserInterface/ActivatableUIComponent.cs` (1)
+- [ ] `Content.Shared/UserInterface/ActivatableUISystem.cs` (1)
+- [ ] `Content.Shared/VendingMachines/SharedVendingMachineSystem.Eject.cs` (1)
+- [ ] `Content.Shared/VendingMachines/SharedVendingMachineSystem.Restock.cs` (3)
+- [ ] `Content.Shared/VendingMachines/SharedVendingMachineSystem.cs` (5)
+- [ ] `Content.Shared/VendingMachines/VendingMachineInventoryEntry.cs` (1)
+- [ ] `Content.Shared/VoiceMask/SharedVoiceMaskSystem.cs` (1)
+- [ ] `Content.Shared/Wagging/WaggingSystem.cs` (14)
+- [ ] `Content.Shared/Weapons/Misc/SharedGrapplingGunSystem.cs` (1)
+- [ ] `Content.Shared/Weapons/Ranged/Components/BasicEntityAmmoProviderComponent.cs` (1)
+- [ ] `Content.Shared/Weapons/Ranged/Systems/BatteryWeaponFireModesSystem.cs` (2)
+- [ ] `Content.Shared/Weapons/Ranged/Systems/RechargeBasicEntityAmmoSystem.cs` (1)
+- [ ] `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Cartridges.cs` (1)
+- [ ] `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Revolver.cs` (1)
+- [ ] `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.TargetFinder.cs` (1)
+- [ ] `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.cs` (2)
+- [ ] `Content.Shared/Weapons/Ranged/Upgrades/GunUpgradeSystem.cs` (1)
+- [ ] `Content.Shared/Xenoarchaeology/Artifact/SharedXenoArtifactSystem.XAT.cs` (1)
+- [ ] `Content.Shared/Xenoarchaeology/Artifact/XAT/XATInteractAttackSystem.cs` (1)
+- [ ] `Content.Shared/Xenoarchaeology/Artifact/XAT/XATInteractWithSystem.cs` (1)
+- [ ] `Resources/Audio/Weapons/Guns/Hits/attributions.yml` (1)
+- [ ] `Resources/Changelog/Maps.yml` (1)
+- [ ] `Resources/ConfigPresets/Build/development.toml` (1)
+- [ ] `Resources/clientCommandPerms.yml` (1)
+- [ ] `Resources/manifest.yml` (1)
+- [ ] `Resources/migration.yml` (2)
+- [ ] `Tools/actions_changelogs_since_last_run.py` (8)
+- [ ] `Tools/publish_multi_request.py` (1)
+
+## 2. Изменены у нас, удалены или перенесены у визов (97)
+
+В ветке пока лежит наша старая версия файла по старому пути. Нужно найти, куда визы перенесли файл (`git log --diff-filter=D -M --stat d21e95e681..e10ad24079 -- <путь>`), перенести наши правки (`git diff d21e95e681 d2b60027d2 -- <путь>`) и удалить старый файл. Часть уже могли перенести агенты: перед переносом проверьте, нет ли наших правок на новом месте.
+
+- [ ] `Content.Client/Administration/UI/CustomControls/HSeparator.cs`
+- [ ] `Content.Client/Administration/UI/CustomControls/VSeparator.cs`
+- [ ] `Content.Client/Cargo/UI/CargoShuttleMenu.xaml`
+- [ ] `Content.Client/GameTicking/Managers/ClientGameTicker.cs`
+- [ ] `Content.Client/Gateway/UI/GatewayWindow.xaml`
+- [ ] `Content.Client/Gateway/UI/GatewayWindow.xaml.cs`
+- [ ] `Content.Client/Revolutionary/RevolutionarySystem.cs`
+- [ ] `Content.Client/Stylesheets/StyleNano.cs`
+- [ ] `Content.Client/TextScreen/TextScreenTimerComponent.cs`
+- [ ] `Content.Client/UserInterface/Controls/TableContainer.cs`
+- [ ] `Content.Client/UserInterface/Systems/DamageOverlays/DamageOverlayUiController.cs`
+- [ ] `Content.IntegrationTests/Tests/LogErrorTest.cs`
+- [ ] `Content.Server/Administration/Commands/DeleteComponent.cs`
+- [ ] `Content.Server/Administration/Systems/AdminVerbSystem.Smites.cs`
+- [ ] `Content.Server/AlertLevel/AlertLevelSystem.cs`
+- [ ] `Content.Server/Animals/Systems/EggLayerSystem.cs`
+- [ ] `Content.Server/Antag/AntagSelectionPlayerPool.cs`
+- [ ] `Content.Server/Antag/AntagSelectionSystem.API.cs`
+- [ ] `Content.Server/Antag/AntagSelectionSystem.cs`
+- [ ] `Content.Server/Antag/Components/AntagSelectionComponent.cs`
+- [ ] `Content.Server/Cargo/Systems/CargoSystem.Shuttle.cs`
+- [ ] `Content.Server/Chat/Commands/SetLOOCCommand.cs`
+- [ ] `Content.Server/Chat/Commands/SetOOCCommand.cs`
+- [ ] `Content.Server/DeviceLinking/Systems/SignalTimerSystem.cs`
+- [ ] `Content.Server/DeviceNetwork/Systems/StationLimitedNetworkSystem.cs`
+- [ ] `Content.Server/Disposal/Unit/DisposableSystem.cs`
+- [ ] `Content.Server/Fax/FaxConstants.cs`
+- [ ] `Content.Server/GameTicking/GameTicker.GameRule.cs`
+- [ ] `Content.Server/GameTicking/GameTicker.Lobby.cs`
+- [ ] `Content.Server/GameTicking/GameTicker.RoundFlow.cs`
+- [ ] `Content.Server/GameTicking/GameTicker.cs`
+- [ ] `Content.Server/GameTicking/Presets/GamePresetPrototype.cs`
+- [ ] `Content.Server/GameTicking/Rules/GameRuleSystem.Utility.cs`
+- [ ] `Content.Server/GameTicking/Rules/GameRuleSystem.cs`
+- [ ] `Content.Server/Gatherable/GatherableSystem.Projectile.cs`
+- [ ] `Content.Server/Gatherable/GatherableSystem.cs`
+- [ ] `Content.Server/Guardian/GuardianSystem.cs`
+- [ ] `Content.Server/Kitchen/EntitySystems/MicrowaveSystem.cs`
+- [ ] `Content.Server/Kitchen/EntitySystems/SharpSystem.cs`
+- [ ] `Content.Server/Medical/BiomassReclaimer/BiomassReclaimerSystem.cs`
+- [ ] `Content.Server/Medical/HealthAnalyzerSystem.cs`
+- [ ] `Content.Server/Mindshield/MindShieldSystem.cs`
+- [ ] `Content.Server/Mobs/DeathgaspComponent.cs`
+- [ ] `Content.Server/Nutrition/EntitySystems/SliceableFoodSystem.cs`
+- [ ] `Content.Server/Power/EntitySystems/PowerStateSystem.cs`
+- [ ] `Content.Server/Prayer/PrayerSystem.cs`
+- [ ] `Content.Server/Shuttles/Components/ShuttleComponent.cs`
+- [ ] `Content.Server/Speech/EntitySystems/BarkAccentSystem.cs`
+- [ ] `Content.Server/Speech/EntitySystems/FrontalLispSystem.cs`
+- [ ] `Content.Server/Speech/EntitySystems/MothAccentSystem.cs`
+- [ ] `Content.Server/Speech/EntitySystems/OwOAccentSystem.cs`
+- [ ] `Content.Server/Speech/EntitySystems/SlurredSystem.cs`
+- [ ] `Content.Server/Speech/EntitySystems/SpeakOnActionSystem.cs`
+- [ ] `Content.Server/Speech/EntitySystems/StutteringSystem.cs`
+- [ ] `Content.Server/Speech/EntitySystems/VocalSystem.cs`
+- [ ] `Content.Server/Station/Systems/StationJobsSystem.Roundstart.cs`
+- [ ] `Content.Server/Station/Systems/StationSpawningSystem.cs`
+- [ ] `Content.Server/StationRecords/Systems/StationRecordsSystem.cs`
+- [ ] `Content.Server/Worldgen/Systems/WorldControllerSystem.cs`
+- [ ] `Content.Shared/Animals/UdderComponent.cs`
+- [ ] `Content.Shared/Animals/UdderSystem.cs`
+- [ ] `Content.Shared/Animals/WoolyComponent.cs`
+- [ ] `Content.Shared/Animals/WoolySystem.cs`
+- [ ] `Content.Shared/Audio/SharedGlobalSoundSystem.cs`
+- [ ] `Content.Shared/DeviceLinking/SharedDeviceLinkSystem.cs`
+- [ ] `Content.Shared/DeviceNetwork/Systems/SharedDeviceListSystem.cs`
+- [ ] `Content.Shared/Eye/Blinding/Systems/EyeClosingSystem.cs`
+- [ ] `Content.Shared/Forensics/Systems/SharedForensicsSystem.cs`
+- [ ] `Content.Shared/GameTicking/SharedGameTicker.cs`
+- [ ] `Content.Shared/Ghost/SharedGhostSystem.cs`
+- [ ] `Content.Shared/Kitchen/RecipeManager.cs`
+- [ ] `Content.Shared/Light/Components/LightOnCollideComponent.cs`
+- [ ] `Content.Shared/Light/EntitySystems/LightCollideSystem.cs`
+- [ ] `Content.Shared/Ninja/Components/DashAbilityComponent.cs`
+- [ ] `Content.Shared/Ninja/Systems/DashAbilitySystem.cs`
+- [ ] `Content.Shared/Ninja/Systems/EnergyKatanaSystem.cs`
+- [ ] `Content.Shared/Stacks/StackSplitEvent.cs`
+- [ ] `Content.Shared/Station/SharedStationSystem.cs`
+- [ ] `Content.Shared/SubFloor/SharedTrayScannerSystem.cs`
+- [ ] `Content.Shared/Weapons/Ranged/Systems/ActionGunSystem.cs`
+- [ ] `Content.Shared/Xenoarchaeology/Artifact/XAE/XAERandomTeleportInvokerSystem.cs`
+- [ ] `Resources/Locale/en-US/store/uplink-catalog.ftl`
+- [ ] `Resources/Locale/ru-RU/plants/component/potted-plant-hide-component.ftl`
+- [ ] `Resources/Prototypes/Catalog/Cargo/cargo_shuttle.yml`
+- [ ] `Resources/Prototypes/Catalog/uplink_catalog.yml`
+- [ ] `Resources/Prototypes/Damage/modifier_sets.yml`
+- [ ] `Resources/Prototypes/Entities/Clothing/Uniforms/jumpskirts.yml`
+- [ ] `Resources/Prototypes/Entities/Clothing/Uniforms/jumpsuits.yml`
+- [ ] `Resources/Prototypes/Entities/Objects/Misc/tiles.yml`
+- [ ] `Resources/Prototypes/Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml`
+- [ ] `Resources/Prototypes/Entities/Structures/Doors/Windoors/clockwork.yml`
+- [ ] `Resources/Prototypes/Entities/Structures/Piping/Atmospherics/alt_layers.yml`
+- [ ] `Resources/Prototypes/Entities/Structures/Windows/mining.yml`
+- [ ] `Resources/Prototypes/Recipes/Construction/Graphs/utilities/atmos_binary.yml`
+- [ ] `Resources/Prototypes/Roles/Jobs/CentComm/emergencyresponseteam.yml`
+- [ ] `Resources/Prototypes/World/Biomes/basic.yml`
+- [ ] `SECURITY.md`
+
+## 3. Конфликт разрешён, но DS14-метка пропала (34)
+
+В нашей версии файла была метка DS14, а в результате её нет. Возможно, апстрим сделал то же самое по-своему, а возможно, наша правка потерялась. Сравнить с `git show d2b60027d2:<путь>`.
+
+- [ ] `Content.Client/Atmos/UI/GasFilterBoundUserInterface.cs`
+- [ ] `Content.Client/Changeling/UI/ChangelingTransformBoundUserInterface.cs`
+- [ ] `Content.Client/Communications/UI/Widgets/AlertLevelControls.xaml.cs`
+- [ ] `Content.Client/Communications/UI/Widgets/ShuttleControls.xaml.cs`
+- [ ] `Content.Client/Doors/AirlockSystem.cs`
+- [ ] `Content.Client/Instruments/UI/InstrumentMenu.xaml.cs`
+- [ ] `Content.Client/UserInterface/Systems/EscapeMenu/EscapeUIController.cs`
+- [ ] `Content.Client/Wall/Systems/WallMountTreeSystem.cs`
+- [ ] `Content.Client/Wall/Systems/WallMountVisibilitySystem.cs`
+- [ ] `Content.Server/Atmos/EntitySystems/AtmosphereSystem.Hotspot.cs`
+- [ ] `Content.Server/Atmos/EntitySystems/BarotraumaSystem.cs`
+- [ ] `Content.Server/Atmos/EntitySystems/GasTankSystem.cs`
+- [ ] `Content.Server/Atmos/EntitySystems/PressureImmunityStatusEffectSystem.cs`
+- [ ] `Content.Server/Cluwne/CluwneSystem.cs`
+- [ ] `Content.Server/CrewManifest/CrewManifestSystem.cs`
+- [ ] `Content.Server/Decals/DecalSystem.cs`
+- [ ] `Content.Server/Ghost/Components/SpookyExtinguishableComponent.cs`
+- [ ] `Content.Server/Singularity/EntitySystems/EmitterSystem.cs`
+- [ ] `Content.Server/Tabletop/TabletopSystem.cs`
+- [ ] `Content.Server/VendingMachines/VendingMachineSystem.cs`
+- [ ] `Content.Server/Weapons/Hitscan/Systems/HitscanIgniteSystem.cs`
+- [ ] `Content.Server/Weapons/Ranged/Systems/GunSystem.TargetFinder.cs`
+- [ ] `Content.Shared/Actions/DangerousActionSystem.cs`
+- [ ] `Content.Shared/Botany/Items/Systems/BotanyHoeSystem.cs`
+- [ ] `Content.Shared/Botany/Items/Systems/BotanyProduceSystem.cs`
+- [ ] `Content.Shared/Botany/Items/Systems/BotanySampleTakerSystem.cs`
+- [ ] `Content.Shared/Botany/Items/Systems/BotanyShovelSystem.cs`
+- [ ] `Content.Shared/Botany/Items/Systems/BotanySwabSystem.cs`
+- [ ] `Content.Shared/Climbing/Systems/ClimbSystem.cs`
+- [ ] `Content.Shared/Forensics/Systems/FingerprintMaskSystem.cs`
+- [ ] `Content.Shared/Forensics/Systems/ForensicPadSystem.cs`
+- [ ] `Content.Shared/Forensics/Systems/SharedForensicScannerSystem.cs`
+- [ ] `Content.Shared/Screech/ScreechSystem.cs`
+- [ ] `Content.Shared/Vehicle/Components/VehicleHandBlockerComponent.cs`
+
+## 4. Спрайты
+
+- [ ] Перенарезать наши спрайты шлюзов под новый формат: базовая RSI (`assembly`, `opening`, `closed`, `open`, `closing`, 4 направления — копия нашего кадра) и общая RSI эффектов из наших `*_unlit`, панелей, искр и сварки.
+- [ ] Стены и окна с `CardinalCornerSpriteSmoothing`: состояния `wall0..13` собрать из наших старых угловых `0..7` по таблице `0←0, 1←1, 2←4, 3←1, 4←4, 5←5, 6←7, 7←7, 8..10←5, 11..13←7`. Для укреплённых стен накладывать наш `reinf_over` на кадр стены.
+- [ ] Шкафы и хранилище скафандров (визы разделили их на дверь и эффекты) — так же, как шлюзы.
+- [ ] `Objects/Weapons/Guns/Rifles/XL8.rsi`: у нас 48px, у визов 32px; 4 новых состояния апстрима не добавлены.
+- [ ] 639 RSI и файлов, удалённых апстримом, пока сохранены. Удалить те, на которые больше не ссылаются прототипы.
+
+## 5. После конфликтов
+
+- [ ] `dotnet build`, починить ошибки компиляции (особенно места, где апстрим опирается на Nubody).
+- [ ] Тесты, YAML-линтер, проверка RSI.
+- [ ] Наши карты с новыми прототипами и тайлами апстрима (Respritening) — проверить загрузку.

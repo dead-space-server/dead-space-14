@@ -9,9 +9,10 @@ using Content.Shared.StatusEffectNew;
 
 namespace Content.Shared.Damage.Systems;
 
-public sealed class SlowOnDamageSystem : EntitySystem
+public sealed partial class SlowOnDamageSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifierSystem = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifierSystem = default!;
+    [Dependency] private DamageableSystem _damage = default!;
 
     public override void Initialize()
     {
@@ -25,6 +26,7 @@ public sealed class SlowOnDamageSystem : EntitySystem
         SubscribeLocalEvent<ClothingSlowOnDamageModifierComponent, ClothingGotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<ClothingSlowOnDamageModifierComponent, ClothingGotUnequippedEvent>(OnGotUnequipped);
 
+<<<<<<< ours
         SubscribeLocalEvent<IgnoreSlowOnDamageComponent, StatusEffectAppliedEvent>(OnIgnoreApplied);
         SubscribeLocalEvent<IgnoreSlowOnDamageComponent, StatusEffectRemovedEvent>(OnIgnoreRemoved);
         SubscribeLocalEvent<IgnoreSlowOnDamageComponent, StatusEffectRelayedEvent<ModifySlowOnDamageSpeedEvent>>(OnIgnoreModifySpeed);
@@ -34,6 +36,15 @@ public sealed class SlowOnDamageSystem : EntitySystem
         SubscribeLocalEvent<PainNumbnessSlowImmunityComponent, ComponentShutdown>(OnPainNumbnessShutdown);
         SubscribeLocalEvent<PainNumbnessSlowImmunityComponent, ModifySlowOnDamageSpeedEvent>(OnPainNumbnessModifySpeed);
 // DS14-End
+||||||| base
+        SubscribeLocalEvent<IgnoreSlowOnDamageComponent, ComponentStartup>(OnIgnoreStartup);
+        SubscribeLocalEvent<IgnoreSlowOnDamageComponent, ComponentShutdown>(OnIgnoreShutdown);
+        SubscribeLocalEvent<IgnoreSlowOnDamageComponent, ModifySlowOnDamageSpeedEvent>(OnIgnoreModifySpeed);
+=======
+        SubscribeLocalEvent<IgnoreSlowOnDamageComponent, StatusEffectAppliedEvent>(OnIgnoreApplied);
+        SubscribeLocalEvent<IgnoreSlowOnDamageComponent, StatusEffectRemovedEvent>(OnIgnoreRemoved);
+        SubscribeLocalEvent<IgnoreSlowOnDamageComponent, StatusEffectRelayedEvent<ModifySlowOnDamageSpeedEvent>>(OnIgnoreModifySpeed);
+>>>>>>> theirs
     }
 
     private void OnRefreshMovespeed(EntityUid uid, SlowOnDamageComponent component, RefreshMovementSpeedModifiersEvent args)
@@ -41,12 +52,14 @@ public sealed class SlowOnDamageSystem : EntitySystem
         if (!TryComp<DamageableComponent>(uid, out var damage))
             return;
 
-        if (damage.TotalDamage == FixedPoint2.Zero)
+        var totalDamage = _damage.GetTotalDamage((uid, damage));
+
+        if (totalDamage == FixedPoint2.Zero)
             return;
 
         // Get closest threshold
         FixedPoint2 closest = FixedPoint2.Zero;
-        var total = damage.TotalDamage;
+        var total = totalDamage;
         foreach (var thres in component.SpeedModifierThresholds)
         {
             if (total >= thres.Key && thres.Key > closest)
@@ -83,7 +96,7 @@ public sealed class SlowOnDamageSystem : EntitySystem
 
     private void OnExamined(Entity<ClothingSlowOnDamageModifierComponent> ent, ref ExaminedEvent args)
     {
-        var msg = Loc.GetString("slow-on-damage-modifier-examine", ("mod", (1 - ent.Comp.Modifier) * 100));
+        var msg = Loc.GetString("slow-on-damage-modifier-examine", ("mod", ent.Comp.Modifier * 100));
         args.PushMarkup(msg);
     }
 
@@ -97,6 +110,7 @@ public sealed class SlowOnDamageSystem : EntitySystem
         _movementSpeedModifierSystem.RefreshMovementSpeedModifiers(args.Wearer);
     }
 
+<<<<<<< ours
     private void OnIgnoreApplied(Entity<IgnoreSlowOnDamageComponent> ent, ref StatusEffectAppliedEvent args)
     {
         _movementSpeedModifierSystem.RefreshMovementSpeedModifiers(args.Target);
@@ -113,18 +127,35 @@ public sealed class SlowOnDamageSystem : EntitySystem
     }
 // DS14-Start
     private void OnPainNumbnessStartup(Entity<PainNumbnessSlowImmunityComponent> ent, ref ComponentStartup args)
+||||||| base
+    private void OnIgnoreStartup(Entity<IgnoreSlowOnDamageComponent> ent, ref ComponentStartup args)
+=======
+    private void OnIgnoreApplied(Entity<IgnoreSlowOnDamageComponent> ent, ref StatusEffectAppliedEvent args)
+>>>>>>> theirs
     {
-        _movementSpeedModifierSystem.RefreshMovementSpeedModifiers(ent);
+        _movementSpeedModifierSystem.RefreshMovementSpeedModifiers(args.Target);
     }
 
+<<<<<<< ours
     private void OnPainNumbnessShutdown(Entity<PainNumbnessSlowImmunityComponent> ent, ref ComponentShutdown args)
+||||||| base
+    private void OnIgnoreShutdown(Entity<IgnoreSlowOnDamageComponent> ent, ref ComponentShutdown args)
+=======
+    private void OnIgnoreRemoved(Entity<IgnoreSlowOnDamageComponent> ent, ref StatusEffectRemovedEvent args)
+>>>>>>> theirs
     {
-        _movementSpeedModifierSystem.RefreshMovementSpeedModifiers(ent);
+        _movementSpeedModifierSystem.RefreshMovementSpeedModifiers(args.Target);
     }
 
+<<<<<<< ours
     private void OnPainNumbnessModifySpeed(Entity<PainNumbnessSlowImmunityComponent> ent, ref ModifySlowOnDamageSpeedEvent args)
+||||||| base
+    private void OnIgnoreModifySpeed(Entity<IgnoreSlowOnDamageComponent> ent, ref ModifySlowOnDamageSpeedEvent args)
+=======
+    private void OnIgnoreModifySpeed(Entity<IgnoreSlowOnDamageComponent> ent, ref StatusEffectRelayedEvent<ModifySlowOnDamageSpeedEvent> args)
+>>>>>>> theirs
     {
-        args.Speed = 1f;
+        args.Args = args.Args with { Speed = 1f };
     }
 // DS14-End
 }

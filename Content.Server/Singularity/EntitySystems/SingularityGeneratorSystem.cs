@@ -17,7 +17,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Singularity.EntitySystems;
 
-public sealed class SingularityGeneratorSystem : SharedSingularityGeneratorSystem
+public sealed partial class SingularityGeneratorSystem : SharedSingularityGeneratorSystem
 {
     // DS14-start
     private const string TeslaEnergyBallPrototype = "TeslaEnergyBall";
@@ -30,14 +30,15 @@ public sealed class SingularityGeneratorSystem : SharedSingularityGeneratorSyste
 
     #region Dependencies
     // DS14-start
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private StationSystem _station = default!;
     // DS14-end
 
-    [Dependency] private readonly IViewVariablesManager _vvm = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly PhysicsSystem _physics = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IViewVariablesManager _vvm = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private EntityQuery<ContainmentFieldComponent> _containmentFieldQuery = default!;
     #endregion Dependencies
 
     public override void Initialize()
@@ -226,13 +227,12 @@ public sealed class SingularityGeneratorSystem : SharedSingularityGeneratorSyste
 
         var ray = new CollisionRay(worldPosition, dirRad.ToVec(), component.CollisionMask);
         var rayCastResults = _physics.IntersectRay(transform.MapID, ray, component.FailsafeDistance, generator, false);
-        var genQuery = GetEntityQuery<ContainmentFieldComponent>();
 
         RayCastResults? closestResult = null;
 
         foreach (var result in rayCastResults)
         {
-            if (!genQuery.HasComponent(result.HitEntity))
+            if (!_containmentFieldQuery.HasComponent(result.HitEntity))
                 continue;
 
             closestResult = result;

@@ -8,19 +8,7 @@ station-ai-has-no-power-for-upload = Upload failed - the AI core is unpowered.
 station-ai-is-too-damaged-for-upload = Upload failed - the AI core must be repaired.
 station-ai-core-losing-power = Your AI core is now running on reserve battery power.
 station-ai-core-critical-power = Your AI core is critically low on power. External power must be re-established or severe data corruption may occur!
-station-ai-leave-round-sender = Automated AI diagnostics
-station-ai-leave-round-announcement = Core purge procedure for {$name} is complete. The consciousness matrix has been unloaded and the core is now in standby.
-station-ai-leave-round-no-mind = Unable to find an active AI mind.
-station-ai-leave-round-failed = Unable to leave the AI core.
-station-ai-leave-round-confirmation-title = AI Core Purge
-station-ai-leave-round-confirmation-warning-title = Warning!
-station-ai-leave-round-confirmation-warning-body =
-    Purging the core will permanently disconnect your consciousness from the AI.
-    After confirmation you will leave the round: you will not be able to return as the AI or return to the lobby.
-station-ai-leave-round-confirmation-cancel = Cancel
-station-ai-leave-round-confirmation-confirm = Purge core
-station-ai-admin-erase-core = Erase AI core
-station-ai-admin-erase-core-description = Forcefully purge the AI core, ghost the current player, and free the role.
+station-ai-core-taking-damage = Your AI core is sustaining physical damage.
 
 # Ghost role
 station-ai-ghost-role-name = Station AI

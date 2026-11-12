@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Content.IntegrationTests;
+using Content.IntegrationTests.Utility;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Reflection;
 using Robust.Shared.Serialization.Markdown.Validation;
@@ -16,11 +18,11 @@ namespace Content.YAMLLinter
 {
     internal static class Program
     {
-        private static readonly ExternalTestContext TestContext =
-            new(nameof(Content.YAMLLinter), Console.Out);
+        private static readonly ExternalTestContext TestContext = new("YAML Linter", StreamWriter.Null);
 
         private static async Task<int> Main(string[] _)
         {
+            GameDataScrounger.NoScrounging = true; // Ugly hack for YAML Linter.
             PoolManager.Startup();
             var stopwatch = new Stopwatch();
             stopwatch.Start();

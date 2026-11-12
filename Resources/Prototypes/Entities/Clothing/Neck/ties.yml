@@ -63,3 +63,24 @@
     storedSprite:
       state: storage
       sprite: Clothing/Neck/Ties/scitie.rsi
+
+- type: entity
+  parent: ClothingNeckTieBase
+  id: ClothingNeckTieSerious
+  name: serious tie
+  description: A perfectly tied tie to get you through the working day.
+  components:
+  - type: Sprite
+    sprite: Clothing/Neck/Ties/serioustie.rsi
+  - type: Clothing
+    sprite: Clothing/Neck/Ties/serioustie.rsi
+  - type: Item
+    storedSprite:
+      state: storage
+      sprite: Clothing/Neck/Ties/serioustie.rsi
+  - type: Tag # We redo the tag list here to remove HamsterWearable because this currently lacks a sprite for it
+    tags:
+    - ClothMade
+    - Recyclable
+    - WhitelistChameleon
+    - MonkeyWearable

@@ -48,7 +48,7 @@ public sealed class DoorRemoteBoundUserInterface(EntityUid owner, Enum uiKey) : 
                 ToolTip = Loc.GetString(modeOption.Tooltip),
                 BackgroundColor = optionCustomColor,
                 HoverBackgroundColor = optionHoverCustomColor,
-                Order = i, // DS14
+                Order = i
             };
             options.Add(option);
         }

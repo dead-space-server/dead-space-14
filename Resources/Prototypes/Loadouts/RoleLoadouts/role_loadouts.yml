@@ -26,8 +26,8 @@
   - HoPJumpsuit
   - HoPBackpack
   - HoPOuterClothing
-  - HoPShoes
-  # - Glasses
+  - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - HoPJobTrinkets
@@ -66,6 +66,7 @@
   - PassengerOuterClothing
   - PassengerShoes
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - PassengerJobTrinkets
@@ -95,6 +96,7 @@
   - BartenderJumpsuit
   - CommonBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - ServiceWorkerJobTrinkets
@@ -112,6 +114,7 @@
   - CommonBackpack
   - ChefOuterClothing
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - ChefJobTrinkets
@@ -128,6 +131,7 @@
   - LibrarianJumpsuit
   - CommonBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - LibrarianJobTrinkets
@@ -160,8 +164,10 @@
   - ChaplainJumpsuit
   - CommonBackpack
   - ChaplainOuterClothing
+  - ChaplainShoes
   - ChaplainBible
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - ChaplainJobTrinkets
@@ -180,6 +186,7 @@
   - JanitorOuterClothing
   - JanitorShoes
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - JanitorJobTrinkets
@@ -196,6 +203,7 @@
   - BotanistBackpack
   - BotanistOuterClothing
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - BotanistJobTrinkets
@@ -214,6 +222,7 @@
   - ClownOuterClothing
   - ClownShoes
   - Glasses
+  - AssistiveItems
   - SurvivalClown
   - Trinkets
   - ClownUnderwear # DS14-Underwear
@@ -232,7 +241,8 @@
   - MimeOuterClothing
   - MimeBelt
   - Glasses
-  - SurvivalMime
+  - AssistiveItems
+  - Survival
   - Trinkets
   - MimeUnderwear # DS14-Underwear
   - MimeJobTrinkets
@@ -245,11 +255,12 @@
   - MusicianJumpsuit
   - CommonBackpack
   - MusicianOuterClothing
+  - Instruments
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
-  - MusicianJobTrinkets
-  - Instruments
+  #- MusicianJobTrinkets
   - GroupSpeciesBreathTool
   - MusicianUnderwear # DS14-Underwear
 
@@ -264,7 +275,8 @@
   - CargoTechnicianBackpack
   - QuartermasterOuterClothing
   - QuartermasterShoes
-  # - Glasses
+  - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - QuartermasterJobTrinkets
@@ -283,6 +295,7 @@
   - CargoTechnicianShoes
 #  - CargoTechnicianID # DS14-disabled
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - CargoTechnicianJobTrinkets
@@ -299,6 +312,7 @@
   - SalvageSpecialistOuterClothing
   - SalvageSpecialistShoes
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - SalvageSpecialistJobTrinkets
@@ -316,6 +330,7 @@
   - ChiefEngineerNeck
   - ChiefEngineerOuterClothing
   - ChiefEngineerShoes
+  - AssistiveItems
   - SurvivalExtended
   - Trinkets
   - ChiefEngineerJobTrinkets
@@ -363,6 +378,7 @@
   - AtmosphericTechnicianBelt # DS14
   - AtmosphericTechnicianOuterClothing
   - AtmosphericTechnicianShoes
+  - AssistiveItems
   - SurvivalExtended
   - Trinkets
   - AtmosphericTechnicianJobTrinkets
@@ -381,7 +397,8 @@
   - ResearchDirectorOuterClothing
   - ScientistGloves
   - ResearchDirectorShoes
-  # - Glasses
+  - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - ResearchDirectorJobTrinkets
@@ -402,6 +419,7 @@
   - ScientistShoes
 #  - ScientistPDA # DS14-disabled
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - ScientistJobTrinkets
@@ -415,6 +433,7 @@
   - ResearchAssistantJumpsuit
   - ScientistBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - ResearchAssistantJobTrinkets
@@ -433,7 +452,8 @@
   - SecurityBackpack
   - HeadOfSecurityBelt # DS14-Belt
   - HeadofSecurityOuterClothing
-  - HeadofSecurityShoes
+  - SecurityShoes
+  - AssistiveItems
   - SurvivalSecurity
   - Trinkets
   - HeadofSecurityJobTrinkets
@@ -452,6 +472,7 @@
   - SecurityBelt
   - WardenOuterClothing
   - SecurityShoes
+  - AssistiveItems
   - SurvivalSecurity
   - Trinkets
   - WardenJobTrinkets
@@ -472,6 +493,7 @@
   - SecurityShoes
 #  - SecurityPDA # DS14-disabled
   - SecurityBelt
+  - AssistiveItems
   - SurvivalSecurity
   - Trinkets
   - SecurityJobTrinkets
@@ -489,7 +511,8 @@
   - DetectiveJumpsuit
   - DetectiveBackpack
   - DetectiveOuterClothing
-  - DetectiveShoes
+  - SecurityShoes
+  - AssistiveItems
   - SurvivalSecurity
   - Trinkets
   - DetectiveJobTrinkets
@@ -504,6 +527,7 @@
   - GroupTankHarness
   - SecurityCadetJumpsuit
   - SecurityBackpack
+  - AssistiveItems
   - SurvivalSecurity
   - Trinkets
   - SecurityCadetJobTrinkets
@@ -551,6 +575,7 @@
   - CommonBackpack
   - ReporterSpecialization #DS-14
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - ReporterJobTrinkets
@@ -580,10 +605,27 @@
   - BoxerGloves
   - CommonBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - Trinkets
   - GroupSpeciesBreathTool
   - BoxerUnderwear # DS14-Underwear
+
+- type: roleLoadout
+  id: JobTramDriver
+  groups:
+  - GroupTankHarness
+  - CommonBackpack
+  - TramDriverJumpsuit
+  - TramDriverOuterClothing #Vest and such
+  - TramDriverHat
+  - TramDriverGloves
+  - Glasses
+  - AssistiveItems
+  - Survival
+  - Trinkets
+  #- TramDriverJobTrinkets
+  - GroupSpeciesBreathTool
 
 # These loadouts are used for non-crew spawns, like off-station antags and event mobs
 # They will be used without player configuration, thus they will only ever apply what is forced by MinLimit
@@ -620,6 +662,13 @@
   id: RoleSurvivalExtended
   groups:
   - SurvivalExtended
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalExtendedAntag # Used by antagonists that spawn off-station (e.g wizards)
+  groups:
+  - SurvivalExtendedAntag
   - GroupSpeciesBreathTool
   - GroupTankHarness
 
@@ -661,6 +710,12 @@
   groups:
   - GroupEVATank
   - SurvivalExtended
+
+- type: roleLoadout
+  id: RoleSurvivalEVAAntag # Used by antagonists that spawn off-station AND in space (e.g ninjas)
+  groups:
+  - GroupEVATank
+  - SurvivalExtendedAntag
 
 - type: roleLoadout
   id: RoleSurvivalSpaceNinja

@@ -50,9 +50,10 @@
   #DS14-End
 
 - type: entity
-  name: trash bag
-  id: TrashBagBlue
+  id: TrashBagHolding
   parent: TrashBag
+  name: trash bag of holding
+  description: A trash bag that opens into a localized pocket of bluespace.
   components:
   - type: Sprite
     layers:
@@ -82,6 +83,9 @@
     quickInsert: true
     areaInsert: true
     areaInsertRadius: 5
+  - type: Tag
+    tags:
+    - TrashBagHolding
 
 - type: entity
   parent: TrashBag

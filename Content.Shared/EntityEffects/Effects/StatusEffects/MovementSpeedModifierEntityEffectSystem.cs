@@ -1,4 +1,4 @@
-﻿using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
@@ -12,14 +12,16 @@ namespace Content.Shared.EntityEffects.Effects.StatusEffects;
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
 public sealed partial class MovementSpeedModifierEntityEffectSystem : EntityEffectSystem<MovementSpeedModifierComponent, MovementSpeedModifier>
 {
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly MovementModStatusSystem _movementModStatus = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private MovementModStatusSystem _movementModStatus = default!;
 
     protected override void Effect(Entity<MovementSpeedModifierComponent> entity, ref EntityEffectEvent<MovementSpeedModifier> args)
     {
+        var duration = args.Effect.Time * args.Scale;
         var proto = args.Effect.EffectProto;
         var sprintMod = args.Effect.SprintSpeedModifier;
         var walkMod = args.Effect.WalkSpeedModifier;
+        var delay = args.Effect.Delay;
 
         switch (args.Effect.Type)
         {
@@ -27,35 +29,68 @@ public sealed partial class MovementSpeedModifierEntityEffectSystem : EntityEffe
                 _movementModStatus.TryUpdateMovementSpeedModDuration(
                     entity,
                     proto,
+<<<<<<< ours
                     args.Effect.Time * args.Scale,
                     walkMod,
                     sprintMod);
+||||||| base
+                    args.Effect.Time * args.Scale,
+                    sprintMod,
+                    walkMod);
+=======
+                    duration,
+                    sprintMod,
+                    walkMod,
+                    delay);
+>>>>>>> theirs
                 break;
             case StatusEffectMetabolismType.Add:
-                if (args.Effect.Time != null)
+                if (duration != null)
                 {
                     _movementModStatus.TryAddMovementSpeedModDuration(
                         entity,
                         proto,
+<<<<<<< ours
                         args.Effect.Time.Value * args.Scale,
                         walkMod,
                         sprintMod);
+||||||| base
+                        args.Effect.Time.Value * args.Scale,
+                        sprintMod,
+                        walkMod);
+=======
+                        duration.Value,
+                        sprintMod,
+                        walkMod,
+                        delay);
+>>>>>>> theirs
                 }
                 else
                 {
                     _movementModStatus.TryUpdateMovementSpeedModDuration(
                         entity,
                         proto,
+<<<<<<< ours
                         args.Effect.Time * args.Scale,
                         walkMod,
                         sprintMod);
+||||||| base
+                        args.Effect.Time * args.Scale,
+                        sprintMod,
+                        walkMod);
+=======
+                        duration,
+                        sprintMod,
+                        walkMod,
+                        delay);
+>>>>>>> theirs
                 }
                 break;
             case StatusEffectMetabolismType.Remove:
-                _status.TryRemoveTime(entity, args.Effect.EffectProto, args.Effect.Time * args.Scale);
+                _status.TryRemoveTime(entity, args.Effect.EffectProto, duration);
                 break;
             case StatusEffectMetabolismType.Set:
-                _status.TrySetStatusEffectDuration(entity, proto, args.Effect.Time * args.Scale);
+                _status.TrySetStatusEffectDuration(entity, proto, duration, delay);
                 break;
         }
     }

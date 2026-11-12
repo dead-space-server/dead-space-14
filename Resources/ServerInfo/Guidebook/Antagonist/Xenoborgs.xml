@@ -81,6 +81,11 @@
     <GuideEntityEmbed Entity="XenoborgModuleConstruction" Caption="строительный модуль ксеноборга"/>
   </Box>
 
+  [bold]Улучшенные модули шасси:[/bold]
+  <Box>
+    <GuideEntityEmbed Entity="XenoborgModuleDoorControl" Caption="модуль ксеноборга для управления дверьми"/>
+  </Box>
+
   ### Тяжелый Ксеноборг
   <Box>
     <GuideEntityEmbed Entity="XenoborgHeavy" Caption=""/>
@@ -95,7 +100,7 @@
 
   [bold]Улучшенные модули шасси:[/bold]
   <Box>
-    <GuideEntityEmbed Entity="XenoborgModuleHeavyLaser" Caption="модуль ксеноборга с тяжёлым лазером"/>
+    <GuideEntityEmbed Entity="XenoborgModuleHeavyLaser" Caption="модуль ксеноборга с лазерной пушкой"/>
   </Box>
 
   ### Разведывательный Ксеноборг

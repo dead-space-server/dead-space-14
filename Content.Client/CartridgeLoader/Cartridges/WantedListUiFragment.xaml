@@ -92,7 +92,7 @@
                             <RichTextLabel Name="WantedReason" VerticalAlignment="Stretch"/>
                             <PanelContainer StyleClasses="DeadSpaceAccentDim" SetHeight="1" Margin="0 5 0 5" /> <!-- DS14 -->
                             <PanelContainer Name="HistoryPanel" StyleClasses="DeadSpaceInset"> <!-- DS14 -->
-                                <controls:TableContainer Name="HistoryTable" Columns="3" Visible="False" HorizontalAlignment="Stretch" />
+                                <TableContainer Name="HistoryTable" Columns="3" Visible="False" HorizontalAlignment="Stretch" />
                             </PanelContainer>
                         </BoxContainer>
                     </ScrollContainer>

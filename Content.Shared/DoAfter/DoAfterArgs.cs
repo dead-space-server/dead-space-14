@@ -91,6 +91,18 @@ public sealed partial class DoAfterArgs
     public bool NeedHand;
 
     /// <summary>
+    /// Whether or not this do after requires your active hand to be empty,
+    /// </summary>
+    [DataField]
+    public bool NeedFreeHand;
+
+    /// <summary>
+    /// Whether or not this do after requires you to have any empty hand,
+    /// </summary>
+    [DataField]
+    public bool NeedAnyFreeHand;
+
+    /// <summary>
     ///     Whether we need to keep our active hand as is (i.e. can't change hand or change item). This also covers
     ///     requiring the hand to be free (if applicable). This does nothing if <see cref="NeedHand"/> is false.
     /// </summary>
@@ -258,6 +270,8 @@ public sealed partial class DoAfterArgs
         EventTarget = other.EventTarget;
         Broadcast = other.Broadcast;
         NeedHand = other.NeedHand;
+        NeedFreeHand = other.NeedFreeHand;
+        NeedAnyFreeHand = other.NeedAnyFreeHand;
         BreakOnHandChange = other.BreakOnHandChange;
         BreakOnDropItem = other.BreakOnDropItem;
         BreakOnMove = other.BreakOnMove;

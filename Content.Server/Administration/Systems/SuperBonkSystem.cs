@@ -2,18 +2,30 @@ using Content.Server.Administration.Components;
 using Content.Shared.Climbing.Components;
 using Content.Shared.Climbing.Systems;
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
-using JetBrains.Annotations;
+using Content.Shared.Mobs.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Administration.Systems;
 
-public sealed class SuperBonkSystem : EntitySystem
+public sealed partial class SuperBonkSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly ClimbSystem _climbSystem = default!; // DS14: current engine IoC requires readonly fields.
     [Dependency] private readonly IGameTiming _timing = default!;
+||||||| base
+    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private readonly ClumsySystem _clumsySystem = default!;
+    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+=======
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private ClimbSystem _climbSystem = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IGameTiming _timing = default!;
+>>>>>>> theirs
 
+<<<<<<< ours
     private EntityQuery<TransformComponent> _transformQuery;
 
     // DS14-start: current engine baseline uses explicit event subscriptions and query initialization.
@@ -27,14 +39,56 @@ public sealed class SuperBonkSystem : EntitySystem
         SubscribeLocalEvent<SuperBonkComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
     // DS14-end
-
-    private void OnInit(Entity<SuperBonkComponent> ent, ref ComponentInit args)
+||||||| base
+    public override void Initialize()
     {
-        var (_, component) = ent;
+        base.Initialize();
+
+        SubscribeLocalEvent<SuperBonkComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<SuperBonkComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<SuperBonkComponent, ComponentShutdown>(OnShutdown);
+    }
+=======
+    [Dependency] private EntityQuery<TransformComponent> _transformQuery;
+>>>>>>> theirs
+
+    [SubscribeLocalEvent]
+    private void OnStartup(Entity<SuperBonkComponent> ent, ref ComponentStartup args)
+    {
+        var (uid, component) = ent;
+
+        if (component.StopWhenDead && _mobState.IsDead(uid))
+        {
+            RemCompDeferred<SuperBonkComponent>(uid);
+            return;
+        }
 
         component.NextBonk = _timing.CurTime + component.BonkCooldown;
+
+        var tables = EntityQueryEnumerator<BonkableComponent>();
+        var bonks = new List<EntityUid>();
+        while (tables.MoveNext(out var table, out _))
+        {
+            bonks.Add(table);
+        }
+
+        component.Tables = bonks.GetEnumerator();
+        if (!component.Tables.MoveNext())
+            RemCompDeferred<SuperBonkComponent>(uid);
     }
 
+<<<<<<< ours
+||||||| base
+    private void OnShutdown(Entity<SuperBonkComponent> ent, ref ComponentShutdown args)
+    {
+        var (uid, component) = ent;
+
+        if (component.RemoveClumsy)
+            RemComp<ClumsyComponent>(uid);
+    }
+
+=======
+    [SubscribeLocalEvent]
     private void OnMobStateChanged(Entity<SuperBonkComponent> ent, ref MobStateChangedEvent args)
     {
         var (uid, component) = ent;
@@ -43,6 +97,7 @@ public sealed class SuperBonkSystem : EntitySystem
             RemCompDeferred<SuperBonkComponent>(uid);
     }
 
+>>>>>>> theirs
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -61,32 +116,6 @@ public sealed class SuperBonkSystem : EntitySystem
 
             comp.NextBonk += comp.BonkCooldown;
         }
-    }
-
-    /// <summary>
-    /// Begin a grand journey to bonk every table.
-    /// </summary>
-    [PublicAPI]
-    public void StartSuperBonk(EntityUid target, bool stopWhenDead = false)
-    {
-        //The other check in the code to stop when the target dies does not work if the target is already dead.
-        if (stopWhenDead && TryComp<MobStateComponent>(target, out var mobState) && mobState.CurrentState == MobState.Dead)
-            return;
-
-        if (EnsureComp<SuperBonkComponent>(target, out var component))
-            return;
-
-        var tables = EntityQueryEnumerator<BonkableComponent>();
-        var bonks = new List<EntityUid>();
-        // This is done so we don't crash if something like a new table is spawned.
-        while (tables.MoveNext(out var uid, out var comp))
-        {
-            bonks.Add(uid);
-        }
-
-        component.Tables = bonks.GetEnumerator();
-        component.Tables.MoveNext(); // Move off the current selection (which is nothing)
-        component.StopWhenDead = stopWhenDead;
     }
 
     private bool TryBonk(EntityUid uid, EntityUid tableUid)

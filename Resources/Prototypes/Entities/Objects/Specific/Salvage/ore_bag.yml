@@ -42,7 +42,7 @@
   parent: OreBag
   id: BorgOreBag
   name: integrated ore bag
-  description: A large ore bag built into the frame of a mining cyborg.
+  description: A large ore bag built into the frame of a mining cyborg. Magnetises any nearby ores when held.
   components:
     - type: MagnetPickup # DS14
     - type: Storage

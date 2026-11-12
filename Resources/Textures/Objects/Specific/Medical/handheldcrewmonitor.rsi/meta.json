@@ -28,6 +28,18 @@
         {
             "name": "icon",
             "directions": 1
+        },
+        {
+            "name": "screen",
+            "delays": [
+                [
+                    0.4,
+                    0.4
+                ]
+            ]
+        },
+        {
+            "name": "base"
         }
     ]
 }

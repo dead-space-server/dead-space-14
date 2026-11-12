@@ -196,8 +196,7 @@ namespace Content.Client.Lobby.UI
 
             NameEdit.OnTextChanged += args => { SetName(args.Text); };
             NameEdit.IsValid = args => args.Length <= _maxNameLength;
-            NameRandomize.OnPressed += args => RandomizeName();
-            RandomizeEverythingButton.OnPressed += args => { RandomizeEverything(); };
+            RandomizeUnlockedButton.OnPressed += args => { RandomizeProfile(); };
             WarningLabel.SetMarkup($"[color=red]{Loc.GetString("humanoid-profile-editor-naming-rules-warning")}[/color]");
 
             #endregion Name
@@ -215,6 +214,16 @@ namespace Content.Client.Lobby.UI
             };
 
             #endregion Sex
+
+            #region Voice
+
+            VoiceButton.OnItemSelected += args =>
+            {
+                VoiceButton.SelectId(args.Id);
+                SetVoice(_voices[args.Id]);
+            };
+
+            #endregion
 
             #region Age
 
@@ -496,8 +505,16 @@ namespace Content.Client.Lobby.UI
                 (int) PreferenceUnavailableMode.StayInLobby);
             PreferenceUnavailableButton.AddItem(
                 Loc.GetString("humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button",
+<<<<<<< ours
                               ("overflowJob", Loc.GetString(SharedGameTicker.FallbackOverflowJobName))),
                 (int) PreferenceUnavailableMode.SpawnAsOverflow);
+||||||| base
+                              ("overflowJob", Loc.GetString(SharedGameTicker.FallbackOverflowJobName))),
+                (int)PreferenceUnavailableMode.SpawnAsOverflow);
+=======
+                              ("overflowJob", Loc.GetString(GameTicker.FallbackOverflowJobName))),
+                (int)PreferenceUnavailableMode.SpawnAsOverflow);
+>>>>>>> theirs
 
             PreferenceUnavailableButton.OnItemSelected += args =>
             {
@@ -717,8 +734,33 @@ namespace Content.Client.Lobby.UI
         {
             IoCManager.Instance!.TryResolveType(out _sponsorsManager); // DS14
 
+<<<<<<< ours
             SpeciesButton.Clear();
             _species.Clear();
+||||||| base
+            UpdateNameEdit();
+            UpdateFlavorTextEdit();
+            UpdateSexControls();
+            UpdateGenderControls();
+            UpdateSkinColor();
+            UpdateSpawnPriorityControls();
+            UpdateAgeEdit();
+            UpdateEyePickers();
+            UpdateSaveButton();
+            UpdateMarkings();
+=======
+            UpdateNameEdit();
+            UpdateFlavorTextEdit();
+            UpdateSexControls();
+            UpdateVoiceControls();
+            UpdateGenderControls();
+            UpdateSkinColor();
+            UpdateSpawnPriorityControls();
+            UpdateAgeEdit();
+            UpdateEyePickers();
+            UpdateSaveButton();
+            UpdateMarkings();
+>>>>>>> theirs
 
             _species.AddRange(_prototypeManager.EnumeratePrototypes<SpeciesPrototype>().Where(o => o.RoundStart));
             _species.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.CurrentCultureIgnoreCase));

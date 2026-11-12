@@ -11,8 +11,14 @@ namespace Content.Client.Lobby.UI
     [GenerateTypedNameReferences]
     public sealed partial class LobbyGui : UIScreen
     {
+<<<<<<< ours
         [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
         [Dependency] private readonly IUriOpener _uriOpener = default!;
+||||||| base
+        [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
+=======
+        [Dependency] private IClientConsoleHost _consoleHost = default!;
+>>>>>>> theirs
 
         public LobbyGui()
         {

@@ -12,15 +12,11 @@ namespace Content.Shared.EntityEffects.Effects.Botany;
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
 public sealed partial class PlantMutateChemicalsEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantMutateChemicals>
 {
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantChemicalsSystem _plantChemicals = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    // DS14-end
+    [Dependency] private PlantChemicalsSystem _plantChemicals = default!;
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantMutateChemicals> args)
     {
-        var randomChems = _prototypeManager.Index(args.Effect.RandomPickBotanyReagent); // DS14 - current engine has no EntitySystem.ProtoMan shortcut.
-        _plantChemicals.MutateRandomChemical(entity.Owner, randomChems);
+        _plantChemicals.MutateRandomChemical(entity.Owner, args.Effect.RandomChemTables);
     }
 }
 
@@ -28,10 +24,10 @@ public sealed partial class PlantMutateChemicalsEntityEffectSystem : EntityEffec
 public sealed partial class PlantMutateChemicals : EntityEffectBase<PlantMutateChemicals>
 {
     /// <summary>
-    /// The Reagent list this mutation draws from.
+    /// Chemical tables from which this mutation can select.
     /// </summary>
-    [DataField]
-    public ProtoId<WeightedRandomFillSolutionPrototype> RandomPickBotanyReagent = "RandomPickBotanyReagent";
+    [DataField(required: true)]
+    public List<ProtoId<WeightedRandomFillSolutionPrototype>> RandomChemTables = [];
 
     /// <inheritdoc/>
     public override string EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
@@ -39,17 +35,20 @@ public sealed partial class PlantMutateChemicals : EntityEffectBase<PlantMutateC
         var list = new List<string>();
 
         // If your table doesn't exist, no guidebook for you!
-        if (!prototype.Resolve(RandomPickBotanyReagent, out var table))
-            return string.Empty;
-
-        foreach (var fill in table.Fills)
+        foreach (var tableId in RandomChemTables)
         {
-            foreach (var reagent in fill.Reagents)
-            {
-                if (!prototype.Resolve(reagent, out var proto))
-                    continue;
+            if (!prototype.Resolve(tableId, out var table))
+                continue;
 
-                list.Add(proto.LocalizedName);
+            foreach (var fill in table.Fills)
+            {
+                foreach (var reagent in fill.Reagents)
+                {
+                    if (!prototype.Resolve(reagent, out var reagentPrototype))
+                        continue;
+
+                    list.Add(reagentPrototype.LocalizedName);
+                }
             }
         }
 

@@ -52,7 +52,7 @@
   Запросите нужные растения в Ботанике. Без ботаника придётся выращивать самому.
   <Box>
     <GuideEntityEmbed Entity="SignHydro1" Caption=" "/>
-    <GuideEntityEmbed Entity="hydroponicsTray"/>
+    <GuideEntityEmbed Entity="HydroponicsTray"/>
     <GuideEntityEmbed Entity="WheatBushel"/>
   </Box>
   ## Дойка:

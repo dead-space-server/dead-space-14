@@ -1,4 +1,4 @@
-﻿using Content.Shared.GameTicking;
+using Content.Shared.GameTicking;
 using Content.Shared.NameIdentifier;
 using Content.Shared.NameModifier.EntitySystems;
 using Robust.Shared.Collections;
@@ -10,10 +10,19 @@ namespace Content.Server.NameIdentifier;
 /// <inheritdoc cref="SharedNameIdentifierSystem"/>
 public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
 {
+<<<<<<< ours
     // DS14: retain the explicit prototype manager dependency used by this branch.
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _robustRandom = default!;
     [Dependency] private readonly NameModifierSystem _nameModifier = default!;
+||||||| base
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IRobustRandom _robustRandom = default!;
+    [Dependency] private readonly NameModifierSystem _nameModifier = default!;
+=======
+    [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private NameModifierSystem _nameModifier = default!;
+>>>>>>> theirs
 
     /// <summary>
     /// Free IDs available per <see cref="NameIdentifierGroupPrototype"/>.
@@ -76,7 +85,13 @@ public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
     /// <param name="randomVal">The index value of the randomly selected modifier.</param>
     public string GenerateUniqueNameModifier(ProtoId<NameIdentifierGroupPrototype> proto, out int randomVal)
     {
+<<<<<<< ours
         return GenerateUniqueNameModifier(_prototypeManager.Index(proto), out randomVal);
+||||||| base
+        return GenerateUniqueName(uid, _prototypeManager.Index(proto), out randomVal);
+=======
+        return GenerateUniqueNameModifier(ProtoMan.Index(proto), out randomVal);
+>>>>>>> theirs
     }
 
     /// <summary>
@@ -101,6 +116,7 @@ public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
         randomVal = set[^1];
         set.RemoveAt(set.Count - 1);
 
+<<<<<<< ours
         return FormatAndLocalize(randomVal, proto);
     }
 
@@ -120,6 +136,28 @@ public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
             formatted = Loc.GetString(identifiers.Values.Prefix+formatted);
         }
 
+||||||| base
+=======
+        return FormatAndLocalize(randomVal, proto);
+    }
+
+    /// <summary>
+    /// Format and localize the provided integer against the prototype.
+    /// </summary>
+    /// <param name="value">The selected value to process.</param>
+    /// <param name="proto">The prototype that defines optional localization and formatting.</param>
+    /// <returns>A formatted and/or localized string.</returns>
+    private string FormatAndLocalize(int value, NameIdentifierGroupPrototype proto)
+    {
+        var formatted = value.ToString();
+
+        if (proto.IdentifierDataset is not null)
+        {
+            var identifiers = ProtoMan.Index(proto.IdentifierDataset);
+            formatted = Loc.GetString(identifiers.Values.Prefix+formatted);
+        }
+
+>>>>>>> theirs
         return proto.Format is not null
             ? Loc.GetString(proto.Format, ("number", formatted))
             : formatted;
@@ -136,7 +174,7 @@ public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
         if (ent.Comp.Group is null)
             return;
 
-        if (!_prototypeManager.Resolve(ent.Comp.Group, out var group))
+        if (!ProtoMan.Resolve(ent.Comp.Group, out var group))
             return;
 
         // If it has an existing valid identifier then use that, otherwise generate a new one.
@@ -168,6 +206,7 @@ public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
     private void FillGroup(NameIdentifierGroupPrototype proto, List<int> values)
     {
         values.Clear();
+<<<<<<< ours
 
         var (max, min) = (proto.MaxValue, proto.MinValue);
 
@@ -178,6 +217,20 @@ public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
         }
 
         for (var i = min; i <= max; i++)
+||||||| base
+        for (var i = proto.MinValue; i < proto.MaxValue; i++)
+=======
+
+        var (max, min) = (proto.MaxValue, proto.MinValue);
+
+        if (proto.IdentifierDataset is not null)
+        {
+            max = ProtoMan.Index(proto.IdentifierDataset).Values.Count;
+            min = 1;
+        }
+
+        for (var i = min; i <= max; i++)
+>>>>>>> theirs
         {
             values.Add(i);
         }
@@ -196,18 +249,28 @@ public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
         if (CurrentIds.TryGetValue(proto.ID, out var ids))
             return ids;
 
+<<<<<<< ours
         // If we're using a dataset, grab the count. Otherwise, use (max - min).
         ids =  new List<int>(proto.IdentifierDataset is null
             ? proto.MaxValue - proto.MinValue
             : _prototypeManager.Index(proto.IdentifierDataset).Values.Count);
 
         CurrentIds.Add(proto.ID, ids);
+||||||| base
+=======
+        // If we're using a dataset, grab the count. Otherwise, use (max - min).
+        ids =  new List<int>(proto.IdentifierDataset is null
+            ? proto.MaxValue - proto.MinValue
+            : ProtoMan.Index(proto.IdentifierDataset).Values.Count);
+
+        CurrentIds.Add(proto.ID, ids);
+>>>>>>> theirs
         return ids;
     }
 
     private void EnsureIds()
     {
-        foreach (var proto in _prototypeManager.EnumeratePrototypes<NameIdentifierGroupPrototype>())
+        foreach (var proto in ProtoMan.EnumeratePrototypes<NameIdentifierGroupPrototype>())
         {
             var ids = GetOrCreateIdList(proto);
 
@@ -224,7 +287,7 @@ public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
 
         foreach (var proto in CurrentIds.Keys)
         {
-            if (!_prototypeManager.HasIndex<NameIdentifierGroupPrototype>(proto))
+            if (!ProtoMan.HasIndex<NameIdentifierGroupPrototype>(proto))
             {
                 toRemove.Add(proto);
             }

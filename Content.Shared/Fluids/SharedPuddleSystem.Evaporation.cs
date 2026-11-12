@@ -80,8 +80,7 @@ public abstract partial class SharedPuddleSystem
                 // Spawn a *sparkle*
                 if (_net.IsServer) // TODO: Change this once we have entity spawn prediction V2
                     SpawnAttachedTo(evaporation.EvaporationEffect, Transform(uid).Coordinates);
-
-                PredictedQueueDel(uid);
+                QueueDel(uid);
             }
 
             _solutionContainerSystem.UpdateChemicals(puddle.Solution.Value);
@@ -91,7 +90,15 @@ public abstract partial class SharedPuddleSystem
 
     private bool HasEvaporatingReagents(Solution solution)
     {
+<<<<<<< ours
         foreach (var (reagent, quantity) in solution.Contents)
+||||||| base
+        List<ProtoId<ReagentPrototype>> evaporatingReagents = [];
+        foreach (var solProto in solution.GetReagentPrototypes(_prototypeManager).Keys)
+=======
+        List<ProtoId<ReagentPrototype>> evaporatingReagents = [];
+        foreach (var solProto in solution.GetReagentPrototypes(ProtoMan).Keys)
+>>>>>>> theirs
         {
             if (quantity > FixedPoint2.Zero && _prototypeManager.Index<ReagentPrototype>(reagent.Prototype).EvaporationSpeed > FixedPoint2.Zero)
                 return true;
@@ -103,7 +110,7 @@ public abstract partial class SharedPuddleSystem
     public ProtoId<ReagentPrototype>[] GetAbsorbentReagents(Solution solution)
     {
         var absorbentReagents = new List<ProtoId<ReagentPrototype>>();
-        foreach (ReagentPrototype solProto in solution.GetReagentPrototypes(_prototypeManager).Keys)
+        foreach (ReagentPrototype solProto in solution.GetReagentPrototypes(ProtoMan).Keys)
         {
             if (solProto.Absorbent)
                 absorbentReagents.Add(solProto.ID);
@@ -129,7 +136,13 @@ public abstract partial class SharedPuddleSystem
     public Dictionary<ProtoId<ReagentPrototype>, FixedPoint2> GetEvaporationSpeeds(Solution solution)
     {
         Dictionary<ProtoId<ReagentPrototype>, FixedPoint2> evaporatingSpeeds = [];
+<<<<<<< ours
         foreach (var (reagent, quantity) in solution.Contents)
+||||||| base
+        foreach (var solProto in solution.GetReagentPrototypes(_prototypeManager).Keys)
+=======
+        foreach (var solProto in solution.GetReagentPrototypes(ProtoMan).Keys)
+>>>>>>> theirs
         {
             var prototype = _prototypeManager.Index<ReagentPrototype>(reagent.Prototype);
             if (quantity > FixedPoint2.Zero && prototype.EvaporationSpeed > FixedPoint2.Zero)

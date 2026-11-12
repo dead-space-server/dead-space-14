@@ -31,7 +31,7 @@ public sealed partial class StationAiSystem
                 {
                     Bolted = !ent.Comp.BoltsDown,
                 },
-                Order = 1, // DS14
+                Order = 1,
             }
         );
     }
@@ -51,7 +51,7 @@ public sealed partial class StationAiSystem
                 {
                     EmergencyAccess = !ent.Comp.EmergencyAccess,
                 },
-                Order = 2, // DS14
+                Order = 2,
             }
         );
     }
@@ -71,7 +71,7 @@ public sealed partial class StationAiSystem
                 {
                     Electrified = !ent.Comp.Enabled,
                 },
-                Order = 3, // DS14
+                Order = 3,
             }
         );
     }

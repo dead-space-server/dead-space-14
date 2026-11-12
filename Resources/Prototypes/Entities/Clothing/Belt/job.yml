@@ -5,6 +5,44 @@
   parent: ClothingBeltUtilityBase # DS14
   id: BaseClothingBeltEngineering
   components:
+  - type: Storage
+    # Don't add more than absolutely needed to this whitelist!
+    # Utility belts shouldn't just be free extra storage.
+    # This is only intended for basic engineering equipment.
+    whitelist:
+      tags:
+      - Powerdrill
+      - Wirecutter
+      - Crowbar
+      - Screwdriver
+      - Flashlight
+      - Wrench
+      - GeigerCounter
+      - Flare
+      - CableCoil
+      - CigPack
+      - Radio
+      - HolofanProjector
+      - Multitool
+      - AppraisalTool
+      - JawsOfLife
+      - GPS
+      - WeldingMask
+      - RemoteSignaller
+      - UtilityKnife
+      components:
+      - StationMap
+      - SprayPainter
+      - SprayPainterAmmo
+      - NetworkConfigurator
+      - RCD
+      - RCDAmmo
+      - Welder
+      - PowerCell
+      - Geiger
+      - TRayScanner
+      - GasAnalyzer
+      - HandLabeler
   - type: ItemMapper
     sprite: &BeltOverlay Clothing/Belt/belt_overlay.rsi
     mapLayers:
@@ -93,7 +131,8 @@
     grid:
     - 0,0,9,1
   - type: StealTarget
-    stealGroup: ChiefEngineerToolBelt
+    stealGroup:
+    - ChiefEngineerToolBelt
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -119,6 +158,7 @@
       - WetFloorSign
       - HolosignProjector
       - Plunger
+      - TrashBagHolding
       - GoldenPlunger
       - WireBrush
       # DS14-start
@@ -130,7 +170,10 @@
       # DS14-end
       components:
       - LightReplacer
-      - SmokeOnTrigger
+      - CleanerGrenade
+      components:
+      - SprayPainter
+      - SprayPainterAmmo
   - type: ItemMapper
     sprite: *BeltOverlay
     mapLayers:
@@ -142,7 +185,7 @@
         whitelist:
           tags:
           - Spray
-      wrench:
+      light_replacer:
         whitelist:
           tags:
           - Wrench
@@ -269,6 +312,26 @@
     sprite: Clothing/Belt/emt.rsi
   - type: Clothing
     sprite: Clothing/Belt/emt.rsi
+  - type: Storage
+    whitelist:
+      tags:
+      - Bottle
+      - Brutepack
+      - Bloodpack
+      - Gauze
+      - Ointment
+      - Tourniquet
+      - CigPack
+      - PillCanister
+      - Radio
+      - DiscreteHealthAnalyzer
+      - SurgeryTool
+      - Dropper
+      components:
+      - Injector
+      - Pill
+      - Prying
+      - SpraySafety
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -285,17 +348,18 @@
       tags:
       - BotanyShovel
       - BotanyHatchet
-      - PlantBGone
       - Bottle
       - Syringe
       - CigPack
       - Dropper
       components:
+      - PlantAnalyzer
       - BotanySampleTaker
       - BotanyHoe
       - Seed
       - Smokable
       - HandLabeler
+      - Spray
   - type: ItemMapper
     sprite: *BeltOverlay
     mapLayers:
@@ -427,11 +491,11 @@
       - MagazinePistol
       - MagazineMagnum
       - CombatKnife
-      - Truncheon
       - HandGrenade
       - EnergyCartridge # DS14
       components:
       - Stunbaton
+      components:
       - FlashOnTrigger
       - SmokeOnTrigger
       - Flash
@@ -453,7 +517,7 @@
           - FlashOnTrigger
       stunbaton:
         whitelist:
-          components:
+          tags:
           - Stunbaton
       tear_gas_grenade:
         whitelist:

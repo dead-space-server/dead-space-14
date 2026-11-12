@@ -13,12 +13,12 @@ namespace Content.Shared.Screech;
 
 public sealed partial class ScreechSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedEntityEffectsSystem _effects = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedEntityEffectsSystem _effects = default!;
 
-    private EntityQuery<StatusEffectsComponent> _statusEffectsQuery; // DS14 - initialized explicitly on the current engine.
+    [Dependency] private EntityQuery<StatusEffectsComponent> _statusEffectsQuery = default!;
 
     private readonly HashSet<EntityUid> _entSet = [];
 
@@ -26,16 +26,10 @@ public sealed partial class ScreechSystem : EntitySystem
     {
         base.Initialize();
 
-        _statusEffectsQuery = GetEntityQuery<StatusEffectsComponent>(); // DS14
         SubscribeLocalEvent<NoiseProtectionComponent, InventoryRelayedEvent<ScreechEffectAttemptEvent>>((a, ref b) => OnScreechProtected(a, ref b.Args));
-        // DS14-start: pre-v288 RobustToolbox has no event-subscription source generator.
-        SubscribeLocalEvent<NoiseProtectionComponent, ExaminedEvent>(OnExamine);
-        SubscribeLocalEvent<ScreechActionComponent, ScreechActionEvent>(OnScreechAction);
-        SubscribeLocalEvent<NoiseProtectionComponent, ScreechEffectAttemptEvent>(OnScreechProtected);
-        SubscribeLocalEvent<ScreechShockWaveComponent, ComponentInit>(OnComponentInit);
-        // DS14-end
     }
 
+    [SubscribeLocalEvent]
     private void OnExamine(Entity<NoiseProtectionComponent> ent, ref ExaminedEvent args)
     {
         if (ent.Comp.ExamineText.HasValue)
@@ -44,6 +38,7 @@ public sealed partial class ScreechSystem : EntitySystem
         }
     }
 
+    [SubscribeLocalEvent]
     private void OnScreechAction(Entity<ScreechActionComponent> ent, ref ScreechActionEvent args)
     {
         args.Handled = true;
@@ -51,11 +46,13 @@ public sealed partial class ScreechSystem : EntitySystem
         Screech(args.Performer, param.Range, param.Vfx, param.ScreechSound, param.Effects);
     }
 
+    [SubscribeLocalEvent]
     private void OnScreechProtected(Entity<NoiseProtectionComponent> ent, ref ScreechEffectAttemptEvent args)
     {
         args.Cancelled = true;
     }
 
+    [SubscribeLocalEvent]
     private void OnComponentInit(Entity<ScreechShockWaveComponent> ent, ref ComponentInit args)
     {
         ent.Comp.InitTime = _timing.CurTime;
@@ -65,11 +62,12 @@ public sealed partial class ScreechSystem : EntitySystem
     /// <summary>
     /// Makes the entity "source" screech, applying the "effects" to every entity in "range" that does not have screech protection.
     /// </summary>
-    public void Screech(EntityUid source, float range, EntProtoId? vfx = null, SoundSpecifier? screechSound = null, List<EntityEffect>? effects = null)
+    public EntityUid? Screech(EntityUid source, float range, EntProtoId? vfx = null, SoundSpecifier? screechSound = null, List<EntityEffect>? effects = null)
     {
+        EntityUid? spawnedEnt = null;
         // first, we spawn the vfx attached to the source
         if (vfx.HasValue)
-            PredictedSpawnAttachedTo(vfx.Value, new EntityCoordinates(source, 0f, 0f));
+            spawnedEnt = PredictedSpawnAttachedTo(vfx.Value, new EntityCoordinates(source, 0f, 0f));
 
         // then, we do the screech per-se
         var transform = Transform(source);
@@ -89,6 +87,7 @@ public sealed partial class ScreechSystem : EntitySystem
         }
 
         _audio.PlayPredicted(screechSound, source, source);
+        return spawnedEnt;
     }
 
     /// <summary>

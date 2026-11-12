@@ -1,7 +1,6 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                       SetSize="650 330"
                       Resizable="False">
     <BoxContainer Orientation="Vertical">
@@ -22,7 +21,7 @@
                             <BoxContainer Orientation="Horizontal">
                                 <Label Text="{Loc 'battery-menu-in'}" HorizontalExpand="True" VerticalAlignment="Top"
                                        StyleClasses="DeadSpaceSectionTitle" />
-                                <controls:OnOffButton Name="InBreaker" />
+                                <controls:SwitchButton Name="InBreaker" Margin="5" />
                             </BoxContainer>
                             <Label Name="InValue" />
                         </BoxContainer>
@@ -56,7 +55,7 @@
                             <BoxContainer Orientation="Horizontal">
                                 <Label Text="{Loc 'battery-menu-out'}" HorizontalExpand="True" VerticalAlignment="Top"
                                        StyleClasses="DeadSpaceSectionTitle" />
-                                <controls:OnOffButton Name="OutBreaker" />
+                                <controls:SwitchButton Name="OutBreaker" Margin="5" />
                             </BoxContainer>
                             <Label Name="OutValue" />
                         </BoxContainer>
@@ -145,7 +144,7 @@
 
         <!-- Footer -->
         <BoxContainer Name="Footer" Orientation="Vertical">
-            <PanelContainer StyleClasses="LowDivider" />
+            <controls:Separator StyleClasses="LowDivider"/>
             <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
                 <!-- DS14-start -->
                 <Label Text="{Loc 'battery-menu-footer-left'}" StyleClasses="DeadSpaceSubtitle" />

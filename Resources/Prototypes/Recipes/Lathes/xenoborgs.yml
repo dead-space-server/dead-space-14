@@ -30,7 +30,7 @@
   materials:
     Steel: 1000
 
-# xenoborgs from common materials
+# xenoborgs
 
 - type: latheRecipe
   parent: BaseXenoborgRecipe

@@ -17,14 +17,17 @@ namespace Content.Server.Spreader;
 /// <summary>
 /// Handles generic spreading logic, where one anchored entity spreads to neighboring tiles.
 /// </summary>
-public sealed class SpreaderSystem : EntitySystem
+public sealed partial class SpreaderSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
+    [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+
+    [Dependency] private EntityQuery<EdgeSpreaderComponent> _edgeSpreaderQuery = default!;
+    [Dependency] private EntityQuery<AirtightComponent> _airtightQuery = default!;
+    [Dependency] private EntityQuery<DockingComponent> _dockingQuery = default!;
 
     /// <summary>
     /// Cached maximum number of updates per spreader prototype. This is applied per-grid.
@@ -36,8 +39,6 @@ public sealed class SpreaderSystem : EntitySystem
     /// </summary>
     private readonly Dictionary<string, int> _updates = [];
     private readonly List<EntityUid> _spreaders = [];
-
-    private EntityQuery<EdgeSpreaderComponent> _query;
 
     public const float SpreadCooldownSeconds = 1;
 
@@ -58,8 +59,6 @@ public sealed class SpreaderSystem : EntitySystem
         SubscribeLocalEvent<ActiveEdgeSpreaderComponent, GridUidChangedEvent>(OnGridChanged);
         SubscribeLocalEvent<ActiveEdgeSpreaderComponent, MetaFlagRemoveAttemptEvent>(OnMetaFlagRemoveAttempt);
         SetupPrototypes();
-
-        _query = GetEntityQuery<EdgeSpreaderComponent>();
     }
 
     private void OnPrototypeReload(PrototypesReloadedEventArgs obj)
@@ -71,7 +70,7 @@ public sealed class SpreaderSystem : EntitySystem
     private void SetupPrototypes()
     {
         _prototypeUpdates = [];
-        foreach (var proto in _prototype.EnumeratePrototypes<EdgeSpreaderPrototype>())
+        foreach (var proto in ProtoMan.EnumeratePrototypes<EdgeSpreaderPrototype>())
         {
             _prototypeUpdates.Add(proto.ID, proto.UpdatesPerSecond);
         }
@@ -177,7 +176,7 @@ public sealed class SpreaderSystem : EntitySystem
                     continue;
                 }
 
-                if (!_query.TryGetComponent(spreaderUid, out var spreader))
+                if (!_edgeSpreaderQuery.TryGetComponent(spreaderUid, out var spreader))
                 {
                     RemComp<ActiveEdgeSpreaderComponent>(spreaderUid);
                     continue;
@@ -221,39 +220,41 @@ public sealed class SpreaderSystem : EntitySystem
     {
         freeTiles = [];
         neighbors = [];
-        if (!_prototype.Resolve(prototype, out var spreaderPrototype))
+        if (!ProtoMan.Resolve(prototype, out var spreaderPrototype))
             return;
 
         if (!TryComp<MapGridComponent>(comp.GridUid, out var grid))
             return;
 
         var tile = _map.TileIndicesFor(comp.GridUid.Value, grid, comp.Coordinates);
-        var spreaderQuery = GetEntityQuery<EdgeSpreaderComponent>();
-        var airtightQuery = GetEntityQuery<AirtightComponent>();
-        var dockQuery = GetEntityQuery<DockingComponent>();
-        var xformQuery = GetEntityQuery<TransformComponent>();
         var blockedAtmosDirs = AtmosDirection.Invalid;
 
         // Due to docking ports they may not necessarily be opposite directions.
         var neighborTiles = new ValueList<(EntityUid entity, MapGridComponent grid, Vector2i Indices, AtmosDirection OtherDir, AtmosDirection OurDir)>();
 
         // Check if anything on our own tile blocking that direction.
-        var ourEnts = _map.GetAnchoredEntitiesEnumerator(comp.GridUid.Value, grid, tile);
+        var ourEnts = _map.GetAnchoredEntities(comp.GridUid.Value, grid, tile);
 
         while (ourEnts.MoveNext(out var ent))
         {
             // Spread via docks in a special-case.
-            if (dockQuery.TryGetComponent(ent, out var dock) &&
+            if (_dockingQuery.TryGetComponent(ent, out var dock) &&
                 dock.Docked &&
-                xformQuery.TryGetComponent(ent, out var xform) &&
-                xformQuery.TryGetComponent(dock.DockedWith, out var dockedXform) &&
+                TryComp(ent, out TransformComponent? xform) &&
+                TryComp(dock.DockedWith, out TransformComponent? dockedXform) &&
                 TryComp<MapGridComponent>(dockedXform.GridUid, out var dockedGrid))
             {
-                neighborTiles.Add((dockedXform.GridUid.Value, dockedGrid, _map.CoordinatesToTile(dockedXform.GridUid.Value, dockedGrid, dockedXform.Coordinates), xform.LocalRotation.ToAtmosDirection(), dockedXform.LocalRotation.ToAtmosDirection()));
+                neighborTiles.Add((
+                    dockedXform.GridUid.Value, dockedGrid,
+                    _map.CoordinatesToTile(dockedXform.GridUid.Value,
+                        dockedGrid,
+                        dockedXform.Coordinates),
+                    xform.LocalRotation.ToAtmosDirection(),
+                    dockedXform.LocalRotation.ToAtmosDirection()));
             }
 
             // If we're on a blocked tile work out which directions we can go.
-            if (!airtightQuery.TryGetComponent(ent, out var airtight) || !airtight.AirBlocked ||
+            if (!_airtightQuery.TryGetComponent(ent, out var airtight) || !airtight.AirBlocked ||
                 _tag.HasTag(ent.Value, IgnoredTag))
             {
                 continue;
@@ -273,7 +274,7 @@ public sealed class SpreaderSystem : EntitySystem
         // Add the normal neighbors.
         for (var i = 0; i < 4; i++)
         {
-            var atmosDir = (AtmosDirection) (1 << i);
+            var atmosDir = (AtmosDirection)(1 << i);
             var neighborPos = tile.Offset(atmosDir);
             neighborTiles.Add((comp.GridUid.Value, grid, neighborPos, atmosDir, i.ToOppositeDir()));
         }
@@ -290,12 +291,12 @@ public sealed class SpreaderSystem : EntitySystem
             if (spreaderPrototype.PreventSpreadOnSpaced && _turf.IsSpace(tileRef))
                 continue;
 
-            var directionEnumerator = _map.GetAnchoredEntitiesEnumerator(neighborEnt, neighborGrid, neighborPos);
+            var directionEnumerator = _map.GetAnchoredEntities(neighborEnt, neighborGrid, neighborPos);
             var occupied = false;
 
             while (directionEnumerator.MoveNext(out var ent))
             {
-                if (!airtightQuery.TryGetComponent(ent, out var airtight) || !airtight.AirBlocked || _tag.HasTag(ent.Value, IgnoredTag))
+                if (!_airtightQuery.TryGetComponent(ent, out var airtight) || !airtight.AirBlocked || _tag.HasTag(ent.Value, IgnoredTag))
                 {
                     continue;
                 }
@@ -311,11 +312,11 @@ public sealed class SpreaderSystem : EntitySystem
                 continue;
 
             var hasNeighbor = false;
-            directionEnumerator = _map.GetAnchoredEntitiesEnumerator(neighborEnt, neighborGrid, neighborPos);
+            directionEnumerator = _map.GetAnchoredEntities(neighborEnt, neighborGrid, neighborPos);
 
             while (directionEnumerator.MoveNext(out var ent))
             {
-                if (!spreaderQuery.TryGetComponent(ent, out var spreader))
+                if (!_edgeSpreaderQuery.TryGetComponent(ent, out var spreader))
                     continue;
 
                 if (spreader.Id != prototype)
@@ -357,7 +358,7 @@ public sealed class SpreaderSystem : EntitySystem
             (gridUid, tile) = position.Value;
         }
 
-        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, gridComp, tile);
+        var anchored = _map.GetAnchoredEntities(gridUid, gridComp, tile);
         while (anchored.MoveNext(out var entity))
         {
             // Don't re-activate the terminating entity
@@ -366,22 +367,22 @@ public sealed class SpreaderSystem : EntitySystem
             DebugTools.Assert(Transform(entity.Value).Anchored);
 
             // Activate any edge spreaders that are non-terminating
-            if (_query.HasComponent(entity) && !TerminatingOrDeleted(entity))
+            if (_edgeSpreaderQuery.HasComponent(entity) && !TerminatingOrDeleted(entity))
                 EnsureComp<ActiveEdgeSpreaderComponent>(entity.Value);
         }
 
         for (var i = 0; i < Atmospherics.Directions; i++)
         {
-            var direction = (AtmosDirection) (1 << i);
+            var direction = (AtmosDirection)(1 << i);
             var adjacentTile = SharedMapSystem.GetDirection(tile, direction.ToDirection());
-            anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, gridComp, adjacentTile);
+            anchored = _map.GetAnchoredEntities(gridUid, gridComp, adjacentTile);
 
             while (anchored.MoveNext(out var entity))
             {
                 DebugTools.Assert(Transform(entity.Value).Anchored);
 
                 // Activate any edge spreaders that are non-terminating
-                if (_query.HasComponent(entity) && !TerminatingOrDeleted(entity))
+                if (_edgeSpreaderQuery.HasComponent(entity) && !TerminatingOrDeleted(entity))
                     EnsureComp<ActiveEdgeSpreaderComponent>(entity.Value);
             }
         }
@@ -389,9 +390,9 @@ public sealed class SpreaderSystem : EntitySystem
 
     public bool RequiresFloorToSpread(EntProtoId<EdgeSpreaderComponent> spreader)
     {
-        if (!_prototype.Index(spreader).TryGetComponent<EdgeSpreaderComponent>(out var spreaderComp, EntityManager.ComponentFactory))
+        if (!ProtoMan.Index(spreader).TryComp<EdgeSpreaderComponent>(out var spreaderComp, EntityManager.ComponentFactory))
             return false;
 
-        return _prototype.Index(spreaderComp.Id).PreventSpreadOnSpaced;
+        return ProtoMan.Index(spreaderComp.Id).PreventSpreadOnSpaced;
     }
 }

@@ -519,7 +519,11 @@
         orGroup: GiftPool
       - id: PlushieDiona
         orGroup: GiftPool
-      - id: PlushieArachind
+      - id: PlushieArachnid
+        orGroup: GiftPool
+      - id: PlushieSheep
+        orGroup: GiftPool
+      - id: PlushieSpaceSheep
         orGroup: GiftPool
       - id: PlushieSheep
         orGroup: GiftPool
@@ -610,6 +614,8 @@
       - id: MicrophoneInstrument
         orGroup: GiftPool
       - id: BassGuitarInstrument
+        orGroup: GiftPool
+      - id: FretlessBassGuitarInstrument
         orGroup: GiftPool
       - id: OcarinaInstrument
         orGroup: GiftPool

@@ -13,14 +13,14 @@ public sealed partial class SuperBonkComponent : Component
     /// <summary>
     /// All of the tables the target will be bonked on.
     /// </summary>
-    [DataField]
+    // TODO: Probably needs to be split into two fields
     public List<EntityUid>.Enumerator Tables;
 
     /// <summary>
     /// How often should we bonk.
     /// </summary>
     [DataField]
-    public TimeSpan BonkCooldown = TimeSpan.FromMilliseconds(100);
+    public TimeSpan BonkCooldown = TimeSpan.FromMilliseconds(1500);
 
     /// <summary>
     /// Next time when we will bonk.

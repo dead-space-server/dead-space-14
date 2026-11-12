@@ -1,22 +1,18 @@
 using System.Linq;
 using Content.Server.Administration;
 using Content.Server.Administration.Managers;
-using Content.Server.DeviceNetwork;
 using Content.Server.DeviceNetwork.Components;
-using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Medical.SuitSensors;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Station.Systems;
 using Content.Shared.Administration;
 using Content.Shared.Database;
-using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.Medical.CrewMonitoring;
-using Content.Shared.Medical.SuitSensor;
 using Content.Shared.Medical.SuitSensors;
 using Content.Shared.Pinpointer;
-using Content.Shared.Popups;
 using Content.Shared.PowerCell;
+using Content.Shared.Popups;
 using Content.Shared.PowerCell.Components;
 using Content.Shared.Silicons.StationAi;
 using Content.Shared.Verbs;
@@ -29,8 +25,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Medical.CrewMonitoring;
 
-public sealed class CrewMonitoringConsoleSystem : EntitySystem
+public sealed partial class CrewMonitoringConsoleSystem : EntitySystem
 {
+<<<<<<< ours
     // DS14-start
     private static readonly CrewMonitoringConsolePingMode[] SelectablePingModes =
     [
@@ -56,12 +53,18 @@ public sealed class CrewMonitoringConsoleSystem : EntitySystem
 
     private float _adminUpdateAccumulator;
     // DS14-end
+||||||| base
+    [Dependency] private readonly PowerCellSystem _cell = default!;
+    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+=======
+    [Dependency] private PowerCellSystem _cell = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<CrewMonitoringConsoleComponent, ComponentRemove>(OnRemove);
-        SubscribeLocalEvent<CrewMonitoringConsoleComponent, DeviceNetworkPacketEvent>(OnPacketReceived);
         SubscribeLocalEvent<CrewMonitoringConsoleComponent, BoundUIOpenedEvent>(OnUIOpened);
 
         // DS14-start
@@ -126,6 +129,7 @@ public sealed class CrewMonitoringConsoleSystem : EntitySystem
         component.ConnectedSensors.Clear();
     }
 
+<<<<<<< ours
     // DS14-start
     private void TryPlayPing(Entity<CrewMonitoringConsoleComponent> ent, CrewMonitoringConsolePingMode pingMode)
     {
@@ -177,7 +181,14 @@ public sealed class CrewMonitoringConsoleSystem : EntitySystem
     // DS14-end
 
     private void OnPacketReceived(EntityUid uid, CrewMonitoringConsoleComponent component, DeviceNetworkPacketEvent args)
+||||||| base
+    private void OnPacketReceived(EntityUid uid, CrewMonitoringConsoleComponent component, DeviceNetworkPacketEvent args)
+=======
+    [SubscribeLocalEvent]
+    private void OnSuitSensorBroadcast(Entity<CrewMonitoringConsoleComponent> ent, ref DeviceNetworkPacketEvent<BroadcastSuitSensorStatePayload> args)
+>>>>>>> theirs
     {
+<<<<<<< ours
         // DS14-start
         // The admin monitor always uses fresh sensor data, including when a server is present.
         if (component.AdminMonitor)
@@ -203,6 +214,25 @@ public sealed class CrewMonitoringConsoleSystem : EntitySystem
 
         component.ConnectedSensors = sensorStatus;
         UpdateUserInterface(uid, component);
+||||||| base
+        var payload = args.Data;
+
+        // Check command
+        if (!payload.TryGetValue(DeviceNetworkConstants.Command, out string? command))
+            return;
+
+        if (command != DeviceNetworkConstants.CmdUpdatedState)
+            return;
+
+        if (!payload.TryGetValue(SuitSensorConstants.NET_STATUS_COLLECTION, out Dictionary<string, SuitSensorStatus>? sensorStatus))
+            return;
+
+        component.ConnectedSensors = sensorStatus;
+        UpdateUserInterface(uid, component);
+=======
+        ent.Comp.ConnectedSensors = args.Data.SensorStatus;
+        UpdateUserInterface(ent, ent.Comp);
+>>>>>>> theirs
     }
 
     private void OnUIOpened(EntityUid uid, CrewMonitoringConsoleComponent component, BoundUIOpenedEvent args)

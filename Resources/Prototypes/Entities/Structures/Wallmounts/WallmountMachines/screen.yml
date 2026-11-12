@@ -1,10 +1,13 @@
 - type: entity
-  parent: BaseWallmountMachine
+  parent: [ BaseWallmountMachine, StructureHealthMachineWeak ]
   id: Screen
   name: screen
   description: Displays text or time.
   components:
   - type: Rotatable
+  - type: TextScreenTimerVisuals
+    timerRow: 1
+    showCentiseconds: false # Distracting when too common.
   - type: TextScreenVisuals
     # DS14-start: align the new text renderer with the restored screen geometry.
     textOffset: 0,3
@@ -14,19 +17,20 @@
     rowLength: 5 # DS14 - match the width of the restored screen sprite.
     scrollEnabled: true
   - type: Sprite
+    noRot: true
     drawdepth: WallMountedItems
     sprite: Structures/Wallmounts/screen.rsi
     state: screen
     noRot: true # DS14 - the restored wall-mounted screen sprite has a fixed orientation.
   - type: Appearance
+  - type: Damageable
+    damageModifierSet: GlassMod
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 200
+        damage: 100
       behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
       - !type:PlaySoundBehavior
         sound:
           collection: MetalGlassBreak

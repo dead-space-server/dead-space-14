@@ -18,15 +18,11 @@
       time: 15h
     - !type:DepartmentTimeRequirement
       department: Command
-      time: 10h
-    - !type:OverallPlaytimeRequirement
-      time: 60h
-    - !type:AgeRequirement
-      requiredAge: 26
+      time: 2.5h
   startingGear: HoPGear
   icon: "JobIconHeadOfPersonnel"
   supervisors: job-supervisors-captain
-  canBeAntag: false
+  guides: [ Command ] # TODO: should have a more specific guidebook page instead of using the department itself
   access:
   - Command
   - HeadOfPersonnel

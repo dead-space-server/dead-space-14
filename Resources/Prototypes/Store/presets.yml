@@ -16,7 +16,7 @@
     - UplinkWearables
     - UplinkJob
     - UplinkPointless
-    - UplinkPresets
+    - UplinkObjective
     currencyWhitelist:
     - Telecrystal
     balance:
@@ -53,3 +53,11 @@
     - ChangelingStoreUtility
     currencyWhitelist:
     - ChangelingDNA
+    inputValidation: false
+
+- type: entity
+  parent: StorePresetUplink
+  id: StorePresetRemoteUplink
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RingerAccessUplink

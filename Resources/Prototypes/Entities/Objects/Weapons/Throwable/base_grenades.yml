@@ -1,6 +1,6 @@
-- type: entity # Starts fuse after taking 10 damage.
-  parent: BaseItem
+- type: entity
   abstract: true
+  parent: BaseItem
   id: GrenadeBase
   components:
   - type: Sprite
@@ -15,6 +15,7 @@
     slots:
     - Belt
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Appearance
   - type: AnimationPlayer
@@ -44,8 +45,8 @@
   #DS14-End
 
 - type: entity # Starts fuse after taking 10 damage.
-  parent: GrenadeBase
   abstract: true
+  parent: GrenadeBase
   id: TimerGrenadeBase
   components:
   - type: TriggerOnUse
@@ -65,9 +66,9 @@
           Primed: { state: primed }
           Unprimed: { state: icon }
 
-- type: entity # Starts fuse after taking 10 damage.
-  parent: GrenadeBase
+- type: entity
   abstract: true
+  parent: [ GrenadeBase, VolatileGrenadeBase ]
   id: ImpactGrenadeBase
   components:
   - type: TriggerOnLand
@@ -75,28 +76,13 @@
   - type: TriggerOnCollide
     fixtureID: fix1
     maxTriggers: 1
-  - type: Destructible
-    thresholds:
-    - trigger: # immediately explode
-        !type:DamageTrigger
-        damage: 45
-      behaviors:
-      - !type:TriggerBehavior
-        keyOut: timer
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
 
-- type: entity # Starts fuse after taking 10 damage, instantly detonates/activates after taking 45 damage.
+- type: entity # Instantly detonates/activates after taking 45 damage.
   abstract: true
   id: VolatileGrenadeBase
   components:
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 10
-      behaviors:
-      - !type:TimerStartBehavior
     - trigger: # immediately explode
         !type:DamageTrigger
         damage: 45
@@ -106,17 +92,12 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
 
-- type: entity # Starts fuse after taking 10 damage, is destroyed without activating/detonating after taking 45 damage.
+- type: entity # Is destroyed without activating/detonating after taking 45 damage.
   abstract: true
   id: FragileGrenadeBase
   components:
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 10
-      behaviors:
-      - !type:TimerStartBehavior
     - trigger: # Disappear
         !type:DamageTrigger
         damage: 45

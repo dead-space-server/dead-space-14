@@ -7,6 +7,7 @@ using Content.Server.Shuttles.Systems;
 using Content.Shared.Backmen.Blob.Components;
 using Content.Shared.Conveyor;
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.NPC;
 using Content.Shared.Shuttles.Components;
@@ -18,26 +19,27 @@ using DroneConsoleComponent = Content.Server.Shuttles.DroneConsoleComponent;
 
 namespace Content.Server.Physics.Controllers;
 
-public sealed class MoverController : SharedMoverController
+public sealed partial class MoverController : SharedMoverController
 {
     private static readonly Gauge ActiveMoverGauge = Metrics.CreateGauge(
         "physics_active_mover_count",
         "Amount of ActiveInputMovers being processed by MoverController");
 
-    [Dependency] private readonly ThrusterSystem _thruster = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ShuttleConsoleSystem _shuttleConsole = default!; //DS-14
+    [Dependency] private ThrusterSystem _thruster = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private ShuttleConsoleSystem _shuttleConsole = default!; //DS-14
+
+    [Dependency] private EntityQuery<ActiveInputMoverComponent> _activeQuery = default!;
+    [Dependency] private EntityQuery<DroneConsoleComponent> _droneQuery = default!;
+    [Dependency] private EntityQuery<ShuttleComponent> _shuttleQuery = default!;
+
+    [Dependency] private EntityQuery<ActiveNPCComponent> _activeNpcQuery = default!;
+    [Dependency] private EntityQuery<ActorComponent> _actorQuery = default!;
+    [Dependency] private EntityQuery<ConveyedComponent> _conveyedQuery = default!;
+    [Dependency] private EntityQuery<HTNComponent> _htnQuery = default!;
+    [Dependency] private EntityQuery<ZombieBlobComponent> _zombieBlobQuery = default!;
 
     private Dictionary<EntityUid, (ShuttleComponent, List<(EntityUid, PilotComponent, InputMoverComponent, TransformComponent)>)> _shuttlePilots = new();
-
-    private EntityQuery<ActiveInputMoverComponent> _activeQuery;
-    private EntityQuery<ActiveNPCComponent> _activeNpcQuery;
-    private EntityQuery<ActorComponent> _actorQuery;
-    private EntityQuery<ConveyedComponent> _conveyedQuery;
-    private EntityQuery<DroneConsoleComponent> _droneQuery;
-    private EntityQuery<HTNComponent> _htnQuery;
-    private EntityQuery<ShuttleComponent> _shuttleQuery;
-    private EntityQuery<ZombieBlobComponent> _zombieBlobQuery;
 
     // Not needed for persistence; just used to save an alloc
     private readonly HashSet<EntityUid> _seenMovers = [];
@@ -58,15 +60,6 @@ public sealed class MoverController : SharedMoverController
         SubscribeLocalEvent<RelayInputMoverComponent, PlayerDetachedEvent>(OnRelayPlayerDetached);
         SubscribeLocalEvent<InputMoverComponent, PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<InputMoverComponent, PlayerDetachedEvent>(OnPlayerDetached);
-
-        _activeQuery = GetEntityQuery<ActiveInputMoverComponent>();
-        _activeNpcQuery = GetEntityQuery<ActiveNPCComponent>();
-        _actorQuery = GetEntityQuery<ActorComponent>();
-        _conveyedQuery = GetEntityQuery<ConveyedComponent>();
-        _droneQuery = GetEntityQuery<DroneConsoleComponent>();
-        _htnQuery = GetEntityQuery<HTNComponent>();
-        _shuttleQuery = GetEntityQuery<ShuttleComponent>();
-        _zombieBlobQuery = GetEntityQuery<ZombieBlobComponent>();
     }
 
     private void OnEntityPaused(Entity<ActiveInputMoverComponent> ent, ref EntityPausedEvent args)
@@ -708,12 +701,12 @@ public sealed class MoverController : SharedMoverController
                     if (!torque.Equals(0f))
                     {
                         PhysicsSystem.ApplyTorque(shuttleUid, torque, body: body);
-                        _thruster.SetAngularThrust(shuttle, true);
+                        _thruster.SetAngularThrustVisualState(shuttle, true);
                     }
                 }
                 else
                 {
-                    _thruster.SetAngularThrust(shuttle, false);
+                    _thruster.SetAngularThrustVisualState(shuttle, false);
                 }
             }
 
@@ -808,7 +801,7 @@ public sealed class MoverController : SharedMoverController
                 PhysicsSystem.SetSleepingAllowed(shuttleUid, body, true);
 
                 if (brakeInput <= 0f)
-                    _thruster.SetAngularThrust(shuttle, false);
+                    _thruster.SetAngularThrustVisualState(shuttle, false);
             }
             else
             {
@@ -826,7 +819,7 @@ public sealed class MoverController : SharedMoverController
                 if (!torque.Equals(0f))
                 {
                     PhysicsSystem.ApplyTorque(shuttleUid, torque, body: body);
-                    _thruster.SetAngularThrust(shuttle, true);
+                    _thruster.SetAngularThrustVisualState(shuttle, true);
                 }
             }
         }

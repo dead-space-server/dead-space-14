@@ -102,6 +102,7 @@
 - Flags: ADMINCHAT
   Commands:
     - achatwindow
+<<<<<<< ours
 # DS14-start
 - Flags: ADMIN
   Commands:
@@ -113,3 +114,10 @@
   Commands:
     - gamepresetui
 # DS14-end
+||||||| base
+=======
+
+- Flags: ADMIN
+  Commands:
+    - admin_overlay
+>>>>>>> theirs

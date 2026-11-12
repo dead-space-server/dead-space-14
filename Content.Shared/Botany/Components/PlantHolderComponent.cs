@@ -1,5 +1,5 @@
-using Content.Shared.Botany.Systems;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.Botany.Components;
@@ -8,7 +8,6 @@ namespace Content.Shared.Botany.Components;
 /// Runtime plant lifecycle data. This component is attached to the plant entity.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true, raiseAfterAutoHandleState: true), AutoGenerateComponentPause]
-[Access(typeof(PlantHolderSystem), typeof(PlantSystem), typeof(PlantHarvestSystem))] // DS14
 public sealed partial class PlantHolderComponent : Component
 {
     /// <summary>
@@ -39,10 +38,11 @@ public sealed partial class PlantHolderComponent : Component
     public int MaxYieldMod = 2;
 
     /// <summary>
-    /// Current mutation level.
+    /// Current mutation level buildup per mutation table.
+    /// Levels are consumed (reset to zero) each time the plant ages and processes its mutations.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float MutationLevel;
+    public Dictionary<ProtoId<RandomPlantMutationListPrototype>, float> MutationLevels = [];
 
     [DataField, AutoNetworkedField]
     public float MaxMutationLevel = 25f;
@@ -62,19 +62,17 @@ public sealed partial class PlantHolderComponent : Component
     [DataField, AutoNetworkedField]
     public float Health = 100f;
 
-    // DS14-start - harvest timing is lifecycle state and must follow the holder through species changes.
     /// <summary>
     /// Whether the plant is currently ready for harvest.
     /// </summary>
     [ViewVariables, AutoNetworkedField]
-    public bool ReadyForHarvest;
+    public bool ReadyForHarvest = false;
 
     /// <summary>
     /// The age of the plant when last harvested.
     /// </summary>
     [ViewVariables, AutoNetworkedField]
-    public int LastHarvest;
-    // DS14-end
+    public int LastHarvest = 0;
 
     /// <summary>
     /// Game time for the next plant reagent update.

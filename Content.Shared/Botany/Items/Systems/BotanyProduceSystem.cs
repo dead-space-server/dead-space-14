@@ -16,30 +16,18 @@ namespace Content.Shared.Botany.Items.Systems;
 /// </summary>
 public sealed partial class BotanyProduceSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions and query initialization.
-    public override void Initialize()
-    {
-        base.Initialize();
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
 
-        SubscribeLocalEvent<ProduceComponent, AfterInteractEvent>(OnAfterInteract);
-        SubscribeLocalEvent<PlantTrayComponent, CompostingProduceAttemptEvent>(OnCompostingProduceAttempt);
-        _trayQuery = GetEntityQuery<PlantTrayComponent>();
-    }
-    // DS14-end
+    [Dependency] private EntityQuery<PlantTrayComponent> _trayQuery;
 
-    // DS14-start
-    private EntityQuery<PlantTrayComponent> _trayQuery;
-
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    // DS14-end
-
+    [SubscribeLocalEvent]
     private void OnAfterInteract(Entity<ProduceComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Target == null || args.Handled || !args.CanReach || !_trayQuery.HasComp(args.Target)) // DS14
+        if (args.Target == null || args.Handled || !args.CanReach || !_trayQuery.HasComp(args.Target))
             return;
 
         var ev = new CompostingProduceAttemptEvent(ent, args.User);
@@ -48,6 +36,18 @@ public sealed partial class BotanyProduceSystem : EntitySystem
         args.Handled = true;
     }
 
+    [SubscribeLocalEvent]
+    private void OnPlantAnalyzerAttempt(Entity<ProduceComponent> ent, ref PlantAnalyzerAttemptEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.PlantData = ent.Comp.PlantData;
+        args.PlantProtoId = ent.Comp.PlantProtoId;
+        args.Handled = true;
+    }
+
+    [SubscribeLocalEvent]
     private void OnCompostingProduceAttempt(Entity<PlantTrayComponent> ent, ref CompostingProduceAttemptEvent args)
     {
         if (args.Cancelled)
@@ -86,6 +86,6 @@ public sealed partial class BotanyProduceSystem : EntitySystem
             _plantTray.AdjustNutrient(ent.AsNullable(), nutrientBonus);
         }
 
-        PredictedQueueDel(args.Produce.Owner);
+        QueueDel(args.Produce.Owner);
     }
 }

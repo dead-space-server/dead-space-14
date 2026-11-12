@@ -373,7 +373,7 @@
 #    - id: HoloprojectorSecurity
     - id: RubberStampHos
     - id: BoxHoSCircuitboards
-#    - id: WeaponDisabler
+    - id: WeaponDisabler
     - id: WantedListCartridge
 #    - id: DrinkHosFlask
     - id: ClothingMaskGasSwat # DS14

@@ -11,17 +11,36 @@ using Robust.Shared.GameStates;
 
 namespace Content.Client.VendingMachines;
 
-public sealed class VendingMachineSystem : SharedVendingMachineSystem
+public sealed partial class VendingMachineSystem : SharedVendingMachineSystem
 {
+<<<<<<< ours
     [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
     [Dependency] private readonly SharedPointLightSystem _light = default!;
     [Dependency] private readonly SharedPowerReceiverSystem _receiver = default!;
     [Dependency] private readonly SpriteSystem _sprite = default!;
+||||||| base
+    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+=======
+    [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private SharedPowerReceiverSystem _receiver = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+>>>>>>> theirs
 
-    public override void Initialize()
+    protected override void UpdateUI(Entity<VendingMachineComponent?> entity)
     {
-        base.Initialize();
+        if (!Resolve(entity, ref entity.Comp))
+            return;
 
+        if (TryGetOpenUi(entity.Owner, out var bui))
+        {
+            bui.UpdateAmounts();
+        }
+    }
+
+<<<<<<< ours
         // DS14 start - old engine compatibility
         SubscribeLocalEvent<VendingMachineComponent, ComponentHandleState>(OnVendingHandleState);
         SubscribeLocalEvent<VendingMachineEjectComponent, AfterAutoHandleStateEvent>(OnEjectHandleState);
@@ -45,8 +64,18 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
     protected override void OnEjectStateChanged(Entity<VendingMachineComponent?> entity, VendingMachineEjectComponent? ejectComponent = null)
     {
         TryUpdateVisualState(entity, ejectComponent);
+||||||| base
+        SubscribeLocalEvent<VendingMachineComponent, AppearanceChangeEvent>(OnAppearanceChange);
+        SubscribeLocalEvent<VendingMachineComponent, AnimationCompletedEvent>(OnAnimationCompleted);
+        SubscribeLocalEvent<VendingMachineComponent, ComponentHandleState>(OnVendingHandleState);
+=======
+    protected override void OnEjectStateChanged(Entity<VendingMachineComponent?> entity, VendingMachineEjectComponent? ejectComponent = null)
+    {
+        TryUpdateVisualState(entity, ejectComponent);
+>>>>>>> theirs
     }
 
+    [SubscribeLocalEvent]
     private void OnVendingHandleState(Entity<VendingMachineComponent> entity, ref ComponentHandleState args)
     {
         if (args.Current is not VendingMachineComponentState state)
@@ -81,16 +110,19 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
             bui.UpdateAmounts();
     }
 
+    [SubscribeLocalEvent]
     private void OnEjectHandleState(Entity<VendingMachineEjectComponent> entity, ref AfterAutoHandleStateEvent args)
     {
         TryUpdateVisualState(entity.Owner);
     }
 
+    [SubscribeLocalEvent]
     private void OnPowerChanged(Entity<VendingMachineComponent> entity, ref PowerChangedEvent args)
     {
         TryUpdateVisualState((entity.Owner, entity.Comp));
     }
 
+    [SubscribeLocalEvent]
     private void OnAnimationCompleted(EntityUid uid, VendingMachineVisualsComponent visuals, AnimationCompletedEvent args)
     {
         if (!TryComp<VendingMachineComponent>(uid, out var vend) ||
@@ -102,6 +134,7 @@ public sealed class VendingMachineSystem : SharedVendingMachineSystem
         UpdateAppearance(uid, visualState, visuals, eject, sprite);
     }
 
+    [SubscribeLocalEvent]
     private void OnVisualsStartup(Entity<VendingMachineVisualsComponent> entity, ref ComponentStartup args)
     {
         TryUpdateVisualState(entity.Owner);

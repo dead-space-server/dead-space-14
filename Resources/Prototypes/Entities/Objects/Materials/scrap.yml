@@ -12,8 +12,9 @@
     sprite: Objects/Materials/Scrap/generic.rsi
     size: Normal
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: FlimsyMetallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -48,8 +49,9 @@
   components:
   - type: InteractionOutline
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: FlimsyMetallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -185,7 +187,7 @@
     size: Large
     shape:
     - 0,0,4,4 # 5x5
-    heldPrefix: "airlock"
+    heldPrefix: "airlock-1"
   - type: MultiHandedItem
   - type: PhysicalComposition
     materialComposition:
@@ -204,6 +206,7 @@
     size: Normal
     shape:
     - 0,0,3,0
+    heldPrefix: "airlock-3"
   - type: PhysicalComposition
     materialComposition:
       Steel: 200 # 2 sheets
@@ -218,6 +221,8 @@
   - type: Sprite
     layers:
     - state: junk-bucket
+  - type: Item
+    heldPrefix: "bucket"
   - type: PhysicalComposition
     materialComposition:
       Plastic: 300 # 3 sheets
@@ -231,6 +236,8 @@
   - type: Sprite
     layers:
     - state: junk-camera
+  - type: Item
+    heldPrefix: "camera"
   - type: PhysicalComposition
     materialComposition:
       Steel: 500 # 5 sheets
@@ -245,6 +252,8 @@
   - type: Sprite
     layers:
     - state: junk-canister-1
+  - type: Item
+    heldPrefix: "canister-1"
   - type: PhysicalComposition
     materialComposition:
       Steel: 300 # 3 sheets
@@ -260,6 +269,7 @@
     - state: junk-canister-2
   - type: Item
     size: Small
+    heldPrefix: "canister-2"
   - type: PhysicalComposition
     materialComposition:
       Steel: 200 # 2 sheets
@@ -294,6 +304,8 @@
     - state: junk-fax
   - type: Item
     size: Huge
+    heldPrefix: "fax"
+  - type: MultiHandedItem
   - type: PhysicalComposition
     materialComposition:
       Plastic: 800 # 8 sheets
@@ -308,6 +320,8 @@
   - type: Sprite
     layers:
     - state: junk-fireextinguisher
+  - type: Item
+    heldPrefix: "extinguisher"
   - type: PhysicalComposition
     materialComposition:
       Steel: 600 # 6 sheets
@@ -325,7 +339,7 @@
     size: Large
     shape:
     - 0,0,4,4 # 5x5
-    heldPrefix: firelock-1
+    heldPrefix: "firelock-1"
   - type: MultiHandedItem
   - type: PhysicalComposition
     materialComposition:
@@ -344,7 +358,7 @@
     size: Large
     shape:
     - 0,0,4,4 # 5x5
-    heldPrefix: firelock-2
+    heldPrefix: "firelock-2"
   - type: MultiHandedItem
   - type: PhysicalComposition
     materialComposition:
@@ -360,6 +374,7 @@
     - state: junk-firelock-3
   - type: Item
     size: Large
+    heldPrefix: "firelock-3"
   - type: PhysicalComposition
     materialComposition:
       Steel: 700 # 7 sheets
@@ -381,6 +396,7 @@
         junk-intercom-2: ""
         junk-intercom-3: ""
   - type: Item
+    heldPrefix: "intercom"
   - type: PhysicalComposition
     materialComposition:
       Steel: 400 # 4 sheets
@@ -397,7 +413,7 @@
     - state: junk-jetpack
   - type: Item
     size: Huge
-    heldPrefix: jetpack
+    heldPrefix: "jetpack"
   - type: PhysicalComposition
     materialComposition:
       Steel: 1000 # 10 sheets
@@ -420,6 +436,7 @@
         junk-medkit-2: ""
   - type: Item
     size: Large
+    heldPrefix: "medkit"
   - type: PhysicalComposition
     materialComposition:
       Plastic: 500 # 5 sheets
@@ -435,9 +452,26 @@
     - state: junk-mop-bucket
   - type: Item
     size: Huge
+    heldPrefix: "mop"
   - type: PhysicalComposition
     materialComposition:
       Plastic: 1500 # 15 sheets
+
+- type: entity
+  parent: BaseScrap
+  id: ScrapTarget
+  name: bloodied target
+  description: Seems like something must have gotten in the way of its purpose.
+  components:
+  - type: Sprite
+    layers:
+    - state: junk-target
+  - type: Item
+    size: Huge
+    heldPrefix: "target"
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 1000 # 10 sheets
 
 - type: entity
   parent: BaseScrap
@@ -450,6 +484,7 @@
     - state: junk-pai
   - type: Item
     size: Small
+    heldPrefix: "pai"
   - type: PhysicalComposition
     materialComposition:
       Steel: 300 # 3 sheets
@@ -466,6 +501,7 @@
     - state: junk-pai-gold
   - type: Item
     size: Small
+    heldPrefix: "gold"
   - type: PhysicalComposition
     materialComposition:
       Gold: 100 # 1 sheet
@@ -492,6 +528,7 @@
         tube-y: ""
   - type: Item
     size: Small
+    heldPrefix: "tube"
   - type: PhysicalComposition
     materialComposition:
       Glass: 500 # 5 sheets
@@ -613,6 +650,9 @@
     sprite: Objects/Materials/Scrap/generator.rsi
     layers:
       - state: uranium_generator_fuel_tank
+  - type: Item
+    sprite: Objects/Materials/Scrap/generator.rsi
+    heldPrefix: "fuel"
   - type: PhysicalComposition
     materialComposition:
       Steel: 200 # 2 sheets

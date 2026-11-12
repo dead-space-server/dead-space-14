@@ -7,8 +7,6 @@ using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind;
 using Content.Server.Power.Components;
 using Content.Server.Roles;
-using Content.Server.Spawners.Components;
-using Content.Server.Spawners.EntitySystems;
 using Content.Server.Station.Systems;
 using Content.Shared.Alert;
 using Content.Shared.Chat.Prototypes;
@@ -16,6 +14,7 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
+using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Mobs;
@@ -27,6 +26,8 @@ using Content.Shared.Power.Components;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Roles;
 using Content.Shared.Silicons.StationAi;
+using Content.Shared.Spawners.Components;
+using Content.Shared.Spawners.EntitySystems;
 using Content.Shared.Speech.Components;
 using Content.Shared.StationAi;
 using Content.Shared.Turrets;
@@ -41,8 +42,9 @@ using static Content.Server.Chat.Systems.ChatSystem;
 
 namespace Content.Server.Silicons.StationAi;
 
-public sealed class StationAiSystem : SharedStationAiSystem
+public sealed partial class StationAiSystem : SharedStationAiSystem
 {
+<<<<<<< ours
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedTransformSystem _xforms = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
@@ -63,6 +65,44 @@ public sealed class StationAiSystem : SharedStationAiSystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly StationAiVisionSystem _vision = default!; // DS14
+||||||| base
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedTransformSystem _xforms = default!;
+    [Dependency] private readonly ContainerSystem _container = default!;
+    [Dependency] private readonly MindSystem _mind = default!;
+    [Dependency] private readonly RoleSystem _roles = default!;
+    [Dependency] private readonly ItemSlotsSystem _slots = default!;
+    [Dependency] private readonly GhostSystem _ghost = default!;
+    [Dependency] private readonly ToggleableGhostRoleSystem _ghostrole = default!;
+    [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private readonly DestructibleSystem _destructible = default!;
+    [Dependency] private readonly SharedBatterySystem _battery = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedPopupSystem _popups = default!;
+    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly StationJobsSystem _stationJobs = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+=======
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _xforms = default!;
+    [Dependency] private ContainerSystem _container = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private RoleSystem _roles = default!;
+    [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private ToggleableGhostRoleSystem _ghostrole = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private DestructibleSystem _destructible = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedPopupSystem _popups = default!;
+    [Dependency] private ServerStationSystem _station = default!;
+    [Dependency] private ServerStationJobsSystem _stationJobs = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+>>>>>>> theirs
 
     private readonly HashSet<Entity<StationAiCoreComponent>> _stationAiCores = new();
 
@@ -70,6 +110,7 @@ public sealed class StationAiSystem : SharedStationAiSystem
     private readonly ProtoId<ChatNotificationPrototype> _aiWireSnippedChatNotificationPrototype = "AiWireSnipped";
     private readonly ProtoId<ChatNotificationPrototype> _aiLosingPowerChatNotificationPrototype = "AiLosingPower";
     private readonly ProtoId<ChatNotificationPrototype> _aiCriticalPowerChatNotificationPrototype = "AiCriticalPower";
+    private readonly ProtoId<ChatNotificationPrototype> _aiTakingDamageChatNotificationPrototype = "AiTakingDamage";
 
     private readonly ProtoId<JobPrototype> _stationAiJob = "StationAi";
     private readonly EntProtoId _stationAiBrain = "StationAiBrain";
@@ -123,7 +164,7 @@ public sealed class StationAiSystem : SharedStationAiSystem
                 // Set the new AI brain to the 'rebooting' state
                 if (TryComp<StationAiCustomizationComponent>(aiBrain, out var customization))
                     SetStationAiState((aiBrain, customization), StationAiState.Rebooting);
-                
+
             }
 
             // Delete the new AI brain if it cannot be inserted into the core
@@ -238,7 +279,7 @@ public sealed class StationAiSystem : SharedStationAiSystem
 
     private void OnDamageChanged(Entity<StationAiCoreComponent> entity, ref DamageChangedEvent args)
     {
-        UpdateCoreIntegrityAlert(entity);
+        UpdateCoreIntegrityAlert(entity, args.DamageIncreased);
         UpdateDamagedAccent(entity);
     }
 
@@ -255,7 +296,7 @@ public sealed class StationAiSystem : SharedStationAiSystem
             accent.OverrideChargeLevel = _battery.GetChargeLevel((ent.Owner, battery));
 
         if (TryComp<DamageableComponent>(ent, out var damageable))
-            accent.OverrideTotalDamage = damageable.TotalDamage;
+            accent.OverrideTotalDamage = _damageable.GetTotalDamage((ent, damageable));
 
         if (TryComp<DestructibleComponent>(ent, out var destructible))
             accent.DamageAtMaxCorruption = _destructible.DestroyedAt(ent, destructible);
@@ -271,7 +312,7 @@ public sealed class StationAiSystem : SharedStationAiSystem
         if (!TryGetHeld((ent.Owner, ent.Comp), out var held))
             return;
 
-        if (!_proto.TryIndex(_batteryAlert, out var proto))
+        if (!ProtoMan.TryIndex(_batteryAlert, out var proto))
             return;
 
         var chargePercent = _battery.GetChargeLevel((ent.Owner, battery));
@@ -288,7 +329,7 @@ public sealed class StationAiSystem : SharedStationAiSystem
         }
     }
 
-    private void UpdateCoreIntegrityAlert(Entity<StationAiCoreComponent> ent)
+    private void UpdateCoreIntegrityAlert(Entity<StationAiCoreComponent> ent, bool damageIncreased = false)
     {
         if (!TryComp<DamageableComponent>(ent, out var damageable))
             return;
@@ -299,13 +340,19 @@ public sealed class StationAiSystem : SharedStationAiSystem
         if (!TryGetHeld((ent.Owner, ent.Comp), out var held))
             return;
 
-        if (!_proto.TryIndex(_damageAlert, out var proto))
+        if (!ProtoMan.TryIndex(_damageAlert, out var proto))
             return;
 
-        var damagePercent = damageable.TotalDamage / _destructible.DestroyedAt(ent, destructible);
+        var damagePercent = _damageable.GetTotalDamage((ent, damageable)) / _destructible.DestroyedAt(ent, destructible);
         var damageLevel = Math.Round(damagePercent.Float() * proto.MaxSeverity);
 
         _alerts.ShowAlert(held.Value, _damageAlert, (short)Math.Clamp(damageLevel, 0, proto.MaxSeverity));
+
+        if (damageIncreased)
+        {
+            var ev = new ChatNotificationEvent(_aiTakingDamageChatNotificationPrototype, ent);
+            RaiseLocalEvent(held.Value, ref ev);
+        }
     }
 
     private void OnDoAfterAttempt(Entity<StationAiCoreComponent> ent, ref DoAfterAttemptEvent<IntellicardDoAfterEvent> args)
@@ -358,9 +405,26 @@ public sealed class StationAiSystem : SharedStationAiSystem
 
     private void OnExpandICChatRecipients(ExpandICChatRecipientsEvent ev)
     {
+<<<<<<< ours
         // Let the AI hear speech around the entity it is currently viewing from.
         var query = EntityQueryEnumerator<StationAiCoreComponent>();
         while (query.MoveNext(out var ent, out var entStationAiCore))
+||||||| base
+        var xformQuery = GetEntityQuery<TransformComponent>();
+        var sourceXform = Transform(ev.Source);
+        var sourcePos = _xforms.GetWorldPosition(sourceXform, xformQuery);
+
+        // This function ensures that chat popups appear on camera views that have connected microphones.
+        var query = EntityQueryEnumerator<StationAiCoreComponent, TransformComponent>();
+        while (query.MoveNext(out var ent, out var entStationAiCore, out var entXform))
+=======
+        var sourceXform = Transform(ev.Source);
+        var sourcePos = _xforms.GetWorldPosition(sourceXform);
+
+        // This function ensures that chat popups appear on camera views that have connected microphones.
+        var query = EntityQueryEnumerator<StationAiCoreComponent, TransformComponent>();
+        while (query.MoveNext(out var ent, out var entStationAiCore, out var entXform))
+>>>>>>> theirs
         {
             var stationAiCore = new Entity<StationAiCoreComponent?>(ent, entStationAiCore);
 
@@ -391,6 +455,7 @@ public sealed class StationAiSystem : SharedStationAiSystem
         hearingDevice = EntityUid.Invalid;
         range = float.PositiveInfinity;
 
+<<<<<<< ours
         var xformQuery = GetEntityQuery<TransformComponent>();
         if (!xformQuery.TryGetComponent(eye, out var eyeXform) ||
             !xformQuery.TryGetComponent(source, out var sourceXform) ||
@@ -401,6 +466,15 @@ public sealed class StationAiSystem : SharedStationAiSystem
         {
             return false;
         }
+||||||| base
+            var range = (xform.MapID != sourceXform.MapID)
+                ? -1
+                : (sourcePos - _xforms.GetWorldPosition(xform, xformQuery)).Length();
+=======
+            var range = (xform.MapID != sourceXform.MapID)
+                ? -1
+                : (sourcePos - _xforms.GetWorldPosition(xform)).Length();
+>>>>>>> theirs
 
         var eyePosition = _xforms.GetWorldPosition(eyeXform, xformQuery);
         var sourcePosition = _xforms.GetWorldPosition(sourceXform, xformQuery);
@@ -456,7 +530,7 @@ public sealed class StationAiSystem : SharedStationAiSystem
             var ev = new ChatNotificationEvent(_turretIsAttackingChatNotificationPrototype, ent);
 
             if (TryComp<DeviceNetworkComponent>(ent, out var deviceNetwork))
-                ev.SourceNameOverride = Loc.GetString("station-ai-turret-component-name", ("name", Name(ent)), ("address", deviceNetwork.Address));
+                ev.SourceNameOverride = Loc.GetString("station-ai-turret-component-name", ("name", Name(ent)), ("address", DeviceLocalizationHelpers.GetAddressFromId(deviceNetwork)));
 
             RaiseLocalEvent(ai, ref ev);
         }

@@ -4,6 +4,7 @@
          HorizontalExpand="True"
          MouseFilter="Ignore"
          Margin="0 0 0 5">
+<<<<<<< ours
     <!-- DS14-start -->
     <Button Name="SelectButton"
             ToggleMode="True"
@@ -11,6 +12,16 @@
             HorizontalExpand="True"/>
     <!-- DS14-end -->
     <PanelContainer SetSize="64 64" HorizontalAlignment="Right" StyleClasses="PanelDeep">
+||||||| base
+    <Button Name="SelectButton" ToggleMode="True" Margin="0 0 5 0" HorizontalExpand="True"/>
+    <PanelContainer SetSize="64 64" HorizontalAlignment="Right">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#1B1B1E" />
+        </PanelContainer.PanelOverride>
+=======
+    <Button Name="SelectButton" ToggleMode="True" Margin="0 0 5 0" HorizontalExpand="True"/>
+    <PanelContainer SetSize="64 64" HorizontalAlignment="Right" StyleClasses="PanelDeep">
+>>>>>>> theirs
         <SpriteView Name="Sprite" Scale="4 4" MouseFilter="Stop"/>
     </PanelContainer>
 </BoxContainer>

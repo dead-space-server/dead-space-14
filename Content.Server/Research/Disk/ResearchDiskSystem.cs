@@ -4,18 +4,26 @@ using Content.Server.Popups;
 using Content.Shared.Research.Prototypes;
 using Content.Server.Research.Systems;
 using Content.Shared.Research.Components;
-using Robust.Shared.Prototypes;
 using Content.Server.DeadSpace.Virus.Systems;
 using Content.Server.DeadSpace.Virus.Components;
 
 namespace Content.Server.Research.Disk
 {
-    public sealed class ResearchDiskSystem : EntitySystem
+    public sealed partial class ResearchDiskSystem : EntitySystem
     {
+<<<<<<< ours
         [Dependency] private readonly IPrototypeManager _prototype = default!;
         [Dependency] private readonly PopupSystem _popupSystem = default!;
         [Dependency] private readonly ResearchSystem _research = default!;
         [Dependency] private readonly VirusDiagnoserDataServerSystem _diagnoserDataServer = default!; // DS14
+||||||| base
+        [Dependency] private readonly IPrototypeManager _prototype = default!;
+        [Dependency] private readonly PopupSystem _popupSystem = default!;
+        [Dependency] private readonly ResearchSystem _research = default!;
+=======
+        [Dependency] private PopupSystem _popupSystem = default!;
+        [Dependency] private ResearchSystem _research = default!;
+>>>>>>> theirs
         public override void Initialize()
         {
             base.Initialize();
@@ -53,7 +61,7 @@ namespace Content.Server.Research.Disk
             if (!component.UnlockAllTech)
                 return;
 
-            component.Points = _prototype.EnumeratePrototypes<TechnologyPrototype>()
+            component.Points = ProtoMan.EnumeratePrototypes<TechnologyPrototype>()
                 .Sum(tech => tech.Cost);
         }
     }

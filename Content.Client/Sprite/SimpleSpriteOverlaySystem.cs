@@ -1,21 +1,13 @@
-﻿using Content.Shared.Sprite;
+using Content.Shared.Sprite;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Sprite;
 
-public sealed class SimpleSpriteOverlaySystem : EntitySystem // DS14 - pre-v288 event/IoC style
+public sealed partial class SimpleSpriteOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!; // DS14 - pre-v288 IoC
+    [Dependency] private SpriteSystem _sprite = default!;
 
-    // DS14-Start - pre-v288 explicit event subscriptions
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<SimpleSpriteOverlayComponent, AfterAutoHandleStateEvent>(OnAfterHandleState);
-        SubscribeLocalEvent<SimpleSpriteOverlayComponent, ComponentShutdown>(OnCompShutdown);
-    }
-    // DS14-End
-
+    [SubscribeLocalEvent]
     private void OnAfterHandleState(Entity<SimpleSpriteOverlayComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         var sprite = Comp<SpriteComponent>(ent);
@@ -29,6 +21,7 @@ public sealed class SimpleSpriteOverlaySystem : EntitySystem // DS14 - pre-v288 
             sprite.LayerSetShader(index, ent.Comp.Shader);
     }
 
+    [SubscribeLocalEvent]
     private void OnCompShutdown(Entity<SimpleSpriteOverlayComponent> ent, ref ComponentShutdown args)
     {
         var sprite = Comp<SpriteComponent>(ent);

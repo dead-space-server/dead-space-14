@@ -1,4 +1,4 @@
-﻿using Content.Client.UserInterface.RichText;
+using Content.Client.UserInterface.RichText;
 using Content.Client.DeadSpace.UserInterface.RichText;
 using Robust.Client.UserInterface.RichText;
 
@@ -31,5 +31,14 @@ public static class UserFormattableTags
         typeof(SmallTag),
         typeof(UnderlineTag),
         // DS14-end
+    ];
+
+    /// <summary>
+    /// Tags allowed in Silicon UIs. Extends from BaseAllowedTags.
+    /// </summary>
+    public static readonly Type[] SiliconAllowedTags =
+    [
+        ..BaseAllowedTags,
+        typeof(ScrambleTag)
     ];
 }

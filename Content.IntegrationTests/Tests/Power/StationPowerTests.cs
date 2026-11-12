@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
 using Content.Server.GameTicking;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
@@ -13,7 +14,7 @@ using Robust.Shared.EntitySerialization;
 
 namespace Content.IntegrationTests.Tests.Power;
 
-public sealed class StationPowerTests
+public sealed class StationPowerTests : GameTest
 {
     /// <summary>
     /// How long the station should be able to survive on stored power if nothing is changed from round start.
@@ -39,6 +40,7 @@ public sealed class StationPowerTests
         "CorvaxSilly",
         "CorvaxSpectrum",
         "Elkridge",
+<<<<<<< ours
         // "Exo", // map removed
         "Fland",
         "Gate",
@@ -46,34 +48,56 @@ public sealed class StationPowerTests
         "Gemini",
         "Loop",
         "Loop",
+||||||| base
+        "Fland",
+=======
+        "Exo",
+>>>>>>> theirs
         "Marathon",
+<<<<<<< ours
         "Meta",
         "Oasis",
         "Omega",
         "Origin",
+||||||| base
+        "Oasis",
+=======
+>>>>>>> theirs
         "Packed",
         "Plasma",
         // "Relic", // map removed
         "Snowball",
+<<<<<<< ours
         "Reach",
         "Saltern",
         "Train",
         "DsTram2", // guess what? DS14
+||||||| base
+        "Reach",
+        "Exo",
+=======
+        "Sushi",
+        "Tram2",
+        "Hike",
+        "gear"
+>>>>>>> theirs
     ];
+
+    public override PoolSettings PoolSettings => new ()
+    {
+        Dirty = true,
+    };
 
     [Explicit]
     [Test, TestCaseSource(nameof(GameMaps))]
     public async Task TestStationStartingPowerWindow(string mapProtoId)
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Dirty = true,
-        });
+        var pair = Pair;
         var server = pair.Server;
 
         var entMan = server.EntMan;
         var protoMan = server.ProtoMan;
-        var ticker = entMan.System<GameTicker>();
+        var ticker = entMan.System<ServerGameTicker>();
         var batterySys = entMan.System<BatterySystem>();
 
         // Load the map
@@ -121,22 +145,17 @@ public sealed class StationPowerTests
             Assert.That(totalStartingCharge, Is.GreaterThanOrEqualTo(requiredStoredPower),
                 $"Needs at least {requiredStoredPower - totalStartingCharge} more stored power!");
         });
-
-        await pair.CleanReturnAsync();
     }
 
     [Test, TestCaseSource(nameof(GameMaps))]
     public async Task TestApcLoad(string mapProtoId)
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Dirty = true,
-        });
+        var pair = Pair;
         var server = pair.Server;
 
         var entMan = server.EntMan;
         var protoMan = server.ProtoMan;
-        var ticker = entMan.System<GameTicker>();
+        var ticker = entMan.System<ServerGameTicker>();
         var xform = entMan.System<TransformSystem>();
 
         // Load the map
@@ -170,7 +189,5 @@ public sealed class StationPowerTests
                 }
             }
         });
-
-        await pair.CleanReturnAsync();
     }
 }

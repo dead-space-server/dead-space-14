@@ -3,6 +3,7 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
+using Content.Shared.Vehicle.Systems;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.Vehicle.Components;
@@ -17,6 +18,6 @@ public sealed partial class VehicleOperatorComponent : Component
     /// <summary>
     /// The vehicle we are currently operating.
     /// </summary>
-    [ViewVariables, AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public EntityUid? Vehicle;
 }

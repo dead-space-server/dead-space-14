@@ -127,7 +127,7 @@
     proto: OxygenBreather
   storage:
     back:
-    - BoxHug
+    - BoxSurvivalHug
 
 - type: loadout
   id: EmergencyNitrogenClown
@@ -136,62 +136,7 @@
     proto: NitrogenBreather
   storage:
     back:
-    - BoxHugNitrogen
-
-- type: loadout
-  id: EmergencyBeerClown
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: EffectSpeciesDwarf
-  storage:
-    back:
-    - BoxHugBeer
-
-- type: loadout
-  id: EmergencyMothClown
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: EffectSpeciesMoth
-  storage:
-    back:
-    - BoxHugMoth
-
-# Mime
-- type: loadout
-  id: EmergencyOxygenMime
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: OxygenBreather
-  storage:
-    back:
-    - BoxMime
-
-- type: loadout
-  id: EmergencyNitrogenMime
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: NitrogenBreather
-  storage:
-    back:
-    - BoxMimeNitrogen
-
-- type: loadout
-  id: EmergencyBeerMime
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: EffectSpeciesDwarf
-  storage:
-    back:
-    - BoxMimeBeer
-
-- type: loadout
-  id: EmergencySpeciesMothMime
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: EffectSpeciesMoth
-  storage:
-    back:
-    - BoxMimeMoth
+    - BoxSurvivalHugNitrogen
 
 # Engineering / Extended
 - type: loadout
@@ -286,61 +231,26 @@
     back:
     - BoxSurvivalSecurityNitrogen
 
-- type: loadout
-  id: EmergencyBeerSecurity
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: EffectSpeciesDwarf
-  storage:
-    back:
-    - BoxSurvivalSecurityBeer
+# Antagonist
 
 - type: loadout
-  id: EmergencyOxygenBrigmedic
+  id: EmergencyOxygenExtendedAntag
   effects:
   - !type:GroupLoadoutEffect
     proto: OxygenBreather
   storage:
     back:
-    - BoxSurvivalBrigmedic
+    - BoxSurvivalDeluxeExtended
 
 - type: loadout
-  id: EmergencyNitrogenBrigmedic
+  id: EmergencyNitrogenExtendedAntag
   effects:
   - !type:GroupLoadoutEffect
     proto: NitrogenBreather
   storage:
     back:
-    - BoxSurvivalBrigmedicNitrogen
+    - BoxSurvivalDeluxeExtendedNitrogen
 
-- type: loadout
-  id: EmergencyBeerBrigmedic
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: EffectSpeciesDwarf
-  storage:
-    back:
-    - BoxSurvivalBrigmedicBeer
-
-- type: loadout
-  id: EmergencyMothSecurity
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: EffectSpeciesMoth
-  storage:
-    back:
-    - BoxSurvivalSecurityMoth
-
-- type: loadout
-  id: EmergencyMothBrigmedic
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: EffectSpeciesMoth
-  storage:
-    back:
-    - BoxSurvivalBrigmedicMoth
-
-# Syndicate
 - type: loadout
   id: EmergencyOxygenSyndicate
   effects:

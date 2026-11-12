@@ -30,8 +30,8 @@ public sealed partial class HealthAnalyzerWindow : FancyWindow
         // DS14-end
     }
 
-    public void Populate(HealthAnalyzerScannedUserMessage msg)
+    public void Populate(HealthAnalyzerUiState state)
     {
-        HealthAnalyzer.Populate(msg.State);
+        HealthAnalyzer.Populate(state);
     }
 }

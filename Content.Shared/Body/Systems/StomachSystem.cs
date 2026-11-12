@@ -7,15 +7,32 @@ using Content.Shared.Chemistry.EntitySystems;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
+<<<<<<< ours
 namespace Content.Shared.Body.Systems
+||||||| base
+namespace Content.Shared.Body.Systems;
+
+public sealed class StomachSystem : EntitySystem
+=======
+namespace Content.Shared.Body.Systems;
+
+public sealed partial class StomachSystem : EntitySystem
+>>>>>>> theirs
 {
+<<<<<<< ours
     public sealed class StomachSystem : EntitySystem
     {
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+||||||| base
+    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+=======
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+>>>>>>> theirs
 
         public const string DefaultSolutionName = "stomach";
 
+<<<<<<< ours
         public override void Initialize()
         {
             SubscribeLocalEvent<StomachComponent, MapInitEvent>(OnMapInit);
@@ -23,7 +40,29 @@ namespace Content.Shared.Body.Systems
             SubscribeLocalEvent<StomachComponent, EntRemovedFromContainerMessage>(OnEntRemoved);
             SubscribeLocalEvent<StomachComponent, ApplyMetabolicMultiplierEvent>(OnApplyMetabolicMultiplier);
         }
+||||||| base
+    public bool CanTransferSolution(
+        EntityUid uid,
+        Solution solution,
+        StomachComponent? stomach = null,
+        SolutionContainerManagerComponent? solutions = null)
+    {
+        return Resolve(uid, ref stomach, ref solutions, logMissing: false)
+            && _solutionContainerSystem.ResolveSolution((uid, solutions), DefaultSolutionName, ref stomach.Solution, out var stomachSolution)
+            // TODO: For now no partial transfers. Potentially change by design
+            && stomachSolution.CanAddSolution(solution);
+    }
+=======
+    public bool CanTransferSolution(Entity<StomachComponent?, SolutionManagerComponent?> entity, Solution solution)
+    {
+        return Resolve(entity, ref entity.Comp1, logMissing: false)
+            && _solutionContainerSystem.ResolveSolution((entity, entity.Comp2), DefaultSolutionName, ref entity.Comp1.Solution, out var stomachSolution)
+            // TODO: For now no partial transfers. Potentially change by design
+            && stomachSolution.CanAddSolution(solution);
+    }
+>>>>>>> theirs
 
+<<<<<<< ours
         private void OnMapInit(Entity<StomachComponent> ent, ref MapInitEvent args)
         {
             ent.Comp.NextUpdate = _gameTiming.CurTime + ent.Comp.AdjustedUpdateInterval;
@@ -118,7 +157,31 @@ namespace Content.Shared.Body.Systems
                 // TODO: For now no partial transfers. Potentially change by design
                 && stomachSolution.CanAddSolution(solution);
         }
+||||||| base
+    public bool TryTransferSolution(
+        EntityUid uid,
+        Solution solution,
+        StomachComponent? stomach = null,
+        SolutionContainerManagerComponent? solutions = null)
+    {
+        if (!Resolve(uid, ref stomach, ref solutions, logMissing: false)
+            || !_solutionContainerSystem.ResolveSolution((uid, solutions), DefaultSolutionName, ref stomach.Solution)
+            || !CanTransferSolution(uid, solution, stomach, solutions))
+        {
+            return false;
+        }
 
+        _solutionContainerSystem.TryAddSolution(stomach.Solution.Value, solution);
+=======
+    public bool TryTransferSolution(Entity<StomachComponent?, SolutionManagerComponent?> entity, Solution solution)
+    {
+        if (!Resolve(entity, ref entity.Comp1, logMissing: false)
+            || !_solutionContainerSystem.ResolveSolution((entity, entity.Comp2), DefaultSolutionName, ref entity.Comp1.Solution)
+            || !CanTransferSolution(entity, solution))
+            return false;
+>>>>>>> theirs
+
+<<<<<<< ours
         public bool TryTransferSolution(
             EntityUid uid,
             Solution solution,
@@ -141,5 +204,11 @@ namespace Content.Shared.Body.Systems
 
             return true;
         }
+||||||| base
+        return true;
+=======
+        _solutionContainerSystem.TryAddSolution(entity.Comp1.Solution.Value, solution);
+        return true;
+>>>>>>> theirs
     }
 }

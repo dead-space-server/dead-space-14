@@ -1,128 +1,70 @@
-using System.Numerics;
-using Content.Server.Storage.EntitySystems;
 using Content.Shared.CardboardBox;
+// DS14-start - upstream moved the cardboard box logic into SharedCardboardBoxSystem;
+// this server system only keeps our slippery cardboard box behaviour.
 using Content.Shared.CardboardBox.Components;
 using Content.Shared.Humanoid;
-using Content.Shared.Interaction;
 using Content.Shared.Slippery;
-using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
 using Content.Shared.Storage.Components;
+using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Stunnable;
-using Content.Shared.Vehicle;
-using Content.Shared.Vehicle.Components;
-using Robust.Server.GameObjects;
+using Content.Shared.Vehicle.Systems;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Physics.Systems;
-using Robust.Shared.Timing;
+// DS14-end
 
 namespace Content.Server.CardboardBox;
 
-public sealed class CardboardBoxSystem : SharedCardboardBoxSystem
+public sealed partial class CardboardBoxSystem : SharedCardboardBoxSystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedStealthSystem _stealth = default!;
-    [Dependency] private readonly EntityStorageSystem _storage = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly EntityManager _entity = default!;
-    // DS14-start - #43532 is adapted to the current server-side cardboard-box system.
-    [Dependency] private readonly VehicleSystem _vehicle = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    // DS14-end
+    // DS14-start
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedEntityStorageSystem _storage = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private VehicleSystem _vehicle = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CardboardBoxComponent, StorageAfterOpenEvent>(AfterStorageOpen);
-        SubscribeLocalEvent<CardboardBoxComponent, StorageBeforeOpenEvent>(BeforeStorageOpen);
-        SubscribeLocalEvent<CardboardBoxComponent, StorageAfterCloseEvent>(AfterStorageClosed);
-        SubscribeLocalEvent<CardboardBoxComponent, ActivateInWorldEvent>(OnInteracted);
-        SubscribeLocalEvent<CardboardBoxComponent, VehicleOperatorSetEvent>(OnOperatorSet);
 
+        // CardboardBoxComponent storage open/close events are already subscribed by the shared system,
+        // so the stealth box slipperiness hooks onto StealthComponent instead.
+        SubscribeLocalEvent<StealthComponent, StorageAfterOpenEvent>(OnStealthBoxOpened);
+        SubscribeLocalEvent<StealthComponent, StorageAfterCloseEvent>(OnStealthBoxClosed);
         SubscribeLocalEvent<CardboardBoxComponent, SlipEvent>(OnSlip);
     }
 
-    private void OnInteracted(EntityUid uid, CardboardBoxComponent component, ActivateInWorldEvent args)
+    private void OnStealthBoxOpened(Entity<StealthComponent> ent, ref StorageAfterOpenEvent args)
     {
-        if (args.Handled)
+        if (!HasComp<CardboardBoxComponent>(ent))
             return;
 
-        if (!TryComp<EntityStorageComponent>(uid, out var box))
-            return;
-
-        if (!args.Complex)
-        {
-            if (box.Open || !box.Contents.Contains(args.User))
-                return;
-        }
-
-        args.Handled = true;
-        _storage.ToggleOpen(args.User, uid, box);
+        RemComp<SlipperyComponent>(ent);
     }
 
-    private void BeforeStorageOpen(EntityUid uid, CardboardBoxComponent component, ref StorageBeforeOpenEvent args)
+    private void OnStealthBoxClosed(Entity<StealthComponent> ent, ref StorageAfterCloseEvent args)
     {
-        if (component.Quiet)
+        if (!HasComp<CardboardBoxComponent>(ent))
             return;
 
-        if (!_vehicle.TryGetOperator(uid, out var operatorEnt))
-            return;
-
-        if (_timing.CurTime <= component.EffectCooldown)
-            return;
-
-        RaiseNetworkEvent(new PlayBoxEffectMessage(GetNetEntity(uid), GetNetEntity(operatorEnt.Value.Owner)));
-        _audio.PlayPvs(component.EffectSound, uid);
-        component.EffectCooldown = _timing.CurTime + component.CooldownDuration;
+        EnsureComp<SlipperyComponent>(ent);
     }
 
-    private void AfterStorageOpen(EntityUid uid, CardboardBoxComponent component, ref StorageAfterOpenEvent args)
+    private void OnSlip(Entity<CardboardBoxComponent> ent, ref SlipEvent args)
     {
-        // If this box has a stealth/chameleon effect, disable the stealth effect while the box is open.
-        _stealth.SetEnabled(uid, false);
-        if (HasComp<StealthComponent>(uid))
-        {
-            RemComp<SlipperyComponent>(uid);
-        }
-    }
-
-    private void AfterStorageClosed(EntityUid uid, CardboardBoxComponent component, ref StorageAfterCloseEvent args)
-    {
-        // If this box has a stealth/chameleon effect, enable the stealth effect.
-        if (TryComp(uid, out StealthComponent? stealth))
-        {
-            _stealth.SetVisibility(uid, stealth.MaxVisibility, stealth);
-            _stealth.SetEnabled(uid, true, stealth);
-            EnsureComp<SlipperyComponent>(uid, out var slippery);
-        }
-    }
-
-    private void OnOperatorSet(Entity<CardboardBoxComponent> ent, ref VehicleOperatorSetEvent args)
-    {
-        if (args.NewOperator != null || args.OldOperator == null)
-            return;
-
-        _physics.SetLinearVelocity(ent, Vector2.Zero);
-    }
-
-    private void OnSlip(EntityUid uid, CardboardBoxComponent component, ref SlipEvent args)
-    {
-        if (_vehicle.TryGetOperator(uid, out var operatorEnt))
+        if (_vehicle.TryGetOperator(ent.Owner, out var operatorEnt))
             _stun.TryUpdateParalyzeDuration(operatorEnt.Value.Owner, TimeSpan.FromSeconds(2));
 
-        if (TryComp<EntityStorageComponent>(uid, out var box))
+        if (TryComp<EntityStorageComponent>(ent, out var box))
         {
-            for (var i = 0; i < box.Contents.Count; i++)
+            foreach (var contained in box.Contents.ContainedEntities)
             {
-                var ent = _entity.GetNetEntity(box.Contents.ContainedEntities[i]);
-
-                if (_entity.HasComponent<HumanoidAppearanceComponent>(_entity.GetEntity(ent)))
-                    _stun.TryUpdateParalyzeDuration(_entity.GetEntity(ent), TimeSpan.FromSeconds(2));
+                if (HasComp<HumanoidAppearanceComponent>(contained))
+                    _stun.TryUpdateParalyzeDuration(contained, TimeSpan.FromSeconds(2));
             }
         }
 
-        _audio.PlayPvs(component.EffectSound, uid);
-        _storage.OpenStorage(uid);
+        _audio.PlayPvs(ent.Comp.EffectSound, ent);
+        _storage.OpenStorage(ent.Owner);
     }
+    // DS14-end
 }

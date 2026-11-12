@@ -36,7 +36,7 @@
             </BoxContainer>
 
             <!-- Central divider -->
-            <PanelContainer StyleClasses="LowDivider" VerticalExpand="True" Margin="0 0 0 0" SetWidth="2"/>
+            <controls:Separator StyleClasses="LowDivider" VerticalExpand="True" SetWidth="2" Orientation="Vertical" MinHeight="2"/>
 
             <!-- Right side - control panel -->
             <BoxContainer VerticalExpand="True" HorizontalExpand="True" Orientation="Vertical" MinWidth="225" Margin="10 10 10 10">
@@ -107,7 +107,7 @@
                               Visible="False">
 
                     <controls:StripeBack>
-                        <Label Text="{Loc 'Controls'}"
+                        <Label Text="{Loc 'station-ai-fixer-console-window-controls'}"
                                HorizontalExpand="True"
                                HorizontalAlignment="Center"/> <!-- DS14 -->
                     </controls:StripeBack>
@@ -151,7 +151,7 @@
 
         <!-- Footer -->
         <BoxContainer Orientation="Vertical">
-            <PanelContainer StyleClasses="LowDivider" />
+            <controls:Separator StyleClasses="LowDivider"/>
             <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
                 <Label Text="{Loc 'station-ai-fixer-console-window-flavor-left'}" StyleClasses="WindowFooterText" />
                 <Label Text="{Loc 'station-ai-fixer-console-window-flavor-right'}" StyleClasses="WindowFooterText"

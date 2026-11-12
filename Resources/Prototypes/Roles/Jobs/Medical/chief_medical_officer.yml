@@ -11,15 +11,14 @@
       time: 10h
     - !type:RoleTimeRequirement
       role: JobMedicalDoctor
-      time: 20h
-    - !type:OverallPlaytimeRequirement
-      time: 40h
-    - !type:AgeRequirement
-      requiredAge: 24
+      time: 5h
+    - !type:DepartmentTimeRequirement
+      department: Medical
+      time: 10h
   startingGear: CMOGear
   icon: "JobIconChiefMedicalOfficer"
   supervisors: job-supervisors-captain
-  canBeAntag: false
+  guides: [ Command ] # TODO: should have a more specific guidebook page instead of using the department itself
   access:
   - Medical
   - Command

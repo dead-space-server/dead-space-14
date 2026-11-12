@@ -1,4 +1,4 @@
-﻿using Content.Client.Overlays;
+using Content.Client.Overlays;
 using Content.Shared.Access.Systems;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
@@ -6,10 +6,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Access.Systems;
 
-public sealed class JobStatusSystem : SharedJobStatusSystem
+public sealed partial class JobStatusSystem : SharedJobStatusSystem
 {
-    [Dependency] private readonly ShowJobIconsSystem _showJobIcons = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private ShowJobIconsSystem _showJobIcons = default!;
+    // DS14: crew border icons (ShowCrewIconsSystem) removed in our fork
 
     public override void Initialize()
     {
@@ -22,6 +22,6 @@ public sealed class JobStatusSystem : SharedJobStatusSystem
     private void OnGetStatusIconsEvent(Entity<JobStatusComponent> ent, ref GetStatusIconsEvent ev)
     {
         if (_showJobIcons.IsActive && ent.Comp.JobStatusIcon != null)
-            ev.StatusIcons.Add(_prototype.Index(ent.Comp.JobStatusIcon));
+            ev.StatusIcons.Add(ProtoMan.Index(ent.Comp.JobStatusIcon));
     }
 }

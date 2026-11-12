@@ -18,6 +18,7 @@ public sealed partial class MarkingColors
     ///     Layers with their own coloring type and properties
     /// </summary>
     [DataField("layers", true)]
+    [Obsolete("Marking coloration should be defined in the layers' MarkingLayerData instead.")]
     public Dictionary<string, LayerColoringDefinition>? Layers;
 }
 
@@ -34,22 +35,49 @@ public static class MarkingColoring
         MarkingSet markingSet
     )
     {
+<<<<<<< ours
         var colors = new List<Color>();
 
         // Coloring from default properties
         var defaultColor = prototype.Coloring.Default.GetColor(skinColor, eyeColor, markingSet);
+||||||| base
+        var colors = new List<Color>();
 
-        if (prototype.Coloring.Layers == null)
+        // Coloring from default properties
+        var defaultColor = prototype.Coloring.Default.GetColor(skinColor, eyeColor, otherMarkings);
+=======
+        var defaultColor = prototype.Coloring.Default.GetColor(skinColor, eyeColor, otherMarkings);
+>>>>>>> theirs
+
+        var colors = GetColorsForMarkingLayers(prototype,
+            skinColor,
+            eyeColor,
+            otherMarkings,
+            defaultColor);
+
+        return colors;
+    }
+
+    /// <summary>
+    ///     Gets a list of default fallback colors for the layers of a marking prototype.
+    /// </summary>
+    /// <param name="prototype">The marking prototype.</param>
+    /// <param name="skinColor">The skin color of the character.</param>
+    /// <param name="eyeColor">The eye color of the character.</param>
+    /// <param name="otherMarkings">A list of markings thie character has.</param>
+    /// <param name="defaultColor">The universal default color for this marking.</param>
+    private static List<Color> GetColorsForMarkingLayers(MarkingPrototype prototype,
+        Color? skinColor,
+        Color? eyeColor,
+        List<Marking> otherMarkings,
+        Color defaultColor)
+    {
+        var colors = new List<Color>();
+        var layers = prototype.Coloring.Layers;
+
+        for (var i = 0; i < prototype.Sprites.Count; i++)
         {
-            // If layers is not specified, then every layer must be default
-            for (var i = 0; i < prototype.Sprites.Count; i++)
-            {
-                colors.Add(defaultColor);
-            }
-            return colors;
-        }
-        else
-        {
+<<<<<<< ours
             // If some layers are specified.
             for (var i = 0; i < prototype.Sprites.Count; i++)
             {
@@ -78,7 +106,53 @@ public static class MarkingColoring
                 }
             }
             return colors;
+||||||| base
+            // If some layers are specified.
+            for (var i = 0; i < prototype.Sprites.Count; i++)
+            {
+                // Getting layer name
+                string? name = prototype.Sprites[i] switch
+                {
+                    SpriteSpecifier.Rsi rsi => rsi.RsiState,
+                    SpriteSpecifier.Texture texture => texture.TexturePath.Filename,
+                    _ => null
+                };
+                if (name == null)
+                {
+                    colors.Add(defaultColor);
+                    continue;
+                }
+
+                // All specified layers must be colored separately, all unspecified must depend on default coloring
+                if (prototype.Coloring.Layers.TryGetValue(name, out var layerColoring))
+                {
+                    var marking_color = layerColoring.GetColor(skinColor, eyeColor, otherMarkings);
+                    colors.Add(marking_color);
+                }
+                else
+                {
+                    colors.Add(defaultColor);
+                }
+            }
+            return colors;
+=======
+            var layer = prototype.Sprites[i];
+            var layerId = layer.GetLayerStateId();
+            var color = defaultColor;
+
+            // Color type associated with layer
+            if (layer.Coloring != null)
+                color = layer.Coloring.GetColor(skinColor, eyeColor, otherMarkings);
+
+            // Color type associated with deprecated coloring field
+            else if (layers != null && layers.TryGetValue(layerId, out var layerColoring))
+                color = layerColoring.GetColor(skinColor, eyeColor, otherMarkings);
+
+            colors.Add(color);
+>>>>>>> theirs
         }
+
+        return colors;
     }
 }
 
@@ -89,13 +163,19 @@ public static class MarkingColoring
 public sealed partial class LayerColoringDefinition
 {
     [DataField("type")]
+<<<<<<< ours
     public LayerColoringType? Type = new SkinColoring();
+||||||| base
+    public LayerColoringType? Type = new ColoringTypes.SkinColoring();
+=======
+    public LayerColoringType? Type;
+>>>>>>> theirs
 
     /// <summary>
     ///     Coloring types that will be used if main coloring type will return nil
     /// </summary>
     [DataField("fallbackTypes")]
-    public List<LayerColoringType> FallbackTypes = new() {};
+    public List<LayerColoringType> FallbackTypes = new() { new ColoringTypes.SkinColoring() };
 
     /// <summary>
     ///     Color that will be used if coloring type and fallback type will return nil

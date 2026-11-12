@@ -1,19 +1,29 @@
+<<<<<<< ours
 using Content.Server.Chat.Systems;
 using Content.Server.Speech.EntitySystems;
 using Content.Shared.Chat;
 using Content.Shared.Inventory;
+||||||| base
+﻿using Content.Server.Chat.Systems;
+using Content.Server.Speech.Muting;
+=======
+using Content.Server.Chat.Systems;
+>>>>>>> theirs
 using Content.Shared.Mobs;
 using Content.Shared.Speech.Muting;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing; //DS-14
 
 namespace Content.Server.Mobs;
 
-/// <see cref="DeathgaspComponent"/>
-public sealed class DeathgaspSystem: EntitySystem
+/// <summary>
+/// A system that handles death gasps, an emote a character makes when they die.
+/// </summary>
+/// <seealso cref="DeathgaspComponent"/>
+public sealed partial class DeathgaspSystem : SharedDeathgaspSystem
 {
+<<<<<<< ours
     [Dependency] private readonly ChatSystem _chat = default!;
     // DS14-start
     [Dependency] private readonly InventorySystem _inventory = default!;
@@ -21,7 +31,14 @@ public sealed class DeathgaspSystem: EntitySystem
     // DS14-end
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly IGameTiming _timing = default!; //DS-14
+||||||| base
+    [Dependency] private readonly ChatSystem _chat = default!;
+=======
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+>>>>>>> theirs
 
+<<<<<<< ours
     public override void Initialize()
     {
         base.Initialize();
@@ -40,12 +57,25 @@ public sealed class DeathgaspSystem: EntitySystem
     // DS14-end
 
     private void OnMobStateChanged(EntityUid uid, DeathgaspComponent component, MobStateChangedEvent args)
+||||||| base
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<DeathgaspComponent, MobStateChangedEvent>(OnMobStateChanged);
+    }
+
+    private void OnMobStateChanged(EntityUid uid, DeathgaspComponent component, MobStateChangedEvent args)
+=======
+    [SubscribeLocalEvent]
+    private void OnMobStateChanged(Entity<DeathgaspComponent> ent, ref MobStateChangedEvent args)
+>>>>>>> theirs
     {
         // don't deathgasp if they arent going straight from crit to dead
         if (args.NewMobState != MobState.Dead || args.OldMobState is not (MobState.Critical or MobState.PreCritical)) // DS14 edited
             return;
 
-        Deathgasp(uid, component);
+        Deathgasp(ent, ent.Comp);
     }
 
     // DS14-start
@@ -67,7 +97,7 @@ public sealed class DeathgaspSystem: EntitySystem
     /// <summary>
     ///     Causes an entity to perform their deathgasp emote, if they have one.
     /// </summary>
-    public bool Deathgasp(EntityUid uid, DeathgaspComponent? component = null)
+    public override bool Deathgasp(EntityUid uid, DeathgaspComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return false;

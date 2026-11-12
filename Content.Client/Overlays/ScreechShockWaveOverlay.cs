@@ -9,9 +9,9 @@ namespace Content.Client.Overlays;
 
 public sealed partial class ScreechShockWaveOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private SharedTransformSystem? _xformSystem;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
@@ -125,9 +125,6 @@ public sealed partial class ScreechShockWaveOverlay : Overlay
         var worldHandle = args.WorldHandle;
         worldHandle.UseShader(_shader);
         worldHandle.DrawRect(args.WorldBounds, Color.White);
-
-        // i wonder what would happen if this line wasn't there :godo:
-        worldHandle.UseShader(null);
     }
 
     /// <summary>

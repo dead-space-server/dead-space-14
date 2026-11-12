@@ -1,20 +1,17 @@
-using Content.Server.DeviceNetwork.Systems;
-using Content.Server.Medical.SuitSensors;
-using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.DeviceNetwork.Events;
-using Content.Shared.Medical.SuitSensor;
+using Content.Shared.DeviceNetwork.Systems;
 using Content.Shared.Medical.CrewMonitoring;
+using Content.Shared.Medical.SuitSensors;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Medical.CrewMonitoring;
 
-public sealed class CrewMonitoringServerSystem : EntitySystem
+public sealed partial class CrewMonitoringServerSystem : EntitySystem
 {
-    [Dependency] private readonly SuitSensorSystem _sensors = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
-    [Dependency] private readonly SingletonDeviceNetServerSystem _singletonServerSystem = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private DeviceNetworkSystem _deviceNetworkSystem = default!;
+    [Dependency] private SingletonDeviceNetServerSystem _singletonServerSystem = default!;
 
     private const float UpdateRate = 3f;
     private float _updateDiff;
@@ -23,7 +20,6 @@ public sealed class CrewMonitoringServerSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<CrewMonitoringServerComponent, ComponentRemove>(OnRemove);
-        SubscribeLocalEvent<CrewMonitoringServerComponent, DeviceNetworkPacketEvent>(OnPacketReceived);
         SubscribeLocalEvent<CrewMonitoringServerComponent, DeviceNetServerDisconnectedEvent>(OnDisconnected);
     }
 
@@ -52,8 +48,10 @@ public sealed class CrewMonitoringServerSystem : EntitySystem
     /// <summary>
     /// Adds or updates a sensor status entry if the received package is a sensor status update
     /// </summary>
-    private void OnPacketReceived(EntityUid uid, CrewMonitoringServerComponent component, DeviceNetworkPacketEvent args)
+    [SubscribeLocalEvent]
+    private void OnSensorStatus(Entity<CrewMonitoringServerComponent> ent, ref DeviceNetworkPacketEvent<SuitSensorStatusPayload> args)
     {
+<<<<<<< ours
         var sensorStatus = _sensors.PacketToSuitSensor(args.Data);
         if (sensorStatus == null)
             return;
@@ -69,6 +67,18 @@ public sealed class CrewMonitoringServerSystem : EntitySystem
 
         sensorStatus.Timestamp = _gameTiming.CurTime;
         component.SensorStatus[args.SenderAddress] = sensorStatus;
+||||||| base
+        var sensorStatus = _sensors.PacketToSuitSensor(args.Data);
+        if (sensorStatus == null)
+            return;
+
+        sensorStatus.Timestamp = _gameTiming.CurTime;
+        component.SensorStatus[args.SenderAddress] = sensorStatus;
+=======
+        var sensorData = args.Data.Data;
+        sensorData.Timestamp = _gameTiming.CurTime;
+        ent.Comp.SensorStatus[args.SenderAddress] = sensorData;
+>>>>>>> theirs
     }
 
     // DS14-start
@@ -157,13 +167,12 @@ public sealed class CrewMonitoringServerSystem : EntitySystem
         if (!Resolve(uid, ref serverComponent, ref device))
             return;
 
-        var payload = new NetworkPayload()
+        var payload = new BroadcastSuitSensorStatePayload
         {
-            [DeviceNetworkConstants.Command] = DeviceNetworkConstants.CmdUpdatedState,
-            [SuitSensorConstants.NET_STATUS_COLLECTION] = serverComponent.SensorStatus
+            SensorStatus = serverComponent.SensorStatus,
         };
 
-        _deviceNetworkSystem.QueuePacket(uid, null, payload, device: device);
+        _deviceNetworkSystem.SendPacket((uid, device), null, ref payload);
     }
 
     /// <summary>

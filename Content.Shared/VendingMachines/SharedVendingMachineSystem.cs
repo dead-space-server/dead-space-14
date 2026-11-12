@@ -3,12 +3,11 @@ using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Emag.Components;
 using Content.Shared.Emag.Systems;
-using Content.Shared.Emp;
-using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.UserInterface;
 using Content.Shared.VendingMachines.Components;
+using Content.Shared.VendingMachines.Events;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -19,6 +18,7 @@ namespace Content.Shared.VendingMachines;
 
 public abstract partial class SharedVendingMachineSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] protected readonly IGameTiming Timing = default!;
     [Dependency] protected readonly SharedAudioSystem Audio = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -28,10 +28,35 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
     [Dependency] protected readonly IRobustRandom Randomizer = default!;
     [Dependency] private readonly EmagSystem _emag = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14 - old engine compatibility
+||||||| base
+    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
+    [Dependency] private   readonly AccessReaderSystem _accessReader = default!;
+    [Dependency] private   readonly SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] protected readonly SharedAudioSystem Audio = default!;
+    [Dependency] private   readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] protected readonly SharedPointLightSystem Light = default!;
+    [Dependency] private   readonly SharedPowerReceiverSystem _receiver = default!;
+    [Dependency] protected readonly SharedPopupSystem Popup = default!;
+    [Dependency] private   readonly SharedSpeakOnUIClosedSystem _speakOn = default!;
+    [Dependency] protected readonly SharedUserInterfaceSystem UISystem = default!;
+    [Dependency] protected readonly IRobustRandom Randomizer = default!;
+    [Dependency] private readonly EmagSystem _emag = default!;
+=======
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPowerReceiverSystem _receiver = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected SharedUserInterfaceSystem UISystem = default!;
+    [Dependency] protected IRobustRandom Randomizer = default!;
+    [Dependency] private EmagSystem _emag = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
         base.Initialize();
+<<<<<<< ours
 
         // DS14 start - old engine compatibility
         SubscribeLocalEvent<VendingMachineComponent, ComponentGetState>(OnVendingGetState);
@@ -43,6 +68,18 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         SubscribeLocalEvent<VendingMachineComponent, BreakageEventArgs>(OnBreak);
         SubscribeLocalEvent<VendingMachineRestockComponent, AfterInteractEvent>(OnAfterInteract);
         // DS14 end
+||||||| base
+        SubscribeLocalEvent<VendingMachineComponent, ComponentGetState>(OnVendingGetState);
+        SubscribeLocalEvent<VendingMachineComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<VendingMachineComponent, GotEmaggedEvent>(OnEmagged);
+        SubscribeLocalEvent<VendingMachineComponent, EmpPulseEvent>(OnEmpPulse);
+        SubscribeLocalEvent<VendingMachineComponent, RestockDoAfterEvent>(OnRestockDoAfter);
+        SubscribeLocalEvent<VendingMachineComponent, ActivatableUIOpenAttemptEvent>(OnActivatableUIOpenAttempt);
+        SubscribeLocalEvent<VendingMachineComponent, BreakageEventArgs>(OnBreak);
+
+        SubscribeLocalEvent<VendingMachineRestockComponent, AfterInteractEvent>(OnAfterInteract);
+=======
+>>>>>>> theirs
 
         Subs.BuiEvents<VendingMachineComponent>(VendingMachineUiKey.Key, subs =>
         {
@@ -50,6 +87,14 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         });
     }
 
+    [SubscribeLocalEvent]
+    private void OnOpenVendingUIAction(Entity<VendingMachineComponent> entity, ref OpenVendingUIActionEvent args)
+    {
+        UISystem.TryToggleUi(entity.Owner, VendingMachineUiKey.Key,args.Performer);
+        args.Handled = true;
+    }
+
+    [SubscribeLocalEvent]
     private void OnVendingGetState(Entity<VendingMachineComponent> entity, ref ComponentGetState args)
     {
         var component = entity.Comp;
@@ -91,11 +136,28 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         }
     }
 
+<<<<<<< ours
+||||||| base
+    private void OnInventoryEjectMessage(Entity<VendingMachineComponent> entity, ref VendingMachineEjectMessage args)
+    {
+        if (!_receiver.IsPowered(entity.Owner) || Deleted(entity))
+            return;
+
+        if (args.Actor is not { Valid: true } actor)
+            return;
+
+        AuthorizedVend(entity.Owner, actor, args.Type, args.ID, entity.Comp);
+    }
+
+=======
+    [SubscribeLocalEvent]
+>>>>>>> theirs
     protected virtual void OnMapInit(EntityUid uid, VendingMachineComponent component, MapInitEvent args)
     {
         RestockInventoryFromPrototype(uid, component, component.InitialStockQuality);
     }
 
+    [SubscribeLocalEvent]
     private void OnEmagged(EntityUid uid, VendingMachineComponent component, ref GotEmaggedEvent args)
     {
         if (!_emag.CompareFlag(args.Type, EmagType.Interaction))
@@ -108,12 +170,14 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         args.Handled = component.EmaggedInventory.Count > 0;
     }
 
+    [SubscribeLocalEvent]
     private void OnActivatableUIOpenAttempt(EntityUid uid, VendingMachineComponent component, ActivatableUIOpenAttemptEvent args)
     {
         if (component.Broken)
             args.Cancel();
     }
 
+    [SubscribeLocalEvent]
     private void OnBreak(EntityUid uid, VendingMachineComponent vendComponent, BreakageEventArgs eventArgs)
     {
         vendComponent.Broken = true;
@@ -132,7 +196,13 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
             return;
         }
 
+<<<<<<< ours
         if (!_prototypeManager.TryIndex(component.PackPrototypeId, out VendingMachineInventoryPrototype? packPrototype))
+||||||| base
+        if (!PrototypeManager.TryIndex(component.PackPrototypeId, out VendingMachineInventoryPrototype? packPrototype))
+=======
+        if (!ProtoMan.TryIndex(component.PackPrototypeId, out VendingMachineInventoryPrototype? packPrototype))
+>>>>>>> theirs
             return;
 
         AddInventoryFromPrototype(uid, packPrototype.StartingInventory, InventoryType.Regular, component, restockQuality);
@@ -173,7 +243,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         return GetAllInventory(uid, component).Where(_ => _.Amount > 0).ToList();
     }
 
-    private void AddInventoryFromPrototype(EntityUid uid, Dictionary<string, uint>? entries,
+    private void AddInventoryFromPrototype(EntityUid uid, Dictionary<EntProtoId, uint>? entries,
         InventoryType type,
         VendingMachineComponent? component = null, float restockQuality = 1.0f)
     {
@@ -200,12 +270,23 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
 
         foreach (var (id, amount) in entries)
         {
+<<<<<<< ours
             if (!_prototypeManager.HasIndex<EntityPrototype>(id)) continue;
             var restock = amount;
             var chanceOfMissingStock = 1 - restockQuality;
 
             var result = Randomizer.NextFloat(0, 1);
             if (result < chanceOfMissingStock)
+||||||| base
+            if (PrototypeManager.HasIndex<EntityPrototype>(id))
+=======
+            if (!ProtoMan.HasIndex<EntityPrototype>(id)) continue;
+            var restock = amount;
+            var chanceOfMissingStock = 1 - restockQuality;
+
+            var result = Randomizer.NextFloat(0, 1);
+            if (result < chanceOfMissingStock)
+>>>>>>> theirs
             {
                 restock = (uint) Math.Floor(amount * result / chanceOfMissingStock);
             }

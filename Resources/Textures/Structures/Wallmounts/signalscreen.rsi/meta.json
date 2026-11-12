@@ -9,6 +9,21 @@
   "states": [
     {
       "name": "signalscreen"
+    },
+    {
+      "name": "finished",
+      "delays": [
+        [
+          0.25,
+          0.25
+        ]
+      ]
+    },
+    {
+      "name": "outer_frame"
+    },
+    {
+      "name": "running"
     }
   ]
 }

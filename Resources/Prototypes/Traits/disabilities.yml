@@ -88,7 +88,7 @@
   specials:
   - !type:ApplyStatusEffectSpecial
     statusEffects:
-    - PainNumbnessTraitStatusEffect
+    - TraitStatusEffectPainNumbness
 
 - type: trait
   id: Hemophilia
@@ -98,7 +98,7 @@
   specials:
   - !type:ApplyStatusEffectSpecial
     statusEffects:
-    - StatusEffectHemophiliaTrait
+    - TraitStatusEffectHemophilia
 
 - type: trait
   id: ImpairedMobility
@@ -108,3 +108,13 @@
   category: Disabilities
   components:
     - type: ImpairedMobility
+
+- type: trait
+  id: BlinkDyspraxia
+  name: trait-blink-dyspraxia-name
+  description: trait-blink-dyspraxia-desc
+  category: Disabilities
+  specials:
+  - !type:ApplyStatusEffectSpecial
+    statusEffects:
+    - TraitStatusEffectBlinkDyspraxia

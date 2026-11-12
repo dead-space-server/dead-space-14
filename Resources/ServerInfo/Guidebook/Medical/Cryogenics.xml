@@ -45,11 +45,11 @@
   - Криоксадон работает при температуре ниже 170 Кельвинов, но лучше всего установить охладитель на 100 Кельвинов для быстрого охлаждения.
 
   <GuideReagentEmbed Reagent="Aloxadone"/>
+  <GuideReagentEmbed Reagent="Arcryox"/>
   <GuideReagentEmbed Reagent="Cryoxadone"/>
   <GuideReagentEmbed Reagent="Doxarubixadone"/>
   <GuideReagentEmbed Reagent="Dexalin"/>
   <GuideReagentEmbed Reagent="Leporazine"/>
-  <GuideReagentEmbed Reagent="Necrosol"/>
   <GuideReagentEmbed Reagent="Opporozidone"/>
 
 </Document>

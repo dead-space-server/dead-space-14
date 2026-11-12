@@ -1,7 +1,7 @@
 using Content.Shared.Botany.Components;
+using Content.Shared.Botany.Events;
 using Content.Shared.Botany.Items.Components;
 using Content.Shared.Botany.Systems;
-using Content.Shared.Botany.Events;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -12,31 +12,18 @@ namespace Content.Shared.Botany.Items.Systems;
 
 public sealed partial class BotanySwabSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions and query initialization.
-    public override void Initialize()
-    {
-        base.Initialize();
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private PlantMutationSystem _mutation = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
-        SubscribeLocalEvent<BotanySwabComponent, ExaminedEvent>(OnExamined);
-        SubscribeLocalEvent<BotanySwabComponent, AfterInteractEvent>(OnAfterInteract);
-        SubscribeLocalEvent<BotanySwabComponent, BotanySwabDoAfterEvent>(OnDoAfter);
-        _plantQuery = GetEntityQuery<PlantComponent>();
-    }
-    // DS14-end
-
-    // DS14-start
-    private EntityQuery<PlantComponent> _plantQuery;
-
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly PlantMutationSystem _mutation = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    // DS14-end
+    [Dependency] private EntityQuery<PlantComponent> _plantQuery;
 
     /// <summary>
     /// This handles swab examination text
     /// so you can tell if they are used or not.
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnExamined(Entity<BotanySwabComponent> ent, ref ExaminedEvent args)
     {
         if (!args.IsInDetailsRange)
@@ -51,9 +38,10 @@ public sealed partial class BotanySwabSystem : EntitySystem
     /// <summary>
     /// Handles swabbing a plant.
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnAfterInteract(Entity<BotanySwabComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Target == null || !args.CanReach || !_plantQuery.HasComp(args.Target)) // DS14
+        if (args.Target == null || !args.CanReach || !_plantQuery.HasComp(args.Target))
             return;
 
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.SwabDelay, new BotanySwabDoAfterEvent(), ent.Owner, target: args.Target, used: ent.Owner)
@@ -67,9 +55,10 @@ public sealed partial class BotanySwabSystem : EntitySystem
     /// <summary>
     /// Save seed data or cross-pollenate.
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnDoAfter(Entity<BotanySwabComponent> ent, ref BotanySwabDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled || !_plantQuery.HasComp(args.Args.Target)) // DS14
+        if (args.Cancelled || args.Handled || !_plantQuery.HasComp(args.Args.Target))
             return;
 
         var targetPlant = args.Args.Target.Value;

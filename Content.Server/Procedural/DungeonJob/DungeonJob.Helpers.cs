@@ -3,7 +3,6 @@ using Content.Shared.Procedural;
 using Content.Shared.Wall;
 using Robust.Shared.Collections;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Physics.Components;
 
 namespace Content.Server.Procedural.DungeonJob;
 
@@ -13,7 +12,7 @@ public sealed partial class DungeonJob
 
     private bool HasWall(Vector2i tile)
     {
-        var anchored = _maps.GetAnchoredEntitiesEnumerator(_gridUid, _grid, tile);
+        var anchored = _maps.GetAnchoredEntities(_gridUid, _grid, tile);
 
         while (anchored.MoveNext(out var uid))
         {

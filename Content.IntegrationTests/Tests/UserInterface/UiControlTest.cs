@@ -14,6 +14,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 // DS14-end
 using Content.Client.LateJoin;
+using Content.IntegrationTests.Fixtures;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.ContentPack;
 using Robust.Shared.IoC;
@@ -22,7 +23,7 @@ using Robust.Shared.Reflection;
 namespace Content.IntegrationTests.Tests.UserInterface;
 
 [TestFixture]
-public sealed class UiControlTest
+public sealed class UiControlTest : GameTest
 {
     // You should not be adding to this.
     private Type[] _ignored = new Type[]
@@ -36,10 +37,7 @@ public sealed class UiControlTest
     [Test]
     public async Task TestWindows()
     {
-        var pair = await PoolManager.GetServerClient(new PoolSettings()
-        {
-            Connected = true,
-        });
+        var pair = Pair;
         var activator = pair.Client.ResolveDependency<IDynamicTypeFactory>();
         var refManager = pair.Client.ResolveDependency<IReflectionManager>();
         var loader = pair.Client.ResolveDependency<IModLoader>();
@@ -67,8 +65,6 @@ public sealed class UiControlTest
                 // DS14-end
             }
         });
-
-        await pair.CleanReturnAsync();
     }
 
     // DS14-start: central controls must never regress to a pure-white interactive backing surface

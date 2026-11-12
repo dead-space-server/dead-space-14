@@ -28,13 +28,9 @@
         probability: 0.15
   tileReactions:
   - !type:CleanTileReaction
-    cleanCost: 0.13
+    cleanCost: 0.01
   - !type:CleanDecalsReaction
-    cleanCost: 0.13
-  - !type:ReplaceTileReaction
-    cost: 0.13
-    replacements:
-      FloorSteelDirty: FloorSteel
+    cleanCost: 0.01
 
 - type: reagent
   id: SpaceCleaner
@@ -48,11 +44,9 @@
   meltingPoint: -11.0
   tileReactions:
     - !type:CleanTileReaction
-      cleanCost: 0.01
-    - !type:CleanDecalsReaction {}
-    - !type:ReplaceTileReaction
-      replacements:
-        FloorSteelDirty: FloorSteel
+      cleanCost: 0.1
+    - !type:CleanDecalsReaction
+      cleanCost: 0.1
 
 - type: reagent
   id: SoapReagent

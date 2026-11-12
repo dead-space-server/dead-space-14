@@ -1,8 +1,15 @@
+<<<<<<< ours
 <!-- DS14: Keep the System namespace while this branch uses explicit system:String style entries. -->
 <DefaultWindow
+||||||| base
+<DefaultWindow
+=======
+<controls:FancyWindow
+>>>>>>> theirs
     xmlns="https://spacestation14.io"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:ui="clr-namespace:Content.Client.Materials.UI"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     Title="{Loc 'lathe-menu-title'}"
     MinSize="550 450"
     SetSize="750 500">
@@ -117,12 +124,8 @@
                             Text="✖"
                             SetSize="38 32"
                             HorizontalAlignment="Right"
-                            ToolTip="{Loc 'lathe-menu-delete-fabricating-tooltip'}">
-                            <Button.StyleClasses>
-                                <system:String>Caution</system:String>
-                                <system:String>OpenLeft</system:String>
-                            </Button.StyleClasses>
-                        </Button>
+                            ToolTip="{Loc 'lathe-menu-delete-fabricating-tooltip'}"
+                            StyleClasses="negative OpenLeft" />
                     </PanelContainer>
                 </BoxContainer>
                 <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
@@ -139,10 +142,21 @@
             VerticalExpand="True"
             HorizontalExpand="True"
             Orientation="Vertical">
+<<<<<<< ours
             <!-- DS14-start -->
             <Label Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle" />
             <!-- DS14-end -->
             <PanelContainer VerticalExpand="True" StyleClasses="PanelDeep">
+||||||| base
+            <Label Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center"/>
+            <PanelContainer VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />
+                </PanelContainer.PanelOverride>
+=======
+            <Label Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center"/>
+            <PanelContainer VerticalExpand="True" StyleClasses="PanelDeep">
+>>>>>>> theirs
                 <BoxContainer
                     Orientation="Vertical"
                     VerticalExpand="True"
@@ -155,4 +169,4 @@
 
     </BoxContainer>
 
-</DefaultWindow>
+</controls:FancyWindow>

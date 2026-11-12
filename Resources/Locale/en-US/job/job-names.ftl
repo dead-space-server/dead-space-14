@@ -6,7 +6,7 @@ job-name-brigmedic = Brigmedic
 job-name-cadet = Security Cadet
 job-name-captain = Captain
 job-name-cargotech = Cargo Technician
-job-name-cburn = CentComm Quarantine Officer
+job-name-cburn = CBURN Officer
 job-name-ce = Chief Engineer
 job-name-centcomoff = CentComm Official
 job-name-centcommoff = CentComm Official
@@ -16,7 +16,7 @@ job-name-chemist = Chemist
 job-name-clown = Clown
 job-name-cluwne = Cluwne
 job-name-cmo = Chief Medical Officer
-job-name-deathsquad = Centcomm Agent
+job-name-deathsquad = Death Squad Commando
 job-name-detective = Detective
 job-name-doctor = Medical Doctor
 job-name-engineer = Station Engineer
@@ -49,6 +49,7 @@ job-name-security = Security Officer
 job-name-serviceworker = Service Worker
 job-name-station-ai = Station AI
 job-name-technical-assistant = Technical Assistant
+job-name-tram-driver = Tram Driver
 job-name-visitor = Visitor
 job-name-warden = Warden
 
@@ -60,6 +61,7 @@ job-name-no-id = No ID
 job-name-prisoner = Prisoner
 job-name-roboticist = Roboticist
 job-name-unknown = Unknown
+job-name-sus = Sus
 job-name-virologist = Virologist
 
 # antagonist jobs

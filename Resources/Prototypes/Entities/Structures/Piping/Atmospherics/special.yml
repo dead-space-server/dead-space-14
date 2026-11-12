@@ -8,6 +8,7 @@
   components:
   - type: Transform
     anchored: true
+  - type: Pullable
   - type: Physics
     bodyType: Static
   - type: Sprite
@@ -19,6 +20,8 @@
         shape:
           !type:PhysShapeAabb
             bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - DoorPassable
   - type: Airtight
     noAirWhenFullyAirBlocked: false
   - type: Clickable
@@ -40,6 +43,7 @@
   components:
   - type: Transform
     anchored: true
+  - type: Pullable
   - type: Physics
     bodyType: Static
   - type: Sprite
@@ -51,6 +55,8 @@
         shape:
           !type:PhysShapeAabb
             bounds: "-0.48,-0.48,0.48,-0.40"
+        mask:
+        - DoorPassable
   - type: Airtight
     noAirWhenFullyAirBlocked: false
     airBlockedDirection:

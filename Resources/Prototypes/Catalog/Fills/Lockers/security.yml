@@ -120,7 +120,8 @@
   id: FillLockerBrigmedic
   table: !type:AllSelector
     children:
-    - id: ClothingHeadsetBrigmedic
+    - id: ClothingEyesGlassesSecurity
+    - id: WeaponDisabler
     - id: TrackingImplanter
     - id: RubberStampBrigmedic
     - id: ClothingOuterHardsuitBrigmedic

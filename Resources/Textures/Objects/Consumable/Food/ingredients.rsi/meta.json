@@ -161,6 +161,18 @@
     },
     {
       "name": "cloth-box"
+    },
+    {
+      "name": "pepper-big"
+    },
+    {
+      "name": "pepper-big_open"
+    },
+    {
+      "name": "salt-big"
+    },
+    {
+      "name": "salt-big_open"
     }
   ]
 }

@@ -4,18 +4,27 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Damage.Systems;
 
-public sealed class PassiveDamageSystem : EntitySystem
+public sealed partial class PassiveDamageSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
+<<<<<<< ours
     #region Subscriptions
 
     // DS14-start: current engine baseline uses explicit subscriptions and DamageChangedEvent.
     public override void Initialize()
     {
         base.Initialize();
+||||||| base
+    public override void Initialize()
+    {
+        base.Initialize();
+=======
+    #region Subscriptions
+>>>>>>> theirs
 
+<<<<<<< ours
         SubscribeLocalEvent<PassiveDamageComponent, MapInitEvent>(OnPendingMapInit);
         SubscribeLocalEvent<PassiveDamageComponent, DamageChangedEvent>(OnDamageTaken);
     }
@@ -24,10 +33,27 @@ public sealed class PassiveDamageSystem : EntitySystem
     {
         ent.Comp.NextDamage = _timing.CurTime + TimeSpan.FromSeconds(1f);
         Dirty(ent);
+||||||| base
+        SubscribeLocalEvent<PassiveDamageComponent, MapInitEvent>(OnPendingMapInit);
+=======
+    [SubscribeLocalEvent]
+    private void OnPendingMapInit(Entity<PassiveDamageComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.NextDamage = _timing.CurTime + TimeSpan.FromSeconds(1f);
+        Dirty(ent);
+>>>>>>> theirs
     }
 
+<<<<<<< ours
     private void OnDamageTaken(Entity<PassiveDamageComponent> ent, ref DamageChangedEvent args)
+||||||| base
+    private void OnPendingMapInit(EntityUid uid, PassiveDamageComponent component, MapInitEvent args)
+=======
+    [SubscribeLocalEvent]
+    private void OnDamageTaken(Entity<PassiveDamageComponent> ent, ref DamageDealtEvent args)
+>>>>>>> theirs
     {
+<<<<<<< ours
         if (_timing.ApplyingState ||
             ent.Comp.IntervalHaltOnDamageTaken == TimeSpan.Zero ||
             !args.DamageIncreased)
@@ -39,8 +65,24 @@ public sealed class PassiveDamageSystem : EntitySystem
             ent.Comp.NextDamage = proposedUpdateTime;
             Dirty(ent);
         }
+||||||| base
+        component.NextDamage = _timing.CurTime + TimeSpan.FromSeconds(1f);
+=======
+        if (ent.Comp.IntervalHaltOnDamageTaken == TimeSpan.Zero || !args.Damage.AnyPositive())
+            return;
+
+        var proposedUpdateTime = _timing.CurTime + ent.Comp.IntervalHaltOnDamageTaken;
+        if (proposedUpdateTime > ent.Comp.NextDamage)
+        {
+            ent.Comp.NextDamage = proposedUpdateTime;
+            Dirty(ent);
+        }
+
+>>>>>>> theirs
     }
     // DS14-end
+
+    #endregion
 
     #endregion
 
@@ -56,9 +98,6 @@ public sealed class PassiveDamageSystem : EntitySystem
         {
             // Make sure they're up for a damage tick
             if (comp.NextDamage > curTime)
-                continue;
-
-            if (comp.DamageCap != 0 && damage.TotalDamage >= comp.DamageCap)
                 continue;
 
             // Set the next time they can take damage

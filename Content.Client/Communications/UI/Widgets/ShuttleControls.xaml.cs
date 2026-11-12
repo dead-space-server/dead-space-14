@@ -11,8 +11,7 @@ namespace Content.Client.Communications.UI.Widgets;
 [GenerateTypedNameReferences]
 public sealed partial class ShuttleControls : Control
 {
-    // DS14: the current engine still uses the pre-source-generator IoC pattern.
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private bool _canCall;
     private bool _countdownStarted;

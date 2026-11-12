@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Client.DamageState;
+using Content.Client.DamageOverlay;
 using Content.Client.Gameplay;
 using Content.Client.Humanoid;
 using Content.Client.Sirena.Animations;
@@ -28,7 +29,6 @@ using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
-using Content.Client.UserInterface.Systems.DamageOverlays;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -58,6 +58,7 @@ public sealed class PsychiatryClientSystem : SharedPsychiatrySystem
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly SpriteSystem _sprites = default!;
     [Dependency] private readonly EmoteAnimationSystem _emotes = default!;
+    [Dependency] private readonly DamageOverlaySystem _damageOverlay = default!; // DS14
     [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly IInputManager _input = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
@@ -229,7 +230,7 @@ public sealed class PsychiatryClientSystem : SharedPsychiatrySystem
             if (_shownPhantom != 0f && _player.LocalEntity is { } local)
             {
                 _shownPhantom = 0f;
-                _ui.GetUIController<DamageOverlayUiController>().RefreshLocal(local);
+                _damageOverlay.RefreshLocal(local);
             }
 
             if (_activeSubject != null || sweep)
@@ -271,7 +272,7 @@ public sealed class PsychiatryClientSystem : SharedPsychiatrySystem
         if (schizo.PhantomAmount != _shownPhantom)
         {
             _shownPhantom = schizo.PhantomAmount;
-            _ui.GetUIController<DamageOverlayUiController>().RefreshLocal(subject);
+            _damageOverlay.RefreshLocal(subject);
         }
 
         if (schizo.Stage >= SchizophreniaStage.Acute && _timing.CurTime >= _nextNearbyVoice)

@@ -9,39 +9,20 @@
       sprite: Objects/Weapons/Melee/riot-shield.rsi
       state: icon
     - type: Item
-      sprite: Objects/Weapons/Melee/riot-shield.rsi
-      heldPrefix: icon
-      size: Ginormous
+      sprite: Objects/Weapons/Melee/shields.rsi
+      heldPrefix: riot
     - type: Blocking
       passiveBlockModifier:
         flatReductions:
-          Blunt: 10
-          Slash: 10
-          Piercing: 10
-          Heat: 10
+          Blunt: 6
+          Slash: 6
+          Piercing: 6
+          Heat: 6
     - type: Damageable
+    - type: Injurable
       damageContainer: Shield
     - type: ExaminableDamage
       messages: ShieldMessages
-    - type: Destructible
-      thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 220 #This is probably enough damage before it breaks
-        behaviors:
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
-        - !type:SpawnEntitiesBehavior
-          spawn:
-            SheetSteel:
-              min: 2
-              max: 2
-            SheetGlass:
-              min: 2
-              max: 2
     - type: StaticPrice
       price: 100
     #DS14-Start
@@ -74,11 +55,66 @@
 #DS14-End
 
 - type: entity
-  name: base repairable shield
-  parent: BaseShield
-  id: BaseRepairableShield
-  description: A repairable shield!
   abstract: true
+  id: BaseShieldDestructible
+  components:
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 125 #This is probably enough damage before it breaks
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel:
+            min: 2
+            max: 2
+          SheetGlass:
+            min: 2
+            max: 2
+
+- type: entity
+  abstract: true
+  parent: BaseShield
+  id: BaseGinormousShield
+  components:
+  - type: Item
+    size: Ginormous
+    shape:
+    - 0,0,3,5
+  - type: HeldSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+
+- type: entity
+  abstract: true
+  parent: BaseShield
+  id: BaseLargeShield
+  components:
+  - type: Item
+    size: Large
+    shape:
+    - 0,0,2,3
+
+- type: entity
+  abstract: true
+  parent: BaseLargeShield
+  id: BaseRoundShield
+  components:
+  - type: Item
+    shape:
+    - 0,0,2,2
+
+- type: entity
+  abstract: true
+  id: BaseRepairableShield
+  name: base repairable shield
+  description: A repairable shield!
   components:
   - type: Repairable # Negative values represent healing
     damage:
@@ -95,7 +131,7 @@
 
 - type: entity
   name: riot shield
-  parent: [ BaseRepairableShield, BaseSecurityContraband ]
+  parent: [ BaseRepairableShield, BaseGinormousShield, BaseShieldDestructible, BaseSecurityContraband ]
   id: RiotShield
   description: A large tower shield. Good for controlling crowds.
   components:
@@ -134,7 +170,7 @@
 
 - type: entity
   name: laser shield
-  parent: [ BaseRepairableShield, BaseSecurityContraband ]
+  parent: [ BaseRepairableShield, BaseGinormousShield, BaseShieldDestructible, BaseSecurityContraband ]
   id: RiotLaserShield
   description: A shield built for withstanding lasers, but not much else.
   components:
@@ -152,14 +188,14 @@
     - type: Blocking
       passiveBlockModifier:
         flatReductions:
-          Blunt: 5
-          Slash: 10
-          Piercing: 5
-          Heat: 20
+          Blunt: 3
+          Slash: 6
+          Piercing: 3
+          Heat: 15
 
 - type: entity
   name: ballistic shield
-  parent: [ BaseRepairableShield, BaseSecurityContraband ]
+  parent: [ BaseRepairableShield, BaseGinormousShield, BaseShieldDestructible, BaseSecurityContraband ]
   id: RiotBulletShield
   description: A shield built for protecting against ballistics, but not much else.
   components:
@@ -205,7 +241,7 @@
 
 - type: entity
   name: wooden buckler
-  parent: BaseShield
+  parent: BaseRoundShield
   id: WoodenBuckler
   description: A small round wooden makeshift shield.
   components:
@@ -213,20 +249,16 @@
       sprite: Objects/Weapons/Melee/buckler-shield.rsi
       state: icon
     - type: Item
-      sprite: Objects/Weapons/Melee/buckler-shield.rsi
-      heldPrefix: icon
-    - type: Clothing
-      sprite: Objects/Weapons/Melee/buckler-shield.rsi
-      quickEquip: false
-      slots:
-      - suitStorage
+      heldPrefix: buckler
+      shape:
+      - 0,0,2,2
     - type: Blocking
       passiveBlockModifier:
         flatReductions:
-          Blunt: 5
-          Slash: 5
-          Piercing: 5
-          Heat: 5
+          Blunt: 6
+          Slash: 6
+          Piercing: 6
+          Heat: 3
     - type: Construction
       graph: WoodenBuckler
       node: woodenBuckler
@@ -234,7 +266,7 @@
       thresholds:
       - trigger:
           !type:DamageTrigger
-          damage: 75 #Weaker shield
+          damage: 50 #Weaker shield
         behaviors:
         - !type:DoActsBehavior
           acts: [ "Destruction" ]
@@ -262,7 +294,7 @@
 
 - type: entity
   name: cardboard shield
-  parent: BaseShield
+  parent: BaseLargeShield
   id: CardShield
   description: A shield made of cardboard. Won't protect you from much.
   components:
@@ -301,7 +333,7 @@
 
 - type: entity
   name: makeshift shield
-  parent: BaseRepairableShield
+  parent: [ BaseRepairableShield, BaseGinormousShield ]
   id: MakeshiftShield
   description: A rundown looking shield, not good for much.
   components:
@@ -344,7 +376,7 @@
 
 - type: entity
   name: web shield
-  parent: BaseShield
+  parent: BaseLargeShield
   id: WebShield
   description: A stringy shield. It's weak, and doesn't seem to do well against heat.
   components:
@@ -357,7 +389,8 @@
     - type: Blocking
       passiveBlockModifier:
         flatReductions:
-          Blunt: 5
+          Blunt: 9
+          Heat: 6
           Piercing: 1 # Scar told me to.
     - type: Construction
       graph: WebObjects
@@ -383,7 +416,7 @@
 
 - type: entity
   name: clockwork shield
-  parent: BaseRepairableShield
+  parent: [ BaseRepairableShield, BaseRoundShield, BaseShieldDestructible ]
   id: ClockworkShield
   description: Ratvar oyrffrf lbh jvgu uvf cebgrpgvba.
   components:
@@ -452,7 +485,7 @@
 
 - type: entity
   name: mirror shield
-  parent: [ BaseShield, BaseMagicalContraband ]
+  parent: [ BaseLargeShield, BaseMagicalContraband ]
   id: MirrorShield
   description: Eerily glows red... you hear the geometer whispering
   components:
@@ -471,10 +504,10 @@
         coefficients:
           Heat: 0.5
         flatReductions:
-          Blunt: 5
-          Slash: 10
-          Piercing: 5
-          Heat: 25
+          Blunt: 3
+          Slash: 6
+          Piercing: 3
+          Heat: 24
       blockSound: !type:SoundPathSpecifier
         path: /Audio/Effects/glass_step.ogg
     - type: Destructible
@@ -507,10 +540,11 @@
 
 - type: entity
   name: energy shield
-  parent: [BaseItem, BaseSyndicateContraband]
+  parent: [BaseShield, BaseSyndicateContraband]
   id: EnergyShield
   description: Exotic energy shield, when folded, can even fit in your pocket.
   components:
+    - type: ItemToggleExaminableStatus
     - type: ItemToggle
       onActivate: false # DS14
       predictable: false # DS14 - server-side EMP can force-toggle the shield off.
@@ -570,20 +604,18 @@
         coefficients:
           Heat: 0.5
         flatReductions:
-          Blunt: 5
-          Piercing: 10
-          Slash: 5
-          Heat: 25
+          Blunt: 3
+          Piercing: 9
+          Slash: 3
+          Heat: 24
     - type: Appearance
-    - type: Damageable
-      damageContainer: Shield
     - type: ExaminableDamage
       messages: EnergyShieldMessages
     - type: Destructible
       thresholds:
       - trigger:
           !type:DamageTrigger
-          damage: 260
+          damage: 125
         behaviors:
         - !type:DoActsBehavior
           acts: [ "Destruction" ]
@@ -637,10 +669,13 @@
 
 - type: entity
   name: telescopic shield
-  parent: BaseRepairableShield
+  parent: [ BaseRepairableShield, BaseShield, BaseShieldDestructible ]
   id: TelescopicShield
   description: An advanced riot shield made of lightweight materials that collapses for easy storage.
   components:
+    - type: ItemToggleExaminableStatus
+      onText: item-toggle-examined-active
+      offText: item-toggle-examined-not-active
     - type: ItemToggle
       onActivate: false # DS14
       soundActivate:
@@ -656,7 +691,12 @@
       - type: DisarmMalus
         malus: 0.6
     - type: ItemToggleSize
-      activatedSize: Huge
+      activatedSize: Ginormous
+      activatedShape:
+      - 0,0,3,5
+    - type: HeldSpeedModifier
+      walkModifier: 0.9
+      sprintModifier: 0.9
     - type: Sprite
       sprite: Objects/Weapons/Melee/teleriot_shield.rsi
       layers:
@@ -665,7 +705,7 @@
           visible: false
           map: [ "shield" ]
     - type: Item
-      size: Small
+      size: Normal
       sprite: Objects/Weapons/Melee/teleriot_shield.rsi
       heldPrefix: teleriot
     - type: UseDelay

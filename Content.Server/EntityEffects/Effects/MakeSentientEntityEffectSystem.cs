@@ -1,12 +1,21 @@
+<<<<<<< ours
 ﻿using Content.Server.Ghost.Roles.Components;
 using Content.Server.DeadSpace.Languages;
 using Content.Server.RuntimeFun;
 using Content.Server.Speech.Components;
 using Content.Shared.DeadSpace.Languages.Components; // DS14
+||||||| base
+﻿using Content.Server.Ghost.Roles.Components;
+using Content.Server.Speech.Components;
+=======
+using Content.Server.Ghost.Roles.Components;
+using Content.Server.RuntimeFun;
+>>>>>>> theirs
 using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects;
 using Content.Shared.Humanoid; // DS14
 using Content.Shared.Mind.Components;
+using Content.Shared.Speech.Components;
 
 namespace Content.Server.EntityEffects.Effects;
 
@@ -27,6 +36,7 @@ public sealed partial class MakeSentientEntityEffectSystem : EntityEffectSystem<
             RemComp<ReplacementAccentComponent>(entity);
             // TODO: Make MonkeyAccent a replacement accent and remove MonkeyAccent code-smell.
             RemComp<MonkeyAccentComponent>(entity);
+<<<<<<< ours
             RemComp<SpeakOnExceptionComponent>(entity);
 
             // DS14-Languages-start
@@ -41,6 +51,10 @@ public sealed partial class MakeSentientEntityEffectSystem : EntityEffectSystem<
 
             Dirty(entity, language);
             // DS14-Languages-end
+||||||| base
+=======
+            RemComp<SpeakOnExceptionComponent>(entity);
+>>>>>>> theirs
         }
 
         // Stops from adding a ghost role to things like people who already have a mind

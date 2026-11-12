@@ -154,6 +154,15 @@ public partial class ListingData : IEquatable<ListingData>
     public int Priority;
 
     /// <summary>
+    /// A dummy entity containing the components to be added to the buyer if the listing is bought.
+    /// </summary>
+    /// <remarks>
+    /// We use an EntProtoId rather than a ComponentRegistry to keep ListingData equatable.
+    /// </remarks>
+    [DataField]
+    public EntProtoId? ProductComponents;
+
+    /// <summary>
     /// The entity that is given when the listing is purchased.
     /// </summary>
     [DataField]
@@ -307,6 +316,12 @@ public sealed partial class ListingDataWithCostModifiers : ListingData
     [DataField]
     public Dictionary<string, Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2>> CostModifiersBySourceId = new();
 
+    /// <summary>
+    /// If true, then this entry was locked.
+    /// </summary>
+    [DataField]
+    public bool Locked = false;
+
     /// <inheritdoc />
     public ListingDataWithCostModifiers(ListingData listingData)
         : base(
@@ -355,11 +370,10 @@ public sealed partial class ListingDataWithCostModifiers : ListingData
     /// <param name="modifiers">Values for cost modification.</param>
     public void AddCostModifier(string modifierSourceId, Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2> modifiers)
     {
-        CostModifiersBySourceId.Add(modifierSourceId, modifiers);
+        CostModifiersBySourceId.TryAdd(modifierSourceId, modifiers);
+
         if (_costModified != null)
-        {
             _costModified = ApplyAllModifiers();
-        }
     }
 
     /// <summary> Remove cost modifier with passed sourceId. </summary>

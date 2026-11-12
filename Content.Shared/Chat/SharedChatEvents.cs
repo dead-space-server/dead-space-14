@@ -4,6 +4,7 @@ using Content.Shared.Radio;
 using Content.Shared.Speech;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Chat;
 
@@ -85,6 +86,7 @@ public sealed class EntitySpokeEvent : EntityEventArgs
         ObfuscatedMessage = obfuscatedMessage;
     }
 }
+<<<<<<< ours
 
 /// <summary>
 ///     Raised on an entity when it sends direct message to another entity
@@ -152,3 +154,27 @@ public sealed class AnnounceSpokeEvent : EntityEventArgs
         Source = source;
     }
 }
+||||||| base
+=======
+
+/// <summary>
+/// Checks if an entity link can be clicked on or not, so that it may be teleported to.
+/// </summary>
+/// <param name="Target">Target we are attempting to teleport to.</param>
+/// <param name="Pure">If pure is true, will only act as an attempt event. If pure is false, will teleport to the entity.</param>
+[ByRefEvent]
+public record struct ClickEntityLinkEvent(EntityUid Target, bool Pure)
+{
+    public bool Handled;
+}
+
+/// <summary>
+/// Net Message that is sent when a client clicks a link in the chat box.
+/// </summary>
+/// <param name="target">Target entity of the text link</param>
+[Serializable, NetSerializable]
+public sealed class ChatLinkClickedRequestEvent(NetEntity target) : EntityEventArgs
+{
+    public readonly NetEntity Target = target;
+}
+>>>>>>> theirs

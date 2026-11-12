@@ -19,6 +19,7 @@
   - ChemistryEmptyVial
   - ChemistryEmptyVialSmall
   - Dropper
+  - CandyBowl
 
 - type: latheRecipePack
   parent: BasicChemistryStatic
@@ -52,6 +53,7 @@
   - ToolAlcoTester # DS14
   - VehicleWheelchair # DS14
   - JetInjector
+  - VehicleWheelchairFolded
 
 - type: latheRecipePack
   id: RollerBedsStatic

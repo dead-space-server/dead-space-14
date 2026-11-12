@@ -9,15 +9,11 @@
       time: 10h
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 40h
-    - !type:OverallPlaytimeRequirement
-      time: 100h
-    - !type:AgeRequirement
-      requiredAge: 24
+      time: 10h
   startingGear: HoSGear
   icon: "JobIconHeadOfSecurity"
   supervisors: job-supervisors-captain
-  canBeAntag: false
+  guides: [ Command ] # TODO: should have a more specific guidebook page instead of using the department itself
   access:
   - HeadOfSecurity
   - Command
@@ -62,5 +58,6 @@
   job: HeadOfSecurity
   hasMindShield: true
   equipment:
+    head: ClothingHeadHatBeretHoS
     mask: ClothingMaskGasSecurity
     neck: ClothingNeckCloakHos

@@ -2,8 +2,8 @@
   id: Common
   name: chat-radio-common
   keycode: ";"
-  frequency: 1459
-  color: "#32cd32"
+  frequency: 145.9
+  color: "#2cdb2c"
 
 - type: radioChannel
   id: CentCom
@@ -73,8 +73,8 @@
 - type: radioChannel
   id: Handheld
   name: chat-radio-handheld
-  frequency: 1330
-  color: "#d39f01"
+  frequency: 133.0
+  color: "#967101"
   # long range since otherwise it'd defeat the point of a handheld radio independent of telecomms
   longRange: true
 

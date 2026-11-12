@@ -1,11 +1,11 @@
-﻿using Content.Shared.Maths;
+using Content.Shared.Maths;
 using Content.Shared.Teleportation.Components;
-using Content.Shared.Timing;
 using Content.Shared.UserInterface;
 using Content.Shared.Warps;
-using Content.Shared.DeadSpace.Teleportation.Components; // DS14
 using Robust.Shared.Map;
 using System.Numerics;
+using Content.Shared.Timing.Systems;
+using Content.Shared.DeadSpace.Teleportation.Components; // DS14
 
 namespace Content.Shared.Teleportation.Systems;
 
@@ -14,10 +14,23 @@ namespace Content.Shared.Teleportation.Systems;
 /// </summary>
 public abstract partial class SharedTeleportLocationsSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly UseDelaySystem _delay = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
+||||||| base
+    [Dependency] protected readonly UseDelaySystem Delay = default!;
+
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly SharedTransformSystem _xform = default!;
+=======
+    [Dependency] private UseDelaySystem _delay = default!;
+
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+>>>>>>> theirs
 
     protected const string TeleportDelay = "TeleportDelay";
     protected const string TeleportFailedDelay = "TeleportFailedDelay";
@@ -61,11 +74,17 @@ public abstract partial class SharedTeleportLocationsSystem : EntitySystem
 
     protected virtual void OnTeleportToLocationRequest(Entity<TeleportLocationsComponent> ent, ref TeleportLocationDestinationMessage args)
     {
+<<<<<<< ours
         //DS14-start
         if (HasComp<PortalGunComponent>(ent))
             return;
         //DS14-end
         if (!TryGetEntity(args.NetEnt, out var telePointEnt) || TerminatingOrDeleted(telePointEnt) || !HasComp<WarpPointComponent>(telePointEnt) || IsDelayed(ent))
+||||||| base
+        if (!TryGetEntity(args.NetEnt, out var telePointEnt) || TerminatingOrDeleted(telePointEnt) || !HasComp<WarpPointComponent>(telePointEnt) || Delay.IsDelayed(ent.Owner, TeleportDelay))
+=======
+        if (!TryGetEntity(args.NetEnt, out var telePointEnt) || TerminatingOrDeleted(telePointEnt) || !HasComp<WarpPointComponent>(telePointEnt) || IsDelayed(ent))
+>>>>>>> theirs
             return;
 
         if (!IsOfferedWarp(ent.Comp, args.NetEnt)) // DS14

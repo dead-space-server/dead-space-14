@@ -1,10 +1,15 @@
+using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.NPC;
 using Content.Server.NPC.Systems;
-using Content.Server.Pinpointer;
+using Content.Shared.Damage.Components;
 using Content.Shared.Dragon;
+using Content.Shared.EntityTable;
 using Content.Shared.Examine;
+using Content.Shared.Pinpointer;
 using Content.Shared.Sprite;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.GameStates;
 //DS14-start
 using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
@@ -13,10 +18,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization.Manager;
-using System.Numerics;
-using Content.Shared.Damage.Components;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.GameStates;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Dragon;
@@ -24,8 +25,9 @@ namespace Content.Server.Dragon;
 /// <summary>
 /// Handles events for rift entities and rift updating.
 /// </summary>
-public sealed class DragonRiftSystem : EntitySystem
+public sealed partial class DragonRiftSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
     [Dependency] private readonly DragonSystem _dragon = default!;
     [Dependency] private readonly ISerializationManager _serManager = default!;
@@ -33,6 +35,22 @@ public sealed class DragonRiftSystem : EntitySystem
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IRobustRandom _random = default!; //DS14
+||||||| base
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly DragonSystem _dragon = default!;
+    [Dependency] private readonly ISerializationManager _serManager = default!;
+    [Dependency] private readonly NavMapSystem _navMap = default!;
+    [Dependency] private readonly NPCSystem _npc = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+=======
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private DragonSystem _dragon = default!;
+    [Dependency] private ISerializationManager _serManager = default!;
+    [Dependency] private NavMapSystem _navMap = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityTableSystem _entityTable = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -94,10 +112,16 @@ public sealed class DragonRiftSystem : EntitySystem
             if (comp.SpawnAccumulator > comp.SpawnCooldown)
             {
                 comp.SpawnAccumulator -= comp.SpawnCooldown;
+<<<<<<< ours
 //DS14-start
                 if (_random.NextFloat() > comp.Chance)
                     continue;
+||||||| base
+                var ent = Spawn(comp.SpawnPrototype, xform.Coordinates);
+=======
+>>>>>>> theirs
 
+<<<<<<< ours
                 string? prototype = null;
 
                 if (comp.RarePrototypes.Count > 0 && _random.NextFloat() < comp.RareChance)
@@ -116,14 +140,26 @@ public sealed class DragonRiftSystem : EntitySystem
 //DS14-end
                 // Update their look to match the leader.
                 if (TryComp<RandomSpriteComponent>(comp.Dragon, out var randomSprite))
+||||||| base
+                // Update their look to match the leader.
+                if (TryComp<RandomSpriteComponent>(comp.Dragon, out var randomSprite))
+=======
+                foreach (var spawn in _entityTable.GetSpawns(comp.Spawn))
+>>>>>>> theirs
                 {
-                    var spawnedSprite = EnsureComp<RandomSpriteComponent>(ent);
-                    _serManager.CopyTo(randomSprite, ref spawnedSprite, notNullableOverride: true);
-                    Dirty(ent, spawnedSprite);
-                }
+                    var ent = Spawn(spawn, xform.Coordinates);
 
-                if (comp.Dragon != null)
-                    _npc.SetBlackboard(ent, NPCBlackboard.FollowTarget, new EntityCoordinates(comp.Dragon.Value, Vector2.Zero));
+                    // Update their look to match the leader.
+                    if (TryComp<RandomSpriteComponent>(comp.Dragon, out var randomSprite))
+                    {
+                        var spawnedSprite = EnsureComp<RandomSpriteComponent>(ent);
+                        _serManager.CopyTo(randomSprite, ref spawnedSprite, notNullableOverride: true);
+                        Dirty(ent, spawnedSprite);
+                    }
+
+                    if (comp.Dragon != null)
+                        _npc.SetBlackboard(ent, NPCBlackboard.FollowTarget, new EntityCoordinates(comp.Dragon.Value, Vector2.Zero));
+                }
             }
         }
     }

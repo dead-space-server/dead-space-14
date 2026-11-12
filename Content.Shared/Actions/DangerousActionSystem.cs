@@ -7,13 +7,11 @@ namespace Content.Shared.Actions;
 
 public sealed partial class DangerousActionSystem : EntitySystem
 {
-    private EntityQuery<PacifiedComponent> _pacifiedQuery; // DS14 - initialized explicitly on the current engine.
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private EntityQuery<PacifiedComponent> _pacifiedQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _pacifiedQuery = GetEntityQuery<PacifiedComponent>(); // DS14
         SubscribeLocalEvent<DangerousActionComponent, ActionAttemptEvent>(OnAttempt);
     }
 
@@ -25,8 +23,9 @@ public sealed partial class DangerousActionSystem : EntitySystem
         if (!_pacifiedQuery.HasComp(args.User))
             return;
 
-        // DS14: the legacy ActionAttemptEvent has no popup payload.
-        _popup.PopupPredicted(Loc.GetString(ent.Comp.PacificationMessage), args.User, args.User, ent.Comp.MessageType);
+        args.Reason = Loc.GetString(ent.Comp.PacificationMessage);
+        args.Type = ent.Comp.MessageType;
+
         args.Cancelled = true;
     }
 

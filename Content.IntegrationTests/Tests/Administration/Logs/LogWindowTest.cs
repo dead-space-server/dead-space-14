@@ -13,7 +13,7 @@ namespace Content.IntegrationTests.Tests.Administration.Logs;
 
 public sealed class LogWindowTest : InteractionTest
 {
-    protected override PoolSettings Settings => new() { Connected = true, Dirty = true, AdminLogsEnabled = true, DummyTicker = false };
+    public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true, AdminLogsEnabled = true, DummyTicker = false };
 
     [Test]
     public async Task TestAdminLogsWindow()
@@ -37,16 +37,18 @@ public sealed class LogWindowTest : InteractionTest
         var refresh = logWindow.Logs.RefreshButton;
         var cont = logWindow.Logs.LogsContainer;
 
-        var searchResult = await SearchLogs(guid);
-        Assert.That(searchResult.Length, Is.EqualTo(1));
+        // Search for the log we added earlier.
+        var searchResult = await SearchLogs(guid); // DS14
+        Assert.That(searchResult, Has.Length.EqualTo(1));
         Assert.That(searchResult[0].Log.Message, Contains.Substring($" test log 1: {guid}"));
 
         // Add a new log
         guid = Guid.NewGuid();
         await Server.WaitPost(() => log.Add(LogType.Unknown, $"{SPlayer} test log 2: {guid}"));
 
-        searchResult = await SearchLogs(guid);
-        Assert.That(searchResult.Length, Is.EqualTo(1));
+        // Update the search and refresh
+        searchResult = await SearchLogs(guid); // DS14
+        Assert.That(searchResult, Has.Length.EqualTo(1));
         Assert.That(searchResult[0].Log.Message, Contains.Substring($" test log 2: {guid}"));
 
         async Task<AdminLogLabel[]> SearchLogs(Guid searchGuid)

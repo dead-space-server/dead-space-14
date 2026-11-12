@@ -1,8 +1,8 @@
 - type: entity
-  name: bola
+  abstract: true
   parent: [BaseItem, BaseSecurityContraband]
-  id: Bola
-  description: Linked together with some spare cuffs and metal.
+  id: BaseBola
+  name: bola
   components:
   - type: Item
     size: Normal
@@ -13,19 +13,11 @@
     sound: /Audio/Weapons/bolathrow.ogg
   - type: EmitSoundOnLand
     sound: /Audio/Effects/snap.ogg
-  - type: Construction
-    graph: Bola
-    node: bola
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 75
-      behaviors:
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
     - trigger:
         !type:DamageTrigger
         damage: 15
@@ -40,10 +32,10 @@
       types:
         Blunt: 5
   - type: Ensnaring
-    freeTime: 2.0
-    breakoutTime: 3.5 #all bola should generally be fast to remove
-    walkSpeed: 0.5 #makeshift bola shouldn't slow too much
-    sprintSpeed: 0.5
+    freeTime: 1.5
+    breakoutTime: 2.0 #all bola should generally be fast to remove
+    walkSpeed: 0.65 #makeshift bola shouldn't slow too much
+    sprintSpeed: 0.65
     staminaDamage: 0 # anything but this is gamebreaking
     canThrowTrigger: true
     canMoveBreakout: true

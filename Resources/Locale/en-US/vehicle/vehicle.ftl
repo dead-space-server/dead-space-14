@@ -1,3 +1,5 @@
 vehicle-slot-component-slot-name-keys = keys
-vehicle-key-eject-requires-operator = You need to be riding the vehicle to take the key.
-vehicle-operator-unstrap-protected = You cannot remove the rider while they can still hold on.
+container-vehicle-verb-enter = Enter
+container-vehicle-verb-remove-operator = Remove operator
+container-vehicle-entry-denied = You cannot operate this.
+container-vehicle-operator-removal-started = {$user} is pulling the operator out of the {$vehicle}!

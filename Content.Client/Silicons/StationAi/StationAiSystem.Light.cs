@@ -27,7 +27,7 @@ public sealed partial class StationAiSystem
             {
                 Enabled = !toggle.Activated
             },
-            Order = 4, // DS14
+            Order = 4,
         });
     }
 }

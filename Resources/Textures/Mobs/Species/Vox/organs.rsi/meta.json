@@ -91,6 +91,15 @@
         },
         {
             "name": "tongue"
+        },
+        {
+            "name": "brain"
+        },
+        {
+            "name": "appendix"
+        },
+        {
+            "name": "ears"
         }
     ]
 }

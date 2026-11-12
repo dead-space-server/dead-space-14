@@ -16,35 +16,20 @@ namespace Content.Shared.Botany.Items.Systems;
 /// </summary>
 public sealed partial class BotanySampleTakerSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions and query initialization.
-    public override void Initialize()
-    {
-        base.Initialize();
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
-        SubscribeLocalEvent<BotanySampleTakerComponent, AfterInteractEvent>(OnAfterInteract);
-        SubscribeLocalEvent<PlantComponent, PlantSampleAttemptEvent>(OnPlantSampleAttempt);
+    [Dependency] private EntityQuery<PlantHolderComponent> _holderQuery;
+    [Dependency] private EntityQuery<PlantDataComponent> _dataQuery;
+    [Dependency] private EntityQuery<PlantComponent> _plantQuery;
 
-        _holderQuery = GetEntityQuery<PlantHolderComponent>();
-        _dataQuery = GetEntityQuery<PlantDataComponent>();
-        _plantQuery = GetEntityQuery<PlantComponent>();
-    }
-    // DS14-end
-
-    // DS14-start
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-
-    private EntityQuery<PlantHolderComponent> _holderQuery;
-    private EntityQuery<PlantDataComponent> _dataQuery;
-    private EntityQuery<PlantComponent> _plantQuery;
-    // DS14-end
-
+    [SubscribeLocalEvent]
     private void OnAfterInteract(Entity<BotanySampleTakerComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Target == null || args.Handled || !args.CanReach || !_plantQuery.HasComp(args.Target)) // DS14
+        if (args.Target == null || args.Handled || !args.CanReach || !_plantQuery.HasComp(args.Target))
             return;
 
         var ev = new PlantSampleAttemptEvent(ent, args.User);
@@ -53,6 +38,7 @@ public sealed partial class BotanySampleTakerSystem : EntitySystem
         args.Handled = true;
     }
 
+    [SubscribeLocalEvent]
     private void OnPlantSampleAttempt(Entity<PlantComponent> ent, ref PlantSampleAttemptEvent args)
     {
         if (args.Cancelled)
@@ -68,9 +54,9 @@ public sealed partial class BotanySampleTakerSystem : EntitySystem
             return;
         }
 
-        // Prevent early sampling.
+        // Prevent early sampling, unless the plant is fully grown.
         var growthStage = _plant.GetGrowthStageValue(ent.AsNullable());
-        if (growthStage <= args.Sample.Comp.MinSampleStage)
+        if (growthStage < ent.Comp.GrowthStages && growthStage <= args.Sample.Comp.MinSampleStage)
         {
             _popup.PopupCursor(Loc.GetString("plant-sample-component-early-sample-popup"), args.User);
             return;
@@ -82,7 +68,7 @@ public sealed partial class BotanySampleTakerSystem : EntitySystem
         _plantHolder.AdjustsHealth((ent.Owner, holder), -random.NextFloat(args.Sample.Comp.SampleDamage.Min, args.Sample.Comp.SampleDamage.Max));
 
         // Produce a seed packet snapshot.
-        float? healthOverride = holder.ReadyForHarvest ? null : holder.Health; // DS14
+        float? healthOverride = holder.ReadyForHarvest ? null : holder.Health;
         var protoId = MetaData(ent.Owner).EntityPrototype!.ID;
         _botany.SpawnSeedPacket(plantData, protoId, ent.Owner, Transform(args.User).Coordinates, args.User, healthOverride);
 

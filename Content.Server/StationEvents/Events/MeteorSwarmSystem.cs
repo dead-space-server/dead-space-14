@@ -1,39 +1,54 @@
 using System.Numerics;
-using Content.Server.Chat.Systems;
-using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.GameTicking.Rules;
 using Content.Shared.Random.Helpers;
-using Robust.Server.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Player;
 using Robust.Shared.Random;
 
 namespace Content.Server.StationEvents.Events;
 
-public sealed class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
+/// <summary>
+/// Handler for events that spawn meteors, throwing them at the largest grid of the station.
+/// </summary>
+/// <seealso cref="MeteorSwarmComponent"/>
+public sealed partial class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private ServerStationSystem _station = default!;
 
-    protected override void Added(EntityUid uid, MeteorSwarmComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
+    protected override void Added(Entity<MeteorSwarmComponent, GameRuleComponent> rule, ref GameRuleAddedEvent args)
     {
-        base.Added(uid, component, gameRule, args);
+        base.Added(rule, ref args);
+        var stations = _station.GetStations();
+        if (stations.Count == 0)
+            return;
 
-        component.WaveCounter = component.Waves.Next(RobustRandom);
+        var station = RobustRandom.Pick(stations);
+        // DS14-start - keep the meteors on the station this rule targets
+        _ruleStation.EnsureEventTarget(rule);
+        if (_ruleStation.GetTargetStation(rule) is { } target && TryComp<StationDataComponent>(target, out var targetData))
+            station = (target, targetData);
+        // DS14-end
+        if (_station.GetLargestGrid(station.AsNullable()) is not { } grid)
+            return;
 
-        // we don't want to send to players who aren't in game (i.e. in the lobby)
-        Filter allPlayersInGame = RuleStation.GetEventPlayers(uid); // DS14
+        rule.Comp1.TargetGrid = grid;
+        rule.Comp1.WaveCounter = rule.Comp1.Waves.Next(RobustRandom);
 
-        if (component.Announcement is { } locId)
-            _chat.DispatchFilteredAnnouncement(allPlayersInGame, Loc.GetString(locId), sender: Loc.GetString("station-event-announcer"), playSound: false, colorOverride: Color.Gold); // DS14
-
-        _audio.PlayGlobal(component.AnnouncementSound, allPlayersInGame, true);
+        // DS14-start
+        if (rule.Comp1.Announcement is { } locId)
+        {
+            _chat.DispatchFilteredAnnouncement(_ruleStation.GetEventPlayers(rule),
+                Loc.GetString(locId),
+                sender: Loc.GetString("station-event-announcer"),
+                announcementSound: rule.Comp1.AnnouncementSound,
+                colorOverride: Color.Gold);
+        }
+        // DS14-end
     }
 
     protected override void ActiveTick(EntityUid uid, MeteorSwarmComponent component, GameRuleComponent gameRule, float frameTime)
@@ -41,15 +56,13 @@ public sealed class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
         if (Timing.CurTime < component.NextWaveTime)
             return;
 
+        if (component.TargetGrid is not { } grid)
+        {
+            ForceEndSelf((uid, gameRule));
+            return;
+        }
+
         component.NextWaveTime += TimeSpan.FromSeconds(component.WaveCooldown.Next(RobustRandom));
-
-
-        // DS14-start
-        if (!TryGetRandomStation(out var station, rule: uid))
-            return;
-        // DS14-end
-        if (_station.GetLargestGrid(station.Value) is not { } grid) // DS14
-            return;
 
         var mapId = Transform(grid).MapID;
         var playableArea = _physics.GetWorldAABB(grid);
@@ -59,14 +72,23 @@ public sealed class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
 
         var center = playableArea.Center;
 
+        IRobustRandom random;
+        if (component.NonDirectional)
+        {
+            random = RobustRandom;
+        }
+        else
+        {
+            random = new RobustRandom();
+            random.SetSeed(uid.Id);
+        }
+
         var meteorsToSpawn = component.MeteorsPerWave.Next(RobustRandom);
         for (var i = 0; i < meteorsToSpawn; i++)
         {
             var spawnProto = RobustRandom.Pick(component.Meteors);
 
-            var angle = component.NonDirectional
-                ? RobustRandom.NextAngle()
-                : new Random(uid.Id).NextAngle();
+            var angle = random.NextAngle();
 
             var offset = angle.RotateVec(new Vector2((maximumDistance - minimumDistance) * RobustRandom.NextFloat() + minimumDistance, 0));
 
@@ -75,7 +97,7 @@ public sealed class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
             var subOffsetAngle = RobustRandom.Prob(0.5f)
                 ? angle + Math.PI / 2
                 : angle - Math.PI / 2;
-            var subOffset = subOffsetAngle.RotateVec(new Vector2( (playableArea.TopRight - playableArea.Center).Length() / 3 * RobustRandom.NextFloat(), 0));
+            var subOffset = subOffsetAngle.RotateVec(new Vector2((playableArea.TopRight - playableArea.Center).Length() / 3 * RobustRandom.NextFloat(), 0));
 
             var spawnPosition = new MapCoordinates(center + offset + subOffset, mapId);
             var meteor = Spawn(spawnProto, spawnPosition);
@@ -86,7 +108,7 @@ public sealed class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
         component.WaveCounter--;
         if (component.WaveCounter <= 0)
         {
-            ForceEndSelf(uid, gameRule);
+            ForceEndSelf((uid, gameRule));
         }
     }
 }

@@ -1,5 +1,11 @@
+<<<<<<< ours
 ﻿using Content.Shared.Database;
 using Content.Shared.DeadSpace.Arena;
+||||||| base
+﻿using Content.Shared.Database;
+=======
+using Content.Shared.Database;
+>>>>>>> theirs
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Components; //DS14
@@ -23,22 +29,6 @@ public partial class MobStateSystem
     {
         return _mobStateQuery.Resolve(entity, ref component, false) &&
                component.AllowedStates.Contains(mobState);
-    }
-
-    /// <summary>
-    /// Run a MobState update check. This will trigger update events if the state has been changed.
-    /// </summary>
-    /// <param name="entity">Target Entity we want to change the MobState of</param>
-    /// <param name="component">MobState Component attached to the entity</param>
-    /// <param name="origin">Entity that caused the state update (if applicable)</param>
-    public void UpdateMobState(EntityUid entity, MobStateComponent? component = null, EntityUid? origin = null)
-    {
-        if (!_mobStateQuery.Resolve(entity, ref component))
-            return;
-
-        var ev = new UpdateMobStateEvent {Target = entity, Component = component, Origin = origin};
-        RaiseLocalEvent(entity, ref ev);
-        ChangeState(entity, component, ev.State, origin: origin);
     }
 
     /// <summary>
@@ -133,14 +123,3 @@ public partial class MobStateSystem
 
     #endregion
 }
-
-/// <summary>
-/// Event that gets triggered when we want to update the mobstate. This allows for systems to override MobState changes
-/// </summary>
-/// <param name="Target">The Entity whose MobState is changing</param>
-/// <param name="Component">The MobState Component owned by the Target</param>
-/// <param name="State">The new MobState we want to set</param>
-/// <param name="Origin">Entity that caused the state update (if applicable)</param>
-[ByRefEvent]
-public record struct UpdateMobStateEvent(EntityUid Target, MobStateComponent Component, MobState State,
-    EntityUid? Origin = null);

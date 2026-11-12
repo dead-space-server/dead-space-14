@@ -1,4 +1,5 @@
-﻿- type: entity
+- type: entity
+  parent: StructureHealthMachineWeak
   id: DisposalMachineFrame
   name: high pressure machine frame
   description: A machine frame made to withstand the amount of pressure used in the station's disposal system.

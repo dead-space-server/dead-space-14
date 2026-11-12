@@ -24,6 +24,12 @@
     },
     {
       "name": "wrapper_kobold"
+    },
+    {
+      "name": "box_slime"
+    },
+    {
+      "name": "wrapper_slime"
     }
   ]
 }

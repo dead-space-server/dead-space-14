@@ -5,6 +5,8 @@ using Content.Shared.DeadSpace.Ninja.Components;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Ninja.Components;
 using Content.Shared.Popups;
+using Content.Shared.Timing.Components;
+using Content.Shared.Timing.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 
@@ -13,8 +15,9 @@ namespace Content.Shared.Ninja.Systems;
 /// <summary>
 /// Handles (un)equipping and provides some API functions.
 /// </summary>
-public abstract class SharedNinjaSuitSystem : EntitySystem
+public abstract partial class SharedNinjaSuitSystem : EntitySystem
 {
+<<<<<<< ours
     [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
@@ -23,6 +26,21 @@ public abstract class SharedNinjaSuitSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly INetManager _net = default!;
     //DS14-end
+||||||| base
+    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
+    [Dependency] private readonly ItemToggleSystem _toggle = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] protected readonly SharedPopupSystem Popup = default!;
+    [Dependency] private readonly SharedSpaceNinjaSystem _ninja = default!;
+    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+=======
+    [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] private SharedSpaceNinjaSystem _ninja = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
+>>>>>>> theirs
 
     public override void Initialize()
     {
@@ -100,7 +118,7 @@ public abstract class SharedNinjaSuitSystem : EntitySystem
     /// </summary>
     private void OnUnequipped(Entity<NinjaSuitComponent> ent, ref GotUnequippedEvent args)
     {
-        var user = args.Equipee;
+        var user = args.EquipTarget;
         if (_ninja.NinjaQuery.TryComp(user, out var ninja))
             UserUnequippedSuit(ent, (user, ninja));
     }
@@ -120,7 +138,21 @@ public abstract class SharedNinjaSuitSystem : EntitySystem
         var uid = ent.Owner;
         var comp = ent.Comp;
 
+<<<<<<< ours
         var revealed = false;
+||||||| base
+        // previously cloaked, disable abilities for a short time
+        _audio.PlayPredicted(comp.RevealSound, uid, user);
+        Popup.PopupClient(Loc.GetString("ninja-revealed"), user, user, PopupType.MediumCaution);
+        _useDelay.TryResetDelay(uid, id: comp.DisableDelayId);
+    }
+=======
+        // previously cloaked, disable abilities for a short time
+        _audio.PlayPredicted(comp.RevealSound, uid, user);
+        Popup.PopupEntity(Loc.GetString("ninja-revealed"), user, user, PopupType.MediumCaution);
+        _useDelay.TryResetDelay(uid, id: comp.DisableDelayId);
+    }
+>>>>>>> theirs
 
         if (TryComp<NinjaCloakComponent>(uid, out var cloak) && cloak.Enabled)
         {

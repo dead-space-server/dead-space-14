@@ -1,10 +1,11 @@
 <BoxContainer xmlns="https://spacestation14.io"
+              xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
               Orientation="Vertical">
     <!-- DS14-start -->
     <Label Name="Title"
            StyleClasses="DeadSpaceSectionTitle"/>
     <!-- DS14-end -->
-    <PanelContainer StyleClasses="HighDivider" />
+    <controls:Separator StyleClasses="HighDivider"/>
     <RichTextLabel Name="Description"
                    Margin="0 4"/>
 </BoxContainer>

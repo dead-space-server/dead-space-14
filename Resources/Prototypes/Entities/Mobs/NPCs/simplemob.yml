@@ -19,10 +19,8 @@
   - type: StatusEffects
     allowed:
     - Electrocution
-    - TemporaryBlindness
     - Pacified
     - Flashed
-    - RadiationProtection
     - Adrenaline
   - type: Buckle
   - type: StandingState
@@ -43,6 +41,8 @@
   - MobCombat
   - MobBloodstream
   - MobFlammable
+  - BaseMobAnimal
+  - BaseHungerThirstSlowdown
   id: SimpleSpaceMobBase # Mob without barotrauma, freezing and asphyxiation (for space carps!?)
   suffix: AI
   components:
@@ -91,10 +91,8 @@
     - SeeingRainbows # DS14
     - Drunk # DS14
     - Electrocution
-    - TemporaryBlindness
     - Pacified
     - Flashed
-    - RadiationProtection
     - Adrenaline
   - type: Bloodstream
     bloodReferenceSolution:
@@ -104,3 +102,14 @@
   - type: MobPrice
     price: 150
   - type: FloatingVisuals
+
+- type: entity
+  abstract: true
+  parent: [ SolutionFood, SolutionTiny ]
+  id: SolutionVermin
+  components:
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: UncookedAnimalProteins
+        Quantity: 15

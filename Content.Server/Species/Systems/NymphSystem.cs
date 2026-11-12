@@ -1,5 +1,6 @@
 using Content.Server.Mind;
 using Content.Shared.Species.Components;
+using Content.Shared.Whitelist;
 using Content.Shared.Body.Events;
 using Content.Shared.Zombies;
 using Content.Server.Zombies;
@@ -10,9 +11,9 @@ namespace Content.Server.Species.Systems;
 
 public sealed partial class NymphSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] private readonly ZombieSystem _zombie = default!;
+    [Dependency] private MindSystem _mindSystem = default!;
+    [Dependency] private ZombieSystem _zombie = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {
@@ -26,10 +27,19 @@ public sealed partial class NymphSystem : EntitySystem
         if (TerminatingOrDeleted(uid) || TerminatingOrDeleted(args.OldBody))
             return;
 
+<<<<<<< ours
         if (HasComp<Content.Shared.DeadSpace.Surgery.SurgeryKeepOrganComponent>(uid)) // DS14
             return; // DS14
 
         if (!_protoManager.TryIndex<EntityPrototype>(comp.EntityPrototype, out var entityProto))
+||||||| base
+        if (!_protoManager.TryIndex<EntityPrototype>(comp.EntityPrototype, out var entityProto))
+=======
+        if (!ProtoMan.TryIndex<EntityPrototype>(comp.EntityPrototype, out var entityProto))
+            return;
+
+        if (!_whitelist.CheckBoth(args.Target, comp.Blacklist, comp.Whitelist))
+>>>>>>> theirs
             return;
 
         // Get the organs' position & spawn a nymph there

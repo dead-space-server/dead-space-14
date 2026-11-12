@@ -1,0 +1,51 @@
+- type: job
+  id: ServiceWorker
+  name: job-name-serviceworker
+  description: job-description-serviceworker
+  playTimeTracker: JobServiceWorker
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: Service
+    time: 0.5h
+  startingGear: ServiceWorkerGear
+  icon: "JobIconServiceWorker"
+  supervisors: job-supervisors-service
+  guides: [ Service ] # TODO: should have a more specific guidebook page instead of using the department itself
+  access:
+  - Bar
+  - Service
+  - Maintenance
+  - Janitor
+  - Theatre
+  extendedAccess:
+  - Chapel
+  - Kitchen
+  - Hydroponics
+  #start-backmen: currency
+  minBankBalance: 250 # DS14-value
+  maxBankBalance: 350 # DS14-value
+  wageDepartment: Civilian
+  wage: 100 # DS14-value
+  #end-backmen: currency
+
+- type: startingGear
+  id: ServiceWorkerGear
+  equipment:
+    shoes: ClothingShoesColorBlack
+    id: ServiceWorkerPDA
+    ears: ClothingHeadsetService
+    socks: ClothingUnderwearSocksService
+  #storage:
+    #back:
+    #- Stuff
+
+- type: chameleonOutfit
+  id: ServiceWorkerChameleonOutfit
+  job: ServiceWorker
+  equipment:
+    head: ClothingHeadHatBowlerHat
+    eyes: ClothingEyesGlassesSunglasses
+    mask: ClothingMaskGas
+    neck: ClothingNeckScarfStripedBrown
+    outerClothing: ClothingOuterVest
+    gloves: ClothingHandsGlovesColorBlack

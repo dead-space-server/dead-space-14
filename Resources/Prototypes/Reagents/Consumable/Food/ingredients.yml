@@ -10,9 +10,6 @@
   metabolisms:
     Food:
       effects:
-      - !type:AdjustReagent
-        reagent: Sugar
-        amount: 0.4
       - !type:Satiate
         satiationType: Thirst
         factor: -0.2 #its flour

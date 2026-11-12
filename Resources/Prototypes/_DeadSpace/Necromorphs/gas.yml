@@ -24,6 +24,7 @@
 - type: gas
   id: InfectionDeadSpace
   name: gases-infectionDeadSpace
+  abbreviation: gas-unknown-abbreviation
   specificHeat: 20
   heatCapacityRatio: 1.4
   molarMass: 44

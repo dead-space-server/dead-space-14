@@ -21,7 +21,7 @@ entity-effect-guidebook-spawn-entity =
         [1] Creates
         *[other] create
     } { $amount ->
-        [1] {INDEFINITE($entname)}
+        [1] {INDEFINITE($entname)} {$entname}
         *[other] {$amount} {MAKEPLURAL($entname)}
     }
 
@@ -129,19 +129,19 @@ entity-effect-guidebook-status-effect =
         [update]{ $chance ->
                     [1] Causes
                     *[other] cause
-                 } {LOC($key)} for at least {NATURALFIXED($time, 3)} {MANY("second", $time)} without accumulation
+                 } {$key} for at least {NATURALFIXED($time, 3)} {MANY("second", $time)} without accumulation
         [add]   { $chance ->
                     [1] Causes
                     *[other] cause
-                } {LOC($key)} for at least {NATURALFIXED($time, 3)} {MANY("second", $time)} with accumulation
+                } {$key} for at least {NATURALFIXED($time, 3)} {MANY("second", $time)} with accumulation
         [set]  { $chance ->
                     [1] Causes
                     *[other] cause
-                } {LOC($key)} for at least {NATURALFIXED($time, 3)} {MANY("second", $time)} without accumulation
+                } {$key} for at least {NATURALFIXED($time, 3)} {MANY("second", $time)} without accumulation
         *[remove]{ $chance ->
                     [1] Removes
                     *[other] remove
-                } {NATURALFIXED($time, 3)} {MANY("second", $time)} of {LOC($key)}
+                } {NATURALFIXED($time, 3)} {MANY("second", $time)} of {$key}
     } { $delay ->
         [0] immediately
         *[other] after a {NATURALFIXED($delay, 3)} second delay
@@ -152,19 +152,19 @@ entity-effect-guidebook-status-effect-indef =
         [update]{ $chance ->
                     [1] Causes
                     *[other] cause
-                 } permanent {LOC($key)}
+                 } permanent {$key}
         [add]   { $chance ->
                     [1] Causes
                     *[other] cause
-                } permanent {LOC($key)}
+                } permanent {$key}
         [set]  { $chance ->
                     [1] Causes
                     *[other] cause
-                } permanent {LOC($key)}
+                } permanent {$key}
         *[remove]{ $chance ->
                     [1] Removes
                     *[other] remove
-                } {LOC($key)}
+                } {$key}
     } { $delay ->
         [0] immediately
         *[other] after a {NATURALFIXED($delay, 3)} second delay
@@ -470,8 +470,8 @@ entity-effect-guidebook-plant-attribute =
         [1] Adjusts
         *[other] adjust
     } {$attribute} by {$positive ->
-    [true] [color=red]{$amount}[/color]
-    *[false] [color=green]{$amount}[/color]
+    [false] [color=red]{$amount}[/color]
+    *[true] [color=green]{$amount}[/color]
     }
 
 entity-effect-guidebook-plant-cryoxadone =
@@ -510,6 +510,22 @@ entity-effect-guidebook-plant-seeds-remove =
         *[other] remove the
     } seeds of the plant
 
+entity-effect-guidebook-plant-change-trait =
+    { $chance ->
+        [1] { $change ->
+            [Add] adds {$trait} to
+            [Remove] removes {$trait} from
+            [Toggle] toggles {$trait} on
+            *[other] changes {$trait} on
+        }
+        *[other] { $change ->
+            [Add] add {$trait} to
+            [Remove] remove {$trait} from
+            [Toggle] toggle {$trait} on
+            *[other] change {$trait} on
+        }
+    } the plant
+
 entity-effect-guidebook-plant-mutate-exude-gasses =
     { $chance ->
         [1] Mutates
@@ -537,5 +553,11 @@ entity-effect-guidebook-add-reagent-to-bloodstream =
 entity-effect-disarm =
     { $chance ->
         [1] Disarms
-        *[other] disarm
+        *[other] disarms
     } the entity
+
+entity-effect-guidebook-make-trap-in-container =
+    { $chance ->
+        [1] Traps
+        *[other] traps
+    } the metabolizer inside a { $entityname }

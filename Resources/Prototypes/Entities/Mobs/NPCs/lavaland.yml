@@ -1,7 +1,7 @@
-﻿- type: entity
+- type: entity
   name: watcher
   id: MobWatcherBase
-  parent: [ SimpleSpaceMobBase, FlyingMobBase, BaseMobLavalandFauna ]
+  parent: [ SimpleSpaceMobBase, FlyingMobBase, BaseSlicingRefinableButchering, BaseMobDestructible ]
   abstract: true
   description: It's like it's staring right through you.
   components:
@@ -54,9 +54,9 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      200: Dead
-  - type: Butcherable
-    spawned:
+      50: Dead
+  - type: ToolRefinable
+    refineResult:
     - id: DiamondOre1
       amount: 2
     - id: LavalandWatcherSinew1

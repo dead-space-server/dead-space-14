@@ -760,27 +760,30 @@
                 ]
             ]
         },
-    	{
+        {
             "name": "pda-black-centcom",
-      	    "delays": [
-        	[
+            "delays": [
+                [
                     1.2,
-         	    1.2,
-         	    1.2,
-         	    1.2
-        	]
+                    1.2,
+                    1.2,
+                    1.2
+                ]
             ]
         },
-    	{
+        {
             "name": "pda-iaaofficer",
             "delays": [
-        	[
+                [
                     0.3,
                     0.3,
                     0.3,
                     0.3
-        ]
-      ]
-    }
+                ]
+            ]
+        },
+        {
+            "name": "pda-tramdriver"
+        }
     ]
 }

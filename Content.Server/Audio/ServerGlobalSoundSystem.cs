@@ -1,10 +1,10 @@
-using System.Linq;
-using Content.Server.Station.Systems;
+using System.Linq; // DS14
 using Content.Shared.Audio;
+using JetBrains.Annotations;
 using Content.Shared.DeadSpace.Administration.Events;
 using Content.Shared.GameTicking;
 using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
+using Robust.Shared.Audio.Systems; // DS14
 using Robust.Shared.Console;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
@@ -15,14 +15,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Audio;
 
-public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
+/// <inheritdoc/>
+public sealed partial class ServerGlobalSoundSystem : GlobalSoundSystem
 {
-    [Dependency] private readonly IConsoleHost _conHost = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!; // DS14
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14
-    [Dependency] private readonly IResourceManager _resourceManager = default!; // DS14
+    [Dependency] private IConsoleHost _conHost = default!;
+    [Dependency] private IPlayerManager _playerManager = default!; // DS14
+    [Dependency] private SharedAudioSystem _audio = default!; // DS14
+    [Dependency] private IGameTiming _timing = default!; // DS14
+    [Dependency] private IResourceManager _resourceManager = default!; // DS14
 
     // DS14-start
     private int _nextAdminSoundId;
@@ -59,6 +59,7 @@ public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
     }
     // DS14-end
 
+    /// <inheritdoc/>
     public override void Shutdown()
     {
         base.Shutdown();
@@ -316,43 +317,4 @@ public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
         RaiseNetworkEvent(msg, playerFilter, recordReplay: replay);
     }
     // DS14-end
-
-    private Filter GetStationAndPvs(EntityUid source)
-    {
-        var stationFilter = _stationSystem.GetInOwningStation(source);
-        stationFilter.AddPlayersByPvs(source, entityManager: EntityManager);
-        return stationFilter;
-    }
-
-    public void PlayGlobalOnStation(EntityUid source, ResolvedSoundSpecifier specifier, AudioParams? audioParams = null)
-    {
-        var msg = new GameGlobalSoundEvent(specifier, audioParams);
-        var filter = GetStationAndPvs(source);
-        RaiseNetworkEvent(msg, filter);
-    }
-
-    public void StopStationEventMusic(EntityUid source, StationEventMusicType type)
-    {
-        // TODO REPLAYS
-        // these start & stop events are gonna be a PITA
-        // theres probably some nice way of handling them. Maybe it just needs dedicated replay data (in which case these events should NOT get recorded).
-
-        var msg = new StopStationEventMusic(type);
-        var filter = GetStationAndPvs(source);
-        RaiseNetworkEvent(msg, filter);
-    }
-
-    public void DispatchStationEventMusic(EntityUid source, SoundSpecifier sound, StationEventMusicType type)
-    {
-        DispatchStationEventMusic(source, _audio.ResolveSound(sound), type);
-    }
-
-    public void DispatchStationEventMusic(EntityUid source, ResolvedSoundSpecifier specifier, StationEventMusicType type)
-    {
-        var audio = AudioParams.Default.WithVolume(-8);
-        var msg = new StationEventMusicEvent(specifier, type, audio);
-
-        var filter = GetStationAndPvs(source);
-        RaiseNetworkEvent(msg, filter);
-    }
 }

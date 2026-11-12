@@ -14,50 +14,27 @@ namespace Content.Shared.Botany.Items.Systems;
 /// </summary>
 public sealed partial class BotanyHoeSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions and query initialization.
-    public override void Initialize()
-    {
-        base.Initialize();
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
-        SubscribeLocalEvent<BotanyHoeComponent, AfterInteractEvent>(OnAfterInteract);
-        SubscribeLocalEvent<PlantTrayComponent, TrayHoeAttemptEvent>(OnTrayHoeAttempt);
-        _plantQuery = GetEntityQuery<PlantComponent>();
-        _trayQuery = GetEntityQuery<PlantTrayComponent>();
-    }
-    // DS14-end
+    [Dependency] private EntityQuery<PlantTrayComponent> _trayQuery;
 
-    // DS14-start
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-
-    private EntityQuery<PlantComponent> _plantQuery;
-    private EntityQuery<PlantTrayComponent> _trayQuery;
-    // DS14-end
-
+    [SubscribeLocalEvent]
     private void OnAfterInteract(Entity<BotanyHoeComponent> ent, ref AfterInteractEvent args)
     {
         if (args.Target == null || args.Handled || !args.CanReach)
             return;
 
-        // Allow interacting with either the plant or the tray.
-        var target = args.Target.Value;
-        if (_plantQuery.TryComp(target, out var targetPlant))
-        {
-            if (!_plant.TryGetTray((target, targetPlant), out var tray))
-                return;
-
-            target = tray.Owner;
-        }
-        else if (!_trayQuery.HasComp(target)) // DS14
+        if (!_trayQuery.HasComp(args.Target.Value))
             return;
 
         var ev = new TrayHoeAttemptEvent(ent, args.User);
-        RaiseLocalEvent(target, ref ev);
+        RaiseLocalEvent(args.Target.Value, ref ev);
 
         args.Handled = true;
     }
 
+    [SubscribeLocalEvent]
     private void OnTrayHoeAttempt(Entity<PlantTrayComponent> ent, ref TrayHoeAttemptEvent args)
     {
         if (args.Cancelled)

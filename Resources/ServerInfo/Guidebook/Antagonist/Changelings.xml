@@ -64,7 +64,7 @@
   ## Эволюции и химикаты
 
   <Box>
-    <GuideEntityEmbed Entity="ActionRetractableItemArmBlade" Caption="Рука-клинок"/>
+    <GuideEntityEmbed Entity="ActionRetractableItemArmblade" Caption="Рука-клинок"/>
     <GuideEntityEmbed Entity="ActionChangelingScreech" Caption="Визг"/>
     <GuideEntityEmbed Entity="ActionChangelingStasis" Caption="Регенеративный стазис"/>
   </Box>
@@ -112,6 +112,8 @@
   - выращенная рука-клинок или другие очевидные изменения тела;
   - живая ткань, оставшаяся после поглощения;
   - несоответствие внешности, голоса, ID-карты и поведения человека.
+
+  Но будьте осторожны: [bold]у генокрадов есть средства, чтобы подставить обычных членов экипажа[/bold]! К счастью, у экипажа есть свои инструменты.
 
   <Box>
     <GuideEntityEmbed Entity="SyringeHivarol" Caption="Шприц с хиваролом"/>

@@ -5,23 +5,16 @@ using Content.Shared.Examine;
 
 namespace Content.Shared.Atmos.Piping.Trinary.EntitySystems;
 
-// DS14: Current engine uses explicit event subscriptions without system source generation.
-public abstract class SharedGasMixerSystem : EntitySystem
+public abstract partial class SharedGasMixerSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<GasMixerComponent, ExaminedEvent>(OnExamined);
-
-        // DS14-start: Current engine does not support source-generated event subscriptions.
-        SubscribeLocalEvent<GasMixerComponent, GasMixerToggleStatusMessage>(OnToggleStatusMessage);
-        SubscribeLocalEvent<GasMixerComponent, GasMixerChangeOutputPressureMessage>(OnOutputPressureChangeMessage);
-        SubscribeLocalEvent<GasMixerComponent, GasMixerChangeNodePercentageMessage>(OnChangeNodePercentageMessage);
-        // DS14-end
     }
 
     private void OnExamined(Entity<GasMixerComponent> ent, ref ExaminedEvent args)
@@ -45,6 +38,7 @@ public abstract class SharedGasMixerSystem : EntitySystem
         }
     }
 
+    [SubscribeLocalEvent]
     private void OnToggleStatusMessage(Entity<GasMixerComponent> ent, ref GasMixerToggleStatusMessage args)
     {
         ent.Comp.Enabled = args.Enabled;
@@ -56,6 +50,7 @@ public abstract class SharedGasMixerSystem : EntitySystem
         UpdateAppearance(ent);
     }
 
+    [SubscribeLocalEvent]
     private void OnOutputPressureChangeMessage(Entity<GasMixerComponent> ent, ref GasMixerChangeOutputPressureMessage args)
     {
         ent.Comp.TargetPressure = Math.Clamp(args.Pressure, 0f, ent.Comp.MaxTargetPressure);
@@ -66,6 +61,7 @@ public abstract class SharedGasMixerSystem : EntitySystem
         UpdateUi(ent);
     }
 
+    [SubscribeLocalEvent]
     private void OnChangeNodePercentageMessage(Entity<GasMixerComponent> ent,
         ref GasMixerChangeNodePercentageMessage args)
     {

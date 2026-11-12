@@ -13,9 +13,9 @@
     group: null # Strips the numeric identifier from the pet's ingame name
 
 - type: entity
-  name: Ian
-  parent: [BaseUniquePet, MobCorgi]
+  parent: [ BaseUniquePet, MobCorgi, BaseSlicingRefinableButchering ]
   id: MobCorgiIan
+  name: Ian
   description: Favorite pet corgi.
   components:
   - type: Sprite
@@ -26,7 +26,7 @@
       state: ian
   - type: Inventory
     speciesId: dog
-    templateId: petAdvanced
+    templateId: Corgi
     displacements:
       head:
         sizeMaps:
@@ -38,6 +38,11 @@
           32:
             sprite: Mobs/Pets/displacements.rsi
             state: corgi_eyes_displacement
+      mask:
+        sizeMaps:
+          32:
+            sprite: Mobs/Pets/displacements.rsi
+            state: corgi_mask_displacement
   - type: DamageStateVisuals
     states:
       Alive:
@@ -50,8 +55,8 @@
     attributes:
       proper: true
       gender: male
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeatCorgi
       amount: 2
     - id: MaterialHideCorgi
@@ -74,9 +79,9 @@
   # DS14-end
 
 - type: entity
-  name: Old Ian
-  parent: MobCorgiIan
+  parent: [ MobCorgiIan, BaseSlicingRefinableButchering ]
   id: MobCorgiIanOld
+  name: Old Ian
   description: Still the favorite pet corgi. Love his wheels.
   components:
   - type: Sprite
@@ -91,17 +96,17 @@
         Base: old_ian_dead
       Dead:
         Base: old_ian_dead
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeatCorgi
       amount: 2
     - id: SheetSteel1
     - id: MaterialHideCorgi
 
 - type: entity
-  name: Lisa
   parent: MobCorgiIan
   id: MobCorgiLisa
+  name: Lisa
   description: Ian's favorite corgi.
   components:
   - type: Sprite
@@ -122,7 +127,7 @@
       gender: female
   - type: Inventory
     speciesId: dog
-    templateId: petAdvanced
+    templateId: Corgi
     displacements:
       head:
         sizeMaps:
@@ -134,11 +139,16 @@
           32:
             sprite: Mobs/Pets/displacements.rsi
             state: corgi_eyes_displacement
+      mask:
+        sizeMaps:
+          32:
+            sprite: Mobs/Pets/displacements.rsi
+            state: corgi_mask_displacement
 
 - type: entity
-  name: real mouse
   parent: MobCorgiIan
   id: MobCorgiMouse
+  name: real mouse
   description: It's 100% a real hungry mouse.
   components:
   - type: Sprite
@@ -160,17 +170,17 @@
   - type: SpeakOnException
 
 - type: entity
-  name: Puppy Ian
-  parent: [BaseUniquePet, MobCorgiPuppy]
+  parent: [ MobCorgiPuppy, BaseSlicingRefinableButchering ]
   id: MobCorgiIanPup
+  name: Puppy Ian
   description: Favourite puppy corgi. Awww.
   components:
   - type: Grammar
     attributes:
       proper: true
       gender: male
-  - type: Butcherable # A puppy? You monster...
-    spawned:
+  - type: ToolRefinable # A puppy? You monster...
+    refineResult:
     - id: FoodMeatCorgi
       amount: 2
     - id: MaterialHideCorgi
@@ -189,9 +199,9 @@
   # DS14-end
 
 - type: entity
-  name: Runtime
-  parent: [BaseUniquePet, MobCat]
+  parent: [ BaseUniquePet, MobCat ]
   id: MobCatRuntime
+  name: Runtime
   description: Professional mouse hunter. Escape artist.
   components:
   - type: NpcFactionMember
@@ -226,9 +236,9 @@
   # DS14-end
 
 - type: entity
-  name: Exception
+  parent: [ BaseUniquePet, MobCatCalico ]
   id: MobCatException
-  parent: [BaseUniquePet, MobCatCalico]
+  name: Exception
   description: Ask nicely, and maybe they'll give you one of their spare lives.
   components:
   - type: NpcFactionMember
@@ -260,9 +270,9 @@
   # DS14-end
 
 - type: entity
-  name: Floppa
+  parent: [ BaseUniquePet, MobCatCaracal ]
   id: MobCatFloppa
-  parent: [BaseUniquePet, MobCatCaracal]
+  name: Floppa
   description: He out here.
   components:
   - type: Fixtures
@@ -306,9 +316,9 @@
   # DS14-end
 
 - type: entity
-  name: Bandito
-  parent: [BaseUniquePet, MobFerret]
+  parent: [ BaseUniquePet, MobFerret ]
   id: MobBandito
+  name: Bandito
   description: Just a silly little guy!
   components:
   - type: Grammar
@@ -331,9 +341,9 @@
   # DS14-end
 
 - type: entity
-  name: Bingus
-  parent: [BaseUniquePet, SimpleMobBase, StripableInventoryBase]
+  parent: [ BaseUniquePet, SimpleMobBase, StripableInventoryBase, BaseSlicingRefinableButchering , BaseMobDestructible ]
   id: MobBingus
+  name: Bingus
   description: Bingus my beloved...
   components:
   # DS14-start
@@ -369,8 +379,8 @@
         Base: bingus_dead
       Dead:
         Base: bingus_dead
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeat
       amount: 2
   - type: InteractionPopup
@@ -405,9 +415,9 @@
   # DS14-end
 
 - type: entity
-  name: McGriff
-  parent: [BaseUniquePet, SimpleMobBase, StripableInventoryBase]
+  parent: [ BaseUniquePet, SimpleMobBase, StripableInventoryBase, BaseSlicingRefinableButchering , BaseMobDestructible ]
   id: MobMcGriff
+  name: McGriff
   description: This dog can tell something smells around here, and that something is CRIME!
   components:
   # DS14-start
@@ -456,8 +466,8 @@
         Base: mcgriff_dead
       Dead:
         Base: mcgriff_dead
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeat
       amount: 2
   # DS14-start
@@ -492,13 +502,14 @@
     - CannotSuicide
     - VimPilot
   - type: StealTarget
-    stealGroup: AnimalMcGriff
+    stealGroup:
+    - AnimalMcGriff
   - type: MessyDrinker
 
 - type: entity
-  name: Paperwork
-  parent: [BaseUniquePet, MobSloth]
+  parent: [ BaseUniquePet, MobSloth, BaseSlicingRefinableButchering ]
   id: MobPaperwork
+  name: Paperwork
   description: Took up a new job sorting books in the library after he got transferred from Space Station 13. He seems to be just as slow at this.
   components:
   - type: Sprite
@@ -515,8 +526,8 @@
         Base: paperwork_dead
       Dead:
         Base: paperwork_dead
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeat
       amount: 3
   - type: InteractionPopup
@@ -539,9 +550,9 @@
 # DS14-end
 
 - type: entity
-  name: Walter
-  parent: [BaseUniquePet, SimpleMobBase, StripableInventoryBase]
+  parent: [ BaseUniquePet, SimpleMobBase, StripableInventoryBase, BaseSlicingRefinableButchering , BaseMobDestructible ]
   id: MobWalter
+  name: Walter
   description: He likes chems and treats. Walter.
   components:
   # DS14-start
@@ -577,8 +588,8 @@
         Base: walter_dead
       Dead:
         Base: walter_dead
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeat
       amount: 3
   - type: InteractionPopup
@@ -597,7 +608,8 @@
     - CannotSuicide
     - VimPilot
   - type: StealTarget
-    stealGroup: AnimalWalter
+    stealGroup:
+    - AnimalWalter
   - type: Speech
     speechVerb: Canine
     speechSounds: Dog
@@ -614,9 +626,9 @@
 # DS14-end
 
 - type: entity
-  name: Morty
-  parent: [BaseUniquePet, MobPossum]
+  parent: [ BaseUniquePet, MobPossum ]
   id: MobPossumMorty
+  name: Morty
   description: The station's resident Didelphis virginiana. A sensitive but resilient kind of guy.
   components:
   - type: InteractionPopup
@@ -647,9 +659,9 @@
 # DS14-end
 
 - type: entity
-  name: Morty
   parent: MobPossumMorty
   id: MobPossumMortyOld
+  name: Morty
   suffix: Old sprite
   components:
   - type: Sprite
@@ -666,9 +678,9 @@
         Base: possum_dead_old
 
 - type: entity
-  name: Poppy # the Safety Possum
   parent: MobPossumMorty
   id: MobPossumPoppy
+  name: Poppy # the Safety Possum
   description: It's an opossum, a small scavenging marsupial. It's wearing appropriate personal protective equipment.
   components:
   - type: Grammar
@@ -689,9 +701,9 @@
         Base: poppy_dead
 
 - type: entity
-  name: Morticia
-  parent: [BaseUniquePet, MobRaccoon]
+  parent: [ BaseUniquePet, MobRaccoon ]
   id: MobRaccoonMorticia
+  name: Morticia
   description: A powerful creature of the night. Her eyeshadow is always on point.
   components:
   - type: InteractionPopup
@@ -720,9 +732,9 @@
 # DS14-end
 
 - type: entity
-  name: Alexander
-  parent: [BaseUniquePet, MobPig]
+  parent: [ BaseUniquePet, MobPig ]
   id: MobAlexander
+  name: Alexander
   description: Chef's finest colleague.
   components:
   - type: InteractionPopup
@@ -764,9 +776,9 @@
 # DS14-end
 
 - type: entity
-  name: Renault
-  parent: [BaseUniquePet, MobFox]
+  parent: [ BaseUniquePet, MobFox, BaseSlicingRefinableButchering ]
   id: MobFoxRenault
+  name: Renault
   description: The captain's trustworthy fox.
   components:
   - type: InteractionPopup
@@ -776,8 +788,8 @@
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
       collection: Fox
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeat
       amount: 3
     - id: Telecrystal5
@@ -803,9 +815,9 @@
 # DS14-end
 
 - type: entity
-  name: Hamlet
-  parent: [BaseUniquePet, MobHamster]
+  parent: [ BaseUniquePet, MobHamster, BaseSlicingRefinableButchering ]
   id: MobHamsterHamlet
+  name: Hamlet
   description: A grumpy, cute and fluffy hamster.
   components:
   - type: Sprite
@@ -839,8 +851,8 @@
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
       path: /Audio/Animals/fox_squeak.ogg
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeat
       amount: 1
   - type: Grammar
@@ -892,9 +904,9 @@
     predicted: true
 
 - type: entity
-  name: Shiva
-  parent: [BaseUniquePet, MobGiantSpider]
+  parent: [ BaseUniquePet, MobSpiderBase ]
   id: MobSpiderShiva
+  name: Shiva
   description: The first defender of the station.
   components:
   - type: InteractionPopup
@@ -935,6 +947,7 @@
       0: Alive
       150: Dead
   - type: MeleeWeapon
+    altDisarm: false
     angle: 0
     animation: WeaponArcBite
     soundHit:
@@ -969,9 +982,9 @@
 # DS14-end
 
 - type: entity
-  name: Willow
-  parent: [BaseUniquePet, MobKangaroo]
+  parent: [ BaseUniquePet, MobKangaroo ]
   id: MobKangarooWillow
+  name: Willow
   description: Willow the boxing kangaroo.
   components:
   - type: InteractionPopup
@@ -1011,9 +1024,9 @@
 # DS14-end
 
 - type: entity
-  name: Smile
+  parent: [ BaseUniquePet, MobAdultSlimes, StripableInventoryBase, BaseSlicingRefinableButchering ]
   id: MobSlimesPet
-  parent: [BaseUniquePet, MobAdultSlimes, StripableInventoryBase]
+  name: Smile
   description: This masterpiece has gone through thousands of experiments. But it is the sweetest creature in the world. Smile Slime!
   components:
   - type: Sprite
@@ -1053,8 +1066,8 @@
         BaseUnshaded: aslime-_3
       Dead:
         Base: rainbow_baby_slime_dead
-  - type: Butcherable
-    spawned:
+  - type: ToolRefinable
+    refineResult:
     - id: FoodMeatSlime
       amount: 1
     - id: MaterialSmileExtract
@@ -1085,6 +1098,7 @@
     name: ghost-role-information-smile-name
     description: ghost-role-information-smile-description
     rules: ghost-role-information-nonantagonist-rules
+    prob: 1
     raffle: null
   - type: Grammar
     attributes:
@@ -1106,9 +1120,9 @@
 # DS14-end
 
 - type: entity
-  name: Pun Pun
-  parent: [BaseUniquePet, MobMonkey]
+  parent: [ BaseUniquePet, MobMonkey ]
   id: MobMonkeyPunpun
+  name: Pun Pun
   description: A prominent representative of monkeys with unlimited access to alcohol.
   components:
   - type: GhostRole
@@ -1127,7 +1141,6 @@
 # DS14-end
   - type: GhostTakeoverAvailable
   - type: Butcherable
-    butcheringType: Spike
     spawned:
     - id: FoodMeat
       amount: 3
@@ -1158,9 +1171,9 @@
 # DS14-end
 
 - type: entity
-  name: Tropico
-  parent: [BaseUniquePet, MobCrab]
+  parent: [ BaseUniquePet, MobCrab ]
   id: MobCrabAtmos
+  name: Tropico
   description: The noble and stalwart defender of Atmosia. Viva!
   components:
 #  - type: GhostRole
@@ -1194,10 +1207,10 @@
 # DS14-end
 
 - type: entity
-  name: Polly the parrot
-  parent: [BaseUniquePet, MobParrotBase]
+  parent: [ BaseUniquePet, MobParrotBase ]
   id: MobPollyParrot
-  description: An expert in quantum cracker theory
+  name: Polly the parrot
+  description: An expert in quantum cracker theory.
   components:
   - type: Vocalizer
     maxVocalizeInterval: 240 # polly is chattier

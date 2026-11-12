@@ -1,7 +1,6 @@
 using Content.Server.Decals;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
-using Content.Shared.Decals;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -28,9 +27,18 @@ public sealed partial class CleanDecalsReaction : ITileReaction
         IEntityManager entityManager,
         List<ReagentData>? data)
     {
+<<<<<<< ours
         if (reactVolume < CleanCost ||
             !entityManager.TryGetComponent<MapGridComponent>(tile.GridUid, out var grid) ||
             !entityManager.TryGetComponent<DecalGridComponent>(tile.GridUid, out var decalGrid))
+||||||| base
+        if (reactVolume <= CleanCost ||
+            !entityManager.TryGetComponent<MapGridComponent>(tile.GridUid, out var grid) ||
+            !entityManager.TryGetComponent<DecalGridComponent>(tile.GridUid, out var decalGrid))
+=======
+        if (reactVolume <= CleanCost ||
+            !entityManager.TryGetComponent<MapGridComponent>(tile.GridUid, out var grid))
+>>>>>>> theirs
         {
             return FixedPoint2.Zero;
         }
@@ -50,7 +58,7 @@ public sealed partial class CleanDecalsReaction : ITileReaction
             if (amount + CleanCost > reactVolume)
                 break;
 
-            decalSystem.RemoveDecal(tile.GridUid, decal.Index, decalGrid);
+            decalSystem.RemoveDecal(tile.GridUid, decal.Index);
             amount += CleanCost;
         }
 

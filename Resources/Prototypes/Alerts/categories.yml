@@ -36,9 +36,3 @@
 
 - type: alertCategory
   id: Chemicals
-
-- type: alertCategory
-  id: BlobResource
-
-- type: alertCategory
-  id: BlobHealth

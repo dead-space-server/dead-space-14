@@ -38,8 +38,14 @@
             "name": "inhand-right-stripe",
             "directions": 4
         },
-    {
-      "name": "incendiary"
-    }
+        {
+            "name": "incendiary"
+        },
+        {
+            "name": "uranium"
+        },
+        {
+            "name": "tranquilizer"
+        }
     ]
 }

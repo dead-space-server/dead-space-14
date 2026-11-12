@@ -1,17 +1,16 @@
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using Content.Server.Administration;
 using Content.Server.Administration.Managers;
 using Content.Server.Discord.WebhookMessages;
 using Content.Server.GameTicking;
-using Content.Server.GameTicking.Presets;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.GameTicking;
+using Content.Shared.GameTicking.Prototypes;
 using Content.Shared.Maps;
 using Content.Shared.Players;
 using Content.Shared.Players.PlayTimeTracking;
@@ -27,14 +26,14 @@ namespace Content.Server.Voting.Managers
 {
     public sealed partial class VoteManager
     {
-        [Dependency] private readonly IPlayerLocator _locator = default!;
-        [Dependency] private readonly ILogManager _logManager = default!;
-        [Dependency] private readonly IBanManager _bans = default!;
-        [Dependency] private readonly VoteWebhooks _voteWebhooks = default!;
+        [Dependency] private IPlayerLocator _locator = default!;
+        [Dependency] private ILogManager _logManager = default!;
+        [Dependency] private IBanManager _bans = default!;
+        [Dependency] private VoteWebhooks _voteWebhooks = default!;
 
         private VotingSystem? _votingSystem;
         private RoleSystem? _roleSystem;
-        private GameTicker? _gameTicker;
+        private ServerGameTicker? _gameTicker;
 
         // DS14-start
         private static readonly TimeSpan PresetRunoffDuration = TimeSpan.FromSeconds(20);
@@ -60,13 +59,15 @@ namespace Content.Server.Voting.Managers
             else
                 _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Initiated a {voteType.ToString()} vote");
 
-            _gameTicker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+            _gameTicker = _entityManager.EntitySysManager.GetEntitySystem<ServerGameTicker>();
 
             bool timeoutVote = true;
 
             switch (voteType)
             {
                 case StandardVoteType.Restart:
+                    if (_gameTicker.RunLevel != GameRunLevel.InRound) // Cancels the vote if it's in the lobby
+                        return;
                     CreateRestartVote(initiator);
                     break;
                 case StandardVoteType.Preset:
@@ -296,7 +297,7 @@ namespace Content.Server.Voting.Managers
                 string picked;
                 if (result.Winner == null)
                 {
-                    var runoffTicker = _gameTicker ??= _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+                    var runoffTicker = _gameTicker ??= _entityManager.EntitySysManager.GetEntitySystem<ServerGameTicker>();
                     if (runoffTicker.TimeUntilMapChangeCloses() > PresetRunoffDuration)
                     {
                         _pendingPresetRunoff = result.Winners.Cast<string>().ToArray();
@@ -328,7 +329,7 @@ namespace Content.Server.Voting.Managers
                 }
 
                 _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Preset vote finished: {picked}");
-                var ticker = _gameTicker ??= _entityManager.EntitySysManager.GetEntitySystem<GameTicker>(); // DS14
+                var ticker = _gameTicker ??= _entityManager.EntitySysManager.GetEntitySystem<ServerGameTicker>(); // DS14
                 ticker.SetGamePreset(picked);
                 VoteStarted = false;
             };
@@ -387,7 +388,7 @@ namespace Content.Server.Voting.Managers
                 }
 
                 _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Map vote finished: {picked.MapName}");
-                var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+                var ticker = _entityManager.EntitySysManager.GetEntitySystem<ServerGameTicker>();
                 if (ticker.CanUpdateMap())
                 {
                     if (_gameMapManager.CheckMapExists(picked.ID))

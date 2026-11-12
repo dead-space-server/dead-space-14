@@ -310,7 +310,6 @@
           type: [ Slime, Vox ] # DS14
           inverted: true
         emote: Laugh
-        showInChat: true
         probability: 0.1
       - !type:Emote
         minScale: 0.2
@@ -319,7 +318,6 @@
           type: [ Slime, Vox ] # DS14
           inverted: true
         emote: Scream
-        showInChat: true
         probability: 0.01
       - !type:PopupMessage
         minScale: 0.5

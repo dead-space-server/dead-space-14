@@ -28,11 +28,10 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Robust.Shared.Utility;
 
 namespace Content.Server.Singularity.EntitySystems;
 
-public sealed class ContainmentFieldGeneratorSystem : EntitySystem
+public sealed partial class ContainmentFieldGeneratorSystem : EntitySystem
 {
     // DS14-start
     private static readonly EntProtoId AntiParticlesProjectile = "AntiParticlesProjectile";
@@ -46,18 +45,19 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
     private TimeSpan _nextDestabilizationAnnouncementTime;
     // DS14-end
 
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly AppearanceSystem _visualizer = default!;
-    [Dependency] private readonly ChatSystem _chat = default!; // DS14
-    [Dependency] private readonly ExplosionSystem _explosion = default!; // DS14
-    [Dependency] private readonly NavMapSystem _navMap = default!; // DS14
-    [Dependency] private readonly PhysicsSystem _physics = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedPointLightSystem _light = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14
-    [Dependency] private readonly IRobustRandom _random = default!; // DS14
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private AppearanceSystem _visualizer = default!;
+    [Dependency] private ChatSystem _chat = default!; // DS14
+    [Dependency] private ExplosionSystem _explosion = default!; // DS14
+    [Dependency] private NavMapSystem _navMap = default!; // DS14
+    [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private IGameTiming _timing = default!; // DS14
+    [Dependency] private IRobustRandom _random = default!; // DS14
+    [Dependency] private EntityQuery<ContainmentFieldGeneratorComponent> _genQuery = default!;
 
     public override void Initialize()
     {
@@ -68,7 +68,6 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
         SubscribeLocalEvent<ContainmentFieldGeneratorComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<ContainmentFieldGeneratorComponent, ActivateInWorldEvent>(OnActivate);
         SubscribeLocalEvent<ContainmentFieldGeneratorComponent, AnchorStateChangedEvent>(OnAnchorChanged);
-        SubscribeLocalEvent<ContainmentFieldGeneratorComponent, ReAnchorEvent>(OnReanchorEvent);
         SubscribeLocalEvent<ContainmentFieldGeneratorComponent, UnanchorAttemptEvent>(OnUnanchorAttempt);
         SubscribeLocalEvent<ContainmentFieldGeneratorComponent, ComponentRemove>(OnComponentRemoved);
         SubscribeLocalEvent<ContainmentFieldGeneratorComponent, EventHorizonAttemptConsumeEntityEvent>(PreventBreach);
@@ -353,11 +352,8 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
     {
         if (!args.Anchored)
             RemoveConnections(generator);
-    }
-
-    private void OnReanchorEvent(Entity<ContainmentFieldGeneratorComponent> generator, ref ReAnchorEvent args)
-    {
-        GridCheck(generator);
+        else
+            GridCheck(generator);
     }
 
     private void OnUnanchorAttempt(EntityUid uid, ContainmentFieldGeneratorComponent component,
@@ -519,13 +515,12 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
 
         var ray = new CollisionRay(genWorldPosRot.WorldPosition, dirRad.ToVec(), component.CollisionMask);
         var rayCastResults = _physics.IntersectRay(gen1XForm.MapID, ray, component.MaxLength, generator, false);
-        var genQuery = GetEntityQuery<ContainmentFieldGeneratorComponent>();
 
         RayCastResults? closestResult = null;
 
         foreach (var result in rayCastResults)
         {
-            if (genQuery.HasComponent(result.HitEntity))
+            if (_genQuery.HasComponent(result.HitEntity))
                 closestResult = result;
 
             break;
@@ -588,18 +583,14 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
         while (currentOffset.Length() < stopDist)
         {
             var currentCoords = gen1Coords.Offset(currentOffset);
-            var newField = Spawn(firstGen.Comp.CreatedField, currentCoords);
-
-            var fieldXForm = Transform(newField);
-            _transformSystem.SetParent(newField, fieldXForm, firstGen);
+            var rotation = Angle.Zero;
             if (dirVec.GetDir() == Direction.East || dirVec.GetDir() == Direction.West)
             {
-                var angle = fieldXForm.LocalPosition.ToAngle();
+                var angle = currentOffset.ToAngle();
                 var rotateBy90 = angle.Degrees + 90;
-                var rotatedAngle = Angle.FromDegrees(rotateBy90);
-
-                fieldXForm.LocalRotation = rotatedAngle;
+                rotation = Angle.FromDegrees(rotateBy90);
             }
+            var newField = SpawnAttachedTo(firstGen.Comp.CreatedField, currentCoords, rotation: rotation);
 
             fieldList.Add(newField);
             currentOffset += dirVec;
@@ -623,12 +614,10 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
     /// </summary>
     public void GridCheck(Entity<ContainmentFieldGeneratorComponent> generator)
     {
-        var xFormQuery = GetEntityQuery<TransformComponent>();
-
         foreach (var (_, generators) in generator.Comp.Connections)
         {
-            var gen1ParentGrid = xFormQuery.GetComponent(generator).ParentUid;
-            var gent2ParentGrid = xFormQuery.GetComponent(generators.Item1).ParentUid;
+            var gen1ParentGrid = Transform(generator).ParentUid;
+            var gent2ParentGrid = Transform(generators.Item1).ParentUid;
 
             if (gen1ParentGrid != gent2ParentGrid)
                 RemoveConnections(generator);

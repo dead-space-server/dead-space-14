@@ -7,6 +7,7 @@ using Robust.Client.GameObjects; //DS14
 
 namespace Content.Client.Ninja.Systems;
 
+<<<<<<< ours
 public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
 {
     //DS14-start
@@ -56,3 +57,8 @@ public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
     }
     //DS14-end
 }
+||||||| base
+public sealed class NinjaSuitSystem : SharedNinjaSuitSystem;
+=======
+public sealed partial class NinjaSuitSystem : SharedNinjaSuitSystem;
+>>>>>>> theirs

@@ -1,5 +1,5 @@
 using Content.Shared.Nutrition.EntitySystems;
-using Robust.Shared.GameStates;//DS14
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.Nutrition.Components;
 
@@ -10,14 +10,30 @@ namespace Content.Shared.Nutrition.Components;
 ///     In the event that more head-wear & mask functionality is added (like identity systems, or raising/lowering of
 ///     masks), then this component might become redundant.
 /// </remarks>
+<<<<<<< ours
 [RegisterComponent, Access(typeof(IngestionSystem))]
 [NetworkedComponent,AutoGenerateComponentState(true)]//DS14
+||||||| base
+[RegisterComponent, Access(typeof(IngestionSystem))]
+=======
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(IngestionSystem))]
+>>>>>>> theirs
 public sealed partial class IngestionBlockerComponent : Component
 {
     /// <summary>
-    ///     Is this component currently blocking consumption.
+    ///     Whether this item currently blocks consuming something.
     /// </summary>
+<<<<<<< ours
     [DataField]
     [AutoNetworkedField]//DS14
     public bool Enabled { get; set; } = true;
 }
+||||||| base
+    [DataField]
+    public bool Enabled { get; set; } = true;
+}
+=======
+    [DataField, AutoNetworkedField]
+    public bool Enabled = true;
+}
+>>>>>>> theirs

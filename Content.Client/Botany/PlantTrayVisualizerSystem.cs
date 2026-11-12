@@ -8,20 +8,9 @@ namespace Content.Client.Botany;
 
 public sealed partial class PlantTrayVisualizerSystem : VisualizerSystem<PlantTrayVisualsComponent>
 {
-    // DS14-start: current engine uses explicit event subscriptions.
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<PlantTrayVisualsComponent, ComponentStartup>(OnComponentStartup);
-        SubscribeLocalEvent<PlantTrayComponent, AfterAutoHandleStateEvent>(OnPlantTrayState);
-    }
-    // DS14-end
-
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    // DS14-end
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     /// <summary>
     /// Defers appearance writes until after network state application and deduplicates multiple state events per frame.
@@ -40,11 +29,13 @@ public sealed partial class PlantTrayVisualizerSystem : VisualizerSystem<PlantTr
         _pendingTrayUpdates.Clear();
     }
 
+    [SubscribeLocalEvent]
     private void OnComponentStartup(Entity<PlantTrayVisualsComponent> ent, ref ComponentStartup args)
     {
         QueueTrayWarnings(ent.Owner);
     }
 
+    [SubscribeLocalEvent]
     private void OnPlantTrayState(Entity<PlantTrayComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         QueueTrayWarnings(ent.Owner);
@@ -59,6 +50,9 @@ public sealed partial class PlantTrayVisualizerSystem : VisualizerSystem<PlantTr
     {
         if (!Resolve(ent.Owner, ref ent.Comp, false))
             return;
+
+        if (_ui.TryGetOpenUi(ent.Owner, PlantTrayUiKey.Key, out var bui))
+            bui.Update();
 
         if (!ent.Comp.DrawWarnings)
             return;
@@ -80,7 +74,7 @@ public sealed partial class PlantTrayVisualizerSystem : VisualizerSystem<PlantTr
                          || plantHolder.MissingGas;
 
                 health = _plantHolder.GetHealthThreshold(plantUid.Value);
-                harvest = plantHolder.ReadyForHarvest; // DS14
+                harvest = plantHolder.ReadyForHarvest && !plantHolder.Dead;
             }
         }
 

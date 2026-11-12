@@ -4,7 +4,14 @@
   name: Shop
   description: Opens the ability shop.
   components:
-  - type: RevenantAction
+  - type: Action
+    useDelay: 15
+    itemIconStyle: BigAction
+  - type: Sprite
+    layers:
+    - texture: Interface/Actions/defile.png
+  - type: InstantAction
+    event: !type:RevenantDefileActionEvent
 
 #DS14-start
 
@@ -54,8 +61,11 @@
   components:
   - type: RevenantAction
   - type: Action
-    icon: Interface/Actions/malfunction.png
     useDelay: 20
+    itemIconStyle: BigAction
+  - type: Sprite
+    layers:
+    - texture: Interface/Actions/malfunction.png
   - type: InstantAction
     event: !type:RevenantMalfunctionActionEvent
 

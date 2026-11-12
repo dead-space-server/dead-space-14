@@ -1,5 +1,4 @@
 using Content.Server.Atmos.EntitySystems;
-using Content.Server.Atmos.Piping.Components; // DS14 - current engine keeps AtmosDeviceUpdateEvent server-side.
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
 using Content.Shared.Atmos;
@@ -13,31 +12,20 @@ using JetBrains.Annotations;
 namespace Content.Server.Atmos.Piping.Trinary.EntitySystems;
 
 [UsedImplicitly]
-// DS14: Current engine uses explicit event subscriptions without system source generation.
-public sealed class GasMixerSystem : SharedGasMixerSystem
+public sealed partial class GasMixerSystem : SharedGasMixerSystem
 {
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambientSoundSystem = default!;
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        // DS14-start: Current engine does not support source-generated event subscriptions.
-        SubscribeLocalEvent<GasMixerComponent, ComponentInit>(OnInit);
-        SubscribeLocalEvent<GasMixerComponent, AtmosDeviceUpdateEvent>(OnMixerUpdated);
-        SubscribeLocalEvent<GasMixerComponent, AtmosDeviceDisabledEvent>(OnMixerLeaveAtmosphere);
-        SubscribeLocalEvent<GasMixerComponent, GasAnalyzerScanEvent>(OnMixerAnalyzed);
-        // DS14-end
-    }
-
+    [SubscribeLocalEvent]
     private void OnInit(Entity<GasMixerComponent> ent, ref ComponentInit args)
     {
         UpdateAppearance(ent);
     }
 
+    [SubscribeLocalEvent]
     private void OnMixerUpdated(Entity<GasMixerComponent> ent, ref AtmosDeviceUpdateEvent args)
     {
         // TODO ATMOS: Cache total moles since it's expensive.
@@ -116,6 +104,7 @@ public sealed class GasMixerSystem : SharedGasMixerSystem
             _ambientSoundSystem.SetAmbience(ent.Owner, true);
     }
 
+    [SubscribeLocalEvent]
     private void OnMixerLeaveAtmosphere(Entity<GasMixerComponent> ent, ref AtmosDeviceDisabledEvent args)
     {
         ent.Comp.Enabled = false;
@@ -129,6 +118,7 @@ public sealed class GasMixerSystem : SharedGasMixerSystem
     /// <summary>
     /// Returns the gas mixture for the gas analyzer
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnMixerAnalyzed(Entity<GasMixerComponent> ent, ref GasAnalyzerScanEvent args)
     {
         args.GasMixtures ??= new List<(string, GasMixture?)>();
