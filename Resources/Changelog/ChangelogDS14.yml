@@ -10035,3 +10035,10 @@ Entries:
     message: МЩ обратно как имплант
   - type: Add
     message: органы и конечности кэпэбэ в фарикатор экзокостюмов
+- id: 961
+  author: Manstari
+  time: '2026-11-12T08:45:54.813039+00:00'
+  pr: 2660
+  changes:
+  - type: Tweak
+    message: Карта Тайпана
