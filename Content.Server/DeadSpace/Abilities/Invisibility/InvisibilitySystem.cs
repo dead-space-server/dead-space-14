@@ -31,8 +31,6 @@ public sealed partial class InvisibilitySystem : SharedInvisibilitySystem
     {
         _actionsSystem.RemoveAction(uid, component.ActionInvisibilityEntity);
 
-        // Стелс может остаться, даже если IsInvisible уже сброшен — снимаем всегда,
-        // иначе клиент застревает в синем виде стелс-шейдера.
         RemComp<StealthComponent>(uid);
     }
 
