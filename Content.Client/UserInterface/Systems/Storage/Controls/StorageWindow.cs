@@ -33,6 +33,8 @@ public sealed class StorageWindow : BaseWindow
 
     // DS14-start
     public bool OpenedAsNested;
+
+    private bool _pendingOverlapCheck;
     // DS14-end
 
     private readonly GridContainer _pieceGrid;
@@ -210,7 +212,7 @@ public sealed class StorageWindow : BaseWindow
 
         BuildGridRepresentation();
 
-        AvoidOverlapWithOtherWindows();
+        _pendingOverlapCheck = true; // DS14
     }
 
     private void CloseParent()
@@ -577,6 +579,14 @@ public sealed class StorageWindow : BaseWindow
         if (!IsOpen)
             return;
 
+        // DS14-start
+        if (_pendingOverlapCheck && Visible && Parent != null && Size.X > 0 && Size.Y > 0 && Parent.Size.X > 0)
+        {
+            _pendingOverlapCheck = false;
+            AvoidOverlapWithOtherWindows();
+        }
+        // DS14-end
+
         if (_isDirty)
         {
             _isDirty = false;
@@ -740,27 +750,24 @@ public sealed class StorageWindow : BaseWindow
         if (_storageController.StaticStorageUIEnabled || OpenedAsNested || Parent == null)
             return;
 
-        InvalidateMeasure();
-        Measure(Vector2Helpers.Infinity);
-        var size = DesiredSize;
-        if (size.X <= 0 || size.Y <= 0)
-            return;
-
         const float step = 24f;
         const int maxTries = 40;
+        var size = Size;
         var bounds = Parent.Size;
+        var pos = Position;
+        var moved = false;
 
         for (var i = 0; i < maxTries; i++)
         {
+            var selfRect = new UIBox2(pos, pos + size);
             var overlaps = false;
+
             foreach (var sibling in Parent.Children)
             {
                 if (sibling == this || sibling is not StorageWindow other || !other.Visible)
                     continue;
 
-                var otherRect = new UIBox2(other.Position, other.Position + other.Size);
-                var selfRect = new UIBox2(Position, Position + size);
-                if (otherRect.Intersects(selfRect))
+                if (new UIBox2(other.Position, other.Position + other.Size).Intersects(selfRect))
                 {
                     overlaps = true;
                     break;
@@ -768,14 +775,19 @@ public sealed class StorageWindow : BaseWindow
             }
 
             if (!overlaps)
-                return;
+                break;
 
-            var next = Position + new Vector2(step, step);
-            if (next.X + size.X > bounds.X || next.Y + size.Y > bounds.Y)
-                next = new Vector2(step, step);
+            pos += new Vector2(step, step);
+            if (pos.X + size.X > bounds.X || pos.Y + size.Y > bounds.Y)
+                pos = new Vector2(step, step);
 
-            LayoutContainer.SetPosition(this, next);
+            moved = true;
         }
+
+        if (!moved)
+            return;
+
+        LayoutContainer.SetPosition(this, pos);
     }
     // DS14-end
 
