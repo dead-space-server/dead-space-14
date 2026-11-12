@@ -698,7 +698,7 @@
     - Snout
 
 - type: entity
-  parent: [ ClothingMaskBase, ClothingMaskFoldableBase ] # DS-14
+  parent: [ ClothingMaskBaseButcherable, ClothingMaskFoldableBase ] # DS-14
   id: ClothingMaskNeckGaiter
   name: neck gaiter
   description: Stylish neck gaiter for your neck, can protect from the cosmic wind?...
@@ -715,6 +715,8 @@
     coverage: MOUTH
   - type: Tag
     tags:
+    - ClothMade
+    - Recyclable
     - WhitelistChameleon
 
 - type: entity
