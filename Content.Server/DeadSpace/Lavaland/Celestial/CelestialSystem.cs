@@ -1,4 +1,6 @@
 using Content.Server.Audio;
+using Content.Server.Chat.Managers;
+using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.DeadSpace.Lavaland.Celestial;
@@ -39,10 +41,50 @@ public sealed class CelestialSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly IChatManager _chat = default!;
 
     private readonly HashSet<EntityUid> _nearbySpheres = new();
 
     private static readonly DamageSpecifier BeamDamage = MakeBeamDamage();
+
+    // DS14: фразы, когда игрока добивает Селестиал
+    private static readonly string[] KillPhrases =
+    {
+        "ВАША БОРЬБА ТЩЕТНА.",
+        "ПРОЩАЙ.",
+        "ПАЛ.",
+        "ЕЩЁ ОДИН.",
+        "СМЕРТНЫЙ.",
+        "ХРУПОК.",
+    };
+
+    private static readonly SoundSpecifier KillSound =
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Kill_Sound.ogg");
+
+    // подложка субтитров: старт, повтор (пока висят), конец
+    private const float DialogueIdleInterval = 2f;
+
+    // голос Селестиала идёт на -8, поэтому подложка должна быть заметно тише
+    private const float DialogueStartVolume = -13f;
+    private const float DialogueIdleVolume = -10f;
+    private const float DialogueEndVolume = -12f;
+
+    // end стартует чуть раньше исчезновения: попадает в затухание субтитров
+    // и не глохнет, если следом сразу начинаются следующие
+    private const float DialogueEndLead = 1f;
+
+    private static readonly SoundSpecifier DialogueStartSound =
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Dialogue_Start.ogg");
+
+    private static readonly SoundSpecifier DialogueIdleSound =
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Dialogue_Idle.ogg");
+
+    private static readonly SoundSpecifier DialogueEndSound =
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Dialogue_End.ogg");
+
+    // чей сейчас диалог: старые таймеры подложки глохнут на новых субтитрах
+    private int _dialogueToken;
+    private EntityUid? _dialogueIdleSound;
 
     private static float DistanceToSegment(Vector2 p, Vector2 a, Vector2 b)
     {
@@ -286,7 +328,7 @@ public sealed class CelestialSystem : EntitySystem
                 // Its own attacks never hurt the Celestial.
                 if (victim == uid || TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim))
                     continue;
-                _damage.TryChangeDamage(victim, sphereDmg);
+                Hurt(victim, sphereDmg);
             }
         }
     }
@@ -428,6 +470,144 @@ public sealed class CelestialSystem : EntitySystem
         RaiseNetworkEvent(new CelestialDeathSpeakEvent(text, duration));
     }
 
+    // ------------------------------------------------------------------
+    // Смерть игрока от Селестиала: фраза в чат, субтитры и звук
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Урон от Селестиала: если после него игрок умер — кричим фразу в чат и субтитрами.
+    /// </summary>
+    private void Hurt(EntityUid victim, DamageSpecifier damage)
+    {
+        if (TerminatingOrDeleted(victim))
+            return;
+
+        var wasAlive = !_mobState.IsDead(victim);
+
+        _damage.TryChangeDamage(victim, damage);
+
+        if (!wasAlive || TerminatingOrDeleted(victim) || !_mobState.IsDead(victim))
+            return;
+
+        AnnounceKill(victim);
+    }
+
+    private void AnnounceKill(EntityUid victim)
+    {
+        // только игроки: у NPC нет сессии
+        if (!_players.TryGetSessionByEntity(victim, out _))
+            return;
+
+        var boss = FindCelestial(victim);
+
+        var localized = false;
+        var mapId = MapId.Nullspace;
+        if (boss is { } bossUid)
+        {
+            mapId = Transform(bossUid).MapID;
+            localized = TryComp<CelestialComponent>(bossUid, out var bossComp) && bossComp.LocalizedEvents;
+        }
+
+        var phrase = _random.Pick(KillPhrases);
+
+        // чат: чистая фраза, шрифт EuroStyle, цвет d05e8b
+        var wrapped = $"[font=\"EuroStyle\"][color=#D05E8B]{phrase}[/color][/font]";
+        var filter = localized && mapId != MapId.Nullspace
+            ? Filter.BroadcastMap(mapId)
+            : Filter.Broadcast();
+
+        _chat.ChatMessageToManyFiltered(filter, ChatChannel.Server, phrase, wrapped,
+            boss ?? victim, false, true, null);
+
+        // субтитры
+        if (boss is { } subtitleBoss && TryComp<CelestialComponent>(subtitleBoss, out var subtitleComp))
+            RaiseCelestial((subtitleBoss, subtitleComp), new CelestialSpeakEvent(phrase, 4f));
+        else
+            RaiseNetworkEvent(new CelestialSpeakEvent(phrase, 4f));
+
+        // звук фразы
+        Announce(KillSound, new AudioParams { Volume = -2f }, localized, mapId);
+    }
+
+    /// <summary>Селестиал на карте жертвы: нужен для карты и локализации.</summary>
+    private EntityUid? FindCelestial(EntityUid victim)
+    {
+        var mapId = Transform(victim).MapID;
+
+        var query = EntityQueryEnumerator<CelestialComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            if (TerminatingOrDeleted(uid))
+                continue;
+            if (Transform(uid).MapID == mapId)
+                return uid;
+        }
+
+        return null;
+    }
+
+    // ------------------------------------------------------------------
+    // Подложка субтитров: старт / повтор / конец
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Старт — когда субтитры появились, idle — повтор пока они стоят, end — когда исчезли.
+    /// Новые субтитры обрывают предыдущую последовательность.
+    /// </summary>
+    private void PlayDialogueCues(EntityUid? source, float duration)
+    {
+        if (duration < 1f)
+            return;
+
+        // хвост предыдущей подложки не должен забивать новую реплику
+        StopDialogueIdle();
+
+        var token = ++_dialogueToken;
+        PlayDialogueCue(source, DialogueStartSound, DialogueStartVolume);
+
+        for (var at = DialogueIdleInterval; at < duration - DialogueEndLead; at += DialogueIdleInterval)
+        {
+            var delay = at;
+            Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
+            {
+                if (token != _dialogueToken)
+                    return;
+                _dialogueIdleSound = PlayDialogueCue(source, DialogueIdleSound, DialogueIdleVolume);
+            });
+        }
+
+        var endAt = MathF.Max(0.1f, duration - DialogueEndLead);
+        Timer.Spawn(TimeSpan.FromSeconds(endAt), () =>
+        {
+            if (token != _dialogueToken)
+                return;
+
+            // idle длится 4.7 с и перекрывал end: гасим перед звуком конца
+            StopDialogueIdle();
+            PlayDialogueCue(source, DialogueEndSound, DialogueEndVolume);
+        });
+    }
+
+    private void StopDialogueIdle()
+    {
+        if (_dialogueIdleSound is not { } idle)
+            return;
+
+        _audio.Stop(idle);
+        _dialogueIdleSound = null;
+    }
+
+    private EntityUid? PlayDialogueCue(EntityUid? source, SoundSpecifier sound, float volume)
+    {
+        var resolved = _audio.ResolveSound(sound);
+        var filter = source is { } uid && Exists(uid) && !TerminatingOrDeleted(uid)
+            ? Filter.BroadcastMap(Transform(uid).MapID)
+            : Filter.Broadcast();
+
+        var played = _audio.PlayGlobal(resolved, filter, false, new AudioParams { Volume = volume });
+        return played?.Entity;
+    }
+
     /// <summary>События босса: глобально или только на его карте.</summary>
     private void RaiseCelestial(Entity<CelestialComponent> ent, EntityEventArgs ev)
     {
@@ -443,6 +623,7 @@ public sealed class CelestialSystem : EntitySystem
     private void SpeakFor(Entity<CelestialComponent> ent, string text, float duration)
     {
         RaiseCelestial(ent, new CelestialSpeakEvent(text, duration));
+        PlayDialogueCues(ent.Owner, duration);
     }
 
     private void RaiseVisual(MapId mapId, EntityEventArgs ev, bool localized)
@@ -493,6 +674,7 @@ public sealed class CelestialSystem : EntitySystem
         }
 
         Speak(text, duration, clamped == 3 ? 3 : 0);
+        PlayDialogueCues(null, duration);
     }
 
     private readonly List<SoundSpecifier> _talkSounds = new()
@@ -654,7 +836,7 @@ public sealed class CelestialSystem : EntitySystem
                     if (DistanceToSegment(victimPos, beamStart, beamEnd) > comp.BeamDamageRadius)
                         continue;
 
-                    _damage.TryChangeDamage(victim, BeamDamage);
+                    Hurt(victim, BeamDamage);
                 }
 
                 // ломаем пол под ударом
@@ -800,6 +982,7 @@ public sealed class CelestialSystem : EntitySystem
             orbComp.TeleportInterval = comp.FutilityJumpInterval;
             orbComp.TeleportDist = dist / 16f;
             orbComp.TeleportJitter = comp.FutilityJumpJitter;
+            orbComp.JumpsLeft = 16;
 
             WaitFutilityOrbGone(ent, comp, target, orb, index + 1);
         });
@@ -861,7 +1044,7 @@ public sealed class CelestialSystem : EntitySystem
         {
             if (TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim) || victim == uid)
                 continue;
-            _damage.TryChangeDamage(victim, damage);
+            Hurt(victim, damage);
         }
     }
 
@@ -890,7 +1073,7 @@ public sealed class CelestialSystem : EntitySystem
                 continue;
             if (DistanceToSegment(_transform.GetMapCoordinates(victim).Position, start, end) > orb.BeamRadius)
                 continue;
-            _damage.TryChangeDamage(victim, damage);
+            Hurt(victim, damage);
         }
     }
 
@@ -944,7 +1127,7 @@ public sealed class CelestialSystem : EntitySystem
                 // у самого центра бьёт гарантированно
                 if (victimRel.Length() <= comp.CutterDamageRadius * 2f)
                 {
-                    _damage.TryChangeDamage(victim, damage);
+                    Hurt(victim, damage);
                     continue;
                 }
 
@@ -962,7 +1145,7 @@ public sealed class CelestialSystem : EntitySystem
                 }
 
                 if (hit)
-                    _damage.TryChangeDamage(victim, damage);
+                    Hurt(victim, damage);
             }
         });
     }
@@ -1002,8 +1185,8 @@ public sealed class CelestialSystem : EntitySystem
                 continue;
             }
 
-            // шар не летит плавно: глитч-рывки к цели с боковым разбросом,
-            // между рывками висит на месте
+            // шар не наводится в полёте: направление зафиксировано в портале,
+            // дальше только глитч-рывки вдоль него с боковым разбросом
             orb.TeleportAccumulator += frameTime;
             if (orb.TeleportAccumulator < orb.TeleportInterval)
                 continue;
@@ -1013,11 +1196,22 @@ public sealed class CelestialSystem : EntitySystem
             if (!CanMove(uid))
                 continue;
 
-            var jumpDir = toTarget / dist;
-            var jump = MathF.Min(orb.TeleportDist, dist);
+            var jumpDir = orb.VelocityDir.LengthSquared() < 0.001f
+                ? toTarget / dist
+                : orb.VelocityDir;
+
             var perpendicular = new Vector2(-jumpDir.Y, jumpDir.X);
             var jitter = perpendicular * _random.NextFloat(-orb.TeleportJitter, orb.TeleportJitter);
-            _transform.SetWorldPosition(uid, orbPos + jumpDir * jump + jitter);
+            _transform.SetWorldPosition(uid, orbPos + jumpDir * orb.TeleportDist + jitter);
+
+            // рывки кончились — рвётся там, куда был нацелен
+            orb.JumpsLeft--;
+            if (orb.JumpsLeft <= 0)
+            {
+                OrbContact(uid, orb, _transform.GetMapCoordinates(uid).Position);
+                QueueDel(uid);
+                continue;
+            }
 
             // стрельба мелкими лучами вдоль пути
             orb.FireAccumulator += frameTime;
@@ -1186,7 +1380,7 @@ public sealed class CelestialSystem : EntitySystem
                 {
                     if (victim == uid || TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim))
                         continue;
-                    _damage.TryChangeDamage(victim, dmg);
+                    Hurt(victim, dmg);
                 }
             }
         }
@@ -1320,7 +1514,7 @@ public sealed class CelestialSystem : EntitySystem
                         var rayEnd = center + new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * comp.BloomLength;
                         if (DistanceToSegment(victimPos, center, rayEnd) <= comp.BloomDamageRadius)
                         {
-                            _damage.TryChangeDamage(victim, bloomDamage);
+                            Hurt(victim, bloomDamage);
                             break;
                         }
                     }
@@ -1426,7 +1620,7 @@ public sealed class CelestialSystem : EntitySystem
                 {
                     if (DistanceToSegment(victimPos, bs, be) <= comp.FreezeBeamRadius)
                     {
-                        _damage.TryChangeDamage(victim, freezeDamage);
+                        Hurt(victim, freezeDamage);
                         break;
                     }
                 }

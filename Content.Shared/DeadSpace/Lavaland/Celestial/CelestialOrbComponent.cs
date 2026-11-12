@@ -86,6 +86,10 @@ public sealed partial class CelestialOrbComponent : Component
     [DataField]
     public float TeleportJitter = 0f;
 
+    /// <summary>Сколько глитч-рывков осталось: когда дойдёт до 0 — шар рвётся.</summary>
+    [ViewVariables]
+    public int JumpsLeft = 16;
+
     [ViewVariables]
     public float TeleportAccumulator;
 
