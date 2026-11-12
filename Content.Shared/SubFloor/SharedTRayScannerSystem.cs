@@ -81,7 +81,7 @@ public abstract partial class SharedTRayScannerSystem : EntitySystem
 
     private void OnUserGetVis(Entity<TRayScannerUserComponent> scanner, ref GetVisMaskEvent args)
     {
-        args.VisibilityMask |= (int)VisibilityFlags.Subfloor;
+        args.VisibilityMask |= (int)SubfloorVisibility.All; //DS-14
     }
 
     private void OnEquip(EntityUid user)
