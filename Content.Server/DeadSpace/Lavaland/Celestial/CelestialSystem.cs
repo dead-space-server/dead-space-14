@@ -44,16 +44,6 @@ public sealed class CelestialSystem : EntitySystem
 
     private static readonly DamageSpecifier BeamDamage = MakeBeamDamage();
 
-    private static float AngleDiff(float from, float to)
-    {
-        var d = (to - from) % MathF.Tau;
-        if (d > MathF.PI)
-            d -= MathF.Tau;
-        if (d < -MathF.PI)
-            d += MathF.Tau;
-        return d;
-    }
-
     private static float DistanceToSegment(Vector2 p, Vector2 a, Vector2 b)
     {
         var ab = b - a;
@@ -67,9 +57,9 @@ public sealed class CelestialSystem : EntitySystem
     private static DamageSpecifier MakeBeamDamage()
     {
         var d = new DamageSpecifier();
-        d.DamageDict.TryAdd("Heat", 20f);
-        d.DamageDict.TryAdd("Blunt", 10f);
-        d.DamageDict.TryAdd("Structural", 25f);
+        d.DamageDict.TryAdd("Heat", 32f);
+        d.DamageDict.TryAdd("Blunt", 16f);
+        d.DamageDict.TryAdd("Structural", 40f);
         return d;
     }
 
@@ -713,6 +703,7 @@ public sealed class CelestialSystem : EntitySystem
         for (var r = 0; r < comp.CutterRepeats; r++)
         {
             var delay = afterOrbs + r * comp.CutterRepeatDelay;
+            var isFinalCutter = r == comp.CutterRepeats - 1;
             Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
             {
                 if (TerminatingOrDeleted(ent))
@@ -722,7 +713,7 @@ public sealed class CelestialSystem : EntitySystem
                 {
                     if (TerminatingOrDeleted(target))
                         continue;
-                    RunCutter(ent, comp, target, final: r == comp.CutterRepeats - 1);
+                    RunCutter(ent, comp, target, final: isFinalCutter);
                 }
             });
         }
@@ -774,13 +765,21 @@ public sealed class CelestialSystem : EntitySystem
         Spawn("CelestialRift", riftMap);
         Sound(comp.FutilityCrackSound, ent, -4f);
 
-        Timer.Spawn(TimeSpan.FromSeconds(0.8f), () =>
+        // прицеливание: пока портал заряжается, от него к цели идёт тонкая линия
+        RaiseVisual(targetPos.MapId, new CelestialBeamVisualEvent(
+            riftCenter, targetPos.Position, (int) targetPos.MapId,
+            comp.FutilityAimTime, 0.05f, 0.35f), comp.LocalizedEvents);
+
+        Timer.Spawn(TimeSpan.FromSeconds(comp.FutilityAimTime), () =>
         {
             if (TerminatingOrDeleted(target) || TerminatingOrDeleted(ent))
                 return;
 
             if (comp.FutilityOrbSounds.Count > 0)
                 Sound(_random.Pick(comp.FutilityOrbSounds), ent, -8f);
+
+            var toTarget = _transform.GetMapCoordinates(target).Position - riftCenter;
+            var dist = MathF.Max(toTarget.Length(), 0.01f);
 
             var orb = Spawn("CelestialOrb", riftMap);
             var orbComp = EnsureComp<CelestialOrbComponent>(orb);
@@ -794,8 +793,13 @@ public sealed class CelestialSystem : EntitySystem
             orbComp.BeamDamageMax = comp.SmallBeamMaxDamage;
             orbComp.BeamRadius = comp.SmallBeamRadius;
             orbComp.LocalizedEvents = comp.LocalizedEvents;
-            orbComp.VelocityDir = Vector2.Normalize(
-                _transform.GetMapCoordinates(target).Position - riftCenter);
+            orbComp.VelocityDir = toTarget / dist;
+
+            // глитч-полёт: ~16 рывков по 0.125 с — около двух секунд до игрока,
+            // каждый рывок уводит шар вбок на случайное смещение
+            orbComp.TeleportInterval = comp.FutilityJumpInterval;
+            orbComp.TeleportDist = dist / 16f;
+            orbComp.TeleportJitter = comp.FutilityJumpJitter;
 
             WaitFutilityOrbGone(ent, comp, target, orb, index + 1);
         });
@@ -998,45 +1002,22 @@ public sealed class CelestialSystem : EntitySystem
                 continue;
             }
 
-            // шар НИКОГДА не останавливается: постоянная скорость, поворот
-            // с ограниченной скоростью - уйти можно, уводя шар в сторону
-            var desired = toTarget / dist;
-
-            if (orb.VelocityDir.LengthSquared() < 0.001f)
-                orb.VelocityDir = desired;
-
-            var angle = MathF.Atan2(orb.VelocityDir.Y, orb.VelocityDir.X);
-            var targetAngle = MathF.Atan2(desired.Y, desired.X);
-            var diff = AngleDiff(angle, targetAngle);
-            var maxTurn = orb.TurnRate * frameTime;
-            angle += Math.Clamp(diff, -maxTurn, maxTurn);
-            orb.VelocityDir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
-
-            // зигзаг-телепорт: раз в интервал шар РЫВКОМ телепортируется
-            // к точке прицела (вперёд к игроку + боковой зигзаг)
+            // шар не летит плавно: глитч-рывки к цели с боковым разбросом,
+            // между рывками висит на месте
             orb.TeleportAccumulator += frameTime;
-            if (orb.TeleportAccumulator >= orb.TeleportInterval)
-            {
-                orb.TeleportAccumulator -= orb.TeleportInterval;
-
-                var blinkAngle = MathF.Atan2(orb.VelocityDir.Y, orb.VelocityDir.X)
-                    + MathF.Sin(orb.Elapsed * orb.WeaveFreq + orb.Phase) * 0.6f;
-                var blinkDir = new Vector2(MathF.Cos(blinkAngle), MathF.Sin(blinkAngle));
-                var blink = blinkDir * MathF.Min(orb.TeleportDist, dist * 0.6f);
-                _transform.SetWorldPosition(uid, orbPos + blink);
+            if (orb.TeleportAccumulator < orb.TeleportInterval)
                 continue;
-            }
 
-            // между рывками - неспешный неповоротливый дрейф к игроку
-            var perpendicular = new Vector2(-orb.VelocityDir.Y, orb.VelocityDir.X);
-            var weave = MathF.Sin(orb.Elapsed * orb.WeaveFreq + orb.Phase) * orb.WeaveAmp;
-            var moveDir = Vector2.Normalize(orb.VelocityDir + perpendicular * weave);
+            orb.TeleportAccumulator -= orb.TeleportInterval;
 
-            var step = orb.Speed * 0.55f * frameTime;
             if (!CanMove(uid))
                 continue;
 
-            _transform.SetWorldPosition(uid, orbPos + moveDir * step);
+            var jumpDir = toTarget / dist;
+            var jump = MathF.Min(orb.TeleportDist, dist);
+            var perpendicular = new Vector2(-jumpDir.Y, jumpDir.X);
+            var jitter = perpendicular * _random.NextFloat(-orb.TeleportJitter, orb.TeleportJitter);
+            _transform.SetWorldPosition(uid, orbPos + jumpDir * jump + jitter);
 
             // стрельба мелкими лучами вдоль пути
             orb.FireAccumulator += frameTime;
@@ -1099,6 +1080,7 @@ public sealed class CelestialSystem : EntitySystem
                 for (var r = 0; r < comp.CutterRepeats; r++)
                 {
                     var delay = r * comp.CutterRepeatDelay;
+                    var isFinalCutter = r == comp.CutterRepeats - 1;
                     Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
                     {
                         if (TerminatingOrDeleted(ent))
@@ -1107,7 +1089,7 @@ public sealed class CelestialSystem : EntitySystem
                         {
                             if (TerminatingOrDeleted(target))
                                 continue;
-                            RunCutter(ent, comp, target, final: r == comp.CutterRepeats - 1);
+                            RunCutter(ent, comp, target, final: isFinalCutter);
                         }
                     });
                 }
@@ -1305,20 +1287,22 @@ public sealed class CelestialSystem : EntitySystem
         for (var tick = 1; tick <= damageTicks; tick++)
         {
             var delay = comp.BloomSweepTime + (tick - 1) * comp.BloomDamageInterval;
+
+            // угол считаем ДО таймера: переменная цикла захватывается лямбдой
+            // по ссылке, и внутри таймера tick всегда равен damageTicks + 1 —
+            // урон уходил в одну повёрнутую сторону, а не по видимым лучам
+            var tickElapsed = (tick - 1) * comp.BloomDamageInterval;
+            var tickAngle = baseAngle + comp.BloomRotateSpeed * (comp.BloomSweepTime + tickElapsed);
+
             Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
             {
                 if (TerminatingOrDeleted(ent))
                     return;
 
-                var elapsed = (tick - 1) * comp.BloomDamageInterval;
-                var angle = baseAngle + comp.BloomRotateSpeed * (comp.BloomSweepTime + elapsed);
-
                 var bloomDamage = new DamageSpecifier();
                 bloomDamage.DamageDict.TryAdd("Heat", comp.BloomBeamDamage);
 
-                // радиус запроса = вся длина луча (плюс запас): раньше брали
-                // половину, и всё дальше BloomLength/2 просто не попадало в
-                // выборку — урон шёл только рядом с Селестиалом
+                // радиус запроса = вся длина луча (плюс запас)
                 var queryRadius = comp.BloomLength + 4f;
                 _nearbySpheres.Clear();
                 foreach (var victim in _lookup.GetEntitiesInRange(
@@ -1328,12 +1312,11 @@ public sealed class CelestialSystem : EntitySystem
                         continue;
 
                     var victimPos = _transform.GetMapCoordinates(victim).Position;
-                    var victimRel = victimPos - center;
 
                     // 4 луча по 90 градусов
                     for (var k = 0; k < 4; k++)
                     {
-                        var ang = angle + k * MathF.PI / 2f;
+                        var ang = tickAngle + k * MathF.PI / 2f;
                         var rayEnd = center + new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * comp.BloomLength;
                         if (DistanceToSegment(victimPos, center, rayEnd) <= comp.BloomDamageRadius)
                         {

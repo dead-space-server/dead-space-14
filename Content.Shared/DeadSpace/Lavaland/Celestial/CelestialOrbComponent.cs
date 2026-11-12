@@ -36,7 +36,7 @@ public sealed partial class CelestialOrbComponent : Component
 
     /// <summary>Урон при касании: долетев до игрока, шар взрывается на нём.</summary>
     [DataField]
-    public float ContactDamage = 25f;
+    public float ContactDamage = 40f;
 
     /// <summary>Радиус взрыва при касании, метры.</summary>
     [DataField]
@@ -81,6 +81,10 @@ public sealed partial class CelestialOrbComponent : Component
     /// <summary>Дальность телепорта-рывка, метры.</summary>
     [DataField]
     public float TeleportDist = 3.5f;
+
+    /// <summary>Боковой разброс рывка, метры: создаёт рваный глитч-полёт.</summary>
+    [DataField]
+    public float TeleportJitter = 0f;
 
     [ViewVariables]
     public float TeleportAccumulator;

@@ -7,7 +7,7 @@
     startScale: 0.25
     endScale: 1.3
     lifetime: 2.6
-    damagePerTick: 15
+    damagePerTick: 24
     damageRadiusScale: 0.8
   - type: PointLight
     enabled: true

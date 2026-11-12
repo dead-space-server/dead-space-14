@@ -103,7 +103,19 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Насколько далеко перед игроком открывается портал для второго и следующих шаров, метры.</summary>
     [DataField]
-    public float FutilityPortalDistance = 4f;
+    public float FutilityPortalDistance = 30f;
+
+    /// <summary>Сколько портал целится перед выстрелом шаром, сек.</summary>
+    [DataField]
+    public float FutilityAimTime = 0.5f;
+
+    /// <summary>Интервал глитч-рывков шара, сек: 16 рывков по 0.125 с ≈ две секунды полёта.</summary>
+    [DataField]
+    public float FutilityJumpInterval = 0.125f;
+
+    /// <summary>Боковой разброс каждого глитч-рывка шара, метры.</summary>
+    [DataField]
+    public float FutilityJumpJitter = 1.1f;
 
     /// <summary>Длительность фазы шаров: после неё начинаются Cutter и лучи, сек.</summary>
     [DataField]
@@ -144,11 +156,11 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Минимальный урон мелкого луча.</summary>
     [DataField]
-    public float SmallBeamMinDamage = 15f;
+    public float SmallBeamMinDamage = 24f;
 
     /// <summary>Максимальный урон мелкого луча.</summary>
     [DataField]
-    public float SmallBeamMaxDamage = 30f;
+    public float SmallBeamMaxDamage = 48f;
 
     /// <summary>Сколько раз повторяется Cutter.</summary>
     [DataField]
@@ -192,7 +204,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон луча Cutter.</summary>
     [DataField]
-    public float CutterDamage = 30f;
+    public float CutterDamage = 48f;
 
     // ----- радиусы попадания (понижены: лучи били слишком широко) -----
 
@@ -280,7 +292,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон за тик гигантского луча.</summary>
     [DataField]
-    public float BloomBeamDamage = 20f;
+    public float BloomBeamDamage = 32f;
 
     /// <summary>Полуширина урона гигантского луча, метры (визуально луч чуть шире).</summary>
     [DataField]
@@ -312,7 +324,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон замершего луча при почернении.</summary>
     [DataField]
-    public float FreezeBeamDamage = 20f;
+    public float FreezeBeamDamage = 32f;
 
     /// <summary>Сколько замерших лучей проходит прямо через каждого игрока (остальные - по округе).</summary>
     [DataField]
