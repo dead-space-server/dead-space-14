@@ -10042,3 +10042,10 @@ Entries:
   changes:
   - type: Tweak
     message: Карта Тайпана
+- id: 962
+  author: IvanKuvalda
+  time: '2026-11-12T08:49:48.825871+00:00'
+  pr: 2616
+  changes:
+  - type: Fix
+    message: Старой сс14 больше не будет!!! Невидимость исправлена!!!
