@@ -30,7 +30,7 @@ public sealed class LimbOrganRulesTest
     }
 
     [Test]
-    public void EnoughPointRupturesTheHeartAndAShortfallDoesNot()
+    public void PointStrikesBruiseTheHeartAndAShortfallDoesNot()
     {
         var organs = LimbOrganRules.CreateAll().ToArray();
         var early = LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Point, 39f, 1f);
@@ -44,6 +44,23 @@ public sealed class LimbOrganRulesTest
             Assert.That(burst.Organ, Is.EqualTo(LimbOrgan.Heart));
             Assert.That(organs[(int) LimbOrgan.Heart].Damage, Is.EqualTo(40f));
             Assert.That(organs[(int) LimbOrgan.Lungs].Damage, Is.EqualTo(40f * 0.8f));
+        });
+    }
+
+    [Test]
+    public void PointStrikeRupturesTheHeart()
+    {
+        var organs = LimbOrganRules.CreateAll().ToArray();
+        var eyes = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, LimbOrganRules.RuptureChance, 0f);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(eyes, Is.EqualTo(0));
+            Assert.That(organs[(int) LimbOrgan.Heart].Ruptured, Is.True);
+            Assert.That(organs[(int) LimbOrgan.Lungs].Ruptured, Is.True);
+            Assert.That(organs[(int) LimbOrgan.Stomach].Ruptured, Is.True);
+            Assert.That(organs[(int) LimbOrgan.Liver].Ruptured, Is.True);
+            Assert.That(organs[(int) LimbOrgan.Kidneys].Ruptured, Is.False);
         });
     }
 

@@ -1691,6 +1691,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var count = Math.Min(zones.Length, LimbWoundRules.BodyZoneCount);
         var worn = new float[LimbWoundRules.BodyZoneCount];
         LostShares(ent.Comp, worn);
+        var mech = new bool[LimbWoundRules.BodyZoneCount];
         var heat = new float[count];
         var pierce = new float[count];
         var blunt = new float[count];
@@ -1738,6 +1739,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 }
 
                 var zoneDamage = heat[i] + pierce[i] + blunt[i] + slash[i] + caustic[i] + other[i];
+                mech[i] = pierce[i] > 0f || blunt[i] > 0f || slash[i] > 0f;
                 if (LimbWoundRules.TryBlastSever(args.Distance, BlastBlocked(ent, (LimbZone) i), _random.NextFloat(), (LimbZone) i, zoneDamage))
                     sever.Add((LimbZone) i);
             }
@@ -1762,7 +1764,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!changed)
             return;
 
-        RuptureWorn(ent.Owner, ent.Comp, worn);
+        RuptureWorn(ent.Owner, ent.Comp, worn, mech);
         Dirty(ent);
         ApplyLife(ent.Owner, ent.Comp);
         RefreshActive(ent.Owner, ent.Comp);
@@ -2124,7 +2126,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
     }
 
-    private bool RuptureWorn(EntityUid uid, LimbBodyComponent limbs, float[] before)
+    private bool RuptureWorn(EntityUid uid, LimbBodyComponent limbs, float[] before, bool[] mechanical)
     {
         EnsureZones(limbs);
         var zones = CollectionsMarshal.AsSpan(limbs.Zones);
@@ -2135,7 +2137,12 @@ public sealed partial class LimbWoundSystem : EntitySystem
             if (zones[i].Severed || before[i] < LimbOrganRules.RuptureShare)
                 continue;
 
-            any |= RuptureIf(uid, limbs, (LimbZone) i);
+            var zone = (LimbZone) i;
+            var lost = LimbWoundRules.LostShare(zones[i], LimbWoundRules.HealthFor(zone, limbs));
+            if (lost <= before[i] || i >= mechanical.Length || !mechanical[i])
+                continue;
+
+            any |= RuptureIf(uid, limbs, zone);
         }
 
         return any;
