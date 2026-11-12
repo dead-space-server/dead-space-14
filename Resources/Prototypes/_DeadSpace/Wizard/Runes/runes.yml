@@ -1,0 +1,618 @@
+# Формы
+
+- type: wizardRune
+  id: RuneFormProjectile
+  name: rune-form-projectile-name
+  description: rune-form-projectile-desc
+  kind: Form
+  syllable: rune-form-projectile-syllable
+  targeting: Point
+  spellRange: 12
+  spellStrain: 18
+  spellCooldown: 8
+  autoTarget: AroundPoint
+  autoPattern: AtPoint
+  color: "#ffd27a"
+  strain: 3
+  order: 0
+  stroke:
+  - 0.2,0.1
+  - 0.8,0.5
+  - 0.2,0.9
+
+- type: wizardRune
+  id: RuneFormWall
+  name: rune-form-wall-name
+  description: rune-form-wall-desc
+  kind: Form
+  syllable: rune-form-wall-syllable
+  targeting: Point
+  spellRange: 8
+  spellStrain: 18
+  spellCooldown: 12
+  autoTarget: AroundPoint
+  autoPattern: LineAtPoint
+  color: "#c9b59a"
+  strain: 4
+  order: 1
+  stroke:
+  - 0.15,0.9
+  - 0.15,0.15
+  - 0.85,0.15
+  - 0.85,0.9
+
+- type: wizardRune
+  id: RuneFormWave
+  name: rune-form-wave-name
+  description: rune-form-wave-desc
+  kind: Form
+  syllable: rune-form-wave-syllable
+  targeting: Self
+  spellStrain: 24
+  spellCooldown: 14
+  spellLoudness: 2
+  autoTarget: AroundCaster
+  autoPattern: RingAroundCaster
+  color: "#8fd3ff"
+  strain: 6
+  loudness: 1
+  order: 2
+  stroke:
+  - 0.05,0.364
+  - 0.15,0.204
+  - 0.25,0.288
+  - 0.35,0.547
+  - 0.45,0.767
+  - 0.55,0.767
+  - 0.65,0.547
+  - 0.75,0.288
+  - 0.85,0.204
+  - 0.95,0.364
+
+- type: wizardRune
+  id: RuneFormTouch
+  name: rune-form-touch-name
+  description: rune-form-touch-desc
+  kind: Form
+  syllable: rune-form-touch-syllable
+  targeting: Entity
+  spellRange: 2
+  spellStrain: 16
+  spellCooldown: 10
+  autoTarget: Target
+  autoPattern: AtPoint
+  color: "#ff9db0"
+  strain: 2
+  order: 3
+  stroke:
+  - 0.1,0.2
+  - 0.5,0.9
+  - 0.9,0.2
+
+- type: wizardRune
+  id: RuneFormSelf
+  name: rune-form-self-name
+  description: rune-form-self-desc
+  kind: Form
+  syllable: rune-form-self-syllable
+  targeting: Self
+  spellStrain: 16
+  spellCooldown: 18
+  autoTarget: Caster
+  autoPattern: AtCaster
+  color: "#f5f5ff"
+  strain: 3
+  order: 4
+  stroke:
+  - 0.5,0.1
+  - 0.653,0.13
+  - 0.783,0.217
+  - 0.87,0.347
+  - 0.9,0.5
+  - 0.87,0.653
+  - 0.783,0.783
+  - 0.653,0.87
+  - 0.5,0.9
+  - 0.347,0.87
+  - 0.217,0.783
+  - 0.13,0.653
+  - 0.1,0.5
+  - 0.13,0.347
+  - 0.217,0.217
+  - 0.347,0.13
+  - 0.5,0.1
+
+- type: wizardRune
+  id: RuneFormAnimate
+  name: rune-form-animate-name
+  description: rune-form-animate-desc
+  kind: Form
+  syllable: rune-form-animate-syllable
+  targeting: Point
+  spellRange: 8
+  spellStrain: 26
+  spellCooldown: 25
+  autoTarget: AroundPoint
+  autoPattern: AtPoint
+  color: "#b9ff8a"
+  strain: 8
+  absurdity: 1
+  order: 5
+  stroke:
+  - 0.55,0.5
+  - 0.559,0.559
+  - 0.5,0.617
+  - 0.394,0.606
+  - 0.317,0.5
+  - 0.347,0.347
+  - 0.5,0.25
+  - 0.7,0.3
+  - 0.817,0.5
+  - 0.747,0.747
+  - 0.5,0.883
+  - 0.205,0.795
+  - 0.05,0.5
+
+- type: wizardRune
+  id: RuneFormSummon
+  name: rune-form-summon-name
+  description: rune-form-summon-desc
+  kind: Form
+  syllable: rune-form-summon-syllable
+  color: "#ffa0f0"
+  strain: 8
+  loudness: 1
+  order: 6
+  targeting: Point
+  spellRange: 6
+  spellStrain: 26
+  spellCooldown: 30
+  autoTarget: AroundPoint
+  autoPattern: AtPoint
+  stroke:
+  - 0.1,0.9
+  - 0.3,0.1
+  - 0.5,0.6
+  - 0.7,0.1
+  - 0.9,0.9
+
+- type: wizardRune
+  id: RuneFormPolymorph
+  name: rune-form-polymorph-name
+  description: rune-form-polymorph-desc
+  kind: Form
+  syllable: rune-form-polymorph-syllable
+  color: "#d0a0ff"
+  strain: 6
+  absurdity: 1
+  order: 7
+  targeting: EntityOrSelf
+  spellRange: 6
+  spellStrain: 22
+  spellCooldown: 30
+  autoTarget: Target
+  autoPattern: AtPoint
+  stroke:
+  - 0.1,0.1
+  - 0.9,0.9
+  - 0.9,0.1
+  - 0.1,0.9
+  - 0.1,0.1
+
+- type: wizardRune
+  id: RuneFormGrasp
+  name: rune-form-grasp-name
+  description: rune-form-grasp-desc
+  kind: Form
+  syllable: rune-form-grasp-syllable
+  color: "#7fe0d0"
+  strain: 3
+  order: 8
+  targeting: Point
+  spellRange: 9
+  spellStrain: 14
+  spellCooldown: 6
+  autoTarget: Target
+  autoPattern: AtPoint
+  stroke:
+  - 0.7,0.1
+  - 0.7,0.65
+  - 0.62,0.82
+  - 0.47,0.9
+  - 0.32,0.85
+  - 0.22,0.7
+
+- type: wizardRune
+  id: RuneFormUltimate
+  name: rune-form-ultimate-name
+  description: rune-form-ultimate-desc
+  kind: Form
+  ultimate: true
+  syllable: rune-form-ultimate-syllable
+  color: "#ffe9a8"
+  strain: 4
+  loudness: 3
+  order: 9
+  targeting: Point
+  spellRange: 10
+  spellStrain: 40
+  spellCooldown: 5
+  spellLoudness: 3
+  autoTarget: AroundPoint
+  autoPattern: AreaAtPoint
+  stroke:
+  - 0.5,0.05
+  - 0.695,0.905
+  - 0.148,0.219
+  - 0.939,0.6
+  - 0.061,0.6
+  - 0.852,0.219
+  - 0.305,0.905
+  - 0.5,0.05
+
+# Стихии
+
+- type: wizardRune
+  id: RuneElementFire
+  name: rune-element-fire-name
+  description: rune-element-fire-desc
+  kind: Element
+  syllable: rune-element-fire-syllable
+  surge: RuneSurgeFire
+  fatalSurge: RuneFatalFire
+  color: "#ff7a2e"
+  strain: 6
+  loudness: 1
+  order: 0
+  stroke:
+  - 0.1,0.9
+  - 0.5,0.1
+  - 0.9,0.9
+  - 0.1,0.9
+
+- type: wizardRune
+  id: RuneElementIce
+  name: rune-element-ice-name
+  description: rune-element-ice-desc
+  kind: Element
+  syllable: rune-element-ice-syllable
+  surge: RuneSurgeIce
+  fatalSurge: RuneFatalIce
+  color: "#9be7ff"
+  strain: 5
+  order: 1
+  stroke:
+  - 0.1,0.1
+  - 0.9,0.1
+  - 0.1,0.9
+  - 0.9,0.9
+
+- type: wizardRune
+  id: RuneElementEarth
+  name: rune-element-earth-name
+  description: rune-element-earth-desc
+  kind: Element
+  syllable: rune-element-earth-syllable
+  surge: RuneSurgeEarth
+  fatalSurge: RuneFatalEarth
+  color: "#b58a5a"
+  strain: 5
+  loudness: 1
+  order: 2
+  stroke:
+  - 0.1,0.1
+  - 0.9,0.1
+  - 0.9,0.9
+  - 0.1,0.9
+  - 0.1,0.1
+
+- type: wizardRune
+  id: RuneElementLightning
+  name: rune-element-lightning-name
+  description: rune-element-lightning-desc
+  kind: Element
+  syllable: rune-element-lightning-syllable
+  surge: RuneSurgeLightning
+  fatalSurge: RuneFatalLightning
+  color: "#fff36b"
+  strain: 7
+  loudness: 1
+  order: 3
+  stroke:
+  - 0.6,0.05
+  - 0.25,0.5
+  - 0.75,0.5
+  - 0.4,0.95
+
+- type: wizardRune
+  id: RuneElementLife
+  name: rune-element-life-name
+  description: rune-element-life-desc
+  kind: Element
+  syllable: rune-element-life-syllable
+  surge: RuneSurgeLife
+  fatalSurge: RuneFatalLife
+  color: "#6dff8f"
+  strain: 6
+  order: 4
+  stroke:
+  - 0.15,0.9
+  - 0.15,0.1
+  - 0.85,0.9
+  - 0.85,0.1
+
+- type: wizardRune
+  id: RuneElementVoid
+  name: rune-element-void-name
+  description: rune-element-void-desc
+  kind: Element
+  syllable: rune-element-void-syllable
+  surge: RuneSurgeVoid
+  fatalSurge: RuneFatalVoid
+  color: "#a77bff"
+  strain: 8
+  loudness: 1
+  order: 5
+  stroke:
+  - 0.1,0.1
+  - 0.9,0.1
+  - 0.5,0.9
+  - 0.1,0.1
+
+- type: wizardRune
+  id: RuneElementChaos
+  name: rune-element-chaos-name
+  description: rune-element-chaos-desc
+  kind: Element
+  syllable: rune-element-chaos-syllable
+  surge: RuneSurgeChaos
+  fatalSurge: RuneFatalChaos
+  color: "#ff6ad5"
+  strain: 4
+  absurdity: 3
+  order: 6
+  stroke:
+  - 0.5,0.05
+  - 0.765,0.864
+  - 0.072,0.361
+  - 0.928,0.361
+  - 0.235,0.864
+  - 0.5,0.05
+
+- type: wizardRune
+  id: RuneElementWater
+  name: rune-element-water-name
+  description: rune-element-water-desc
+  kind: Element
+  syllable: rune-element-water-syllable
+  color: "#4aa8ff"
+  strain: 5
+  order: 7
+  surge: RuneSurgeWater
+  fatalSurge: RuneFatalWater
+  stroke:
+  - 0.05,0.5
+  - 0.2,0.3
+  - 0.35,0.3
+  - 0.5,0.5
+  - 0.65,0.7
+  - 0.8,0.7
+  - 0.95,0.5
+
+- type: wizardRune
+  id: RuneElementAir
+  name: rune-element-air-name
+  description: rune-element-air-desc
+  kind: Element
+  syllable: rune-element-air-syllable
+  color: "#d8f4ff"
+  strain: 5
+  order: 8
+  surge: RuneSurgeAir
+  fatalSurge: RuneFatalAir
+  stroke:
+  - 0.3,0.95
+  - 0.6,0.6
+  - 0.7,0.3
+  - 0.55,0.05
+  - 0.4,0.3
+  - 0.5,0.6
+  - 0.9,0.95
+
+- type: wizardRune
+  id: RuneElementBlood
+  name: rune-element-blood-name
+  description: rune-element-blood-desc
+  kind: Element
+  syllable: rune-element-blood-syllable
+  color: "#d4141f"
+  strain: 3
+  loudness: 2
+  order: 9
+  surge: RuneSurgeBlood
+  fatalSurge: RuneFatalBlood
+  stroke:
+  - 0.5,0.95
+  - 0.1,0.45
+  - 0.15,0.2
+  - 0.3,0.1
+  - 0.5,0.25
+  - 0.7,0.1
+  - 0.85,0.2
+  - 0.9,0.45
+  - 0.5,0.95
+
+- type: wizardRune
+  id: RuneElementDeath
+  name: rune-element-death-name
+  description: rune-element-death-desc
+  kind: Element
+  syllable: rune-element-death-syllable
+  color: "#8c8c9e"
+  strain: 6
+  loudness: 2
+  order: 10
+  surge: RuneSurgeDeath
+  fatalSurge: RuneFatalDeath
+  stroke:
+  - 0.2,0.95
+  - 0.2,0.1
+  - 0.6,0.1
+  - 0.9,0.35
+  - 0.6,0.35
+
+- type: wizardRune
+  id: RuneElementPoison
+  name: rune-element-poison-name
+  description: rune-element-poison-desc
+  kind: Element
+  syllable: rune-element-poison-syllable
+  color: "#8bd450"
+  strain: 5
+  order: 11
+  surge: RuneSurgePoison
+  fatalSurge: RuneFatalPoison
+  stroke:
+  - 0.5,0.05
+  - 0.2,0.6
+  - 0.3,0.85
+  - 0.5,0.95
+  - 0.7,0.85
+  - 0.8,0.6
+  - 0.5,0.05
+
+# Модификаторы
+
+- type: wizardRune
+  id: RuneModifierPower
+  name: rune-modifier-power-name
+  description: rune-modifier-power-desc
+  kind: Modifier
+  syllable: rune-modifier-power-syllable
+  color: "#ff4040"
+  strain: 10
+  strainScale: 1.3
+  power: 1.5
+  loudness: 1
+  order: 0
+  stroke:
+  - 0.1,0.8
+  - 0.5,0.2
+  - 0.9,0.8
+
+- type: wizardRune
+  id: RuneModifierSwarm
+  name: rune-modifier-swarm-name
+  description: rune-modifier-swarm-desc
+  kind: Modifier
+  syllable: rune-modifier-swarm-syllable
+  color: "#ffb347"
+  strain: 8
+  strainScale: 1.25
+  extra: 2
+  loudness: 1
+  order: 1
+  stroke:
+  - 0.05,0.2
+  - 0.3,0.85
+  - 0.5,0.35
+  - 0.7,0.85
+  - 0.95,0.2
+
+- type: wizardRune
+  id: RuneModifierRange
+  name: rune-modifier-range-name
+  description: rune-modifier-range-desc
+  kind: Modifier
+  syllable: rune-modifier-range-syllable
+  color: "#7ab8ff"
+  strain: 4
+  range: 1.6
+  order: 2
+  stroke:
+  - 0.05,0.5
+  - 0.95,0.5
+
+- type: wizardRune
+  id: RuneModifierDuration
+  name: rune-modifier-duration-name
+  description: rune-modifier-duration-desc
+  kind: Modifier
+  syllable: rune-modifier-duration-syllable
+  color: "#9bffcf"
+  strain: 5
+  duration: 1.8
+  order: 3
+  stroke:
+  - 0.15,0.1
+  - 0.15,0.7
+  - 0.3,0.9
+  - 0.7,0.9
+  - 0.85,0.7
+  - 0.85,0.1
+
+- type: wizardRune
+  id: RuneModifierFusion
+  name: rune-modifier-fusion-name
+  description: rune-modifier-fusion-desc
+  kind: Modifier
+  fusion: true
+  syllable: rune-modifier-fusion-syllable
+  color: "#ffffff"
+  strain: 6
+  strainScale: 1.3
+  loudness: 1
+  order: 5
+  stroke:
+  - 0.1,0.9
+  - 0.9,0.1
+
+- type: wizardRune
+  id: RuneModifierEcho
+  name: rune-modifier-echo-name
+  description: rune-modifier-echo-desc
+  kind: Modifier
+  echo: true
+  syllable: rune-modifier-echo-syllable
+  color: "#c0c0ff"
+  strain: 8
+  strainScale: 1.4
+  loudness: 1
+  absurdity: 1
+  order: 6
+  stroke:
+  - 0.9,0.1
+  - 0.1,0.1
+  - 0.9,0.9
+  - 0.1,0.9
+
+- type: wizardRune
+  id: RuneModifierBlood
+  name: rune-modifier-blood-name
+  description: rune-modifier-blood-desc
+  kind: Modifier
+  bloodPrice: 0.5
+  syllable: rune-modifier-blood-syllable
+  color: "#b00000"
+  strain: 2
+  loudness: 1
+  order: 7
+  stroke:
+  - 0.2,0.1
+  - 0.2,0.9
+  - 0.85,0.9
+
+- type: wizardRune
+  id: RuneModifierWhisper
+  name: rune-modifier-whisper-name
+  description: rune-modifier-whisper-desc
+  kind: Modifier
+  syllable: rune-modifier-whisper-syllable
+  color: "#9a9aa8"
+  strain: 3
+  strainScale: 1.15
+  loudness: -2
+  order: 4
+  stroke:
+  - 0.5,0.05
+  - 0.5,0.95

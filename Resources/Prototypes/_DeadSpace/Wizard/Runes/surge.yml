@@ -1,0 +1,377 @@
+- type: wizardRuneSurge
+  id: WizardRuneSurge
+  entries:
+  - weight: 2
+    popup: rune-surge-chicken
+    effects:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneChaosChicken
+  - weight: 3
+    popup: rune-surge-burn
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Heat: 15
+    - !type:RuneIgniteEffect
+      target: Caster
+      fireStacks: 2
+  - weight: 2
+    popup: rune-surge-rainbow
+    effects:
+    - !type:RuneSpeakEffect
+      target: AroundCaster
+      radius: 6
+      includeCaster: true
+      lines: RuneChaosLines
+    - !type:RuneSlowEffect
+      target: AroundCaster
+      radius: 6
+      includeCaster: true
+      time: 5
+      multiplier: 0.6
+  - weight: 3
+    popup: rune-surge-drain
+    effects:
+    - !type:RuneStaminaEffect
+      target: Caster
+      amount: 80
+  - weight: 2
+    popup: rune-surge-furniture
+    effects:
+    - !type:RuneAnimateEffect
+      template: RuneAnimateChaosTemplate
+      count: 2
+      radius: 4
+  - weight: 2
+    popup: rune-surge-boom
+    effects:
+    - !type:RuneSpawnEffect
+      prototype: WizardEffectLightningExplosion
+      pattern: AtCaster
+      skipBlocked: false
+  - weight: 2
+    popup: rune-surge-tear
+    effects:
+    - !type:RuneKnockdownEffect
+      target: Caster
+      time: 3
+    - !type:RunePushEffect
+      speed: 8
+      radius: 4
+
+# Срывы по стихиям
+
+- type: wizardRuneSurge
+  id: RuneSurgeFire
+  entries:
+  - weight: 3
+    popup: rune-surge-fire-robe
+    effects:
+    - !type:RuneIgniteEffect
+      target: Caster
+      fireStacks: 3
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Heat: 10
+  - weight: 2
+    popup: rune-surge-fire-ring
+    effects:
+    - !type:RuneSpawnEffect
+      prototype: RuneFireTile
+      pattern: RingAroundCaster
+      size: 1
+  - weight: 1
+    popup: rune-surge-boom
+    effects:
+    - !type:RuneSpawnEffect
+      prototype: WizardEffectLightningExplosion
+      pattern: AtCaster
+      skipBlocked: false
+
+- type: wizardRuneSurge
+  id: RuneSurgeIce
+  entries:
+  - weight: 3
+    popup: rune-surge-ice-frozen
+    effects:
+    - !type:RuneParalyzeEffect
+      target: Caster
+      time: 3
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Cold: 10
+  - weight: 2
+    popup: rune-surge-ice-blood
+    effects:
+    - !type:RuneSlowEffect
+      target: Caster
+      time: 8
+      multiplier: 0.3
+
+- type: wizardRuneSurge
+  id: RuneSurgeEarth
+  entries:
+  - weight: 3
+    popup: rune-surge-earth-fall
+    effects:
+    - !type:RuneKnockdownEffect
+      target: Caster
+      time: 4
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Blunt: 12
+  - weight: 2
+    popup: rune-surge-earth-tomb
+    effects:
+    - !type:RuneSpawnEffect
+      prototype: RuneWallMud
+      pattern: RingAroundCaster
+      size: 1
+      lifetime: 8
+
+- type: wizardRuneSurge
+  id: RuneSurgeLightning
+  entries:
+  - weight: 3
+    popup: rune-surge-lightning-self
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Shock: 18
+    - !type:RuneStaminaEffect
+      target: Caster
+      amount: 90
+  - weight: 2
+    popup: rune-surge-lightning-emp
+    effects:
+    - !type:RuneEmpEffect
+      range: 4
+
+- type: wizardRuneSurge
+  id: RuneSurgeLife
+  entries:
+  - weight: 3
+    popup: rune-surge-life-vines
+    effects:
+    - !type:RuneSpawnEffect
+      prototype: RuneHedge
+      pattern: RingAroundCaster
+      size: 1
+      lifetime: 10
+    - !type:RuneSpawnEffect
+      prototype: RuneHedge
+      pattern: AtCaster
+      skipBlocked: false
+      lifetime: 10
+  - weight: 2
+    popup: rune-surge-life-monkey
+    effects:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneMorphMonkey
+
+- type: wizardRuneSurge
+  id: RuneSurgeVoid
+  entries:
+  - weight: 3
+    popup: rune-surge-void-spit
+    effects:
+    - !type:RuneTeleportEffect
+      mode: ScatterCaster
+      radius: 8
+  - weight: 2
+    popup: rune-surge-void-air
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Asphyxiation: 20
+
+- type: wizardRuneSurge
+  id: RuneSurgeChaos
+  entries:
+  - weight: 2
+    popup: rune-surge-chicken
+    effects:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneChaosChicken
+  - weight: 2
+    popup: rune-surge-rainbow
+    effects:
+    - !type:RuneSpeakEffect
+      target: AroundCaster
+      radius: 6
+      includeCaster: true
+      lines: RuneChaosLines
+  - weight: 2
+    popup: rune-surge-furniture
+    effects:
+    - !type:RuneAnimateEffect
+      template: RuneAnimateChaosTemplate
+      count: 2
+      radius: 4
+
+- type: wizardRuneSurge
+  id: RuneSurgeWater
+  entries:
+  - weight: 3
+    popup: rune-surge-water-soap
+    effects:
+    - !type:RuneComponentsEffect
+      target: Caster
+      fromAction: ActionSlippery
+      duration: 20
+    - !type:RuneKnockdownEffect
+      target: Caster
+      time: 1.5
+  - weight: 2
+    popup: rune-surge-water-lungs
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Asphyxiation: 15
+    - !type:RuneStaminaEffect
+      target: Caster
+      amount: 40
+
+- type: wizardRuneSurge
+  id: RuneSurgeAir
+  entries:
+  - weight: 3
+    popup: rune-surge-air-gust
+    effects:
+    - !type:RuneTeleportEffect
+      mode: ScatterCaster
+      radius: 5
+    - !type:RuneKnockdownEffect
+      target: Caster
+      time: 2
+  - weight: 2
+    popup: rune-surge-air-lungs
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Asphyxiation: 20
+
+# Смертельные срывы
+
+- type: wizardRuneSurge
+  id: RuneFatalFire
+  entries:
+  - popup: rune-fatal-fire
+    effects:
+    - !type:RuneIgniteEffect
+      target: Caster
+      fireStacks: 10
+    - !type:RuneDamageEffect
+      target: Caster
+      ignoreResistances: true
+      damage:
+        types:
+          Heat: 300
+    - !type:RuneSpawnEffect
+      prototype: RuneFireTile
+      pattern: RingAroundCaster
+      size: 1
+
+- type: wizardRuneSurge
+  id: RuneFatalIce
+  entries:
+  - popup: rune-fatal-ice
+    effects:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneDoomIceStatue
+
+- type: wizardRuneSurge
+  id: RuneFatalEarth
+  entries:
+  - popup: rune-fatal-earth
+    effects:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneDoomStoneStatue
+
+- type: wizardRuneSurge
+  id: RuneFatalLightning
+  entries:
+  - popup: rune-fatal-lightning
+    effects:
+    - !type:RuneLightningEffect
+      range: 6
+      bolts: 6
+    - !type:RuneGibEffect
+      target: Caster
+
+- type: wizardRuneSurge
+  id: RuneFatalLife
+  entries:
+  - popup: rune-fatal-life
+    effects:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneDoomTree
+
+- type: wizardRuneSurge
+  id: RuneFatalVoid
+  entries:
+  - popup: rune-fatal-void
+    effects:
+    - !type:RunePushEffect
+      speed: -20
+      radius: 6
+    - !type:RuneGibEffect
+      target: Caster
+
+- type: wizardRuneSurge
+  id: RuneFatalChaos
+  entries:
+  - popup: rune-fatal-chaos
+    effects:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneDoomDuck
+
+- type: wizardRuneSurge
+  id: RuneFatalWater
+  entries:
+  - popup: rune-fatal-water
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      ignoreResistances: true
+      damage:
+        types:
+          Asphyxiation: 400
+    - !type:RuneSpawnEffect
+      prototype: RuneSlickTile
+      pattern: AreaAtPoint
+      size: 2
+
+- type: wizardRuneSurge
+  id: RuneFatalAir
+  entries:
+  - popup: rune-fatal-air
+    effects:
+    - !type:RunePushEffect
+      speed: 20
+      radius: 6
+    - !type:RuneGibEffect
+      target: Caster

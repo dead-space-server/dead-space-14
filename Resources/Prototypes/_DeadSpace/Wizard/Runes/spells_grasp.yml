@@ -1,0 +1,155 @@
+# Длань
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspFire
+  name: rune-spell-grasp-fire
+  form: RuneFormGrasp
+  element: RuneElementFire
+  range: 9
+  strain: 16
+  cooldown: 8
+  loudness: 1
+  effects:
+  - !type:RuneTelekinesisEffect
+  - !type:RuneIgniteEffect
+    fireStacks: 1.5
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspIce
+  name: rune-spell-grasp-ice
+  form: RuneFormGrasp
+  element: RuneElementIce
+  range: 9
+  strain: 14
+  cooldown: 7
+  effects:
+  - !type:RuneTelekinesisEffect
+  - !type:RuneSlowEffect
+    time: 3
+    multiplier: 0.6
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspEarth
+  name: rune-spell-grasp-earth
+  form: RuneFormGrasp
+  element: RuneElementEarth
+  range: 8
+  strain: 18
+  cooldown: 10
+  loudness: 1
+  effects:
+  - !type:RuneTelekinesisEffect
+    pullSpeed: 9
+    hurlSpeed: 16
+  - !type:RuneKnockdownEffect
+    time: 1.5
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspLightning
+  name: rune-spell-grasp-lightning
+  form: RuneFormGrasp
+  element: RuneElementLightning
+  range: 9
+  strain: 16
+  cooldown: 8
+  effects:
+  - !type:RuneTelekinesisEffect
+    pullSpeed: 16
+  - !type:RuneStaminaEffect
+    amount: 25
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspLife
+  name: rune-spell-grasp-life
+  form: RuneFormGrasp
+  element: RuneElementLife
+  range: 10
+  strain: 14
+  cooldown: 10
+  effects:
+  - !type:RuneTelekinesisEffect
+    pullSpeed: 8
+  - !type:RuneDamageEffect
+    damage:
+      groups:
+        Brute: -10
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspVoid
+  name: rune-spell-grasp-void
+  form: RuneFormGrasp
+  element: RuneElementVoid
+  range: 11
+  strain: 20
+  cooldown: 12
+  loudness: 1
+  effects:
+  - !type:RuneTelekinesisEffect
+    pullSpeed: 18
+    hurlSpeed: 26
+  - !type:RuneParalyzeEffect
+    time: 1
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspChaos
+  name: rune-spell-grasp-chaos
+  form: RuneFormGrasp
+  element: RuneElementChaos
+  range: 9
+  strain: 12
+  cooldown: 6
+  absurdity: 2
+  effects:
+  - !type:RuneTelekinesisEffect
+  - !type:RuneRandomEffect
+    options:
+    - !type:RuneIgniteEffect
+      fireStacks: 1
+    - !type:RuneSlowEffect
+      time: 3
+    - !type:RuneKnockdownEffect
+      time: 1
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosChicken
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspWater
+  name: rune-spell-grasp-water
+  form: RuneFormGrasp
+  element: RuneElementWater
+  range: 9
+  strain: 12
+  cooldown: 6
+  effects:
+  - !type:RuneTelekinesisEffect
+  - !type:RuneExtinguishEffect
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspAir
+  name: rune-spell-grasp-air
+  form: RuneFormGrasp
+  element: RuneElementAir
+  range: 12
+  strain: 12
+  cooldown: 5
+  effects:
+  - !type:RuneTelekinesisEffect
+    pullSpeed: 18
+    hurlSpeed: 28
+    grabRadius: 1.2
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspBlood
+  name: rune-spell-grasp-blood
+  form: RuneFormGrasp
+  element: RuneElementBlood
+  range: 9
+  strain: 14
+  cooldown: 8
+  loudness: 1
+  effects:
+  - !type:RuneTelekinesisEffect
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Bloodloss: 8

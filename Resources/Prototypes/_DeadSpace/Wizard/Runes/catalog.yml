@@ -1,0 +1,326 @@
+- type: storeCategory
+  id: SpellbookRuneForms
+  name: store-category-spellbook-rune-forms
+  priority: -3
+
+- type: storeCategory
+  id: SpellbookRuneElements
+  name: store-category-spellbook-rune-elements
+  priority: -2
+
+- type: storeCategory
+  id: SpellbookRuneModifiers
+  name: store-category-spellbook-rune-modifiers
+  priority: -1
+
+# Формы
+
+- type: listing
+  id: SpellbookRuneFormWave
+  name: rune-form-wave-name
+  description: rune-form-wave-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: repulse }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneFormWave
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneForms
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneFormAnimate
+  name: rune-form-animate-name
+  description: rune-form-animate-desc
+  icon: { sprite: Objects/Weapons/Guns/Basic/staves.rsi, state: animation }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneFormAnimate
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 3
+  categories:
+  - SpellbookRuneForms
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneFormSummon
+  name: rune-form-summon-name
+  description: rune-form-summon-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: spell_default }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneFormSummon
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneForms
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneFormGrasp
+  name: rune-form-grasp-name
+  description: rune-form-grasp-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: item_recall }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneFormGrasp
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneForms
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+# Стихии
+
+- type: listing
+  id: SpellbookRuneElementIce
+  name: rune-element-ice-name
+  description: rune-element-ice-desc
+  icon: { sprite: Objects/Weapons/Guns/Projectiles/magic.rsi, state: ice }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneElementIce
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneElements
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneElementLightning
+  name: rune-element-lightning-name
+  description: rune-element-lightning-desc
+  icon: { sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi, state: tesla_projectile }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneElementLightning
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneElements
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneElementVoid
+  name: rune-element-void-name
+  description: rune-element-void-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: jaunt }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneElementVoid
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 3
+  categories:
+  - SpellbookRuneElements
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneElementChaos
+  name: rune-element-chaos-name
+  description: rune-element-chaos-desc
+  icon: { sprite: Clothing/Mask/cluwne.rsi, state: icon }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneElementChaos
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 1
+  categories:
+  - SpellbookRuneElements
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneElementPoison
+  name: rune-element-poison-name
+  description: rune-element-poison-desc
+  icon: { sprite: Mobs/Aliens/Xenos/purple_snake.rsi, state: small_purple_snake }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneElementPoison
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneElements
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+# Модификаторы
+
+- type: listing
+  id: SpellbookRuneModifierPower
+  name: rune-modifier-power-name
+  description: rune-modifier-power-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: fireball }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneModifierPower
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneModifiers
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneModifierSwarm
+  name: rune-modifier-swarm-name
+  description: rune-modifier-swarm-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: magicmissile }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneModifierSwarm
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneModifiers
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneModifierRange
+  name: rune-modifier-range-name
+  description: rune-modifier-range-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: item_recall }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneModifierRange
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 1
+  categories:
+  - SpellbookRuneModifiers
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneModifierDuration
+  name: rune-modifier-duration-name
+  description: rune-modifier-duration-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: spell_default }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneModifierDuration
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 1
+  categories:
+  - SpellbookRuneModifiers
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneModifierFusion
+  name: rune-modifier-fusion-name
+  description: rune-modifier-fusion-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: magicmissile }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneModifierFusion
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 3
+  categories:
+  - SpellbookRuneModifiers
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneModifierWhisper
+  name: rune-modifier-whisper-name
+  description: rune-modifier-whisper-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: knock }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneModifierWhisper
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 1
+  categories:
+  - SpellbookRuneModifiers
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneFormPolymorph
+  name: rune-form-polymorph-name
+  description: rune-form-polymorph-desc
+  icon: { sprite: Objects/Weapons/Guns/Basic/wands.rsi, state: poly }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneFormPolymorph
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneForms
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneModifierEcho
+  name: rune-modifier-echo-name
+  description: rune-modifier-echo-desc
+  icon: { sprite: Objects/Weapons/Guns/Projectiles/magic.rsi, state: magicm }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneModifierEcho
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneModifiers
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: SpellbookRuneModifierBlood
+  name: rune-modifier-blood-name
+  description: rune-modifier-blood-desc
+  icon: { sprite: Objects/Weapons/Guns/Projectiles/magic.rsi, state: magicm_red }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneModifierBlood
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 1
+  categories:
+  - SpellbookRuneModifiers
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1

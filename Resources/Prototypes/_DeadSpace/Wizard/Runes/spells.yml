@@ -1,0 +1,838 @@
+# Снаряд
+
+- type: wizardRuneSpell
+  id: RuneSpellFireball
+  name: rune-spell-fireball
+  form: RuneFormProjectile
+  element: RuneElementFire
+  range: 14
+  strain: 22
+  cooldown: 6
+  loudness: 2
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: ProjectileFireball
+
+- type: wizardRuneSpell
+  id: RuneSpellIceball
+  name: rune-spell-iceball
+  form: RuneFormProjectile
+  element: RuneElementIce
+  range: 14
+  strain: 12
+  cooldown: 2.5
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileIce
+
+- type: wizardRuneSpell
+  id: RuneSpellBoulder
+  name: rune-spell-boulder
+  form: RuneFormProjectile
+  element: RuneElementEarth
+  range: 12
+  strain: 16
+  cooldown: 4
+  loudness: 1
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileBoulder
+    speed: 14
+
+- type: wizardRuneSpell
+  id: RuneSpellSpark
+  name: rune-spell-spark
+  form: RuneFormProjectile
+  element: RuneElementLightning
+  range: 14
+  strain: 15
+  cooldown: 3.5
+  loudness: 1
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileSpark
+    speed: 26
+
+- type: wizardRuneSpell
+  id: RuneSpellMendingBolt
+  name: rune-spell-mending-bolt
+  form: RuneFormProjectile
+  element: RuneElementLife
+  range: 12
+  strain: 14
+  cooldown: 4
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileMending
+    speed: 16
+
+- type: wizardRuneSpell
+  id: RuneSpellBlink
+  name: rune-spell-blink
+  form: RuneFormProjectile
+  element: RuneElementVoid
+  range: 16
+  strain: 18
+  cooldown: 8
+  effects:
+  - !type:RuneTeleportEffect
+    mode: CasterToPoint
+
+- type: wizardRuneSpell
+  id: RuneSpellNonsenseBolt
+  name: rune-spell-nonsense-bolt
+  form: RuneFormProjectile
+  element: RuneElementChaos
+  range: 12
+  strain: 20
+  cooldown: 10
+  absurdity: 1
+  effects:
+  - !type:RuneRandomEffect
+    options:
+    - !type:RuneProjectileEffect
+      prototype: ProjectilePolyboltMonkey
+    - !type:RuneProjectileEffect
+      prototype: ProjectilePolyboltBread
+    - !type:RuneProjectileEffect
+      prototype: RuneProjectileRubberDuck
+      count: 5
+      spread: 8
+    - !type:RuneSpawnRandomEffect
+      prototypes:
+      - TrashBananaPeel
+      pattern: AreaAtPoint
+      size: 2
+      count: 6
+
+# Стена
+
+- type: wizardRuneSpell
+  id: RuneSpellFireLine
+  name: rune-spell-fire-line
+  form: RuneFormWall
+  element: RuneElementFire
+  range: 8
+  strain: 24
+  cooldown: 12
+  loudness: 2
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneFireTile
+    pattern: LineAtPoint
+    size: 3
+
+- type: wizardRuneSpell
+  id: RuneSpellIceWall
+  name: rune-spell-ice-wall
+  form: RuneFormWall
+  element: RuneElementIce
+  range: 8
+  strain: 18
+  cooldown: 10
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneWallIce
+    pattern: LineAtPoint
+    size: 3
+    lifetime: 20
+
+- type: wizardRuneSpell
+  id: RuneSpellMudWall
+  name: rune-spell-mud-wall
+  form: RuneFormWall
+  element: RuneElementEarth
+  range: 8
+  strain: 20
+  cooldown: 14
+  loudness: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneWallMud
+    pattern: LineAtPoint
+    size: 3
+    lifetime: 40
+
+- type: wizardRuneSpell
+  id: RuneSpellArcFence
+  name: rune-spell-arc-fence
+  form: RuneFormWall
+  element: RuneElementLightning
+  range: 8
+  strain: 22
+  cooldown: 12
+  loudness: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneArcFence
+    pattern: LineAtPoint
+    size: 3
+    lifetime: 10
+
+- type: wizardRuneSpell
+  id: RuneSpellHedge
+  name: rune-spell-hedge
+  form: RuneFormWall
+  element: RuneElementLife
+  range: 8
+  strain: 16
+  cooldown: 10
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneHedge
+    pattern: LineAtPoint
+    size: 3
+    lifetime: 25
+
+- type: wizardRuneSpell
+  id: RuneSpellForceWall
+  name: rune-spell-force-wall
+  form: RuneFormWall
+  element: RuneElementVoid
+  range: 6
+  strain: 20
+  cooldown: 15
+  loudness: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: WallForce
+    pattern: LineAtPoint
+    size: 3
+    lifetime: 10
+    passableByCaster: true
+
+- type: wizardRuneSpell
+  id: RuneSpellJunkWall
+  name: rune-spell-junk-wall
+  form: RuneFormWall
+  element: RuneElementChaos
+  range: 8
+  strain: 12
+  cooldown: 10
+  absurdity: 1
+  effects:
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - TrashBananaPeel
+    - ToyRubberDuck
+    - PlushieCarp
+    - PlushieLizard
+    - BikeHorn
+    - FoodPieBananaCream
+    - ClothingHeadHatCone
+    pattern: LineAtPoint
+    size: 3
+    count: 6
+
+# Волна
+
+- type: wizardRuneSpell
+  id: RuneSpellFireRing
+  name: rune-spell-fire-ring
+  form: RuneFormWave
+  element: RuneElementFire
+  targeting: Self
+  strain: 28
+  cooldown: 14
+  loudness: 2
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneFireTile
+    pattern: RingAroundCaster
+    size: 2
+  - !type:RuneIgniteEffect
+    target: AroundCaster
+    radius: 2.5
+    fireStacks: 1
+
+- type: wizardRuneSpell
+  id: RuneSpellFrostNova
+  name: rune-spell-frost-nova
+  form: RuneFormWave
+  element: RuneElementIce
+  targeting: Self
+  strain: 22
+  cooldown: 12
+  loudness: 1
+  effects:
+  - !type:RuneSlowEffect
+    target: AroundCaster
+    radius: 4
+    time: 5
+    multiplier: 0.4
+  - !type:RuneDamageEffect
+    target: AroundCaster
+    radius: 4
+    damage:
+      types:
+        Cold: 8
+
+- type: wizardRuneSpell
+  id: RuneSpellQuake
+  name: rune-spell-quake
+  form: RuneFormWave
+  element: RuneElementEarth
+  targeting: Self
+  strain: 26
+  cooldown: 15
+  loudness: 2
+  effects:
+  - !type:RuneKnockdownEffect
+    target: AroundCaster
+    radius: 4
+    time: 2
+  - !type:RuneDamageEffect
+    target: AroundCaster
+    radius: 4
+    damage:
+      types:
+        Blunt: 6
+
+- type: wizardRuneSpell
+  id: RuneSpellStorm
+  name: rune-spell-storm
+  form: RuneFormWave
+  element: RuneElementLightning
+  targeting: Self
+  strain: 30
+  cooldown: 16
+  loudness: 2
+  effects:
+  - !type:RuneLightningEffect
+    range: 5
+    bolts: 3
+  - !type:RuneEmpEffect
+    range: 3
+
+- type: wizardRuneSpell
+  id: RuneSpellLifeWave
+  name: rune-spell-life-wave
+  form: RuneFormWave
+  element: RuneElementLife
+  targeting: Self
+  strain: 26
+  cooldown: 16
+  effects:
+  - !type:RuneDamageEffect
+    target: AroundCaster
+    radius: 3
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -12
+        Burn: -12
+        Toxin: -6
+
+- type: wizardRuneSpell
+  id: RuneSpellVoidPulse
+  name: rune-spell-void-pulse
+  form: RuneFormWave
+  element: RuneElementVoid
+  targeting: Self
+  strain: 20
+  cooldown: 10
+  loudness: 1
+  effects:
+  - !type:RunePushEffect
+    speed: 12
+    radius: 5
+  - !type:RuneKnockEffect
+    range: 6
+
+- type: wizardRuneSpell
+  id: RuneSpellDanceParty
+  name: rune-spell-dance-party
+  form: RuneFormWave
+  element: RuneElementChaos
+  targeting: Self
+  strain: 16
+  cooldown: 14
+  absurdity: 2
+  effects:
+  - !type:RuneSpeakEffect
+    target: AroundCaster
+    radius: 6
+    lines: RuneChaosLines
+  - !type:RuneSlowEffect
+    target: AroundCaster
+    radius: 6
+    time: 4
+    multiplier: 0.6
+
+# Касание
+
+- type: wizardRuneSpell
+  id: RuneSpellIgnite
+  name: rune-spell-ignite
+  form: RuneFormTouch
+  element: RuneElementFire
+  targeting: Entity
+  range: 2
+  strain: 14
+  cooldown: 6
+  loudness: 1
+  effects:
+  - !type:RuneIgniteEffect
+    fireStacks: 4
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Heat: 10
+
+- type: wizardRuneSpell
+  id: RuneSpellFrostbite
+  name: rune-spell-frostbite
+  form: RuneFormTouch
+  element: RuneElementIce
+  targeting: Entity
+  range: 2
+  strain: 16
+  cooldown: 6
+  effects:
+  - !type:RuneSlowEffect
+    time: 8
+    multiplier: 0.35
+  - !type:RuneStaminaEffect
+    amount: 30
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Cold: 15
+
+- type: wizardRuneSpell
+  id: RuneSpellStoneSkin
+  name: rune-spell-stone-skin
+  form: RuneFormTouch
+  element: RuneElementEarth
+  targeting: Entity
+  range: 2
+  strain: 18
+  cooldown: 20
+  effects:
+  - !type:RuneComponentsEffect
+    template: RuneStoneSkinTemplate
+    duration: 20
+
+- type: wizardRuneSpell
+  id: RuneSpellShock
+  name: rune-spell-shock
+  form: RuneFormTouch
+  element: RuneElementLightning
+  targeting: Entity
+  range: 2
+  strain: 18
+  cooldown: 8
+  loudness: 1
+  effects:
+  - !type:RuneStaminaEffect
+    amount: 70
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Shock: 8
+
+- type: wizardRuneSpell
+  id: RuneSpellHeal
+  name: rune-spell-heal
+  form: RuneFormTouch
+  element: RuneElementLife
+  targeting: Entity
+  range: 2
+  strain: 22
+  cooldown: 10
+  effects:
+  - !type:RuneDamageEffect
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -30
+        Burn: -30
+        Toxin: -15
+        Airloss: -20
+
+- type: wizardRuneSpell
+  id: RuneSpellSmite
+  name: rune-spell-smite
+  form: RuneFormTouch
+  element: RuneElementVoid
+  targeting: Entity
+  range: 2
+  strain: 70
+  cooldown: 90
+  loudness: 4
+  requiresClothes: true
+  effects:
+  - !type:RuneGibEffect
+
+- type: wizardRuneSpell
+  id: RuneSpellClownCurse
+  name: rune-spell-clown-curse
+  form: RuneFormTouch
+  element: RuneElementChaos
+  targeting: Entity
+  range: 2
+  strain: 35
+  cooldown: 60
+  absurdity: 2
+  requiresClothes: true
+  effects:
+  - !type:RuneComponentsEffect
+    fromAction: ActionCluwne
+
+# Я
+
+- type: wizardRuneSpell
+  id: RuneSpellPhoenix
+  name: rune-spell-phoenix
+  form: RuneFormSelf
+  element: RuneElementFire
+  targeting: Self
+  strain: 18
+  cooldown: 25
+  loudness: 1
+  effects:
+  - !type:RuneExtinguishEffect
+    target: Caster
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Burn: -40
+  - !type:RuneComponentsEffect
+    target: Caster
+    template: RunePhoenixTemplate
+    duration: 45
+
+- type: wizardRuneSpell
+  id: RuneSpellIceArmor
+  name: rune-spell-ice-armor
+  form: RuneFormSelf
+  element: RuneElementIce
+  targeting: Self
+  strain: 20
+  cooldown: 30
+  effects:
+  - !type:RuneComponentsEffect
+    target: Caster
+    template: RuneIceArmorTemplate
+    duration: 30
+
+- type: wizardRuneSpell
+  id: RuneSpellStoneStride
+  name: rune-spell-stone-stride
+  form: RuneFormSelf
+  element: RuneElementEarth
+  targeting: Self
+  strain: 22
+  cooldown: 30
+  loudness: 1
+  effects:
+  - !type:RuneOrbitShieldEffect
+    prototype: RuneStoneShield
+    count: 4
+    duration: 60
+  - !type:RuneComponentsEffect
+    target: Caster
+    template: RuneStoneStrideTemplate
+    duration: 60
+
+- type: wizardRuneSpell
+  id: RuneSpellHaste
+  name: rune-spell-haste
+  form: RuneFormSelf
+  element: RuneElementLightning
+  targeting: Self
+  strain: 22
+  cooldown: 25
+  loudness: 1
+  effects:
+  - !type:RuneSlowEffect
+    target: Caster
+    time: 6
+    multiplier: 1.6
+  - !type:RuneChargeEffect
+  - !type:RuneComponentsEffect
+    target: Caster
+    template: RuneLightningRodTemplate
+    duration: 15
+
+- type: wizardRuneSpell
+  id: RuneSpellRegeneration
+  name: rune-spell-regeneration
+  form: RuneFormSelf
+  element: RuneElementLife
+  targeting: Self
+  strain: 24
+  cooldown: 30
+  effects:
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -10
+        Burn: -10
+  - !type:RuneRegenerationEffect
+    target: Caster
+    duration: 20
+    perSecond:
+      types:
+        Bloodloss: -1
+      groups:
+        Brute: -3
+        Burn: -3
+        Toxin: -1.5
+        Airloss: -2
+
+- type: wizardRuneSpell
+  id: RuneSpellJaunt
+  name: rune-spell-jaunt
+  form: RuneFormSelf
+  element: RuneElementVoid
+  targeting: Self
+  strain: 22
+  cooldown: 20
+  effects:
+  - !type:RunePolymorphEffect
+    target: Caster
+    polymorph: Jaunt
+
+- type: wizardRuneSpell
+  id: RuneSpellWildShape
+  name: rune-spell-wild-shape
+  form: RuneFormSelf
+  element: RuneElementChaos
+  targeting: Self
+  strain: 14
+  cooldown: 20
+  absurdity: 2
+  effects:
+  - !type:RuneRandomEffect
+    options:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneChaosChicken
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneChaosCorgi
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: RuneChaosMouse
+
+# Призыв
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonFire
+  name: rune-spell-summon-fire
+  form: RuneFormSummon
+  element: RuneElementFire
+  range: 6
+  strain: 30
+  cooldown: 35
+  loudness: 2
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSummonMagmawing
+    lifetime: 45
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonIce
+  name: rune-spell-summon-ice
+  form: RuneFormSummon
+  element: RuneElementIce
+  range: 6
+  strain: 30
+  cooldown: 35
+  loudness: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSummonIcewing
+    lifetime: 45
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonEarth
+  name: rune-spell-summon-earth
+  form: RuneFormSummon
+  element: RuneElementEarth
+  range: 6
+  strain: 40
+  cooldown: 60
+  loudness: 3
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSummonGoliath
+    lifetime: 30
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonLightning
+  name: rune-spell-summon-lightning
+  form: RuneFormSummon
+  element: RuneElementLightning
+  range: 6
+  strain: 30
+  cooldown: 35
+  loudness: 2
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSummonStormwing
+    lifetime: 45
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonLife
+  name: rune-spell-summon-life
+  form: RuneFormSummon
+  element: RuneElementLife
+  range: 6
+  strain: 22
+  cooldown: 30
+  absurdity: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSummonPenguin
+    lifetime: 60
+  - !type:RuneDamageEffect
+    target: AroundPoint
+    radius: 2
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -10
+        Burn: -10
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonVoid
+  name: rune-spell-summon-void
+  form: RuneFormSummon
+  element: RuneElementVoid
+  range: 6
+  strain: 34
+  cooldown: 40
+  loudness: 2
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSummonBasilisk
+    lifetime: 40
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonChaos
+  name: rune-spell-summon-chaos
+  form: RuneFormSummon
+  element: RuneElementChaos
+  range: 6
+  strain: 18
+  cooldown: 25
+  absurdity: 2
+  effects:
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - MobGoose
+    - MobGorilla
+    - MobKangaroo
+    - MobClownSpider
+    - MobDuckMallard
+    - MobPig
+    pattern: AreaAtPoint
+    size: 2
+    count: 3
+    lifetime: 40
+
+# Оживление
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateFire
+  name: rune-spell-animate-fire
+  form: RuneFormAnimate
+  element: RuneElementFire
+  range: 8
+  strain: 30
+  cooldown: 25
+  loudness: 1
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateFireTemplate
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateIce
+  name: rune-spell-animate-ice
+  form: RuneFormAnimate
+  element: RuneElementIce
+  range: 8
+  strain: 30
+  cooldown: 25
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateIceTemplate
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateEarth
+  name: rune-spell-animate-earth
+  form: RuneFormAnimate
+  element: RuneElementEarth
+  range: 8
+  strain: 34
+  cooldown: 30
+  loudness: 1
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateEarthTemplate
+    count: 2
+    radius: 2
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateLightning
+  name: rune-spell-animate-lightning
+  form: RuneFormAnimate
+  element: RuneElementLightning
+  range: 8
+  strain: 32
+  cooldown: 30
+  loudness: 1
+  absurdity: 1
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateLightningTemplate
+    count: 3
+    radius: 2.5
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateLife
+  name: rune-spell-animate-life
+  form: RuneFormAnimate
+  element: RuneElementLife
+  range: 8
+  strain: 30
+  cooldown: 30
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateLifeTemplate
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateVoid
+  name: rune-spell-animate-void
+  form: RuneFormAnimate
+  element: RuneElementVoid
+  range: 8
+  strain: 32
+  cooldown: 30
+  loudness: 1
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateVoidTemplate
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateChaos
+  name: rune-spell-animate-chaos
+  form: RuneFormAnimate
+  element: RuneElementChaos
+  range: 8
+  strain: 20
+  cooldown: 20
+  absurdity: 1
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateChaosTemplate
+    count: 3
+    radius: 3

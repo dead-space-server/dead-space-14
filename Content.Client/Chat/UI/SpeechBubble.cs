@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Client.Chat.Managers;
+using Content.Client.DeadSpace.Wizard.Runes; //DS-14
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Speech;
@@ -72,6 +73,8 @@ namespace Content.Client.Chat.UI
                     return new TextSpeechBubble(message, senderEntity, "emoteBox");
 
                 case SpeechType.Say:
+                    if (RuneWaveSpeechBubble.IsWave(message)) //DS-14
+                        return new RuneWaveSpeechBubble(message, senderEntity, "sayBox"); //DS-14
                     return new FancyTextSpeechBubble(message, senderEntity, "sayBox");
 
                 case SpeechType.Whisper:

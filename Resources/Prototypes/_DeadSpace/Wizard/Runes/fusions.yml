@@ -1,0 +1,815 @@
+# Огонь
+
+- type: wizardRuneFusion
+  id: RuneFusionThermalShock
+  name: rune-fusion-thermal-shock
+  first: RuneElementFire
+  second: RuneElementIce
+  strain: 14
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    damage:
+      types:
+        Heat: 8
+        Cold: 8
+        Structural: 40
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 2
+    time: 1.5
+
+- type: wizardRuneFusion
+  id: RuneFusionSteam
+  name: rune-fusion-steam
+  first: RuneElementFire
+  second: RuneElementWater
+  strain: 8
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: WizardSmoke
+    pattern: Auto
+    skipBlocked: false
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Heat: 10
+  - !type:RuneExtinguishEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+
+- type: wizardRuneFusion
+  id: RuneFusionMagma
+  name: rune-fusion-magma
+  first: RuneElementFire
+  second: RuneElementEarth
+  strain: 14
+  loudness: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneMagmaTile
+    pattern: Auto
+    size: 2
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    damage:
+      types:
+        Heat: 8
+        Blunt: 8
+  formEffects:
+    RuneFormProjectile:
+    - !type:RuneProjectileEffect
+      prototype: RuneProjectileBoulder
+      speed: 14
+    - !type:RuneSpawnEffect
+      prototype: RuneMagmaTile
+      pattern: AreaAtPoint
+      size: 2
+
+- type: wizardRuneFusion
+  id: RuneFusionPlasma
+  name: rune-fusion-plasma
+  first: RuneElementFire
+  second: RuneElementLightning
+  strain: 16
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    damage:
+      types:
+        Heat: 14
+        Shock: 10
+  - !type:RuneEmpEffect
+    auto: true
+    range: 2
+
+- type: wizardRuneFusion
+  id: RuneFusionCautery
+  name: rune-fusion-cautery
+  first: RuneElementFire
+  second: RuneElementLife
+  strain: 10
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -22
+      types:
+        Heat: 4
+  - !type:RuneExtinguishEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+
+- type: wizardRuneFusion
+  id: RuneFusionHellfire
+  name: rune-fusion-hellfire
+  first: RuneElementFire
+  second: RuneElementVoid
+  strain: 20
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    ignoreResistances: true
+    damage:
+      types:
+        Heat: 12
+  - !type:RuneIgniteEffect
+    target: Auto
+    radius: 2
+    fireStacks: 3
+
+- type: wizardRuneFusion
+  id: RuneFusionFireworks
+  name: rune-fusion-fireworks
+  first: RuneElementFire
+  second: RuneElementChaos
+  strain: 6
+  absurdity: 2
+  effects:
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 3
+    amount: 25
+  - !type:RuneIgniteEffect
+    target: Auto
+    radius: 3
+    fireStacks: 0.5
+  - !type:RuneSpeakEffect
+    target: Auto
+    radius: 3
+    lines: RuneChaosLines
+
+# Лёд
+
+- type: wizardRuneFusion
+  id: RuneFusionPermafrost
+  name: rune-fusion-permafrost
+  first: RuneElementIce
+  second: RuneElementEarth
+  strain: 14
+  loudness: 1
+  effects:
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 2.5
+    time: 1.5
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 2.5
+    time: 6
+    multiplier: 0.3
+
+- type: wizardRuneFusion
+  id: RuneFusionBlizzard
+  name: rune-fusion-blizzard
+  first: RuneElementIce
+  second: RuneElementLightning
+  strain: 14
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 3
+    damage:
+      types:
+        Cold: 8
+        Shock: 4
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 3
+    amount: 35
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 3
+    time: 4
+    multiplier: 0.5
+
+- type: wizardRuneFusion
+  id: RuneFusionCryosleep
+  name: rune-fusion-cryosleep
+  first: RuneElementIce
+  second: RuneElementLife
+  strain: 12
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -15
+        Burn: -15
+        Toxin: -10
+        Airloss: -15
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 2
+    includeCaster: true
+    time: 6
+    multiplier: 0.2
+
+- type: wizardRuneFusion
+  id: RuneFusionAbsoluteZero
+  name: rune-fusion-absolute-zero
+  first: RuneElementIce
+  second: RuneElementVoid
+  strain: 20
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    ignoreResistances: true
+    damage:
+      types:
+        Cold: 22
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 2
+    time: 8
+    multiplier: 0.2
+
+- type: wizardRuneFusion
+  id: RuneFusionRink
+  name: rune-fusion-rink
+  first: RuneElementIce
+  second: RuneElementChaos
+  strain: 6
+  absurdity: 2
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSlickTile
+    pattern: AreaAtPoint
+    size: 2
+  formEffects:
+    RuneFormWave:
+    - !type:RuneSpawnEffect
+      prototype: RuneSlickTile
+      pattern: RingAroundCaster
+      size: 2
+    RuneFormWall:
+    - !type:RuneSpawnEffect
+      prototype: RuneSlickTile
+      pattern: LineAtPoint
+      size: 5
+    RuneFormSelf:
+    - !type:RuneSpawnEffect
+      prototype: RuneSlickTile
+      pattern: RingAroundCaster
+      size: 1
+
+# Земля
+
+- type: wizardRuneFusion
+  id: RuneFusionMagnetism
+  name: rune-fusion-magnetism
+  first: RuneElementEarth
+  second: RuneElementLightning
+  strain: 14
+  loudness: 1
+  effects:
+  - !type:RunePushEffect
+    auto: true
+    speed: -10
+    radius: 4
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    damage:
+      types:
+        Shock: 6
+
+- type: wizardRuneFusion
+  id: RuneFusionBloom
+  name: rune-fusion-bloom
+  first: RuneElementEarth
+  second: RuneElementLife
+  strain: 10
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneBloom
+    pattern: AreaAtPoint
+    size: 2
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -10
+        Burn: -10
+        Toxin: -10
+
+- type: wizardRuneFusion
+  id: RuneFusionGravity
+  name: rune-fusion-gravity
+  first: RuneElementEarth
+  second: RuneElementVoid
+  strain: 18
+  loudness: 2
+  effects:
+  - !type:RunePushEffect
+    auto: true
+    speed: -16
+    radius: 5
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 2.5
+    time: 2
+  formEffects:
+    RuneFormSelf:
+    - !type:RunePolymorphEffect
+      target: Caster
+      polymorph: WizardRod
+
+- type: wizardRuneFusion
+  id: RuneFusionQuicksand
+  name: rune-fusion-quicksand
+  first: RuneElementEarth
+  second: RuneElementChaos
+  strain: 8
+  absurdity: 2
+  effects:
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 3
+    time: 6
+    multiplier: 0.35
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - ToyRubberDuck
+    - TrashBananaPeel
+    - ClothingHeadHatCone
+    pattern: Auto
+    size: 2
+    count: 4
+
+# Молния
+
+- type: wizardRuneFusion
+  id: RuneFusionDefibrillation
+  name: rune-fusion-defibrillation
+  first: RuneElementLightning
+  second: RuneElementLife
+  strain: 12
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      groups:
+        Airloss: -40
+        Brute: -10
+      types:
+        Shock: 3
+
+- type: wizardRuneFusion
+  id: RuneFusionRiftBolt
+  name: rune-fusion-rift-bolt
+  first: RuneElementLightning
+  second: RuneElementVoid
+  strain: 18
+  loudness: 1
+  effects:
+  - !type:RuneTeleportEffect
+    mode: ScatterTargets
+    radius: 6
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Shock: 8
+
+- type: wizardRuneFusion
+  id: RuneFusionDisco
+  name: rune-fusion-disco
+  first: RuneElementLightning
+  second: RuneElementChaos
+  strain: 8
+  absurdity: 3
+  effects:
+  - !type:RuneSpeakEffect
+    target: Auto
+    radius: 4
+    lines: RuneChaosLines
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 4
+    amount: 20
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 4
+    time: 5
+    multiplier: 0.7
+
+# Жизнь
+
+- type: wizardRuneFusion
+  id: RuneFusionLifeDrain
+  name: rune-fusion-life-drain
+  first: RuneElementLife
+  second: RuneElementVoid
+  strain: 18
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    damage:
+      types:
+        Cold: 10
+        Asphyxiation: 8
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -12
+        Burn: -12
+
+- type: wizardRuneFusion
+  id: RuneFusionMutation
+  name: rune-fusion-mutation
+  first: RuneElementLife
+  second: RuneElementChaos
+  strain: 14
+  absurdity: 2
+  effects:
+  - !type:RuneRandomEffect
+    options:
+    - !type:RunePolymorphEffect
+      target: Auto
+      radius: 1.5
+      polymorph: RuneChaosChicken
+    - !type:RunePolymorphEffect
+      target: Auto
+      radius: 1.5
+      polymorph: RuneChaosCorgi
+    - !type:RunePolymorphEffect
+      target: Auto
+      radius: 1.5
+      polymorph: RuneChaosMouse
+
+# Пустота
+
+- type: wizardRuneFusion
+  id: RuneFusionAbyssJoke
+  name: rune-fusion-abyss-joke
+  first: RuneElementVoid
+  second: RuneElementChaos
+  strain: 12
+  absurdity: 2
+  effects:
+  - !type:RuneTeleportEffect
+    mode: ScatterTargets
+    radius: 8
+  - !type:RuneSpeakEffect
+    target: Auto
+    radius: 3
+    lines: RuneChaosLines
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 3
+    time: 1
+  formEffects:
+    RuneFormTouch:
+    - !type:RuneMindSwapEffect
+
+# Вода
+
+- type: wizardRuneFusion
+  id: RuneFusionHail
+  name: rune-fusion-hail
+  first: RuneElementWater
+  second: RuneElementIce
+  strain: 12
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Blunt: 10
+        Cold: 4
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 2.5
+    time: 4
+    multiplier: 0.6
+
+- type: wizardRuneFusion
+  id: RuneFusionMire
+  name: rune-fusion-mire
+  first: RuneElementWater
+  second: RuneElementEarth
+  strain: 12
+  effects:
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 3
+    time: 7
+    multiplier: 0.25
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 3
+    time: 1
+  formEffects:
+    RuneFormWave:
+    - !type:RuneSpawnEffect
+      prototype: RuneFuelPuddle
+      pattern: RingAroundCaster
+      size: 2
+    - !type:RuneSpawnEffect
+      prototype: RuneFuelPuddle
+      pattern: RingAroundCaster
+      size: 3
+    - !type:RunePushEffect
+      speed: 8
+      radius: 4
+    - !type:RuneSlowEffect
+      target: AroundCaster
+      radius: 4
+      time: 5
+      multiplier: 0.5
+
+- type: wizardRuneFusion
+  id: RuneFusionShockwater
+  name: rune-fusion-shockwater
+  first: RuneElementWater
+  second: RuneElementLightning
+  strain: 16
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 3
+    damage:
+      types:
+        Shock: 12
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 3
+    amount: 45
+
+- type: wizardRuneFusion
+  id: RuneFusionLivingWater
+  name: rune-fusion-living-water
+  first: RuneElementWater
+  second: RuneElementLife
+  strain: 14
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -15
+        Burn: -15
+        Toxin: -15
+        Airloss: -15
+  - !type:RuneExtinguishEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+
+- type: wizardRuneFusion
+  id: RuneFusionWhirlpool
+  name: rune-fusion-whirlpool
+  first: RuneElementWater
+  second: RuneElementVoid
+  strain: 18
+  loudness: 2
+  effects:
+  - !type:RunePushEffect
+    auto: true
+    speed: -12
+    radius: 4
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    damage:
+      types:
+        Asphyxiation: 8
+
+- type: wizardRuneFusion
+  id: RuneFusionFoamParty
+  name: rune-fusion-foam-party
+  first: RuneElementWater
+  second: RuneElementChaos
+  strain: 6
+  absurdity: 3
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSlickTile
+    pattern: AreaAtPoint
+    size: 2
+  - !type:RuneSpeakEffect
+    target: Auto
+    radius: 3
+    lines: RuneChaosLines
+
+- type: wizardRuneFusion
+  id: RuneFusionStorm
+  name: rune-fusion-storm
+  first: RuneElementWater
+  second: RuneElementAir
+  strain: 14
+  loudness: 1
+  effects:
+  - !type:RunePushEffect
+    auto: true
+    speed: 14
+    radius: 4
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 3
+    amount: 20
+  - !type:RuneExtinguishEffect
+    target: Auto
+    radius: 3
+    includeCaster: true
+
+# Воздух
+
+- type: wizardRuneFusion
+  id: RuneFusionFirestorm
+  name: rune-fusion-firestorm
+  first: RuneElementAir
+  second: RuneElementFire
+  strain: 22
+  loudness: 2
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: WizardFireSpawn
+    pattern: Auto
+    skipBlocked: false
+  formEffects:
+    RuneFormWall:
+    - !type:RuneSpawnEffect
+      prototype: WizardFireSpawn
+      pattern: LineAtPoint
+      size: 3
+    RuneFormWave:
+    - !type:RuneIgniteEffect
+      target: AroundCaster
+      radius: 3
+      fireStacks: 2
+    RuneFormSelf:
+    - !type:RuneSpawnEffect
+      prototype: WizardFireSpawn
+      pattern: RingAroundCaster
+      size: 2
+
+- type: wizardRuneFusion
+  id: RuneFusionBlizzardWind
+  name: rune-fusion-snowstorm
+  first: RuneElementAir
+  second: RuneElementIce
+  strain: 14
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: WizardSmoke
+    pattern: Auto
+    skipBlocked: false
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 3
+    time: 6
+    multiplier: 0.4
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 3
+    damage:
+      types:
+        Cold: 6
+
+- type: wizardRuneFusion
+  id: RuneFusionSandstorm
+  name: rune-fusion-sandstorm
+  first: RuneElementAir
+  second: RuneElementEarth
+  strain: 14
+  loudness: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: WizardSmoke
+    pattern: Auto
+    skipBlocked: false
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 3
+    damage:
+      types:
+        Blunt: 5
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 3
+    amount: 20
+
+- type: wizardRuneFusion
+  id: RuneFusionThunder
+  name: rune-fusion-thunder
+  first: RuneElementAir
+  second: RuneElementLightning
+  strain: 24
+  loudness: 3
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: WizardEffectLightning
+    pattern: AtPoint
+    skipBlocked: false
+  formEffects:
+    RuneFormWave:
+    - !type:RuneLightningEffect
+      range: 5
+      bolts: 4
+    RuneFormSelf:
+    - !type:RuneLightningEffect
+      range: 5
+      bolts: 3
+
+- type: wizardRuneFusion
+  id: RuneFusionBreath
+  name: rune-fusion-breath
+  first: RuneElementAir
+  second: RuneElementLife
+  strain: 10
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      groups:
+        Airloss: -50
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+    amount: -40
+
+- type: wizardRuneFusion
+  id: RuneFusionVoidClap
+  name: rune-fusion-void-clap
+  first: RuneElementAir
+  second: RuneElementVoid
+  strain: 16
+  loudness: 1
+  effects:
+  - !type:RuneTeleportEffect
+    mode: SwapWithTarget
+  formEffects:
+    RuneFormWave:
+    - !type:RuneTeleportEffect
+      mode: ScatterTargets
+      radius: 6
+
+- type: wizardRuneFusion
+  id: RuneFusionAbsurdHurricane
+  name: rune-fusion-absurd-hurricane
+  first: RuneElementAir
+  second: RuneElementChaos
+  strain: 10
+  absurdity: 3
+  effects:
+  - !type:RuneTeleportEffect
+    mode: ScatterTargets
+    radius: 5
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - ToyRubberDuck
+    - PlushieCarp
+    - TrashBananaPeel
+    - BikeHorn
+    pattern: Auto
+    size: 2
+    count: 5
+  - !type:RuneSpeakEffect
+    target: Auto
+    radius: 3
+    lines: RuneChaosLines

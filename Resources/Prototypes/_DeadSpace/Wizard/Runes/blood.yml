@@ -1,0 +1,455 @@
+# Кровь
+
+- type: wizardRuneSpell
+  id: RuneSpellBloodSpear
+  name: rune-spell-blood-spear
+  form: RuneFormProjectile
+  element: RuneElementBlood
+  range: 14
+  strain: 10
+  cooldown: 3
+  loudness: 1
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileBloodSpear
+    speed: 24
+
+- type: wizardRuneSpell
+  id: RuneSpellBloodSpikes
+  name: rune-spell-blood-spikes
+  form: RuneFormWall
+  element: RuneElementBlood
+  range: 8
+  strain: 14
+  cooldown: 10
+  loudness: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneBloodSpikes
+    pattern: LineAtPoint
+    size: 3
+
+- type: wizardRuneSpell
+  id: RuneSpellBloodHarvest
+  name: rune-spell-blood-harvest
+  form: RuneFormWave
+  element: RuneElementBlood
+  targeting: Self
+  strain: 20
+  cooldown: 14
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: AroundCaster
+    radius: 3
+    damage:
+      types:
+        Slash: 10
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -15
+
+- type: wizardRuneSpell
+  id: RuneSpellBloodletting
+  name: rune-spell-bloodletting
+  form: RuneFormTouch
+  element: RuneElementBlood
+  targeting: Entity
+  range: 2
+  strain: 16
+  cooldown: 10
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Bloodloss: 30
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      types:
+        Bloodloss: -15
+      groups:
+        Brute: -10
+
+- type: wizardRuneSpell
+  id: RuneSpellBloodFeast
+  name: rune-spell-blood-feast
+  form: RuneFormSelf
+  element: RuneElementBlood
+  targeting: Self
+  strain: 14
+  cooldown: 20
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      types:
+        Bloodloss: -30
+      groups:
+        Brute: -30
+        Burn: -15
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateBlood
+  name: rune-spell-animate-blood
+  form: RuneFormAnimate
+  element: RuneElementBlood
+  range: 8
+  strain: 26
+  cooldown: 25
+  loudness: 2
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateBloodTemplate
+    count: 2
+    radius: 2
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonFlesh
+  name: rune-spell-summon-flesh
+  form: RuneFormSummon
+  element: RuneElementBlood
+  range: 6
+  strain: 30
+  cooldown: 40
+  loudness: 3
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSummonFleshGolem
+    lifetime: 40
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphBlood
+  name: rune-spell-morph-blood
+  form: RuneFormPolymorph
+  element: RuneElementBlood
+  targeting: EntityOrSelf
+  range: 6
+  strain: 24
+  cooldown: 35
+  loudness: 2
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneMorphFlesh
+
+# Сплавы крови
+
+- type: wizardRuneFusion
+  id: RuneFusionBoilingBlood
+  name: rune-fusion-boiling-blood
+  first: RuneElementBlood
+  second: RuneElementFire
+  strain: 12
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Heat: 10
+        Slash: 6
+
+- type: wizardRuneFusion
+  id: RuneFusionBloodIce
+  name: rune-fusion-blood-ice
+  first: RuneElementBlood
+  second: RuneElementIce
+  strain: 12
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Piercing: 12
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 2.5
+    time: 4
+    multiplier: 0.5
+
+- type: wizardRuneFusion
+  id: RuneFusionIronBlood
+  name: rune-fusion-iron-blood
+  first: RuneElementBlood
+  second: RuneElementEarth
+  strain: 12
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Blunt: 10
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 2.5
+    time: 1.5
+
+- type: wizardRuneFusion
+  id: RuneFusionCrimsonBolt
+  name: rune-fusion-crimson-bolt
+  first: RuneElementBlood
+  second: RuneElementLightning
+  strain: 14
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Shock: 10
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 2.5
+    amount: 35
+
+- type: wizardRuneFusion
+  id: RuneFusionTransfusion
+  name: rune-fusion-transfusion
+  first: RuneElementBlood
+  second: RuneElementLife
+  strain: 12
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+    ignoreResistances: true
+    damage:
+      types:
+        Bloodloss: -40
+      groups:
+        Brute: -20
+
+- type: wizardRuneFusion
+  id: RuneFusionVampirism
+  name: rune-fusion-vampirism
+  first: RuneElementBlood
+  second: RuneElementVoid
+  strain: 18
+  loudness: 3
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    ignoreResistances: true
+    damage:
+      types:
+        Slash: 14
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -14
+        Burn: -6
+
+- type: wizardRuneFusion
+  id: RuneFusionBloodCarnival
+  name: rune-fusion-blood-carnival
+  first: RuneElementBlood
+  second: RuneElementChaos
+  strain: 8
+  loudness: 1
+  absurdity: 2
+  effects:
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - PuddleBloodSmall
+    pattern: Auto
+    size: 2
+    count: 5
+  - !type:RuneSpeakEffect
+    target: Auto
+    radius: 3
+    lines: RuneChaosLines
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 3
+    amount: 15
+
+- type: wizardRuneFusion
+  id: RuneFusionCrimsonTide
+  name: rune-fusion-crimson-tide
+  first: RuneElementBlood
+  second: RuneElementWater
+  strain: 14
+  loudness: 2
+  effects:
+  - !type:RunePushEffect
+    auto: true
+    speed: 12
+    radius: 4
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 3
+    damage:
+      types:
+        Bloodloss: 10
+
+- type: wizardRuneFusion
+  id: RuneFusionBloodMist
+  name: rune-fusion-blood-mist
+  first: RuneElementBlood
+  second: RuneElementAir
+  strain: 12
+  loudness: 1
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: WizardSmoke
+    pattern: Auto
+    skipBlocked: false
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 3
+    damage:
+      types:
+        Slash: 4
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 3
+    amount: 20
+
+# Срывы крови
+
+- type: wizardRuneSurge
+  id: RuneSurgeBlood
+  entries:
+  - weight: 3
+    popup: rune-surge-blood-boil
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Bloodloss: 20
+          Slash: 10
+  - weight: 2
+    popup: rune-surge-blood-eyes
+    effects:
+    - !type:RuneSpawnRandomEffect
+      prototypes:
+      - PuddleBloodSmall
+      pattern: AtCaster
+      count: 2
+    - !type:RuneSlowEffect
+      target: Caster
+      time: 6
+      multiplier: 0.5
+
+- type: wizardRuneSurge
+  id: RuneFatalBlood
+  entries:
+  - popup: rune-fatal-blood
+    effects:
+    - !type:RuneSpawnRandomEffect
+      prototypes:
+      - PuddleBlood
+      pattern: AreaAtPoint
+      size: 2
+      count: 6
+    - !type:RuneGibEffect
+      target: Caster
+
+# Сущности
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileBloodSpear
+  name: кровавое копьё
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: magicm_red
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 14
+        Slash: 8
+  - type: PointLight
+    color: "#d4141f"
+    radius: 1.5
+    energy: 2
+
+- type: entity
+  parent: RuneWaterCurtain
+  id: RuneBloodSpikes
+  name: кровавые шипы
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: magicm_red
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.5
+    sprintSpeedModifier: 0.5
+  - type: DamageContacts
+    damage:
+      types:
+        Piercing: 6
+  - type: TimedDespawn
+    lifetime: 12
+
+- type: entity
+  id: RuneAnimateBloodTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Weapons/bladeslice.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Slash: 12
+  - type: PassiveDamage
+    damage:
+      groups:
+        Brute: -2
+  - type: PointLight
+    color: "#d4141f"
+    radius: 1.5
+    energy: 1
+
+- type: entity
+  parent: MobFleshGolem
+  id: RuneSummonFleshGolem
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+
+- type: polymorph
+  id: RuneMorphFlesh
+  configuration:
+    entity: MobFleshClamp
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 20

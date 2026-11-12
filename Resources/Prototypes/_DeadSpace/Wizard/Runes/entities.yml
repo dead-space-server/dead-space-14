@@ -1,0 +1,1042 @@
+# Действия
+
+- type: entity
+  parent: BaseAction
+  id: ActionWizardRuneCircle
+  name: Рунный круг
+  description: Начертите формулу курсором. Форма, стихия, модификаторы. ПКМ творит заклинание.
+  components:
+  - type: Action
+    clientExclusive: true
+    checkCanInteract: false
+    itemIconStyle: BigAction
+    priority: -20
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: magicmissile
+  - type: InstantAction
+    event: !type:RuneCircleActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWizardRuneScroll
+  name: Рунный свиток
+  description: Мгновенно прочесть записанную формулу. Свиток сгорит.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    priority: -19
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: spell_default
+  - type: TargetAction
+    range: 30
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:RuneScrollActionEvent
+
+# Свиток
+
+- type: entity
+  parent: [ BaseItem, BaseMagicalContraband ]
+  id: WizardRuneScroll
+  name: рунный свиток
+  description: Бумага, исписанная светящимися рунами. Прочесть её может кто угодно. Пережить сможет не каждый.
+  components:
+  - type: Sprite
+    sprite: Objects/Magic/magicactions.rsi
+    layers:
+    - state: spell_default
+      color: "#d9b3ff"
+  - type: Item
+    size: Tiny
+  - type: RuneScroll
+  - type: PointLight
+    color: "#b07bff"
+    radius: 1.2
+    energy: 1
+
+# Статус
+
+- type: entity
+  parent: StatusEffectSlowdown
+  id: RuneSlowStatusEffect
+  name: рунное замедление
+
+# Снаряды
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileIce
+  name: ледяной шар
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: ice
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Cold: 14
+  - type: StunOnCollide
+    slowdownAmount: 4
+    walkSpeedModifier: 0.5
+    sprintSpeedModifier: 0.5
+  - type: PointLight
+    color: "#7fd4ff"
+    radius: 1.5
+    energy: 2
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileBoulder
+  name: валун
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/meteor.rsi
+    layers:
+    - state: large
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 20
+        Structural: 40
+  - type: StunOnCollide
+    knockdownAmount: 1.5
+    drop: true
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileSpark
+  name: разряд
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi
+    layers:
+    - state: tesla_projectile
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Shock: 10
+  - type: StaminaDamageOnCollide
+    damage: 40
+  - type: PointLight
+    color: "#fff36b"
+    radius: 1.5
+    energy: 2
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileMending
+  name: лечащий болт
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#6dff8f"
+      shader: unshaded
+  - type: Projectile
+    ignoreResistances: true
+    damage:
+      groups:
+        Brute: -15
+        Burn: -15
+  - type: PointLight
+    color: "#6dff8f"
+    radius: 1.5
+    energy: 2
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileRubberDuck
+  name: боевая уточка
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/ducky.rsi
+    layers:
+    - state: icon
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 1
+  - type: StaminaDamageOnCollide
+    damage: 8
+  - type: EmitSoundOnCollide
+    sound:
+      path: /Audio/Items/Toys/quack.ogg
+
+# Плитки и стены
+
+- type: entity
+  id: RuneFireTile
+  name: рунное пламя
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Sprite
+    sprite: _DeadSpace/Effects/fire.rsi
+    layers:
+    - state: fire
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        layer:
+        - MidImpassable
+  - type: PointLight
+    color: "#ff8c00"
+    radius: 2
+    energy: 2
+  - type: IgniteOnCollide
+    fireStacks: 0.6
+    count: 30
+    fixtureId: fix1
+  - type: DamageContacts
+    damage:
+      types:
+        Heat: 6
+  - type: TimedDespawn
+    lifetime: 8
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: WallIce
+  id: RuneWallIce
+  name: рунный лёд
+  suffix: Маг
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: TimedDespawn
+    lifetime: 20
+
+- type: entity
+  parent: WallSandstone
+  id: RuneWallMud
+  name: грязевая стена
+  suffix: Маг
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Structures/Walls/sandstone.rsi
+    color: "#8a6a4a"
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: TimedDespawn
+    lifetime: 40
+
+- type: entity
+  id: RuneArcFence
+  name: стена разрядов
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Sprite
+    sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi
+    layers:
+    - state: tesla_projectile
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        layer:
+        - MidImpassable
+  - type: Electrified
+    requirePower: false
+    shockDamage: 10
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.5
+    sprintSpeedModifier: 0.5
+  - type: PointLight
+    color: "#fff36b"
+    radius: 2
+    energy: 2
+  - type: TimedDespawn
+    lifetime: 10
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: Kudzu
+  id: RuneHedge
+  name: живая изгородь
+  suffix: Маг
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Kudzu
+    growthTickChance: 0
+    spreadChance: 0
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.15
+    sprintSpeedModifier: 0.15
+  - type: TimedDespawn
+    lifetime: 25
+
+# Шаблоны компонентов
+
+- type: entity
+  id: RuneStoneSkinTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RuneWard
+    modifier: RuneStoneSkin
+
+- type: entity
+  id: RuneIceArmorTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RuneWard
+    modifier: RuneIceArmor
+  - type: StaminaResistance
+    damageCoefficient: 0.3
+  - type: ExplosionResistance
+    damageCoefficient: 0.35
+    worn: false
+
+- type: entity
+  id: RunePhoenixTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RuneWard
+    modifier: RunePhoenix
+
+- type: entity
+  id: RuneLightningRodTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StunImmune
+  - type: Reflect
+    reflects:
+    - Energy
+    - NonEnergy
+    reflectProb: 0.6
+
+- type: entity
+  id: RuneWaterBubbleTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RespiratorImmunity
+
+- type: entity
+  id: RuneStoneShield
+  name: каменный щит
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/meteor.rsi
+    drawdepth: Overdoors
+    scale: 0.4,0.4
+    layers:
+    - state: large
+  - type: PointLight
+    color: "#c9b59a"
+    radius: 1
+    energy: 0.6
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: RuneStoneStrideTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NoSlip
+  - type: StaminaResistance
+    damageCoefficient: 0.2
+
+# Шаблоны оживления
+
+- type: entity
+  id: RuneAnimateFireTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Weapons/smash.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Blunt: 6
+        Heat: 8
+  - type: PointLight
+    color: "#ff8c00"
+    radius: 2
+    energy: 2
+
+- type: entity
+  id: RuneAnimateIceTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 2.5
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Weapons/smash.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Blunt: 8
+        Cold: 6
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: PointLight
+    color: "#7fd4ff"
+    radius: 1.5
+    energy: 1
+
+- type: entity
+  id: RuneAnimateEarthTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Weapons/smash.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Blunt: 14
+        Structural: 20
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 160
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  id: RuneAnimateLightningTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 5.5
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Effects/sparks4.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Shock: 6
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: PointLight
+    color: "#fff36b"
+    radius: 1.5
+    energy: 1.5
+
+- type: entity
+  id: RuneAnimateLifeTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Weapons/smash.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Blunt: 7
+  - type: PassiveDamage
+    damage:
+      groups:
+        Brute: -2
+        Burn: -2
+  - type: PointLight
+    color: "#6dff8f"
+    radius: 1.5
+    energy: 1
+
+- type: entity
+  id: RuneAnimateVoidTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 5
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Magic/Eldritch/voidblink.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Cold: 10
+  - type: PointLight
+    color: "#a77bff"
+    radius: 1.5
+    energy: 1
+
+- type: entity
+  id: RuneAnimateChaosTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AllHostile
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 6
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Items/bikehorn.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Blunt: 9
+  - type: PointLight
+    color: "#ff6ad5"
+    radius: 1.5
+    energy: 1.5
+
+# Призывы
+
+- type: entity
+  parent: MobWatcherMagmawing
+  id: RuneSummonMagmawing
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+
+- type: entity
+  parent: MobWatcherIcewing
+  id: RuneSummonIcewing
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+
+- type: entity
+  parent: MobGoliath
+  id: RuneSummonGoliath
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+
+- type: entity
+  parent: MobWatcherLavaland
+  id: RuneSummonStormwing
+  name: грозовой наблюдатель
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: Sprite
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: base
+    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
+      state: unshaded
+      shader: unshaded
+      color: yellow
+  - type: PointLight
+    radius: 1.5
+    energy: 3
+    color: yellow
+
+- type: entity
+  parent: MobPenguin
+  id: RuneSummonPenguin
+  name: пингвин-санитар
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: PassiveDamage
+    allowedStates:
+    - Alive
+    damage:
+      groups:
+        Brute: -1
+        Burn: -1
+
+- type: entity
+  parent: MobBasilisk
+  id: RuneSummonBasilisk
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+
+# Плитки сплавов
+
+- type: entity
+  parent: RuneFireTile
+  id: RuneMagmaTile
+  name: рунная магма
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Effects/fire.rsi
+    layers:
+    - state: fire
+      shader: unshaded
+      color: "#ff4a1a"
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.4
+    sprintSpeedModifier: 0.4
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: entity
+  id: RuneSlickTile
+  name: рунный каток
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: ice
+      color: "#bdf3ff88"
+  - type: Fixtures
+    fixtures:
+      slips:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        mask:
+        - ItemMask
+        layer:
+        - SlipLayer
+  - type: Slippery
+  - type: StepTrigger
+  - type: TimedDespawn
+    lifetime: 12
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: KudzuFlowerFriendly
+  id: RuneBloom
+  suffix: Маг
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Kudzu
+    growthTickChance: 0
+    spreadChance: 0
+  - type: TimedDespawn
+    lifetime: 30
+
+# Модификаторы урона
+
+- type: damageModifierSet
+  id: RuneStoneSkin
+  coefficients:
+    Blunt: 0.5
+    Slash: 0.5
+    Piercing: 0.6
+    Heat: 0.85
+
+- type: damageModifierSet
+  id: RuneIceArmor
+  coefficients:
+    Blunt: 0.6
+    Slash: 0.6
+    Piercing: 0.6
+    Cold: 0
+    Heat: 1.3
+
+- type: damageModifierSet
+  id: RunePhoenix
+  coefficients:
+    Heat: 0
+    Caustic: 0.5
+
+# Полиморфы хаоса
+
+- type: polymorph
+  id: RuneChaosChicken
+  configuration:
+    entity: MobChicken
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosCorgi
+  configuration:
+    entity: MobCorgi
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosMouse
+  configuration:
+    entity: MobMouse
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+# Вода и воздух
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileWater
+  name: водяной хлыст
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#4aa8ff"
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 4
+  - type: StaminaDamageOnCollide
+    damage: 30
+  - type: StunOnCollide
+    slowdownAmount: 2
+    walkSpeedModifier: 0.7
+    sprintSpeedModifier: 0.7
+
+- type: entity
+  id: RuneWaterCurtain
+  name: водяная завеса
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#4aa8ffaa"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        layer:
+        - MidImpassable
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.45
+    sprintSpeedModifier: 0.45
+  - type: TimedDespawn
+    lifetime: 15
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: RuneWaterCurtain
+  id: RuneWindWall
+  name: стена ветра
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#d8f4ff88"
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.25
+    sprintSpeedModifier: 0.25
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: entity
+  id: RuneAnimateWaterTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 4
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Effects/Fluids/splat.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Blunt: 7
+  - type: PointLight
+    color: "#4aa8ff"
+    radius: 1.5
+    energy: 1
+
+- type: entity
+  id: RuneAnimateAirTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5.5
+    baseSprintSpeed: 6.5
+  - type: MeleeWeapon
+    animation: WeaponArcPunch
+    wideAnimation: WeaponArcPunch
+    altDisarm: false
+    soundHit: /Audio/Weapons/smash.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Blunt: 5
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: MobBat
+  id: RuneSummonBat
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+
+# Превращения
+
+- type: polymorph
+  id: RuneMorphPenguin
+  configuration:
+    entity: MobPenguin
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 20
+
+- type: polymorph
+  id: RuneMorphTree
+  configuration:
+    entity: FloraTree
+    forced: true
+    transferName: true
+    inventory: None
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneMorphMonkey
+  configuration:
+    entity: MobMonkey
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 25
+
+- type: polymorph
+  id: RuneMorphFrog
+  configuration:
+    entity: MobFrog
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 20
+
+- type: polymorph
+  id: RuneMorphBat
+  configuration:
+    entity: MobBat
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 20
+
+# Смертельные превращения
+
+- type: polymorph
+  id: RuneDoomIceStatue
+  configuration:
+    entity: StatueVenusBlue
+    forced: true
+    transferName: true
+    inventory: Drop
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: RuneDoomStoneStatue
+  configuration:
+    entity: StatueIronsandTall
+    forced: true
+    transferName: true
+    inventory: Drop
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: RuneDoomTree
+  configuration:
+    entity: FloraTree
+    forced: true
+    transferName: true
+    inventory: Drop
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: RuneDoomDuck
+  configuration:
+    entity: ToyRubberDuck
+    forced: true
+    transferName: true
+    inventory: Drop
+    revertOnCrit: false
+    revertOnDeath: false
+
+# Фразы
+
+- type: localizedDataset
+  id: RuneChaosLines
+  values:
+    prefix: rune-chaos-line-
+    count: 30

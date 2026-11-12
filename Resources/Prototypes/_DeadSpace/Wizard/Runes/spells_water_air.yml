@@ -1,0 +1,373 @@
+# Вода
+
+- type: wizardRuneSpell
+  id: RuneSpellWaterJet
+  name: rune-spell-water-jet
+  form: RuneFormProjectile
+  element: RuneElementWater
+  range: 12
+  strain: 10
+  cooldown: 2.5
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileWater
+    speed: 22
+
+- type: wizardRuneSpell
+  id: RuneSpellWaterCurtain
+  name: rune-spell-water-curtain
+  form: RuneFormWall
+  element: RuneElementWater
+  range: 8
+  strain: 14
+  cooldown: 10
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneWaterCurtain
+    pattern: LineAtPoint
+    size: 3
+  - !type:RuneExtinguishEffect
+    target: AroundPoint
+    radius: 2
+
+- type: wizardRuneSpell
+  id: RuneSpellTide
+  name: rune-spell-tide
+  form: RuneFormWave
+  element: RuneElementWater
+  targeting: Self
+  strain: 20
+  cooldown: 12
+  loudness: 1
+  effects:
+  - !type:RunePushEffect
+    speed: 9
+    radius: 4
+  - !type:RuneStaminaEffect
+    target: AroundCaster
+    radius: 4
+    amount: 15
+  - !type:RuneExtinguishEffect
+    target: AroundCaster
+    radius: 4
+    includeCaster: true
+
+- type: wizardRuneSpell
+  id: RuneSpellSlippery
+  name: rune-spell-slippery
+  form: RuneFormTouch
+  element: RuneElementWater
+  targeting: Entity
+  range: 2
+  strain: 14
+  cooldown: 30
+  absurdity: 1
+  effects:
+  - !type:RuneComponentsEffect
+    fromAction: ActionSlippery
+
+- type: wizardRuneSpell
+  id: RuneSpellCleanse
+  name: rune-spell-cleanse
+  form: RuneFormSelf
+  element: RuneElementWater
+  targeting: Self
+  strain: 16
+  cooldown: 30
+  effects:
+  - !type:RuneExtinguishEffect
+    target: Caster
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Toxin: -25
+        Burn: -10
+        Airloss: -30
+  - !type:RuneStatusEffect
+    target: Caster
+    status: StatusEffectPressureImmunity
+    time: 90
+  - !type:RuneComponentsEffect
+    target: Caster
+    template: RuneWaterBubbleTemplate
+    duration: 90
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateWater
+  name: rune-spell-animate-water
+  form: RuneFormAnimate
+  element: RuneElementWater
+  range: 8
+  strain: 28
+  cooldown: 25
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateWaterTemplate
+    count: 2
+    radius: 2
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonCarp
+  name: rune-spell-summon-carp
+  form: RuneFormSummon
+  element: RuneElementWater
+  range: 6
+  strain: 26
+  cooldown: 35
+  loudness: 1
+  effects:
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - MobCarpMagicWizard
+    pattern: AreaAtPoint
+    size: 1
+    count: 3
+    lifetime: 60
+
+# Воздух
+
+- type: wizardRuneSpell
+  id: RuneSpellGust
+  name: rune-spell-gust
+  form: RuneFormProjectile
+  element: RuneElementAir
+  range: 10
+  strain: 12
+  cooldown: 4
+  effects:
+  - !type:RunePushEffect
+    atPoint: true
+    speed: 14
+    radius: 2
+  - !type:RuneStaminaEffect
+    target: AroundPoint
+    radius: 2
+    amount: 15
+
+- type: wizardRuneSpell
+  id: RuneSpellWindWall
+  name: rune-spell-wind-wall
+  form: RuneFormWall
+  element: RuneElementAir
+  range: 8
+  strain: 14
+  cooldown: 10
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneWindWall
+    pattern: LineAtPoint
+    size: 3
+
+- type: wizardRuneSpell
+  id: RuneSpellSmokeScreen
+  name: rune-spell-smoke-screen
+  form: RuneFormWave
+  element: RuneElementAir
+  targeting: Self
+  strain: 10
+  cooldown: 10
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: WizardSmoke
+    pattern: AtCaster
+    skipBlocked: false
+
+- type: wizardRuneSpell
+  id: RuneSpellSuffocate
+  name: rune-spell-suffocate
+  form: RuneFormTouch
+  element: RuneElementAir
+  targeting: Entity
+  range: 2
+  strain: 16
+  cooldown: 8
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Asphyxiation: 18
+  - !type:RuneStaminaEffect
+    amount: 25
+
+- type: wizardRuneSpell
+  id: RuneSpellRecall
+  name: rune-spell-recall
+  form: RuneFormSelf
+  element: RuneElementAir
+  targeting: Self
+  strain: 6
+  cooldown: 3
+  effects:
+  - !type:RuneRecallEffect
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimateAir
+  name: rune-spell-animate-air
+  form: RuneFormAnimate
+  element: RuneElementAir
+  range: 8
+  strain: 28
+  cooldown: 25
+  absurdity: 1
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimateAirTemplate
+    count: 3
+    radius: 2.5
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonBats
+  name: rune-spell-summon-bats
+  form: RuneFormSummon
+  element: RuneElementAir
+  range: 6
+  strain: 22
+  cooldown: 30
+  effects:
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - RuneSummonBat
+    pattern: AreaAtPoint
+    size: 1
+    count: 4
+    lifetime: 40
+
+# Превращение
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphFire
+  name: rune-spell-morph-fire
+  form: RuneFormPolymorph
+  element: RuneElementFire
+  targeting: EntityOrSelf
+  range: 6
+  strain: 22
+  cooldown: 30
+  absurdity: 1
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneChaosChicken
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphIce
+  name: rune-spell-morph-ice
+  form: RuneFormPolymorph
+  element: RuneElementIce
+  targeting: EntityOrSelf
+  range: 6
+  strain: 22
+  cooldown: 30
+  absurdity: 1
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneMorphPenguin
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphEarth
+  name: rune-spell-morph-earth
+  form: RuneFormPolymorph
+  element: RuneElementEarth
+  targeting: EntityOrSelf
+  range: 6
+  strain: 26
+  cooldown: 35
+  loudness: 1
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneMorphTree
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphLightning
+  name: rune-spell-morph-lightning
+  form: RuneFormPolymorph
+  element: RuneElementLightning
+  targeting: EntityOrSelf
+  range: 6
+  strain: 20
+  cooldown: 30
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneChaosMouse
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphLife
+  name: rune-spell-morph-life
+  form: RuneFormPolymorph
+  element: RuneElementLife
+  targeting: EntityOrSelf
+  range: 6
+  strain: 22
+  cooldown: 30
+  absurdity: 1
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneMorphMonkey
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphVoid
+  name: rune-spell-morph-void
+  form: RuneFormPolymorph
+  element: RuneElementVoid
+  targeting: EntityOrSelf
+  range: 6
+  strain: 30
+  cooldown: 45
+  loudness: 2
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: WizardForcedCarp
+    onCaster: WizardSpider
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphChaos
+  name: rune-spell-morph-chaos
+  form: RuneFormPolymorph
+  element: RuneElementChaos
+  targeting: EntityOrSelf
+  range: 6
+  strain: 18
+  cooldown: 25
+  absurdity: 2
+  effects:
+  - !type:RuneRandomEffect
+    options:
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosChicken
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosCorgi
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosMouse
+    - !type:RunePolymorphEffect
+      polymorph: RuneMorphFrog
+    - !type:RunePolymorphEffect
+      polymorph: RuneMorphPenguin
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphWater
+  name: rune-spell-morph-water
+  form: RuneFormPolymorph
+  element: RuneElementWater
+  targeting: EntityOrSelf
+  range: 6
+  strain: 20
+  cooldown: 30
+  absurdity: 1
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneMorphFrog
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphAir
+  name: rune-spell-morph-air
+  form: RuneFormPolymorph
+  element: RuneElementAir
+  targeting: EntityOrSelf
+  range: 6
+  strain: 20
+  cooldown: 30
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneMorphBat
