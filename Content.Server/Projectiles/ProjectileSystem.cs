@@ -2,6 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Destructible;
 using Content.Server.Effects;
 using Content.Server.Weapons.Ranged.Systems;
+using Content.Shared.Anomaly.Components; //DS-14
 using Content.Shared.Camera;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -93,6 +94,11 @@ public sealed class ProjectileSystem : SharedProjectileSystem
         var ray = new CollisionRay(from, delta / distance, ourFixture.CollisionMask);
         foreach (var hit in _physics.IntersectRay(mapId, ray, distance, uid, false))
         {
+            //DS-14 start
+            if (HasComp<AnomalousParticleComponent>(uid) && HasComp<AnomalyComponent>(hit.HitEntity))
+                break;
+            //DS-14 end
+
             if (!CanSweepHit(uid, body, ourFixture, hit.HitEntity))
                 continue;
 
