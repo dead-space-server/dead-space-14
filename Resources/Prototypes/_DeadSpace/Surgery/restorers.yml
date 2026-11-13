@@ -25,6 +25,7 @@
     state: syndicate
   - type: LimbRestorer
     charges: 4
+    maxCharges: 4
     prime: 4
     delay: 8
     selfDelay: 12
@@ -54,6 +55,7 @@
     state: necro
   - type: LimbRestorer
     charges: 2
+    maxCharges: 2
     prime: 6
     delay: 10
     selfDelay: 14
@@ -94,6 +96,7 @@
     state: pirate
   - type: LimbRestorer
     charges: 2
+    maxCharges: 2
     prime: 5
     delay: 9
     selfDelay: 12
@@ -123,6 +126,7 @@
     state: ert
   - type: LimbRestorer
     charges: 6
+    maxCharges: 6
     prime: 3
     delay: 7
     allowSelf: false
@@ -243,6 +247,7 @@
     implantAction: ActionLimbRestorerImplantNecro
   - type: LimbRestorer
     charges: 2
+    maxCharges: 2
     autoCrit: true
     health: 0.5
     regrow: 0.3
@@ -281,6 +286,7 @@
     implantAction: ActionLimbRestorerImplant
   - type: LimbRestorer
     charges: 1
+    maxCharges: 1
     autoCrit: true
     health: 0.4
     useSound:
