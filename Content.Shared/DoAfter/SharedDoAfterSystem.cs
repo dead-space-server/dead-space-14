@@ -198,6 +198,11 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
             return DoAfterStatus.Finished;
         }
 
+        // DS14-start
+        if (!component.DoAfters.ContainsKey(id.Value.Index))
+            return DoAfterStatus.Finished;
+        // DS14-end
+
         var tcs = new TaskCompletionSource<DoAfterStatus>();
         component.AwaitedDoAfters.Add(id.Value.Index, tcs);
         return await tcs.Task;
