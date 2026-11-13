@@ -8,6 +8,7 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Random.Helpers;
+using Content.Shared.Stacks;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Verbs;
 using Robust.Shared.Prototypes;
@@ -29,6 +30,7 @@ public sealed partial class SharedShearableSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private readonly SharedToolSystem _tool = default!;
+    [Dependency] private readonly SharedStackSystem _stack = default!; // DS14: sheared products stack
     // DS14-end
 
     public override void Initialize()
@@ -207,15 +209,25 @@ public sealed partial class SharedShearableSystem : EntitySystem
         var rand = SharedRandomExtensions.PredictedRandom(_timing, GetNetEntity(ent));
         var center = ent.Owner.ToCoordinates();
         // Spawn product.
-        for (var i = 0; i < removedSolution.Volume / ent.Comp.SolutionPerProduct; i++)
+        // DS14-start: a product that stacks comes as stacks (as many as the stack size allows), not one by one.
+        var productCount = (int) (removedSolution.Volume / ent.Comp.SolutionPerProduct);
+        var maxStack = Math.Max(1, _stack.GetMaxCount(ent.Comp.ShearedProductId)); // 1 for a thing that does not stack
+
+        while (productCount > 0)
         {
-            // Offset the spawn position by e.g 0.4 pixels, so they don't all stack in one spot.
+            var amount = Math.Min(productCount, maxStack);
+            productCount -= amount;
+
+            // Offset the spawn position by e.g 0.4 pixels, so they do not all stack in one spot.
             var xoffs = rand.NextFloat(-ent.Comp.RandomSpawnOffsetVariation, ent.Comp.RandomSpawnOffsetVariation);
             var yoffs = rand.NextFloat(-ent.Comp.RandomSpawnOffsetVariation, ent.Comp.RandomSpawnOffsetVariation);
             var pos = center.Offset(new Vector2(xoffs, yoffs));
 
-            PredictedSpawnAtPosition(ent.Comp.ShearedProductId, pos);
+            var product = PredictedSpawnAtPosition(ent.Comp.ShearedProductId, pos);
+            if (maxStack > 1)
+                _stack.SetCount(product, amount);
         }
+        // DS14-end
 
         // Success message.
         _popup.PopupClient(Loc.GetString("shearable-system-success", ("target", Identity.Entity(ent.Owner, EntityManager)), ("product", shearedProduct.Name)), ent.Owner, args.Args.User, PopupType.Medium);

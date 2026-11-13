@@ -1,0 +1,15 @@
+﻿{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Beekeeping sprites for Dead Space 14, added by RIP6100 (github)",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "idle",
+            "directions": 4
+        }
+    ]
+}

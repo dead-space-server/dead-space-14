@@ -1,0 +1,20 @@
+- type: entity
+  id: DebugAnalyzer
+  parent: BaseItem
+  name: debug analyzer
+  description: A hand-held scanner that shows everything there is to know about a living being. Health, hunger, thirst and more.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Devices/debug_analyzer.rsi
+    layers:
+    - state: icon
+    - state: analyzer
+      shader: unshaded
+  - type: Item
+    heldPrefix: analyzer
+    storedRotation: -90
+  - type: UserInterface
+    interfaces:
+      enum.DebugAnalyzerUiKey.Key:
+        type: DebugAnalyzerBoundUserInterface
+  - type: DebugAnalyzer

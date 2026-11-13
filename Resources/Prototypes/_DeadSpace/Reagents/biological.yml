@@ -154,3 +154,19 @@
     collection: FootstepBlood
     params:
       volume: 6
+
+- type: reagent
+  id: Honey
+  name: reagent-name-honey
+  group: Foods
+  desc: reagent-desc-honey
+  physicalDesc: reagent-physical-desc-sticky
+  flavor: honey
+  color: "#D4A017"
+  recognizable: true
+  metabolisms:
+    Food:
+      effects:
+      - !type:Satiate
+        satiationType: Hunger
+        factor: 2
