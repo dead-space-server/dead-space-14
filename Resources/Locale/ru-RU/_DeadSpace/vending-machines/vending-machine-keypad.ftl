@@ -6,3 +6,6 @@ vending-machine-keypad-invalid-code = НЕВЕРНЫЙ КОД
 vending-machine-keypad-out-of-stock = НЕТ В НАЛИЧИИ
 vending-machine-keypad-busy = ВЫДАЧА...
 vending-machine-keypad-vending = ВЫДАЧА: {$item}
+vending-machine-keypad-search = Поиск товара или кода...
+vending-machine-keypad-no-funds = НЕДОСТАТОЧНО СРЕДСТВ
+vending-machine-keypad-withdraw = Сдача

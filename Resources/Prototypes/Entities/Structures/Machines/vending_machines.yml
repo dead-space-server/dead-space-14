@@ -266,6 +266,7 @@
   name: Booze-O-Mat
   description: A technological marvel, supposedly able to mix just the mixture you'd like to drink the moment you ask for one.
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: BoozeOMatInventory
   - type: VendingMachineVisuals
@@ -486,6 +487,7 @@
   name: Solar's Best Hot Drinks
   description: Served boiling so it stays hot all shift!
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: HotDrinksMachineInventory
     initialStockQuality: 0.33
@@ -525,6 +527,7 @@
   name: Robust Softdrinks
   description: A softdrink vendor provided by Robust Industries, LLC.
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: RobustSoftdrinksInventory
     initialStockQuality: 0.33
@@ -673,6 +676,7 @@
   name: Shambler's Juice Vendor
   description: ~Shake me up some of that Shambler's Juice!~
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: ShamblersJuiceInventory
     initialStockQuality: 0.33
@@ -705,6 +709,7 @@
   name: Pwr Game Vendor
   description: You want it, we got it. Brought to you in partnership with Vlad's Salads.
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: PwrGameInventory
     initialStockQuality: 0.33
@@ -739,6 +744,7 @@
   name: Dr. Gibb Vendor
   description: Canned explosion of different flavors in this very vendor!
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: DrGibbInventory
     initialStockQuality: 0.33
@@ -784,6 +790,7 @@
     - state: panel
       map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       visible: false # DS14
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: SmiteInventory
     initialStockQuality: 0.33
@@ -867,6 +874,7 @@
   name: Discount Dan's
   description: A vending machine containing discount snacks from the infamous 'Discount Dan' franchise.
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: DiscountDansInventory
     initialStockQuality: 0.33
@@ -1100,6 +1108,7 @@
   name: Getmore Chocolate Corp
   description: A snack machine courtesy of the Getmore Chocolate Corporation, based out of Mars.
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: GetmoreChocolateCorpInventory
     initialStockQuality: 0.33
@@ -1244,6 +1253,7 @@
   description: An old vending machine containing sweet water.
   suffix: VODA
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: BodaInventory
     initialStockQuality: 0.33
@@ -1438,6 +1448,7 @@
   name: Mr. Chang
   description: A self-serving Chinese food machine, for all your Chinese food needs.
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: ChangInventory
     initialStockQuality: 0.33
@@ -1498,6 +1509,7 @@
   name: Monkin' Donuts
   description: A donut vendor provided by Robust Industries, LLC.
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: DonutInventory
     initialStockQuality: 0.33
@@ -2084,6 +2096,7 @@
   name: Happy Honk Dispenser
   description: A happy honk meal box dispenser made by honk! co.
   components:
+  - type: VendingMachineKeypad # DS14
   - type: VendingMachine
     pack: HappyHonkDispenserInventory
     initialStockQuality: 1.0 # Nobody knows how Honk does it, but their vending machines always seem well-stocked...
