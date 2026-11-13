@@ -1,5 +1,4 @@
 using Content.Server.NPC;
-using Content.Server.NPC;
 using Content.Shared.DeadSpace.Critters;
 using Robust.Shared.Timing;
 
