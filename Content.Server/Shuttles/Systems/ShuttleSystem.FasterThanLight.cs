@@ -87,6 +87,13 @@ public sealed partial class ShuttleSystem
     /// </summary>
     private const int FTLProximityIterations = 5;
     private const int FTLProximityCandidateAttempts = 32;
+
+    // DS14-start
+    private const int FTLProximityFarRings = 3;
+    private const float FTLProximityRingGrowth = 2f;
+    private const int FTLProximityFarAttempts = 16;
+    // DS14-end
+
     private const float LavalandTendrilFTLExclusionRange = 8f;
 
     private readonly HashSet<EntityUid> _lookupEnts = new();
@@ -955,45 +962,55 @@ public sealed partial class ShuttleSystem
 
         var offset = -shuttleAABB.Center;
         var randomizePosition = nearbyGrids.Count > 1 || !HasComp<MapComponent>(targetXform.GridUid);
-        var candidateAttempts = randomizePosition ? FTLProximityCandidateAttempts : 1;
 
-        for (var attempt = 0; attempt < candidateAttempts; attempt++)
+        // DS14-start
+        var minRadius = MathF.Max(targetAABB.Width / 2f, targetAABB.Height / 2f);
+        for (var ring = 0; ring <= FTLProximityFarRings; ring++)
         {
-            // TODO: This should prefer the position's angle instead.
-            // TODO: This is pretty crude for multiple landings.
-            Vector2 spawnPos;
-            if (randomizePosition)
+            var ringMaxOffset = maxOffset * MathF.Pow(FTLProximityRingGrowth, ring);
+            var candidateAttempts = ring == 0
+                ? (randomizePosition ? FTLProximityCandidateAttempts : 1)
+                : FTLProximityFarAttempts;
+        // DS14-end
+
+            for (var attempt = 0; attempt < candidateAttempts; attempt++)
             {
-                var offsetAngle = _random.NextAngle();
+                // TODO: This should prefer the position's angle instead.
+                // TODO: This is pretty crude for multiple landings.
+                Vector2 spawnPos;
+                // DS14-start
+                if (ring == 0 && !randomizePosition)
+                {
+                    if (shuttleBody != null)
+                        (spawnPos, _) = _transform.GetWorldPositionRotation(targetXform);
+                    else
+                        spawnPos = _transform.GetWorldPosition(targetXform);
+                }
+                else
+                {
+                    var offsetAngle = _random.NextAngle();
 
-                // Our valid spawn positions are <targetAABB width / height +  offset> away.
-                var minRadius = MathF.Max(targetAABB.Width / 2f, targetAABB.Height / 2f);
-                spawnPos = targetAABB.Center + offsetAngle.RotateVec(new Vector2(_random.NextFloat(minRadius + minOffset, minRadius + maxOffset), 0f));
+                    // Our valid spawn positions are <targetAABB width / height +  offset> away.
+                    spawnPos = targetAABB.Center + offsetAngle.RotateVec(new Vector2(_random.NextFloat(minRadius + minOffset, minRadius + ringMaxOffset), 0f));
+                }
+                // DS14-end
+
+                if (!HasComp<MapComponent>(targetXform.GridUid))
+                    angle = _random.NextAngle();
+                else
+                    angle = Angle.Zero;
+
+                // Rotate our localcenter around so we spawn exactly where we "think" we should (center of grid on the dot).
+                var transform = new Transform(spawnPos, angle);
+                spawnPos = Robust.Shared.Physics.Transform.Mul(transform, offset);
+
+                var candidateCoordinates = new EntityCoordinates(targetXform.MapUid.Value, spawnPos - offset);
+                if (!IsFTLTargetCoordinatesValid(shuttleUid, candidateCoordinates, angle, shuttleGrid))
+                    continue;
+
+                coordinates = candidateCoordinates;
+                return true;
             }
-            else if (shuttleBody != null)
-            {
-                (spawnPos, angle) = _transform.GetWorldPositionRotation(targetXform);
-            }
-            else
-            {
-                spawnPos = _transform.GetWorldPosition(targetXform);
-            }
-
-            if (!HasComp<MapComponent>(targetXform.GridUid))
-                angle = _random.NextAngle();
-            else
-                angle = Angle.Zero;
-
-            // Rotate our localcenter around so we spawn exactly where we "think" we should (center of grid on the dot).
-            var transform = new Transform(spawnPos, angle);
-            spawnPos = Robust.Shared.Physics.Transform.Mul(transform, offset);
-
-            var candidateCoordinates = new EntityCoordinates(targetXform.MapUid.Value, spawnPos - offset);
-            if (!IsFTLTargetCoordinatesValid(shuttleUid, candidateCoordinates, angle, shuttleGrid))
-                continue;
-
-            coordinates = candidateCoordinates;
-            return true;
         }
 
         if (IsFTLTargetCoordinatesValid(shuttleUid, targetCoordinates, Angle.Zero, shuttleGrid))
@@ -1006,7 +1023,7 @@ public sealed partial class ShuttleSystem
         return false;
     }
 
-    private bool IsFTLTargetCoordinatesValid(
+    public bool IsFTLTargetCoordinatesValid( // DS14
         EntityUid shuttleUid,
         EntityCoordinates coordinates,
         Angle angle,

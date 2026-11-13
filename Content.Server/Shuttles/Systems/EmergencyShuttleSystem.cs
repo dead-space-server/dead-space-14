@@ -33,6 +33,7 @@ using Content.Shared.Tiles;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -74,6 +75,10 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
 
     private const float ShuttleSpawnBuffer = 1f;
+
+    // DS14-start
+    private const int ShuttlePlacementAttempts = 20;
+    // DS14-end
 
     private bool _emergencyShuttleEnabled;
 
@@ -612,12 +617,32 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
         if (!_loader.TryLoadGrid(map.MapId,
             shuttlePath,
             out var shuttle,
-            // Should be far enough... right? I'm too lazy to bounds check CentCom rn.
             offset: new Vector2(500f + ent.Comp2.ShuttleIndex, 0f)))
         {
             Log.Error($"Unable to spawn emergency shuttle {shuttlePath} for {ToPrettyString(ent)}");
             return;
         }
+
+        // DS14-start
+        var mapUid = _mapSystem.GetMap(map.MapId);
+        var shuttleWidth = Comp<MapGridComponent>(shuttle.Value).LocalAABB.Width;
+        var clear = false;
+
+        for (var attempt = 0; attempt < ShuttlePlacementAttempts; attempt++)
+        {
+            if (_shuttle.IsFTLTargetCoordinatesValid(shuttle.Value, new EntityCoordinates(mapUid, new Vector2(500f + ent.Comp2.ShuttleIndex, 0f)), Angle.Zero))
+            {
+                clear = true;
+                break;
+            }
+
+            ent.Comp2.ShuttleIndex += shuttleWidth + ShuttleSpawnBuffer;
+            _transformSystem.SetCoordinates(shuttle.Value, new EntityCoordinates(mapUid, new Vector2(500f + ent.Comp2.ShuttleIndex, 0f)));
+        }
+
+        if (!clear)
+            Log.Warning($"Unable to find empty space on the centcomm map for emergency shuttle {shuttlePath} for {ToPrettyString(ent)}");
+        // DS14-end
 
         ent.Comp2.ShuttleIndex += Comp<MapGridComponent>(shuttle.Value).LocalAABB.Width + ShuttleSpawnBuffer;
 

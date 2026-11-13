@@ -111,20 +111,22 @@ public sealed class LoadMapRuleSystem : StationEventSystem<LoadMapRuleComponent>
             }
 
             var sourceMap = _map.GetMapOrInvalid(mapId);
+            var relocated = true;
             foreach (var grid in grids)
             {
                 if (_shuttles.TryFTLProximity(grid, targetGrid))
                     continue;
 
-                foreach (var loadedGrid in grids)
-                    QueueDel(loadedGrid);
-                QueueDel(sourceMap);
-                ForceEndSelf(uid, rule);
-                return;
+                Log.Warning($"Failed to find empty space near {ToPrettyString(targetGrid)} for {ToPrettyString(uid)}; keeping grids on their own map");
+                relocated = false;
+                break;
             }
 
-            mapId = Transform(targetGrid).MapID;
-            QueueDel(sourceMap);
+            if (relocated)
+            {
+                mapId = Transform(targetGrid).MapID;
+                QueueDel(sourceMap);
+            }
         }
         // DS14-end
 
