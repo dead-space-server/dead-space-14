@@ -10,10 +10,10 @@ namespace Content.Shared.DeadSpace.Weapons.Ranged.Upgrades;
 /// Overheating from an upgrade (<see cref="GunUpgradeOverheatComponent"/>). The gun's shots and shot attempts reach
 /// the upgrade through GunUpgradeSystem's relay.
 /// </summary>
-public sealed class GunUpgradeOverheatSystem : EntitySystem
+public sealed partial class GunUpgradeOverheatSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

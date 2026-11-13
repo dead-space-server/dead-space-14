@@ -9,10 +9,10 @@ using Robust.Shared.Timing;
 namespace Content.Client.DeadSpace.Lavaland;
 
 /// <summary>Draws Bubblegum's walls of blood as the Circle's blink blood: drops churning over every tile.</summary>
-public sealed class LavalandBloodWallSystem : EntitySystem
+public sealed partial class LavalandBloodWallSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -27,7 +27,7 @@ public sealed class LavalandBloodWallSystem : EntitySystem
     }
 }
 
-public sealed class LavalandBloodWallOverlay : Overlay
+public sealed partial class LavalandBloodWallOverlay : Overlay
 {
     private const int Drops = 9;
     private const float FadeTime = 0.35f;

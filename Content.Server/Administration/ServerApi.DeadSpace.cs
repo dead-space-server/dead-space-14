@@ -19,9 +19,9 @@ public sealed partial class ServerApi
     private const int DefaultRoundStatsDays = 7;
     private const int MaxRoundStatsDays = 365;
 
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly ServerDbEntryManager _serverDbEntry = default!;
-    [Dependency] private readonly PlayTimeTrackingManager _playTimeTracking = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private ServerDbEntryManager _serverDbEntry = default!;
+    [Dependency] private PlayTimeTrackingManager _playTimeTracking = default!;
 
     /// <summary>
     /// Get players and active admins list
@@ -532,7 +532,7 @@ public sealed partial class ServerApi
         return string.IsNullOrWhiteSpace(value) ? "Unknown" : value;
     }
 
-    private sealed class RoundStatsResponse
+    private sealed partial class RoundStatsResponse
     {
         public required string Server { get; init; }
         public required DateTime From { get; init; }
@@ -542,14 +542,14 @@ public sealed partial class ServerApi
         public required Stat[] Maps { get; init; }
         public required Round[] Rounds { get; init; }
 
-        public sealed class Stat
+        public sealed partial class Stat
         {
             public required string Name { get; init; }
             public required int Count { get; init; }
             public required double Percent { get; init; }
         }
 
-        public sealed class Round
+        public sealed partial class Round
         {
             public required int RoundId { get; init; }
             public required DateTime StartedAt { get; init; }
@@ -568,25 +568,25 @@ public sealed partial class ServerApi
         public string? Reason { get; init; }
     }
 
-    private sealed class PlaytimeAddEntryBody
+    private sealed partial class PlaytimeAddEntryBody
     {
         public string? Tracker { get; init; }
         public required int Minutes { get; init; }
     }
 
-    private sealed class PlaytimeJobsResponse
+    private sealed partial class PlaytimeJobsResponse
     {
         public required string OverallTracker { get; init; }
         public required PlaytimeJobInfo[] Jobs { get; init; }
     }
 
-    private sealed class PlaytimeResponse
+    private sealed partial class PlaytimeResponse
     {
         public required PlaytimePlayerInfo Player { get; init; }
         public required long OverallSeconds { get; init; }
         public required TrackerTime[] Trackers { get; init; }
 
-        public sealed class TrackerTime
+        public sealed partial class TrackerTime
         {
             public required string Tracker { get; init; }
             public required long Seconds { get; init; }
@@ -594,13 +594,13 @@ public sealed partial class ServerApi
         }
     }
 
-    private sealed class PlaytimeAddResponse
+    private sealed partial class PlaytimeAddResponse
     {
         public required PlaytimePlayerInfo Player { get; init; }
         public required string? Reason { get; init; }
         public required Entry[] Entries { get; init; }
 
-        public sealed class Entry
+        public sealed partial class Entry
         {
             public required string Tracker { get; init; }
             public required long AddedSeconds { get; init; }
@@ -609,13 +609,13 @@ public sealed partial class ServerApi
         }
     }
 
-    private sealed class PlaytimePlayerInfo
+    private sealed partial class PlaytimePlayerInfo
     {
         public required Guid UserId { get; init; }
         public required string UserName { get; init; }
     }
 
-    private sealed class PlaytimeJobInfo
+    private sealed partial class PlaytimeJobInfo
     {
         public required string Id { get; init; }
         public required string Name { get; init; }
@@ -624,7 +624,7 @@ public sealed partial class ServerApi
         public required bool SetPreference { get; init; }
     }
 
-    private sealed class PlaytimeDepartmentInfo
+    private sealed partial class PlaytimeDepartmentInfo
     {
         public required string Id { get; init; }
         public required string Name { get; init; }

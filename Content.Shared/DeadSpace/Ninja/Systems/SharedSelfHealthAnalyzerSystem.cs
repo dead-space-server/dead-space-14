@@ -5,9 +5,9 @@ using Content.Shared.Actions;
 
 namespace Content.Shared.DeadSpace.Ninja.Systems;
 
-public abstract class SharedSelfHealthAnalyzerSystem : EntitySystem
+public abstract partial class SharedSelfHealthAnalyzerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
     public override void Initialize()
     {
         base.Initialize();

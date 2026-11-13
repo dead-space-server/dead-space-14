@@ -20,9 +20,9 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab
     [GenerateTypedNameReferences]
     public sealed partial class ERTCallWindow : DefaultWindow
     {
-        [Dependency] private readonly IEntityManager _entMan = default!;
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+        [Dependency] private IEntityManager _entMan = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IUserInterfaceManager _uiManager = default!;
 
         private static readonly Vector2 PreferredWindowSize = new(1080, 700);
         private static readonly Vector2 PreferredMinimumSize = new(900, 560);

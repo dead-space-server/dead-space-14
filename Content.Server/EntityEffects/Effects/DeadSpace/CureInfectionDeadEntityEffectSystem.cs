@@ -12,7 +12,7 @@ namespace Content.Server.EntityEffects.Effects.DeadSpace;
 /// </summary>
 public sealed partial class CureInfectionDeadEntityEffectSystem : EntityEffectSystem<InfectionDeadComponent, CureInfectionDead>
 {
-    [Dependency] private readonly InfectionDeadSystem _infectionDead = default!;
+    [Dependency] private InfectionDeadSystem _infectionDead = default!;
 
     protected override void Effect(Entity<InfectionDeadComponent> entity, ref EntityEffectEvent<CureInfectionDead> args)
     {

@@ -8,9 +8,9 @@ using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client._Donate.UI;
 
-public sealed class DonateShopUIController : UIController
+public sealed partial class DonateShopUIController : UIController
 {
-    [Dependency] private readonly IEntityManager _manager = default!;
+    [Dependency] private IEntityManager _manager = default!;
 
     private DonateShopWindow? _window;
 

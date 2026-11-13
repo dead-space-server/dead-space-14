@@ -19,12 +19,12 @@ namespace Content.Shared.Light.EntitySystems;
 public sealed partial class LightReplacerSystem : EntitySystem
 {
     // DS14-start: current engine baseline uses readonly IoC fields and explicit event subscriptions.
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly EntityProviderSystem _provider = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedPoweredLightSystem _poweredLight = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityProviderSystem _provider = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPoweredLightSystem _poweredLight = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private EntityQuery<LightBulbComponent> _lightBulbQuery;
 

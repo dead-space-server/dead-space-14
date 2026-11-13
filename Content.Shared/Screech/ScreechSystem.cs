@@ -13,10 +13,10 @@ namespace Content.Shared.Screech;
 
 public sealed partial class ScreechSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedEntityEffectsSystem _effects = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedEntityEffectsSystem _effects = default!;
 
     private EntityQuery<StatusEffectsComponent> _statusEffectsQuery; // DS14 - initialized explicitly on the current engine.
 

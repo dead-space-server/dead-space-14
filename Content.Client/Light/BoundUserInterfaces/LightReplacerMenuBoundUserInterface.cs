@@ -11,7 +11,7 @@ namespace Content.Client.Light.BoundUserInterfaces;
 [UsedImplicitly]
 public sealed partial class LightReplacerMenuBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!; // DS14: old IoC baseline
+    [Dependency] private IPrototypeManager _prototype = default!; // DS14: old IoC baseline
 
     private SimpleRadialMenu? _menu;
 

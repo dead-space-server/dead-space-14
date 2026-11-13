@@ -24,16 +24,16 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// Celestial is beaten. Can be turned off with <see cref="CCCCVars.LavalandParticles"/>;
 /// the cloud under the feet of a flight potion drinker is always shown, it tells that he walks over chasms.
 /// </summary>
-public sealed class LavalandParticleSystem : EntitySystem
+public sealed partial class LavalandParticleSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private const int MaxParticles = 600;
 

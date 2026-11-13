@@ -19,18 +19,18 @@ namespace Content.Server.DeadSpace.StationAI.Systems;
 /// Adjusts station AI vision supplied by cyborg cameras when the cyborg is critical, dead, or unpowered.
 /// Empty cyborgs intentionally remain valid cameras.
 /// </summary>
-public sealed class BorgCameraVisionSystem : EntitySystem
+public sealed partial class BorgCameraVisionSystem : EntitySystem
 {
     private const float PoweredRange = 4f;
     private const float UnpoweredRange = 2f;
     private const float CriticalVisibleTileChance = 0.95f;
     private static readonly TimeSpan PowerRefreshInterval = TimeSpan.FromSeconds(1);
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly SharedStationAiSystem _stationAi = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private SharedStationAiSystem _stationAi = default!;
 
     private TimeSpan _nextPowerRefresh;
 

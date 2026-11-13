@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Content.Server.Fluids.EntitySystems;
+using Robust.Shared.Maths;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
@@ -99,10 +101,16 @@ namespace Content.IntegrationTests.Tests.Fluids
             // Remove all tiles
             await server.WaitPost(() =>
             {
-                var tiles = mapSystem.GetAllTiles(grid.Owner, grid.Comp);
-                foreach (var tile in tiles)
+                // Collect first: clearing tiles while enumerating them empties chunks mid-walk.
+                var tiles = new List<Vector2i>();
+                foreach (var tile in mapSystem.GetAllTiles(grid.Owner, grid.Comp))
                 {
-                    mapSystem.SetTile(grid, tile.GridIndices, Tile.Empty);
+                    tiles.Add(tile.GridIndices);
+                }
+
+                foreach (var indices in tiles)
+                {
+                    mapSystem.SetTile(grid, indices, Tile.Empty);
                 }
             });
 

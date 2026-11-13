@@ -24,16 +24,16 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Follower;
 
-public sealed class FollowerSystem : EntitySystem
+public sealed partial class FollowerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TagSystem _tagSystem = default!;
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly SharedJointSystem _jointSystem = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physicsSystem = default!;
-    [Dependency] private readonly INetManager _netMan = default!;
-    [Dependency] private readonly ISharedAdminManager _adminManager = default!;
-    [Dependency] private readonly SharedViewSubscriberSystem _viewSubscriber = default!; // DS14
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private SharedJointSystem _jointSystem = default!;
+    [Dependency] private SharedPhysicsSystem _physicsSystem = default!;
+    [Dependency] private INetManager _netMan = default!;
+    [Dependency] private ISharedAdminManager _adminManager = default!;
+    [Dependency] private SharedViewSubscriberSystem _viewSubscriber = default!; // DS14
 
     private static readonly ProtoId<TagPrototype> ForceableFollowTag = "ForceableFollow";
     private static readonly ProtoId<TagPrototype> PreventGhostnadoWarpTag = "NotGhostnadoWarpable";
@@ -385,7 +385,7 @@ public sealed class FollowerSystem : EntitySystem
     }
 }
 
-public abstract class FollowEvent : EntityEventArgs
+public abstract partial class FollowEvent : EntityEventArgs
 {
     public EntityUid Following;
     public EntityUid Follower;
@@ -400,7 +400,7 @@ public abstract class FollowEvent : EntityEventArgs
 /// <summary>
 ///     Raised on an entity when it start following another entity.
 /// </summary>
-public sealed class StartedFollowingEntityEvent : FollowEvent
+public sealed partial class StartedFollowingEntityEvent : FollowEvent
 {
     public StartedFollowingEntityEvent(EntityUid following, EntityUid follower) : base(following, follower)
     {
@@ -410,7 +410,7 @@ public sealed class StartedFollowingEntityEvent : FollowEvent
 /// <summary>
 ///     Raised on an entity when it stops following another entity.
 /// </summary>
-public sealed class StoppedFollowingEntityEvent : FollowEvent
+public sealed partial class StoppedFollowingEntityEvent : FollowEvent
 {
     public StoppedFollowingEntityEvent(EntityUid following, EntityUid follower) : base(following, follower)
     {
@@ -420,7 +420,7 @@ public sealed class StoppedFollowingEntityEvent : FollowEvent
 /// <summary>
 ///     Raised on an entity when it start following another entity.
 /// </summary>
-public sealed class EntityStartedFollowingEvent : FollowEvent
+public sealed partial class EntityStartedFollowingEvent : FollowEvent
 {
     public EntityStartedFollowingEvent(EntityUid following, EntityUid follower) : base(following, follower)
     {
@@ -430,7 +430,7 @@ public sealed class EntityStartedFollowingEvent : FollowEvent
 /// <summary>
 ///     Raised on an entity when it starts being followed by another entity.
 /// </summary>
-public sealed class EntityStoppedFollowingEvent : FollowEvent
+public sealed partial class EntityStoppedFollowingEvent : FollowEvent
 {
     public EntityStoppedFollowingEvent(EntityUid following, EntityUid follower) : base(following, follower)
     {

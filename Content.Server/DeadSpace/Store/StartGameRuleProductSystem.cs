@@ -9,9 +9,9 @@ namespace Content.Server.DeadSpace.Store;
 /// Starts the game rule bought from a store (<see cref="StartGameRuleProductEvent"/>). The store has already checked the
 /// listing's conditions and taken the price on the server; a rule already running is not started twice.
 /// </summary>
-public sealed class StartGameRuleProductSystem : EntitySystem
+public sealed partial class StartGameRuleProductSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _ticker = default!;
+    [Dependency] private GameTicker _ticker = default!;
 
     public override void Initialize()
     {

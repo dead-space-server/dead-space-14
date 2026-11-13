@@ -11,12 +11,12 @@ using Content.Server.Atmos.EntitySystems;
 
 namespace Content.Server.DeadSpace.Necromorphs.Hive;
 
-public sealed class HiveSystem : EntitySystem
+public sealed partial class HiveSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedChargesSystem _charges = default!;
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedChargesSystem _charges = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
 
     public override void Initialize()
     {

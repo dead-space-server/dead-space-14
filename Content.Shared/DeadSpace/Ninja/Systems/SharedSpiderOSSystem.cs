@@ -12,11 +12,11 @@ namespace Content.Shared.DeadSpace.Ninja.Systems;
 
 public abstract partial class SharedSpiderOSSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedTransformSystem SharedTransform = default!;
-    [Dependency] protected readonly SharedSpaceNinjaSystem Ninja = default!;
-    [Dependency] protected readonly IPrototypeManager Proto = default!;
-    [Dependency] protected readonly InventorySystem Inventory = default!;
-    [Dependency] protected readonly PowerCellSystem PowerCell = default!;
+    [Dependency] protected SharedTransformSystem SharedTransform = default!;
+    [Dependency] protected SharedSpaceNinjaSystem Ninja = default!;
+    [Dependency] protected IPrototypeManager Proto = default!;
+    [Dependency] protected InventorySystem Inventory = default!;
+    [Dependency] protected PowerCellSystem PowerCell = default!;
 
     public const float RollbackDelaySeconds = 10f;
     public const float ConfirmTimeoutSeconds = 50f;

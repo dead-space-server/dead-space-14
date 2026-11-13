@@ -8,10 +8,10 @@ using Robust.Shared.Configuration;
 
 namespace Content.Client.DeadSpace.Audio;
 
-public sealed class ItemSoundAudioSystem : EntitySystem
+public sealed partial class ItemSoundAudioSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     private readonly HashSet<EntityUid> _pendingApply = new();
     private float _itemSoundsVolume = 1f;

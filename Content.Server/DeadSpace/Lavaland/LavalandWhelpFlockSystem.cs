@@ -19,15 +19,15 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// Flocks of little whelps (<see cref="LavalandWhelpFlockTriggerComponent"/>): they appear just off a player's
 /// screen, mill about, and the moment the player sees them the whole flock scatters in all directions and flies off.
 /// </summary>
-public sealed class LavalandWhelpFlockSystem : EntitySystem
+public sealed partial class LavalandWhelpFlockSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     private static readonly TimeSpan TriggerInterval = TimeSpan.FromSeconds(0.5);
 

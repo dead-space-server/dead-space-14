@@ -7,7 +7,7 @@ namespace Content.Shared.DeadSpace.Abilities.HipoHand;
 
 public sealed partial class SharedHipoHandSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

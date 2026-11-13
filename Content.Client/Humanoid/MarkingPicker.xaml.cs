@@ -20,9 +20,9 @@ public sealed partial class MarkingPicker : Control
 {
     private const float MarkingIconScale = 1.25f; // DS14
 
-    [Dependency] private readonly MarkingManager _markingManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private MarkingManager _markingManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
     private IClientSponsorsManager? _sponsorsManager; // DS14-sponsors
 
     private readonly SpriteSystem _sprite;

@@ -7,9 +7,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Actions;
 
-public sealed class ActionGateSystem : EntitySystem
+public sealed partial class ActionGateSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public void Set(EntityUid user, string id, IReadOnlyList<EntProtoId> prototypes, bool open)
     {
@@ -85,9 +85,9 @@ public sealed class ActionGateSystem : EntitySystem
     }
 }
 
-public sealed class ActionAvailabilitySystem : EntitySystem
+public sealed partial class ActionAvailabilitySystem : EntitySystem
 {
-    [Dependency] private readonly SharedChargesSystem _charges = default!;
+    [Dependency] private SharedChargesSystem _charges = default!;
 
     public bool IsAvailable(Entity<ActionComponent> action)
     {

@@ -9,10 +9,10 @@ namespace Content.Client.DeadSpace.StationAI.UI;
 ///     Initializes a <see cref="AICameraList"/> and updates it when new server messages are received.
 /// </summary>
 [UsedImplicitly]
-public sealed class AICameraListBoundUserInterface : BoundUserInterface
+public sealed partial class AICameraListBoundUserInterface : BoundUserInterface
 {
     public AICameraList? Window;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14
+    [Dependency] private IGameTiming _timing = default!; // DS14
 
     public AICameraListBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {

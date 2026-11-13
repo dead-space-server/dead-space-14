@@ -14,14 +14,14 @@ namespace Content.Shared.Ninja.Systems;
 /// <summary>
 /// Provides shared ninja API, handles being attacked revealing ninja and stops guns from shooting.
 /// </summary>
-public abstract class SharedSpaceNinjaSystem : EntitySystem
+public abstract partial class SharedSpaceNinjaSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedNinjaSuitSystem Suit = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
+    [Dependency] protected SharedNinjaSuitSystem Suit = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
     //DS14-start
-    [Dependency] protected readonly SharedBatterySystem Battery = default!;
-    [Dependency] protected readonly PowerCellSystem PowerCell = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] protected SharedBatterySystem Battery = default!;
+    [Dependency] protected PowerCellSystem PowerCell = default!;
+    [Dependency] private IRobustRandom _random = default!;
     //DS14-end
 
     public EntityQuery<SpaceNinjaComponent> NinjaQuery;

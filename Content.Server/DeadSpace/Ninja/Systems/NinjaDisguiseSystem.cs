@@ -22,20 +22,20 @@ using Content.Shared.Ninja.Systems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaDisguiseSystem : SharedNinjaDisguiseSystem
+public sealed partial class NinjaDisguiseSystem : SharedNinjaDisguiseSystem
 {
     private static readonly ProtoId<JobIconPrototype> JobIconNoId = "JobIconNoId";
 
-    [Dependency] private readonly SharedSpaceNinjaSystem _ninja = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IdentitySystem _identity = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedSpaceNinjaSystem _ninja = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IdentitySystem _identity = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
 
     private const float ScanRange = 1.5f;
 

@@ -12,13 +12,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.CodeLock;
 
-public sealed class CodeLockSystem : EntitySystem
+public sealed partial class CodeLockSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly LockSystem _lock = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private LockSystem _lock = default!;
 
     public override void Initialize()
     {

@@ -49,7 +49,7 @@ namespace Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 /// and only with something that has <see cref="GrapplingGunComponent"/>.
 /// The caves' light follows the lavaland day: day - deep night, night - night, deep night - the caves glow.
 /// </summary>
-public sealed class LavalandChromiteCavesSystem : EntitySystem
+public sealed partial class LavalandChromiteCavesSystem : EntitySystem
 {
     private const int BoundaryBatchSize = 256;
 
@@ -63,28 +63,28 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
     private TimeSpan _nextBoundaryCheck;
     private const int HookSearchDepth = 3;
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly BiomeSystem _biome = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
-    [Dependency] private readonly LavalandBossArenaSystem _bossArena = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly LavalandPitDropSystem _pitDrop = default!;
-    [Dependency] private readonly LavalandFaunaRaidSystem _raid = default!;
-    [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private BiomeSystem _biome = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinition = default!;
+    [Dependency] private LavalandBossArenaSystem _bossArena = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private LavalandPitDropSystem _pitDrop = default!;
+    [Dependency] private LavalandFaunaRaidSystem _raid = default!;
+    [Dependency] private LavalandPitLandingSystem _landing = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly TimeSpan ModeInterval = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan ExitCheckInterval = TimeSpan.FromSeconds(0.5);

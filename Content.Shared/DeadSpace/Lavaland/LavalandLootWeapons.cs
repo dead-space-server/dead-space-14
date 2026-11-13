@@ -43,9 +43,9 @@ public sealed partial class LavalandLavaStaffDoAfterEvent : DoAfterEvent
     public override DoAfterEvent Clone() => this;
 }
 
-public sealed class LavalandCleavingSawSystem : EntitySystem
+public sealed partial class LavalandCleavingSawSystem : EntitySystem
 {
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
 
     public override void Initialize()
     {

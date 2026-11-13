@@ -11,13 +11,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.TheCircle.ArchitectArm;
 
-public sealed class ArchitectArmSystem : EntitySystem
+public sealed partial class ArchitectArmSystem : EntitySystem
 {
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private ArchitectArmWindupOverlay _windup = default!;
 

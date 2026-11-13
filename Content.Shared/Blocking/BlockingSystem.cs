@@ -38,8 +38,8 @@ public sealed partial class BlockingSystem : EntitySystem
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private TurfSystem _turf = default!;
     // DS14-start
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
     // DS14-end
 
     [Dependency] private EntityQuery<BlockingComponent> _blockQuery = default!;

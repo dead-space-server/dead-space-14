@@ -7,9 +7,9 @@ using Robust.Shared.Console;
 namespace Content.Server.DeadSpace.Administration.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class TickLoadCommand : IConsoleCommand
+public sealed partial class TickLoadCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "tickload";
     public string Description => "Show which systems spend server tick time.";

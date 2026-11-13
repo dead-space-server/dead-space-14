@@ -14,13 +14,13 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Client.DeadSpace.SignBoard;
 
-public sealed class SignBoardVisualsSystem : EntitySystem
+public sealed partial class SignBoardVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly ItemSystem _itemSystem = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private ItemSystem _itemSystem = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private Angle _lastEyeAngle;
 

@@ -24,16 +24,16 @@ using Content.Shared.DeadSpace.Necromorphs.InfectionDead;
 
 namespace Content.Server.DeadSpace.HardsuitIdentification;
 
-public sealed class HardsuitIdentificationSystem : EntitySystem
+public sealed partial class HardsuitIdentificationSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly VocalSystem _vocal = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedSubdermalImplantSystem _implants = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private VocalSystem _vocal = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedSubdermalImplantSystem _implants = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {

@@ -24,19 +24,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Administration.GamePreset;
 
-public sealed class GamePresetServerSystem : EntitySystem
+public sealed partial class GamePresetServerSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IVoteManager _voteManager = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IVoteManager _voteManager = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
 
     private ISawmill _sawmill = default!;
 

@@ -16,14 +16,14 @@ using Robust.Shared.Timing;
 namespace Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 
 /// <inheritdoc cref="NecroobeliskShardComponent"/>
-public sealed class NecroobeliskShardSystem : EntitySystem
+public sealed partial class NecroobeliskShardSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedSanitySystem _sanity = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedSanitySystem _sanity = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _inRange = new();
 

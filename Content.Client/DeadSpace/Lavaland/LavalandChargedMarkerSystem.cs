@@ -19,15 +19,15 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// The kinetic machete's charged marker on the client: the right button in combat mode starts and releases the charge
 /// (predicted, the server spawns the bolt), and a ring by the cursor fills up while it is held.
 /// </summary>
-public sealed class LavalandChargedMarkerSystem : SharedLavalandChargedMarkerSystem
+public sealed partial class LavalandChargedMarkerSystem : SharedLavalandChargedMarkerSystem
 {
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly InputSystem _inputSystem = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private InputSystem _inputSystem = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private bool _wasDown;
     private EntityUid? _charging;
@@ -83,7 +83,7 @@ public sealed class LavalandChargedMarkerSystem : SharedLavalandChargedMarkerSys
 }
 
 /// <summary>A ring by the cursor: how far the machete's mark is charged, red when it is about to blow up.</summary>
-public sealed class LavalandChargedMarkerOverlay : Overlay
+public sealed partial class LavalandChargedMarkerOverlay : Overlay
 {
     private readonly IEntityManager _entities;
     private readonly IGameTiming _timing;

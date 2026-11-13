@@ -7,7 +7,7 @@ namespace Content.Benchmarks
     // To actually run this benchmark you'll have to make DependencyCollection public so it's accessible.
 
     [Virtual]
-    public class DependencyInjectBenchmark
+    public partial class DependencyInjectBenchmark
     {
         [Params(InjectMode.Reflection, InjectMode.DynamicMethod)]
         public InjectMode Mode { get; set; }
@@ -51,19 +51,19 @@ namespace Content.Benchmarks
             DynamicMethod
         }
 
-        private sealed class X1 { }
-        private sealed class X2 { }
-        private sealed class X3 { }
-        private sealed class X4 { }
-        private sealed class X5 { }
+        private sealed partial class X1 { }
+        private sealed partial class X2 { }
+        private sealed partial class X3 { }
+        private sealed partial class X4 { }
+        private sealed partial class X5 { }
 
-        private sealed class TestDummy
+        private sealed partial class TestDummy
         {
-            [Dependency] private readonly X1 _x1;
-            [Dependency] private readonly X2 _x2;
-            [Dependency] private readonly X3 _x3;
-            [Dependency] private readonly X4 _x4;
-            [Dependency] private readonly X5 _x5;
+            [Dependency] private X1 _x1;
+            [Dependency] private X2 _x2;
+            [Dependency] private X3 _x3;
+            [Dependency] private X4 _x4;
+            [Dependency] private X5 _x5;
         }
     }
 }

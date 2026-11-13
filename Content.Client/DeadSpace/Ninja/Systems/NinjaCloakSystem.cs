@@ -9,10 +9,10 @@ using Robust.Client.Animations;
 
 namespace Content.Client.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaCloakSystem : SharedNinjaCloakSystem
+public sealed partial class NinjaCloakSystem : SharedNinjaCloakSystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
 
     private readonly Dictionary<EntityUid, EntityUid> _hidden = new();
 

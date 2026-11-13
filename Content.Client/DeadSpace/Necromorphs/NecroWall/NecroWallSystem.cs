@@ -6,9 +6,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.Revenant;
 
-public sealed class NecroWallSystem : EntitySystem
+public sealed partial class NecroWallSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     
     public override void Initialize()
     {

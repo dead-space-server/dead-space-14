@@ -14,14 +14,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryHeadBrainSystem : EntitySystem
+public sealed partial class SurgeryHeadBrainSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
 
     public override void Initialize()
     {

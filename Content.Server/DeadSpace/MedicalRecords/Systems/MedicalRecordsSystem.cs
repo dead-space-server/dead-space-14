@@ -19,12 +19,12 @@ namespace Content.Server.DeadSpace.MedicalRecords.Systems;
 /// <c>GeneralStationRecord</c>, and the history-editing logic the console system calls into. No
 /// permission checking happens here - <c>MedicalRecordsConsoleSystem</c> checks every action first.
 /// </summary>
-public sealed class MedicalRecordsSystem : SharedMedicalRecordsSystem
+public sealed partial class MedicalRecordsSystem : SharedMedicalRecordsSystem
 {
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly StationRecordsSystem _records = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     public override void Initialize()
     {

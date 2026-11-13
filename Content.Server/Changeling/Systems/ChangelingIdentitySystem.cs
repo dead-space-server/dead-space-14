@@ -14,9 +14,9 @@ namespace Content.Server.Changeling.Systems;
 public sealed partial class ChangelingIdentitySystem : SharedChangelingIdentitySystem
 {
     // DS14-start
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     private static readonly EntProtoId ChangelingRule = "Changeling";
     // DS14-end

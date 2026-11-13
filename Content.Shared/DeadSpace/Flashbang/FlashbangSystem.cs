@@ -19,14 +19,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Flashbang;
 
-public sealed class FlashbangSystem : XOnTriggerSystem<FlashbangComponent>
+public sealed partial class FlashbangSystem : XOnTriggerSystem<FlashbangComponent>
 {
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     private readonly HashSet<EntityUid> _entSet = new();
 

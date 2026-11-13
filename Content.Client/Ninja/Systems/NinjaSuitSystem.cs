@@ -7,13 +7,13 @@ using Robust.Client.GameObjects; //DS14
 
 namespace Content.Client.Ninja.Systems;
 
-public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
+public sealed partial class NinjaSuitSystem : SharedNinjaSuitSystem
 {
     //DS14-start
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 

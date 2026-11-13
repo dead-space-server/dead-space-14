@@ -13,7 +13,7 @@ namespace Content.Shared.Botany.Systems;
 public sealed partial class BotanySystem
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
+    [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
     // DS14-end
 
     private void OnProduceExamined(Entity<ProduceComponent> ent, ref ExaminedEvent args)

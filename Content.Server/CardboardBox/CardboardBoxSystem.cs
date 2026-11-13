@@ -18,17 +18,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CardboardBox;
 
-public sealed class CardboardBoxSystem : SharedCardboardBoxSystem
+public sealed partial class CardboardBoxSystem : SharedCardboardBoxSystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedStealthSystem _stealth = default!;
-    [Dependency] private readonly EntityStorageSystem _storage = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly EntityManager _entity = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedStealthSystem _stealth = default!;
+    [Dependency] private EntityStorageSystem _storage = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private EntityManager _entity = default!;
     // DS14-start - #43532 is adapted to the current server-side cardboard-box system.
-    [Dependency] private readonly VehicleSystem _vehicle = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private VehicleSystem _vehicle = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     // DS14-end
 
     public override void Initialize()

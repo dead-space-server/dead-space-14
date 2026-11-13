@@ -10,7 +10,7 @@ namespace Content.Shared.EntityEffects.Effects.Botany;
 public sealed partial class PlantMutateHarvestEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantMutateHarvest>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantHarvestSystem _plantHarvest = default!;
+    [Dependency] private PlantHarvestSystem _plantHarvest = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantMutateHarvest> args)

@@ -12,15 +12,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling
 {
-    public sealed class ShadowlingThunderstormSystem : EntitySystem
+    public sealed partial class ShadowlingThunderstormSystem : EntitySystem
     {
-        [Dependency] private readonly SharedActionsSystem _actions = default!;
-        [Dependency] private readonly MobStateSystem _mobState = default!;
-        [Dependency] private readonly EntityLookupSystem _lookup = default!;
-        [Dependency] private readonly BeamSystem _beam = default!;
-        [Dependency] private readonly SharedStunSystem _stun = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!;
-        [Dependency] private readonly DamageableSystem _damageable = default!;
+        [Dependency] private SharedActionsSystem _actions = default!;
+        [Dependency] private MobStateSystem _mobState = default!;
+        [Dependency] private EntityLookupSystem _lookup = default!;
+        [Dependency] private BeamSystem _beam = default!;
+        [Dependency] private SharedStunSystem _stun = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
+        [Dependency] private DamageableSystem _damageable = default!;
 
         public override void Initialize()
         {

@@ -11,7 +11,7 @@ namespace Content.Shared.Actions;
 /// </summary>
 public sealed partial class PopupOnActionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

@@ -13,7 +13,7 @@ namespace Content.Client.Options.UI.Tabs;
 [GenerateTypedNameReferences]
 public sealed partial class GraphicsTab : Control
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     public GraphicsTab()
     {
@@ -100,7 +100,7 @@ public sealed partial class GraphicsTab : Control
         ViewportWidthSlider.Slider.MaxValue = max;
     }
 
-    private sealed class OptionLightingQuality : BaseOption
+    private sealed partial class OptionLightingQuality : BaseOption
     {
         private readonly IConfigurationManager _cfg;
         private readonly OptionDropDown _dropDown;
@@ -194,7 +194,7 @@ public sealed partial class GraphicsTab : Control
         }
     }
 
-    private sealed class OptionFullscreen : BaseOptionCVar<int>
+    private sealed partial class OptionFullscreen : BaseOptionCVar<int>
     {
         private readonly CheckBox _checkBox;
 
@@ -218,7 +218,7 @@ public sealed partial class GraphicsTab : Control
         }
     }
 
-    private sealed class OptionIntegerScaling : BaseOptionCVar<int>
+    private sealed partial class OptionIntegerScaling : BaseOptionCVar<int>
     {
         private readonly CheckBox _checkBox;
 

@@ -21,14 +21,14 @@ namespace Content.Server.Prayer;
 /// <remarks>
 /// Rain is a professional developer and this did not take 2 PRs to fix subtle messages
 /// </remarks>
-public sealed class PrayerSystem : EntitySystem
+public sealed partial class PrayerSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
-    [Dependency] private readonly AudioSystem _audioSystem = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private QuickDialogSystem _quickDialog = default!;
+    [Dependency] private AudioSystem _audioSystem = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
 
 
     public override void Initialize()

@@ -11,7 +11,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgerySlimeRegrowSystem : EntitySystem
+public sealed partial class SurgerySlimeRegrowSystem : EntitySystem
 {
     private static readonly LimbZone[] Order =
     {
@@ -26,12 +26,12 @@ public sealed class SurgerySlimeRegrowSystem : EntitySystem
         LimbZone.FootRight,
     };
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

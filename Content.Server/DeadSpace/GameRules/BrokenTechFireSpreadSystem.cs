@@ -21,14 +21,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.GameRules;
 
-public sealed class BrokenTechFireSpreadSystem : EntitySystem
+public sealed partial class BrokenTechFireSpreadSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     private const int FireProcessBudget = 64;
     private static readonly TimeSpan WaterCheckInterval = TimeSpan.FromSeconds(1);

@@ -26,8 +26,8 @@ namespace Content.Client.DeadSpace.Ninja.UI;
 [GenerateTypedNameReferences]
 public sealed partial class NinjaDisguiseWindow : FancyWindow
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private readonly SpriteSystem _spriteSystem;
     private readonly HumanoidAppearanceSystem _humanoid;

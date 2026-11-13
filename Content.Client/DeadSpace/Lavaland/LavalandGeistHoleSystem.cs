@@ -14,12 +14,12 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// Draws a geist sunk in its hole: everything of it below the ground line is cut away by a shader on each of its
 /// layers (clothes included), so only its upper half shows - rising out of it or sinking back in.
 /// </summary>
-public sealed class LavalandGeistHoleSystem : EntitySystem
+public sealed partial class LavalandGeistHoleSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SpriteTreeSystem _spriteTree = default!;
 
     private static readonly ProtoId<ShaderPrototype> CutShader = "LavalandGeistHoleCut";
 

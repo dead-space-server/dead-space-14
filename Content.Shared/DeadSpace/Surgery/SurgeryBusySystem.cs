@@ -5,9 +5,9 @@ using Content.Shared.Movement.Events;
 
 namespace Content.Shared.DeadSpace.Surgery;
 
-public sealed class SurgeryBusySystem : EntitySystem
+public sealed partial class SurgeryBusySystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
 
     public override void Initialize()
     {

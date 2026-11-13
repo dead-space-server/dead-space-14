@@ -21,10 +21,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Traitor.Objectives;
 
-public sealed class TraitorUltraSabotageConditionSystem : EntitySystem
+public sealed partial class TraitorUltraSabotageConditionSystem : EntitySystem
 {
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Initialize()
     {

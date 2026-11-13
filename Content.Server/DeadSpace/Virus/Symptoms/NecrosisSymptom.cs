@@ -14,10 +14,10 @@ using Content.Shared.DeadSpace.Virus.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class NecrosisSymptom : VirusSymptomBase
+public sealed partial class NecrosisSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private EntityManager _entityManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
     public override VirusSymptom Type => VirusSymptom.Necrosis;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "NecrosisSymptom";
     private static readonly ProtoId<DamageTypePrototype> NecrosisDamageType = "Cellular";

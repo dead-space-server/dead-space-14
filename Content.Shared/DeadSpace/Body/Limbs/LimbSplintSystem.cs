@@ -10,14 +10,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
-public sealed class LimbSplintSystem : EntitySystem
+public sealed partial class LimbSplintSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private static readonly LimbZone[] Splintable =
     {

@@ -12,10 +12,10 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Server.DeadSpace.Physics;
 
-public sealed class MobSweepSystem : EntitySystem
+public sealed partial class MobSweepSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private const float MinSpeed = 9f;
     private const float DefaultRadius = 0.35f;

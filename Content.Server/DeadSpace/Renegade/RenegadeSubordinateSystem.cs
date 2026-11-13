@@ -18,13 +18,13 @@ using Content.Shared.Implants;
 
 namespace Content.Server.DeadSpace.Renegade;
 
-public sealed class RenegadeSubordinateSystem : EntitySystem
+public sealed partial class RenegadeSubordinateSystem : EntitySystem
 {
-    [Dependency] private readonly SharedStunSystem _sharedStun = default!;
-    [Dependency] private readonly RenegadeSubmissionConditionSystem _RenegadeSubmissionConditionSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedSubdermalImplantSystem _sharedSubdermalImplantSystem = default!;
+    [Dependency] private SharedStunSystem _sharedStun = default!;
+    [Dependency] private RenegadeSubmissionConditionSystem _RenegadeSubmissionConditionSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedSubdermalImplantSystem _sharedSubdermalImplantSystem = default!;
 
     private EntityQuery<RenegadeSubmissionConditionComponent> _objQuery;
 

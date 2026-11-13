@@ -18,14 +18,14 @@ namespace Content.Shared.DeadSpace.ComponentModeSwitcher;
 /// Generic mode switcher driven by an arbitrary list of component registries.
 /// The mode of the item in the active hand is cycled with its dedicated keybind.
 /// </summary>
-public sealed class ComponentModeSwitcherSystem : EntitySystem
+public sealed partial class ComponentModeSwitcherSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RCDSystem _rcd = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RCDSystem _rcd = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
 
     public override void Initialize()
     {
@@ -120,7 +120,7 @@ public sealed class ComponentModeSwitcherSystem : EntitySystem
         foreach (var (name, entry) in state)
         {
             var registration = Factory.GetRegistration(name);
-            if (!EntityManager.TryGetComponent(uid, registration.Type, out var component))
+            if (!TryComp(uid, registration.Type, out var component))
                 continue;
 
             _serialization.CopyTo(entry.Component, ref component, notNullableOverride: true);
@@ -135,7 +135,7 @@ public sealed class ComponentModeSwitcherSystem : EntitySystem
         foreach (var (name, _) in components)
         {
             var registration = Factory.GetRegistration(name);
-            if (!EntityManager.TryGetComponent(uid, registration.Type, out var component))
+            if (!TryComp(uid, registration.Type, out var component))
                 continue;
 
             var copy = (IComponent) _serialization.CreateCopy(component, notNullableOverride: true);

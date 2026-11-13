@@ -9,10 +9,10 @@ namespace Content.Shared.Light.EntitySystems;
 /// <summary>
 /// System for assigning random values to <see cref="SharedPointLightComponent"/> variables when given <see cref="RandomPointLightComponent"/>
 /// </summary>
-public sealed class RandomPointLightSystem : EntitySystem
+public sealed partial class RandomPointLightSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPointLightSystem _light = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
 
     public override void Initialize()
     {

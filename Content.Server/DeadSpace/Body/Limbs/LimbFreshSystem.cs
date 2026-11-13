@@ -13,11 +13,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.DeadSpace.Body.Limbs;
 
-public sealed class LimbFreshSystem : EntitySystem
+public sealed partial class LimbFreshSystem : EntitySystem
 {
     public const float SlowRate = 0.1f;
 
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {

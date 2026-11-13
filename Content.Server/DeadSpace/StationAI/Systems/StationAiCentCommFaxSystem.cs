@@ -21,22 +21,22 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.StationAI.Systems;
 
-public sealed class StationAiCentCommFaxSystem : EntitySystem
+public sealed partial class StationAiCentCommFaxSystem : EntitySystem
 {
     private const string CentCommFaxPrototype = "FaxMachineCentcom";
     private const string SourceAddress = "station-ai-centcomm-uplink";
     private const string PaperPrototype = "PaperPrintedCentcomm";
     private const string StampState = "paper_stamp-centcom";
 
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly FaxSystem _fax = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly StationAiSystem _stationAi = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private FaxSystem _fax = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private StationAiSystem _stationAi = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

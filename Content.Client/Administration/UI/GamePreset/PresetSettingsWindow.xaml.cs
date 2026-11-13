@@ -12,7 +12,7 @@ namespace Content.Client.Administration.UI.GamePreset;
 [GenerateTypedNameReferences]
 public sealed partial class PresetSettingsWindow : DefaultWindow
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private GamePresetClientSystem _system = default!;
     private List<string> _currentWhitelist = new();

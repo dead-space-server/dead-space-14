@@ -18,19 +18,19 @@ using Robust.Shared.Serialization.Manager;
 
 namespace Content.Server.DeadSpace.Attachments;
 
-public sealed class AttachmentSystem : SharedAttachmentSystem
+public sealed partial class AttachmentSystem : SharedAttachmentSystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly SharedEntityEffectsSystem _effects = default!;
-    [Dependency] private readonly SharedPointLightSystem _light = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly Content.Shared.PowerCell.PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly Content.Shared.Power.EntitySystems.SharedBatterySystem _battery = default!;
-    [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private SharedEntityEffectsSystem _effects = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private Content.Shared.PowerCell.PowerCellSystem _powerCell = default!;
+    [Dependency] private Content.Shared.Power.EntitySystems.SharedBatterySystem _battery = default!;
+    [Dependency] private Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
 
     private readonly List<EntityUid> _expiredShields = new();
 
@@ -232,7 +232,7 @@ public sealed class AttachmentSystem : SharedAttachmentSystem
         foreach (var name in remove.Keys)
         {
             var type = Factory.GetRegistration(name).Type;
-            if (!EntityManager.TryGetComponent(holder, type, out var existing))
+            if (!TryComp(holder, type, out var existing))
                 continue;
 
             applied.Saved.Add(_serialization.CreateCopy(existing, notNullableOverride: true));
@@ -242,7 +242,7 @@ public sealed class AttachmentSystem : SharedAttachmentSystem
         foreach (var (name, entry) in add)
         {
             var type = Factory.GetRegistration(name).Type;
-            if (EntityManager.TryGetComponent(holder, type, out var existing))
+            if (TryComp(holder, type, out var existing))
                 applied.Saved.Add(_serialization.CreateCopy(existing, notNullableOverride: true));
             else
                 applied.Added.Add(name);
@@ -270,7 +270,7 @@ public sealed class AttachmentSystem : SharedAttachmentSystem
             foreach (var name in applied.Added)
             {
                 var type = Factory.GetRegistration(name).Type;
-                if (EntityManager.TryGetComponent(holder, type, out var added))
+                if (TryComp(holder, type, out var added))
                     RemComp(holder, added);
             }
 

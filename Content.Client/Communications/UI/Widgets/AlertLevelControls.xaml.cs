@@ -11,7 +11,7 @@ namespace Content.Client.Communications.UI.Widgets;
 public sealed partial class AlertLevelControls : BoxContainer
 {
     // DS14-start - the current engine still uses the pre-source-generator IoC pattern.
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
     // DS14-end
 
     private bool _alertLevelSelectable;

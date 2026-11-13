@@ -6,7 +6,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Sandevistan;
 
-public sealed class SandevistanBodyVisualSystem : EntitySystem
+public sealed partial class SandevistanBodyVisualSystem : EntitySystem
 {
     private static readonly ResPath SpritePath =
         new("/Textures/_DeadSpace/Mobs/Effects/sandevistan.rsi");
@@ -14,7 +14,7 @@ public sealed class SandevistanBodyVisualSystem : EntitySystem
     private const string SpriteState = "body";
     private const string OuterClothingSlot = "outerClothing";
 
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

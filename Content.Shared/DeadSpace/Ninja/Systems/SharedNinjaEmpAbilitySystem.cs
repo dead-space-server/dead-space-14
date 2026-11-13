@@ -9,14 +9,14 @@ using Content.Shared.Ninja.Systems;
 
 namespace Content.Shared.DeadSpace.Ninja.Systems;
 
-public sealed class SharedNinjaEmpAbilitySystem : EntitySystem
+public sealed partial class SharedNinjaEmpAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedEmpSystem _emp = default!;
-    [Dependency] private readonly SharedSpaceNinjaSystem _ninja = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedEmpSystem _emp = default!;
+    [Dependency] private SharedSpaceNinjaSystem _ninja = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private INetManager _net = default!;
     public override void Initialize()
     {
         base.Initialize();

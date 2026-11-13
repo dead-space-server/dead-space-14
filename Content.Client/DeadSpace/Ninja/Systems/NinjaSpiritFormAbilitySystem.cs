@@ -6,9 +6,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaSpiritFormSystem : SharedNinjaSpiritFormSystem
+public sealed partial class NinjaSpiritFormSystem : SharedNinjaSpiritFormSystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private readonly Dictionary<EntityUid, EntityUid> _tinted = new();
 

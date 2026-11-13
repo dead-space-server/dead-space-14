@@ -9,7 +9,7 @@ namespace Content.Server.DeadSpace.Arkalyse;
 
 public sealed partial class ArkalyseGlovesSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {

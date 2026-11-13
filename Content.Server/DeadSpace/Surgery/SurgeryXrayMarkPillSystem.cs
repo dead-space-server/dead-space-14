@@ -8,14 +8,14 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryXrayMarkPillSystem : EntitySystem
+public sealed partial class SurgeryXrayMarkPillSystem : EntitySystem
 {
     private static readonly EntProtoId Shard = "SurgeryXrayShard";
 
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SurgeryCavitySystem _cavity = default!;
-    [Dependency] private readonly SurgeryInfectionSystem _infection = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SurgeryCavitySystem _cavity = default!;
+    [Dependency] private SurgeryInfectionSystem _infection = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

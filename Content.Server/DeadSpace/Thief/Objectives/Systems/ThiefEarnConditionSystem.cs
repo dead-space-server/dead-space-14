@@ -10,9 +10,9 @@ namespace Content.Server.DeadSpace.Thief.Objectives.Systems;
 /// currently carried as physical dirty credits (dCR) somewhere in the thief's
 /// inventory — exactly like steal objectives count items on person.
 /// </summary>
-public sealed class ThiefEarnConditionSystem : EntitySystem
+public sealed partial class ThiefEarnConditionSystem : EntitySystem
 {
-    [Dependency] private readonly ThiefProgramSystem _thiefProgram = default!;
+    [Dependency] private ThiefProgramSystem _thiefProgram = default!;
 
     public override void Initialize()
     {

@@ -21,7 +21,7 @@ using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
+public sealed partial class LavalandNecropolisTendrilPlacementSystem : EntitySystem
 {
     private const int InitialSpawnBatchSize = 2;
     private const float FtlLandingAreaPadding = 16f;
@@ -40,14 +40,14 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         new(0, -1),
     ];
 
-    [Dependency] private readonly BiomeSystem _biome = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly LavalandSecretBossSystem _secretBoss = default!;
+    [Dependency] private BiomeSystem _biome = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private LavalandSecretBossSystem _secretBoss = default!;
 
     private readonly Dictionary<EntProtoId, int> _counts = new();
     private readonly List<Vector2i> _placed = new();

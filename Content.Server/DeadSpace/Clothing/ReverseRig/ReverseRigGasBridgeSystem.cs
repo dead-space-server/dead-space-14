@@ -14,7 +14,7 @@ namespace Content.Server.DeadSpace.Clothing.ReverseRig;
 ///     is used both for breathing (internals) and the jetpack. Every tick this system tops the buffer up from
 ///     the oxygen tank inserted in the backpack's item slot, making that tank the actual gas source.
 /// </summary>
-public sealed class ReverseRigGasBridgeSystem : EntitySystem
+public sealed partial class ReverseRigGasBridgeSystem : EntitySystem
 {
     public const string TankSlotId = "sor-tank";
 
@@ -31,8 +31,8 @@ public sealed class ReverseRigGasBridgeSystem : EntitySystem
     /// </summary>
     private const float CompositionTolerance = 0.05f;
 
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
 
     public override void Initialize()
     {

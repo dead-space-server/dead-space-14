@@ -20,12 +20,12 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// The deep night over a chasm: the countdown over the own head, and the shadow rising from the chasm that drags
 /// its victim down - a dark pool spreading under him, tendrils winding up, the doll darkening and sinking.
 /// </summary>
-public sealed class LavalandShadowClientSystem : EntitySystem
+public sealed partial class LavalandShadowClientSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SpriteTreeSystem _spriteTree = default!;
 
     private const string GrabKey = "lavaland-shadow-grab";
 
@@ -139,7 +139,7 @@ public sealed class LavalandShadowClientSystem : EntitySystem
 }
 
 /// <summary>Countdown over the own head (screen) and the shadow pool with its tendrils (world).</summary>
-public sealed class LavalandShadowOverlay : Overlay
+public sealed partial class LavalandShadowOverlay : Overlay
 {
     private readonly IEntityManager _entities;
     private readonly IPlayerManager _player;

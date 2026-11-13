@@ -19,19 +19,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaInfoScannerSystem : SharedNinjaInfoScannerSystem
+public sealed partial class NinjaInfoScannerSystem : SharedNinjaInfoScannerSystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly NinjaInfoObjectiveSystem _objectiveSystem = default!;
-    [Dependency] private readonly NinjaInfoConsoleSystem _infoConsoleSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedDeviceLinkSystem _deviceLink = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private NinjaInfoObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private NinjaInfoConsoleSystem _infoConsoleSystem = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedDeviceLinkSystem _deviceLink = default!;
 
     public override void Initialize()
     {

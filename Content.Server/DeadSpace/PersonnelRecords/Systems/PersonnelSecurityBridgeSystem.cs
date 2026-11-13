@@ -23,9 +23,9 @@ namespace Content.Server.DeadSpace.PersonnelRecords.Systems;
 /// texts). This system deliberately does not send a second one - doing so per §2.8's phrasing
 /// literally would double every Security announcement for the same event.
 /// </summary>
-public sealed class PersonnelSecurityBridgeSystem : EntitySystem
+public sealed partial class PersonnelSecurityBridgeSystem : EntitySystem
 {
-    [Dependency] private readonly CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private CriminalRecordsSystem _criminalRecords = default!;
 
     public override void Initialize()
     {

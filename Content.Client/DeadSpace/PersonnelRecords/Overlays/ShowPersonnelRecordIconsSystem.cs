@@ -13,9 +13,9 @@ namespace Content.Client.DeadSpace.PersonnelRecords.Overlays;
 /// Mirrors <c>Content.Client.Overlays.ShowCriminalRecordIconsSystem</c> exactly, for the
 /// Personnel Records HUD layer instead of the criminal one.
 /// </summary>
-public sealed class ShowPersonnelRecordIconsSystem : EquipmentHudSystem<ShowPersonnelRecordIconsComponent>
+public sealed partial class ShowPersonnelRecordIconsSystem : EquipmentHudSystem<ShowPersonnelRecordIconsComponent>
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

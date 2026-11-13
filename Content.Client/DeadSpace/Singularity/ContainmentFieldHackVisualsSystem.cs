@@ -9,12 +9,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Singularity;
 
-public sealed class ContainmentFieldHackVisualsSystem : EntitySystem
+public sealed partial class ContainmentFieldHackVisualsSystem : EntitySystem
 {
     private static readonly ProtoId<ShaderPrototype> HackShader = "ContainmentFieldHack";
 
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly Dictionary<EntityUid, ShaderInstance> _shaders = new();
 

@@ -72,14 +72,14 @@ public sealed partial class LavalandPipeSliderComponent : Component
 
 /// <summary>Alt + left click on a pipe: hop on it, or hop off while sliding.</summary>
 [Serializable, NetSerializable]
-public sealed class LavalandPipeSlideRequestEvent(NetEntity? pipe) : EntityEventArgs
+public sealed partial class LavalandPipeSlideRequestEvent(NetEntity? pipe) : EntityEventArgs
 {
     public NetEntity? Pipe = pipe;
 }
 
-public sealed class SharedLavalandPipeSlideSystem : EntitySystem
+public sealed partial class SharedLavalandPipeSlideSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlocker.ActionBlockerSystem _blocker = default!;
+    [Dependency] private ActionBlocker.ActionBlockerSystem _blocker = default!;
 
     public override void Initialize()
     {

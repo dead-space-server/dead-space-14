@@ -45,27 +45,27 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// Active abilities of lavaland loot weapons: Cain and Abel dagger throws, the possessed soulscythe
 /// and concussive gauntlets mining rock on contact.
 /// </summary>
-public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
+public sealed partial class LavalandLootWeaponAbilitiesSystem : EntitySystem
 {
-    [Dependency] private readonly Content.Shared.Actions.SharedActionsSystem _actions = default!;
-    [Dependency] private readonly BlinkSystem _blink = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly GatherableSystem _gatherable = default!;
-    [Dependency] private readonly GunSystem _gun = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly LavalandLootWeaponsSystem _weapons = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly LavalandCainAndAbelLookSystem _cainAbelLook = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
+    [Dependency] private Content.Shared.Actions.SharedActionsSystem _actions = default!;
+    [Dependency] private BlinkSystem _blink = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private GatherableSystem _gatherable = default!;
+    [Dependency] private GunSystem _gun = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private LavalandLootWeaponsSystem _weapons = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private LavalandCainAndAbelLookSystem _cainAbelLook = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private Robust.Shared.Containers.SharedContainerSystem _containers = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 

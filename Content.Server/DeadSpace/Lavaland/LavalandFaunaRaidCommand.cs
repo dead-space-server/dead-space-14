@@ -9,9 +9,9 @@ namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>lavalandraid - starts a fauna raid on the outpost of every lavaland right now (the warning first).</summary>
 [AdminCommand(AdminFlags.Admin)]
-public sealed class LavalandFaunaRaidCommand : IConsoleCommand
+public sealed partial class LavalandFaunaRaidCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "lavalandraid";
     public string Description => "Принудительно запустить рейд фауны на базу утилей Лаваленда (с предупреждением).";

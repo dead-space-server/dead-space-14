@@ -44,32 +44,32 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// <summary>
 /// Mining shop equipment ported from tgstation: marker beacons, the lazarus injector and minebots.
 /// </summary>
-public sealed class LavalandMiningEquipmentSystem : EntitySystem
+public sealed partial class LavalandMiningEquipmentSystem : EntitySystem
 {
-    [Dependency] private readonly Content.Shared.Tools.Systems.SharedToolSystem _tool = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly Content.Server.Administration.QuickDialogSystem _quickDialog = default!;
-    [Dependency] private readonly Content.Shared.Interaction.SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
-    [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPointLightSystem _light = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly LavalandTamingSystem _taming = default!;
-    [Dependency] private readonly SharedStorageSystem _storage = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private Content.Shared.Tools.Systems.SharedToolSystem _tool = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private Content.Server.Administration.QuickDialogSystem _quickDialog = default!;
+    [Dependency] private Content.Shared.Interaction.SharedInteractionSystem _interaction = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private LavalandTamingSystem _taming = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly HashSet<Entity<StackComponent>> _ores = new();
     private readonly HashSet<Entity<OreVeinComponent>> _veins = new();

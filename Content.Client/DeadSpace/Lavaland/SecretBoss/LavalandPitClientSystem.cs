@@ -16,13 +16,13 @@ namespace Content.Client.DeadSpace.Lavaland.SecretBoss;
 /// Dive animations into the Celestial pit (seen by everyone around), the dark falling screen
 /// and the fade to black before the Celestial.
 /// </summary>
-public sealed class LavalandPitClientSystem : EntitySystem
+public sealed partial class LavalandPitClientSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SpriteTreeSystem _spriteTree = default!;
 
     private const string JumpKey = "lavaland-pit-jump";
     private const string LandingKey = "lavaland-pit-landing";

@@ -17,16 +17,16 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// taken <see cref="ExecuteDamage"/> damage under a memento mori, the boss drops everything, walks up to them and
 /// tears them apart: they go to ash as if the pendant came off.
 /// </summary>
-public sealed class LavalandBossExecutionSystem : EntitySystem
+public sealed partial class LavalandBossExecutionSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly LavalandBossArenaSystem _arenas = default!;
-    [Dependency] private readonly LavalandNecropolisArtifactSystem _artifacts = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private LavalandBossArenaSystem _arenas = default!;
+    [Dependency] private LavalandNecropolisArtifactSystem _artifacts = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     /// <summary>Damage on the memento mori's wearer at which the boss comes for them.</summary>
     private const float ExecuteDamage = 350f;

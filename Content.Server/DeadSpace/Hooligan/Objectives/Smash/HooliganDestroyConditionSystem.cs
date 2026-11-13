@@ -8,11 +8,11 @@ using Content.Shared.Tag;
 
 namespace Content.Server.DeadSpace.Hooligan.Objectives;
 
-public sealed class HooliganDestroyConditionSystem : EntitySystem
+public sealed partial class HooliganDestroyConditionSystem : EntitySystem
 {
     
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     public override void Initialize()
     {

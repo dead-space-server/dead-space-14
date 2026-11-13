@@ -6,10 +6,10 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Weapons.Hitscan.Systems;
 
-public sealed class HitscanIgniteSystem : EntitySystem // DS14 - pre-v288 event/IoC style
+public sealed partial class HitscanIgniteSystem : EntitySystem // DS14 - pre-v288 event/IoC style
 {
-    [Dependency] private readonly IRobustRandom _robustRandom = default!; // DS14 - pre-v288 IoC
-    [Dependency] private readonly FlammableSystem _flammable = default!; // DS14 - pre-v288 IoC
+    [Dependency] private IRobustRandom _robustRandom = default!; // DS14 - pre-v288 IoC
+    [Dependency] private FlammableSystem _flammable = default!; // DS14 - pre-v288 IoC
 
     //The hitscan has hit the target, rolls a chance to ignite and ignite if it succeeds.
     // DS14-Start - pre-v288 explicit event subscription

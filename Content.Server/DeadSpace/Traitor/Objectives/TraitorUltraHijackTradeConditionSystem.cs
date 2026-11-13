@@ -9,11 +9,11 @@ using Content.Shared.Station.Components;
 
 namespace Content.Server.DeadSpace.Traitor.Objectives;
 
-public sealed class TraitorUltraHijackTradeConditionSystem : EntitySystem
+public sealed partial class TraitorUltraHijackTradeConditionSystem : EntitySystem
 {
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Initialize()
     {

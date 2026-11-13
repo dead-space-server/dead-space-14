@@ -14,8 +14,8 @@ namespace Content.Client.Light.Controls;
 public sealed partial class LightReplacerStatusControl : Control
 {
     // DS14-start: current engine baseline uses readonly IoC fields.
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IEntityManager _entity = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entity = default!;
     // DS14-end
 
     private readonly Entity<LightReplacerComponent> _parent;

@@ -8,11 +8,11 @@ using Content.Shared.Chat;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling;
 
-public sealed class ShadowlingScreechSystem : EntitySystem
+public sealed partial class ShadowlingScreechSystem : EntitySystem
 {
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private ChatSystem _chat = default!;
 
     public override void Initialize()
     {

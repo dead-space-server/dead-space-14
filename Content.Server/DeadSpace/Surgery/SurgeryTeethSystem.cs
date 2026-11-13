@@ -18,19 +18,19 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryTeethSystem : EntitySystem
+public sealed partial class SurgeryTeethSystem : EntitySystem
 {
     private const string Pocket = "surgery-teeth";
     private const string CapId = "Teeth";
     private static readonly EntProtoId BiteAction = "ActionSurgeryBitePill";
 
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly ReactiveSystem _reactive = default!;
-    [Dependency] private readonly StomachSystem _stomach = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private ReactiveSystem _reactive = default!;
+    [Dependency] private StomachSystem _stomach = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

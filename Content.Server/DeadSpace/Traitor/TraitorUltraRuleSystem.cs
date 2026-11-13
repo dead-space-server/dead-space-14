@@ -65,38 +65,38 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.Traitor;
 
-public sealed class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComponent>
+public sealed partial class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComponent>
 {
     private const int SourceParentSearchDepth = 8;
     private const string DefaultTraitorUltraRule = "TraitorUltra";
     private const string StandardUplinkImplant = "UplinkImplant";
 
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly BankManagerSystem _bankManager = default!;
-    [Dependency] private readonly ISharedChatManager _chatManager = default!;
-    [Dependency] private readonly SharedCargoSystem _cargo = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly ObjectivesSystem _objectives = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
-    [Dependency] private readonly SharedObjectivesSystem _sharedObjectives = default!;
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedSubdermalImplantSystem _subdermalImplant = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly StoreSystem _store = default!;
-    [Dependency] private readonly TargetObjectiveSystem _targetObjectives = default!;
-    [Dependency] private readonly TraitorRuleSystem _traitorRule = default!;
-    [Dependency] private readonly UplinkSystem _uplink = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private ActionsSystem _actions = default!;
+    [Dependency] private BankManagerSystem _bankManager = default!;
+    [Dependency] private ISharedChatManager _chatManager = default!;
+    [Dependency] private SharedCargoSystem _cargo = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private ObjectivesSystem _objectives = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private PrisonSystem _prison = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedJobSystem _jobs = default!;
+    [Dependency] private SharedObjectivesSystem _sharedObjectives = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedSubdermalImplantSystem _subdermalImplant = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private StoreSystem _store = default!;
+    [Dependency] private TargetObjectiveSystem _targetObjectives = default!;
+    [Dependency] private TraitorRuleSystem _traitorRule = default!;
+    [Dependency] private UplinkSystem _uplink = default!;
 
     private readonly List<TraitorUltraDelayedAction> _delayedActions = new();
     private readonly Dictionary<EntityUid, TraitorUltraOfferEui> _openUpgradeOfferEuis = new();

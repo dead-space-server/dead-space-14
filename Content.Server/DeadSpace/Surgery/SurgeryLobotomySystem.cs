@@ -6,11 +6,11 @@ using Content.Shared.DeadSpace.Surgery;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryLobotomySystem : EntitySystem
+public sealed partial class SurgeryLobotomySystem : EntitySystem
 {
     private const string Effect = "Lobotomy";
 
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
 
     public override void Initialize()
     {

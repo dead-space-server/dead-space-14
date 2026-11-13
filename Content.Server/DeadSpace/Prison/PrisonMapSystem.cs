@@ -22,23 +22,23 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Prison;
 
-public sealed class PrisonMapSystem : EntitySystem
+public sealed partial class PrisonMapSystem : EntitySystem
 {
     private const string PrisonPlanet = "PrisonQuarry";
     private const string PrisonWarpLocation = "Prison Quarry";
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly BiomeSystem _biome = default!;
-    [Dependency] private readonly IConfigurationManager _configuration = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TileSystem _tile = default!;
-    [Dependency] private readonly PrisonFaunaPopulationSystem _faunaPopulation = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private BiomeSystem _biome = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinition = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TileSystem _tile = default!;
+    [Dependency] private PrisonFaunaPopulationSystem _faunaPopulation = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
     private EntityUid? _generatedMap;

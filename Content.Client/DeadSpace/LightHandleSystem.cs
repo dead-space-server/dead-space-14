@@ -6,11 +6,11 @@ using Robust.Client.Player;
 
 namespace Content.Client.DeadSpace;
 
-public sealed class LightHandleSystem : EntitySystem
+public sealed partial class LightHandleSystem : EntitySystem
 {
-    [Dependency] private readonly ILightManager _light = default!;
-    [Dependency] private readonly IClientConGroupController _conGroup = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private ILightManager _light = default!;
+    [Dependency] private IClientConGroupController _conGroup = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public override void Update(float frameTime)
     {

@@ -16,12 +16,12 @@ namespace Content.Client.DeadSpace.Notify;
 
 public sealed partial class ReceiveNotifySystem : EntitySystem
 {
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IClyde _clyde = default!;
     private ISawmill _sawmill = default!;
 
     private TimeSpan _lastNotifyTime;

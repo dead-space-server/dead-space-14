@@ -20,9 +20,9 @@ namespace Content.Server.Store.Systems;
 /// </summary>
 public sealed partial class StoreSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -197,7 +197,7 @@ public sealed partial class StoreSystem : EntitySystem
 
 }
 
-public sealed class CurrencyInsertAttemptEvent : CancellableEntityEventArgs
+public sealed partial class CurrencyInsertAttemptEvent : CancellableEntityEventArgs
 {
     public readonly EntityUid User;
     public readonly EntityUid Target;

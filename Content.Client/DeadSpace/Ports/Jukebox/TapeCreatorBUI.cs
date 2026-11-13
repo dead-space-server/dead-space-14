@@ -3,9 +3,9 @@ using Content.Shared.Popups;
 
 namespace Content.Client.DeadSpace.Ports.Jukebox;
 
-public sealed class TapeCreatorBUI : BoundUserInterface
+public sealed partial class TapeCreatorBUI : BoundUserInterface
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     private readonly SharedPopupSystem _sharedPopupSystem = default!;
 
     private TapeCreatorMenu? _window;

@@ -88,35 +88,35 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 
 public sealed partial class LimbWoundSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly BlindableSystem _blind = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedGunSystem _guns = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly LimbImplantSystem _implants = default!;
-    [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private BlindableSystem _blind = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedGunSystem _guns = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private LimbImplantSystem _implants = default!;
+    [Dependency] private Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
     private EntityUid? _cause;
 
@@ -3027,7 +3027,7 @@ public readonly record struct LimbCover(bool Face, bool Ricochet, bool Grip, boo
 public record struct LimbArmorZoneEvent(HitscanRaycastFiredData Data);
 
 [Serializable, NetSerializable]
-public sealed class LimbAimSetEvent : EntityEventArgs
+public sealed partial class LimbAimSetEvent : EntityEventArgs
 {
     public bool Aiming;
 
@@ -3038,7 +3038,7 @@ public sealed class LimbAimSetEvent : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
-public sealed class LimbZoneSetEvent : EntityEventArgs
+public sealed partial class LimbZoneSetEvent : EntityEventArgs
 {
     public LimbZone? Zone;
 

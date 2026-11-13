@@ -6,9 +6,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.Events.Roles;
 
-public sealed class EventRoleSystem : EntitySystem
+public sealed partial class EventRoleSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

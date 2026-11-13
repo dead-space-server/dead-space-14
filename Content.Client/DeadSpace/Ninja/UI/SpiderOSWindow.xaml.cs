@@ -18,8 +18,8 @@ namespace Content.Client.DeadSpace.Ninja.UI;
 
 public sealed partial class SpiderOSWindow : FancyWindow
 {
-    [Dependency] private readonly IResourceCache _resCache = default!;
-    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
+    [Dependency] private IResourceCache _resCache = default!;
+    [Dependency] private IEntitySystemManager _sysMan = default!;
 
     private static readonly string[] Categories = { "Ghost", "Snake", "Steel" };
 

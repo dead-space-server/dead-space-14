@@ -18,11 +18,11 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Language;
 
-public sealed class LanguageUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
+public sealed partial class LanguageUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
-    [Dependency] private readonly IPlayerManager _playerMan = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
+    [Dependency] private IPlayerManager _playerMan = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
     private Radial.Controls.RadialContainer? _openedMenu;
     private const string DefaultIcon = "/Textures/_DeadSpace/LanguageIcons/default.png";
     private bool _isClosing;

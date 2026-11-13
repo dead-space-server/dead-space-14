@@ -11,8 +11,8 @@ namespace Content.Client.Power;
 
 public sealed partial class PowerMonitoringConsoleNavMapControl : NavMapControl
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IGameTiming _timing = default!; // DS14
 
     // Cable indexing
     // 0: CableType.HighVoltage

@@ -6,10 +6,10 @@ using Content.Shared.Objectives.Components;
 
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
-public sealed class UnitologyAssemblyConditionSystem : EntitySystem
+public sealed partial class UnitologyAssemblyConditionSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly UnitologySubmissionConditionSystem _submissionCondition = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private UnitologySubmissionConditionSystem _submissionCondition = default!;
 
     public override void Initialize()
     {

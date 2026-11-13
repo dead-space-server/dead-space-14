@@ -6,9 +6,9 @@ using Content.Shared.Verbs;
 
 namespace Content.Shared.DeadSpace.Flashbang;
 
-public sealed class FlashbangProtectionSystem : EntitySystem
+public sealed partial class FlashbangProtectionSystem : EntitySystem
 {
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     public override void Initialize()
     {

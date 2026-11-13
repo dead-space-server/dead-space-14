@@ -10,13 +10,13 @@ using Robust.Shared.Physics.Components;
 
 namespace Content.Server.DeadSpace.Guardian;
 
-public sealed class GuardianChaosAttractSystem : EntitySystem
+public sealed partial class GuardianChaosAttractSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly UseDelaySystem _delay = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private UseDelaySystem _delay = default!;
 
     private readonly HashSet<EntityUid> _targets = new();
     private EntityQuery<GuardianComponent> _guardianQuery;

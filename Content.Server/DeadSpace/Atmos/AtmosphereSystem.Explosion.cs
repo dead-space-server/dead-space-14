@@ -9,7 +9,7 @@ namespace Content.Server.Atmos.EntitySystems;
 
 public sealed partial class AtmosphereSystem
 {
-    [Dependency] public readonly ExplosionSystem Explosion = default!;
+    [Dependency] public ExplosionSystem Explosion = default!;
 
     public MapCoordinates GetTileWorldCoordinates(TileAtmosphere tile)
     {

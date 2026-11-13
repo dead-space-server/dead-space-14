@@ -7,9 +7,9 @@ namespace Content.Server.Changeling.Systems;
 /// <summary>
 /// Compatibility bridge for Wizards' shared metabolism component on DS14's server-side metabolism architecture.
 /// </summary>
-public sealed class ChangelingMetabolismSystem : EntitySystem
+public sealed partial class ChangelingMetabolismSystem : EntitySystem
 {
-    [Dependency] private readonly MetabolizerSystem _metabolizer = default!;
+    [Dependency] private MetabolizerSystem _metabolizer = default!;
 
     public override void Initialize()
     {

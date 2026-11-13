@@ -54,28 +54,28 @@ namespace Content.Server.GameTicking.Rules;
 /// Assigns revolutionaries and keeps their active state on minds instead of historical bodies.
 /// Icon visibility is synchronized with targeted roster messages rather than session-specific components.
 /// </summary>
-public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleComponent>
+public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleComponent>
 {
-    [Dependency] private readonly IVoteManager _voteManager = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly EuiManager _euiMan = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogManager = default!;
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!;
+    [Dependency] private IVoteManager _voteManager = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private EuiManager _euiMan = default!;
+    [Dependency] private IAdminLogManager _adminLogManager = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private PrisonSystem _prison = default!;
+    [Dependency] private RoleSystem _role = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private ActionsSystem _actions = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private ErtResponseSystem _ertResponseSystem = default!;
 
     public readonly ProtoId<ErtTeamPrototype> RevolutionarySupplyTeam = "RevSup";
     public readonly EntProtoId Objective = "KillCommandStaffObjective";

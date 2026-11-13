@@ -25,23 +25,23 @@ using Robust.Shared.Configuration;
 
 namespace Content.Server.DeadSpace.CustomizableHumanoidSpawner;
 
-public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
+public sealed partial class CustomizableHumanoidSpawnerSystem : EntitySystem
 {
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly StationSpawningSystem _spawning = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly IServerPreferencesManager _prefs = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly GhostRoleSystem _ghostRole = default!;
-    [Dependency] private readonly SpeechSystem _speech = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly TagSystem _tagSystem = default!;
-    [Dependency] private readonly NpcFactionSystem _factionSystem = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly TraitSystem _trait = default!;
-    [Dependency] private readonly JobSystem _jobs = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private StationSpawningSystem _spawning = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private GhostRoleSystem _ghostRole = default!;
+    [Dependency] private SpeechSystem _speech = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private NpcFactionSystem _factionSystem = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private TraitSystem _trait = default!;
+    [Dependency] private JobSystem _jobs = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     /// <summary>The random name the menu offered, where the name may not be changed: the client's own is ignored.</summary>
     private readonly Dictionary<EntityUid, string> _offeredNames = new();

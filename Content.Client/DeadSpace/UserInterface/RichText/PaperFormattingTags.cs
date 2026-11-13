@@ -13,7 +13,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.UserInterface.RichText;
 
-public sealed class ShiftTag : IMarkupTagHandler
+public sealed partial class ShiftTag : IMarkupTagHandler
 {
     public string Name => "shift";
 
@@ -30,12 +30,12 @@ public sealed class ShiftTag : IMarkupTagHandler
     }
 }
 
-public sealed class SmallTag : IMarkupTagHandler
+public sealed partial class SmallTag : IMarkupTagHandler
 {
     private const int MaxDecrease = 6;
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public string Name => "small";
 
@@ -65,7 +65,7 @@ public sealed class SmallTag : IMarkupTagHandler
     }
 }
 
-public sealed class ConfusionTag : IMarkupTagHandler
+public sealed partial class ConfusionTag : IMarkupTagHandler
 {
     private const int MaxStrength = 10;
 
@@ -93,7 +93,7 @@ public sealed class ConfusionTag : IMarkupTagHandler
     }
 }
 
-public sealed class CyrillicConfusionTag : IMarkupTagHandler
+public sealed partial class CyrillicConfusionTag : IMarkupTagHandler
 {
     public string Name => "сonf";
 
@@ -108,7 +108,7 @@ public sealed class CyrillicConfusionTag : IMarkupTagHandler
     }
 }
 
-public sealed class CutTag : IMarkupTagHandler
+public sealed partial class CutTag : IMarkupTagHandler
 {
     public string Name => "cut";
 
@@ -125,7 +125,7 @@ public sealed class CutTag : IMarkupTagHandler
     }
 }
 
-public sealed class UnderlineTag : IMarkupTagHandler
+public sealed partial class UnderlineTag : IMarkupTagHandler
 {
     public string Name => "uline";
 
@@ -148,7 +148,7 @@ internal readonly record struct PaperTextEffects(
     bool Strikethrough = false,
     bool Underline = false);
 
-internal static class PaperFormattingTagHelpers
+internal static partial class PaperFormattingTagHelpers
 {
     public static Font GetCurrentFont(MarkupDrawingContext context)
     {
@@ -170,7 +170,7 @@ internal static class PaperFormattingTagHelpers
     }
 }
 
-internal sealed class PaperFormattingFont : Font
+internal sealed partial class PaperFormattingFont : Font
 {
     private readonly Font _inner;
     private readonly PaperTextEffects _effects;
@@ -419,7 +419,7 @@ internal sealed class PaperFormattingFont : Font
         int HeightPermille,
         int RotationTenths);
 
-    private sealed class HandwritingSequence
+    private sealed partial class HandwritingSequence
     {
         public int DrawRuneIndex;
         public int MeasureRuneIndex;

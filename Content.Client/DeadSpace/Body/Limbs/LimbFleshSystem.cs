@@ -10,10 +10,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Body.Limbs;
 
-public sealed class LimbFleshSystem : EntitySystem
+public sealed partial class LimbFleshSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private static readonly Color Rotten = new(0.6f, 0.72f, 0.45f);
 

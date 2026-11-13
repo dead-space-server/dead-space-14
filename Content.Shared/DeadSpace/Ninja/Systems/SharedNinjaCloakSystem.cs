@@ -7,9 +7,9 @@ using Content.Shared.Ninja.Components;
 
 namespace Content.Shared.DeadSpace.Ninja.Systems;
 
-public abstract class SharedNinjaCloakSystem : EntitySystem
+public abstract partial class SharedNinjaCloakSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
     public override void Initialize()
     {
         base.Initialize();

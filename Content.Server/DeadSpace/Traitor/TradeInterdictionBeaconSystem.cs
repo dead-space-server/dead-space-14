@@ -15,7 +15,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Traitor;
 
-public sealed class TradeInterdictionBeaconSystem : EntitySystem
+public sealed partial class TradeInterdictionBeaconSystem : EntitySystem
 {
     private static readonly Color DangerColor = Color.Red;
     private static readonly Color NoticeColor = Color.LightSkyBlue;
@@ -24,14 +24,14 @@ public sealed class TradeInterdictionBeaconSystem : EntitySystem
     private const float TradeAnchorExplosionIntensitySlope = 10f;
     private const float TradeAnchorExplosionMaxIntensity = 75f;
 
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly FoldableSystem _foldable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly TraitorUltraHijackTradeConditionSystem _objectives = default!;
+    [Dependency] private CargoSystem _cargo = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private FoldableSystem _foldable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private TraitorUltraHijackTradeConditionSystem _objectives = default!;
 
     public override void Initialize()
     {

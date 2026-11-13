@@ -11,8 +11,8 @@ namespace Content.Shared.VendingMachines;
 
 public abstract partial class SharedVendingMachineSystem
 {
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly SharedSpeakOnUIClosedSystem _speakOn = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedSpeakOnUIClosedSystem _speakOn = default!;
 
     private void OnInventoryEjectMessage(Entity<VendingMachineComponent> entity, ref VendingMachineEjectMessage args)
     {

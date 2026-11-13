@@ -13,9 +13,9 @@ namespace Content.Server.DeadSpace.SignatureOnPaper;
 
 public sealed partial class SignaturePaperSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private HandsSystem _hands = default!;
 
     public override void Initialize()
     {

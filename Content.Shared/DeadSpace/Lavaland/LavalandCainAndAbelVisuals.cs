@@ -53,9 +53,9 @@ public sealed partial class LavalandChainArcComponent : Component
     public Color Color = Color.White;
 }
 
-public sealed class LavalandCainAndAbelLookSystem : EntitySystem
+public sealed partial class LavalandCainAndAbelLookSystem : EntitySystem
 {
-    [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private SharedItemSystem _item = default!;
 
     public override void Initialize()
     {

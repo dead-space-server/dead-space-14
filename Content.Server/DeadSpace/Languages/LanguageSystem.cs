@@ -17,12 +17,12 @@ using System.Text.RegularExpressions;
 
 namespace Content.Server.DeadSpace.Languages;
 
-public sealed class LanguageSystem : EntitySystem
+public sealed partial class LanguageSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     public static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
     public static readonly ProtoId<LanguagePrototype> PrisonLanguageId = "PrisonLanguage";
     private readonly Dictionary<ProtoId<LanguagePrototype>, List<Regex>> _regexCache = new();

@@ -7,10 +7,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Sandevistan;
 
-public sealed class SharedSandevistanSystem : EntitySystem
+public sealed partial class SharedSandevistanSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

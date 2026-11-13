@@ -12,13 +12,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.VotingNew;
 
-public sealed class VoteCallNewEui : BaseEui
+public sealed partial class VoteCallNewEui : BaseEui
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IConsoleHost _consoleHost = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IConsoleHost _consoleHost = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public VoteCallNewEui()
     {

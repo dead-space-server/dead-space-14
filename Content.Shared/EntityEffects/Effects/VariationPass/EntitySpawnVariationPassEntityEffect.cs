@@ -13,13 +13,13 @@ namespace Content.Shared.EntityEffects.Effects.VariationPass;
 /// Used for spawning entities randomly dotted around the grid.
 /// </summary>
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
-public sealed class EntitySpawnVariationPassEntityEffectSystem : EntityEffectSystem<MapGridComponent, EntitySpawnVariationPass> // DS14 - pre-v288 engine
+public sealed partial class EntitySpawnVariationPassEntityEffectSystem : EntityEffectSystem<MapGridComponent, EntitySpawnVariationPass> // DS14 - pre-v288 engine
 {
     // DS14-start - pre-v288 engine
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly EntityTableSystem _tables = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private EntityTableSystem _tables = default!;
     // DS14-end
 
     protected override void Effect(Entity<MapGridComponent> entity, ref EntityEffectEvent<EntitySpawnVariationPass> args)

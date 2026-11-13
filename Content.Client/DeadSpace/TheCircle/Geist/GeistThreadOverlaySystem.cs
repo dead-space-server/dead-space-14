@@ -11,9 +11,9 @@ namespace Content.Client.DeadSpace.TheCircle.Geist;
 /// Draws the geist's thread from its spool to the tied item. The server sends the thread only to the one who tied it;
 /// the owner check here keeps it so even if the state is around (a body swap).
 /// </summary>
-public sealed class GeistThreadOverlaySystem : EntitySystem
+public sealed partial class GeistThreadOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
 
     public override void Initialize()
     {
@@ -28,7 +28,7 @@ public sealed class GeistThreadOverlaySystem : EntitySystem
     }
 }
 
-public sealed class GeistThreadOverlay : Overlay
+public sealed partial class GeistThreadOverlay : Overlay
 {
     private static readonly Color ThreadColor = Color.FromHex("#e6e6e6aa");
 

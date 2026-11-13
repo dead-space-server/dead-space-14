@@ -12,15 +12,15 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.Traitor.Objectives;
 
-public sealed class TraitorUltraDestroyStationAiCoreConditionSystem : EntitySystem
+public sealed partial class TraitorUltraDestroyStationAiCoreConditionSystem : EntitySystem
 {
     private const string StationAiJob = "StationAi";
 
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedStationAiSystem _stationAi = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedJobSystem _jobs = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedStationAiSystem _stationAi = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Initialize()
     {

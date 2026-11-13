@@ -8,9 +8,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Access.Systems;
 
-public abstract class SharedJobStatusSystem : EntitySystem
+public abstract partial class SharedJobStatusSystem : EntitySystem
 {
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
 
     private static readonly ProtoId<JobIconPrototype> JobIconForNoId = "JobIconNoId";
 

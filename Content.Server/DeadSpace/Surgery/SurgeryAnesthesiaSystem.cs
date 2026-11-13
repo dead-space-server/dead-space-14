@@ -22,21 +22,21 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryAnesthesiaSystem : EntitySystem
+public sealed partial class SurgeryAnesthesiaSystem : EntitySystem
 {
     private const string Rules = "Default";
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly SleepingSystem _sleeping = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private SleepingSystem _sleeping = default!;
 
     private readonly Dictionary<EntityUid, Dictionary<string, FixedPoint2>> _seen = new();
     private readonly HashSet<EntityUid> _live = new();

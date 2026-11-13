@@ -8,14 +8,14 @@ namespace Content.Server.Discord.DiscordLink;
 /// <summary>
 ///     Relays in-game chat to Discord through regular webhooks, without using the Discord bot gateway.
 /// </summary>
-public sealed class DiscordChatWebhook : IPostInjectInit
+public sealed partial class DiscordChatWebhook : IPostInjectInit
 {
     private const int DiscordMessageMaxLength = 2000;
     private const string TruncatedSuffix = "...";
 
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly DiscordWebhook _discordWebhook = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private DiscordWebhook _discordWebhook = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
     private string _adminChatWebhookUrl = string.Empty;

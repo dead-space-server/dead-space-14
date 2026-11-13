@@ -12,13 +12,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.CameraArchives;
 
-public sealed class CameraConcealSystem : EntitySystem
+public sealed partial class CameraConcealSystem : EntitySystem
 {
     private static readonly ProtoId<ShaderPrototype> Shader = "Stealth";
     private static readonly ProtoId<ShaderPrototype> HideShader = "CameraConceal";
 
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private ShaderInstance _shader = default!;
     private ShaderInstance _hide = default!;

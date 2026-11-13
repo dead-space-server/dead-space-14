@@ -8,7 +8,7 @@ namespace Content.Shared.Actions;
 /// </summary>
 public sealed partial class EntityEffectActionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedEntityEffectsSystem _effects = default!;
+    [Dependency] private SharedEntityEffectsSystem _effects = default!;
 
     // DS14-start: pre-v288 RobustToolbox has no event-subscription source generator.
     public override void Initialize()

@@ -18,16 +18,16 @@ namespace Content.Server.Ninja.Systems;
 /// Handles power cell upgrading and actions.
 /// TODO: Move all of this to shared and predict it
 /// </summary>
-public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
+public sealed partial class NinjaSuitSystem : SharedNinjaSuitSystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SpaceNinjaSystem _ninja = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SpaceNinjaSystem _ninja = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
     //DS14-start
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly AutoDustSystem _autoDust = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private AutoDustSystem _autoDust = default!;
     //DS14-end
 
     public override void Initialize()

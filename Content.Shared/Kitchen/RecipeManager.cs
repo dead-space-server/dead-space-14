@@ -3,9 +3,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Kitchen
 {
-    public sealed class RecipeManager
+    public sealed partial class RecipeManager
     {
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
 
         public List<FoodRecipePrototype> Recipes { get; private set; } = new();
 
@@ -47,7 +47,7 @@ namespace Content.Shared.Kitchen
             return Recipes.Any(recipe => recipe.IngredientsSolids.ContainsKey(solidId));
         }
 
-        private sealed class RecipeComparer : Comparer<FoodRecipePrototype>
+        private sealed partial class RecipeComparer : Comparer<FoodRecipePrototype>
         {
             public override int Compare(FoodRecipePrototype? x, FoodRecipePrototype? y)
             {

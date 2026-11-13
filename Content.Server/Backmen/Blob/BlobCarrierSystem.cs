@@ -13,15 +13,15 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobCarrierSystem : SharedBlobCarrierSystem
+public sealed partial class BlobCarrierSystem : SharedBlobCarrierSystem
 {
-    [Dependency] private readonly BlobCoreSystem _blobCoreSystem = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly GibbingSystem _gibbing = default!;
-    [Dependency] private readonly ActionsSystem _action = default!;
+    [Dependency] private BlobCoreSystem _blobCoreSystem = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private ActionsSystem _action = default!;
     // DS14-start
-    [Dependency] private readonly BlobAntagRollbackSystem _rollback = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private BlobAntagRollbackSystem _rollback = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     // DS14-end
 
     public override void Initialize()

@@ -11,8 +11,8 @@ namespace Content.Server.Screens.Systems;
 /// </summary>
 public sealed partial class ScreenSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
 
     // DS14-start - current engine baseline requires explicit event subscriptions.
     public override void Initialize()

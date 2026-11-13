@@ -8,10 +8,10 @@ using Content.Client.DeadSpace.Crayon; //DS-14
 
 namespace Content.Client.Crayon.UI
 {
-    public sealed class CrayonBoundUserInterface : BoundUserInterface
+    public sealed partial class CrayonBoundUserInterface : BoundUserInterface
     {
-        [Dependency] private readonly IPrototypeManager _protoManager = default!;
-        [Dependency] private readonly CrayonGhostSystem _crayonGhostSystem = default!; //DS-14
+        [Dependency] private IPrototypeManager _protoManager = default!;
+        [Dependency] private CrayonGhostSystem _crayonGhostSystem = default!; //DS-14
 
         [ViewVariables]
         private CrayonWindow? _menu;

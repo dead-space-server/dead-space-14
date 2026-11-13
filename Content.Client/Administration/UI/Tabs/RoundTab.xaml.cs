@@ -15,11 +15,11 @@ namespace Content.Client.Administration.UI.Tabs
     [GenerateTypedNameReferences]
     public sealed partial class RoundTab : Control
     {
-        [Dependency] private readonly IClientConsoleHost _console = default!;
-        [Dependency] private readonly IClientAdminManager _admin = default!;
+        [Dependency] private IClientConsoleHost _console = default!;
+        [Dependency] private IClientAdminManager _admin = default!;
 
         // DS14-start
-        [Dependency] private readonly IEntityManager _entityManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
 
         private SecondaryAnnouncementAdminSystem _secondaryAnnouncements = default!;
         private bool _updatingSecondaryAnnouncements;

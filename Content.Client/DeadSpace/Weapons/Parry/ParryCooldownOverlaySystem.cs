@@ -8,13 +8,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Weapons.Parry;
 
-public sealed class ParryCooldownOverlaySystem : EntitySystem
+public sealed partial class ParryCooldownOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {

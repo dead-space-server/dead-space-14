@@ -23,23 +23,23 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// in their arena or next to a mini-boss. Enraged bosses attack much more often, move faster and hit harder,
 /// but keep their telegraphs, so careful dodging still wins.
 /// </summary>
-public sealed class LavalandBossRageSystem : EntitySystem
+public sealed partial class LavalandBossRageSystem : EntitySystem
 {
     private static readonly TimeSpan ScanInterval = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan VictimLifetime = TimeSpan.FromSeconds(2.5);
     private static readonly Color RageColor = Color.FromHex("#ff1e1e");
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedPointLightSystem _light = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly LavalandBossArenaSystem _arena = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private LavalandBossArenaSystem _arena = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
 
     private TimeSpan _nextScan;
     private readonly HashSet<EntityUid> _violating = new();

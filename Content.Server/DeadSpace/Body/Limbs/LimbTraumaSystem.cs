@@ -8,11 +8,11 @@ using Content.Shared.Stunnable;
 
 namespace Content.Server.DeadSpace.Body.Limbs;
 
-public sealed class LimbTraumaSystem : EntitySystem
+public sealed partial class LimbTraumaSystem : EntitySystem
 {
-    [Dependency] private readonly PsychiatrySystem _psychiatry = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly LimbHearingSystem _hearing = default!;
+    [Dependency] private PsychiatrySystem _psychiatry = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private LimbHearingSystem _hearing = default!;
 
     public override void Initialize()
     {

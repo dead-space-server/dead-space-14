@@ -8,11 +8,11 @@ using Robust.Shared.Network;
 
 namespace Content.Shared.DeadSpace.Clothing.ReverseRig;
 
-public sealed class ReverseRigSystem : EntitySystem
+public sealed partial class ReverseRigSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private INetManager _net = default!;
 
     private readonly Dictionary<EntityUid, DeferredReverseRigRollbackEvent> _pendingRollbacks = new();
 
@@ -229,7 +229,7 @@ public sealed class ReverseRigSystem : EntitySystem
             predicted: true);
     }
 
-    private sealed class DeferredReverseRigRollbackEvent(
+    private sealed partial class DeferredReverseRigRollbackEvent(
         EntityUid rig,
         EntityUid wearer,
         string rigSlot,

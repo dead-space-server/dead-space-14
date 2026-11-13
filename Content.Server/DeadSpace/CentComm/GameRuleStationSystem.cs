@@ -14,11 +14,11 @@ using Robust.Shared.Random;
 namespace Content.Server.DeadSpace.CentComm;
 
 /// <summary>Keeps station-event effects and announcements on the same station map.</summary>
-public sealed class GameRuleStationSystem : EntitySystem
+public sealed partial class GameRuleStationSystem : EntitySystem
 {
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ChatSystem _chat = default!;
 
     public EntityUid? GetTargetStation(EntityUid rule)
     {

@@ -9,13 +9,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.StationEvents.Events;
 
-public sealed class SurvivalNecromorphBreachRule : StationEventSystem<SurvivalNecromorphBreachRuleComponent>
+public sealed partial class SurvivalNecromorphBreachRule : StationEventSystem<SurvivalNecromorphBreachRuleComponent>
 {
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     protected override void Started(EntityUid uid,
         SurvivalNecromorphBreachRuleComponent component,

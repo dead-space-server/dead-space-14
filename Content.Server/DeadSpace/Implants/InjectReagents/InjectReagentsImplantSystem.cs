@@ -7,10 +7,10 @@ using Content.Shared.Popups;
 
 namespace Content.Server.DeadSpace.Implants.InjectReagents;
 
-public sealed class InjectReagentsImplantSystem : EntitySystem
+public sealed partial class InjectReagentsImplantSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

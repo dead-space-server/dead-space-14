@@ -7,10 +7,10 @@ using Content.Shared.Objectives.Components;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaAiHackConditionSystem : EntitySystem
+public sealed partial class NinjaAiHackConditionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     public override void Initialize()
     {

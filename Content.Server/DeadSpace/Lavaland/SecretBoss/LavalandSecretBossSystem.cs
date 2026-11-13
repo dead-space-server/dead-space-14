@@ -60,50 +60,50 @@ namespace Content.Server.DeadSpace.Lavaland.SecretBoss;
 /// Dormant -> (all arena bosses dead) roar, pit and tablet interference -> players gather and jump -> fall ->
 /// maze -> flower -> sleep -> Celestial fight on a glass square -> defeat cutscene, sleep by the pit, blessings.
 /// </summary>
-public sealed class LavalandSecretBossSystem : EntitySystem
+public sealed partial class LavalandSecretBossSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly BiomeSystem _biome = default!;
-    [Dependency] private readonly CelestialSystem _celestial = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly Content.Shared.Inventory.InventorySystem _inventory = default!;
-    [Dependency] private readonly Content.Shared.Hands.EntitySystems.SharedHandsSystem _hands = default!;
-    [Dependency] private readonly Content.Shared.Humanoid.SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private BiomeSystem _biome = default!;
+    [Dependency] private CelestialSystem _celestial = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private Content.Shared.Inventory.InventorySystem _inventory = default!;
+    [Dependency] private Content.Shared.Hands.EntitySystems.SharedHandsSystem _hands = default!;
+    [Dependency] private Content.Shared.Humanoid.SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IChatManager _chatManager = default!;
 
     private static readonly Color BlessingColor = Color.FromHex("#c47bff");
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
-    [Dependency] private readonly LavalandPitDropSystem _pitDrop = default!;
-    [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
-    [Dependency] private readonly LavalandDayNightSystem _dayNight = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinition = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private LavalandPitLandingSystem _landing = default!;
+    [Dependency] private LavalandPitDropSystem _pitDrop = default!;
+    [Dependency] private LavalandChromiteCavesSystem _caves = default!;
+    [Dependency] private LavalandDayNightSystem _dayNight = default!;
 
     private static readonly Color CelestialTint = Color.FromHex("#b46bff");
     private static readonly Color CelestialPulsePink = Color.FromHex("#ff7fc8");
     private static readonly Color CelestialPulseWhite = Color.FromHex("#fff4fb");
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly Content.Shared.Camera.SharedCameraRecoilSystem _camera = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SleepingSystem _sleeping = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
-    [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
-    [Dependency] private readonly Content.Shared.Stacks.SharedStackSystem _stacks = default!;
-    [Dependency] private readonly Content.Shared.Storage.EntitySystems.SharedStorageSystem _storage = default!;
-    [Dependency] private readonly Content.Shared.Chemistry.EntitySystems.SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private Content.Shared.Camera.SharedCameraRecoilSystem _camera = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SleepingSystem _sleeping = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private Robust.Shared.Containers.SharedContainerSystem _containers = default!;
+    [Dependency] private Content.Shared.Stacks.SharedStackSystem _stacks = default!;
+    [Dependency] private Content.Shared.Storage.EntitySystems.SharedStorageSystem _storage = default!;
+    [Dependency] private Content.Shared.Chemistry.EntitySystems.SharedSolutionContainerSystem _solutionContainer = default!;
 
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan HudInterval = TimeSpan.FromSeconds(0.5);

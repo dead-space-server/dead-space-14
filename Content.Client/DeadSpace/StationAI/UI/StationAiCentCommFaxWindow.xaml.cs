@@ -13,7 +13,7 @@ namespace Content.Client.DeadSpace.StationAI.UI;
 [GenerateTypedNameReferences]
 public sealed partial class StationAiCentCommFaxWindow : FancyWindow
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private bool _canSend = true;
     private bool _updatingText;

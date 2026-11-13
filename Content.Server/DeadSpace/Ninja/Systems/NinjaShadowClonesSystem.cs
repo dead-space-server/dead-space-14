@@ -9,16 +9,16 @@ using Content.Shared.Ninja.Systems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaHolographicClonesSystem : SharedNinjaHolographicClonesSystem
+public sealed partial class NinjaHolographicClonesSystem : SharedNinjaHolographicClonesSystem
 {
     private const int MaxSpawnAttempts = 20;
-    [Dependency] private readonly NinjaSmokeAbilitySystem _ninjaSmoke = default!;
-    [Dependency] private readonly SharedSpaceNinjaSystem _ninja = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly NinjaCloneSystem _ninjaClone = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private NinjaSmokeAbilitySystem _ninjaSmoke = default!;
+    [Dependency] private SharedSpaceNinjaSystem _ninja = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private NinjaCloneSystem _ninjaClone = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

@@ -8,9 +8,9 @@ using Robust.Shared.Console;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Mapping)]
-public sealed class ErtUiCommand : LocalizedEntityCommands
+public sealed partial class ErtUiCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly EuiManager _euiManager = default!;
+    [Dependency] private EuiManager _euiManager = default!;
 
     public override string Command => "ertui";
 

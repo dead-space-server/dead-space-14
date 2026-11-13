@@ -13,8 +13,8 @@ namespace Content.Client.DeadSpace.VendingMachines.UI;
 [GenerateTypedNameReferences]
 public sealed partial class VendingMachineSpiralSlot : PanelContainer
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private static readonly Color CoilLoaded = Color.FromHex("#b8bcc6");
     private static readonly Color CoilEmpty = Color.FromHex("#2c2f36");

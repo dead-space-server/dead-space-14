@@ -10,10 +10,10 @@ using Content.Shared.DeadSpace.Virus.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class DrowsinessSymptom : VirusSymptomBase
+public sealed partial class DrowsinessSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private EntityManager _entityManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
     public override VirusSymptom Type => VirusSymptom.Drowsiness;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "DrowsinessSymptom";
     public static readonly EntProtoId StatusEffectForcedSleeping = "StatusEffectForcedSleeping";

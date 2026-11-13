@@ -7,7 +7,7 @@ namespace Content.Shared.DeadSpace.Abilities.Evolution;
 
 public sealed partial class SharedEvolutionSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

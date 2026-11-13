@@ -12,11 +12,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaSuitRefillSystem : EntitySystem
+public sealed partial class NinjaSuitRefillSystem : EntitySystem
 {
-    [Dependency] private readonly SharedChargesSystem _charges = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedChargesSystem _charges = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

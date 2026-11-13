@@ -18,15 +18,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Teleportation;
 
-public sealed class PortalGunSystem : EntitySystem
+public sealed partial class PortalGunSystem : EntitySystem
 {
-    [Dependency] private readonly LinkedEntitySystem _link = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTeleportLocationsSystem _teleportLocations = default!;
+    [Dependency] private LinkedEntitySystem _link = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTeleportLocationsSystem _teleportLocations = default!;
 
     private const string PortalTriggerKey = "openportal";
 

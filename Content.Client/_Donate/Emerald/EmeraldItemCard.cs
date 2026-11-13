@@ -11,11 +11,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._Donate.Emerald;
 
-public sealed class EmeraldItemCard : Control
+public sealed partial class EmeraldItemCard : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
 
     private const int BaseNameFontSize = 10;
     private const int BaseStatusFontSize = 9;

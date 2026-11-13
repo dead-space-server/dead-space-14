@@ -7,11 +7,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.ConsoleCraft;
 
-public abstract class SharedConsoleCraftBlueprintSystem : EntitySystem
+public abstract partial class SharedConsoleCraftBlueprintSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedContainerSystem Container = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly IPrototypeManager Proto = default!;
+    [Dependency] protected SharedContainerSystem Container = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected IPrototypeManager Proto = default!;
 
     public override void Initialize()
     {

@@ -19,13 +19,13 @@ using Content.Shared.Humanoid;
 
 namespace Content.Server.DeadSpace.Ports.TapeRecorder;
 
-public sealed class TapeRecorderSystem : SharedTapeRecorderSystem
+public sealed partial class TapeRecorderSystem : SharedTapeRecorderSystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly PaperSystem _paper = default!;
-    [Dependency] private readonly LanguageSystem _language = default!; // DS14 - render recordings through their original language.
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private PaperSystem _paper = default!;
+    [Dependency] private LanguageSystem _language = default!; // DS14 - render recordings through their original language.
 
     public override void Initialize()
     {

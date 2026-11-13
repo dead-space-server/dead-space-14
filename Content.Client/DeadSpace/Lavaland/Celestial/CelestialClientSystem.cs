@@ -18,14 +18,14 @@ namespace Content.Client.DeadSpace.Lavaland.Celestial;
 /// Клиентская сторона Селестиала: субтитры поверх UI-корня (видны и в игре, и в лобби)
 /// и анимация роста сфер.
 /// </summary>
-public sealed class CelestialClientSystem : EntitySystem
+public sealed partial class CelestialClientSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private EntityUid? _introMusic;
     private EntityUid? _deathMusic;

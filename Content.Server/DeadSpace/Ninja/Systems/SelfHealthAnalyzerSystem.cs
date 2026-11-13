@@ -11,10 +11,10 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class SelfHealthAnalyzerSystem : SharedSelfHealthAnalyzerSystem
+public sealed partial class SelfHealthAnalyzerSystem : SharedSelfHealthAnalyzerSystem
 {
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     public override void Initialize()
     {
         base.Initialize();

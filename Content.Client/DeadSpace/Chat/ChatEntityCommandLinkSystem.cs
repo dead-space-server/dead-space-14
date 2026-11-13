@@ -13,7 +13,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Chat;
 
-public sealed class ChatEntityCommandLinkSystem : EntitySystem
+public sealed partial class ChatEntityCommandLinkSystem : EntitySystem
 {
     public static readonly Type[] TagsWithCommandLinks =
     [
@@ -27,9 +27,9 @@ public sealed class ChatEntityCommandLinkSystem : EntitySystem
         typeof(ItalicTag),
     ];
 
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public bool TryGetPrefix(ChatMessage message, out string prefix)
     {

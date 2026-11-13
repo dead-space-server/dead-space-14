@@ -18,9 +18,9 @@ namespace Content.Client.DeadSpace.ConsoleCraft;
 [GenerateTypedNameReferences]
 public sealed partial class ConsoleCraftConsoleWindow : DefaultWindow
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IEntitySystemManager _sysMan = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     private SpriteSystem? _spriteSystem;
     private EntityUid? _previewEntity;

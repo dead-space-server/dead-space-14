@@ -13,11 +13,11 @@ using Content.Shared.Examine;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class VirusDataCollectorSystem : EntitySystem
+public sealed partial class VirusDataCollectorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IngestionSystem _ingestion = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IngestionSystem _ingestion = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     public override void Initialize()
     {

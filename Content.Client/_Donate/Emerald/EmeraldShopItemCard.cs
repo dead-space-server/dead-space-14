@@ -13,11 +13,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._Donate.Emerald;
 
-public sealed class EmeraldShopItemCard : Control
+public sealed partial class EmeraldShopItemCard : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
 
     private const int BaseNameFontSize = 10;
     private const int BasePriceFontSize = 11;
@@ -421,9 +421,9 @@ public sealed class EmeraldShopItemCard : Control
     }
 }
 
-public sealed class EmeraldPeriodButton : Control
+public sealed partial class EmeraldPeriodButton : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const int BaseFontSize = 7;
 

@@ -12,9 +12,9 @@ namespace Content.Server.DeadSpace.Lavaland.Celestial;
 /// killcelestial [uid] - убивает Селестиала (единственный способ убить во второй фазе).
 /// </summary>
 [AdminCommand(AdminFlags.Admin)]
-public sealed class KillCelestialCommand : IConsoleCommand
+public sealed partial class KillCelestialCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "killcelestial";
     public string Description => "Убить Селестиала.";

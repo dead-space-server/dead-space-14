@@ -7,10 +7,10 @@ using Robust.Shared.Player;
 
 namespace Content.Client.DeadSpace.Sandevistan;
 
-public sealed class SandevistanOverlaySystem : EntitySystem
+public sealed partial class SandevistanOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IOverlayManager _overlayMan = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private SandevistanOverlay _overlay = default!;
     private bool _overlayAdded;

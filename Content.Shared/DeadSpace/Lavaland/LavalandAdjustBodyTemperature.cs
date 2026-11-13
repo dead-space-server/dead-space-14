@@ -21,7 +21,7 @@ public sealed partial class LavalandAdjustBodyTemperature : EntityEffectBase<Lav
 public sealed partial class LavalandAdjustBodyTemperatureEntityEffectSystem
     : EntityEffectSystem<TemperatureComponent, LavalandAdjustBodyTemperature>
 {
-    [Dependency] private readonly SharedTemperatureSystem _temperature = default!;
+    [Dependency] private SharedTemperatureSystem _temperature = default!;
 
     protected override void Effect(Entity<TemperatureComponent> entity, ref EntityEffectEvent<LavalandAdjustBodyTemperature> args)
     {

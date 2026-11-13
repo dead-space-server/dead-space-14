@@ -19,11 +19,11 @@ namespace Content.Server.Corvax.DiscordAuth;
 /// <summary>
 ///     Manage Discord linking with SS14 account through external API
 /// </summary>
-public sealed class DiscordAuthManager
+public sealed partial class DiscordAuthManager
 {
-    [Dependency] private readonly IServerNetManager _netMgr = default!;
-    [Dependency] private readonly IPlayerManager _playerMgr = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IServerNetManager _netMgr = default!;
+    [Dependency] private IPlayerManager _playerMgr = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private ISawmill _sawmill = default!;
     private readonly HttpClient _httpClient = new();

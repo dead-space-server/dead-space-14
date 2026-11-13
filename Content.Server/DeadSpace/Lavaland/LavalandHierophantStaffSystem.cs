@@ -25,7 +25,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandHierophantStaffSystem : EntitySystem
+public sealed partial class LavalandHierophantStaffSystem : EntitySystem
 {
     private const int MaxPendingBlasts = 90;
     private const float DuplicateBlastWindow = 0.12f;
@@ -38,17 +38,17 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
         new(-1, 0),
     };
 
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly LavalandHierophantBeatSystem _beat = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private LavalandHierophantBeatSystem _beat = default!;
 
     private readonly List<PendingBlast> _pendingBlasts = new();
     private readonly List<PendingTeleport> _pendingTeleports = new();
@@ -731,7 +731,7 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
             : delay;
     }
 
-    private sealed class PendingBlast
+    private sealed partial class PendingBlast
     {
         public EntityUid Grid;
         public Vector2i Tile;
@@ -746,7 +746,7 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
         public SoundSpecifier HitSound = default!;
     }
 
-    private sealed class PendingTeleport
+    private sealed partial class PendingTeleport
     {
         public EntityUid Performer;
         public EntityUid Grid;
@@ -754,7 +754,7 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
         public TimeSpan ExecuteAt;
     }
 
-    private sealed class PendingChaser
+    private sealed partial class PendingChaser
     {
         public EntityUid Performer;
         public EntityUid Target;

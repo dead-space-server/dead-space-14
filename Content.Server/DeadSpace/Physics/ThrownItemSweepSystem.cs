@@ -11,11 +11,11 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Server.DeadSpace.Physics;
 
-public sealed class ThrownItemSweepSystem : EntitySystem
+public sealed partial class ThrownItemSweepSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ThrownItemSystem _thrown = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ThrownItemSystem _thrown = default!;
 
     private const float MinDistance = 0.25f;
     private const float StopBackoff = 0.35f;

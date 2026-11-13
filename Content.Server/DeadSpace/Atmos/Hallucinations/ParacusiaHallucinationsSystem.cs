@@ -10,11 +10,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Atmos.Hallucinations;
 
-public sealed class ParacusiaHallucinationsSystem : EntitySystem
+public sealed partial class ParacusiaHallucinationsSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ParacusiaSystem _paracusia = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private ParacusiaSystem _paracusia = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     public static readonly EntProtoId StatusEffectParacusia = "StatusEffectParacusia";
 

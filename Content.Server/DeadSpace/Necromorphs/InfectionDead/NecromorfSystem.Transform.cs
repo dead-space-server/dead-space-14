@@ -73,23 +73,23 @@ namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
 public sealed partial class NecromorfSystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly ServerInventorySystem _inventory = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearance = default!;
-    [Dependency] private readonly IdentitySystem _identity = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly IChatManager _chatMan = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly SharedCuffableSystem _cuffs = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly SharedRotationVisualsSystem _sharedRotationVisuals = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly VirusSystem _virus = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private ServerInventorySystem _inventory = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private IdentitySystem _identity = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private IChatManager _chatMan = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private SharedCuffableSystem _cuffs = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private SharedRotationVisualsSystem _sharedRotationVisuals = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private VirusSystem _virus = default!;
+    [Dependency] private LanguageSystem _language = default!;
     private static readonly ProtoId<LanguagePrototype> NecroLanguage = "NecromorfLanguage";
     private static readonly ProtoId<NpcFactionPrototype> NecromorfsFaction = "Necromorfs";
 

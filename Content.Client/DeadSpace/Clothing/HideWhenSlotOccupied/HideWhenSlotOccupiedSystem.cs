@@ -7,9 +7,9 @@ using Content.Shared.Item;
 
 namespace Content.Client.DeadSpace.Clothing.HideWhenSlotOccupied;
 
-public sealed class HideWhenSlotOccupiedSystem : SharedHideWhenSlotOccupiedSystem
+public sealed partial class HideWhenSlotOccupiedSystem : SharedHideWhenSlotOccupiedSystem
 {
-    [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private SharedItemSystem _item = default!;
 
     public override void Initialize()
     {

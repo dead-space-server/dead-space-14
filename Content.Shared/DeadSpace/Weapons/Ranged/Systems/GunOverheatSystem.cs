@@ -13,11 +13,11 @@ namespace Content.Shared.DeadSpace.Weapons.Ranged.Systems;
 /// Overheating of a self-recharging gun (<see cref="GunOverheatComponent"/>): fired too often, its charges come back
 /// slower.
 /// </summary>
-public sealed class GunOverheatSystem : EntitySystem
+public sealed partial class GunOverheatSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly RechargeBasicEntityAmmoSystem _recharge = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private RechargeBasicEntityAmmoSystem _recharge = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

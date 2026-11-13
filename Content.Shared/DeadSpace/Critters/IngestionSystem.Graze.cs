@@ -10,7 +10,7 @@ namespace Content.Shared.Nutrition.EntitySystems;
 
 public sealed partial class IngestionSystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private void TryCritterGraze(Entity<BodyComponent> entity, ref AttemptIngestEvent args)
     {

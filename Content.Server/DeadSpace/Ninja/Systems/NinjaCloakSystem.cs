@@ -8,11 +8,11 @@ using Content.Server.Ninja.Systems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaCloakSystem : SharedNinjaCloakSystem
+public sealed partial class NinjaCloakSystem : SharedNinjaCloakSystem
 {
-    [Dependency] private readonly NinjaSmokeAbilitySystem _ninjaSmoke = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SpaceNinjaSystem _ninja = default!;
+    [Dependency] private NinjaSmokeAbilitySystem _ninjaSmoke = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SpaceNinjaSystem _ninja = default!;
 
     public override void Initialize()
     {

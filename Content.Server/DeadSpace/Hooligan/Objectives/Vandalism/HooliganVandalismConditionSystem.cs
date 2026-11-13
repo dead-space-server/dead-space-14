@@ -15,13 +15,13 @@ namespace Content.Server.DeadSpace.Hooligan.Objectives;
 /// Логика цели на вандализм 
 /// Выбирает место, считает граффити рядом с ним, отвечает о прогрессе
 /// </summary>
-public sealed class HooliganVandalismConditionSystem : EntitySystem
+public sealed partial class HooliganVandalismConditionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Initialize()
     {

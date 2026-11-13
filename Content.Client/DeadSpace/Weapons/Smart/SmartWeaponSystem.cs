@@ -27,21 +27,21 @@ using System.Numerics;
 
 namespace Content.Client.DeadSpace.Weapons.Smart;
 
-public sealed class SmartWeaponSystem : EntitySystem
+public sealed partial class SmartWeaponSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IOverlayManager _overlayManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatModeSystem = default!;
-    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly SpriteSystem _spriteSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TransformSystem _transformSystem = default!;
-    [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlotsSystem = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IOverlayManager _overlayManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private SharedCombatModeSystem _combatModeSystem = default!;
+    [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private SpriteSystem _spriteSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TransformSystem _transformSystem = default!;
+    [Dependency] private ExamineSystemShared _examineSystem = default!;
+    [Dependency] private MobStateSystem _mobStateSystem = default!;
+    [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
 
     private SmartWeaponOverlay _overlay = default!;
     private Texture? _innerRingTexture;

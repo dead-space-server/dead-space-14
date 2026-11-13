@@ -11,12 +11,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server.GameTicking.Rules;
 
-public sealed class ThiefRuleSystem : GameRuleSystem<ThiefRuleComponent>
+public sealed partial class ThiefRuleSystem : GameRuleSystem<ThiefRuleComponent>
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     // DS14: one of these tools (all fit in a utility tool belt) is chosen at random
     // each round as the exact tool the thief must insert to unlock ВорПРО.

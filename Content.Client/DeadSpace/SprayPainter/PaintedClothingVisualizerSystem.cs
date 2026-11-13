@@ -10,12 +10,12 @@ namespace Content.Client.DeadSpace.SprayPainter;
 /// <summary>
 /// Applies the visuals of the selected paint style to spray painted clothing.
 /// </summary>
-public sealed class PaintedClothingVisualizerSystem : VisualizerSystem<ClothingComponent>
+public sealed partial class PaintedClothingVisualizerSystem : VisualizerSystem<ClothingComponent>
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IComponentFactory _factory = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly ClothingSystem _clothing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IComponentFactory _factory = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private ClothingSystem _clothing = default!;
 
     protected override void OnAppearanceChange(EntityUid uid, ClothingComponent component, ref AppearanceChangeEvent args)
     {

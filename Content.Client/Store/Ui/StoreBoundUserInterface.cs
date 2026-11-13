@@ -12,9 +12,9 @@ using Content.Shared.FixedPoint; // DS14
 namespace Content.Client.Store.Ui;
 
 [UsedImplicitly]
-public sealed class StoreBoundUserInterface : BoundUserInterface
+public sealed partial class StoreBoundUserInterface : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14
+    [Dependency] private IPrototypeManager _prototypeManager = default!; // DS14
 
     [ViewVariables]
     private StoreMenu? _menu;

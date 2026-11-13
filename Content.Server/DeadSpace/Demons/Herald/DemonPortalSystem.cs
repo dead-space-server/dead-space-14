@@ -14,13 +14,13 @@ using Content.Shared.Random.Helpers;
 
 namespace Content.Server.DeadSpace.Demons.Herald;
 
-public sealed class DemonPortalSystem : EntitySystem
+public sealed partial class DemonPortalSystem : EntitySystem
 {
-    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!;
-    [Dependency] private readonly NavMapSystem _navMap = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!;
+    [Dependency] private NavMapSystem _navMap = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

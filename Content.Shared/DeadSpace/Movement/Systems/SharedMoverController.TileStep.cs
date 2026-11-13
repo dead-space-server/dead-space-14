@@ -18,7 +18,7 @@ namespace Content.Shared.Movement.Systems;
 /// </summary>
 public abstract partial class SharedMoverController
 {
-    [Dependency] private readonly INetManager _tileStepNet = default!;
+    [Dependency] private INetManager _tileStepNet = default!;
 
     protected EntityQuery<TileStepMovementComponent> TileStepQuery;
     protected EntityQuery<FixturesComponent> TileStepFixturesQuery;

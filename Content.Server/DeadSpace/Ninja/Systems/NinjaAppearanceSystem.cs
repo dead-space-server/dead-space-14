@@ -13,8 +13,8 @@ namespace Content.Server.DeadSpace.Ninja.Systems;
 
 public sealed partial class NinjaAppearanceSystem : SharedNinjaAppearanceSystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
 
     public override void Initialize()
     {

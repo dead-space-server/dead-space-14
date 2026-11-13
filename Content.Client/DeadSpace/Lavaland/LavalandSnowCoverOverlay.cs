@@ -18,7 +18,7 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// Only the planet's own open land is covered: not the outpost, a shelter or any other grid on it, nor anything
 /// under a roof or on an indoor floor - where the storm does not reach, there is no snow.
 /// </summary>
-public sealed class LavalandSnowCoverOverlay : Overlay
+public sealed partial class LavalandSnowCoverOverlay : Overlay
 {
     private const int Strips = 12;
 
@@ -163,11 +163,11 @@ public sealed class LavalandSnowCoverOverlay : Overlay
     }
 }
 
-public sealed class LavalandSnowCoverSystem : EntitySystem
+public sealed partial class LavalandSnowCoverSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinitions = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitions = default!;
 
     private LavalandSnowCoverOverlay _overlay = default!;
 

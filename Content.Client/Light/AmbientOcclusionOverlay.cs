@@ -15,18 +15,18 @@ namespace Content.Client.Light;
 /// <summary>
 /// Applies ambient-occlusion to the viewport.
 /// </summary>
-public sealed class AmbientOcclusionOverlay : Overlay
+public sealed partial class AmbientOcclusionOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
     private static readonly ProtoId<ShaderPrototype> StencilMaskShader = "StencilMask";
     private static readonly ProtoId<ShaderPrototype> StencilEqualDrawShader = "StencilEqualDraw";
 
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IConfigurationManager _cfgManager = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IConfigurationManager _cfgManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
     private SharedMapSystem? _mapManagerCache;
     private SharedMapSystem _mapManager => _mapManagerCache ??= _entManager.System<SharedMapSystem>();
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private List<Entity<MapGridComponent>> _grids = new();
 
@@ -158,7 +158,7 @@ public sealed class AmbientOcclusionOverlay : Overlay
         base.DisposeBehavior();
     }
 
-    private sealed class CachedResources : IDisposable
+    private sealed partial class CachedResources : IDisposable
     {
         public IRenderTexture? AOTarget;
         public IRenderTexture? AOBlurBuffer;

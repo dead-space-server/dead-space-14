@@ -15,14 +15,14 @@ namespace Content.Client.DeadSpace.Lavaland.ChromiteCaves;
 /// Looks of the chromite caves: the pit shimmering blue and purple, the pulsing beam of the exit,
 /// hopping under the beam without a hook, the hook with its rope flying up and the doll pulled up after it.
 /// </summary>
-public sealed class LavalandChromiteCavesClientSystem : EntitySystem
+public sealed partial class LavalandChromiteCavesClientSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SpriteTreeSystem _spriteTree = default!;
 
     private const string HopKey = "lavaland-cave-hop";
     private const string ClimbKey = "lavaland-cave-climb";

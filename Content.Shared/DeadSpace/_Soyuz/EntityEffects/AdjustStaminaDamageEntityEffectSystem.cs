@@ -13,7 +13,7 @@ namespace Content.Shared.DeadSpace._Soyuz.EntityEffects;
 /// </summary>
 public sealed partial class AdjustStaminaDamageEntityEffectSystem : EntityEffectSystem<StaminaComponent, AdjustStaminaDamage>
 {
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
+    [Dependency] private SharedStaminaSystem _stamina = default!;
 
     protected override void Effect(Entity<StaminaComponent> entity, ref EntityEffectEvent<AdjustStaminaDamage> args)
     {

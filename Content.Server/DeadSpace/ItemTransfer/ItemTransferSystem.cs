@@ -18,18 +18,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.ItemTransfer;
 
-public sealed class ItemTransferSystem : EntitySystem
+public sealed partial class ItemTransferSystem : EntitySystem
 {
     private static readonly TimeSpan OfferLifetime = TimeSpan.FromSeconds(10);
 
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
 
     private readonly Dictionary<int, ItemTransferOffer> _offers = new();
     private readonly Dictionary<EntityUid, int> _targetOffers = new();

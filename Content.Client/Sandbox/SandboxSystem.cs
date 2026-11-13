@@ -10,15 +10,15 @@ using Robust.Shared.Player;
 
 namespace Content.Client.Sandbox
 {
-    public sealed class SandboxSystem : SharedSandboxSystem
+    public sealed partial class SandboxSystem : SharedSandboxSystem
     {
-        [Dependency] private readonly IClientAdminManager _adminManager = default!;
-        [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-        [Dependency] private readonly IPlacementManager _placement = default!;
-        [Dependency] private readonly ContentEyeSystem _contentEye = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!;
-        [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-        [Dependency] private readonly DeviceLinkVisSystem _deviceLinks = default!; //DS-14
+        [Dependency] private IClientAdminManager _adminManager = default!;
+        [Dependency] private IClientConsoleHost _consoleHost = default!;
+        [Dependency] private IPlacementManager _placement = default!;
+        [Dependency] private ContentEyeSystem _contentEye = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
+        [Dependency] private SharedMapSystem _mapSystem = default!;
+        [Dependency] private DeviceLinkVisSystem _deviceLinks = default!; //DS-14
 
         private bool _sandboxEnabled;
         public bool SandboxAllowed { get; private set; }

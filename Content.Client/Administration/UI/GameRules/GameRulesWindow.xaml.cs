@@ -22,9 +22,9 @@ namespace Content.Client.Administration.UI.GameRules;
 [GenerateTypedNameReferences]
 public sealed partial class GameRulesWindow : DefaultWindow
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IClientAdminManager _adminManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IClientAdminManager _adminManager = default!;
 
     private GameRulesClientSystem _system = default!;
     private string? _selectedRuleId;

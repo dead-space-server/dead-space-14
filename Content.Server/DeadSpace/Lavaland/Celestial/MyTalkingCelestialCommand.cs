@@ -13,11 +13,11 @@ namespace Content.Server.DeadSpace.Lavaland.Celestial;
 /// показывает субтитры Селестиала всем игрокам без самого босса.
 /// </summary>
 [AdminCommand(AdminFlags.Admin)]
-public sealed class MyTalkingCelestialCommand : IConsoleCommand
+public sealed partial class MyTalkingCelestialCommand : IConsoleCommand
 {
     private static readonly Regex PhraseRegex = new("\"(.+?)\"\\s+(\\d+(?:\\.\\d+)?)", RegexOptions.Compiled);
 
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "mytalkingcelestial";
     public string Description => "Показать субтитры Селестиала всем игрокам (режим 0-3).";

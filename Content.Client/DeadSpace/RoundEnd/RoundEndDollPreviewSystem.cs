@@ -19,15 +19,15 @@ namespace Content.Client.DeadSpace.RoundEnd;
 /// <summary>
 /// Builds at most one local manifest doll per client frame and caches one immutable sprite per player.
 /// </summary>
-public sealed class RoundEndDollPreviewSystem : EntitySystem
+public sealed partial class RoundEndDollPreviewSystem : EntitySystem
 {
     private const string SnapshotPrototype = "clientsideclone";
     private const string FallbackPrototype = "MobObserver";
 
-    [Dependency] private readonly ClientInventorySystem _inventory = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SpriteSystem _sprites = default!;
+    [Dependency] private ClientInventorySystem _inventory = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
 
     private readonly Dictionary<int, OwnerState> _owners = new();
     private readonly Queue<BuildRequest> _queue = new();
@@ -363,13 +363,13 @@ public sealed class RoundEndDollPreviewSystem : EntitySystem
         _queue.Clear();
     }
 
-    private sealed class OwnerState
+    private sealed partial class OwnerState
     {
         public readonly Dictionary<RoundEndDollData, PreviewEntry> Entries =
             new(ReferenceEqualityComparer.Instance);
     }
 
-    private sealed class PreviewEntry
+    private sealed partial class PreviewEntry
     {
         public readonly List<Action<EntityUid?>> Callbacks = new();
         public EntityUid? Snapshot;

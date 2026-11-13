@@ -9,11 +9,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Blink;
 
-public abstract class SharedBlinkSystem : EntitySystem
+public abstract partial class SharedBlinkSystem : EntitySystem
 {
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     public override void Initialize()
     {

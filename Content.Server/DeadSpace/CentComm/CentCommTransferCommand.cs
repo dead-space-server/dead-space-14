@@ -11,11 +11,11 @@ using Robust.Shared.Console;
 namespace Content.Server.DeadSpace.CentComm;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class CentCommTransferCommand : LocalizedEntityCommands
+public sealed partial class CentCommTransferCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly CentCommTransferSystem _transfer = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private CentCommTransferSystem _transfer = default!;
+    [Dependency] private EuiManager _eui = default!;
 
     public override string Command => "centcomm_transfer";
 

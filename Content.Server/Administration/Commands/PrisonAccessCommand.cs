@@ -7,10 +7,10 @@ using Robust.Shared.Console;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Ban)]
-public sealed class PrisonAccessCommand : LocalizedCommands
+public sealed partial class PrisonAccessCommand : LocalizedCommands
 {
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public override string Command => "prison_access";
 

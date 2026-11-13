@@ -18,7 +18,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Nuke;
 
-public sealed class PendingNukeCodeRequestData
+public sealed partial class PendingNukeCodeRequestData
 {
     public int RequestId { get; set; }
     public EntityUid StationUid { get; set; }
@@ -29,14 +29,14 @@ public sealed class PendingNukeCodeRequestData
     public bool Automatic { get; set; }
 }
 
-public sealed class NukeCodeSendQueueSystem : EntitySystem
+public sealed partial class NukeCodeSendQueueSystem : EntitySystem
 {
-    [Dependency] private readonly NukeCodePaperSystem _nukeCodePaper = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly TimedWindowSystem _timedWindowSystem = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
+    [Dependency] private NukeCodePaperSystem _nukeCodePaper = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private TimedWindowSystem _timedWindowSystem = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
 
     private static readonly TimeSpan DecisionLifetime = TimeSpan.FromMinutes(1);
     private static readonly TimeSpan ReminderInterval = TimeSpan.FromSeconds(30);

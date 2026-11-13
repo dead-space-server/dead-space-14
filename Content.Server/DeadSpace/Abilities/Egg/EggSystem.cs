@@ -18,13 +18,13 @@ namespace Content.Server.DeadSpace.Abilities.Egg;
 public sealed partial class EggSystem : SharedEggSystem
 {
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly GhostRoleSystem _ghost = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private GhostRoleSystem _ghost = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
 
     public override void Initialize()
     {

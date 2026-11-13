@@ -20,16 +20,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryMannequinSystem : EntitySystem
+public sealed partial class SurgeryMannequinSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
 
     private float _accumulator;
 

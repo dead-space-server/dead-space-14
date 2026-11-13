@@ -20,9 +20,9 @@ namespace Content.Shared.DeadSpace.PersonnelRecords.Systems;
 /// incrementally across Phases 1, 2 and 5. This shared base only owns the HUD identity/icon sync
 /// that has to run on both sides, exactly like its criminal-records counterpart.
 /// </summary>
-public abstract class SharedPersonnelRecordsSystem : EntitySystem
+public abstract partial class SharedPersonnelRecordsSystem : EntitySystem
 {
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
 

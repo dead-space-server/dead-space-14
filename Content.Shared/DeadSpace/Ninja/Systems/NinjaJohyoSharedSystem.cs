@@ -12,11 +12,11 @@ using Robust.Shared.Physics;
 
 namespace Content.Shared.DeadSpace.Ninja.Systems;
 
-public abstract class SharedChainGunSystem : EntitySystem
+public abstract partial class SharedChainGunSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

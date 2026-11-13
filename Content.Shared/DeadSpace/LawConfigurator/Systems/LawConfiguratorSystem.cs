@@ -16,13 +16,13 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.LawConfigurator.Systems;
 
-public sealed class LawConfiguratorSystem : EntitySystem
+public sealed partial class LawConfiguratorSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
 
     public override void Initialize()
     {
@@ -199,7 +199,7 @@ public sealed partial class LawConfiguratorDoAfterEvent : SimpleDoAfterEvent
 }
 
 // Событие для запроса замены законов на законы с платы
-public sealed class ConfigureLawsFromBoardEvent : EntityEventArgs
+public sealed partial class ConfigureLawsFromBoardEvent : EntityEventArgs
 {
     public EntityUid Target { get; }
     public EntityUid User { get; }

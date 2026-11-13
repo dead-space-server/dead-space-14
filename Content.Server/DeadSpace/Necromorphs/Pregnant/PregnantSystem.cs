@@ -9,11 +9,11 @@ using Robust.Shared.Audio;
 
 namespace Content.Server.DeadSpace.Necromorphs.Pregnant;
 
-public sealed class PregnantSystem : EntitySystem
+public sealed partial class PregnantSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private AudioSystem _audio = default!;
 
     public override void Initialize()
     {

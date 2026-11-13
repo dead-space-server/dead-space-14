@@ -9,13 +9,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Sanity;
 
-public sealed class SanityEffectsSystem : EntitySystem
+public sealed partial class SanityEffectsSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _cameraRecoil = default!;
-    [Dependency] private readonly IOverlayManager _overlayManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedCameraRecoilSystem _cameraRecoil = default!;
+    [Dependency] private IOverlayManager _overlayManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private SanityOverlay? _sanityOverlay;
     private EntityUid? _overlayEntity;

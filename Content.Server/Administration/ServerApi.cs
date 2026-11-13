@@ -45,19 +45,19 @@ public sealed partial class ServerApi : IPostInjectInit
         CCVars.PanicBunkerCustomReason.Name,
     ];
 
-    [Dependency] private readonly IStatusHost _statusHost = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly ISharedAdminManager _adminManager = default!;
-    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
-    [Dependency] private readonly IServerNetManager _netManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly ITaskManager _taskManager = default!;
-    [Dependency] private readonly EntityManager _entityManager = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private IStatusHost _statusHost = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private ISharedAdminManager _adminManager = default!;
+    [Dependency] private IGameMapManager _gameMapManager = default!;
+    [Dependency] private IServerNetManager _netManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private ITaskManager _taskManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     private string _token = string.Empty;
     private ISawmill _sawmill = default!;
@@ -633,29 +633,29 @@ public sealed partial class ServerApi : IPostInjectInit
 
     #region From Client
 
-    private sealed class Actor
+    private sealed partial class Actor
     {
         public required Guid Guid { get; init; }
         public required string Name { get; init; }
     }
 
-    private sealed class KickActionBody
+    private sealed partial class KickActionBody
     {
         public required Guid Guid { get; init; }
         public string? Reason { get; init; }
     }
 
-    private sealed class GameRuleActionBody
+    private sealed partial class GameRuleActionBody
     {
         public required string GameRuleId { get; init; }
     }
 
-    private sealed class PresetActionBody
+    private sealed partial class PresetActionBody
     {
         public required string PresetId { get; init; }
     }
 
-    private sealed class MotdActionBody
+    private sealed partial class MotdActionBody
     {
         public required string Motd { get; init; }
     }
@@ -695,7 +695,7 @@ public sealed partial class ServerApi : IPostInjectInit
     /// <summary>
     /// Record used to send the response for the info endpoint.
     /// </summary>
-    private sealed class InfoResponse
+    private sealed partial class InfoResponse
     {
         public required int RoundId { get; init; }
         public required List<Player> Players { get; init; }
@@ -705,7 +705,7 @@ public sealed partial class ServerApi : IPostInjectInit
         public required string? MOTD { get; init; }
         public required Dictionary<string, object> PanicBunker { get; init; }
 
-        public sealed class Player
+        public sealed partial class Player
         {
             public required Guid UserId { get; init; }
             public required string Name { get; init; }
@@ -713,18 +713,18 @@ public sealed partial class ServerApi : IPostInjectInit
             public required bool IsDeadminned { get; init; }
         }
 
-        public sealed class MapInfo
+        public sealed partial class MapInfo
         {
             public required string Id { get; init; }
             public required string Name { get; init; }
         }
     }
 
-    private sealed class PresetResponse
+    private sealed partial class PresetResponse
     {
         public required List<Preset> Presets { get; init; }
 
-        public sealed class Preset
+        public sealed partial class Preset
         {
             public required string Id { get; init; }
             public required string Description { get; init; }
@@ -732,7 +732,7 @@ public sealed partial class ServerApi : IPostInjectInit
         }
     }
 
-    private sealed class GameruleResponse
+    private sealed partial class GameruleResponse
     {
         public required List<string> GameRules { get; init; }
     }

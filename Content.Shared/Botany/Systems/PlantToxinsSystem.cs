@@ -23,10 +23,10 @@ public sealed partial class PlantToxinsSystem : EntitySystem
     // DS14-end
 
     // DS14-start
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly PlantMutationSystem _mutation = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private PlantMutationSystem _mutation = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
 
     private EntityQuery<PlantTrayComponent> _trayQuery;
     private EntityQuery<PlantHolderComponent> _holderQuery;

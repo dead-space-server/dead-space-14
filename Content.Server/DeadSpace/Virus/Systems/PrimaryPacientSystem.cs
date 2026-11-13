@@ -8,12 +8,12 @@ using Content.Shared.Popups;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class PrimaryPacientSystem : EntitySystem
+public sealed partial class PrimaryPacientSystem : EntitySystem
 {
-    [Dependency] private readonly SentientVirusSystem _sentientVirusSystem = default!;
-    [Dependency] private readonly VirusSystem _virus = default!;
-    [Dependency] private readonly TimedWindowSystem _timedWindowSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private SentientVirusSystem _sentientVirusSystem = default!;
+    [Dependency] private VirusSystem _virus = default!;
+    [Dependency] private TimedWindowSystem _timedWindowSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
     private const int Compensation = 5000;
     public override void Initialize()
     {

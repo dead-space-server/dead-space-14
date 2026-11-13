@@ -17,15 +17,15 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// dropping out of the sky in front of whoever is there, or - nobody there to see it - just lying on the floor,
 /// no animation to run.
 /// </summary>
-public sealed class LavalandPitDropSystem : EntitySystem
+public sealed partial class LavalandPitDropSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
-    [Dependency] private readonly Robust.Shared.Physics.Systems.SharedPhysicsSystem _physics = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private Robust.Shared.Containers.SharedContainerSystem _containers = default!;
+    [Dependency] private Robust.Shared.Physics.Systems.SharedPhysicsSystem _physics = default!;
 
     /// <summary>How long a thing shrinks away into the pit before it is gone down it.</summary>
     private const float SinkDuration = 0.6f;
@@ -42,7 +42,7 @@ public sealed class LavalandPitDropSystem : EntitySystem
     private readonly List<PendingDrop> _pending = new();
     private readonly List<(EntityUid Uid, TimeSpan Until)> _dropping = new();
 
-    private sealed class PendingDrop
+    private sealed partial class PendingDrop
     {
         public EntityUid Item;
         /// <summary>Still sinking into the pit until then, where it fell in.</summary>

@@ -10,12 +10,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class VirusRule : StationEventSystem<VirusRuleComponent>
+public sealed partial class VirusRule : StationEventSystem<VirusRuleComponent>
 {
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly VirusSystem _virusSystem = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private VirusSystem _virusSystem = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
     private ISawmill _sawmill = default!;
     public override void Initialize()
     {

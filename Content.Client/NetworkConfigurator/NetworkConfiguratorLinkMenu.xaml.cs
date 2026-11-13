@@ -15,7 +15,7 @@ namespace Content.Client.NetworkConfigurator;
 [GenerateTypedNameReferences]
 public sealed partial class NetworkConfiguratorLinkMenu : FancyWindow
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private readonly LinksRender _links;
 
@@ -152,7 +152,7 @@ public sealed partial class NetworkConfiguratorLinkMenu : FancyWindow
     ///  Draws lines between linked ports using bezier curve calculated with polynomial coefficients
     ///  See: https://youtu.be/jvPPXbo87ds?t=351
     /// </summary>
-    private sealed class LinksRender : Control
+    private sealed partial class LinksRender : Control
     {
         public readonly List<(ProtoId<SourcePortPrototype>, ProtoId<SinkPortPrototype>)> Links = new();
         public readonly Dictionary<string, Button> SourceButtons = new();

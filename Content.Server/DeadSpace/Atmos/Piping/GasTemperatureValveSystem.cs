@@ -11,11 +11,11 @@ using JetBrains.Annotations;
 namespace Content.Server.DeadSpace.Atmos.Piping;
 
 [UsedImplicitly]
-public sealed class GasTemperatureValveSystem : SharedGasTemperatureValveSystem
+public sealed partial class GasTemperatureValveSystem : SharedGasTemperatureValveSystem
 {
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambientSound = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {

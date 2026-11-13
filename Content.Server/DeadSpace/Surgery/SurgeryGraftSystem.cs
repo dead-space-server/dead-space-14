@@ -19,19 +19,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryGraftSystem : EntitySystem
+public sealed partial class SurgeryGraftSystem : EntitySystem
 {
     private const string Rules = "Default";
     private const string OrganLines = "-organ";
     private const string AppendageLines = "-tail";
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private float _accumulator;
     private float _cellsAccumulator;

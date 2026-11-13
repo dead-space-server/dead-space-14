@@ -10,11 +10,11 @@ using Content.Shared.Inventory;
 
 namespace Content.Shared.DeadSpace.Ninja.Systems;
 
-public abstract class SharedNinjaDisguiseSystem : EntitySystem
+public abstract partial class SharedNinjaDisguiseSystem : EntitySystem
 {
-    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoidAppearance = default!;
 
     public override void Initialize()
     {

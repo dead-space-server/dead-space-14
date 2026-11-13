@@ -23,20 +23,20 @@ namespace Content.Client.DeadSpace.Lavaland.Bosses;
 /// players act out their cues, the screen shakes on the hits, the boss name is shown. The server moves and spawns
 /// the real things; only the camera and the sprites of the players change here.
 /// </summary>
-public sealed class LavalandBossIntroSystem : EntitySystem
+public sealed partial class LavalandBossIntroSystem : EntitySystem
 {
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
-    [Dependency] private readonly LavalandSpriteMotionSystem _motion = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ContentAudioSystem _contentAudio = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private LavalandSpriteMotionSystem _motion = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ContentAudioSystem _contentAudio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private const float MusicFadeIn = 1.5f;
     private const float MusicFadeOut = 1.5f;
@@ -50,7 +50,7 @@ public sealed class LavalandBossIntroSystem : EntitySystem
     private LavalandBossIntroOverlay _overlay = default!;
     private Scene? _scene;
 
-    private sealed class Scene
+    private sealed partial class Scene
     {
         public required LavalandBossIntroEvent Event;
         public readonly List<EntityUid> Watchers = new();

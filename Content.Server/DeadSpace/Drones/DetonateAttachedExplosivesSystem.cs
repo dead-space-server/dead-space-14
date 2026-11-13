@@ -11,12 +11,12 @@ using Content.Shared.Whitelist;
 
 namespace Content.Server.DeadSpace.Drones.Systems;
 
-public sealed class DetonateAttachedExplosivesSystem : EntitySystem
+public sealed partial class DetonateAttachedExplosivesSystem : EntitySystem
 {
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
-    [Dependency] private readonly StickySystem _sticky = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private StickySystem _sticky = default!;
 
     public override void Initialize()
     {

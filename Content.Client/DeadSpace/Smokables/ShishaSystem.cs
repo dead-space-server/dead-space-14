@@ -7,12 +7,12 @@ using Robust.Shared.Serialization.Manager;
 
 namespace Content.Client.DeadSpace.Smokables;
 
-public sealed class ShishaSystem : SharedShishaSystem
+public sealed partial class ShishaSystem : SharedShishaSystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly ItemSystem _items = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private ItemSystem _items = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
 
     public override void Initialize()
     {

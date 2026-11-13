@@ -20,8 +20,8 @@ public sealed partial class DrugEchoSystem : EntitySystem
 {
     private const string NarcoticsGroup = "Narcotics";
 
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
 
     public override void Update(float frameTime)
     {

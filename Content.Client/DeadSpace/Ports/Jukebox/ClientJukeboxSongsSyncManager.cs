@@ -8,9 +8,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Ports.Jukebox;
 
-public sealed class ClientJukeboxSongsSyncManager : JukeboxSongsSyncManager
+public sealed partial class ClientJukeboxSongsSyncManager : JukeboxSongsSyncManager
 {
-    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private ILogManager _log = default!;
     private readonly Dictionary<ResPath, int> _fileRounds = new();
     private int _clearedRound = -1;
 

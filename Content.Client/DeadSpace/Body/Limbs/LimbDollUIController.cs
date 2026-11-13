@@ -22,11 +22,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Body.Limbs;
 
-public sealed class LimbDollUIController : UIController, IOnStateChanged<GameplayState>
+public sealed partial class LimbDollUIController : UIController, IOnStateChanged<GameplayState>
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IInputManager _input = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IInputManager _input = default!;
 
     private static readonly Color Normal = new(0.45f, 0.72f, 0.82f);
     private static readonly Color Gone = new(0.42f, 0.44f, 0.47f);

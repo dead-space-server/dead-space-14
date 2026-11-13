@@ -36,34 +36,34 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.AshWalkers;
 
-public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
+public sealed partial class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
 {
     private const float OfferingRange = 1.5f;
     private static readonly string[] HealingTypes = ["Blunt", "Slash", "Piercing", "Heat", "Cold", "Caustic"];
 
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly BloodstreamSystem _blood = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly MovementModStatusSystem _movementStatus = default!;
-    [Dependency] private readonly OpenableSystem _openable = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ISharedPlayerManager _players = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private BloodstreamSystem _blood = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private MovementModStatusSystem _movementStatus = default!;
+    [Dependency] private OpenableSystem _openable = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ISharedPlayerManager _players = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
     private readonly Dictionary<EntityUid, AshWalkerReturnEui> _pendingReturns = new();
 

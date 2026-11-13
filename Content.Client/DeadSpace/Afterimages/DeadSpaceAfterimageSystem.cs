@@ -12,12 +12,12 @@ using Robust.Shared.Spawners;
 
 namespace Content.Client.DeadSpace.Afterimages;
 
-public sealed class DeadSpaceAfterimageSystem : EntitySystem
+public sealed partial class DeadSpaceAfterimageSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private const string AnimationKey = "deadspace-afterimage";
 

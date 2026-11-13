@@ -9,12 +9,12 @@ using Robust.Client.Graphics;
 
 namespace Content.Client.DeadSpace.ERT;
 
-public sealed class ErtTrackingSystem : EntitySystem
+public sealed partial class ErtTrackingSystem : EntitySystem
 {
     private const string TrackingAlert = "ErtTracking";
 
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

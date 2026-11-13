@@ -4,10 +4,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Electrocution
 {
-    public abstract class SharedElectrocutionSystem : EntitySystem
+    public abstract partial class SharedElectrocutionSystem : EntitySystem
     {
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-        [Dependency] private readonly IGameTiming _timing = default!; // DS14 - pre-v288 IoC
+        [Dependency] private SharedAppearanceSystem _appearance = default!;
+        [Dependency] private IGameTiming _timing = default!; // DS14 - pre-v288 IoC
 
         public override void Initialize()
         {

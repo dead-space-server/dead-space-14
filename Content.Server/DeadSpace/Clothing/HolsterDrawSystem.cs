@@ -10,10 +10,10 @@ using Content.Shared.Storage;
 
 namespace Content.Server.DeadSpace.Clothing;
 
-public sealed class HolsterDrawSystem : EntitySystem
+public sealed partial class HolsterDrawSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

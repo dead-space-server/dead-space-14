@@ -10,11 +10,11 @@ using Robust.Shared.Input.Binding;
 
 namespace Content.Client.DeadSpace.Blink;
 
-public sealed class BlinkSystem : SharedBlinkSystem
+public sealed partial class BlinkSystem : SharedBlinkSystem
 {
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private BlinkRangeOverlay _overlay = default!;
     private BlinkBloodTrailOverlay _bloodTrail = default!;

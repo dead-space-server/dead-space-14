@@ -17,17 +17,17 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Database;
 
-public sealed class UserIdAutoMigrationManager
+public sealed partial class UserIdAutoMigrationManager
 {
     private const string AuthUnavailableMessage = "Authentication service is temporarily unavailable. Please try again later.";
     private const string MigrationBusyMessage = "Account data migration is already in progress. Please try again later.";
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IHttpClientHolder _http = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly PlayTimeTrackingManager _playTimeTracking = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IHttpClientHolder _http = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private PlayTimeTrackingManager _playTimeTracking = default!;
 
     private readonly ConcurrentDictionary<Guid, SemaphoreSlim> _migrationLocks = new();
     private ISawmill _sawmill = default!;

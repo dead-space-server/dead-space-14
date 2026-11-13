@@ -57,15 +57,15 @@ namespace Content.Client.DeadSpace.UserInterface.Testing;
 /// Developer-only deterministic UI fixture renderer. The runner launches one fixture per client process.
 /// </summary>
 [AnyCommand]
-public sealed class DeadSpaceUiRenderCommand : IConsoleCommand
+public sealed partial class DeadSpaceUiRenderCommand : IConsoleCommand
 {
     private static readonly ResPath OutputDirectory = new("/Screenshots/DS14UI");
 
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IGameController _gameController = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IGameController _gameController = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private BaseWindow? _window;
     private IConsoleShell? _shell;
@@ -1065,7 +1065,7 @@ public sealed class DeadSpaceUiRenderCommand : IConsoleCommand
         return string.IsNullOrWhiteSpace(safe) ? "fixture" : safe;
     }
 
-    private sealed class FixtureContainerButton : ContainerButton
+    private sealed partial class FixtureContainerButton : ContainerButton
     {
         public void ForcePseudo(string pseudo)
         {
@@ -1074,7 +1074,7 @@ public sealed class DeadSpaceUiRenderCommand : IConsoleCommand
     }
 }
 
-internal sealed class DeadSpaceUiFixtureWindow : DefaultWindow
+internal sealed partial class DeadSpaceUiFixtureWindow : DefaultWindow
 {
     public DeadSpaceUiFixtureWindow(string fixture)
     {
@@ -1312,7 +1312,7 @@ internal sealed class DeadSpaceUiFixtureWindow : DefaultWindow
         };
     }
 
-    private sealed class FixtureButton : Button
+    private sealed partial class FixtureButton : Button
     {
         public void ForcePseudo(string pseudo)
         {

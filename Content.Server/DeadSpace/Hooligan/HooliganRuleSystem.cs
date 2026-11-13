@@ -12,9 +12,9 @@ namespace Content.Server.DeadSpace.Hooligan;
 /// Логика роли Хулигана. 
 /// Показывает брифинг.
 /// </summary>
-public sealed class HooliganRuleSystem : GameRuleSystem<HooliganRuleComponent>
+public sealed partial class HooliganRuleSystem : GameRuleSystem<HooliganRuleComponent>
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
 
     public override void Initialize()
     {

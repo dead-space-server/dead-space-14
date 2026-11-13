@@ -31,18 +31,18 @@ namespace Content.Server.RoundEnd
     /// </summary>
     public sealed partial class RoundEndSystem : EntitySystem // DS14
     {
-        [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
-        [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IChatManager _chatManager = default!;
-        [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly IPrototypeManager _protoManager = default!;
-        [Dependency] private readonly ChatSystem _chatSystem = default!;
-        [Dependency] private readonly GameTicker _gameTicker = default!;
-        [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
-        [Dependency] private readonly EmergencyShuttleSystem _shuttle = default!;
-        [Dependency] private readonly SharedAudioSystem _audio = default!;
-        [Dependency] private readonly StationSystem _stationSystem = default!;
+        [Dependency] private Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
+        [Dependency] private IAdminLogManager _adminLogger = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IChatManager _chatManager = default!;
+        [Dependency] private IGameTiming _gameTiming = default!;
+        [Dependency] private IPrototypeManager _protoManager = default!;
+        [Dependency] private ChatSystem _chatSystem = default!;
+        [Dependency] private GameTicker _gameTicker = default!;
+        [Dependency] private DeviceNetworkSystem _deviceNetworkSystem = default!;
+        [Dependency] private EmergencyShuttleSystem _shuttle = default!;
+        [Dependency] private SharedAudioSystem _audio = default!;
+        [Dependency] private StationSystem _stationSystem = default!;
 
         public TimeSpan DefaultCooldownDuration { get; set; } = TimeSpan.FromSeconds(30);
 
@@ -430,7 +430,7 @@ namespace Content.Server.RoundEnd
         }
     }
 
-    public sealed class RoundEndSystemChangedEvent : EntityEventArgs
+    public sealed partial class RoundEndSystemChangedEvent : EntityEventArgs
     {
         public static RoundEndSystemChangedEvent Default { get; } = new();
     }

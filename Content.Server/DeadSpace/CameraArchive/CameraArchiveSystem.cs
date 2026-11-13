@@ -52,7 +52,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.CameraArchives;
 
-public sealed class CameraArchiveSystem : EntitySystem
+public sealed partial class CameraArchiveSystem : EntitySystem
 {
     public readonly record struct CameraFrame(TimeSpan RoundTime, CameraArchive Still, bool Saved = false, int Id = 0, CameraFrameParts? Parts = null);
 
@@ -61,25 +61,25 @@ public sealed class CameraArchiveSystem : EntitySystem
     [ByRefEvent]
     public readonly record struct CameraArchiveHistoryEvent(EntityUid? Camera);
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IRobustSerializer _serializer = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SurveillanceCameraSystem _cameras = default!;
-    [Dependency] private readonly SharedToolSystem _tools = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly EmagSystem _emag = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IRobustSerializer _serializer = default!;
+    [Dependency] private IResourceManager _resources = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SurveillanceCameraSystem _cameras = default!;
+    [Dependency] private SharedToolSystem _tools = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EmagSystem _emag = default!;
+    [Dependency] private StationSystem _station = default!;
 
     private static readonly string Welding = "Welding";
     private const string AudioEntity = "Audio";
@@ -1940,7 +1940,7 @@ public sealed class CameraArchiveSystem : EntitySystem
         return hash.ToHashCode();
     }
 
-    private sealed class BuiltView
+    private sealed partial class BuiltView
     {
         public int Anchored;
         public int LooseStamp;

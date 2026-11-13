@@ -7,8 +7,8 @@ namespace Content.Server.Objectives.Systems;
 
 public sealed partial class ChangelingObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly NumberObjectiveSystem _number = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private NumberObjectiveSystem _number = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
 
     // DS14-start: pre-v288 RobustToolbox has no event-subscription source generator.
     public override void Initialize()

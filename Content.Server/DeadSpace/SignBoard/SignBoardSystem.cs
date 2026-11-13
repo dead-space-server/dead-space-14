@@ -6,11 +6,11 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.SignBoard;
 
-public sealed class SignBoardSystem : EntitySystem
+public sealed partial class SignBoardSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

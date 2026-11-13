@@ -9,10 +9,10 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.SleepOnSSD;
 
-public sealed class SleepOnSSDSystem : EntitySystem
+public sealed partial class SleepOnSSDSystem : EntitySystem
 {
-    [Dependency] private readonly SleepingSystem _sleepingSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+    [Dependency] private SleepingSystem _sleepingSystem = default!;
+    [Dependency] private MobStateSystem _mobStateSystem = default!;
 
     public override void Initialize()
     {

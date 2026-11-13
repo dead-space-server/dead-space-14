@@ -23,21 +23,21 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class VirusSolutionAnalyzerSystem : EntitySystem
+public sealed partial class VirusSolutionAnalyzerSystem : EntitySystem
 {
     private static readonly TimeSpan ConsoleStatusUpdateCooldown = TimeSpan.FromSeconds(5);
 
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly VirusDiagnoserConsoleSystem _console = default!;
-    [Dependency] private readonly PowerReceiverSystem _powerReceiverSystem = default!;
-    [Dependency] private readonly VirusDiagnoserDataServerSystem _dataServer = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly VirusEvolutionConsoleSystem _evolutionConsoleSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly DeviceLinkSystem _deviceLink = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private VirusDiagnoserConsoleSystem _console = default!;
+    [Dependency] private PowerReceiverSystem _powerReceiverSystem = default!;
+    [Dependency] private VirusDiagnoserDataServerSystem _dataServer = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private VirusEvolutionConsoleSystem _evolutionConsoleSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private DeviceLinkSystem _deviceLink = default!;
     private const string FlaskContainerKey = "flask_container_virus_solution_analyzer";
 
     public override void Initialize()

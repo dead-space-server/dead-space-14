@@ -6,11 +6,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.DeadSpace.Guardian;
 
-public sealed class GuardianSelfToggleSystem : EntitySystem
+public sealed partial class GuardianSelfToggleSystem : EntitySystem
 {
-    [Dependency] private readonly GuardianSystem _guardian = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private GuardianSystem _guardian = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {

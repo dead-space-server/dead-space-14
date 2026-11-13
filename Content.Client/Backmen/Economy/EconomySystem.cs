@@ -11,7 +11,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.Backmen.Economy;
 
-public sealed class EconomySystem : EntitySystem
+public sealed partial class EconomySystem : EntitySystem
 {
     [Dependency] private TransformSystem _transformSystem = default!;
     [Dependency] private IPlayerManager _playerManager = default!;

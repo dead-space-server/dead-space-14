@@ -17,18 +17,18 @@ using Robust.Shared.Player;
 
 namespace Content.Client.DeadSpace.Lavaland.Bosses;
 
-public sealed class LavalandBossHudSystem : EntitySystem
+public sealed partial class LavalandBossHudSystem : EntitySystem
 {
     private const float HudTopMargin = 14f;
     private const float BossMusicMutedVolumeOffset = -32f;
     private const float BossMusicFadeInDuration = 1.75f;
     private const float BossMusicFadeOutDuration = 2.5f;
 
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly ContentAudioSystem _contentAudio = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IInputManager _input = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private ContentAudioSystem _contentAudio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private IInputManager _input = default!;
 
     private LavalandBossHudControl? _hud;
     private LayoutContainer? _viewportRoot;

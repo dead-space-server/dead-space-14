@@ -10,13 +10,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryGiftSystem : EntitySystem
+public sealed partial class SurgeryGiftSystem : EntitySystem
 {
     private const string PartPrefix = "part:";
 
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly IComponentFactory _factory = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private IComponentFactory _factory = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

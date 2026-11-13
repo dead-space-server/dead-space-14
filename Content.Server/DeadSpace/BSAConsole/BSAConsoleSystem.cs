@@ -20,15 +20,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.BSAConsole;
 
-public sealed class BSAConsoleSystem : EntitySystem
+public sealed partial class BSAConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly DeviceListSystem _deviceList = default!;
-    [Dependency] private readonly SharedMapSystem _mapManager = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private DeviceListSystem _deviceList = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
 
     private static readonly TimeSpan UiUpdateInterval = TimeSpan.FromMilliseconds(250);
     private const float RadarMaxRange = 512f;

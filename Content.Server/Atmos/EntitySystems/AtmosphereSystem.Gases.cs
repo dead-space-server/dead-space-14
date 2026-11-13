@@ -11,7 +11,7 @@ namespace Content.Server.Atmos.EntitySystems
 {
     public sealed partial class AtmosphereSystem
     {
-        [Dependency] private readonly IPrototypeManager _protoMan = default!;
+        [Dependency] private IPrototypeManager _protoMan = default!;
 
         private GasReactionPrototype[] _gasReactions = [];
         // DS14-start: most active tiles are normal O2/N2 air; skip reaction scans when no reaction-only gases exist.

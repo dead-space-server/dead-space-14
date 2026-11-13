@@ -37,26 +37,26 @@ using Content.Shared.Zombies;
 
 namespace Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 
-public sealed class SuperNecroobeliskSystem : SharedSuperNecroobeliskSystem
+public sealed partial class SuperNecroobeliskSystem : SharedSuperNecroobeliskSystem
 {
     private const string ActivationAnnouncement = "unitology-centcomm-announcement-supermatter-obelisk-activated";
     private const string ActivationAnnouncementSender = "Автоматические Системы Станции";
     private const string ActivationAnnouncementVoice = "Glados";
 
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly BeamSystem _beam = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly AnomalySystem _anomaly = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private BeamSystem _beam = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private AnomalySystem _anomaly = default!;
 
 
     public override void Initialize()

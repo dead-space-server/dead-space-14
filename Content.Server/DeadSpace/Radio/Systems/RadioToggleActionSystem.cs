@@ -5,9 +5,9 @@ using Content.Shared.Radio.Components;
 
 namespace Content.Server.DeadSpace.Radio.Systems;
 
-public sealed class RadioToggleActionSystem : SharedRadioToggleActionSystem
+public sealed partial class RadioToggleActionSystem : SharedRadioToggleActionSystem
 {
-    [Dependency] private readonly SharedRadioDeviceSystem _radioDevice = default!;
+    [Dependency] private SharedRadioDeviceSystem _radioDevice = default!;
     public override void Initialize()
     {
         base.Initialize();

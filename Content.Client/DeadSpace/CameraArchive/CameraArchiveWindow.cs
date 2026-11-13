@@ -15,7 +15,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.CameraArchives;
 
-public sealed class CameraArchiveControl : Control
+public sealed partial class CameraArchiveControl : Control
 {
     public readonly LineEdit Search;
     public readonly BoxContainer CameraRows;
@@ -50,8 +50,8 @@ public sealed class CameraArchiveControl : Control
     private static readonly ProtoId<ShaderPrototype> CameraStaticShader = "CameraStatic";
     private readonly PanelContainer _cover;
 
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IResourceCache _resources = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IResourceCache _resources = default!;
 
     public CameraArchiveControl()
     {
@@ -401,7 +401,7 @@ public sealed class CameraArchiveControl : Control
         ZoomInButton.Disabled = _zoomStep >= _zoomSteps.Length - 1;
     }
 
-    private sealed class FrameDrag : Control
+    private sealed partial class FrameDrag : Control
     {
         public event Action<Vector2>? Pan;
         private bool _drag;

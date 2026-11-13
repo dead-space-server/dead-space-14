@@ -12,11 +12,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.AdminToy;
 
-public sealed class AdminToySystem : EntitySystem
+public sealed partial class AdminToySystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly ConstructionSystem _construction = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private ConstructionSystem _construction = default!;
 
     private readonly Dictionary<int, EntityUid> _constructionGhosts = new();
 

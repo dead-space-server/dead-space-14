@@ -18,9 +18,9 @@ namespace Content.Client.SprayPainter;
 /// <summary>
 /// Client-side spray painter functions. Caches information for spray painter windows and updates the UI to reflect component state.
 /// </summary>
-public sealed class SprayPainterSystem : SharedSprayPainterSystem
+public sealed partial class SprayPainterSystem : SharedSprayPainterSystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public List<SprayPainterDecalEntry> Decals = [];
     public Dictionary<string, List<string>> PaintableGroupsByCategory = new();
@@ -134,7 +134,7 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
     }
             // DS14-end
 
-    private sealed class StatusControl : Control
+    private sealed partial class StatusControl : Control
     {
         private readonly RichTextLabel _label;
         private readonly Entity<SprayPainterComponent> _entity;

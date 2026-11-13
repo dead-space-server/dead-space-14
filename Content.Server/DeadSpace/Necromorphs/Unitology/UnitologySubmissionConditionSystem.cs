@@ -8,10 +8,10 @@ using Robust.Server.Player;
 
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
-public sealed class UnitologySubmissionConditionSystem : EntitySystem
+public sealed partial class UnitologySubmissionConditionSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     public override void Initialize()
     {

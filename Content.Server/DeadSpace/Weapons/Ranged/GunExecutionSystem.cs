@@ -30,7 +30,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Weapons.Ranged;
 
-public sealed class GunExecutionSystem : EntitySystem
+public sealed partial class GunExecutionSystem : EntitySystem
 {
     private static readonly TimeSpan ExecutionDuration = TimeSpan.FromSeconds(5);
     private const float CourageFailureChance = 0.25f;
@@ -38,16 +38,16 @@ public sealed class GunExecutionSystem : EntitySystem
     private static readonly FixedPoint2 TriggerPayloadMinimumExecutionDamage = FixedPoint2.New(7);
     private const float MinimumExecutionExplosionIntensity = 1f;
 
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly GunSystem _gun = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SuicideSystem _suicide = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private GunSystem _gun = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SuicideSystem _suicide = default!;
 
     public override void Initialize()
     {

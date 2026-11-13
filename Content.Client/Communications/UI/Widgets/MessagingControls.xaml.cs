@@ -17,9 +17,9 @@ namespace Content.Client.Communications.UI.Widgets;
 public sealed partial class MessagingControls : TabContainer
 {
     // DS14-start - the current engine still uses the pre-source-generator IoC pattern.
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
     // DS14-end
 
     private SharedAppearanceSystem _appearance = default!;

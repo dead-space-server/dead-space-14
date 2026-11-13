@@ -15,7 +15,7 @@ namespace Content.Client.DeadSpace.Ninja.UI;
 [GenerateTypedNameReferences]
 public sealed partial class NinjaInfoScannerWindow : DefaultWindow
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public event Action? OnScanPressed;
     public event Action? OnEjectPressed;

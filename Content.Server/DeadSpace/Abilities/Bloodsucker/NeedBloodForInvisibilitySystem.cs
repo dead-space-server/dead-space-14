@@ -8,8 +8,8 @@ namespace Content.Server.DeadSpace.Abilities.Bloodsucker;
 
 public sealed partial class NeededBloodForInvisibilitySystem : SharedBloodsuckerSystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedInvisibilitySystem _invis = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedInvisibilitySystem _invis = default!;
 
     public override void Initialize()
     {

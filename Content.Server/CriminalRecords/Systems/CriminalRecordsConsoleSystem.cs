@@ -30,23 +30,23 @@ namespace Content.Server.CriminalRecords.Systems;
 /// <summary>
 /// Handles all UI for criminal records console
 /// </summary>
-public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleSystem
+public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleSystem
 {
-    [Dependency] private readonly AccessReaderSystem _access = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!; // DS14
-    [Dependency] private readonly CriminalRecordsSystem _criminalRecords = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!; // DS14
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!; // DS14
-    [Dependency] private readonly PaperSystem _paperSystem = default!; // DS14
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!; // DS14
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly StationRecordsSystem _records = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!; // DS14
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private AccessReaderSystem _access = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedAudioSystem _audio = default!; // DS14
+    [Dependency] private CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private GameTicker _gameTicker = default!; // DS14
+    [Dependency] private SharedIdCardSystem _idCard = default!; // DS14
+    [Dependency] private PaperSystem _paperSystem = default!; // DS14
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!; // DS14
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
+    [Dependency] private IResourceManager _resourceManager = default!; // DS14
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IGameTiming _timing = default!; // DS14
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

@@ -20,11 +20,11 @@ using Content.Shared.Inventory;
 
 namespace Content.Shared.Backmen.Blob.NPC.BlobPod;
 
-public abstract class SharedBlobPodSystem : EntitySystem
+public abstract partial class SharedBlobPodSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly InventorySystem _inventorySystem = default!; //DS14
-    [Dependency] private readonly ToggleableClothingSystem _toggleableClothingSystem = default!; //DS14
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private InventorySystem _inventorySystem = default!; //DS14
+    [Dependency] private ToggleableClothingSystem _toggleableClothingSystem = default!; //DS14
 
     private EntityQuery<HumanoidAppearanceComponent> _query;
     private EntityQuery<InputMoverComponent> _inputQuery;

@@ -7,14 +7,14 @@ using Content.Shared.Inventory;
 
 namespace Content.Shared.DeadSpace.TheCircle.Dreadnought;
 
-public sealed class DreadnoughtBuckleSystem : EntitySystem
+public sealed partial class DreadnoughtBuckleSystem : EntitySystem
 {
     private const string OuterClothingSlot = "outerClothing";
     private readonly HashSet<(EntityUid Buckle, EntityUid Strap)> _completedBuckleAttempts = [];
 
-    [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     public override void Initialize()
     {

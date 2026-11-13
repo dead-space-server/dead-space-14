@@ -81,25 +81,25 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
         Vector2i.Zero,
     };
 
-    [Dependency] private readonly Robust.Shared.EntitySerialization.Systems.MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly Content.Server.Decals.DecalSystem _decals = default!;
-    [Dependency] private readonly BiomeSystem _biome = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!; // DS14
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TileSystem _tile = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly ShuttleSystem _shuttle = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private Robust.Shared.EntitySerialization.Systems.MapLoaderSystem _mapLoader = default!;
+    [Dependency] private Content.Server.Decals.DecalSystem _decals = default!;
+    [Dependency] private BiomeSystem _biome = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private SharedContainerSystem _container = default!; // DS14
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinition = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TileSystem _tile = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private ShuttleSystem _shuttle = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private List<Entity<MapGridComponent>> _nearbyGrids = new();
     private readonly List<EntityUid> _anchoredToDelete = new();
@@ -729,7 +729,7 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
 
     #region Cave arenas
 
-    private sealed class CaveLayout
+    private sealed partial class CaveLayout
     {
         public readonly HashSet<Vector2i> Floor = new();
         public readonly HashSet<Vector2i> Rock = new();

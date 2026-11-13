@@ -7,10 +7,10 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.DeadSpace.Smokables;
 
 /// <summary>Shared click routing and drag-to-self pickup, including client drag affordances.</summary>
-public abstract class SharedShishaSystem : EntitySystem
+public abstract partial class SharedShishaSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
 
     public override void Initialize()
     {

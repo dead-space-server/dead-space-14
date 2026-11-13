@@ -23,11 +23,11 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Storage.Controls;
 
-public sealed class StorageWindow : BaseWindow
+public sealed partial class StorageWindow : BaseWindow
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
+    [Dependency] private IEntityManager _entity = default!;
     private readonly StorageUIController _storageController;
-    [Dependency] private readonly IPlayerManager _playerManager = default!; // DS14
+    [Dependency] private IPlayerManager _playerManager = default!; // DS14
 
     public EntityUid? StorageEntity;
 

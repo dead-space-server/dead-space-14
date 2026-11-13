@@ -19,14 +19,14 @@ using Content.Shared.Revenant.Components; //DS14
 
 namespace Content.Server.Revenant.EntitySystems;
 
-public sealed class RevenantMindCapturedSystem : EntitySystem
+public sealed partial class RevenantMindCapturedSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!; //DS14
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private SharedActionsSystem _actions = default!; //DS14
 
     public override void Initialize()
     {

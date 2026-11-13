@@ -6,8 +6,8 @@ namespace Content.Server.NPC.HTN.Preconditions;
 
 public sealed partial class CritterGrazePrecondition : HTNPrecondition
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override bool IsMet(NPCBlackboard blackboard)
     {

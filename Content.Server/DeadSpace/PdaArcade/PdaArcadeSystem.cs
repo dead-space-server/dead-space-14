@@ -20,17 +20,17 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.PdaArcade;
 
-public sealed class PdaArcadeSystem : EntitySystem
+public sealed partial class PdaArcadeSystem : EntitySystem
 {
     private const int MaxPerGame = 20;
     private static readonly ResPath ScoresPath = new("/pda_arcade_scores.json");
     private static readonly JsonSerializerOptions JsonOpts = new() { IncludeFields = true };
 
-    [Dependency] private readonly CartridgeLoaderSystem _loader = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private CartridgeLoaderSystem _loader = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private IResourceManager _resources = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private readonly List<StoredScore> _scores = new();
     private readonly List<Match> _matches = new();
@@ -682,7 +682,7 @@ public sealed class PdaArcadeSystem : EntitySystem
         return MetaData(uid).EntityName;
     }
 
-    public sealed class Match
+    public sealed partial class Match
     {
         public int Id;
         public string Game;
@@ -707,7 +707,7 @@ public sealed class PdaArcadeSystem : EntitySystem
         }
     }
 
-    private sealed class StoredScore
+    private sealed partial class StoredScore
     {
         public string Game = "";
         public string Name = "";
@@ -715,7 +715,7 @@ public sealed class PdaArcadeSystem : EntitySystem
         public string User = "";
     }
 
-    private sealed class Invite
+    private sealed partial class Invite
     {
         public int Id;
         public string Game;

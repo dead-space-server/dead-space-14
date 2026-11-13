@@ -21,14 +21,14 @@ namespace Content.Server.DeadSpace.QueueTerminal;
 /// поддержание согласованности очереди, если вызванный или ожидающий билет исчезает
 /// преждевременно (отброшен, сожжен, удален и т.д.)
 /// </summary>
-public sealed class QueueTerminalSystem : EntitySystem
+public sealed partial class QueueTerminalSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

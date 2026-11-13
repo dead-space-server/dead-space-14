@@ -5,9 +5,9 @@ using Content.Shared.Trigger;
 
 namespace Content.Shared.DeadSpace.Triggers.Systems;
 
-public sealed class TriggerOnActionSystem : TriggerOnXSystem
+public sealed partial class TriggerOnActionSystem : TriggerOnXSystem
 {
-    [Dependency] private readonly SharedActionsSystem _action = default!;
+    [Dependency] private SharedActionsSystem _action = default!;
     public override void Initialize()
     {
         base.Initialize();

@@ -11,12 +11,12 @@ using Robust.Shared.GameStates;
 
 namespace Content.Client.VendingMachines;
 
-public sealed class VendingMachineSystem : SharedVendingMachineSystem
+public sealed partial class VendingMachineSystem : SharedVendingMachineSystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
-    [Dependency] private readonly SharedPointLightSystem _light = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _receiver = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private SharedPowerReceiverSystem _receiver = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

@@ -11,7 +11,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Surgery;
 
-public sealed class SurgeryMmiBellySystem : EntitySystem
+public sealed partial class SurgeryMmiBellySystem : EntitySystem
 {
     private const string Shell = "surgery-mmi-belly";
     private const string Brain = "surgery-mmi-belly-brain";
@@ -19,9 +19,9 @@ public sealed class SurgeryMmiBellySystem : EntitySystem
     private static readonly Vector2 Offset = new(0f, -0.12f);
     private static readonly Vector2 Scale = new(0.45f, 0.45f);
 
-    [Dependency] private readonly SpriteSystem _sprites = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     public override void Initialize()
     {

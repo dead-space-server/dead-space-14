@@ -7,10 +7,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.PatrolTablet;
 
-public sealed class ShowPatrolIconsSystem : EquipmentHudSystem<ShowPatrolIconsComponent>
+public sealed partial class ShowPatrolIconsSystem : EquipmentHudSystem<ShowPatrolIconsComponent>
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
 
     public override void Initialize()
     {

@@ -15,11 +15,11 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// Places the planet's <see cref="LavalandPlanetPrototype.GuaranteedSpawns"/> as it is made: the mini-bosses are
 /// always there, not left to the rare peaks of a biome layer's noise.
 /// </summary>
-public sealed class LavalandGuaranteedSpawnSystem : EntitySystem
+public sealed partial class LavalandGuaranteedSpawnSystem : EntitySystem
 {
-    [Dependency] private readonly LavalandNecropolisTendrilPlacementSystem _placement = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private LavalandNecropolisTendrilPlacementSystem _placement = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     private readonly List<Vector2i> _placed = new();
 

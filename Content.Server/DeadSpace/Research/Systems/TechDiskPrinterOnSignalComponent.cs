@@ -7,9 +7,9 @@ using Content.Server.Power.EntitySystems;
 
 namespace Content.Server.DeadSpace.Research.Systems;
 
-public sealed class TechDiskPrinterOnSignalSystem : EntitySystem
+public sealed partial class TechDiskPrinterOnSignalSystem : EntitySystem
 {
-    [Dependency] private readonly PowerReceiverSystem _powerReceiver = default!;
+    [Dependency] private PowerReceiverSystem _powerReceiver = default!;
 
     public override void Initialize()
     {

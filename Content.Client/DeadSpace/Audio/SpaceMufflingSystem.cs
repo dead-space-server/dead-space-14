@@ -17,13 +17,13 @@ namespace Content.Client.DeadSpace.Audio;
 /// <summary>
 /// Adds pressure-dependent filtering to positional sounds, preserving their playback and wall occlusion.
 /// </summary>
-public sealed class SpaceMufflingSystem : EntitySystem
+public sealed partial class SpaceMufflingSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     private float _maxRayLength;
     private bool _enabled;

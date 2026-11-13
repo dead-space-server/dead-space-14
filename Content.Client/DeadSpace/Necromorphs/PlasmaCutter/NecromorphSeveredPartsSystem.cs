@@ -13,11 +13,11 @@ namespace Content.Client.DeadSpace.Necromorphs.PlasmaCutter;
 /// layers go with the parts, but a suit or a helmet (or a one-piece sprite like the mad miner's) keeps drawing them.
 /// Where each part is drawn depends on the sprite's layout and on which way it faces.
 /// </summary>
-public sealed class NecromorphSeveredPartsSystem : EntitySystem
+public sealed partial class NecromorphSeveredPartsSystem : EntitySystem
 {
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly ProtoId<ShaderPrototype> MaskShader = "NecromorphSeveredMask";
 

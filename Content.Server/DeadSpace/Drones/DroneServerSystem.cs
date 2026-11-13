@@ -14,15 +14,15 @@ using Content.Shared.Actions;
 
 namespace Content.Server.DeadSpace.Drones.Systems;
 
-public sealed class DroneSystem : EntitySystem
+public sealed partial class DroneSystem : EntitySystem
 {
-    [Dependency] private readonly EyeSystem _eye = default!;
-    [Dependency] private readonly SharedMoverController _mover = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly DroneRemoteControllerSystem _controller = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private EyeSystem _eye = default!;
+    [Dependency] private SharedMoverController _mover = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private DroneRemoteControllerSystem _controller = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {

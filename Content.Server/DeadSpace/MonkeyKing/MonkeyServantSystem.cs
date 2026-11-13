@@ -12,13 +12,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.MonkeyKing;
 
-public sealed class MonkeyServantSystem : EntitySystem
+public sealed partial class MonkeyServantSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
     private static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
 
     public override void Initialize()

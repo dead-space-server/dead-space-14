@@ -7,11 +7,11 @@ using Content.Shared.Examine;
 namespace Content.Shared.Atmos.Piping.Trinary.EntitySystems;
 
 // DS14: Current engine uses explicit event subscriptions without system source generation.
-public abstract class SharedGasFilterSystem : EntitySystem
+public abstract partial class SharedGasFilterSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAtmosphereSystem _atmosphereSystem = default!; // DS14 - readonly IoC on current engine baseline
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAtmosphereSystem _atmosphereSystem = default!;
 
     public override void Initialize()
     {

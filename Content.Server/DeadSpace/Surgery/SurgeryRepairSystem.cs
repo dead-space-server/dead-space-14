@@ -10,7 +10,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryRepairSystem : EntitySystem
+public sealed partial class SurgeryRepairSystem : EntitySystem
 {
     private const string Effect = "MachineRepair";
     private const string OrganMend = "OrganMend";
@@ -33,12 +33,12 @@ public sealed class SurgeryRepairSystem : EntitySystem
 
     private static readonly HashSet<string> ClosesWound = new() { "CutMend", "PunctureMend", "FractureOpenMend" };
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedRottingSystem _rotting = default!;
-    [Dependency] private readonly Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedRottingSystem _rotting = default!;
+    [Dependency] private Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
 
     public override void Initialize()
     {

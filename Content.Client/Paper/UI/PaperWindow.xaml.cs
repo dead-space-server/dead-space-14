@@ -27,10 +27,10 @@ namespace Content.Client.Paper.UI
     [GenerateTypedNameReferences]
     public sealed partial class PaperWindow : BaseWindow
     {
-        [Dependency] private readonly IInputManager _inputManager = default!;
-        [Dependency] private readonly IResourceCache _resCache = default!;
-        [Dependency] private readonly IPlayerManager _players = default!; // DS14
-        [Dependency] private readonly IEntityManager _entManager = default!; // DS14
+        [Dependency] private IInputManager _inputManager = default!;
+        [Dependency] private IResourceCache _resCache = default!;
+        [Dependency] private IPlayerManager _players = default!; // DS14
+        [Dependency] private IEntityManager _entManager = default!; // DS14
 
         private static Color DefaultTextColor = new(25, 25, 25);
 

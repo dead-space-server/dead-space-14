@@ -10,10 +10,10 @@ using Robust.Shared.Utility;
 namespace Content.Client.DeadSpace.Attachments;
 
 /// <summary>Draws <see cref="AttachmentComponent.Layers"/> over the weapon holding them.</summary>
-public sealed class AttachmentSystem : SharedAttachmentSystem
+public sealed partial class AttachmentSystem : SharedAttachmentSystem
 {
-    [Dependency] private readonly IResourceCache _resources = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IResourceCache _resources = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private const string LayerPrefix = "attachment-layer-";
 

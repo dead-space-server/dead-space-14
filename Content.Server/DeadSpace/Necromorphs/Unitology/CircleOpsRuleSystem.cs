@@ -29,17 +29,17 @@ using Content.Shared.DeadSpace.TheCircle.Shuttles;
 
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
-public sealed class CircleOpsRuleSystem : GameRuleSystem<CircleOpsRuleComponent>
+public sealed partial class CircleOpsRuleSystem : GameRuleSystem<CircleOpsRuleComponent>
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly TimedWindowSystem _timedWindow = default!;
-    [Dependency] private readonly AlertLevelSystem _alertLevel = default!;
-    [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!;
-    [Dependency] private readonly CargoSystem _cargoSystem = default!;
-    [Dependency] private readonly RoundEndSystem _roundEndSystem = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private TimedWindowSystem _timedWindow = default!;
+    [Dependency] private AlertLevelSystem _alertLevel = default!;
+    [Dependency] private ErtResponseSystem _ertResponseSystem = default!;
+    [Dependency] private CargoSystem _cargoSystem = default!;
+    [Dependency] private RoundEndSystem _roundEndSystem = default!;
+    [Dependency] private IServerDbManager _db = default!;
     private const int AdditionalSupport = 100000;
     private static readonly ProtoId<CargoAccountPrototype> Account = "Security";
     private static readonly ProtoId<NpcFactionPrototype> Faction = "Necromorfs";

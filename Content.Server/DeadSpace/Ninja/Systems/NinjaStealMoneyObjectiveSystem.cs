@@ -8,10 +8,10 @@ using Content.Shared.Cargo.Components;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaStealMoneyObjectiveSystem : EntitySystem
+public sealed partial class NinjaStealMoneyObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Initialize()
     {

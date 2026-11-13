@@ -17,7 +17,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class SmokeBladeSystem : EntitySystem
+public sealed partial class SmokeBladeSystem : EntitySystem
 {
     private static readonly Vector2i[] Neighbours =
     {
@@ -29,13 +29,13 @@ public sealed class SmokeBladeSystem : EntitySystem
     private readonly HashSet<EntityUid> _tileBlockers = new();
     private readonly HashSet<Entity<MobStateComponent>> _cloudTargets = new();
 
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     public override void Initialize()
     {

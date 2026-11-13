@@ -11,11 +11,11 @@ using Content.Shared.DeadSpace.Necromorphs.PlasmaCutter;
 
 namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
-public sealed class InfectionDeadSystem : SharedInfectionDeadSystem
+public sealed partial class InfectionDeadSystem : SharedInfectionDeadSystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly NecromorfSystem _necromorfSystem = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private NecromorfSystem _necromorfSystem = default!;
 
     public override void Initialize()
     {

@@ -27,9 +27,9 @@ public sealed partial class BotanyHoeSystem : EntitySystem
     // DS14-end
 
     // DS14-start
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private EntityQuery<PlantComponent> _plantQuery;
     private EntityQuery<PlantTrayComponent> _trayQuery;

@@ -16,15 +16,15 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Administration.UI;
 
-public sealed class AdminGlobalSoundEui : BaseEui
+public sealed partial class AdminGlobalSoundEui : BaseEui
 {
     private const string AudioRoot = "/Audio/";
 
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private string _currentPath = AudioRoot;
     private List<AdminGlobalSoundEntry> _entries = [];

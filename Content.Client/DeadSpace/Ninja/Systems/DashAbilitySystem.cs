@@ -12,12 +12,12 @@ using Robust.Shared.Input.Binding;
 
 namespace Content.Client.DeadSpace.Ninja.Systems;
 
-public sealed class DashAbilitySystem : SharedDashAbilitySystem
+public sealed partial class DashAbilitySystem : SharedDashAbilitySystem
 {
     private const string CooldownAlert = "DashCooldown";
 
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

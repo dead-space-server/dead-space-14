@@ -9,12 +9,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Guardian;
 
-public sealed class GuardianLightningArcSystem : EntitySystem
+public sealed partial class GuardianLightningArcSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly HashSet<EntityUid> _arcCandidates = new();
     private readonly HashSet<EntityUid> _nearbyCandidates = new();

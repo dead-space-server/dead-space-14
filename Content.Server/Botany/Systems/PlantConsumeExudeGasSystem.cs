@@ -22,10 +22,10 @@ public sealed partial class PlantConsumeExudeGasSystem : SharedPlantConsumeExude
     // DS14-end
 
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly Dictionary<EntityUid, TimeSpan> _nextGasLog = new();
     private static readonly TimeSpan GasLogCooldown = TimeSpan.FromSeconds(60);

@@ -17,12 +17,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.SponsorLoadout;
 
-public sealed class SponsorEvacuationSystem : EntitySystem
+public sealed partial class SponsorEvacuationSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSubdermalImplantSystem _implants = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly ResponseErtImplantSystem _response = default!;
+    [Dependency] private SharedSubdermalImplantSystem _implants = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private ResponseErtImplantSystem _response = default!;
 
     private readonly EntProtoId[] _implantPrototypes = ["TrackingImplantCriticalForce", "TrackingImplantSyndicateEvacuation"];
     private readonly HashSet<NetUserId> _recipients = new();

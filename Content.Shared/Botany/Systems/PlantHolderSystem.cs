@@ -23,7 +23,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
     // DS14-end
 
     // DS14-start
-    [Dependency] private readonly ISerializationManager _serialization = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
 
     private EntityQuery<PlantComponent> _plantQuery;
     // DS14-end

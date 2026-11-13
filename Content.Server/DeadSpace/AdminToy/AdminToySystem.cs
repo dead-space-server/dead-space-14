@@ -46,7 +46,7 @@ using LanguageSystem = Content.Server.DeadSpace.Languages.LanguageSystem;
 
 namespace Content.Server.DeadSpace.AdminToy;
 
-public sealed class AdminToySystem : EntitySystem
+public sealed partial class AdminToySystem : EntitySystem
 {
     private const string AdminToyPrototype = "MobAdminToy";
     private const int PrivateLayerFirstBit = 5;
@@ -56,30 +56,30 @@ public sealed class AdminToySystem : EntitySystem
     private const string DefaultToyName = "Дух нудной работы";
     private const string DefaultToyDescription = "Дух рабочего, что некогда служил на этой станции и сгорел на работе... Или он просто съел пельмени от Джониты Райтмен... Кто знает?..";
 
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly VisibilitySystem _visibility = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly LightningSystem _lightning = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
-    [Dependency] private readonly SharedRgbLightControllerSystem _rgb = default!;
-    [Dependency] private readonly FollowerSystem _follower = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IReplayRecordingManager _replay = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private VisibilitySystem _visibility = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private LightningSystem _lightning = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private SharedRgbLightControllerSystem _rgb = default!;
+    [Dependency] private FollowerSystem _follower = default!;
+    [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IReplayRecordingManager _replay = default!;
 
     private readonly HashSet<ushort> _usedPrivateLayers = new();
     private readonly Dictionary<ICommonSession, HashSet<ushort>> _sessionLayers = new();

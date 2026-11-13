@@ -7,11 +7,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Fishing;
 
-public sealed class LavaFishingSystem : SharedLavaFishingSystem
+public sealed partial class LavaFishingSystem : SharedLavaFishingSystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly InputSystem _input = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private InputSystem _input = default!;
 
     public override void Initialize()
     {

@@ -6,10 +6,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Lavaland;
 
-public sealed class LavalandFaunaRaidHudSystem : EntitySystem
+public sealed partial class LavalandFaunaRaidHudSystem : EntitySystem
 {
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private Label? _timer;
     private TimeSpan? _hideAt;
 

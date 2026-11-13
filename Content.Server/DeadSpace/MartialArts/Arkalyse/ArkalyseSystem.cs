@@ -17,16 +17,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.MartialArts.Arkalyse;
 
-public sealed class ArkalyseSystem : EntitySystem
+public sealed partial class ArkalyseSystem : EntitySystem
 {
     private static readonly EntProtoId MutedEffect = "StatusEffectArkalyseMuted";
 
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly StaminaSystem _stamina = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private StaminaSystem _stamina = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
     public override void Initialize()
     {
         base.Initialize();

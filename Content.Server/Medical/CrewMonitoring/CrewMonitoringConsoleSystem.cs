@@ -29,7 +29,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Medical.CrewMonitoring;
 
-public sealed class CrewMonitoringConsoleSystem : EntitySystem
+public sealed partial class CrewMonitoringConsoleSystem : EntitySystem
 {
     // DS14-start
     private static readonly CrewMonitoringConsolePingMode[] SelectablePingModes =
@@ -40,19 +40,19 @@ public sealed class CrewMonitoringConsoleSystem : EntitySystem
         CrewMonitoringConsolePingMode.Disabled,
     ];
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly PowerReceiverSystem _power = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private PowerReceiverSystem _power = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
     // DS14-end
-    [Dependency] private readonly PowerCellSystem _cell = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private PowerCellSystem _cell = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
     // DS14-start
-    [Dependency] private readonly SharedStationAiSystem _stationAi = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly SuitSensorSystem _sensors = default!;
-    [Dependency] private readonly StationLimitedNetworkSystem _stationNetwork = default!;
+    [Dependency] private SharedStationAiSystem _stationAi = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private SuitSensorSystem _sensors = default!;
+    [Dependency] private StationLimitedNetworkSystem _stationNetwork = default!;
 
     private float _adminUpdateAccumulator;
     // DS14-end

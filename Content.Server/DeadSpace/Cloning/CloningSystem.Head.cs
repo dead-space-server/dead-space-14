@@ -16,7 +16,7 @@ namespace Content.Server.Cloning;
 
 public sealed partial class CloningSystem
 {
-    [Dependency] private readonly SurgeryGraftSystem _graft = default!;
+    [Dependency] private SurgeryGraftSystem _graft = default!;
 
     private bool TryCloningHead(EntityUid head, MapCoordinates? coords, CloningSettingsPrototype settings, [NotNullWhen(true)] out EntityUid? clone)
     {

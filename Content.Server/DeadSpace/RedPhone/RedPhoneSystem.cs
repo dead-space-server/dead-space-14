@@ -20,17 +20,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.RedPhone;
 
-public sealed class RedPhoneSystem : EntitySystem
+public sealed partial class RedPhoneSystem : EntitySystem
 {
-    [Dependency] private readonly AccessReaderSystem _access = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly TelephoneSystem _telephone = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AccessReaderSystem _access = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private TelephoneSystem _telephone = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly SoundSpecifier AdminNotificationSound = new SoundPathSpecifier("/Audio/_DeadSpace/Misc/pew-connor.ogg");
 

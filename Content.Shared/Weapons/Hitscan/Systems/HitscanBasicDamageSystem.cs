@@ -9,11 +9,11 @@ using Content.Shared.Whitelist;
 
 namespace Content.Shared.Weapons.Hitscan.Systems;
 
-public sealed class HitscanBasicDamageSystem : EntitySystem
+public sealed partial class HitscanBasicDamageSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!; // DS14
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!; // DS14
 
     public override void Initialize()
     {

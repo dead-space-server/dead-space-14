@@ -5,9 +5,9 @@ using Content.Shared.DeadSpace.ThermalVision;
 
 namespace Content.Server.DeadSpace.ThermalVision;
 
-public sealed class ThermalVisionSystem : EntitySystem
+public sealed partial class ThermalVisionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {

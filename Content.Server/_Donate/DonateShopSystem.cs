@@ -18,15 +18,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Donate;
 
-public sealed class DonateShopSystem : EntitySystem
+public sealed partial class DonateShopSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly ISharedPlayerManager _playMan = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly ActorSystem _actorSystem = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private ISharedPlayerManager _playMan = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private ActorSystem _actorSystem = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("donate.uptime");
 

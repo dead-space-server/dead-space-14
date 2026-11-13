@@ -27,16 +27,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.AshWalkers;
 
-public sealed class AshWalkerLobbySystem : EntitySystem
+public sealed partial class AshWalkerLobbySystem : EntitySystem
 {
-    [Dependency] private readonly IBanManager _bans = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly GhostRoleSystem _ghostRoles = default!;
-    [Dependency] private readonly StationJobsSystem _jobs = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IBanManager _bans = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private GhostRoleSystem _ghostRoles = default!;
+    [Dependency] private StationJobsSystem _jobs = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly ProtoId<JobPrototype> Job = "AshWalker";
     private static readonly EntProtoId Station = "AshWalkerStation";

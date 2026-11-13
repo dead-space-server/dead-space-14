@@ -12,11 +12,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.DeadSpace.Cloning;
 
-public sealed class CloningLimbSystem : EntitySystem
+public sealed partial class CloningLimbSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
 
     public bool IsRemains(EntityUid uid)
     {

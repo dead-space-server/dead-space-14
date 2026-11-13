@@ -8,9 +8,9 @@ namespace Content.Server.DeadSpace.Abilities.ReleaseGasPerSecond;
 
 public sealed partial class ReleaseGasPerSecondSystem : SharedReleaseGasPerSecondSystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
-    [Dependency] private readonly TransformSystem _xform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
+    [Dependency] private TransformSystem _xform = default!;
 
     public override void Initialize()
     {

@@ -14,11 +14,11 @@ namespace Content.Server.DeadSpace.Administration;
 /// <summary>
 /// Preserves a blob carrier body so an administrator can restore it after transformation.
 /// </summary>
-public sealed class BlobAntagRollbackSystem : EntitySystem
+public sealed partial class BlobAntagRollbackSystem : EntitySystem
 {
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly ISharedPlayerManager _players = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private ISharedPlayerManager _players = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<NetUserId, BlobBodyBackup> _backups = new();
 

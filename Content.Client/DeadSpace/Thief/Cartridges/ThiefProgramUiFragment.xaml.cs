@@ -15,7 +15,7 @@ namespace Content.Client.DeadSpace.Thief.Cartridges;
 [GenerateTypedNameReferences]
 public sealed partial class ThiefProgramUiFragment : BoxContainer
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public event Action<ThiefProgramUiAction, int, string, int>? OnActionPressed;
 

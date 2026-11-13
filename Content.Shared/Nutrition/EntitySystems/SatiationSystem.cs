@@ -32,10 +32,10 @@ public sealed partial class SatiationSystem : EntitySystem
     // DS14-end
 
     // DS14-start: current engine uses readonly IoC fields and initializes entity queries explicitly.
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     private EntityQuery<SatiationComponent> _satiationQuery;
     // DS14-end
 

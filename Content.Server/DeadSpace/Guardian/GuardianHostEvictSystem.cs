@@ -9,12 +9,12 @@ using Content.Shared.Popups;
 
 namespace Content.Server.DeadSpace.Guardian;
 
-public sealed class GuardianHostEvictSystem : EntitySystem
+public sealed partial class GuardianHostEvictSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     public override void Initialize()
     {

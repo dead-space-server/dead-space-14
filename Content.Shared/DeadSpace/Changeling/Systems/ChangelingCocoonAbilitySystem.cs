@@ -5,9 +5,9 @@ using Content.Shared.DeadSpace.Changeling.Components;
 
 namespace Content.Shared.DeadSpace.Changeling.Systems;
 
-public sealed class ChangelingCocoonAbilitySystem : EntitySystem
+public sealed partial class ChangelingCocoonAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
 
     public override void Initialize()
     {

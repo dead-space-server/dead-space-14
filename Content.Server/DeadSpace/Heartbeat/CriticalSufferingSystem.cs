@@ -18,16 +18,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Heartbeat;
 
-public sealed class CriticalSufferingSystem : EntitySystem
+public sealed partial class CriticalSufferingSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly VomitSystem _vomit = default!;
-    [Dependency] private readonly StatusEffectsSystem _effects = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private VomitSystem _vomit = default!;
+    [Dependency] private StatusEffectsSystem _effects = default!;
 
     private static readonly SoundSpecifier MaleGasp = new SoundCollectionSpecifier("CriticalSufferingMaleGasp");
     private static readonly SoundSpecifier FemaleGasp = new SoundCollectionSpecifier("CriticalSufferingFemaleGasp");

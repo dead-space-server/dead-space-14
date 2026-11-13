@@ -22,18 +22,18 @@ using System.Numerics;
 
 namespace Content.Server.DeadSpace.Traps;
 
-public sealed class TripwireSystem : EntitySystem
+public sealed partial class TripwireSystem : EntitySystem
 {
-    [Dependency] private readonly DeviceLinkSystem _links = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly NpcFactionSystem _factions = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly StealthSystem _stealth = default!;
-    [Dependency] private readonly SharedToolSystem _tools = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
+    [Dependency] private DeviceLinkSystem _links = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private NpcFactionSystem _factions = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private StealthSystem _stealth = default!;
+    [Dependency] private SharedToolSystem _tools = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
 
     public override void Initialize()
     {

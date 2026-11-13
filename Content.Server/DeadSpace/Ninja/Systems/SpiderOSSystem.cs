@@ -20,17 +20,17 @@ using Content.Shared.Ninja.Components;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class SpiderOSSystem : SharedSpiderOSSystem
+public sealed partial class SpiderOSSystem : SharedSpiderOSSystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedNinjaAppearanceSystem _appearance = default!;
-    [Dependency] private readonly BatterySystem _battery = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly RetractableItemActionSystem _retractableItemAction = default!;
-    [Dependency] private readonly ShuttleConsoleSystem _shuttleConsole = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedNinjaAppearanceSystem _appearance = default!;
+    [Dependency] private BatterySystem _battery = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private RetractableItemActionSystem _retractableItemAction = default!;
+    [Dependency] private ShuttleConsoleSystem _shuttleConsole = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _lockedBySpiderOS = new();
 

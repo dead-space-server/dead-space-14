@@ -9,11 +9,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.ThermalVision;
 
-public sealed class ThermalVisionExperimentalSystem : EntitySystem
+public sealed partial class ThermalVisionExperimentalSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private const float EnergyPerUse = 100f;
     private const float CooldownSeconds = 8f;

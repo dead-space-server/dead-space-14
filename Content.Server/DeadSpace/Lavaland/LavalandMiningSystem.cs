@@ -32,7 +32,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandMiningSystem : EntitySystem
+public sealed partial class LavalandMiningSystem : EntitySystem
 {
     private static readonly HashSet<ProtoId<AccessLevelPrototype>> DefaultMiningAccess = new()
     {
@@ -40,17 +40,17 @@ public sealed class LavalandMiningSystem : EntitySystem
         "SeniorSalvage",
     };
 
-    [Dependency] private readonly SharedAccessSystem _access = default!;
-    [Dependency] private readonly EmagSystem _emag = default!;
-    [Dependency] private readonly IdCardSystem _idCard = default!;
-    [Dependency] private readonly Robust.Server.Player.IPlayerManager _players = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly StoreSystem _store = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedStorageSystem _storageSystem = default!;
+    [Dependency] private SharedAccessSystem _access = default!;
+    [Dependency] private EmagSystem _emag = default!;
+    [Dependency] private IdCardSystem _idCard = default!;
+    [Dependency] private Robust.Server.Player.IPlayerManager _players = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private MaterialStorageSystem _materialStorage = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private StoreSystem _store = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedStorageSystem _storageSystem = default!;
 
     public override void Initialize()
     {

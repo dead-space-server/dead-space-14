@@ -14,10 +14,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Fishing;
 
-public sealed class LavaFishingUIController : UIController, IOnSystemChanged<LavaFishingSystem>, IOnStateChanged<GameplayState>
+public sealed partial class LavaFishingUIController : UIController, IOnSystemChanged<LavaFishingSystem>, IOnStateChanged<GameplayState>
 {
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IInputManager _input = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IInputManager _input = default!;
     [UISystemDependency] private readonly LavaFishingSystem _fishing = default!;
     [UISystemDependency] private readonly HandsSystem _hands = default!;
     [UISystemDependency] private readonly ProgressColorSystem _colors = default!;

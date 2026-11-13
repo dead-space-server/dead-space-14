@@ -14,12 +14,12 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems;
 
 [UsedImplicitly]
 // DS14: Current engine uses explicit event subscriptions without system source generation.
-public sealed class GasMixerSystem : SharedGasMixerSystem
+public sealed partial class GasMixerSystem : SharedGasMixerSystem
 {
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambientSoundSystem = default!;
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
 
     public override void Initialize()
     {

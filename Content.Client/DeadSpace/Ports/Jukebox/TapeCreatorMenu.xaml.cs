@@ -18,10 +18,10 @@ namespace Content.Client.DeadSpace.Ports.Jukebox;
 [GenerateTypedNameReferences]
 public sealed partial class TapeCreatorMenu : DefaultWindow
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
-    [Dependency] private readonly IFileDialogManager _fileDialogManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ClientJukeboxSongsSyncManager _songs = default!;
+    [Dependency] private EntityManager _entityManager = default!;
+    [Dependency] private IFileDialogManager _fileDialogManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ClientJukeboxSongsSyncManager _songs = default!;
     private readonly SharedPopupSystem _popupSystem = default!;
 
     private byte[] _songBytes = Array.Empty<byte>();

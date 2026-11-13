@@ -12,9 +12,9 @@ namespace Content.Client.Disposal.Unit
     /// Initializes a <see cref="MailingUnitWindow"/> or a <see cref="_disposalUnitWindow"/> and updates it when new server messages are received.
     /// </summary>
     [UsedImplicitly]
-    public sealed class DisposalUnitBoundUserInterface : BoundUserInterface
+    public sealed partial class DisposalUnitBoundUserInterface : BoundUserInterface
     {
-        [Dependency] private readonly IPlayerManager _playerManager = default!; // DS14
+        [Dependency] private IPlayerManager _playerManager = default!; // DS14
 
         [ViewVariables] private DisposalUnitWindow? _disposalUnitWindow;
 

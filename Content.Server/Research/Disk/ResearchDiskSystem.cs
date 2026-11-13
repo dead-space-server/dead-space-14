@@ -10,12 +10,12 @@ using Content.Server.DeadSpace.Virus.Components;
 
 namespace Content.Server.Research.Disk
 {
-    public sealed class ResearchDiskSystem : EntitySystem
+    public sealed partial class ResearchDiskSystem : EntitySystem
     {
-        [Dependency] private readonly IPrototypeManager _prototype = default!;
-        [Dependency] private readonly PopupSystem _popupSystem = default!;
-        [Dependency] private readonly ResearchSystem _research = default!;
-        [Dependency] private readonly VirusDiagnoserDataServerSystem _diagnoserDataServer = default!; // DS14
+        [Dependency] private IPrototypeManager _prototype = default!;
+        [Dependency] private PopupSystem _popupSystem = default!;
+        [Dependency] private ResearchSystem _research = default!;
+        [Dependency] private VirusDiagnoserDataServerSystem _diagnoserDataServer = default!; // DS14
         public override void Initialize()
         {
             base.Initialize();

@@ -15,7 +15,7 @@ using Robust.Shared.Configuration;
 namespace Content.Server.Corvax.TTS;
 
 // ReSharper disable once InconsistentNaming
-public sealed class TTSManager
+public sealed partial class TTSManager
 {
     private static readonly Histogram RequestTimings = Metrics.CreateHistogram(
         "tts_req_timings",
@@ -34,7 +34,7 @@ public sealed class TTSManager
         "tts_reused_count",
         "Amount of reused TTS audio from cache.");
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private readonly HttpClient _httpClient = new();
     private readonly SemaphoreSlim _nttsRequests = new(1, 1); // DS14

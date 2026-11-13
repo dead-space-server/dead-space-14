@@ -6,11 +6,11 @@ using Robust.Shared.Random; // DS14
 
 namespace Content.Shared.GPS.Systems;
 
-public sealed class HandheldGpsSystem : EntitySystem
+public sealed partial class HandheldGpsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!; // DS14
-    [Dependency] private readonly IRobustRandom _random = default!; // DS14
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private LavalandDayCycleSystem _dayCycle = default!; // DS14
+    [Dependency] private IRobustRandom _random = default!; // DS14
 
     /// <inheritdoc/>
     public override void Initialize()

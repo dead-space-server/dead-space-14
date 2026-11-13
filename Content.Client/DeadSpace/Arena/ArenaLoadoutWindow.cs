@@ -18,7 +18,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.Arena;
 
-public sealed class ArenaLoadoutWindow : DefaultWindow
+public sealed partial class ArenaLoadoutWindow : DefaultWindow
 {
     public event Action<int>? OnLoadoutConfirmed;
     public event Action<int>? OnCostumeBuy;
@@ -50,9 +50,9 @@ public sealed class ArenaLoadoutWindow : DefaultWindow
     private EntityUid? _previewDummy;
     private readonly List<EntityUid> _previewItems = new();
 
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IClientPreferencesManager _preferencesManager = default!;
 
     public ArenaLoadoutWindow()
     {
@@ -454,7 +454,7 @@ public sealed class ArenaLoadoutWindow : DefaultWindow
         _confirmButton.Disabled = false;
     }
 
-    private sealed class ArenaWeaponCard : PanelContainer
+    private sealed partial class ArenaWeaponCard : PanelContainer
     {
         public event Action<ArenaWeaponCard>? OnSelected;
         public int WeaponIndex { get; }
@@ -526,7 +526,7 @@ public sealed class ArenaLoadoutWindow : DefaultWindow
         }
     }
 
-    private sealed class ArenaCostumeCard : PanelContainer
+    private sealed partial class ArenaCostumeCard : PanelContainer
     {
         public event Action<int>? OnBuy;
         public event Action<int>? OnToggleEquip;

@@ -8,15 +8,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.UserInterface.Systems.DamageOverlays.Overlays;
 
-public sealed class DamageOverlay : Overlay
+public sealed partial class DamageOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> DamageShader = "DeadSpaceDamageBurn";
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;

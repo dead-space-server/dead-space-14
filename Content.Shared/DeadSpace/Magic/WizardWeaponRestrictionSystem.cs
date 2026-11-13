@@ -10,11 +10,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Magic;
 
-public sealed class WizardWeaponRestrictionSystem : EntitySystem
+public sealed partial class WizardWeaponRestrictionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private TagSystem _tags = default!;
 
     private static readonly ProtoId<TagPrototype> WizardWandTag = "WizardWand";
 

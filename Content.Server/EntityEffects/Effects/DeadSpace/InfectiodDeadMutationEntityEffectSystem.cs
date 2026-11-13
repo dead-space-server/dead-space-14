@@ -12,7 +12,7 @@ namespace Content.Server.EntityEffects.Effects.DeadSpace;
 /// </summary>
 public sealed partial class InfectiodDeadMutationEntityEffectSystem : EntityEffectSystem<NecromorfComponent, InfectiodDeadMutation>
 {
-    [Dependency] private readonly NecromorfSystem _necromorf = default!;
+    [Dependency] private NecromorfSystem _necromorf = default!;
 
     protected override void Effect(Entity<NecromorfComponent> entity, ref EntityEffectEvent<InfectiodDeadMutation> args)
     {

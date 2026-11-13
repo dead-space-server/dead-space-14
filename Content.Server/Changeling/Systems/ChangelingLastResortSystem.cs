@@ -16,10 +16,10 @@ namespace Content.Server.Changeling.Systems;
 
 public sealed partial class ChangelingLastResortSystem : SharedChangelingLastResortSystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
 
     // DS14-start: pre-v288 RobustToolbox has no subscription source generator or antag specifiers.
     public override void Initialize()

@@ -24,20 +24,20 @@ using Content.Shared.Silicons.Laws;
 
 namespace Content.Server.Silicons.AiBorgControl;
 
-public sealed class AiBorgControlSystem : EntitySystem
+public sealed partial class AiBorgControlSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly BorgSystem _borg = default!;
-    [Dependency] private readonly SiliconLawSystem _laws = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly EmagSystem _emag = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private BorgSystem _borg = default!;
+    [Dependency] private SiliconLawSystem _laws = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EmagSystem _emag = default!;
 
     private static readonly EntProtoId ReturnAction = "ActionAiReturnFromBorg";
     private static readonly TimeSpan UpdateDelay = TimeSpan.FromSeconds(1);

@@ -32,23 +32,23 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.TheCircle.Legion;
 
-public sealed class LegionSystem : EntitySystem
+public sealed partial class LegionSystem : EntitySystem
 {
     private static readonly EntProtoId DoorSlow = "TaserSlowdownStatusEffect";
     private static readonly HashSet<ProtoId<DamageContainerPrototype>> SyntheticDamageContainers =
         ["Silicon", "Inorganic", "StructuralInorganic"];
     private static readonly DamageSpecifier SecondHitDamage = new() { DamageDict = { ["Slash"] = 2 } };
 
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedDoorSystem _doors = default!;
-    [Dependency] private readonly MovementModStatusSystem _movementStatus = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NpcFactionSystem _factions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedDoorSystem _doors = default!;
+    [Dependency] private MovementModStatusSystem _movementStatus = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NpcFactionSystem _factions = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly Dictionary<EntityUid, (TimeSpan EndsAt, EntityUid Origin)> _damageOverTime = new();
     private readonly Dictionary<EntityUid, TimeSpan> _revealUntil = new();

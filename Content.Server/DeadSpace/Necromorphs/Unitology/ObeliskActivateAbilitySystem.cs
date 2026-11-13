@@ -11,11 +11,11 @@ using Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
-public sealed class ObeliskActivateAbilitySystem : EntitySystem
+public sealed partial class ObeliskActivateAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly NecroobeliskSystem _necroobeliskSystem = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private NecroobeliskSystem _necroobeliskSystem = default!;
     private bool _canActiveObelisk = true;
     public override void Initialize()
     {

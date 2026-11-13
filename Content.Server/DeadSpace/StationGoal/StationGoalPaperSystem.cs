@@ -15,14 +15,14 @@ namespace Content.Server.DeadSpace.StationGoal;
 /// <summary>
 ///     System to spawn paper with station goal
 /// </summary>
-public sealed class StationGoalPaperSystem : EntitySystem
+public sealed partial class StationGoalPaperSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly FaxSystem _faxSystem = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private FaxSystem _faxSystem = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private CargoSystem _cargo = default!;
 
     public override void Initialize()
     {

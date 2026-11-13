@@ -12,9 +12,9 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// and its boss follow as usual.
 /// </summary>
 [AdminCommand(AdminFlags.Admin)]
-public sealed class LavalandStrongStormCommand : IConsoleCommand
+public sealed partial class LavalandStrongStormCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "lavalandstrongstorm";
     public string Description => "Вызвать сильную бурю на Лаваленде (через минуту тревоги).";

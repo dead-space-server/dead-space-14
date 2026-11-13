@@ -17,7 +17,7 @@ public sealed partial class PlantTraitScreamSystem : EntitySystem
     // DS14-end
 
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     // DS14-end
 
     private void OnAfterDoHarvest(Entity<PlantTraitScreamComponent> ent, ref AfterDoHarvestEvent args)

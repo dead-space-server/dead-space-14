@@ -12,7 +12,7 @@ namespace Content.Client.DeadSpace.Lavaland.AshWolf;
 /// The eyes of the Ash Wolf drawn again above the weather (and below the field of view), so they glow through the ash
 /// of the strong storm while its body is lost in it.
 /// </summary>
-public sealed class LavalandAshWolfEyesOverlay : Overlay
+public sealed partial class LavalandAshWolfEyesOverlay : Overlay
 {
     private readonly IEntityManager _entities;
     private readonly SpriteSystem _sprite;
@@ -63,9 +63,9 @@ public sealed class LavalandAshWolfEyesOverlay : Overlay
     }
 }
 
-public sealed class LavalandAshWolfEyesSystem : EntitySystem
+public sealed partial class LavalandAshWolfEyesSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
 
     private LavalandAshWolfEyesOverlay _overlay = default!;
 

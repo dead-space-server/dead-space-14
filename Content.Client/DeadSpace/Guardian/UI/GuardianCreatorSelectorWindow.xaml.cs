@@ -14,7 +14,7 @@ namespace Content.Client.DeadSpace.Guardian.UI;
 public sealed partial class GuardianCreatorSelectorWindow : DefaultWindow
 {
     private const float DetailsTextWidth = 430f;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly List<Button> _buttons = new();
     private readonly ButtonGroup _buttonGroup = new();

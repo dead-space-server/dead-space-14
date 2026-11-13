@@ -15,10 +15,10 @@ namespace Content.Shared.DeadSpace.Alerts;
 /// Handles relaying the health alert of a linked entity to the entity with <see cref="HealthAlertRelayComponent"/>.
 /// This runs on both client and server, so alerts update immediately alongside damage prediction.
 /// </summary>
-public sealed class HealthAlertRelaySystem : EntitySystem
+public sealed partial class HealthAlertRelaySystem : EntitySystem
 {
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
 
     public override void Initialize()
     {

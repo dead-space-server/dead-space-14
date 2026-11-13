@@ -6,10 +6,10 @@ using Content.Shared.UserInterface;
 
 namespace Content.Shared.DeadSpace.CameraArchives;
 
-public sealed class CameraArchiveSheetLimitSystem : EntitySystem
+public sealed partial class CameraArchiveSheetLimitSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

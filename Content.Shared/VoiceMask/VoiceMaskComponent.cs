@@ -41,9 +41,8 @@ public sealed partial class VoiceMaskComponent : Component
     public EntProtoId Action = "ActionChangeVoiceMask";
 
     // Corvax-TTS-Start
-    [DataField]
+    // DS14-start: not a data field, it only fronts Voices; serializing both made copies write the default voice into Voices
     [ViewVariables(VVAccess.ReadWrite)]
-    // DS14-start
     public string VoiceId
     {
         get => Voices.GetValueOrDefault(TTSVoices.Silero, SharedHumanoidAppearanceSystem.DefaultVoice);

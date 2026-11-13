@@ -9,9 +9,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._Donate.Emerald;
 
-public sealed class EmeraldLootboxOpener : Control
+public sealed partial class EmeraldLootboxOpener : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const int TitleFontSize = 14;
     private const int NameFontSize = 12;

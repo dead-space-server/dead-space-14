@@ -19,8 +19,8 @@ public sealed partial class PlantAtmosphericSystem : SharedPlantAtmosphericSyste
     // DS14-end
 
     // DS14-start
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
 
     private EntityQuery<PlantHolderComponent> _holderQuery;
     // DS14-end

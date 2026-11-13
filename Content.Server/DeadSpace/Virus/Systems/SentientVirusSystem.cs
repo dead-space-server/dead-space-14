@@ -15,15 +15,15 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class SentientVirusSystem : EntitySystem
+public sealed partial class SentientVirusSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly VirusSystem _virusSystem = default!;
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TimedWindowSystem _timedWindowSystem = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private VirusSystem _virusSystem = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TimedWindowSystem _timedWindowSystem = default!;
     private const int PrimaryPacientPrice = 250;
     private const int ModifyPointsRegenPerInfected = 5;
     public override void Initialize()

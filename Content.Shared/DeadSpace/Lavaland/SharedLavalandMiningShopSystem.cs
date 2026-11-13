@@ -12,14 +12,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Lavaland;
 
-public sealed class SharedLavalandMiningShopSystem : EntitySystem
+public sealed partial class SharedLavalandMiningShopSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAccessSystem _access = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedAccessSystem _access = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

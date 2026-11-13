@@ -27,7 +27,7 @@ namespace Content.Client.TextScreen;
 /// </summary>
 public sealed partial class TextScreenSystem : VisualizerSystem<TextScreenVisualsComponent>
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     // DS14-start - injected EntityQuery fields are unavailable on the current engine baseline.
     private EntityQuery<SpriteComponent> _spriteQuery;

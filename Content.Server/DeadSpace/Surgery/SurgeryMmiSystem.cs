@@ -18,16 +18,16 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryMmiSystem : EntitySystem
+public sealed partial class SurgeryMmiSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SurgeryOrganFreshSystem _fresh = default!;
-    [Dependency] private readonly ReturnToBodyNotificationSystem _returnToBody = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly BlindableSystem _blind = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SurgeryOrganFreshSystem _fresh = default!;
+    [Dependency] private ReturnToBodyNotificationSystem _returnToBody = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private BlindableSystem _blind = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
 
     public override void Initialize()
     {

@@ -8,10 +8,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Necromorphs.Necroobelisk;
 
-public sealed class SplinterBladeVisualSystem : EntitySystem
+public sealed partial class SplinterBladeVisualSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private PanelContainer? _darkness;
     private TimeSpan _endTime;

@@ -10,7 +10,7 @@ namespace Content.Shared.EntityEffects.Effects.Botany.PlantAttributes;
 public sealed partial class PlantAdjustNutritionEntityEffectSystem : EntityEffectSystem<PlantTrayComponent, PlantAdjustNutrition>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantTrayComponent> entity, ref EntityEffectEvent<PlantAdjustNutrition> args)

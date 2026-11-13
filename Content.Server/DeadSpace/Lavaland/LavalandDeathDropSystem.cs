@@ -28,10 +28,10 @@ public sealed partial class LavalandDeathDropEntry
     public float Chance = 1f;
 }
 
-public sealed class LavalandDeathDropSystem : EntitySystem
+public sealed partial class LavalandDeathDropSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

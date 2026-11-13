@@ -15,14 +15,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Audio;
 
-public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
+public sealed partial class ServerGlobalSoundSystem : SharedGlobalSoundSystem
 {
-    [Dependency] private readonly IConsoleHost _conHost = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!; // DS14
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14
-    [Dependency] private readonly IResourceManager _resourceManager = default!; // DS14
+    [Dependency] private IConsoleHost _conHost = default!;
+    [Dependency] private IPlayerManager _playerManager = default!; // DS14
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!; // DS14
+    [Dependency] private IResourceManager _resourceManager = default!; // DS14
 
     // DS14-start
     private int _nextAdminSoundId;
@@ -272,7 +272,7 @@ public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
     public string? ActiveAdminSoundPath => _activeAdminSound?.Path;
     public bool ActiveAdminSoundPaused => _activeAdminSound?.Paused ?? false;
 
-    private sealed class ActiveAdminSound(
+    private sealed partial class ActiveAdminSound(
         int id,
         ResolvedSoundSpecifier specifier,
         AudioParams parameters,

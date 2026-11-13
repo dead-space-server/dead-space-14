@@ -8,10 +8,10 @@ using Robust.Shared.Console;
 
 namespace Content.Client.DeadSpace.DeviceLinkVis;
 
-public sealed class DeviceLinkVisSystem : EntitySystem
+public sealed partial class DeviceLinkVisSystem : EntitySystem
 {
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
 
     private DeviceLinkVisOverlay? _overlay;
 
@@ -89,9 +89,9 @@ public sealed class DeviceLinkVisSystem : EntitySystem
     }
 }
 
-public sealed class ShowDeviceLinksCommand : LocalizedEntityCommands
+public sealed partial class ShowDeviceLinksCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly DeviceLinkVisSystem _vis = default!;
+    [Dependency] private DeviceLinkVisSystem _vis = default!;
 
     public override string Command => "showdevicelinks";
 

@@ -11,12 +11,12 @@ using Content.Shared.Hands.EntitySystems;
 
 namespace Content.Server.DeadSpace.Renegade;
 
-public sealed class RenegadeShieldAbilitySystem : EntitySystem
+public sealed partial class RenegadeShieldAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {

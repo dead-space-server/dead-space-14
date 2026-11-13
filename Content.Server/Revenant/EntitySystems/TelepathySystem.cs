@@ -13,9 +13,9 @@ namespace Content.Server.Revenant;
 
 public sealed partial class TelepathySystem : EntitySystem
 {
-    [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
-    [Dependency] private readonly PrayerSystem _prayerSystem = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
+    [Dependency] private QuickDialogSystem _quickDialog = default!;
+    [Dependency] private PrayerSystem _prayerSystem = default!;
+    [Dependency] private LanguageSystem _language = default!;
 
     public override void Initialize()
     {

@@ -14,9 +14,9 @@ namespace Content.Shared.Nutrition.EntitySystems;
 public sealed partial class SatiationDamageSystem :
     BaseSatiationEffectSystem<SatiationDamageComponent, DamageSpecifier?>
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Update(float frameTime)
     {

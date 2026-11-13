@@ -15,11 +15,11 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// <summary>
 /// A GPS on the lavaland beeps when a miniboss (the mad miner, an elite) or an elite tumor is near - faster the closer.
 /// </summary>
-public sealed class LavalandGpsBeepSystem : EntitySystem
+public sealed partial class LavalandGpsBeepSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private const float Range = 14f;
     private static readonly TimeSpan IntervalFar = TimeSpan.FromSeconds(1.6);

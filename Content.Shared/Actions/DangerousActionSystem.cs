@@ -8,7 +8,7 @@ namespace Content.Shared.Actions;
 public sealed partial class DangerousActionSystem : EntitySystem
 {
     private EntityQuery<PacifiedComponent> _pacifiedQuery; // DS14 - initialized explicitly on the current engine.
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

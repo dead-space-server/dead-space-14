@@ -24,16 +24,16 @@ namespace Content.Server.DeadSpace.Salvage;
 /// A fulton stack that finds no room in a bag, while the bag holds fultons linked to another beacon, offers to merge
 /// them: each fulton keeps its own beacon.
 /// </summary>
-public sealed class FultonBeaconInfoSystem : EntitySystem
+public sealed partial class FultonBeaconInfoSystem : EntitySystem
 {
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly FultonSystem _fulton = default!;
-    [Dependency] private readonly NavMapSystem _navMap = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStorageSystem _storage = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private FultonSystem _fulton = default!;
+    [Dependency] private NavMapSystem _navMap = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly HashSet<ICommonSession> _asking = new();
 
@@ -147,7 +147,7 @@ public sealed class FultonBeaconInfoSystem : EntitySystem
     }
 }
 
-public sealed class FultonMergeEui : BaseEui
+public sealed partial class FultonMergeEui : BaseEui
 {
     private readonly FultonBeaconInfoSystem _system;
     private bool _answered;

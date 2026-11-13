@@ -5,9 +5,9 @@ using Content.Shared.DeadSpace.Abilities.ReleaseGasPerSecond.Components;
 
 namespace Content.Shared.DeadSpace.Abilities.ReleaseGasPerSecond;
 
-public abstract class SharedReleaseGasPerSecondSystem : EntitySystem
+public abstract partial class SharedReleaseGasPerSecondSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

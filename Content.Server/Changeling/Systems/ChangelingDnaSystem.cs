@@ -10,12 +10,12 @@ namespace Content.Server.Changeling.Systems;
 /// <summary>
 /// Awards DNA currency after a successful unique devour.
 /// </summary>
-public sealed class ChangelingDnaSystem : EntitySystem
+public sealed partial class ChangelingDnaSystem : EntitySystem
 {
     private const float IpcDnaRewardMultiplier = 0.3f; // DS14
 
-    [Dependency] private readonly SharedPuddleSystem _puddle = default!; // DS14
-    [Dependency] private readonly StoreSystem _store = default!;
+    [Dependency] private SharedPuddleSystem _puddle = default!; // DS14
+    [Dependency] private StoreSystem _store = default!;
 
     public override void Initialize()
     {

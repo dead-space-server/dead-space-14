@@ -29,11 +29,11 @@ namespace Content.Server.NPC.Systems
             "npc_active_count",
             "Amount of NPCs that are actively processing");
 
-        [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-        [Dependency] private readonly HTNSystem _htn = default!;
-        [Dependency] private readonly MobStateSystem _mobState = default!;
-        [Dependency] private readonly IGameTiming _timing = default!;
-        [Dependency] private readonly NPCSteeringSystem _steering = default!;
+        [Dependency] private IConfigurationManager _configurationManager = default!;
+        [Dependency] private HTNSystem _htn = default!;
+        [Dependency] private MobStateSystem _mobState = default!;
+        [Dependency] private IGameTiming _timing = default!;
+        [Dependency] private NPCSteeringSystem _steering = default!;
 
         // DS14-Start: put idle NPCs to sleep when no players are nearby.
         private const float ProximitySleepMinRange = 24f;

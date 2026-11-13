@@ -42,7 +42,7 @@ namespace Content.Server.DeadSpace.PersonnelRecords.Systems;
 /// slot back: it only ever reclaims slots this system itself handed out, never a station's
 /// round-start allotment or a free slot that exists for an unrelated reason.
 /// </summary>
-public sealed class PersonnelVacancySystem : EntitySystem
+public sealed partial class PersonnelVacancySystem : EntitySystem
 {
     /// <summary>
     /// Access that always bypasses <see cref="OnJobAssignmentAttempt"/> - same precedent as the
@@ -51,13 +51,13 @@ public sealed class PersonnelVacancySystem : EntitySystem
     /// </summary>
     private static readonly ProtoId<AccessLevelPrototype> CentComBypassAccess = "CentralCommand";
 
-    [Dependency] private readonly AccessReaderSystem _access = default!;
-    [Dependency] private readonly PersonnelRecordsConsoleSystem _console = default!;
-    [Dependency] private readonly SharedJobSystem _jobSystem = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly StationJobsSystem _stationJobs = default!;
-    [Dependency] private readonly StationRecordsSystem _records = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private AccessReaderSystem _access = default!;
+    [Dependency] private PersonnelRecordsConsoleSystem _console = default!;
+    [Dependency] private SharedJobSystem _jobSystem = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Initialize()
     {

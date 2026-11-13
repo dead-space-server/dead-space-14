@@ -7,11 +7,11 @@ using Content.Shared.Mobs.Systems;
 
 namespace Content.Server.DeadSpace.Abilities.ExplosionAbility;
 
-public sealed class ExplosionAbilitySystem : EntitySystem
+public sealed partial class ExplosionAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     public override void Initialize()
     {

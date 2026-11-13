@@ -6,9 +6,9 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobSpawnerSystem : EntitySystem
+public sealed partial class BlobSpawnerSystem : EntitySystem
 {
-    [Dependency] private readonly BlobCoreSystem _blobCoreSystem = default!;
+    [Dependency] private BlobCoreSystem _blobCoreSystem = default!;
 
     public override void Initialize()
     {

@@ -44,32 +44,32 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// Periodic fauna raids on the salvage outpost, independent of any machine. Settings live in the lavaland
 /// planet prototype (<see cref="LavalandFaunaRaidConfig"/>).
 /// </summary>
-public sealed class LavalandFaunaRaidSystem : EntitySystem
+public sealed partial class LavalandFaunaRaidSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly NPCUseActionOnTargetSystem _useAction = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
-    [Dependency] private readonly Content.Shared.Damage.Systems.DamageableSystem _damageable = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private NPCUseActionOnTargetSystem _useAction = default!;
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private Content.Shared.Damage.Systems.DamageableSystem _damageable = default!;
 
     private const string RaidCompound = "LavalandRaidHostileCompound";
 
     /// <summary>Raid fauna find the players of the outpost from this far.</summary>
     private const float RaidVision = 60f;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     public override void Initialize()
     {

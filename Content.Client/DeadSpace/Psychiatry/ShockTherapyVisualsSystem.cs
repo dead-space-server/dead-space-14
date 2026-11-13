@@ -11,13 +11,13 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.Psychiatry;
 
-public sealed class ShockTherapyVisualsSystem : EntitySystem
+public sealed partial class ShockTherapyVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
-    [Dependency] private readonly PowerCellSystem _cells = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private PowerCellSystem _cells = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
 
     private readonly Dictionary<EntityUid, string> _shown = new();
 

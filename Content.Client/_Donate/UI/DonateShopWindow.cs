@@ -9,10 +9,10 @@ using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client._Donate.UI;
 
-public sealed class DonateShopWindow : EmeraldDefaultWindow
+public sealed partial class DonateShopWindow : EmeraldDefaultWindow
 {
-    [Dependency] private readonly IUriOpener _url = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IUriOpener _url = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     private enum Tab
     {

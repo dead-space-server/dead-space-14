@@ -30,9 +30,9 @@ public sealed partial class BotanyShovelSystem : EntitySystem
     private EntityQuery<PlantComponent> _plantQuery;
     private EntityQuery<PlantTrayComponent> _trayQuery;
 
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     // DS14-end
 
     private void OnAfterInteract(Entity<ShovelComponent> ent, ref AfterInteractEvent args)

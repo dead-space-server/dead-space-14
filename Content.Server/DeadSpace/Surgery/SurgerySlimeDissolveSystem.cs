@@ -7,12 +7,12 @@ using Content.Shared.Fluids;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgerySlimeDissolveSystem : EntitySystem
+public sealed partial class SurgerySlimeDissolveSystem : EntitySystem
 {
     private const string SlimeGel = "SlimeGel";
     private const string Slime = "Slime";
 
-    [Dependency] private readonly SharedPuddleSystem _puddle = default!;
+    [Dependency] private SharedPuddleSystem _puddle = default!;
 
     public override void Update(float frameTime)
     {

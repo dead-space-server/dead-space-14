@@ -20,17 +20,17 @@ using System.Linq;//DS14
 
 namespace Content.Shared.SmartFridge;
 
-public abstract class SharedSmartFridgeSystem : EntitySystem
+public abstract partial class SharedSmartFridgeSystem : EntitySystem
 {
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _receiver = default!;//DS14
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;//DS14
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPowerReceiverSystem _receiver = default!;//DS14
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;//DS14
 
     public override void Initialize()
     {

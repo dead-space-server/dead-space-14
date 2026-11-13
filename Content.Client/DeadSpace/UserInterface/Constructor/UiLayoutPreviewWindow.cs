@@ -11,9 +11,9 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.DeadSpace.UserInterface.Constructor;
 
-public sealed class UiLayoutPreviewWindow : DefaultWindow
+public sealed partial class UiLayoutPreviewWindow : DefaultWindow
 {
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     private readonly UiLayoutDocument _document;
     private readonly UiConstructorSurface _surface;

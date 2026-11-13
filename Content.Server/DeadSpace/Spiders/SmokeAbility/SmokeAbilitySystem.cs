@@ -19,18 +19,18 @@ using Content.Server.Spreader;
 
 namespace Content.Server.DeadSpace.Spiders.SmokeAbility;
 
-public sealed class SmokeAbilitySystem : SharedBloodsuckerSystem
+public sealed partial class SmokeAbilitySystem : SharedBloodsuckerSystem
 {
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SmokeSystem _smokeSystem = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SpreaderSystem _spreader = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SmokeSystem _smokeSystem = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private SpreaderSystem _spreader = default!;
 
     public override void Initialize()
     {

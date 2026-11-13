@@ -10,11 +10,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Administration.GameRules;
 
-public sealed class GameRulesServerSystem : EntitySystem
+public sealed partial class GameRulesServerSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private readonly Dictionary<(TimeSpan, string), EntityUid> _ruleEntities = new();
     private readonly Dictionary<EntityUid, string> _addedByAdmin = new();

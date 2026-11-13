@@ -8,10 +8,10 @@ using Content.Shared.Inventory.Events;
 
 namespace Content.Server.DeadSpace.Body;
 
-public sealed class DetachedBodyPartSystem : EntitySystem
+public sealed partial class DetachedBodyPartSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     public override void Initialize()
     {

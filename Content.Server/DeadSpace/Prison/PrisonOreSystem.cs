@@ -30,21 +30,21 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Prison;
 
-public sealed class PrisonOreSystem : EntitySystem
+public sealed partial class PrisonOreSystem : EntitySystem
 {
     private const string ShipmentPrototype = "CratePrisonOreShipment";
 
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly ITaskManager _tasks = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
-    [Dependency] private readonly SharedEntityStorageSystem _entityStorage = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private ITaskManager _tasks = default!;
+    [Dependency] private PrisonSystem _prison = default!;
+    [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private StackSystem _stack = default!;
 
     private readonly HashSet<EntityUid> _pendingStacks = new();
 

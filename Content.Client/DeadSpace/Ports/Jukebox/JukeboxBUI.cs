@@ -4,9 +4,9 @@ using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.DeadSpace.Ports.Jukebox;
 
-public sealed class JukeboxBUI : BoundUserInterface
+public sealed partial class JukeboxBUI : BoundUserInterface
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
 
     private readonly WhiteJukeboxMenu? _window;
 

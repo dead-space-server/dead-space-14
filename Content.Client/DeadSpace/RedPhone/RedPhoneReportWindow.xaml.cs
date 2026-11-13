@@ -13,8 +13,8 @@ namespace Content.Client.DeadSpace.RedPhone;
 [GenerateTypedNameReferences]
 public sealed partial class RedPhoneReportWindow : FancyWindow
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private EntityUid? _owner;
     private TelephoneState _currentState;

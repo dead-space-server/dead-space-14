@@ -10,9 +10,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class VascularRuptureSymptom : VirusSymptomBase
+public sealed partial class VascularRuptureSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     public override VirusSymptom Type => VirusSymptom.VascularRupture;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "VascularRuptureSymptom";
     private const float BleedIncrease = 1.5f;

@@ -16,8 +16,8 @@ namespace Content.Client.DeadSpace.Virus.UI;
 [GenerateTypedNameReferences]
 public sealed partial class VirusEvolutionConsoleWindow : DefaultWindow
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
     private VirusEvolutionConsoleBoundUserInterfaceState? _lastUpdate;
     private readonly List<VirusSymptomPrototype> _availableSymptoms = new();
     private readonly List<BodyPrototype> _availableBodies = new();

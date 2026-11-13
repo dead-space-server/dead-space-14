@@ -5,11 +5,11 @@ using Content.Shared.Hands.EntitySystems;
 
 namespace Content.Shared.DeadSpace.Surgery;
 
-public sealed class SurgeryNearbySystem : EntitySystem
+public sealed partial class SurgeryNearbySystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IComponentFactory _factory = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IComponentFactory _factory = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     public bool Has(EntityUid patient, SurgeryOperationPrototype operation, EntityUid? user = null)
     {

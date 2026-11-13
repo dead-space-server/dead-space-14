@@ -14,12 +14,12 @@ using System.ComponentModel;
 
 namespace Content.Client.Sirena.Animations;
 
-public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
+public sealed partial class EmoteAnimationSystem : SharedEmoteAnimationSystem
 {
     private const string AnimationKey = "emoteAnimationKeyId"; //DS-14
 
-    [Dependency] private readonly AnimationPlayerSystem AnimationSystem = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!; //DS-14
+    [Dependency] private AnimationPlayerSystem AnimationSystem = default!;
+    [Dependency] private SpriteSystem _sprite = default!; //DS-14
 
     private readonly Dictionary<EntityUid, EmoteFrameRestore> _frames = new(); //DS-14
     private readonly Dictionary<EntityUid, int> _played = new(); //DS-14

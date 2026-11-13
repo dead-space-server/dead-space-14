@@ -6,10 +6,10 @@ using Robust.Shared.Player;
 
 namespace Content.Client.DeadSpace.BSAA;
 
-public sealed class BSAASpecialistSystem : EntitySystem
+public sealed partial class BSAASpecialistSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly SpriteSystem _sprites = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
 
     private readonly Dictionary<EntityUid, bool> _originalVisibility = new();
 

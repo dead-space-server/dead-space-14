@@ -10,10 +10,10 @@ using Content.Shared.Throwing;
 
 namespace Content.Shared.DeadSpace.Prison;
 
-public sealed class PrisonFactionSelectionLockedSystem : EntitySystem
+public sealed partial class PrisonFactionSelectionLockedSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private PullingSystem _pulling = default!;
 
     public override void Initialize()
     {

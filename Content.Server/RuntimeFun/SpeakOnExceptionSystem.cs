@@ -16,11 +16,11 @@ namespace Content.Server.RuntimeFun;
 public sealed partial class SpeakOnExceptionSystem : EntitySystem
 {
     // DS14-start: current engine baseline uses readonly IoC fields and explicit event subscriptions.
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ILogManager _log = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ChatSystem _chat = default!;
 
     // Special log handler that just saves the latest error.
     private SpeakOnExceptionLogHandler _logHandler = default!;
@@ -84,7 +84,7 @@ public sealed partial class SpeakOnExceptionSystem : EntitySystem
     }
 
     // Log handler for SpeakOnException entities.
-    private sealed class SpeakOnExceptionLogHandler : ILogHandler
+    private sealed partial class SpeakOnExceptionLogHandler : ILogHandler
     {
         // Gets set to true if an error ever occurs - reset this to false if you want to see if another error has occurred!
         public bool ErrorHasOccured;

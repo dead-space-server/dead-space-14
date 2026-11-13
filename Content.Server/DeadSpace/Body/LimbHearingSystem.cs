@@ -9,11 +9,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Body;
 
-public sealed class LimbHearingSystem : EntitySystem
+public sealed partial class LimbHearingSystem : EntitySystem
 {
     private static readonly EntProtoId DeafEffect = "StatusEffectDeaf";
 
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
 
     private float _accumulator;
 

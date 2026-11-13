@@ -12,14 +12,14 @@ namespace Content.Shared.Movement.Systems;
 /// <summary>
 /// This handles the worm component
 /// </summary>
-public sealed class WormSystem : EntitySystem
+public sealed partial class WormSystem : EntitySystem
 {
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
     // DS14-start
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     // DS14-end
 
     public override void Initialize()

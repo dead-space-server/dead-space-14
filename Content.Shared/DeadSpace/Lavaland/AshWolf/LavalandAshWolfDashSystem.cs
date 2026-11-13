@@ -13,9 +13,9 @@ namespace Content.Shared.DeadSpace.Lavaland.AshWolf;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class LavalandAshWolfDashingComponent : Component;
 
-public sealed class LavalandAshWolfDashSystem : EntitySystem
+public sealed partial class LavalandAshWolfDashSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
 
     public override void Initialize()
     {

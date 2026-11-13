@@ -18,10 +18,10 @@ public sealed partial class TabletopPlaceSystem : EntitySystem
 {
     private const int MaxPiecesPerBoard = 10;
 
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly TabletopSystem _tabletop = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private TabletopSystem _tabletop = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     public override void Initialize()
     {

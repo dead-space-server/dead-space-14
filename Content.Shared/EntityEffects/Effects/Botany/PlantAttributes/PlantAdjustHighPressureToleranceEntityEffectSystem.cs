@@ -10,8 +10,8 @@ namespace Content.Shared.EntityEffects.Effects.Botany.PlantAttributes;
 public sealed partial class PlantAdjustHighPressureToleranceEntityEffectSystem : EntityEffectSystem<PlantAtmosphericComponent, PlantAdjustHighPressureTolerance>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly SharedPlantAtmosphericSystem _plantAtmospheric = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
+    [Dependency] private SharedPlantAtmosphericSystem _plantAtmospheric = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantAtmosphericComponent> entity, ref EntityEffectEvent<PlantAdjustHighPressureTolerance> args)

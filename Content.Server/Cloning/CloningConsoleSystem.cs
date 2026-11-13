@@ -21,17 +21,17 @@ using Content.Server.DeadSpace.Cloning; //DS-14
 
 namespace Content.Server.Cloning
 {
-    public sealed class CloningConsoleSystem : EntitySystem
+    public sealed partial class CloningConsoleSystem : EntitySystem
     {
-        [Dependency] private readonly DeviceLinkSystem _signalSystem = default!;
-        [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly CloningPodSystem _cloningPodSystem = default!;
-        [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-        [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-        [Dependency] private readonly PowerReceiverSystem _powerReceiverSystem = default!;
-        // [Dependency] private readonly SharedMindSystem _mindSystem = default!; //DS-14
-        [Dependency] private readonly CloningLimbSystem _cloningLimb = default!; //DS-14
+        [Dependency] private DeviceLinkSystem _signalSystem = default!;
+        [Dependency] private IAdminLogManager _adminLogger = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private CloningPodSystem _cloningPodSystem = default!;
+        [Dependency] private UserInterfaceSystem _uiSystem = default!;
+        [Dependency] private MobStateSystem _mobStateSystem = default!;
+        [Dependency] private PowerReceiverSystem _powerReceiverSystem = default!;
+        // [Dependency] private SharedMindSystem _mindSystem = default!; //DS-14
+        [Dependency] private CloningLimbSystem _cloningLimb = default!; //DS-14
 
         public override void Initialize()
         {

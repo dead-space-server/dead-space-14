@@ -23,11 +23,11 @@ public record struct FindInternalsTankEvent(Entity<GasTankComponent>? Tank = nul
 [ByRefEvent]
 public record struct GasTankBreatherEvent(EntityUid? Breather = null);
 
-public sealed class SurgeryTankMountSystem : EntitySystem
+public sealed partial class SurgeryTankMountSystem : EntitySystem
 {
-    [Dependency] private readonly ItemSlotsSystem _slots = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedInternalsSystem _internals = default!;
+    [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedInternalsSystem _internals = default!;
 
     public override void Initialize()
     {

@@ -26,15 +26,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Psychiatry;
 
-public sealed class PsychiatryOnsetSystem : EntitySystem
+public sealed partial class PsychiatryOnsetSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly PsychiatrySystem _psychiatry = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private PsychiatrySystem _psychiatry = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly ProtoId<PsychiatryHarmfulReagentsPrototype> HarmfulList = "PsychiatryHarmful";
 

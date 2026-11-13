@@ -30,23 +30,23 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.CentComm;
 
-public sealed class CentCommTransferSystem : EntitySystem
+public sealed partial class CentCommTransferSystem : EntitySystem
 {
     public static readonly TimeSpan PreparationTime = TimeSpan.FromMinutes(1);
 
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IAdminLogManager _log = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly ShuttleSystem _shuttle = default!;
-    [Dependency] private readonly DockingSystem _docking = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly WeatherSystem _weather = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly GameRuleStationSystem _ruleStation = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IAdminLogManager _log = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private ShuttleSystem _shuttle = default!;
+    [Dependency] private DockingSystem _docking = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private WeatherSystem _weather = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private GameRuleStationSystem _ruleStation = default!;
 
     private TimeSpan _nextUiUpdate;
     public event Action? StateChanged;

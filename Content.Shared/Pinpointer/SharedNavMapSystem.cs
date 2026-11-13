@@ -11,7 +11,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.Pinpointer;
 
-public abstract class SharedNavMapSystem : EntitySystem
+public abstract partial class SharedNavMapSystem : EntitySystem
 {
     public const int Categories = 3;
     public const int Directions = 4; // Not directly tied to number of atmos directions
@@ -24,8 +24,8 @@ public abstract class SharedNavMapSystem : EntitySystem
     public const int WallMask = AllDirMask << (int) NavMapChunkType.Wall;
     public const int FloorMask = AllDirMask << (int) NavMapChunkType.Floor;
 
-    [Robust.Shared.IoC.Dependency] private readonly TagSystem _tagSystem = default!;
-    [Robust.Shared.IoC.Dependency] private readonly INetManager _net = default!;
+    [Robust.Shared.IoC.Dependency] private TagSystem _tagSystem = default!;
+    [Robust.Shared.IoC.Dependency] private INetManager _net = default!;
 
     private static readonly ProtoId<TagPrototype>[] WallTags = {"Window"};
     private EntityQuery<NavMapDoorComponent> _doorQuery;
@@ -186,7 +186,7 @@ public abstract class SharedNavMapSystem : EntitySystem
     #region: System messages
 
     [Serializable, NetSerializable]
-    protected sealed class NavMapState(
+    protected sealed partial class NavMapState(
         Dictionary<Vector2i, int[]> chunks,
         Dictionary<NetEntity, NavMapBeacon> beacons,
         Dictionary<NetEntity, NavMapRegionProperties> regions)
@@ -198,7 +198,7 @@ public abstract class SharedNavMapSystem : EntitySystem
     }
 
     [Serializable, NetSerializable]
-    protected sealed class NavMapDeltaState(
+    protected sealed partial class NavMapDeltaState(
         Dictionary<Vector2i, int[]> modifiedChunks,
         Dictionary<NetEntity, NavMapBeacon> beacons,
         Dictionary<NetEntity, NavMapRegionProperties> regions,

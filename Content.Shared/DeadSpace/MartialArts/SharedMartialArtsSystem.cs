@@ -5,9 +5,9 @@ using Content.Shared.Weapons.Ranged.Events;
 
 namespace Content.Shared.DeadSpace.MartialArts.SmokingCarp;
 
-public abstract class SharedMartialArtsSystem : EntitySystem
+public abstract partial class SharedMartialArtsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

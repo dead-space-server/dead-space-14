@@ -32,7 +32,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Singularity.EntitySystems;
 
-public sealed class ContainmentFieldGeneratorSystem : EntitySystem
+public sealed partial class ContainmentFieldGeneratorSystem : EntitySystem
 {
     // DS14-start
     private static readonly EntProtoId AntiParticlesProjectile = "AntiParticlesProjectile";
@@ -46,18 +46,18 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
     private TimeSpan _nextDestabilizationAnnouncementTime;
     // DS14-end
 
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly AppearanceSystem _visualizer = default!;
-    [Dependency] private readonly ChatSystem _chat = default!; // DS14
-    [Dependency] private readonly ExplosionSystem _explosion = default!; // DS14
-    [Dependency] private readonly NavMapSystem _navMap = default!; // DS14
-    [Dependency] private readonly PhysicsSystem _physics = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedPointLightSystem _light = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14
-    [Dependency] private readonly IRobustRandom _random = default!; // DS14
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private AppearanceSystem _visualizer = default!;
+    [Dependency] private ChatSystem _chat = default!; // DS14
+    [Dependency] private ExplosionSystem _explosion = default!; // DS14
+    [Dependency] private NavMapSystem _navMap = default!; // DS14
+    [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private IGameTiming _timing = default!; // DS14
+    [Dependency] private IRobustRandom _random = default!; // DS14
 
     public override void Initialize()
     {

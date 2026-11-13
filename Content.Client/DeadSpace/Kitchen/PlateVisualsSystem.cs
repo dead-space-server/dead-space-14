@@ -12,13 +12,13 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Client.DeadSpace.Kitchen;
 
-public sealed class PlateVisualsSystem : EntitySystem
+public sealed partial class PlateVisualsSystem : EntitySystem
 {
     private const string WorldLayerPrefix = "plate-content-";
 
-    [Dependency] private readonly ItemSystem _itemSystem = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private ItemSystem _itemSystem = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private readonly Dictionary<EntityUid, HashSet<string>> _worldLayerKeys = new();
 

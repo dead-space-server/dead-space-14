@@ -10,10 +10,10 @@ using Robust.Shared.GameStates;
 
 namespace Content.Client.DeadSpace.Languages;
 
-public sealed class LanguageSystem : EntitySystem
+public sealed partial class LanguageSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private AudioSystem _audio = default!;
 
     public override void Initialize()
     {

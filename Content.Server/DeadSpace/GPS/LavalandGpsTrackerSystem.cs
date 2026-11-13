@@ -9,11 +9,11 @@ using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.GPS;
 
-public sealed class LavalandGpsTrackerSystem : EntitySystem
+public sealed partial class LavalandGpsTrackerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

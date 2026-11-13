@@ -17,15 +17,15 @@ using Robust.Shared.Network;
 
 namespace Content.Server.DeadSpace.Ports.Jukebox;
 
-public sealed class TapeCreatorSystem : EntitySystem
+public sealed partial class TapeCreatorSystem : EntitySystem
 {
-    [Dependency] private readonly ServerJukeboxSongsSyncManager _songsSyncManager = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly ContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private ServerJukeboxSongsSyncManager _songsSyncManager = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private ContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     private static readonly ProtoId<TagPrototype> TapeRecorderCoinTag = "TapeRecorderCoin";
     private const string TapeCreatorContainerName = "tape_creator_container";

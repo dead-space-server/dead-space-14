@@ -14,18 +14,18 @@ using Robust.Shared.Random;
 
 namespace Content.Server.StationEvents;
 
-public sealed class SurvivalRampingStationEventSchedulerSystem : GameRuleSystem<SurvivalRampingStationEventSchedulerComponent>
+public sealed partial class SurvivalRampingStationEventSchedulerSystem : GameRuleSystem<SurvivalRampingStationEventSchedulerComponent>
 {
     private const int EventPickAttempts = 20;
     private const float FailedEventRetryCooldown = 30f;
 
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly EventManagerSystem _event = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly EntityTableSystem _entityTable = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private EventManagerSystem _event = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private EntityTableSystem _entityTable = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
 
     public float GetChaosModifier(SurvivalRampingStationEventSchedulerComponent component)
     {

@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace Content.Server.DeadSpace.Ports.Jukebox;
 
-public sealed class ServerJukeboxSongsSyncManager : JukeboxSongsSyncManager
+public sealed partial class ServerJukeboxSongsSyncManager : JukeboxSongsSyncManager
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ILogManager _log = default!;
     private int _round;
     private CancellationTokenSource _roundCancel = new();
     private readonly HashSet<INetChannel> _receivingUploads = new();

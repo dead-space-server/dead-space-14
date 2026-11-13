@@ -10,11 +10,11 @@ using Robust.Shared.Network;
 
 namespace Content.Shared.DeadSpace.Lavaland;
 
-public sealed class SharedLavalandJaunterSystem : EntitySystem
+public sealed partial class SharedLavalandJaunterSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     /// <summary>How deep into bags, body bags and the like the jaunter is looked for.</summary>
     private const int SearchDepth = 4;

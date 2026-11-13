@@ -8,9 +8,9 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Client.DeadSpace.Tiles;
 
-public sealed class InvisibleTileOverlay : Overlay
+public sealed partial class InvisibleTileOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     private readonly SharedMapSystem _map;
     private readonly SharedTransformSystem _transform;

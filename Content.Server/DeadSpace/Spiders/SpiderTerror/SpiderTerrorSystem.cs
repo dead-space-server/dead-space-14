@@ -11,11 +11,11 @@ using Content.Shared.DeadSpace.Spiders.Roles;
 
 namespace Content.Server.DeadSpace.Spiders.SpiderTerror;
 
-public sealed class SpiderTerrorSystem : SharedBloodsuckerSystem
+public sealed partial class SpiderTerrorSystem : SharedBloodsuckerSystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private RoleSystem _role = default!;
+    [Dependency] private PrisonSystem _prison = default!;
     private ISawmill _logger = default!;
 
     public override void Initialize()

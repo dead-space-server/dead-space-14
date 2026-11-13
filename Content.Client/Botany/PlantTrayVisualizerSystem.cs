@@ -19,8 +19,8 @@ public sealed partial class PlantTrayVisualizerSystem : VisualizerSystem<PlantTr
     // DS14-end
 
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
     // DS14-end
 
     /// <summary>

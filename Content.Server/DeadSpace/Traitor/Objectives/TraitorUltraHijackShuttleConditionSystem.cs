@@ -5,9 +5,9 @@ using Content.Shared.Objectives.Components;
 
 namespace Content.Server.DeadSpace.Traitor.Objectives;
 
-public sealed class TraitorUltraHijackShuttleConditionSystem : EntitySystem
+public sealed partial class TraitorUltraHijackShuttleConditionSystem : EntitySystem
 {
-    [Dependency] private readonly EmergencyShuttleSystem _emergencyShuttle = default!;
+    [Dependency] private EmergencyShuttleSystem _emergencyShuttle = default!;
 
     public override void Initialize()
     {

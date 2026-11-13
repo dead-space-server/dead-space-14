@@ -5,10 +5,10 @@ using Content.Shared.Inventory.Events;
 
 namespace Content.Shared.DeadSpace.Radio.Systems;
 
-public abstract class SharedRadioToggleActionSystem : EntitySystem
+public abstract partial class SharedRadioToggleActionSystem : EntitySystem
 {
-    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
     public override void Initialize()
     {
         base.Initialize();

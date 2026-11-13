@@ -9,12 +9,12 @@ namespace Content.Shared.Changeling.Systems;
 
 public abstract partial class SharedChangelingLastResortSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly GibbingSystem _gibbing = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly DestructionResistanceSystem _destructionResistance = default!;
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private DestructionResistanceSystem _destructionResistance = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
 
     // DS14-start: pre-v288 RobustToolbox has no event-subscription source generator.
     public override void Initialize()

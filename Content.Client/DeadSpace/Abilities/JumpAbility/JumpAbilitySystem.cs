@@ -7,9 +7,9 @@ using Content.Shared.DeadSpace.Abilities.JumpAbility.Components;
 
 namespace Content.Client.DeadSpace.Abilities.JumpAbility;
 
-public sealed class JumpAbilitySystem : EntitySystem
+public sealed partial class JumpAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
     private const string AnimationKey = "jumpAnimationKeyId";
     public override void Initialize()
     {

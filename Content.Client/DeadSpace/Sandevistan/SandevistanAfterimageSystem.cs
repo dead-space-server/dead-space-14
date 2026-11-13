@@ -11,7 +11,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Sandevistan;
 
-public sealed class SandevistanAfterimageSystem : EntitySystem
+public sealed partial class SandevistanAfterimageSystem : EntitySystem
 {
     private const int MaxAfterimagesPerFrame = 14;
     private const float MinStepDistance = 0.005f;
@@ -23,9 +23,9 @@ public sealed class SandevistanAfterimageSystem : EntitySystem
     private static readonly Color FarTrailColor = Color.FromHex("#38c8ffbf");
     private static readonly Color FarSoftcapTrailColor = Color.FromHex("#00f0ffd2");
 
-    [Dependency] private readonly DeadSpaceAfterimageSystem _afterimages = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private DeadSpaceAfterimageSystem _afterimages = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<EntityUid, TrailState> _trailStates = new();
     private readonly HashSet<EntityUid> _activeThisFrame = new();

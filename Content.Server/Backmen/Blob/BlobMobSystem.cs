@@ -14,12 +14,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobMobSystem : EntitySystem
+public sealed partial class BlobMobSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly RadioSystem _radioSystem = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private RadioSystem _radioSystem = default!;
 
     public override void Initialize()
     {

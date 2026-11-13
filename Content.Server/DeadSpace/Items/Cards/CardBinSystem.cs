@@ -10,10 +10,10 @@ using Content.Shared.Hands.Components;
 
 namespace Content.Server.DeadSpace.Items.Cards;
 
-public sealed class CardBinSystem : EntitySystem
+public sealed partial class CardBinSystem : EntitySystem
 {
 
-    [Dependency] private readonly BinSystem _bin = default!;
+    [Dependency] private BinSystem _bin = default!;
 
     public override void Initialize()
     {

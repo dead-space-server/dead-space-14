@@ -9,9 +9,9 @@ using Robust.Shared.Physics.Events;
 
 namespace Content.Shared.DeadSpace.Weapons.Ranged.Systems;
 
-public sealed class ProjectileHostilesOnlySystem : EntitySystem
+public sealed partial class ProjectileHostilesOnlySystem : EntitySystem
 {
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
 
     public override void Initialize()
     {

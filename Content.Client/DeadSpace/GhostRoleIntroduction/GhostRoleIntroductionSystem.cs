@@ -16,14 +16,14 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.GhostRoleIntroduction;
 
-public sealed class GhostRoleIntroductionSystem : EntitySystem
+public sealed partial class GhostRoleIntroductionSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private LayoutContainer? _root;
     private PanelContainer? _black;

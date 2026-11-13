@@ -3,10 +3,10 @@ using Robust.Shared.Network;
 
 namespace Content.Shared.DeadSpace.Ports.Jukebox;
 
-public sealed class JukeboxSharedSystem : EntitySystem
+public sealed partial class JukeboxSharedSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private INetManager _netManager = default!;
 
     public override void Initialize()
     {

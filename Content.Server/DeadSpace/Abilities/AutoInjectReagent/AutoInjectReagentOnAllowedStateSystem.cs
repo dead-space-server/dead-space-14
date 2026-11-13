@@ -10,9 +10,9 @@ namespace Content.Server.DeadSpace.Abilities.AutoInjectReagentOnAllowedState;
 
 public sealed partial class AutoInjectReagentOnAllowedStateSystem : SharedReagentSystem
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

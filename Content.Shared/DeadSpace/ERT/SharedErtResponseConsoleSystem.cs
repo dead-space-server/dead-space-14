@@ -7,9 +7,9 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Shared.DeadSpace.ERT;
 
-public sealed class SharedErtResponseConsoleSystem : EntitySystem
+public sealed partial class SharedErtResponseConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

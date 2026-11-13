@@ -11,12 +11,12 @@ using Robust.Shared.Physics.Systems;
 namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>Steers <see cref="LavalandHomingProjectileComponent"/> projectiles (rude buster) at creatures ahead.</summary>
-public sealed class LavalandHomingProjectileSystem : EntitySystem
+public sealed partial class LavalandHomingProjectileSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _candidates = new();
 

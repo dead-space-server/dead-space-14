@@ -22,17 +22,17 @@ using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Weapons.Ranged;
 
-public sealed class ExplosivePkaUpgradeSystem : EntitySystem
+public sealed partial class ExplosivePkaUpgradeSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMapSystem _mapManager = default!;
-    [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
-    [Dependency] private readonly Content.Shared.Weapons.Ranged.Upgrades.GunUpgradeSystem _upgrades = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
+    [Dependency] private Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private Robust.Shared.Containers.SharedContainerSystem _containers = default!;
+    [Dependency] private Content.Shared.Weapons.Ranged.Upgrades.GunUpgradeSystem _upgrades = default!;
 
     public override void Initialize()
     {

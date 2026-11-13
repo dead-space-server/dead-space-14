@@ -15,23 +15,23 @@ using Content.Server.Ninja.Systems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaSecondChanceSystem : EntitySystem
+public sealed partial class NinjaSecondChanceSystem : EntitySystem
 {
     private const string CloneSettingsId = "NinjaSecondChanceClone";
     private const string BodyContainerId = "ninja_capsule_body";
     private const string GearId = "SpaceNinjaGear";
     private const string SurvivalLoadoutId = "RoleSurvivalSpaceNinja";
 
-    [Dependency] private readonly CloningSystem _cloning = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SpaceNinjaSystem _ninja = default!;
-    [Dependency] private readonly SpiderOSSystem _spiderOS = default!;
-    [Dependency] private readonly LoadoutSystem _loadout = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private CloningSystem _cloning = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SpaceNinjaSystem _ninja = default!;
+    [Dependency] private SpiderOSSystem _spiderOS = default!;
+    [Dependency] private LoadoutSystem _loadout = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {

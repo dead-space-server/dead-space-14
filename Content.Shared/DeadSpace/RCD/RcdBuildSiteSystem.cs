@@ -14,7 +14,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.RCD;
 
-public sealed class RcdBuildSiteSystem : EntitySystem
+public sealed partial class RcdBuildSiteSystem : EntitySystem
 {
     private static readonly EntProtoId SitePrototype = "RcdBuildSite";
     private static readonly TimeSpan IdleLifetime = TimeSpan.FromSeconds(180);
@@ -26,13 +26,13 @@ public sealed class RcdBuildSiteSystem : EntitySystem
     private static readonly TimeSpan StaleGrace = TimeSpan.FromSeconds(5);
     private static readonly Box2 TileBox = new(-0.5f, -0.5f, 0.5f, 0.5f);
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     private readonly HashSet<EntityUid> _intersecting = new();
     private float _accumulator;

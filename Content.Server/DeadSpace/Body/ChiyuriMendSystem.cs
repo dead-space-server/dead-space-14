@@ -5,7 +5,7 @@ using Content.Shared.EntityEffects;
 
 namespace Content.Server.DeadSpace.Body;
 
-public sealed class ChiyuriMendSystem : EntityEffectSystem<LimbBodyComponent, ChiyuriMend>
+public sealed partial class ChiyuriMendSystem : EntityEffectSystem<LimbBodyComponent, ChiyuriMend>
 {
     private static readonly LimbZone[] RegrowOrder =
     {
@@ -19,7 +19,7 @@ public sealed class ChiyuriMendSystem : EntityEffectSystem<LimbBodyComponent, Ch
         LimbZone.FootRight,
     };
 
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
 
     protected override void Effect(Entity<LimbBodyComponent> entity, ref EntityEffectEvent<ChiyuriMend> args)
     {

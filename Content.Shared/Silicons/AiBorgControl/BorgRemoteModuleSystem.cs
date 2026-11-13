@@ -5,9 +5,9 @@ using Robust.Shared.Containers;
 
 namespace Content.Shared.Silicons.AiBorgControl;
 
-public sealed class BorgRemoteModuleSystem : EntitySystem
+public sealed partial class BorgRemoteModuleSystem : EntitySystem
 {
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {

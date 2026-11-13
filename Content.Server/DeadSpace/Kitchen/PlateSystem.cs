@@ -16,13 +16,13 @@ using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.Kitchen;
 
-public sealed class PlateSystem : EntitySystem
+public sealed partial class PlateSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly StorageSystem _storage = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private StorageSystem _storage = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     public override void Initialize()
     {

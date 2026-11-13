@@ -7,9 +7,9 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client._Donate.Emerald;
 
-public sealed class EmeraldBatteryDisplay : Control
+public sealed partial class EmeraldBatteryDisplay : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const int BaseFontSize = 11;
     private const int BigFontSize = 13;

@@ -18,10 +18,10 @@ public sealed partial class EnergySellerSystem : EntitySystem
 {
     private const int MinPowerSetting = 5000;
 
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private CargoSystem _cargo = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
 
     public override void Initialize()
     {

@@ -11,9 +11,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class NecromutationSymptom : VirusSymptomBase
+public sealed partial class NecromutationSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     public override VirusSymptom Type => VirusSymptom.Necromutation;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "NecromutationSymptom";
     private const string NecroReagent = "ExtractInfectorDead";

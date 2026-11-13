@@ -25,20 +25,20 @@ public sealed partial class EnsnareableDoAfterEvent : SimpleDoAfterEvent
 {
 }
 
-public abstract class SharedEnsnareableSystem : EntitySystem
+public abstract partial class SharedEnsnareableSystem : EntitySystem
 {
     private const float SandevistanRemovalDurationMultiplier = 0.25f; // DS14
 
-    [Dependency] private   readonly AlertsSystem _alerts = default!;
-    [Dependency] private   readonly MovementSpeedModifierSystem _speedModifier = default!;
-    [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
-    [Dependency] private   readonly SharedAudioSystem _audio = default!;
-    [Dependency] protected readonly SharedContainerSystem Container = default!;
-    [Dependency] private   readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private   readonly SharedHandsSystem _hands = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] private   readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private   readonly IGameTiming _timing = default!; // DS14
+    [Dependency] private   AlertsSystem _alerts = default!;
+    [Dependency] private   MovementSpeedModifierSystem _speedModifier = default!;
+    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] private   SharedAudioSystem _audio = default!;
+    [Dependency] protected SharedContainerSystem Container = default!;
+    [Dependency] private   SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private   SharedHandsSystem _hands = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] private   SharedStaminaSystem _stamina = default!;
+    [Dependency] private   IGameTiming _timing = default!; // DS14
 
     public override void Initialize()
     {

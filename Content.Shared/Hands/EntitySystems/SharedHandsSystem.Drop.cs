@@ -17,8 +17,8 @@ namespace Content.Shared.Hands.EntitySystems;
 
 public abstract partial class SharedHandsSystem
 {
-    [Dependency] private readonly TagSystem _tagSystem = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     private static readonly ProtoId<TagPrototype> BypassDropChecksTag = "BypassDropChecks";
     private const float DropCollisionBuffer = PhysicsConstants.PolygonRadius * 4f;

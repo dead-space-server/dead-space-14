@@ -13,7 +13,7 @@ namespace Content.Client.DeadSpace.UserInterface.RichText;
 /// Switches the font of the enclosed text to one of the whitelisted fonts
 /// from Resources/Fonts. Usage: <c>[pfont="ComicSans"]text[/pfont]</c>.
 /// </summary>
-public sealed class PaperFontTag : IMarkupTagHandler
+public sealed partial class PaperFontTag : IMarkupTagHandler
 {
     public const string DefaultFontId = FontTag.DefaultFont;
     public const string ComicSansFontId = "ComicSans";
@@ -28,8 +28,8 @@ public sealed class PaperFontTag : IMarkupTagHandler
         "ComicSans",
     ];
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public string Name => "pfont";
 

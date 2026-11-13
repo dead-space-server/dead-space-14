@@ -10,10 +10,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.Crayon;
 
-public sealed class CrayonSystem : SharedCrayonSystem
+public sealed partial class CrayonSystem : SharedCrayonSystem
 {
-    [Dependency] private readonly SharedChargesSystem _charges = default!;
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private SharedChargesSystem _charges = default!;
+    [Dependency] private EntityManager _entityManager = default!;
 
     public override void Initialize()
     {
@@ -22,7 +22,7 @@ public sealed class CrayonSystem : SharedCrayonSystem
         Subs.ItemStatus<CrayonComponent>(ent => new StatusControl(ent, _charges, _entityManager));
     }
 
-    private sealed class StatusControl : Control
+    private sealed partial class StatusControl : Control
     {
         private readonly Entity<CrayonComponent> _crayon;
         private readonly SharedChargesSystem _charges;

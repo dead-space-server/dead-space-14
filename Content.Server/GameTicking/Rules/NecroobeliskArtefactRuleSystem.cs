@@ -12,14 +12,14 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.GameTicking.Rules;
 
-public sealed class NecroobeliskArtefactRuleSystem : GameRuleSystem<NecroobeliskArtefactRuleComponent>
+public sealed partial class NecroobeliskArtefactRuleSystem : GameRuleSystem<NecroobeliskArtefactRuleComponent>
 {
     private static readonly ResPath ObeliskOrderPath = new("/Paperwork/StationGoal/Obelisk.xml");
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly FaxSystem _faxSystem = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private FaxSystem _faxSystem = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
 
     public override void Initialize()
     {

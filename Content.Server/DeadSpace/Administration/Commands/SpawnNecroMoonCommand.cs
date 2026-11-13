@@ -11,9 +11,9 @@ namespace Content.Server.DeadSpace.Administration.Commands;
 /// spawnnecromoon [uid] - принудительно вызывает появление луны из обелиска.
 /// </summary>
 [AdminCommand(AdminFlags.Admin)]
-public sealed class SpawnNecroMoonCommand : IConsoleCommand
+public sealed partial class SpawnNecroMoonCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "spawnnecromoon";
     public string Description => "Принудительно заспавнить луну из обелиска.";

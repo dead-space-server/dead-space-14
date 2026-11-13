@@ -12,7 +12,7 @@ namespace Content.Server.NPC.HTN.Preconditions;
 /// <seealso cref="SatiationSystem.IsValueInRange"/>
 public sealed partial class BaseSatiationPrecondition : HTNPrecondition
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     /// <summary>
     /// The bottom of the range the agent's satiation must be in for this condition to be met. If null, the range has

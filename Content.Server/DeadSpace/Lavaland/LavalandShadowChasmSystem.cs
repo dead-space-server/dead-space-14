@@ -22,18 +22,18 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// cloud, in moon boots or the like - has <see cref="Content.Shared.DeadSpace.Lavaland.LavalandDeepNightConfig.ChasmHoverTime"/>
 /// (the countdown over his head is shown to him only); then a shadow rises, drags him down, and he dies in the chasm.
 /// </summary>
-public sealed class LavalandShadowChasmSystem : EntitySystem
+public sealed partial class LavalandShadowChasmSystem : EntitySystem
 {
-    [Dependency] private readonly ChasmSystem _chasm = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
-    [Dependency] private readonly LavalandDeepNightSystem _deepNight = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private ChasmSystem _chasm = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private LavalandChromiteCavesSystem _caves = default!;
+    [Dependency] private LavalandDeepNightSystem _deepNight = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(0.2);
 

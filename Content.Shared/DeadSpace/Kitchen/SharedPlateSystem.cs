@@ -23,21 +23,21 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Kitchen;
 
-public sealed class SharedPlateSystem : EntitySystem
+public sealed partial class SharedPlateSystem : EntitySystem
 {
     private const int EatAltVerbPriority = 10;
     private const UtensilType PlateUtensils = UtensilType.Fork | UtensilType.Spoon;
 
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly IngestionSystem _ingestion = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private IngestionSystem _ingestion = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly Dictionary<ProtoId<ItemSizePrototype>, EntityWhitelist> _sizeWhitelistCache = new();
 

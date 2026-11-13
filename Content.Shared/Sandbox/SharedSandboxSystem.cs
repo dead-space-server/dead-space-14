@@ -3,29 +3,29 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.Sandbox
 {
-    public abstract class SharedSandboxSystem : EntitySystem
+    public abstract partial class SharedSandboxSystem : EntitySystem
     {
-        [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
+        [Dependency] protected IPrototypeManager PrototypeManager = default!;
 
         [Serializable, NetSerializable]
-        protected sealed class MsgSandboxStatus : EntityEventArgs
+        protected sealed partial class MsgSandboxStatus : EntityEventArgs
         {
             public bool SandboxAllowed { get; set; }
         }
 
         [Serializable, NetSerializable]
-        protected sealed class MsgSandboxRespawn : EntityEventArgs {}
+        protected sealed partial class MsgSandboxRespawn : EntityEventArgs {}
 
         [Serializable, NetSerializable]
-        protected sealed class MsgSandboxGiveAccess : EntityEventArgs {}
+        protected sealed partial class MsgSandboxGiveAccess : EntityEventArgs {}
 
         [Serializable, NetSerializable]
-        protected sealed class MsgSandboxGiveAghost : EntityEventArgs {}
+        protected sealed partial class MsgSandboxGiveAghost : EntityEventArgs {}
 
         [Serializable, NetSerializable]
-        protected sealed class MsgSandboxSuicide : EntityEventArgs {}
+        protected sealed partial class MsgSandboxSuicide : EntityEventArgs {}
 
         [Serializable, NetSerializable]
-        protected sealed class MsgSandboxThermalVision : EntityEventArgs {}
+        protected sealed partial class MsgSandboxThermalVision : EntityEventArgs {}
     }
 }

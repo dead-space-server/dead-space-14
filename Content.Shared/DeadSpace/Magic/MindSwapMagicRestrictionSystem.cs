@@ -9,10 +9,10 @@ using Content.Shared.Mind.Components;
 
 namespace Content.Shared.DeadSpace.Magic;
 
-public sealed class MindSwapMagicRestrictionSystem : EntitySystem
+public sealed partial class MindSwapMagicRestrictionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
 
     public override void Initialize()
     {

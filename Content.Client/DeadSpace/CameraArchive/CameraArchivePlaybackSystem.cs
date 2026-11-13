@@ -27,15 +27,15 @@ using Robust.Shared.Serialization;
 
 namespace Content.Client.DeadSpace.CameraArchives;
 
-public sealed class CameraArchivePlaybackSystem : EntitySystem
+public sealed partial class CameraArchivePlaybackSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
-    [Dependency] private readonly IRobustSerializer _serializer = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly StealthSystem _stealth = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private ITileDefinitionManager _tileDefs = default!;
+    [Dependency] private IRobustSerializer _serializer = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StealthSystem _stealth = default!;
 
     private MapId? _mapId;
     private MapId? _sheetMapId;
@@ -319,7 +319,7 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
     }
 }
 
-public sealed class CameraArchiveView(EntityUid map, EntityUid grid, MapId mapId, FixedEye eye)
+public sealed partial class CameraArchiveView(EntityUid map, EntityUid grid, MapId mapId, FixedEye eye)
 {
     public EntityUid Map { get; } = map;
     public EntityUid Grid { get; } = grid;

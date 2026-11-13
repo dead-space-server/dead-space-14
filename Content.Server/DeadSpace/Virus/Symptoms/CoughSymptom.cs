@@ -11,9 +11,9 @@ using Robust.Shared.Prototypes;
 using Content.Shared.DeadSpace.Virus.Prototypes;
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class CoughSymptom : VirusSymptomBase
+public sealed partial class CoughSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     public override VirusSymptom Type => VirusSymptom.Cough;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "CoughSymptom";
     private static readonly ProtoId<EmotePrototype> CoughEmote = "Cough";

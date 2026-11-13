@@ -8,11 +8,11 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Client.Light;
 
-public sealed class TileEmissionOverlay : Overlay
+public sealed partial class TileEmissionOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.BeforeLighting;
 
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     private SharedMapSystem _mapSystem;
     private SharedTransformSystem _xformSystem;

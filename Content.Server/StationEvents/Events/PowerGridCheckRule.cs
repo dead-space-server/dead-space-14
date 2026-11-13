@@ -14,10 +14,10 @@ using Timer = Robust.Shared.Timing.Timer;
 namespace Content.Server.StationEvents.Events
 {
     [UsedImplicitly]
-    public sealed class PowerGridCheckRule : StationEventSystem<PowerGridCheckRuleComponent>
+    public sealed partial class PowerGridCheckRule : StationEventSystem<PowerGridCheckRuleComponent>
     {
-        [Dependency] private readonly ApcSystem _apcSystem = default!;
-        [Dependency] private readonly SharedStationSystem _stationSystem = default!;
+        [Dependency] private ApcSystem _apcSystem = default!;
+        [Dependency] private SharedStationSystem _stationSystem = default!;
 
         protected override void Started(EntityUid uid, PowerGridCheckRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
         {

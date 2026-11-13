@@ -13,11 +13,11 @@ using Content.Shared.Storage.Components;
 
 namespace Content.Server.DeadSpace.Borgs;
 
-public sealed class BorgRideSystem : EntitySystem
+public sealed partial class BorgRideSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedVirtualItemSystem _virtual = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedVirtualItemSystem _virtual = default!;
 
     public override void Initialize()
     {

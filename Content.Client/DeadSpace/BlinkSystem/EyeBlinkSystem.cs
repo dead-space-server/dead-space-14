@@ -11,9 +11,9 @@ using Content.Shared.Blink;
 
 namespace Content.Client.BlinkSystem;
 
-public sealed class EyeBlinkSystem : EntitySystem
+public sealed partial class EyeBlinkSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IRobustRandom _random = default!;
     private const string BlinkLayerKey = "humanoid_blink_layer";
     private const float UpdateInterval = 0.1f;
 
@@ -302,7 +302,7 @@ public sealed class EyeBlinkSystem : EntitySystem
         data.TimeLeft = delay;
     }
 
-    private sealed class BlinkData
+    private sealed partial class BlinkData
     {
         public float TimeLeft;
         public bool IsClosed;

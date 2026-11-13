@@ -11,13 +11,13 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.BluespaceMiner;
 
-public sealed class BluespaceMinerSystem : EntitySystem
+public sealed partial class BluespaceMinerSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {

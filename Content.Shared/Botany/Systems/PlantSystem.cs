@@ -28,11 +28,11 @@ public sealed partial class PlantSystem : EntitySystem
     // DS14-end
 
     // DS14-start
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!; //DS-14
-    [Dependency] private readonly PlantMutationSystem _mutation = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private MetaDataSystem _metaData = default!; //DS-14
+    [Dependency] private PlantMutationSystem _mutation = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
 
     private EntityQuery<PlantHolderComponent> _holderQuery;
     private EntityQuery<PlantTrayComponent> _trayQuery;

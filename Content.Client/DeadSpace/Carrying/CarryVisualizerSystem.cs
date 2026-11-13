@@ -12,13 +12,13 @@ using Robust.Client.Graphics;
 
 namespace Content.Client.DeadSpace.Carrying;
 
-public sealed class CarryVisualizerSystem : EntitySystem
+public sealed partial class CarryVisualizerSystem : EntitySystem
 {
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly SlimeFormVisualizerSystem _slimeForm = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private SlimeFormVisualizerSystem _slimeForm = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private readonly Dictionary<EntityUid, CarryVisualState> _states = new();
 
@@ -194,7 +194,7 @@ public sealed class CarryVisualizerSystem : EntitySystem
             : rotationVisuals.VerticalRotation;
     }
 
-    private sealed class CarryVisualState(
+    private sealed partial class CarryVisualState(
         Vector2 offset,
         int drawDepth,
         Angle rotation,

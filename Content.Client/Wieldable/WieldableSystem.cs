@@ -17,14 +17,14 @@ using Robust.Shared.Input.Binding;
 
 namespace Content.Client.Wieldable;
 
-public sealed class WieldableSystem : SharedWieldableSystem
+public sealed partial class WieldableSystem : SharedWieldableSystem
 {
-    [Dependency] private readonly CombatModeSystem _combat = default!;
-    [Dependency] private readonly EyeCursorOffsetSystem _eyeOffset = default!;
-    [Dependency] private readonly IClientGameTiming _gameTiming = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly InputSystem _input = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private CombatModeSystem _combat = default!;
+    [Dependency] private EyeCursorOffsetSystem _eyeOffset = default!;
+    [Dependency] private IClientGameTiming _gameTiming = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private InputSystem _input = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private readonly HashSet<EntityUid> _aimingItems = new();
     private readonly HashSet<EntityUid> _seenAimItems = new();

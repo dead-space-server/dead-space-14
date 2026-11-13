@@ -6,9 +6,9 @@ using Content.Server.NPC.HTN;
 namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>Mapped lavaland bosses: spawned by a marker when the map loads, living outside any arena.</summary>
-public sealed class LavalandBossSpawnerSystem : EntitySystem
+public sealed partial class LavalandBossSpawnerSystem : EntitySystem
 {
-    [Dependency] private readonly HTNSystem _htn = default!;
+    [Dependency] private HTNSystem _htn = default!;
 
     public override void Initialize()
     {

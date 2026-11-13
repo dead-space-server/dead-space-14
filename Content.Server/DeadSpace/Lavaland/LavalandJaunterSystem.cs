@@ -29,26 +29,26 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandJaunterSystem : EntitySystem
+public sealed partial class LavalandJaunterSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedLavalandJaunterSystem _jaunter = default!;
-    [Dependency] private readonly LavalandMadMinerSystem _madMiner = default!;
-    [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!;
-    [Dependency] private readonly LavalandBossArenaSystem _arena = default!;
-    [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedLavalandJaunterSystem _jaunter = default!;
+    [Dependency] private LavalandMadMinerSystem _madMiner = default!;
+    [Dependency] private LavalandDayCycleSystem _dayCycle = default!;
+    [Dependency] private LavalandBossArenaSystem _arena = default!;
+    [Dependency] private LavalandChromiteCavesSystem _caves = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
 
     private readonly HashSet<Entity<HTNComponent>> _creatures = new();
 

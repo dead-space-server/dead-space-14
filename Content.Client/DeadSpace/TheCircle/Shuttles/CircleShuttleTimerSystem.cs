@@ -8,12 +8,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.TheCircle.Shuttles;
 
-public sealed class CircleShuttleTimerSystem : EntitySystem
+public sealed partial class CircleShuttleTimerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private CircleShuttleTimerControl? _timer;
 

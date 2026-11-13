@@ -5,9 +5,9 @@ using Content.Shared.DeadSpace.Atmos.Piping;
 
 namespace Content.Client.DeadSpace.Atmos.Piping;
 
-public sealed class GasTemperatureValveSystem : SharedGasTemperatureValveSystem
+public sealed partial class GasTemperatureValveSystem : SharedGasTemperatureValveSystem
 {
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

@@ -26,20 +26,20 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Weapons.Parry;
 
-public sealed class ParrySystem : EntitySystem
+public sealed partial class ParrySystem : EntitySystem
 {
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ItemToggleSystem _itemToggle = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
 
     private static readonly ProtoId<TagPrototype> ParryAllTag = "ParryAll";
 
@@ -283,7 +283,7 @@ public sealed class ParrySystem : EntitySystem
 }
 
 [Serializable, NetSerializable]
-public sealed class ParryPressedEvent(NetEntity weapon) : EntityEventArgs
+public sealed partial class ParryPressedEvent(NetEntity weapon) : EntityEventArgs
 {
     public NetEntity Weapon = weapon;
 }

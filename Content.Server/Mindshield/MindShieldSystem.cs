@@ -12,10 +12,10 @@ namespace Content.Server.Mindshield;
 /// System used for adding or removing components with a mindshield implant
 /// as well as checking if the implanted is a Rev or Head Rev.
 /// </summary>
-public sealed class MindShieldSystem : EntitySystem
+public sealed partial class MindShieldSystem : EntitySystem
 {
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly RevolutionaryRuleSystem _revolutionary = default!; // DS14
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private RevolutionaryRuleSystem _revolutionary = default!; // DS14
 
     public override void Initialize()
     {

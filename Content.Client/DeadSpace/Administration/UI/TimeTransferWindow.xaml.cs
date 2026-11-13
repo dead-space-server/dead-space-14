@@ -16,8 +16,8 @@ namespace Content.Client.DeadSpace.Administration.UI;
 public sealed partial class TimeTransferWindow : FancyWindow
 {
     private const float IconSize = 24f;
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly SpriteSystem _spriteSystem;
 

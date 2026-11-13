@@ -14,20 +14,20 @@ using System.Linq;
 
 namespace Content.Shared.DeadSpace.Clothing
 {
-    public sealed class BeerHatSystem : EntitySystem
+    public sealed partial class BeerHatSystem : EntitySystem
     {
-        [Dependency] private readonly OpenableSystem _openable = default!;
-        [Dependency] private readonly SharedPopupSystem _popup = default!;
-        [Dependency] private readonly SharedActionsSystem _actions = default!;
+        [Dependency] private OpenableSystem _openable = default!;
+        [Dependency] private SharedPopupSystem _popup = default!;
+        [Dependency] private SharedActionsSystem _actions = default!;
 
-        [Dependency] private readonly IngestionSystem _ingestionSystem = default!;
-        [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-        [Dependency] private readonly SharedAudioSystem _audio = default!;
-        [Dependency] private readonly InventorySystem _inventorySystem = default!;
-        [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-        [Dependency] private readonly IPrototypeManager _proto = default!;
-        [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly FlavorProfileSystem _flavorProfile = default!;
+        [Dependency] private IngestionSystem _ingestionSystem = default!;
+        [Dependency] private ActionContainerSystem _actionContainer = default!;
+        [Dependency] private SharedAudioSystem _audio = default!;
+        [Dependency] private InventorySystem _inventorySystem = default!;
+        [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+        [Dependency] private IPrototypeManager _proto = default!;
+        [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+        [Dependency] private FlavorProfileSystem _flavorProfile = default!;
 
         public override void Initialize()
         {

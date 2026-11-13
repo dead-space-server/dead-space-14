@@ -17,7 +17,7 @@ public sealed partial class PlantTraitSampledSystem : EntitySystem
     // DS14-end
 
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     // DS14-end
 
     private void OnPlantSampleAttempt(Entity<PlantTraitSampledComponent> ent, ref PlantSampleAttemptEvent args)

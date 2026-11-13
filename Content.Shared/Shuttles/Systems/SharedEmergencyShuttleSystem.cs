@@ -7,11 +7,11 @@ using Robust.Shared.Configuration;
 
 namespace Content.Shared.Shuttles.Systems;
 
-public abstract class SharedEmergencyShuttleSystem : EntitySystem
+public abstract partial class SharedEmergencyShuttleSystem : EntitySystem
 {
-    [Dependency] protected readonly AccessReaderSystem AccessReader = default!; // DS14
-    [Dependency] protected readonly IConfigurationManager ConfigManager = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
+    [Dependency] protected AccessReaderSystem AccessReader = default!; // DS14
+    [Dependency] protected IConfigurationManager ConfigManager = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
 
     protected bool EmergencyEarlyLaunchAllowed; // DS14
 

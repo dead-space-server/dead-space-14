@@ -19,7 +19,7 @@ namespace Content.Server.DeadSpace.Physics;
 /// <summary>
 /// Resolves dynamic bodies that remain awake because they are stuck in hard static overlaps.
 /// </summary>
-public sealed class PhysicsSanitySystem : EntitySystem
+public sealed partial class PhysicsSanitySystem : EntitySystem
 {
     private static readonly Gauge CandidatesGauge = Metrics.CreateGauge(
         "physics_sanity_candidates",
@@ -41,13 +41,13 @@ public sealed class PhysicsSanitySystem : EntitySystem
         "physics_sanity_resolve_limit_reached_count",
         "Amount of physics sanity updates that reached the per-update resolve limit.");
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly AnchorableSystem _anchorable = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private AnchorableSystem _anchorable = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     private EntityQuery<ActorComponent> _actorQuery;
     private EntityQuery<MapGridComponent> _gridQuery;

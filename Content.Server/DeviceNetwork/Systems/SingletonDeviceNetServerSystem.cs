@@ -10,10 +10,10 @@ namespace Content.Server.DeviceNetwork.Systems;
 /// Keeps one active server entity per station. Activates another available one if the currently active server becomes unavailable
 /// Server in this context means an entity that manages the devicenet packets like the <see cref="Content.Server.Medical.CrewMonitoring.CrewMonitoringServerSystem"/>
 /// </summary>
-public sealed class SingletonDeviceNetServerSystem : EntitySystem
+public sealed partial class SingletonDeviceNetServerSystem : EntitySystem
 {
-    [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
-    [Dependency] private readonly StationLimitedNetworkSystem _stationLimitedNetwork = default!; // DS14
+    [Dependency] private DeviceNetworkSystem _deviceNetworkSystem = default!;
+    [Dependency] private StationLimitedNetworkSystem _stationLimitedNetwork = default!; // DS14
 
     public override void Initialize()
     {

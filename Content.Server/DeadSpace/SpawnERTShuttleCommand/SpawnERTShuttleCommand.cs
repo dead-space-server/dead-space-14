@@ -18,10 +18,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.DeadSpace.SpawnERTShuttleCommand;
 
 [AdminCommand(AdminFlags.Spawn)]
-public sealed class SpawnERTShuttleCommand : LocalizedCommands
+public sealed partial class SpawnERTShuttleCommand : LocalizedCommands
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private const string DockTagPrefix = "DockCentcommERT";
     private const int DockPairSize = 2;

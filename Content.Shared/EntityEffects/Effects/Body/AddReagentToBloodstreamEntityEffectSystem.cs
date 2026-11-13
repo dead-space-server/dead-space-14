@@ -13,8 +13,8 @@ namespace Content.Shared.EntityEffects.Effects.Body;
 public sealed partial class AddReagentToBloodstreamEntityEffectSystem
     : EntityEffectSystem<BloodstreamComponent, AddReagentToBloodstream>
 {
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly ReactiveSystem _reactive = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private ReactiveSystem _reactive = default!;
 
     protected override void Effect(Entity<BloodstreamComponent> entity, ref EntityEffectEvent<AddReagentToBloodstream> args)
     {

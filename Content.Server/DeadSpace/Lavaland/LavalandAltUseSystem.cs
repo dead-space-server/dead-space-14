@@ -8,10 +8,10 @@ using Content.Shared.Hands.EntitySystems;
 namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>Alt + right click with a held item that handles it itself: checks and passes it on to the item.</summary>
-public sealed class LavalandAltUseSystem : EntitySystem
+public sealed partial class LavalandAltUseSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {

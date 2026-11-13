@@ -56,28 +56,28 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Prison;
 
-public sealed class PrisonSystem : EntitySystem
+public sealed partial class PrisonSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly ITaskManager _taskManager = default!;
-    [Dependency] private readonly IServerPreferencesManager _preferences = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
-    [Dependency] private readonly StationSpawningSystem _spawning = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private ITaskManager _taskManager = default!;
+    [Dependency] private IServerPreferencesManager _preferences = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private RoleSystem _role = default!;
+    [Dependency] private StationSpawningSystem _spawning = default!;
+    [Dependency] private LanguageSystem _language = default!;
 
     private readonly HashSet<NetUserId> _prisonUsers = [];
     private readonly Dictionary<NetUserId, ICommonSession> _prisonSessions = new();

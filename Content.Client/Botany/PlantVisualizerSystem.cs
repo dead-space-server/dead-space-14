@@ -22,9 +22,9 @@ public sealed partial class PlantVisualizerSystem : VisualizerSystem<PlantVisual
     // DS14-end
 
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly PlantTrayVisualizerSystem _plantTrayVisualizer = default!;
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantTrayVisualizerSystem _plantTrayVisualizer = default!;
     // DS14-end
 
     private void OnComponentInit(EntityUid uid, PlantVisualsComponent component, ComponentInit args)

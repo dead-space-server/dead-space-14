@@ -16,16 +16,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.GasMaskDispatch.Systems;
 
-public sealed class GasMaskDispatchSystem : EntitySystem
+public sealed partial class GasMaskDispatchSystem : EntitySystem
 {
     private const string DispatchActionPrototype = "ActionGasMaskDispatch";
 
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly NavMapSystem _navMap = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private NavMapSystem _navMap = default!;
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     private static readonly Dictionary<GasMaskDispatchCode, string> CodeLocKeys = new()
     {

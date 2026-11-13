@@ -15,15 +15,15 @@ using Robust.Shared.Audio;
 
 namespace Content.Server.Administration.Notes;
 
-public sealed class AdminNotesSystem : EntitySystem
+public sealed partial class AdminNotesSystem : EntitySystem
 {
-    [Dependency] private readonly IConsoleHost _console = default!;
-    [Dependency] private readonly IAdminNotesManager _notes = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly EuiManager _euis = default!;
-    [Dependency] private readonly AudioSystem _audioSystem = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
+    [Dependency] private IConsoleHost _console = default!;
+    [Dependency] private IAdminNotesManager _notes = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private EuiManager _euis = default!;
+    [Dependency] private AudioSystem _audioSystem = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
 
     public override void Initialize()
     {

@@ -9,10 +9,10 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.Clothing;
 
-public sealed class ClientHideLayerClothingSystem : EntitySystem
+public sealed partial class ClientHideLayerClothingSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

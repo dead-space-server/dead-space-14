@@ -13,16 +13,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryOrganFreshSystem : EntitySystem
+public sealed partial class SurgeryOrganFreshSystem : EntitySystem
 {
     private const string Rules = "Default";
     private const float Tick = 2f;
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SurgeryGraftSystem _graft = default!;
-    [Dependency] private readonly SurgeryOrganSystem _organs = default!;
-    [Dependency] private readonly LimbFreshSystem _fresh = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SurgeryGraftSystem _graft = default!;
+    [Dependency] private SurgeryOrganSystem _organs = default!;
+    [Dependency] private LimbFreshSystem _fresh = default!;
 
     private float _accumulator;
 

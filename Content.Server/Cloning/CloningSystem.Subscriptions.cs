@@ -29,13 +29,13 @@ namespace Content.Server.Cloning;
 /// </remarks>
 public sealed partial class CloningSystem
 {
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly LabelSystem _label = default!;
-    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
-    [Dependency] private readonly PaperSystem _paper = default!;
-    [Dependency] private readonly VocalSystem _vocal = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
-    [Dependency] private readonly SharedScaleVisualsSystem _scaleVisuals = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private LabelSystem _label = default!;
+    [Dependency] private SharedForensicsSystem _forensics = default!;
+    [Dependency] private PaperSystem _paper = default!;
+    [Dependency] private VocalSystem _vocal = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private SharedScaleVisualsSystem _scaleVisuals = default!;
 
     public override void Initialize()
     {
