@@ -193,6 +193,7 @@
     implantAction: ActionLimbRestorerImplant
   - type: LimbRestorer
     charges: 2
+    maxCharges: 2
     autoCrit: true
     health: 0.5
     useSound:

@@ -68,11 +68,12 @@
     tags:
     - WhitelistChameleon
     - SecurityHelmet
-  # DS14
+  #ds14-start
   - type: LimbCover
     zones:
     - Head
     ricochet: true
+  #ds14-end
 
 #Mercenary Helmet
 - type: entity
