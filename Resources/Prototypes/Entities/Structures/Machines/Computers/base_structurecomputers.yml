@@ -24,6 +24,7 @@
   - type: UIPowerState
   - type: ExtensionCableReceiver
   - type: ActivatableUIRequiresPower
+  - type: Terminal
   - type: Sprite
     sprite: Structures/Machines/computers.rsi
     layers:
