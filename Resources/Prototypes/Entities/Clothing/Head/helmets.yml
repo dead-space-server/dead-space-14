@@ -576,13 +576,15 @@
     sprite: Clothing/Head/Helmets/syndie-raid.rsi
   - type: Clothing
     sprite: Clothing/Head/Helmets/syndie-raid.rsi
+  #ds14-start
   - type: Armor
     modifiers: #There's gotta be SOME reason to use this over other helmets.
       coefficients:
-        Blunt: 0.85
-        Slash: 0.85
-        Piercing: 0.85
-        Heat: 0.85
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+  #ds14-end
   - type: HideLayerClothing
     layers:
       Hair: HEAD

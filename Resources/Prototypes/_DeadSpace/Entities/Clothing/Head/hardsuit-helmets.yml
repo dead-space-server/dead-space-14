@@ -8,6 +8,14 @@
     sprite: _DeadSpace/Clothing/Head/Hardsuits/agent_forest_ghost.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Head/Hardsuits/agent_forest_ghost.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.5
+        Heat: 0.5
+        Radiation: 0.25
   - type: PointLight
     color: red
 
