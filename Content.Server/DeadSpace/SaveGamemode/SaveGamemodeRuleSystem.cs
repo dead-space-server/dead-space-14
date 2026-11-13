@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Content.Server.DeviceNetwork.Systems;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Maps;
@@ -9,6 +10,8 @@ using Content.Server.NPC.Systems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared.DeviceNetwork;
+using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Maps;
@@ -19,6 +22,7 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.SaveGamemode;
@@ -35,6 +39,8 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     [Dependency] private readonly IResourceManager _res = default!;
     [Dependency] private readonly IGameMapManager _gameMap = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
+    [Dependency] private readonly DeviceNetworkSystem _deviceNet = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
 
     /// <summary>
     ///     Результат проверки файла сохранения за текущий раунд.
@@ -282,7 +288,10 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         // пометка BecomesStation у сетки. Без станции раунд обрывается на спавне игроков, поэтому
         // регистрируем её так же, как это делает тикер для обычной карты.
         if (TryRegisterStations(defaultMap, component.SuppressRoundstartGrids))
+        {
+            ConnectLoadedDevices(defaultMap);
             return;
+        }
 
         Log.Error("SaveGamemode: станцию зарегистрировать не удалось, раунд уходит на обычную карту");
 
@@ -420,6 +429,66 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         }
 
         Log.Info($"SaveGamemode: разбужено NPC на загруженной карте: {woken}");
+    }
+
+    /// <summary>
+    ///     Возвращает в сети устройств приборы, поднятые из сохранения.
+    /// </summary>
+    /// <remarks>
+    ///     Прибор вступает в сеть устройств только в <c>MapInit</c>: <c>DeviceNetworkSystem.OnMapInit</c>
+    ///     подставляет частоты из прототипа и зовёт <c>ConnectDevice</c>. Сохранённые сущности приходят
+    ///     с флагом <c>mapInit</c> и повторного MapInit не видят, поэтому остаются вне сети: адрес и частоты
+    ///     в файле есть, списки связей мультитул показывает, но получателя в сети нет и пакет никуда не идёт.
+    ///     Молчат и сохранённые кнопки, и сохранённые двери, и свежие связки «новая кнопка — старая дверь».
+    ///     Отключённые вручную приборы не трогаем: <c>DisconnectDevice</c> выставляет <c>AutoConnect = false</c>.
+    /// </remarks>
+    private void ConnectLoadedDevices(MapId mapId)
+    {
+        var connected = 0;
+        var renamed = 0;
+        var refused = 0;
+
+        var query = AllEntityQuery<DeviceNetworkComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var device, out var xform))
+        {
+            if (xform.MapID != mapId || TerminatingOrDeleted(uid))
+                continue;
+
+            if (!device.AutoConnect || _deviceNet.IsDeviceConnected(uid, device))
+                continue;
+
+            var address = device.Address;
+
+            if (!_deviceNet.ConnectDevice(uid, device))
+            {
+                // Адрес занят другим прибором: в сеть устройство не попало, связи по нему работать не будут.
+                refused++;
+                continue;
+            }
+
+            // Частоты из прототипа подставляет тот же MapInit. В файле они обычно уже посчитаны,
+            // но если достался файл до их записи — восстанавливаем через сеть, чтобы она не разошлась.
+            if (device.ReceiveFrequency == null && device.ReceiveFrequencyId != null &&
+                _proto.TryIndex<DeviceFrequencyPrototype>(device.ReceiveFrequencyId, out var receive))
+            {
+                _deviceNet.SetReceiveFrequency(uid, receive.Frequency, device);
+            }
+
+            if (device.TransmitFrequency == null && device.TransmitFrequencyId != null &&
+                _proto.TryIndex<DeviceFrequencyPrototype>(device.TransmitFrequencyId, out var transmit))
+            {
+                _deviceNet.SetTransmitFrequency(uid, transmit.Frequency, device);
+            }
+
+            connected++;
+
+            if (address != device.Address)
+                renamed++;
+        }
+
+        Log.Info($"SaveGamemode: в сети устройств на загруженной карте: {connected} приборов" +
+                 (renamed > 0 ? $", из них {renamed} получили новый адрес (связи по адресу их не найдут)" : string.Empty) +
+                 (refused > 0 ? $", отказано {refused}" : string.Empty));
     }
 
     /// <summary>
