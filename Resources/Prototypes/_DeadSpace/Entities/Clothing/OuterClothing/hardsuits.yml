@@ -98,6 +98,13 @@
   name: шлем скафандра лидера Эмбер
   description: Надеюсь оно спасёт от стержня мага.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
   - type: FlashbangProtection
     reduction: 2
   - type: Sprite
@@ -168,6 +175,13 @@
   name: шлем скафандра офицера Эмбер
   description: Надеюсь оно спасёт от стержня мага.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
   - type: FlashbangProtection
     reduction: 2
   - type: Sprite
@@ -199,6 +213,13 @@
   name: шлем скафандра офицера ОБР «Красного Кода»
   description: Надеюсь оно спасёт от стержня мага.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
   - type: FlashbangProtection
     reduction: 2
   - type: Sprite
@@ -238,6 +259,13 @@
   name: шлем скафандра медика Эмбер
   description: Надеюсь оно спасёт от стержня мага.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
   - type: FlashbangProtection
     reduction: 2
   - type: Sprite
@@ -269,6 +297,13 @@
   name: шлем скафандра медика ОБР «Красного Кода»
   description: Надеюсь оно спасёт от стержня мага.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
   - type: FlashbangProtection
     reduction: 2
   - type: Sprite
@@ -325,10 +360,11 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.2
 
 - type: entity
   parent: ClothingOuterRIGSecurity
@@ -375,10 +411,11 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.2
 
 # Janitor
 - type: entity
@@ -412,6 +449,13 @@
   name: шлем скафандра офицера Эмбер
   description: Надеюсь оно спасёт от стержня мага.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
   - type: FlashbangProtection
     reduction: 2
   - type: Sprite
@@ -443,6 +487,13 @@
   name: шлем скафандра уборщика ОБР «Красного Кода»
   description: Надеюсь оно спасёт от стержня мага.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
   - type: FlashbangProtection
     reduction: 2
   - type: Sprite

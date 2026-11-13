@@ -238,7 +238,7 @@
   table: !type:AllSelector
     children:
 #   - id: ClothingBeltMedicalFilled
-#   - id: ClothingBackpackDuffelSurgeryFilled
+    - id: ClothingBackpackDuffelSurgeryFilled # DS14
 #   - id: ClothingCloakCmo
 #   - id: ClothingHandsGlovesNitrile
 #   - id: ClothingHeadHatBeretCmo

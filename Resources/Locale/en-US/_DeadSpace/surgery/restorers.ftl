@@ -11,16 +11,23 @@ ent-LimbRestorerERT = ERT field autosurgeon
 
 ent-ActionLimbRestorerImplant = Emergency reconstruction
     .desc = Fire the implant. Rebuilds the inside of the body in a second.
+ent-ActionLimbRestorerImplantRefill = Rapid reconstruction
+    .desc = Fire the implant. Quickly rebuilds the inside of the body.
 ent-ActionLimbRestorerImplantNecro = Marker's heartbeat
     .desc = Wake the shard under your skin. It knits you together and takes its share.
 ent-LimbRestorerImplantSyndicate = emergency reconstruction implant
     .desc = A Cybersun bluespace node under the skin. Two charges, fires by itself when the wearer goes critical.
+ent-LimbRestorerImplantSyndicateRefill = rechargeable emergency reconstruction implant
+    .desc = A cheap Cybersun bluespace node under the skin. One charge that refills every 3.5 minutes, fires by itself when the wearer goes critical.
 ent-LimbRestorerImplantNecro = Marker's heart
     .desc = A sliver of the Marker sewn under the skin. Two charges, wakes by itself when the wearer goes critical, and even pushes out lost limbs.
 ent-LimbRestorerImplantPirate = smuggler's patch-up implant
     .desc = A cheap bluespace capsule under the skin. One charge, cracks open by itself when the wearer goes critical.
 ent-LimbRestorerImplanterSyndicate = { ent-BaseImplantOnlyImplanterSyndi }
     .suffix = emergency reconstruction
+    .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
+ent-LimbRestorerImplanterSyndicateRefill = { ent-BaseImplantOnlyImplanterSyndi }
+    .suffix = rechargeable emergency reconstruction
     .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
 ent-LimbRestorerImplanterNecro = { ent-BaseImplantOnlyImplanterSyndi }
     .suffix = Marker's heart
@@ -29,13 +36,17 @@ ent-LimbRestorerImplanterPirate = { ent-BaseImplantOnlyImplanterSyndi }
     .suffix = patch-up implant
     .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
 limb-restorer-implant-empty = The implant is empty.
+limb-restorer-implant-recharging = The implant is empty. Next charge in { $time }.
 uplink-limb-restorer-implant-name = Emergency reconstruction implant
 uplink-limb-restorer-implant-desc = Two charges. Fire it with a button, no hands needed, or it fires by itself in crit: bones, bleeding, shards, organs and their regrowth, infection, plus some wound healing. Does not grow limbs.
+uplink-limb-restorer-implant-refill-name = Rechargeable emergency reconstruction implant
+uplink-limb-restorer-implant-refill-desc = One charge, refilling every 3.5 minutes. Fire it with a button, no hands needed, or it fires by itself in crit: bones, bleeding, shards, organs and their regrowth, infection, plus some wound healing. Does not grow limbs.
 uplink-limb-restorer-implant-necro-name = Marker's heart
 uplink-limb-restorer-implant-necro-desc = Two charges. Fire it with a button, no hands needed, or it wakes by itself in crit. Fixes everything inside, regrows limbs, heals some wounds. Costs cellular damage.
 uplink-limb-restorer-implant-pirate-name = Smuggler's patch-up implant
 uplink-limb-restorer-implant-pirate-desc = One charge. Fire it with a button, no hands needed, or it cracks open by itself in crit. Bones, bleeding, shards and organs, heals some wounds and poisons a little.
 limb-restorer-charges = Charges left: [color=yellow]{ $count }[/color].
+limb-restorer-charges-max = Charges: [color=yellow]{ $count }[/color] / { $max }.
 limb-restorer-examine-primed = [color=cyan]Primed[/color] and waiting for a patient.
 limb-restorer-primed = The device is primed. Hold it on the patient.
 limb-restorer-primed-necro = The reliquary whispers and fills with red.

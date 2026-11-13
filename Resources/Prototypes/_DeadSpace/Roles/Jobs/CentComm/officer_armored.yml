@@ -1,0 +1,41 @@
+- type: job
+  id: CentralCommandOfficerArmored
+  name: job-name-centcom-officer-armored
+  description: job-description-centcom-officer
+  playTimeTracker: JobCentralCommandOfficerArmored
+  setPreference: false
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 72000 # 20 hours
+  startingGear: CentcomOfficerArmoredGear
+  icon: "JobIconNanotrasen"
+  supervisors: job-supervisors-centcom-administrator
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - CentralCommand
+  - ErtTeamLeader
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: ZombieImmune
+    - type: NpcFactionMember
+      factions:
+      - CentralCommand
+
+- type: startingGear
+  id: CentcomOfficerArmoredGear
+  equipment:
+    # jumpsuit: ClothingUniformJumpsuitCentcomOfficerGreen
+    mask: ClothingMaskGasCentcomSecurity
+    outerClothing: ClothingOuterCoatCentcomOfficer
+    head: ClothingHeadHelmetCentcomSecurityUSSP
+    id: CentcomPDA
+    gloves: ClothingHandsGlovesCombat
+    ears: ClothingHeadsetAltCentCom
+    belt: ClothingBeltCentcomSecurityFilled

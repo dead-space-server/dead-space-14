@@ -24,6 +24,14 @@
   name: шлем Офицера "Синий Щит"
   description: Очень прочный шлем, широко используемый военизированными организациями. На его верхней части выгравирован логотип Корпуса "Синий Щит".
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.5
   - type: Sprite
     sprite: _DeadSpace/Clothing/Head/Helmets/blueshieldhelmet.rsi
   - type: Clothing

@@ -104,6 +104,14 @@
   name: шлем скафандра киберпсиха
   description: Шлем изолирующий владельца от страшного вакуума снаружи.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/defo5796/helmet.rsi
   - type: Clothing

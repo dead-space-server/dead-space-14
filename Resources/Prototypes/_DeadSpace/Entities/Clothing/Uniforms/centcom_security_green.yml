@@ -1,0 +1,10 @@
+- type: entity
+  parent: [ ClothingUniformBase, ClothingUniformFoldableBase ]
+  id: ClothingUniformJumpsuitCentcomOfficerGreen
+  name: комбинезон офицера Центком
+  description: Практичный комбинезон офицера службы безопасности Центрального Командования.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/centcom_security_green.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/centcom_security_green.rsi

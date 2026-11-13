@@ -55,6 +55,8 @@ public sealed partial class LimbWoundSystem
             state.Bone = 0f;
             state.Bleed = 0f;
         }
+        if (!limbs.Bleeds)
+            state.Bleed = 0f;
         state.Scar = Math.Max(0, state.Scar + edit.Scar);
         var cap = LimbWoundRules.HealthFor(zone, limbs);
         state.Health = edit.SetHealth
@@ -446,6 +448,8 @@ public sealed partial class LimbWoundSystem
             state.Bone = 0f;
             state.Bleed = 0f;
         }
+        if (!limbs.Bleeds)
+            state.Bleed = 0f;
 
         if (LimbWoundRules.TryCarried(zone, out var child))
         {

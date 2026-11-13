@@ -107,6 +107,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
   - type: HideLayerClothing
     slots:
     - Hair

@@ -35,6 +35,9 @@ public sealed partial class LimbSpeciesPrototype : IPrototype
     public bool Soft;
 
     [DataField]
+    public bool Bleeds = true;
+
+    [DataField]
     public bool Plant;
 
     [DataField]

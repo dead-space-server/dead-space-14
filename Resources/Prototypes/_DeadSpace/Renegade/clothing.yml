@@ -81,10 +81,10 @@
   - type: Armor #Values seem to let the user survive one extra hit if attacked consistently.
     modifiers:
       coefficients:
-        Blunt: 0.8
-        Slash: 0.8
-        Piercing: 0.8
-        Heat: 0.8
+        Blunt: 0.4
+        Slash: 0.4
+        Piercing: 0.5
+        Heat: 0.5
 
 - type: entity
   parent: ClothingHeadHatHoodWinterBase

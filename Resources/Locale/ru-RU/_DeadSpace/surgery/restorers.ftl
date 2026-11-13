@@ -11,16 +11,23 @@ ent-LimbRestorerERT = полевой автохирург ОБР
 
 ent-ActionLimbRestorerImplant = Экстренная реконструкция
     .desc = Запустить имплант. За секунду собирает тело изнутри.
+ent-ActionLimbRestorerImplantRefill = Быстрая реконструкция
+    .desc = Запустить имплант. Быстро собирает тело изнутри.
 ent-ActionLimbRestorerImplantNecro = Сердцебиение Маркера
     .desc = Разбудить осколок под кожей. Он сшивает тело и берёт свою плату.
 ent-LimbRestorerImplantSyndicate = имплант экстренной реконструкции
     .desc = Блюспейс-узел Cybersun под кожей. Два заряда, сам срабатывает, когда носитель падает в критическое состояние.
+ent-LimbRestorerImplantSyndicateRefill = восполняемый имплант экстренной реконструкции
+    .desc = Дешёвый блюспейс-узел Cybersun под кожей. Один заряд, восполняется каждые 3,5 минуты, сам срабатывает, когда носитель падает в критическое состояние.
 ent-LimbRestorerImplantNecro = сердце Маркера
     .desc = Щепка Маркера, вшитая под кожу. Два заряда, сама просыпается при критическом состоянии и даже выталкивает потерянные конечности.
 ent-LimbRestorerImplantPirate = латальный имплант контрабандиста
     .desc = Дешёвая блюспейс-капсула под кожей. Один заряд, сама лопается при критическом состоянии.
 ent-LimbRestorerImplanterSyndicate = { ent-BaseImplantOnlyImplanterSyndi }
     .suffix = экстренная реконструкция
+    .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
+ent-LimbRestorerImplanterSyndicateRefill = { ent-BaseImplantOnlyImplanterSyndi }
+    .suffix = восполняемая экстренная реконструкция
     .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
 ent-LimbRestorerImplanterNecro = { ent-BaseImplantOnlyImplanterSyndi }
     .suffix = сердце Маркера
@@ -29,13 +36,17 @@ ent-LimbRestorerImplanterPirate = { ent-BaseImplantOnlyImplanterSyndi }
     .suffix = латальный имплант
     .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
 limb-restorer-implant-empty = Имплант пуст.
+limb-restorer-implant-recharging = Имплант пуст. Следующий заряд через { $time }.
 uplink-limb-restorer-implant-name = Имплант экстренной реконструкции
 uplink-limb-restorer-implant-desc = Два заряда. Срабатывает кнопкой без рук или сам при критическом состоянии: кости, кровотечение, осколки, органы и их выращивание, заражение, плюс немного лечит раны. Конечности не отращивает.
+uplink-limb-restorer-implant-refill-name = Восполняемый имплант экстренной реконструкции
+uplink-limb-restorer-implant-refill-desc = Один заряд, восполняется каждые 3,5 минуты. Срабатывает кнопкой без рук или сам при критическом состоянии: кости, кровотечение, осколки, органы и их выращивание, заражение, плюс немного лечит раны. Конечности не отращивает.
 uplink-limb-restorer-implant-necro-name = Сердце Маркера
 uplink-limb-restorer-implant-necro-desc = Два заряда. Срабатывает кнопкой без рук или само при критическом состоянии. Чинит всё внутреннее, отращивает конечности, немного лечит раны. Стоит клеточного урона.
 uplink-limb-restorer-implant-pirate-name = Латальный имплант контрабандиста
 uplink-limb-restorer-implant-pirate-desc = Один заряд. Срабатывает кнопкой без рук или сам при критическом состоянии. Кости, кровотечение, осколки и органы, немного лечит раны и слегка травит.
 limb-restorer-charges = Осталось зарядов: [color=yellow]{ $count }[/color].
+limb-restorer-charges-max = Заряды: [color=yellow]{ $count }[/color] / { $max }.
 limb-restorer-examine-primed = [color=cyan]Подготовлен[/color] и ждёт пациента.
 limb-restorer-primed = Устройство подготовлено. Держите его на пациенте.
 limb-restorer-primed-necro = Реликварий шепчет и наливается красным.
