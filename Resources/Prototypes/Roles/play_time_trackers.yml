@@ -50,6 +50,12 @@
   id: JobCentralCommandOfficer
 
 - type: playTimeTracker
+  id: JobCentralCommandOfficerAlt
+
+- type: playTimeTracker
+  id: JobCentralCommandOfficerArmored
+
+- type: playTimeTracker
   id: JobChaplain
 
 - type: playTimeTracker
@@ -243,7 +249,6 @@
 
 - type: playTimeTracker
   id: JobWarden
-
 
 - type: playTimeTracker
   id: JobBoxer
