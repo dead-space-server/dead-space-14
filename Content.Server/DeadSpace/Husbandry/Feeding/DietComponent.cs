@@ -1,6 +1,8 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Whitelist;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Husbandry.Feeding;
 
@@ -36,4 +38,23 @@ public sealed partial class DietComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan DrinkTime = TimeSpan.FromSeconds(2);
+
+    /// <summary>
+    /// What the animal drinks. A container is a drink only if everything that is in it is in this list: an animal does
+    /// not drink blood, acid or a medicine out of a bucket, and does not drink a mixture with any of them.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<ReagentPrototype>> DrinkReagents = new() { "Water" };
+
+    /// <summary>
+    /// The thing the animal is eating now, so that it goes on with it bite after bite and does not start a new one.
+    /// </summary>
+    [ViewVariables]
+    public EntityUid? Eating;
+
+    /// <summary>
+    /// How many bites (sips) the farm gives the animal in one cycle while nobody watches it.
+    /// </summary>
+    [DataField]
+    public int OfflineBites = 4;
 }

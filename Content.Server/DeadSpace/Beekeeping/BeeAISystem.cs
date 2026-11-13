@@ -5,9 +5,13 @@ using Content.Server.DeadSpace.Husbandry.Walking;
 using Content.Server.NPC.HTN;
 using Content.Shared.DeadSpace.Beekeeping;
 using Content.Shared.DeadSpace.Husbandry.Walking;
+using Content.Shared.CCVar;
 using Content.Shared.DoAfter;
+using Content.Shared.Ghost;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared.Configuration;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -22,6 +26,8 @@ namespace Content.Server.DeadSpace.Beekeeping;
 /// pathfinding and no steering, nothing that could leave it standing. What keeps it cheap on a server with many players:
 /// <list type="bullet">
 /// <item>a bee thinks twice a second, not every tick;</item>
+/// <item>a bee that has no player within <see cref="BeeComponent.ActiveRange"/> does nothing at all (its brain is off), and
+/// the hive makes up for it while the farm is on, see <see cref="BeeHiveSystem"/>;</item>
 /// <item>plants are found with a lookup around the bee, not by going through every plant of the round.</item>
 /// </list>
 /// </summary>
@@ -29,6 +35,7 @@ public sealed class BeeAISystem : EntitySystem
 {
     [Dependency] private readonly AnimalWalkerSystem _walker = default!;
     [Dependency] private readonly BeeHiveSystem _hive = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
@@ -38,6 +45,8 @@ public sealed class BeeAISystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private readonly HashSet<Entity<PollinationComponent>> _flowers = new();
+    private readonly List<EntityCoordinates> _players = new();
+    private TimeSpan _nextPlayerScan;
 
     public override void Initialize()
     {
@@ -81,6 +90,14 @@ public sealed class BeeAISystem : EntitySystem
             if (_mobState.IsIncapacitated(uid))
                 continue;
 
+            // Nobody sees the bee: its brain is off, it stays where it is and costs nothing. The hive makes up for what it
+            // would have brought, see BeeHiveSystem.
+            if (!IsPlayerNear(xform.Coordinates, bee.ActiveRange))
+            {
+                StopFlying((uid, bee));
+                continue;
+            }
+
             if (bee.IsBusy)
                 continue;
 
@@ -96,6 +113,35 @@ public sealed class BeeAISystem : EntitySystem
                 case BeeState.ReturningToHive: TickReturning(ent); break;
             }
         }
+    }
+
+    /// <summary>
+    /// Whether a player (not a ghost) is within the range of the coordinates. The positions of the players are taken
+    /// every <c>husbandry.wander.player_scan_interval</c> seconds, whatever the number of callers.
+    /// </summary>
+    public bool IsPlayerNear(EntityCoordinates coordinates, float range)
+    {
+        var now = _timing.CurTime;
+        if (now >= _nextPlayerScan)
+        {
+            _nextPlayerScan = now + TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.HusbandryPlayerScanInterval));
+            _players.Clear();
+
+            var players = EntityQueryEnumerator<ActorComponent, TransformComponent>();
+            while (players.MoveNext(out var uid, out _, out var xform))
+            {
+                if (!HasComp<GhostComponent>(uid))
+                    _players.Add(xform.Coordinates);
+            }
+        }
+
+        foreach (var player in _players)
+        {
+            if (coordinates.TryDistance(EntityManager, player, out var distance) && distance <= range)
+                return true;
+        }
+
+        return false;
     }
 
     private void StopFlying(Entity<BeeComponent> ent)

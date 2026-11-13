@@ -30,6 +30,13 @@ public sealed partial class DebugAnalyzerComponent : Component
     /// </summary>
     [DataField]
     public float? MaxScanRange = 5f;
+
+    /// <summary>
+    /// Only admins can use it: it shows what no player is meant to see (the state of the animals, the brains of the
+    /// bees), and an admin thing that lies about gets picked up by everybody. Turn it off for a test item.
+    /// </summary>
+    [DataField]
+    public bool AdminOnly = true;
 }
 
 [Serializable, NetSerializable]

@@ -70,3 +70,16 @@ debug-analyzer-pollination-boost = До конца эффекта
 debug-analyzer-pollination-age = Бонус к возрасту
 debug-analyzer-pollination-potency = Бонус к потенции
 debug-analyzer-bee-walker = Полёт (AnimalWalker)
+
+debug-analyzer-admin-only = Это инструмент для админов, вы не знаете, как им пользоваться.
+
+debug-analyzer-breeding-male = Самец: пару не ищет, беременеть не может
+debug-analyzer-section-farm = Ферма (что в загоне)
+debug-analyzer-farm-enabled = Ферма включена (husbandry.farm.enabled)
+debug-analyzer-farm-asleep = ИИ спит (тогда кормит ферма)
+debug-analyzer-farm-no-pen = Загона нет
+debug-analyzer-farm-feeders = Кормушек в загоне
+debug-analyzer-farm-feeder-eatable = Съедобного для этого животного в кормушках
+debug-analyzer-farm-feeder-not-eatable = Несъедобного для него в кормушках (не переваривает)
+debug-analyzer-farm-floor-food = Съедобной еды на полу
+debug-analyzer-farm-drinks = Ёмкостей с питьём

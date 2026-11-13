@@ -70,4 +70,69 @@ public static class PenRules
 
         return open;
     }
+
+    /// <summary>
+    /// The shortest way over the walkable cells (up and down and sideways) from <paramref name="start"/> to the
+    /// nearest cell that is a goal. A breadth-first search: one run finds the nearest of any number of goals, so an
+    /// animal that looks for food among many things needs one run, not a path for each of them. Engine independent.
+    /// </summary>
+    /// <param name="isWalkable">Whether the cell can be stepped on (the start does not have to be).</param>
+    /// <param name="isGoal">Whether the cell is a place to stop at.</param>
+    /// <param name="maxCells">The search gives up after looking at this many cells.</param>
+    /// <returns>The cells from the start to the goal, both included, or null if no goal can be reached.</returns>
+    public static List<(int X, int Y)>? FindRoute(
+        (int X, int Y) start,
+        Func<(int X, int Y), bool> isWalkable,
+        Func<(int X, int Y), bool> isGoal,
+        int maxCells = 1024)
+    {
+        if (isGoal(start))
+            return new List<(int X, int Y)> { start };
+
+        var parents = new Dictionary<(int X, int Y), (int X, int Y)> { [start] = start };
+        var queue = new Queue<(int X, int Y)>();
+        queue.Enqueue(start);
+
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var next = i switch
+                {
+                    0 => (current.X + 1, current.Y),
+                    1 => (current.X - 1, current.Y),
+                    2 => (current.X, current.Y + 1),
+                    _ => (current.X, current.Y - 1),
+                };
+
+                if (parents.ContainsKey(next) || !isWalkable(next))
+                    continue;
+
+                parents[next] = current;
+
+                if (isGoal(next))
+                {
+                    var route = new List<(int X, int Y)> { next };
+                    var step = next;
+                    while (step != start)
+                    {
+                        step = parents[step];
+                        route.Add(step);
+                    }
+
+                    route.Reverse();
+                    return route;
+                }
+
+                if (parents.Count >= maxCells)
+                    return null;
+
+                queue.Enqueue(next);
+            }
+        }
+
+        return null;
+    }
 }

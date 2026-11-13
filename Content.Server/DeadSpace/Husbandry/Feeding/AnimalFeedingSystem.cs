@@ -122,7 +122,9 @@ public sealed class AnimalFeedingSystem : EntitySystem
 
     /// <summary>
     /// Starts eating: the usual eating of anything edible, bite after bite into the stomach until the stomach is
-    /// full or the food is gone. Food in a feeder is taken out of it first and eaten where it lies.
+    /// full or the food is gone. The animal goes on with the thing it began (<see cref="DietComponent.Eating"/>) and
+    /// takes the next one from a feeder only when that is eaten up: it does not spill the feeder one item at a time.
+    /// Food in a feeder is eaten where it lies if that works, and otherwise taken out of it first.
     /// </summary>
     /// <param name="delay">How long one bite takes.</param>
     public bool TryEat(EntityUid animal, EntityUid source, out TimeSpan delay)
@@ -131,19 +133,83 @@ public sealed class AnimalFeedingSystem : EntitySystem
 
         if (!TryComp<DietComponent>(animal, out var diet) ||
             !HasComp<AnimalNeedsComponent>(animal) ||
-            _mobState.IsIncapacitated(animal) ||
-            !TryFindFood((animal, diet), source, out var food))
+            _mobState.IsIncapacitated(animal))
             return false;
 
-        // Whatever the animal takes out of the feeder it eats on the floor next to it; what is left is food on the floor.
-        if (_container.IsEntityInContainer(food))
-            _container.TryRemoveFromContainer(food);
+        // What it began, if there is something left of it.
+        EntityUid food;
+        if (diet.Eating is { } eating &&
+            !TerminatingOrDeleted(eating) &&
+            Transform(eating).Coordinates.TryDistance(EntityManager, Transform(animal).Coordinates, out var nearby) &&
+            nearby <= 1.5f &&
+            CanEat((animal, diet), eating))
+        {
+            food = eating;
+        }
+        else if (!TryFindFood((animal, diet), source, out food))
+        {
+            diet.Eating = null;
+            return false;
+        }
 
         if (!_ingestion.TryIngest(animal, food))
-            return false;
+        {
+            // It cannot be eaten in the feeder: it is taken out and eaten on the floor next to it.
+            if (!_container.IsEntityInContainer(food) || !_container.TryRemoveFromContainer(food) || !_ingestion.TryIngest(animal, food))
+            {
+                diet.Eating = null;
+                return false;
+            }
+        }
 
+        diet.Eating = food;
         delay = TryComp<EdibleComponent>(food, out var edible) ? edible.Delay : TimeSpan.FromSeconds(1);
         return true;
+    }
+
+    /// <summary>
+    /// The animal takes a bite at once, without walking and without the do-after: what the usual eating would put into
+    /// the stomach with one bite goes into it, and the food is used up the same way. For the farm, which looks after
+    /// animals that nobody watches.
+    /// </summary>
+    /// <returns>False if the animal cannot eat it or the stomach is full.</returns>
+    public bool EatNow(Entity<DietComponent> animal, EntityUid food)
+    {
+        if (!CanEat(animal, food) ||
+            !TryComp<EdibleComponent>(food, out var edible) ||
+            !TryGetStomach(animal, out var stomach) ||
+            !_solutions.TryGetSolution(food, edible.Solution, out var soln, out var sol) ||
+            !_solutions.ResolveSolution(stomach.Owner, StomachSystem.DefaultSolutionName, ref stomach.Comp1.Solution, out var stomachSolution))
+            return false;
+
+        var bite = edible.TransferAmount ?? sol.Volume;
+        var amount = FixedPoint2.Min(bite, FixedPoint2.Min(sol.Volume, stomachSolution.AvailableVolume));
+        if (amount <= FixedPoint2.Zero)
+            return false;
+
+        var taken = _solutions.SplitSolution(soln.Value, amount);
+        if (!_stomach.TryTransferSolution(stomach.Owner, taken, stomach.Comp1))
+        {
+            _solutions.TryAddSolution(soln.Value, taken);
+            return false;
+        }
+
+        if (_ingestion.IsEmpty((food, edible)))
+        {
+            _ingestion.SpawnTrash((food, edible));
+            QueueDel(food);
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// The meal is over: the animal does not hold on to the thing it was eating.
+    /// </summary>
+    public void StopEating(EntityUid animal)
+    {
+        if (TryComp<DietComponent>(animal, out var diet))
+            diet.Eating = null;
     }
 
     /// <summary>
@@ -169,9 +235,9 @@ public sealed class AnimalFeedingSystem : EntitySystem
 
     /// <summary>
     /// The solution that the animal would drink from the container: any open container that has a drainable
-    /// solution (or says which one it is) with something in it.
+    /// solution (or says which one it is) with only drinks in it.
     /// </summary>
-    public bool TryGetDrinkSolution(EntityUid source, out Entity<SolutionComponent> solution)
+    public bool TryGetDrinkSolution(Entity<DietComponent> animal, EntityUid source, out Entity<SolutionComponent> solution)
     {
         solution = default;
 
@@ -192,16 +258,23 @@ public sealed class AnimalFeedingSystem : EntitySystem
         if (!_solutions.TryGetSolution(source, name, out var soln, out var sol) || sol.Volume <= FixedPoint2.Zero)
             return false;
 
+        // Only what an animal drinks: everything in the container has to be on the list.
+        foreach (var (reagent, _) in sol.Contents)
+        {
+            if (!animal.Comp.DrinkReagents.Contains(reagent.Prototype))
+                return false;
+        }
+
         solution = soln.Value;
         return true;
     }
 
     /// <summary>
-    /// Whether there is anything to drink in the container. Any liquid will do.
+    /// Whether there is something in the container that the animal drinks.
     /// </summary>
-    public bool CanDrink(EntityUid source)
+    public bool CanDrink(Entity<DietComponent> animal, EntityUid source)
     {
-        return TryGetDrinkSolution(source, out _);
+        return TryGetDrinkSolution(animal, source, out _);
     }
 
     /// <summary>
@@ -215,7 +288,7 @@ public sealed class AnimalFeedingSystem : EntitySystem
         if (!HasComp<AnimalNeedsComponent>(animal) ||
             !TryComp<DietComponent>(animal, out var diet) ||
             _mobState.IsIncapacitated(animal) ||
-            !CanDrink(source) ||
+            !CanDrink((animal, diet), source) ||
             !TryGetStomach(animal, out _))
             return false;
 
@@ -243,17 +316,15 @@ public sealed class AnimalFeedingSystem : EntitySystem
     }
 
     /// <summary>
-    /// The animal takes a sip at once: a part of the solution of the container goes into the stomach, whatever it is.
+    /// The animal takes a sip at once: a part of the solution of the container goes into the stomach (it is a drink: see <see cref="DietComponent.DrinkReagents"/>).
     /// </summary>
     /// <returns>False if there was nothing to drink or the stomach is full.</returns>
     public bool DrinkNow(EntityUid animal, EntityUid source)
     {
-        if (!TryGetStomach(animal, out var stomach) ||
-            !TryGetDrinkSolution(source, out var soln) ||
+        if (!TryComp<DietComponent>(animal, out var diet) ||
+            !TryGetStomach(animal, out var stomach) ||
+            !TryGetDrinkSolution((animal, diet), source, out var soln) ||
             !_solutions.ResolveSolution(stomach.Owner, StomachSystem.DefaultSolutionName, ref stomach.Comp1.Solution, out var stomachSolution))
-            return false;
-
-        if (!TryComp<DietComponent>(animal, out var diet))
             return false;
 
         var sip = TryComp<WaterSourceComponent>(source, out var water) ? water.AmountPerDrink : diet.SipAmount;

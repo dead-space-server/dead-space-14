@@ -7,6 +7,13 @@ using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Temperature.Components;
+using Content.Server.Popups;
+using Content.Shared.DeadSpace.Husbandry.Core;
+using Robust.Shared.Containers;
+using Robust.Shared.Configuration;
+using Content.Shared.Chemistry.Components;
+using Content.Shared.CCVar;
+using Content.Shared.Administration.Managers;
 using Content.Shared.Atmos;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -46,7 +53,13 @@ namespace Content.Server.DeadSpace.DebugAnalyzer;
 /// </summary>
 public sealed class DebugAnalyzerSystem : EntitySystem
 {
+    [Dependency] private readonly ISharedAdminManager _admin = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly AnimalPenSystem _pens = default!;
+    [Dependency] private readonly AnimalFeedingSystem _feeding = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly NPCSystem _npc = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
@@ -101,6 +114,13 @@ public sealed class DebugAnalyzerSystem : EntitySystem
 
     private void Scan(Entity<DebugAnalyzerComponent> ent, EntityUid target, EntityUid user)
     {
+        // A debug tool: an admin uses it, nobody else, whoever holds it.
+        if (ent.Comp.AdminOnly && !_admin.IsAdmin(user))
+        {
+            _popup.PopupEntity(Loc.GetString("debug-analyzer-admin-only"), user, user);
+            return;
+        }
+
         ent.Comp.ScannedEntity = target;
         ent.Comp.NextUpdate = _timing.CurTime + ent.Comp.UpdateInterval;
 
@@ -154,6 +174,7 @@ public sealed class DebugAnalyzerSystem : EntitySystem
         TryAdd(sections, () => BuildGrowth(target));
         TryAdd(sections, () => BuildBreeding(target));
         TryAdd(sections, () => BuildPen(target));
+        TryAdd(sections, () => BuildFarm(target));
         TryAdd(sections, () => BuildBee(target));
         TryAdd(sections, () => BuildHive(target));
         TryAdd(sections, () => BuildPollination(target));
@@ -351,6 +372,16 @@ public sealed class DebugAnalyzerSystem : EntitySystem
         if (!TryComp<AnimalBreedingComponent>(target, out var breeding))
             return null;
 
+        // A male is a partner: it does not get pregnant, so there is no chance, no pause and no attempt to show.
+        if (TryComp<AnimalSexComponent>(target, out var sex) && sex.Sex == AnimalSexKind.Male)
+        {
+            return new DebugAnalyzerSection(L("section-breeding"), new List<DebugAnalyzerRow>
+            {
+                new(L("breeding-species"), breeding.Species),
+                new(L("breeding-male"), "-"),
+            });
+        }
+
         var now = _timing.CurTime;
         var rows = new List<DebugAnalyzerRow>
         {
@@ -367,6 +398,78 @@ public sealed class DebugAnalyzerSystem : EntitySystem
         rows.Add(new DebugAnalyzerRow(L("breeding-chance"), $"{Fmt(breeding.BreedChance * 100f)}%"));
 
         return new DebugAnalyzerSection(L("section-breeding"), rows);
+    }
+
+    /// <summary>
+    /// What the farm sees for this animal: whether its AI sleeps (then <c>AnimalFarmSystem</c> looks after it) and what
+    /// lies in its pen that it can use. Food that the animal cannot digest is counted apart: it is in the feeder, and the
+    /// animal still goes hungry.
+    /// </summary>
+    private DebugAnalyzerSection? BuildFarm(EntityUid target)
+    {
+        if (!TryComp<AnimalPenComponent>(target, out var penComp) ||
+            !TryComp<DietComponent>(target, out var diet) ||
+            !TryComp<HTNComponent>(target, out var htn))
+            return null;
+
+        var rows = new List<DebugAnalyzerRow>
+        {
+            new(L("farm-enabled"), _cfg.GetCVar(CCVars.HusbandryFarmEnabled) ? "yes" : "no"),
+            new(L("farm-asleep"), _npc.IsAwake(target, htn) ? "no" : "yes"),
+        };
+
+        if (_pens.GetPen((target, penComp)) is not { } pen)
+        {
+            rows.Add(new(L("farm-no-pen"), "-", severity: DebugAnalyzerSeverity.Warning));
+            return new DebugAnalyzerSection(L("section-farm"), rows);
+        }
+
+        var feeders = new HashSet<Entity<AnimalFeederComponent>>();
+        var foods = new HashSet<Entity<EdibleComponent>>();
+        var waters = new HashSet<Entity<DrainableSolutionComponent>>();
+        _pens.GetEntitiesInPen(pen, feeders, adjacent: true);
+        _pens.GetEntitiesInPen(pen, foods, adjacent: true);
+        _pens.GetEntitiesInPen(pen, waters, adjacent: true);
+
+        var eatable = 0;
+        var notEatable = 0;
+        foreach (var feeder in feeders)
+        {
+            if (!_container.TryGetContainer(feeder, feeder.Comp.Container, out var container))
+                continue;
+
+            foreach (var item in container.ContainedEntities)
+            {
+                if (_feeding.CanEat((target, diet), item))
+                    eatable++;
+                else
+                    notEatable++;
+            }
+        }
+
+        var floor = 0;
+        foreach (var food in foods)
+        {
+            if (_feeding.CanEat((target, diet), food))
+                floor++;
+        }
+
+        var drinks = 0;
+        foreach (var water in waters)
+        {
+            if (_feeding.CanDrink((target, diet), water))
+                drinks++;
+        }
+
+        rows.Add(new(L("farm-feeders"), feeders.Count.ToString(CultureInfo.InvariantCulture)));
+        rows.Add(new(L("farm-feeder-eatable"), eatable.ToString(CultureInfo.InvariantCulture),
+            severity: eatable == 0 && feeders.Count > 0 ? DebugAnalyzerSeverity.Warning : DebugAnalyzerSeverity.Normal));
+        rows.Add(new(L("farm-feeder-not-eatable"), notEatable.ToString(CultureInfo.InvariantCulture),
+            severity: notEatable > 0 ? DebugAnalyzerSeverity.Warning : DebugAnalyzerSeverity.Normal));
+        rows.Add(new(L("farm-floor-food"), floor.ToString(CultureInfo.InvariantCulture)));
+        rows.Add(new(L("farm-drinks"), drinks.ToString(CultureInfo.InvariantCulture)));
+
+        return new DebugAnalyzerSection(L("section-farm"), rows);
     }
 
     private DebugAnalyzerSection? BuildPen(EntityUid target)

@@ -97,7 +97,10 @@ public sealed class AnimalBreedingSystem : EntitySystem
                 continue;
 
             comp.NextAttempt = now + RandomInterval(comp);
-            TryStartPregnancy((uid, comp));
+
+            // Only a female looks for a partner. A male has nothing to attempt: it is a partner, and its timer only ticks.
+            if (SexOf(EntityManager, uid) == AnimalSexKind.Female)
+                TryStartPregnancy((uid, comp));
         }
 
         foreach (var uid in _births)

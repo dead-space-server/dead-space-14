@@ -68,6 +68,7 @@ public sealed partial class AnimalEatOperator : HTNOperator
         if (bites <= 0)
         {
             feeding.DelaySearch(owner, food: true);
+            feeding.StopEating(owner);
             return HTNOperatorStatus.Failed;
         }
 
@@ -80,6 +81,7 @@ public sealed partial class AnimalEatOperator : HTNOperator
         if (bites >= MaxBites || HasHadEnough(owner))
         {
             feeding.DelaySearch(owner, food: true);
+            feeding.StopEating(owner);
             return HTNOperatorStatus.Finished;
         }
 
@@ -90,6 +92,7 @@ public sealed partial class AnimalEatOperator : HTNOperator
         {
             // The stomach is full or the food is gone: wait for it to be digested.
             feeding.DelaySearch(owner, food: true);
+            feeding.StopEating(owner);
             return HTNOperatorStatus.Finished;
         }
 

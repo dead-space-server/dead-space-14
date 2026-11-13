@@ -32,12 +32,25 @@ public sealed partial class AnimalPenComponent : Component
     public float WallArea = 0.5f;
 
     /// <summary>
-    /// The grid and the tile the animal calls home: where it first was when the pen was asked for. It is moved to
-    /// where the animal is if it was taken out of its square. Not saved, found again after a load.
+    /// How long an animal that stands outside of its pen (it was carried away) takes before the place where it stands
+    /// becomes its new home. Until then the pen is the one round the old home, and the animal does not wander off.
+    /// </summary>
+    [DataField]
+    public TimeSpan RehomeTime = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// The grid and the tile the animal calls home: where it first was when the pen was asked for. The pen is worked
+    /// out round it. Not saved, found again after a load.
     /// </summary>
     [ViewVariables]
     public EntityUid? HomeGrid;
 
     [ViewVariables]
     public Vector2i Home;
+
+    /// <summary>
+    /// Since when the animal stands outside of its pen. Empty when it is inside.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? OutsideSince;
 }

@@ -1,6 +1,8 @@
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.DeadSpace.Husbandry.Needs;
+using Content.Shared.DeadSpace.Husbandry.Core;
+using Content.Shared.DeadSpace.Husbandry.Sex;
 using Content.Shared.DoAfter;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -72,6 +74,10 @@ public sealed class UdderSystem : EntitySystem
 
             udder.NextGrowth += udder.GrowthDelay;
 
+            // DS14: a male does not make milk
+            if (IsMale(uid))
+                continue;
+
             if (_mobState.IsDead(uid))
                 continue;
 
@@ -110,10 +116,18 @@ public sealed class UdderSystem : EntitySystem
         }
     }
 
+    // DS14-start: a male animal of the husbandry module has no udder to milk
+    private bool IsMale(EntityUid uid)
+    {
+        return TryComp<AnimalSexComponent>(uid, out var sex) && sex.Sex == AnimalSexKind.Male;
+    }
+    // DS14-end
+
     private void OnInteractUsing(Entity<UdderComponent> ent, ref InteractUsingEvent args)
     {
         if (args.Handled || !ent.Comp.MilkOnInteract || !HasComp<RefillableSolutionComponent>(args.Used) ||
-            !HasComp<DrainableSolutionComponent>(args.Used))
+            !HasComp<DrainableSolutionComponent>(args.Used) ||
+            IsMale(ent)) // DS14
             return;
 
         args.Handled = true;
@@ -123,6 +137,7 @@ public sealed class UdderSystem : EntitySystem
     private bool CanMilk(EntityUid udder, EntityUid user, EntityUid container)
     {
         return _mobState.IsAlive(udder) &&
+               !IsMale(udder) && // DS14
                (!TryComp<OpenableComponent>(container, out var openable) || openable.Opened) &&
                _interaction.InRangeAndAccessible(user, udder) &&
                _interaction.InRangeAndAccessible(user, container);
@@ -132,6 +147,13 @@ public sealed class UdderSystem : EntitySystem
     {
         if (!Resolve(udder, ref udder.Comp))
             return;
+        // DS14-start
+        if (IsMale(udder.Owner))
+        {
+            _popupSystem.PopupClient(Loc.GetString("udder-system-male"), udder, userUid);
+            return;
+        }
+        // DS14-end
         if (!_mobState.IsAlive(udder.Owner))
         {
             _popupSystem.PopupClient(Loc.GetString("udder-system-dead"), udder, userUid);
@@ -196,7 +218,8 @@ public sealed class UdderSystem : EntitySystem
     {
         if (args.Using == null ||
              !args.CanInteract ||
-             !HasComp<RefillableSolutionComponent>(args.Using.Value))
+             !HasComp<RefillableSolutionComponent>(args.Using.Value) ||
+             IsMale(entity)) // DS14
             return;
         var uid = entity.Owner;
         var user = args.User;

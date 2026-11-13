@@ -139,4 +139,38 @@ public sealed class HusbandryRulesTest
 
         Assert.That(cells, Has.Count.EqualTo(1));
     }
+
+    [Test]
+    public void RouteIsTheShortestWayOverTheWalkableCells()
+    {
+        // A wall of three cells with a gap at the bottom: the way goes round it.
+        Func<(int X, int Y), bool> walkable = c => c.X is >= 0 and <= 4 && c.Y is >= 0 and <= 4 && !(c.X == 2 && c.Y is >= 1 and <= 3);
+
+        var route = PenRules.FindRoute((0, 2), walkable, c => c == (4, 2));
+
+        Assert.That(route, Is.Not.Null);
+        Assert.That(route![0], Is.EqualTo((0, 2)));
+        Assert.That(route[^1], Is.EqualTo((4, 2)));
+        Assert.That(route, Has.Count.EqualTo(9), "over the top or the bottom of the wall: four steps there, two round, four on");
+        Assert.That(route, Does.Not.Contain((2, 2)));
+    }
+
+    [Test]
+    public void RouteFindsTheNearestOfManyGoalsAtOnce()
+    {
+        Func<(int X, int Y), bool> walkable = c => c.X is >= 0 and <= 9 && c.Y == 0;
+
+        var route = PenRules.FindRoute((5, 0), walkable, c => c is (1, 0) or (8, 0));
+
+        Assert.That(route![^1], Is.EqualTo((8, 0)), "three steps to the one, four to the other");
+    }
+
+    [Test]
+    public void RouteIsNullWhenThereIsNoWayAndSimpleWhenAlreadyThere()
+    {
+        Func<(int X, int Y), bool> walkable = c => c.X is 0 or 1 or 3;
+
+        Assert.That(PenRules.FindRoute((0, 0), walkable, c => c == (3, 0)), Is.Null);
+        Assert.That(PenRules.FindRoute((0, 0), walkable, c => c == (0, 0)), Has.Count.EqualTo(1));
+    }
 }

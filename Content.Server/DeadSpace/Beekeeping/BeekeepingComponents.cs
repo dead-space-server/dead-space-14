@@ -55,6 +55,13 @@ public sealed partial class BeeComponent : Component
     public float ArrivalThreshold = 0.5f;
 
     /// <summary>
+    /// A bee farther than this from every player has its brain turned off: it does nothing, and the hive works for
+    /// it (see <see cref="BeeHiveComponent.OfflinePollenPerBee"/>).
+    /// </summary>
+    [DataField]
+    public float ActiveRange = 40f;
+
+    /// <summary>
     /// How long a flight to one target may take, in seconds: after that the bee gives the flower up.
     /// </summary>
     [DataField]
@@ -135,6 +142,23 @@ public sealed partial class BeeHiveComponent : Component
 
     [DataField]
     public EntProtoId BeePrototype = "MobBeeWorker";
+
+    /// <summary>
+    /// How much pollen each bee brings per production interval while no player is near and the bees do not fly (the
+    /// farm is on: the cvar husbandry.farm.enabled). It is paid only if there is a plant to pollinate within
+    /// <see cref="OfflineRange"/>.
+    /// </summary>
+    [DataField]
+    public float OfflinePollenPerBee = 5f;
+
+    [DataField]
+    public float OfflineRange = 5f;
+
+    /// <summary>
+    /// How far from the hive a player has to be for the bees to stop flying (see <see cref="BeeComponent.ActiveRange"/>).
+    /// </summary>
+    [DataField]
+    public float ActiveRange = 40f;
 
     [ViewVariables]
     public float SpawnTimer;

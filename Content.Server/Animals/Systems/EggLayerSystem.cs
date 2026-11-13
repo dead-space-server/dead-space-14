@@ -3,6 +3,8 @@ using Content.Server.Animals.Components;
 using Content.Server.Popups;
 using Content.Shared.Actions.Events;
 using Content.Shared.DeadSpace.Husbandry.Needs;
+using Content.Shared.DeadSpace.Husbandry.Core;
+using Content.Shared.DeadSpace.Husbandry.Sex;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
@@ -91,6 +93,14 @@ public sealed class EggLayerSystem : EntitySystem
     {
         if (!Resolve(uid, ref egglayer))
             return false;
+
+        // DS14-start: a male animal of the husbandry module (a rooster) does not lay eggs
+        if (TryComp<AnimalSexComponent>(uid, out var sex) && sex.Sex == AnimalSexKind.Male)
+        {
+            _popup.PopupEntity(Loc.GetString("action-popup-lay-egg-male"), uid, uid);
+            return false;
+        }
+        // DS14-end
 
         if (_mobState.IsDead(uid))
             return false;

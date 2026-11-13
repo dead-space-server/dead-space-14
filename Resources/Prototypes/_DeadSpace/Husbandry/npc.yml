@@ -10,14 +10,12 @@
             - !type:NeedPrecondition
               need: Satiety
           operator: !type:FindFoodOperator
-            # How far the animal looks for food, in tiles. Small on purpose: a pathfinder run for every far candidate is the
-            # costliest thing the animal does, and one that wanders about comes across food sooner or later.
-            range: 6
 
         # The way is walked by the AnimalWalker, not by the usual steering of the AI, which twitches.
         - !type:HTNPrimitiveTask
           operator: !type:AnimalGoToOperator
-            arriveDistance: 1.5
+            # Eating works from a tile away at most (the usual eating range), so the animal comes up close.
+            arriveDistance: 0.8
 
         - !type:HTNPrimitiveTask
           preconditions:
@@ -39,7 +37,6 @@
             - !type:NeedPrecondition
               need: Hydration
           operator: !type:FindWaterOperator
-            range: 6
 
         - !type:HTNPrimitiveTask
           operator: !type:AnimalGoToOperator

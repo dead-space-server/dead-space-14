@@ -123,18 +123,18 @@ public sealed class HusbandryTest
             server.System<SharedAnimalNeedsSystem>().SetNeeds((cow, ents.GetComponent<AnimalNeedsComponent>(cow)), hydration: 10f, satietyDecay: 0f, hydrationDecay: 0f);
 
             trough = ents.SpawnEntity("AnimalTrough", map.GridCoords);
-            Assert.That(feeding.CanDrink(trough), Is.False, "an empty trough");
+            Assert.That(feeding.CanDrink((cow, ents.GetComponent<Content.Server.DeadSpace.Husbandry.Feeding.DietComponent>(cow)), trough), Is.False, "an empty trough");
 
             Assert.That(solutions.TryGetSolution(trough, "tank", out var soln, out _), Is.True);
             solutions.TryAddReagent(soln.Value, "Water", 50);
-            Assert.That(feeding.CanDrink(trough), Is.True);
+            Assert.That(feeding.CanDrink((cow, ents.GetComponent<Content.Server.DeadSpace.Husbandry.Feeding.DietComponent>(cow)), trough), Is.True);
 
             // Any open container with a liquid in it, not only a trough.
             bucket = ents.SpawnEntity("Bucket", map.GridCoords);
             var drainable = ents.GetComponent<DrainableSolutionComponent>(bucket);
             Assert.That(solutions.TryGetSolution(bucket, drainable.Solution, out var bucketSoln, out _), Is.True);
             solutions.TryAddReagent(bucketSoln.Value, "Water", 30);
-            Assert.That(feeding.CanDrink(bucket), Is.True);
+            Assert.That(feeding.CanDrink((cow, ents.GetComponent<Content.Server.DeadSpace.Husbandry.Feeding.DietComponent>(cow)), bucket), Is.True);
 
             Assert.That(feeding.TryDrink(cow, trough, out _), Is.True);
         });

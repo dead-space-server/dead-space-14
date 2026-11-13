@@ -31,7 +31,6 @@
   - type: WaterSource
     solution: tank
     amountPerDrink: 15
-    hydrationPerUnit: 1
     delay: 2
   - type: DrainableSolution
     solution: tank
