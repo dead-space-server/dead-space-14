@@ -10063,3 +10063,10 @@ Entries:
   changes:
   - type: Tweak
     message: Оптимизация Лавы
+- id: 965
+  author: BlueDogDoc
+  time: '2026-11-13T10:09:43.532286+00:00'
+  pr: 2731
+  changes:
+  - type: Tweak
+    message: Оптимизация сервера
