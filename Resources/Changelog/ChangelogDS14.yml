@@ -10070,3 +10070,10 @@ Entries:
   changes:
   - type: Tweak
     message: Оптимизация сервера
+- id: 966
+  author: IvanKuvalda
+  time: '2026-11-13T10:12:47.014512+00:00'
+  pr: 2727
+  changes:
+  - type: Remove
+    message: прижигания у слаймов
