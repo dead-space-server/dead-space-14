@@ -31,10 +31,16 @@ public sealed partial class HardsuitIdentificationComponent : Component
     public bool PunishmentTriggered;
 
     /// <summary>
-    /// Whether the wearer should be dissolved if their DNA changes or they transform into an undead creature.
+    /// Whether the wearer should be dissolved if their DNA changes.
     /// </summary>
     [DataField]
     public bool DissolveOnDnaChange = true;
+
+    /// <summary>
+    /// Whether the wearer should be dissolved if they turn into an undead creature.
+    /// </summary>
+    [DataField]
+    public bool DissolveOnUndead = false;
 
     /// <summary>
     /// Emag sound effects.

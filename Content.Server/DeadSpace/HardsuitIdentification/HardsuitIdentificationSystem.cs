@@ -68,33 +68,35 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
 
     private void OnDnaChanged(Entity<DnaComponent> ent, ref GenerateDnaEvent args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: true);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.DnaChange);
     }
 
     private void OnZombieStartup(Entity<ZombieComponent> ent, ref ComponentStartup args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: false);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.Undead);
     }
 
+    /// <summary>
+    /// The wearer stopped being a person, so the hardsuit dissolves them regardless of the stored DNA.
+    /// </summary>
     private void OnNecroficationStarted(Entity<DnaComponent> ent, ref NecroficationStartedEvent args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: false);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.Undead);
     }
 
-    private void TryActivateEquippedItems(EntityUid wearer, bool requireDnaMismatch)
+    private void TryActivateEquippedItems(EntityUid wearer, DissolveTrigger trigger)
     {
         var slots = _inventory.GetSlotEnumerator(wearer);
         while (slots.NextItem(out var equipment, out var slot))
         {
             if (!TryComp<HardsuitIdentificationComponent>(equipment, out var comp) ||
                 !comp.DNAWasStored ||
-                comp.Activated ||
-                !comp.DissolveOnDnaChange)
+                comp.Activated)
             {
                 continue;
             }
 
-            if (requireDnaMismatch && TryComp<DnaComponent>(wearer, out var dna) && comp.DNA == dna.DNA)
+            if (!ShouldDissolve(wearer, comp, trigger))
                 continue;
 
             ActivateProtection((equipment, comp), wearer, slot.Name);
@@ -103,6 +105,30 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
             if (!comp.Nonlethal)
                 return;
         }
+    }
+
+    /// <summary>
+    /// Whether the given hardsuit should dissolve its wearer for the given trigger.
+    /// </summary>
+    private bool ShouldDissolve(EntityUid wearer, HardsuitIdentificationComponent comp, DissolveTrigger trigger)
+    {
+        return trigger switch
+        {
+            // The DNA has to actually differ from the stored one.
+            DissolveTrigger.DnaChange => comp.DissolveOnDnaChange
+                && (!TryComp<DnaComponent>(wearer, out var dna) || comp.DNA != dna.DNA),
+            DissolveTrigger.Undead => comp.DissolveOnUndead,
+            _ => false,
+        };
+    }
+
+    private enum DissolveTrigger
+    {
+        /// <summary>The DNA of the wearer changed.</summary>
+        DnaChange,
+
+        /// <summary>The wearer turned into a zombie or a necromorph.</summary>
+        Undead,
     }
 
     private void ActivateProtection(Entity<HardsuitIdentificationComponent> equipment, EntityUid wearer, string slot)
