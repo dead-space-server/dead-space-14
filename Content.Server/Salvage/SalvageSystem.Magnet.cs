@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Content.Server.Salvage.Magnet;
+using Content.Shared.DeadSpace.Salvage.Magnet; // DS14
 using Content.Shared.Mobs.Components;
 using Content.Shared.Procedural;
 using Content.Shared.Radio;
@@ -33,6 +34,7 @@ public sealed partial class SalvageSystem
         SubscribeLocalEvent<SalvageMagnetTargetComponent, GridSplitEvent>(OnMagnetTargetSplit);
 
         SubscribeLocalEvent<SalvageMagnetComponent, MagnetClaimOfferEvent>(OnMagnetClaim);
+        SubscribeLocalEvent<SalvageMagnetComponent, MagnetReleaseOfferEvent>(OnMagnetRelease); // DS14
         SubscribeLocalEvent<SalvageMagnetComponent, ComponentStartup>(OnMagnetStartup);
         SubscribeLocalEvent<SalvageMagnetComponent, AnchorStateChangedEvent>(OnMagnetAnchored);
     }
@@ -61,6 +63,22 @@ public sealed partial class SalvageSystem
         }
         TryTakeMagnetOffer();
     }
+
+    // DS14-start
+    private void OnMagnetRelease(EntityUid uid, SalvageMagnetComponent component, ref MagnetReleaseOfferEvent args)
+    {
+        var station = _station.GetOwningStation(uid);
+
+        if (!TryComp(station, out SalvageMagnetDataComponent? dataComp) ||
+            dataComp.EndTime == null)
+        {
+            return;
+        }
+
+        EndMagnet((station.Value, dataComp));
+        CreateMagnetOffers((station.Value, dataComp));
+    }
+    // DS14-end
 
     private void OnMagnetStartup(EntityUid uid, SalvageMagnetComponent component, ComponentStartup args)
     {
