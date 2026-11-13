@@ -10217,3 +10217,10 @@ Entries:
       несколько раз)
   - type: Fix
     message: Скелет не истекает кровью
+- id: 977
+  author: BlueDogDoc
+  time: '2026-11-13T17:06:37.726672+00:00'
+  pr: 2740
+  changes:
+  - type: Fix
+    message: Хитрега аномалий
