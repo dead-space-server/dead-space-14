@@ -120,6 +120,14 @@
   name: шлем скафандра «Потерянный Лик Добродетеля»
   description: Массивный закрытый шлем, полностью скрывающий лицо Патриота. Потёртый металл покрыт шрамами старых сражений, а встроенная система дыхания помогает поддерживать жизнь умирающего воина. За его безликой маской скрывается не только измученное тело, но и память о павших братьях.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.5
   - type: Sprite
     sprite: _DeadSpace/Sponsor/AnarchistVanity/hardsuit_helmet.rsi
   - type: Clothing

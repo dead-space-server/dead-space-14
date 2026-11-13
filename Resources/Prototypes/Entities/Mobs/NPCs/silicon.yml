@@ -385,7 +385,7 @@
     interactFailureString: petting-failure-medibot
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
-      path: /Audio/Animals/cat_meow.ogg
+      path: /Audio/Ambience/Objects/periodic_beep.ogg #ds14
   - type: ShowHealthBars
     damageContainers:
     - Biological

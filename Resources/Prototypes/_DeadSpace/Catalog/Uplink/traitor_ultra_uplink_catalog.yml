@@ -2980,7 +2980,7 @@
   - TraitorUltraUplinkWeaponry
   conditions:
   - !type:StoreWhitelistCondition
-    whitelist:
+    blacklist:
       tags:
       - LoneOpsUplink
   - !type:ListingLimitedStockCondition

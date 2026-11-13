@@ -162,6 +162,16 @@
     event: !type:LimbRestorerImplantEvent
 
 - type: entity
+  id: ActionLimbRestorerImplantRefill
+  parent: ActionLimbRestorerImplant
+  name: Rapid reconstruction
+  description: Fire the implant. Quickly rebuilds the inside of the body.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 0
+
+- type: entity
   id: ActionLimbRestorerImplantNecro
   parent: ActionLimbRestorerImplant
   name: Marker's heartbeat
@@ -208,6 +218,19 @@
     - Infection
     - Rejection
     - MissingOrgans
+
+- type: entity
+  id: LimbRestorerImplantSyndicateRefill
+  parent: LimbRestorerImplantSyndicate
+  name: rechargeable emergency reconstruction implant
+  description: A cheap Cybersun bluespace node under the skin. One charge that refills every 3.5 minutes, fires by itself when the wearer goes critical.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionLimbRestorerImplantRefill
+  - type: LimbRestorer
+    charges: 1
+    recharge: 210
 
 - type: entity
   id: LimbRestorerImplantNecro
@@ -288,6 +311,14 @@
     implant: LimbRestorerImplantSyndicate
 
 - type: entity
+  id: LimbRestorerImplanterSyndicateRefill
+  suffix: rechargeable emergency reconstruction
+  parent: BaseImplantOnlyImplanterSyndi
+  components:
+  - type: Implanter
+    implant: LimbRestorerImplantSyndicateRefill
+
+- type: entity
   id: LimbRestorerImplanterNecro
   suffix: Marker's heart
   parent: BaseImplantOnlyImplanterSyndi
@@ -302,23 +333,6 @@
   components:
   - type: Implanter
     implant: LimbRestorerImplantPirate
-
-- type: listing
-  id: UplinkLimbRestorerImplant
-  name: uplink-limb-restorer-implant-name
-  description: uplink-limb-restorer-implant-desc
-  productEntity: LimbRestorerImplanterSyndicate
-  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
-  cost:
-    Telecrystal: 7
-  categories:
-  - UplinkImplants
-  conditions:
-  - !type:StoreWhitelistCondition
-    blacklist:
-      tags:
-      - NukeOpsUplink
-      - LoneOpsUplink
 
 - type: listing
   id: UplinkLimbRestorerImplantNuke
@@ -340,13 +354,30 @@
       - LoneOpsUplink
 
 - type: listing
-  id: UplinkLimbRestorerImplantLone
-  name: uplink-limb-restorer-implant-name
-  description: uplink-limb-restorer-implant-desc
-  productEntity: LimbRestorerImplanterSyndicate
+  id: UplinkLimbRestorerImplantRefill
+  name: uplink-limb-restorer-implant-refill-name
+  description: uplink-limb-restorer-implant-refill-desc
+  productEntity: LimbRestorerImplanterSyndicateRefill
   icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
   cost:
-    Telecrystal: 10
+    Telecrystal: 6
+  categories:
+  - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkLimbRestorerImplantRefillLone
+  name: uplink-limb-restorer-implant-refill-name
+  description: uplink-limb-restorer-implant-refill-desc
+  productEntity: LimbRestorerImplanterSyndicateRefill
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
+  cost:
+    Telecrystal: 12
   categories:
   - UplinkImplants
   conditions:
@@ -355,14 +386,15 @@
       tags:
       - LoneOpsUplink
 
+
 - type: listing
-  id: TraitorUltraUplinkLimbRestorerImplant
-  name: uplink-limb-restorer-implant-name
-  description: uplink-limb-restorer-implant-desc
-  productEntity: LimbRestorerImplanterSyndicate
+  id: TraitorUltraUplinkLimbRestorerImplantRefill
+  name: uplink-limb-restorer-implant-refill-name
+  description: uplink-limb-restorer-implant-refill-desc
+  productEntity: LimbRestorerImplanterSyndicateRefill
   icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
   cost:
-    Telecrystal: 12
+    Telecrystal: 6
   categories:
   - TraitorUltraUplinkImplants
 

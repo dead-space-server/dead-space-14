@@ -231,11 +231,12 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
-        Cold: 0.9
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+        Cold: 0.7
+        Radiation: 0.3
   - type: PointLight
     color: "#ffac26"
     radius: 10
@@ -303,10 +304,11 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+        Radiation: 0.5
 
 - type: polymorph
   id: LavalandDrakeArmorDrake

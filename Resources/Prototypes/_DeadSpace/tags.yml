@@ -96,7 +96,7 @@
 
 - type: Tag
   id: CloningPodMachineCircuitboard
-  
+
 - type: Tag
   id: CorruptTeleportItem
 
@@ -307,7 +307,6 @@
 - type: Tag
   id: MagazineEagleAP
 
-
 - type: Tag
   id: MagazineGurza
 
@@ -340,6 +339,9 @@
 
 - type: Tag
   id: Medipen
+
+- type: Tag
+  id: MetalTable # Used by Hooligan smash objectives for metal/iron tables.
 
 - type: Tag
   id: MaskGasVoice
@@ -504,7 +506,7 @@
   id: VulpkaninEmotes
 
 - type: Tag
-  id: voicesensor 
+  id: voicesensor
 
 - type: Tag
   id: WeldingMaskFlame
