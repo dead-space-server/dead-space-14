@@ -113,7 +113,8 @@ public sealed class BlobPodSystem : SharedBlobPodSystem
         RemComp<HTNComponent>(uid);
         RemComp<UnremoveableComponent>(uid);
 
-        _audioSystem.PlayPvs(component.ZombifyFinishSoundPath, uid);
+        if (!BlobSilence.BeforeAnnouncement(EntityManager))
+            _audioSystem.PlayPvs(component.ZombifyFinishSoundPath, uid);
 
         var rejEv = new RejuvenateEvent();
         RaiseLocalEvent(args.Args.Target.Value, rejEv);
@@ -155,7 +156,8 @@ public sealed class BlobPodSystem : SharedBlobPodSystem
         _popups.PopupEntity(Loc.GetString("blob-mob-zombify-third-start", ("pod", uid), ("target", target)), target,
             Filter.PvsExcept(target), true, Shared.Popups.PopupType.LargeCaution);
 
-        component.ZombifyStingStream = _audioSystem.PlayPvs(component.ZombifySoundPath, target);
+        if (!BlobSilence.BeforeAnnouncement(EntityManager))
+            component.ZombifyStingStream = _audioSystem.PlayPvs(component.ZombifySoundPath, target);
         component.IsZombifying = true;
 
         var ev = new BlobPodZombifyDoAfterEvent();

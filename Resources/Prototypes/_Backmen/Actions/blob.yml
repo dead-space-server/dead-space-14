@@ -153,3 +153,20 @@
       state: blobToCore
   - type: InstantAction
     event: !type:TransformToBlobActionEvent
+
+- type: entity
+  id: ActionPlantBlobMine
+  name: blob-plant-mine-action-name
+  description: blob-plant-mine-action-desc
+  components:
+  - type: Action
+    priority: -4
+    icon:
+      sprite: Objects/Weapons/Grenades/pyrogrenade.rsi
+      state: icon
+    itemIconStyle: BigAction
+    useDelay: 0.5
+  - type: TargetAction
+    range: 200
+  - type: WorldTargetAction
+    event: !type:BlobPlantMineActionEvent

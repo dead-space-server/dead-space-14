@@ -48,6 +48,8 @@
   - type: Damageable
     damageContainer: Blob
     damageModifierSet: BlobMob
+  - type: ExplosionResistance
+    damageCoefficient: 0
   - type: Clothing
     quickEquip: false
     sprite: _Backmen/Mobs/Aliens/blob.rsi
@@ -142,6 +144,8 @@
   - type: Damageable
     damageContainer: Blob
     damageModifierSet: BlobMob
+  - type: ExplosionResistance
+    damageCoefficient: 0
   - type: Tag
     tags:
       - BlobMob
@@ -283,7 +287,7 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
         Heat: 3 # DS14-value
@@ -319,7 +323,7 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
         Heat: 3 # DS14-value
@@ -391,7 +395,7 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
         Heat: 3 # DS14-value
@@ -423,7 +427,7 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
         Heat: 3 # DS14-value
@@ -456,7 +460,7 @@
   components:
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
         Heat: 3 # DS14-value
@@ -491,7 +495,7 @@
   # DS14-start
   - type: Temperature
   - type: Flammable
-    fireSpread: true
+    fireSpread: false
     damage:
       types:
         Heat: 3
@@ -526,7 +530,7 @@
     # DS14-start
     - type: Temperature
     - type: Flammable
-      fireSpread: true
+      fireSpread: false
       damage:
         types:
           Heat: 3
@@ -633,9 +637,26 @@
       - BypassInteractionRangeChecks
   # DS14-start
   - type: Language
-    knownLanguages: 
+    knownLanguages:
     - BlobLanguage
     selectedLanguage: BlobLanguage
-  - type: GhostRoleNotifys 
-    groupPrototype: Blob  
+  - type: GhostRoleNotifys
+    groupPrototype: Blob
   # DS14-end
+
+- type: entity
+  parent: CollideFloorTrap
+  id: BlobMineTile
+  name: blob-mine-tile-name
+  description: blob-mine-tile-desc
+  components:
+  - type: Sprite
+    sprite: _Backmen/Mobs/Aliens/blob.rsi
+    state: blob
+    drawdepth: FloorObjects
+    color: "#9C7A0066"
+  - type: TriggerOnCollide
+    fixtureID: floortrap
+  - type: BlobMine
+  - type: Visibility
+    layer: 2

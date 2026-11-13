@@ -48,3 +48,6 @@
 
 - type: playTimeTracker
   id: JobIAAOfficer
+
+- type: playTimeTracker
+  id: JobCBURNFlamer
