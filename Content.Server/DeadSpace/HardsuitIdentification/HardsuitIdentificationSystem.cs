@@ -76,9 +76,6 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         TryActivateEquippedItems(ent.Owner, DissolveTrigger.Undead);
     }
 
-    /// <summary>
-    /// The wearer stopped being a person, so the hardsuit dissolves them regardless of the stored DNA.
-    /// </summary>
     private void OnNecroficationStarted(Entity<DnaComponent> ent, ref NecroficationStartedEvent args)
     {
         TryActivateEquippedItems(ent.Owner, DissolveTrigger.Undead);
@@ -107,14 +104,10 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         }
     }
 
-    /// <summary>
-    /// Whether the given hardsuit should dissolve its wearer for the given trigger.
-    /// </summary>
     private bool ShouldDissolve(EntityUid wearer, HardsuitIdentificationComponent comp, DissolveTrigger trigger)
     {
         return trigger switch
         {
-            // The DNA has to actually differ from the stored one.
             DissolveTrigger.DnaChange => comp.DissolveOnDnaChange
                 && (!TryComp<DnaComponent>(wearer, out var dna) || comp.DNA != dna.DNA),
             DissolveTrigger.Undead => comp.DissolveOnUndead,
@@ -124,10 +117,8 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
 
     private enum DissolveTrigger
     {
-        /// <summary>The DNA of the wearer changed.</summary>
         DnaChange,
 
-        /// <summary>The wearer turned into a zombie or a necromorph.</summary>
         Undead,
     }
 
@@ -257,9 +248,9 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
     {
         if (!comp.CanEmag)
             return;
-    
+
         _audio.PlayPvs(comp.SparkSound, uid);
-    
+
         if (comp.Activated)
         {
             _popupSystem.PopupEntity(Loc.GetString("hardsuit-identification-on-emagged-late"), uid);
@@ -270,7 +261,7 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         }
 
         RemComp<HardsuitIdentificationComponent>(uid);
-    
+
         args.Handled = true;
     }
 }
