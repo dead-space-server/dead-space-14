@@ -358,6 +358,7 @@ ui-options-colorblind-friendly = Режим для дальтоников
 ui-options-accessability-header-visuals = Изображение
 ui-options-accessability-header-content = Содержимое
 ui-options-reduced-motion = Снижение интенсивности визуальных эффектов
+ui-options-old-crit-screen = Старый экран крита (без кровавого эффекта)
 ui-options-chat-window-opacity = Прозрачность окна чата
 ui-options-chat-window-opacity-percent = { TOSTRING($opacity, "P0") }
 ui-options-screen-shake-intensity = Интенсивность дрожания экрана

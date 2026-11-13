@@ -60,6 +60,11 @@ public sealed partial class CCVars
     public static readonly CVarDef<float> SpeechBubbleBackgroundOpacity =
         CVarDef.Create("accessibility.speech_bubble_background_opacity", 0.75f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    // DS14-start
+    public static readonly CVarDef<bool> OldCritScreen =
+        CVarDef.Create("accessibility.old_crit_screen", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+    // DS14-end
+
     // /// <summary>
     // /// If enabled, censors character nudity by forcing clothes markings on characters, selected by the client.
     // /// Both this and AccessibilityServerCensorNudity must be false to display nudity on the client.

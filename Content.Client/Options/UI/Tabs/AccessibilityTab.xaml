@@ -9,6 +9,9 @@
                        StyleClasses="DeadSpaceSectionTitle"/>
                 <!-- DS14-end -->
                 <CheckBox Name="ReducedMotionCheckBox" Text="{Loc 'ui-options-reduced-motion'}" />
+                <!-- DS14-start -->
+                <CheckBox Name="OldCritScreenCheckBox" Text="{Loc 'ui-options-old-crit-screen'}" />
+                <!-- DS14-end -->
                 <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />
                 <CheckBox Name="ColorblindFriendlyCheckBox" Text="{Loc 'ui-options-colorblind-friendly'}" />
                 <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
