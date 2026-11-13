@@ -60,6 +60,7 @@ public sealed class LimbJumpSystem : EntitySystem
         ability.JumpDistance = distance;
         ability.JumpThrowSpeed = speed;
         ability.CanCollide = collide;
+        ability.RequireUnobstructedPath = true;
         ability.Action = action;
         ability.JumpSound = sound;
         Dirty(body, ability);
