@@ -166,6 +166,19 @@ public sealed class LimbOrganRulesTest
     }
 
     [Test]
+    public void OrgansOnlyBurstInAWreckedLimb()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(LimbOrganRules.ShouldRupture(0f), Is.False);
+            Assert.That(LimbOrganRules.ShouldRupture(0.1f), Is.False);
+            Assert.That(LimbOrganRules.ShouldRupture(LimbOrganRules.RuptureHpShare - 0.01f), Is.False);
+            Assert.That(LimbOrganRules.ShouldRupture(LimbOrganRules.RuptureHpShare), Is.True);
+            Assert.That(LimbOrganRules.ShouldRupture(1f), Is.True);
+        });
+    }
+
+    [Test]
     public void RuptureKeepsBleedingAndCryoDoesNotSealIt()
     {
         var organs = LimbOrganRules.CreateAll().ToArray();

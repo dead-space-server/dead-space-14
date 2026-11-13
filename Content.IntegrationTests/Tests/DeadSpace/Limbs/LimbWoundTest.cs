@@ -259,7 +259,7 @@ public sealed class LimbWoundTest
     }
 
     [Test]
-    public async Task PointStrikeRupturesTheHeart()
+    public async Task PointStrikeWrecksTheTorsoWithoutBurstingTheKidneys()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -271,13 +271,23 @@ public sealed class LimbWoundTest
             var wounds = server.EntMan.System<LimbWoundSystem>();
             var strike = new LimbStrike(LimbZone.Torso, LimbMark.Point, 99f, 0.9f, 40f, false, false, false, false, false, 1f);
             wounds.Strike(human, strike);
-            var organs = server.EntMan.GetComponent<LimbBodyComponent>(human).Organs;
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            var organs = limbs.Organs;
+            var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
+
+            var ruptured = 0;
+            for (var i = 0; i < organs.Count && i < LimbOrganRules.Count; i++)
+            {
+                if (organs[i].Ruptured && LimbOrganHomes.Home((LimbOrgan) i) == LimbZone.Torso)
+                    ruptured++;
+            }
 
             Assert.Multiple(() =>
             {
-                Assert.That(organs[(int) LimbOrgan.Heart].Ruptured, Is.True);
-                Assert.That(organs[(int) LimbOrgan.Lungs].Ruptured, Is.True);
+                Assert.That(torso, Is.LessThan(LimbWoundRules.HealthFor(LimbZone.Torso, limbs)));
+                Assert.That(organs[(int) LimbOrgan.Kidneys].Damage, Is.EqualTo(0f));
                 Assert.That(organs[(int) LimbOrgan.Kidneys].Ruptured, Is.False);
+                Assert.That(ruptured, Is.LessThanOrEqualTo(1));
             });
         });
 

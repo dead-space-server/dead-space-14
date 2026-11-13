@@ -2134,23 +2134,21 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var any = false;
         for (var i = 0; i < count; i++)
         {
-            if (zones[i].Severed || before[i] <= 1f - LimbOrganRules.RuptureHpShare)
+            if (zones[i].Severed || !LimbOrganRules.ShouldRupture(before[i]))
                 continue;
 
-            var zone = (LimbZone) i;
-            var lost = LimbWoundRules.LostShare(zones[i], LimbWoundRules.HealthFor(zone, limbs));
-            if (lost <= before[i] || i >= mechanical.Length || !mechanical[i])
+            if (i >= mechanical.Length || !mechanical[i])
                 continue;
 
-            any |= RuptureIf(uid, limbs, zone);
+            any |= RuptureIf(uid, limbs, (LimbZone) i, before[i]);
         }
 
         return any;
     }
 
-    private bool RuptureIf(EntityUid uid, LimbBodyComponent limbs, LimbZone zone)
+    private bool RuptureIf(EntityUid uid, LimbBodyComponent limbs, LimbZone zone, float lost)
     {
-        if (!LimbWoundRules.IsBody(zone))
+        if (!LimbWoundRules.IsBody(zone) || !LimbOrganRules.ShouldRupture(lost))
             return false;
 
         EnsureOrgans(limbs);
@@ -2194,9 +2192,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
             if (_net.IsServer && !limbs.Soft && !state.Severed)
                 LimbWoundRules.RollCrack(ref state, lost, _random.NextFloat());
             if (_net.IsServer && !state.Severed
-                && lost > 1f - LimbOrganRules.RuptureHpShare
+                && LimbOrganRules.ShouldRupture(lost)
                 && strike.Mark is LimbMark.Edge or LimbMark.Point or LimbMark.Blunt)
-                RuptureIf(uid, limbs, strike.Zone);
+                RuptureIf(uid, limbs, strike.Zone, lost);
             Dirty(uid, limbs);
         }
 

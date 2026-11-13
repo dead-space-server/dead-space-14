@@ -85,6 +85,11 @@ public static class LimbOrganRules
         return plan;
     }
 
+    public static bool ShouldRupture(float lost)
+    {
+        return lost >= RuptureHpShare;
+    }
+
     public static OrganHit Apply(Span<LimbOrganState> organs, LimbZone zone, LimbMark mark, float amount, float woundMultiplier, LimbOrganMask present = LimbOrganMask.Standard, bool projectile = false)
     {
         if (amount <= 0f)
