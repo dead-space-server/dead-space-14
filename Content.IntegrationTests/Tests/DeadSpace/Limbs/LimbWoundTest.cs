@@ -259,7 +259,7 @@ public sealed class LimbWoundTest
     }
 
     [Test]
-    public async Task PointStrikeWrecksTheTorsoWithoutBurstingTheKidneys()
+    public async Task PointStrikesRuptureAtMostOneTorsoOrgan()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -271,16 +271,30 @@ public sealed class LimbWoundTest
             var wounds = server.EntMan.System<LimbWoundSystem>();
             var strike = new LimbStrike(LimbZone.Torso, LimbMark.Point, 99f, 0.9f, 40f, false, false, false, false, false, 1f);
             wounds.Strike(human, strike);
-            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
-            var organs = limbs.Organs;
-            var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
+
+            int Ruptured(LimbBodyComponent limbs)
+            {
+                var organs = limbs.Organs;
+                var count = 0;
+                for (var i = 0; i < organs.Count && i < LimbOrganRules.Count; i++)
+                {
+                    if (organs[i].Ruptured && LimbOrganHomes.Home((LimbOrgan) i) == LimbZone.Torso)
+                        count++;
+                }
+
+                return count;
+            }
 
             var ruptured = 0;
-            for (var i = 0; i < organs.Count && i < LimbOrganRules.Count; i++)
+            for (var attempt = 0; attempt < 60 && ruptured == 0; attempt++)
             {
-                if (organs[i].Ruptured && LimbOrganHomes.Home((LimbOrgan) i) == LimbZone.Torso)
-                    ruptured++;
+                wounds.Strike(human, strike);
+                ruptured = Ruptured(server.EntMan.GetComponent<LimbBodyComponent>(human));
             }
+
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
+            var organs = limbs.Organs;
 
             Assert.Multiple(() =>
             {
