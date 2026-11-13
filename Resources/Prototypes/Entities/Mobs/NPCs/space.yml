@@ -599,7 +599,7 @@
     size: Small
   # DS14-end
   - type: Body
-    prototype: Mouse
+    prototype: Animal # DS14
   - type: GhostRole
     makeSentient: true
     allowSpeech: false

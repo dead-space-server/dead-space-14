@@ -6,8 +6,4 @@
     torso:
       part: TorsoAnimal
       organs:
-        lungs: OrganAnimalLungs
         stomach: OrganMothStomach
-        liver: OrganAnimalLiver
-        heart: OrganAnimalHeart
-        kidneys: OrganAnimalKidneys
