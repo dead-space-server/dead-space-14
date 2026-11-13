@@ -85,6 +85,8 @@ public sealed partial class RuneBarrageEffect : RuneSpellEffect
 
 public sealed partial class RuneReviveEffect : RuneTargetedEffect
 {
+    [DataField]
+    public float Immortality;
 }
 
 public sealed partial class RuneTimeStopEffect : RuneSpellEffect

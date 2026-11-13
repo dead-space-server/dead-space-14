@@ -343,6 +343,7 @@
   loudness: 3
   effects:
   - !type:RuneReviveEffect
+    immortality: 15
   - !type:RuneDamageEffect
     target: AroundPoint
     radius: 3

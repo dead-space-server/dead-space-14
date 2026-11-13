@@ -1,9 +1,11 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Server.DeadSpace.Surgery;
+using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Wizard.Runes;
+using Content.Shared.FixedPoint;
 
 namespace Content.Server.DeadSpace.Wizard.Runes;
 
@@ -19,9 +21,11 @@ public sealed partial class RuneCasterSystem
 {
     [Dependency] private readonly LimbWoundSystem _limbs = default!;
     [Dependency] private readonly SurgeryLimbPort _limbPort = default!;
+    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
 
     private const float LimbMendShare = 0.6f;
     private const float OrganMendShare = 1.5f;
+    private const string BloodlossDamage = "Bloodloss";
 
     private void ApplyDamage(RuneCastContext ctx, RuneDamageEffect effect)
     {
@@ -32,6 +36,8 @@ public sealed partial class RuneCasterSystem
         foreach (var target in Targets(ctx, effect))
         {
             _damageable.TryChangeDamage(target, damage, effect.IgnoreResistances, origin: ctx.Caster);
+            if (damage.DamageDict.TryGetValue(BloodlossDamage, out var bloodloss) && bloodloss != FixedPoint2.Zero)
+                _bloodstream.TryModifyBloodLevel(target, -bloodloss);
             if (heal > 0f)
                 MendLimbs(target, heal, deep);
         }

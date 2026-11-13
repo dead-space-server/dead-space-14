@@ -66,7 +66,7 @@
   - !type:RuneDamageEffect
     damage:
       types:
-        Bloodloss: 30
+        Bloodloss: 20
   - !type:RuneDamageEffect
     target: Caster
     ignoreResistances: true

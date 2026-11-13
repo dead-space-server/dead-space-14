@@ -363,6 +363,7 @@ rune-form-ultimate-syllable = Ультиматум
 rune-ultimate-cooldown = Ультима ещё не восстановилась: { $seconds } с.
 rune-cast-not-wounded = Эта ультима отзывается только тяжело раненому магу.
 rune-cast-once = Эту ультиму можно прочесть лишь раз за раунд.
+rune-cast-arena-disabled = Арена пока закрыта.
 
 rune-ultimate-meteors = НЕБО, ПАДИ НА НИХ!
 rune-ultimate-ice-age = ЛЕДНИКОВЫЙ ПЕРИОД!

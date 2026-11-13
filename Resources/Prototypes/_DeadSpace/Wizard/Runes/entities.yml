@@ -591,6 +591,10 @@
   - type: NpcFactionMember
     factions:
     - Wizard
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      151: Dead
 
 - type: entity
   parent: MobWatcherIcewing
@@ -601,6 +605,10 @@
   - type: NpcFactionMember
     factions:
     - Wizard
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      119: Dead
 
 - type: entity
   parent: MobGoliath
@@ -611,6 +619,10 @@
   - type: NpcFactionMember
     factions:
     - Wizard
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      280: Dead
 
 - type: entity
   parent: MobWatcherLavaland
@@ -622,6 +634,10 @@
   - type: NpcFactionMember
     factions:
     - Wizard
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      140: Dead
   - type: Sprite
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -734,10 +750,10 @@
 - type: damageModifierSet
   id: RuneStoneSkin
   coefficients:
-    Blunt: 0.5
-    Slash: 0.5
-    Piercing: 0.6
-    Heat: 0.85
+    Blunt: 0.3
+    Slash: 0.3
+    Piercing: 0.3
+    Heat: 0.3
 
 - type: damageModifierSet
   id: RuneIceArmor

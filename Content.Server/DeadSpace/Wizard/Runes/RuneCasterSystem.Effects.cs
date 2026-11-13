@@ -11,9 +11,11 @@ using Content.Shared.Charges.Systems;
 using Content.Shared.Mind;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Containers;
+using Content.Server.Destructible;
 using Content.Server.Emp;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Lightning;
+using Content.Server.Lightning.Components;
 using Content.Server.Magic;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Weapons.Ranged.Systems;
@@ -21,6 +23,7 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Chat;
 using Content.Shared.Magic.Events;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Gibbing;
 using Content.Shared.Magic.Components;
@@ -90,6 +93,14 @@ public sealed class RuneTimedEntry
     }
 }
 
+[RegisterComponent]
+public sealed partial class RuneImmortalityComponent : Component
+{
+    public TimeSpan End;
+
+    public bool Granted;
+}
+
 public sealed partial class RuneCasterSystem
 {
     [Dependency] private readonly IMapManager _mapManager = default!;
@@ -114,6 +125,10 @@ public sealed partial class RuneCasterSystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private readonly SharedGodmodeSystem _godmode = default!;
+
+    private const float AnimateHealthScale = 0.6f;
+    private EntityUid? _lightningOwner;
 
     private static readonly EntProtoId SlowStatus = "RuneSlowStatusEffect";
     private static readonly ProtoId<TagPrototype> AnimateBlacklistTag = "AnimateSpellBlacklist";
@@ -136,6 +151,15 @@ public sealed partial class RuneCasterSystem
     private void InitializeEffects()
     {
         _pushWhitelist = new EntityWhitelist { Components = new[] { "MobMover", "Item" } };
+        SubscribeLocalEvent<LightningComponent, ComponentInit>(OnWizardLightningInit);
+    }
+
+    private void OnWizardLightningInit(EntityUid uid, LightningComponent component, ComponentInit args)
+    {
+        if (_lightningOwner is not { } owner)
+            return;
+
+        EnsureComp<PreventCollideComponent>(uid).Uid = owner;
     }
 
     private void Apply(RuneCastContext ctx, RuneSpellEffect effect)
@@ -223,7 +247,10 @@ public sealed partial class RuneCasterSystem
                 break;
             case RuneReviveEffect revive:
                 foreach (var target in Targets(ctx, revive))
+                {
                     RestoreFully(target);
+                    GrantImmortality(target, revive.Immortality * ctx.DurationScale);
+                }
                 break;
             case RuneTimeStopEffect timeStop:
                 StartTimeStop(ctx, timeStop);
@@ -740,6 +767,7 @@ public sealed partial class RuneCasterSystem
             }
 
             EntityManager.AddComponents(uid, template.Components, true);
+            ScaleAnimateHealth(uid);
         }
 
         if (count == 0)
@@ -769,11 +797,61 @@ public sealed partial class RuneCasterSystem
         return !HasComp<MovementSpeedModifierComponent>(uid);
     }
 
+    private void ScaleAnimateHealth(EntityUid uid)
+    {
+        if (!TryComp<DestructibleComponent>(uid, out var destructible))
+            return;
+
+        foreach (var threshold in destructible.Thresholds)
+        {
+            if (threshold.Trigger is DamageTrigger trigger)
+                trigger.Damage *= AnimateHealthScale;
+        }
+    }
+
+    private void GrantImmortality(EntityUid target, float seconds)
+    {
+        if (seconds <= 0f)
+            return;
+
+        var granted = !HasComp<GodmodeComponent>(target);
+        var immortality = EnsureComp<RuneImmortalityComponent>(target);
+        if (granted)
+            immortality.Granted = true;
+
+        immortality.End = Timing.CurTime + TimeSpan.FromSeconds(seconds);
+        if (immortality.Granted)
+            _godmode.EnableGodmode(target);
+    }
+
+    private void UpdateImmortality()
+    {
+        var query = EntityQueryEnumerator<RuneImmortalityComponent>();
+        while (query.MoveNext(out var uid, out var immortality))
+        {
+            if (Timing.CurTime < immortality.End)
+                continue;
+
+            if (immortality.Granted)
+                _godmode.DisableGodmode(uid);
+
+            RemCompDeferred<RuneImmortalityComponent>(uid);
+        }
+    }
+
     private void ApplyLightning(RuneCastContext ctx, RuneLightningEffect effect)
     {
         var origin = Spawn(null, _transform.ToMapCoordinates(ctx.Point));
         EnsureComp<TimedDespawnComponent>(origin).Lifetime = 2f;
-        _lightning.ShootRandomLightnings(origin, effect.Range * ctx.RangeScale, effect.Bolts + ctx.Extra, effect.Prototype);
+        _lightningOwner = ctx.Caster;
+        try
+        {
+            _lightning.ShootRandomLightnings(origin, effect.Range * ctx.RangeScale, effect.Bolts + ctx.Extra, effect.Prototype);
+        }
+        finally
+        {
+            _lightningOwner = null;
+        }
     }
 
     private void ApplySpeak(RuneCastContext ctx, RuneSpeakEffect effect)

@@ -59,9 +59,13 @@ public sealed partial class RuneCasterSystem
     private static readonly EntProtoId ArenaStash = "CrateGenericSteel";
     private static readonly EntProtoId NewWizardBook = "WizardsGrimoire";
     private static readonly ProtoId<NpcFactionPrototype> WizardFaction = "Wizard";
+    private readonly bool _arenaCastsEnabled = false;
 
     private void StartArena(RuneCastContext ctx, RuneArenaEffect effect)
     {
+        if (!_arenaCastsEnabled)
+            return;
+
         var caster = ctx.Caster;
         var origin = _transform.GetMapCoordinates(caster);
 

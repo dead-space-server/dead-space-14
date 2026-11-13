@@ -82,6 +82,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
     {
         base.Update(frameTime);
         UpdateTimedComponents();
+        UpdateImmortality();
         UpdateShields();
         UpdateRegeneration();
         UpdateBlood(frameTime);
@@ -227,6 +228,12 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
     {
         var spell = composition.Spell!;
         var ultimate = composition.Form.Ultimate;
+
+        if (!_arenaCastsEnabled && spell.ID == "RuneUltimateArena")
+        {
+            _popup.PopupEntity(Loc.GetString("rune-cast-arena-disabled"), caster, caster, PopupType.SmallCaution);
+            return false;
+        }
 
         if (HasComp<RuneArenaFighterComponent>(caster))
         {
