@@ -10077,3 +10077,12 @@ Entries:
   changes:
   - type: Remove
     message: прижигания у слаймов
+- id: 967
+  author: Manstari
+  time: '2026-11-13T10:14:39.909456+00:00'
+  pr: 2723
+  changes:
+  - type: Fix
+    message: Таракамоль теперь может скушать шейный гетр
+  - type: Fix
+    message: Исправлен баг с дюпом лавалендовских очков
