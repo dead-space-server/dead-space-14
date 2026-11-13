@@ -10056,3 +10056,10 @@ Entries:
   changes:
   - type: Add
     message: От скафандра обр священника исходит свет в 3 тайла.
+- id: 964
+  author: BlueDogDoc
+  time: '2026-11-13T09:59:26.577514+00:00'
+  pr: 2730
+  changes:
+  - type: Tweak
+    message: Оптимизация Лавы
