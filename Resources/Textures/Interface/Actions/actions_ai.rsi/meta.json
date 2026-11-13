@@ -57,6 +57,9 @@
 		},
 		{
 			"name": "centcomm_fax"
+		},
+        {
+			"name": "borg_remote_control"
 		}
 	]
 }

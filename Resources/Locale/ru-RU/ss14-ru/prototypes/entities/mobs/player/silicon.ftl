@@ -79,3 +79,5 @@ ent-PlayerBorgDerelictGhostRole = { ent-PlayerBorgDerelict }
     .desc = { ent-PlayerBorgDerelict.desc }
 ent-PlayerBorgSyndicateInvasionGhostRoleSpawner = спавнер штурмового борга синдиката
     .desc = { ent-MarkerBase.desc }
+ent-AIBorgChassisGenericSpawner = спавнер личного борга ЦИИ
+    .desc = { ent-PlayerBorgDerelict.desc }
