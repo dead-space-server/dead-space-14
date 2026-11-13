@@ -10093,3 +10093,10 @@ Entries:
   changes:
   - type: Add
     message: Модуль "Б.О.Р.И.С.", который позволяет ЦИИ управлять боргами
+- id: 969
+  author: BlueDogDoc
+  time: '2026-11-13T10:48:15.506492+00:00'
+  pr: 2733
+  changes:
+  - type: Remove
+    message: Всякие потрошки у животных, насекомых.
