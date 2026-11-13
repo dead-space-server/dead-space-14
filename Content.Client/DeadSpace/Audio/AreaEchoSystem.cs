@@ -36,7 +36,6 @@ public sealed class AreaEchoSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
@@ -319,7 +318,7 @@ public sealed class AreaEchoSystem : EntitySystem
 
         var gridUid = xform.GridUid ?? EntityUid.Invalid;
         if (!TryComp<MapGridComponent>(gridUid, out var grid) &&
-            !_mapManager.TryFindGridAt(xform.MapID, position, out gridUid, out grid))
+            !_maps.TryFindGridAt(xform.MapID, position, out gridUid, out grid))
             return true;
 
         if (_timing.RealTime >= _refreshAt)

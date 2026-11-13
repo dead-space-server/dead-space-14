@@ -5,7 +5,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared.Traits;
 
 namespace Content.Shared.Roles
@@ -20,7 +19,7 @@ namespace Content.Shared.Roles
         [IdDataField]
         public string ID { get; private set; } = default!;
 
-        [DataField(required: true, customTypeSerializer: typeof(PrototypeIdSerializer<PlayTimeTrackerPrototype>))]
+        [DataField(required: true)]
         public string PlayTimeTracker { get; private set; } = string.Empty;
 
         /// <summary>
@@ -105,7 +104,7 @@ namespace Content.Shared.Roles
         /// Starting gear will be ignored.
         /// If you want to just add special attributes to a humanoid, use AddComponentSpecial instead.
         /// </summary>
-        [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        [DataField]
         public string? JobEntity = null;
 
         /// <summary>
@@ -144,7 +143,7 @@ namespace Content.Shared.Roles
         public List<ProtoId<GuideEntryPrototype>>? Guides;
 
         // start-backmen
-        [DataField("wageDepartment", customTypeSerializer: typeof(PrototypeIdSerializer<DepartmentPrototype>))]
+        [DataField("wageDepartment")]
         public string? WageDepartment { get; private set; }
 
         [DataField("minBankBalance")]

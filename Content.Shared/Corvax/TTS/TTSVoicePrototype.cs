@@ -1,7 +1,6 @@
 using Content.Shared.Humanoid;
 using Content.Shared.DeadSpace.TTS;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 
 namespace Content.Shared.Corvax.TTS;
 
@@ -19,7 +18,7 @@ public sealed partial class TTSVoicePrototype : IPrototype
     [DataField]
     public string Provider { get; set; } = TTSVoices.Silero;
 
-    [DataField(customTypeSerializer: typeof(PrototypeIdValueDictionarySerializer<string, TTSVoicePrototype>))]
+    [DataField]
     public Dictionary<string, string> Fallbacks { get; set; } = new();
     // DS14-end
 

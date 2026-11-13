@@ -6,7 +6,6 @@ using Content.Shared.Store;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
 
 namespace Content.Shared.Backmen.Economy.ATM;
 
@@ -23,7 +22,7 @@ public sealed partial class AtmComponent : Component
     [DataField("normalState")]
     public string? NormalState;
 
-    [ViewVariables(VVAccess.ReadOnly), DataField("currencyWhitelist", customTypeSerializer: typeof(PrototypeIdHashSetSerializer<CurrencyPrototype>))]
+    [ViewVariables(VVAccess.ReadOnly), DataField("currencyWhitelist")]
     public HashSet<string> CurrencyWhitelist = new();
 
     [DataField("soundInsertCurrency")]

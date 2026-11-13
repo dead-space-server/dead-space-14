@@ -17,6 +17,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Timer = Robust.Shared.Timing.Timer;
+using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
@@ -42,7 +43,6 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
     [Dependency] private readonly BiomeSystem _biome = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -340,7 +340,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         var position = _map.GridTileToWorldPos(mapUid, grid, indices);
         var mapId = Transform(mapUid).MapID;
         var box = Box2.CenteredAround(position, new Vector2(OtherGridExclusion * 2f));
-        foreach (var other in _mapManager.FindGridsIntersecting(mapId, box))
+        foreach (var other in _map.GridsIntersecting(mapId, box))
         {
             if (other.Owner != mapUid)
                 return true;

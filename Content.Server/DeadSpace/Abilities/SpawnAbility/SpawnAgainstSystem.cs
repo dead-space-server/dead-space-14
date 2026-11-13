@@ -24,7 +24,7 @@ public sealed class SpawnAgainstSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly IMapManager _mapMan = default!;
+    [Dependency] private readonly SharedMapSystem _mapMan = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SpreaderSystem _spreader = default!;
@@ -114,7 +114,7 @@ public sealed class SpawnAgainstSystem : EntitySystem
         var xform = Transform(uid);
         // Get the tile in front of the uni
         var offsetValue = xform.LocalRotation.ToWorldVec();
-        var coords = xform.Coordinates.Offset(offsetValue).SnapToGrid(EntityManager, _mapMan);
+        var coords = xform.Coordinates.Offset(offsetValue).SnapToGrid(EntityManager);
         var tile = _turf.GetTileRef(coords);
         if (tile == null)
             return null;

@@ -448,7 +448,7 @@ public sealed class PrisonOreProvenanceTest
         {
             var mapSystem = server.System<SharedMapSystem>();
             mapSystem.CreateMap(out var mapId);
-            var grid = server.ResolveDependency<IMapManager>().CreateGridEntity(mapId);
+            var grid = server.System<SharedMapSystem>().CreateGridEntity(mapId);
             shuttle = grid.Owner;
             for (var x = 0; x < 3; x++)
                 mapSystem.SetTile(grid.Owner, grid.Comp, new Vector2i(x, 0), new Tile(1));
@@ -536,7 +536,7 @@ public sealed class PrisonOreProvenanceTest
         {
             var mapSystem = server.System<SharedMapSystem>();
             mapSystem.CreateMap(out var mapId);
-            var grid = server.ResolveDependency<IMapManager>().CreateGridEntity(mapId);
+            var grid = server.System<SharedMapSystem>().CreateGridEntity(mapId);
             shuttle = grid.Owner;
             mapSystem.SetTile(grid.Owner, grid.Comp, Vector2i.Zero, new Tile(1));
             server.EntMan.EnsureComponent<CargoShuttleComponent>(shuttle);

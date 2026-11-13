@@ -77,7 +77,7 @@ public sealed class ShadowlingSystem : SharedShadowlingSystem
             if (distance > light.Radius)
                 continue;
 
-            if (light.MaskPath != null)
+            if (light.LightMask != null)
             {
                 var directionToShadowling = shadowlingPos - lightPos;
 

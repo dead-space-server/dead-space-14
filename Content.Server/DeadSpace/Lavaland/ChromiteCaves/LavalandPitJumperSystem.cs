@@ -44,7 +44,6 @@ public sealed class LavalandPitJumperSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
@@ -463,7 +462,7 @@ public sealed class LavalandPitJumperSystem : EntitySystem
     {
         spot = default;
         pit = default;
-        if (!_mapManager.TryFindGridAt(target, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(target, out var gridUid, out var grid))
         {
             Log.Warning($"Argocyte: no grid under the player at {target}, back out of its own chasm.");
             return false;
@@ -636,7 +635,7 @@ public sealed class LavalandPitJumperSystem : EntitySystem
     private bool TryGetChasmAt(MapCoordinates coords, out Vector2 chasm)
     {
         chasm = default;
-        if (!_mapManager.TryFindGridAt(coords, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coords, out var gridUid, out var grid))
             return false;
 
         var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, _map.TileIndicesFor(gridUid, grid, coords));

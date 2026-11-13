@@ -18,6 +18,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Spawners;
+using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Weapons.Ranged;
 
@@ -26,7 +27,7 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -200,7 +201,7 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
     private bool IsNearOutpost(MapCoordinates center, float range)
     {
         var box = Box2.CenteredAround(center.Position, new System.Numerics.Vector2(range * 2f));
-        foreach (var grid in _mapManager.FindGridsIntersecting(center.MapId, box))
+        foreach (var grid in _mapManager.GridsIntersecting(center.MapId, box))
         {
             if (HasComp<LavalandOutpostComponent>(grid.Owner))
                 return true;

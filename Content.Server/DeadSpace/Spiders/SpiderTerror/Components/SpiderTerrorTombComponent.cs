@@ -1,7 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Maps;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.Spiders.SpiderTerror.Components;
@@ -12,7 +11,7 @@ public sealed partial class SpiderTerrorTombComponent : Component
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public float Range = 15;
 
-    [DataField("tileId", customTypeSerializer: typeof(PrototypeIdSerializer<ContentTileDefinition>)), ViewVariables(VVAccess.ReadWrite)]
+    [DataField("tileId"), ViewVariables(VVAccess.ReadWrite)]
     public string TileId = "VebTile";
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]

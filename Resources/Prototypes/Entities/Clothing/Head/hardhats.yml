@@ -17,7 +17,7 @@
       - state: equipped-helmet
   - type: PointLight
     enabled: false
-    mask: "/Textures/Effects/LightMasks/cone.png" # DS14
+    lightMask: ConeSingle # DS14
     autoRot: true
     radius: 7
     netsync: false

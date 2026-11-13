@@ -11,8 +11,9 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.Ninja;
 
+[DataDefinition]
 [Serializable, NetSerializable]
-public sealed class NinjaDisguiseAppearance
+public sealed partial class NinjaDisguiseAppearance
 {
     [DataField]
     public MarkingSet MarkingSet = new();

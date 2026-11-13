@@ -22,7 +22,6 @@ public sealed class SpaceMufflingSystem : EntitySystem
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly GhostSystem _ghost = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
 
@@ -70,7 +69,7 @@ public sealed class SpaceMufflingSystem : EntitySystem
         if (!_maps.TryGetMap(position.MapId, out var map))
             return 0f;
 
-        if (_mapManager.TryFindGridAt(position, out var gridUid, out var grid))
+        if (_maps.TryFindGridAt(position, out var gridUid, out var grid))
         {
             var tile = _maps.WorldToTile(gridUid, grid, position.Position);
             if (TryComp<GasTileOverlayComponent>(gridUid, out var overlay) &&

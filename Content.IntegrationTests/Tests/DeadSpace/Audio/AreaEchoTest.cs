@@ -105,7 +105,7 @@ public sealed class AreaEchoTest
 
             try
             {
-                var grid = client.ResolveDependency<IMapManager>().CreateGridEntity(mapId);
+                var grid = client.System<SharedMapSystem>().CreateGridEntity(mapId);
                 entMan.EnsureComponent<ImplicitRoofComponent>(grid);
                 var floor = new Tile(client.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
                 var tiles = new List<(Vector2i, Tile)>();
@@ -386,7 +386,7 @@ public sealed class AreaEchoTest
             var map = maps.CreateMap(out var mapId);
             try
             {
-                var grid = client.ResolveDependency<IMapManager>().CreateGridEntity(mapId);
+                var grid = client.System<SharedMapSystem>().CreateGridEntity(mapId);
                 entities.EnsureComponent<ImplicitRoofComponent>(grid);
                 var floor = new Tile(client.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
                 var tiles = new List<(Vector2i, Tile)>();

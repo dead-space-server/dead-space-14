@@ -47,7 +47,6 @@ public sealed class LavalandSystem : EntitySystem
     [Dependency] private readonly LavalandGuaranteedSpawnSystem _guaranteedSpawn = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly MetaDataSystem _metadata = default!;
@@ -969,7 +968,7 @@ public sealed class LavalandSystem : EntitySystem
 
         var mapId = Transform(terrainGridUid).MapID;
         var bounds = Box2.CenteredAround(center, Vector2.One * (radius * 2f + 1f));
-        _mapManager.FindGridsIntersecting(mapId, bounds, ref _nearbyGrids);
+        _map.FindGridsIntersecting(mapId, bounds, ref _nearbyGrids);
 
         foreach (var grid in _nearbyGrids)
         {

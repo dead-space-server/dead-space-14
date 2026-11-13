@@ -898,7 +898,7 @@ public sealed partial class LavalandBossArenaSystem
         for (var step = 0.5f; step <= distance + 0.01f; step += 0.5f)
         {
             var candidate = from.Offset(direction * step);
-            if (!_mapManager.TryFindGridAt(candidate, out var gridUid, out var grid))
+            if (!_map.TryFindGridAt(candidate, out var gridUid, out var grid))
                 break;
 
             var tile = _map.TileIndicesFor(gridUid, grid, candidate);

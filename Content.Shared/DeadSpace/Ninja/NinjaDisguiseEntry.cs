@@ -9,8 +9,9 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.Ninja;
 
+[DataDefinition]
 [Serializable, NetSerializable]
-public sealed class NinjaDisguiseEntry
+public sealed partial class NinjaDisguiseEntry
 {
     [DataField]
     public string Name = string.Empty;
@@ -58,8 +59,9 @@ public sealed class NinjaDisguiseEntry
     public IdentityBlockerCoverage IdentityBlockedCoverage = IdentityBlockerCoverage.NONE;
 }
 
+[DataDefinition]
 [Serializable, NetSerializable]
-public sealed class NinjaDisguiseInventoryEntry
+public sealed partial class NinjaDisguiseInventoryEntry
 {
     [DataField]
     public string Slot = string.Empty;

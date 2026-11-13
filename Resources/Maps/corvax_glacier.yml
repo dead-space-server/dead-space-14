@@ -232550,7 +232550,11 @@ entities:
       pos: 46.5,77.5
       parent: 41679
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 43839
     components:
     - type: Transform
@@ -232558,7 +232562,11 @@ entities:
       pos: 46.5,83.5
       parent: 41679
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 43840
     components:
     - type: Transform
@@ -232566,7 +232574,11 @@ entities:
       pos: 46.5,79.5
       parent: 41679
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
 - proto: PlasticBanana
   entities:
   - uid: 15732

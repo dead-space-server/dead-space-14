@@ -1,7 +1,5 @@
 using Content.Shared.DeadSpace.TTS;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Corvax.TTS;
 
@@ -16,7 +14,7 @@ public sealed partial class TTSComponent : Component
     /// Prototype of used voice for TTS.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("voice", customTypeSerializer: typeof(PrototypeIdSerializer<TTSVoicePrototype>))]
+    [DataField("voice")]
     // DS14-start
     public string? VoicePrototypeId
     {
@@ -31,7 +29,7 @@ public sealed partial class TTSComponent : Component
     }
 
     [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("voices", customTypeSerializer: typeof(PrototypeIdValueDictionarySerializer<string, TTSVoicePrototype>))]
+    [DataField("voices")]
     public Dictionary<string, string> Voices { get; set; } = new();
     // DS14-end
 }

@@ -624,7 +624,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
 
     private bool IsInsideLightCone(EntityUid uid, EntityUid lightUid, PointLightComponent light)
     {
-        if (light.MaskPath == null)
+        if (light.LightMask == null)
             return true;
 
         var demonPosition = _transform.GetWorldPosition(uid);

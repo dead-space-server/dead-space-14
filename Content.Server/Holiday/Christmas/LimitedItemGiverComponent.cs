@@ -1,6 +1,5 @@
 ﻿using Content.Shared.Storage;
 using Robust.Shared.Network;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Holiday.Christmas;
 
@@ -36,6 +35,6 @@ public sealed partial class LimitedItemGiverComponent : Component
     /// <summary>
     /// The holiday required for this giver to work, if any.
     /// </summary>
-    [DataField("requiredHoliday", customTypeSerializer: typeof(PrototypeIdSerializer<HolidayPrototype>)), ViewVariables(VVAccess.ReadWrite)]
+    [DataField("requiredHoliday"), ViewVariables(VVAccess.ReadWrite)]
     public string? RequiredHoliday = null;
 }

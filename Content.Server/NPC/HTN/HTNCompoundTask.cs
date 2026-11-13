@@ -1,4 +1,3 @@
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.NPC.HTN;
 
@@ -10,6 +9,6 @@ namespace Content.Server.NPC.HTN;
 /// </remarks>
 public sealed partial class HTNCompoundTask : HTNTask, IHTNCompound
 {
-    [DataField("task", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<HTNCompoundPrototype>))]
+    [DataField("task", required: true)]
     public string Task = string.Empty;
 }

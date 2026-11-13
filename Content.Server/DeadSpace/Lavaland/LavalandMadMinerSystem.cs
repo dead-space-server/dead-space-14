@@ -43,6 +43,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
@@ -61,7 +62,6 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -127,7 +127,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         var position = _transform.GetWorldPosition(xform);
         var box = Box2.CenteredAround(position, new Vector2(OtherGridExclusion * 2f));
         var circle = new Circle(position, OtherGridExclusion);
-        foreach (var other in _mapManager.FindGridsIntersecting(xform.MapID, box))
+        foreach (var other in _map.GridsIntersecting(xform.MapID, box))
         {
             // The grid's bounds reach far past its tiles (a large outpost): only its real tiles nearby count.
             if (other.Owner != mapUid && _map.GetTilesIntersecting(other.Owner, other, circle).Any())
@@ -567,7 +567,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
 
     private bool IsOpenGround(MapCoordinates coordinates)
     {
-        if (!_mapManager.TryFindGridAt(coordinates, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
             return false;
 
         var tile = _map.TileIndicesFor(gridUid, grid, coordinates);

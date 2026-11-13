@@ -19,7 +19,7 @@ namespace Content.Shared.Chunking;
 public sealed class ChunkingSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;

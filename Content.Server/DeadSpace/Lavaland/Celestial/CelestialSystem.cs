@@ -28,7 +28,6 @@ namespace Content.Server.DeadSpace.Lavaland.Celestial;
 public sealed class CelestialSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -665,7 +664,7 @@ public sealed class CelestialSystem : EntitySystem
                 // ломаем пол под ударом
                 if (!comp.BreakTiles)
                     return;
-                foreach (var gridEnt in _mapManager.GetAllGrids(strikeMap.MapId))
+                foreach (var gridEnt in _map.GetAllGrids(strikeMap.MapId))
                 {
                     foreach (var tile in _map.GetTilesIntersecting(gridEnt.Owner, gridEnt.Comp, new Circle(strikeMap.Position, 0.6f)))
                     {

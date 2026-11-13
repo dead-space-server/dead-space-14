@@ -169,7 +169,7 @@ public sealed class PowerStateTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
-        var mapManager = server.ResolveDependency<IMapManager>();
+        var mapManager = server.System<SharedMapSystem>();
         var entManager = server.ResolveDependency<IEntityManager>();
         var mapSys = entManager.System<SharedMapSystem>();
 
@@ -213,7 +213,7 @@ public sealed class PowerStateTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
-        var mapManager = server.ResolveDependency<IMapManager>();
+        var mapManager = server.System<SharedMapSystem>();
         var entManager = server.ResolveDependency<IEntityManager>();
         var mapSys = entManager.System<SharedMapSystem>();
 
@@ -266,7 +266,7 @@ public sealed class PowerStateTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
-        var mapManager = server.ResolveDependency<IMapManager>();
+        var mapManager = server.System<SharedMapSystem>();
         var entManager = server.ResolveDependency<IEntityManager>();
         var mapSys = entManager.System<SharedMapSystem>();
 

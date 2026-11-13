@@ -45,7 +45,7 @@ public sealed class SharedAshWalkerSystem : EntitySystem
             _popup.PopupClient(Loc.GetString("ash-walker-cannot-pilot"), args.Target, ent);
     }
 
-    private void OnUiMessageAttempt(BoundUserInterfaceMessageAttempt args)
+    private void OnUiMessageAttempt(ref BoundUserInterfaceMessageAttempt args)
     {
         if (args.Cancelled || args.UiKey is not ShuttleConsoleUiKey.Key || !HasComp<AshWalkerComponent>(args.Actor))
             return;

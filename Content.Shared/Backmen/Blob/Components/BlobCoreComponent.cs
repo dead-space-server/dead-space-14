@@ -3,7 +3,6 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Backmen.Blob.Components;
 
@@ -168,7 +167,7 @@ public sealed partial class BlobCoreComponent : Component
     public FixedPoint2 CoreBlobTotalHealth = 400;
 
     [ViewVariables(VVAccess.ReadWrite),
-     DataField("ghostPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+     DataField("ghostPrototype")]
     public string ObserverBlobPrototype = "MobObserverBlob";
 
     [DataField("greetSoundNotification")]

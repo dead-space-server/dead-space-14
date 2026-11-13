@@ -13,7 +13,8 @@ public sealed class CrayonGhostOverlay : Overlay
 {
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    private SharedMapSystem? _mapManagerCache;
+    private SharedMapSystem _mapManager => _mapManagerCache ??= IoCManager.Resolve<IEntityManager>().System<SharedMapSystem>();
     [Dependency] private readonly IPrototypeManager _protoMan = default!;
 
     private readonly CrayonGhostSystem _crayonSystem;

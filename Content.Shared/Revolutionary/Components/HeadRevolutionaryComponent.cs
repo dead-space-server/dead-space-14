@@ -1,7 +1,6 @@
 using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Revolutionary.Components;
 
@@ -23,7 +22,7 @@ public sealed partial class HeadRevolutionaryComponent : Component
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan StunTime = TimeSpan.FromSeconds(8);
 
-    [DataField("headRevConvertAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("headRevConvertAction")]
     public string HeadRevConvertAction = "ActionHeadRevConvert";
 
     [DataField("actionEntity")] public EntityUid HeadRevConvertActionEntity;

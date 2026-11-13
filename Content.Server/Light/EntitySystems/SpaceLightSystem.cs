@@ -62,8 +62,8 @@ public sealed partial class SpaceLightSystem : EntitySystem
 
     private static Color ParseSpaceLightColor(string value)
     {
-        // DS14: the pinned API returns a nullable color instead of using an out parameter.
-        var color = Color.TryFromHex(value) ?? Color.FromHex(CCVars.DefaultSpaceLightColor);
+        if (!Color.TryFromHex(value, out var color))
+            color = Color.FromHex(CCVars.DefaultSpaceLightColor);
 
         return Color.FromSrgb(color);
     }

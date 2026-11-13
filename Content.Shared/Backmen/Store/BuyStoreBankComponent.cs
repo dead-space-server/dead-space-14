@@ -5,7 +5,6 @@ using Content.Shared.VendingMachines;
 using Content.Shared.VendingMachines.Components; // DS14 - vending machine refactor adaptation
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
 
 namespace Content.Shared.Backmen.Store;
 
@@ -24,7 +23,7 @@ public sealed partial class BuyStoreBankComponent : Component
     /// This is checked against the VendingMachineComponent's pack value.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("canRestock", customTypeSerializer: typeof(PrototypeIdHashSetSerializer<VendingMachineInventoryPrototype>))]
+    [DataField("canRestock")]
     public HashSet<string> CanRestock = new();
 
     /// <summary>
@@ -48,7 +47,7 @@ public sealed partial class BuyStoreBankComponent : Component
     [DataField("soundRestockDone")]
     public SoundSpecifier SoundRestockDone = new SoundPathSpecifier("/Audio/Machines/vending_restock_done.ogg");
 
-    [DataField("emagCategories", customTypeSerializer: typeof(PrototypeIdHashSetSerializer<StoreCategoryPrototype>))]
+    [DataField("emagCategories")]
     public HashSet<string> EmagCategories = new();
 
     /// <summary>

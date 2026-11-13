@@ -2282,6 +2282,14 @@
     intensity: 0.5
     slope: 0.3
   - type: Bloodstream
+    # DS14-start: critters lost MobBloodstream, so the cancer mouse's own bloodstream needs the required damage fields
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    # DS14-end
     bloodReferenceSolution:
       reagents:
       - ReagentId: UnstableMutagen

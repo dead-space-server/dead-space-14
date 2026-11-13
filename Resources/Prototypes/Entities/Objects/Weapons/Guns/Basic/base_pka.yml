@@ -97,7 +97,7 @@
   # Light of a flashlight in the light slot: a cone like the flashlight's, off until it is switched on.
   - type: PointLight
     enabled: false
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
     radius: 6
   - type: ItemSlots

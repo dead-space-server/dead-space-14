@@ -355,12 +355,7 @@ public sealed partial class EmagCommunicationsInterface : FancyWindow
         if (value.Length != ColorShortLength && value.Length != ColorLongLength)
             return false;
 
-        var parsed = Color.TryFromHex($"#{value}");
-        if (parsed == null)
-            return false;
-
-        color = parsed.Value;
-        return true;
+        return Color.TryFromHex($"#{value}", out color);
     }
 
     private void ToggleColorPalette()

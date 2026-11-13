@@ -23,7 +23,7 @@
         fix1:
           shape:
             !type:PhysShapeAabb
-            bounds: "-0.3,0.3,0.3,0.2"
+            bounds: "-0.3,0.2,0.3,0.3"
           density: 100
           mask:
             - None
@@ -79,7 +79,7 @@
         fix1:
           shape:
             !type:PhysShapeAabb
-            bounds: "-0.3,0.3,0.3,0.2"
+            bounds: "-0.3,0.2,0.3,0.3"
           density: 100
           mask:
             - None
