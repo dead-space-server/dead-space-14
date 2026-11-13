@@ -434,6 +434,10 @@ public sealed class SurgeryClientSystem : EntitySystem
                 _verb = close;
             else if (_tool != null && FewOrgans() && ToolHas(SurgeryVerbKind.Extract))
                 _verb = SurgeryVerbKind.Extract;
+            else if (held != null && step == SurgeryVerbKind.Seat
+                     && _board is { } seatBoard
+                     && Has(seatBoard.Verbs, SurgeryVerbKind.Seat))
+                _verb = step;
             else if (held == null && step == SurgeryVerbKind.SetBone)
                 _verb = step;
             else
@@ -2984,6 +2988,9 @@ public sealed class SurgeryClientSystem : EntitySystem
             return SurgeryVerbKind.Extract;
         if (Has(board.Verbs, SurgeryVerbKind.Insert))
             return SurgeryVerbKind.Insert;
+
+        if (Has(board.Verbs, SurgeryVerbKind.Seat))
+            return SurgeryVerbKind.Seat;
 
         var layer = Top(board);
         if ((uint) layer >= (uint) board.LayerKinds.Length || (uint) layer >= (uint) board.Integrity.Length)
