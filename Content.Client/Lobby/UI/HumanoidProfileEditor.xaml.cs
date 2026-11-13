@@ -1651,6 +1651,14 @@ namespace Content.Client.Lobby.UI
             _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
             _loadoutWindow.OpenCenteredLeft();
 
+            // DS14-start
+            _loadoutWindow.OnAiLawsetChanged += lawset =>
+            {
+                Profile = Profile?.WithStationAiLawset(lawset);
+                SetDirty();
+            };
+            // DS14-end
+
             _loadoutWindow.OnNameChanged += name =>
             {
                 roleLoadout.EntityName = name;

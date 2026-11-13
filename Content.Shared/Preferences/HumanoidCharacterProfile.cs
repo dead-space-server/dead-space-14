@@ -8,6 +8,8 @@ using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
+using Content.Shared.DeadSpace.Silicons.Laws; // DS14
+using Content.Shared.Silicons.Laws; // DS14
 using Content.Shared.Traits;
 using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
@@ -122,6 +124,15 @@ namespace Content.Shared.Preferences
         [DataField]
         public SpawnPriorityPreference SpawnPriority { get; private set; } = SpawnPriorityPreference.None;
 
+        // DS14-start
+        /// <summary>
+        /// Lawset the player wants to use when spawning as the station AI.
+        /// Null means the job default lawset is used.
+        /// </summary>
+        [DataField]
+        public ProtoId<SiliconLawsetPrototype>? StationAiLawset { get; private set; }
+        // DS14-end
+
         /// <summary>
         /// <see cref="_jobPriorities"/>
         /// </summary>
@@ -214,6 +225,7 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts), other.TtsVoices) // DS14
         {
+            StationAiLawset = other.StationAiLawset; // DS14
         }
 
         /// <summary>
@@ -370,6 +382,13 @@ namespace Content.Shared.Preferences
         {
             return new(this) { SpawnPriority = spawnPriority };
         }
+
+        // DS14-start
+        public HumanoidCharacterProfile WithStationAiLawset(ProtoId<SiliconLawsetPrototype>? lawset)
+        {
+            return new(this) { StationAiLawset = lawset };
+        }
+        // DS14-end
 
         public HumanoidCharacterProfile WithJobPriorities(IEnumerable<KeyValuePair<ProtoId<JobPrototype>, JobPriority>> jobPriorities)
         {
@@ -537,6 +556,7 @@ namespace Content.Shared.Preferences
             // DS14-end
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             if (SpawnPriority != other.SpawnPriority) return false;
+            if (StationAiLawset != other.StationAiLawset) return false; // DS14
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
             if (!_antagPreferences.SequenceEqual(other._antagPreferences)) return false;
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
@@ -684,6 +704,15 @@ namespace Content.Shared.Preferences
             Gender = gender;
             Appearance = appearance;
             SpawnPriority = spawnPriority;
+
+            // DS14-start
+            if (StationAiLawset != null &&
+                (!prototypeManager.HasIndex(StationAiLawset.Value) ||
+                 !StationAiLawsets.Available.Contains(StationAiLawset.Value)))
+            {
+                StationAiLawset = null;
+            }
+            // DS14-end
 
             _jobPriorities.Clear();
 
@@ -849,6 +878,7 @@ namespace Content.Shared.Preferences
             hashCode.Add((int)Gender);
             hashCode.Add(Appearance);
             hashCode.Add((int)SpawnPriority);
+            hashCode.Add(StationAiLawset); // DS14
             hashCode.Add((int)PreferenceUnavailable);
             return hashCode.ToHashCode();
         }
