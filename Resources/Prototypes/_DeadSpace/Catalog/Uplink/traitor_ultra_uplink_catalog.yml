@@ -2980,9 +2980,10 @@
   - TraitorUltraUplinkWeaponry
   conditions:
   - !type:StoreWhitelistCondition
-    whitelist:
+    blacklist:
       tags:
       - LoneOpsUplink
+      - NukeOpsUplink
   - !type:ListingLimitedStockCondition
     stock: 1
   - !type:BuyerWhitelistCondition
