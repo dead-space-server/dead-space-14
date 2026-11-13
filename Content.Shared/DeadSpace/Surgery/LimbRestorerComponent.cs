@@ -46,6 +46,23 @@ public sealed partial class LimbRestorerComponent : Component
     [DataField, AutoNetworkedField]
     public int Charges = 1;
 
+    /// <summary>
+    /// Maximum charges restored by <see cref="Recharge"/>. Zero means the initial <see cref="Charges"/> value.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int MaxCharges;
+
+    /// <summary>
+    /// Seconds to restore one charge. Zero disables recharging.
+    /// </summary>
+    [DataField]
+    public float Recharge;
+
+    /// <summary>
+    /// When the next charge is restored. Zero means no recharge is pending.
+    /// </summary>
+    public TimeSpan RechargeAt;
+
     [DataField]
     public bool DeleteEmpty = true;
 

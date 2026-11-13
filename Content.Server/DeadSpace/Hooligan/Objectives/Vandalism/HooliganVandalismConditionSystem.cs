@@ -5,6 +5,7 @@ using Content.Shared.Objectives.Components;
 using Content.Server.Objectives.Components;
 using Content.Shared.Mind;
 using Robust.Shared.Random;
+using Robust.Shared.Prototypes;
 using Content.Shared.Warps;
 using Content.Server.Station.Systems;
 using System;
@@ -22,6 +23,7 @@ public sealed class HooliganVandalismConditionSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {
@@ -41,6 +43,7 @@ public sealed class HooliganVandalismConditionSystem : EntitySystem
         var station = _station.GetOwningStation(hooligan);
 
         var warps = new List<EntityUid>();
+        var highSecurityWarps = new List<EntityUid>();
         var query = EntityQueryEnumerator<WarpPointComponent>();
         while (query.MoveNext(out var uid, out var warp))
         {
@@ -49,12 +52,16 @@ public sealed class HooliganVandalismConditionSystem : EntitySystem
             if (_station.GetOwningStation(uid) != station)
                 continue;
             warps.Add(uid);
+            if (IsHighSecurity(uid, ent.Comp))
+                highSecurityWarps.Add(uid);
         }
 
         if (warps.Count == 0)
             return;
 
-        var target = _random.Pick(warps);
+        var target = highSecurityWarps.Count > 0 && _random.Prob(ent.Comp.HighSecurityChance)
+            ? _random.Pick(highSecurityWarps)
+            : _random.Pick(warps);
         ent.Comp.TargetLocation = target;
 
         var location = Comp<WarpPointComponent>(target).Location;
@@ -62,6 +69,33 @@ public sealed class HooliganVandalismConditionSystem : EntitySystem
         _metaData.SetEntityName(ent.Owner, title, args.Meta);
 
 
+    }
+
+    private bool IsHighSecurity(EntityUid warp, HooliganVandalismConditionComponent comp)
+    {
+        var protoId = MetaData(warp).EntityPrototype?.ID;
+        if (protoId == null)
+            return false;
+
+        foreach (var candidate in comp.HighSecurityBeacons)
+        {
+            if (candidate.Id == protoId)
+                return true;
+        }
+
+        if (!_prototype.HasIndex<EntityPrototype>(protoId))
+            return false;
+
+        foreach (var parent in _prototype.EnumerateParents<EntityPrototype>(protoId))
+        {
+            foreach (var candidate in comp.HighSecurityBeacons)
+            {
+                if (parent.ID == candidate.Id)
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     private void OnGraffitiDrawn(ref HooliganGraffitiDrawnEvent args)
