@@ -162,7 +162,7 @@ namespace Content.Server.Entry
         private static void ApplyServerPerformanceDefaults(IConfigurationManager cfg)
         {
 #if RELEASE
-            cfg.SetCVar(CVars.TargetMinimumTickrate, 25);
+            cfg.SetCVar(CVars.TargetMinimumTickrate, 20); //DS-14
             cfg.SetCVar(CVars.VelocityIterations, 4);
             cfg.SetCVar(CVars.PositionIterations, 2);
             cfg.SetCVar(CVars.TimeToSleep, 0.3f);
