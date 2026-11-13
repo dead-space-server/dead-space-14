@@ -15,3 +15,21 @@
     stopAtTarget: false
   - type: TimedDespawn
     lifetime: 5
+    
+- type: entity
+  parent: BaseBullet
+  id: BulletSaidwinder
+  categories: [ HideSpawnMenu ]
+  name: патрон (5.56х45 мм Smart™)
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 19
+  - type: ChasingWalk
+    speed: 40
+    maxAngleVectorChangePerImpulse: 10
+    impulseInterval: 0.05
+    stopAtTarget: false
+  - type: TimedDespawn
+    lifetime: 5

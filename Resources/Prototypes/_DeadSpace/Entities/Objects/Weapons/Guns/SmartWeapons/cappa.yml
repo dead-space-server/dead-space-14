@@ -1,0 +1,126 @@
+- type: entity
+  name: INCEPTA «Каппа»
+  parent: [BaseWeaponPistol, BaseSecurityContraband]
+  id: WeaponSmartCappa
+  description: "Умный пистолет, созданный Incepta Exploratores специально для пилотов дальнего фронтира. По сути,  не имеет преимуществ без импланта «Смартлинк»."
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/cappa.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-0
+        map: ["enum.GunVisualLayers.Mag"]
+  - type: Gun
+    minAngle: 4
+    maxAngle: 4
+    fireRate: 5.5
+    burstFireRate: 20
+    soundGunshot:
+      path: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/cappa/fire_cappa.ogg
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    shotsPerBurst: 3
+    burstCooldown: 0.375
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineSmartWeaponCappa
+        insertSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/cappa/mag_in_cappa.ogg
+        ejectSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/cappa/mag_out_cappa.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - MagazineSmartWeaponCappa
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        priority: 1
+        whitelist:
+          tags:
+            - CartridgePistol
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: Item
+    storedOffset: 0,-2
+  - type: SmartWeapon
+    crosshairColor: "#00b0e6"
+    targetHighlightColor: "#00d9ff"
+    targetMarkerCrossColor: "#ffffff"
+    debugZoneColor: "#f8f8f87f"
+    ammoDigitsColor: "#38ffff"
+    magnetismDelay: 0.01
+    magnetismUpdateInterval: 0.002
+    magnetismMaxAngle: 5
+    crosshairAlpha: 0.7
+    cornerStickTexture: /Textures/_DeadSpace/Interface/SmartWeapon/corner_stick.png
+    crossTexture: /Textures/_DeadSpace/Interface/SmartWeapon/cross.png
+    targetLockSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_on.ogg
+    targetLostSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_off.ogg
+    crosshairInnerTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_inner.png
+    crosshairOuterTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_outer.png
+
+- type: entity
+  parent: [ BaseStorageItem, BaseBagOpenClose ]
+  id: CaseCappa
+  name: оружейный кейс
+  description: Небольшой кейс, хранящий внутри умный пистолет. Украшен эмблемой Incepta Exploratores, ракетой летящей к звездам.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case_cappa.rsi
+    layers:
+    - state: open
+      map: [ "openLayer" ]
+      visible: false
+    - state: sl
+      map: [ "sl" ]
+      visible: false
+    - state: sg
+      map: [ "sg" ]
+      visible: false
+    - state: mg
+      map: [ "mg" ]
+      visible: false
+    - state: closed
+      map: [ "closeLayer" ]
+  - type: Storage
+    grid:
+    - 0,0,3,1
+    - 1,1,2,2
+  - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case_cappa.rsi
+    size: Ginormous
+  - type: ItemMapper
+    mapLayers:
+      sl:
+        whitelist:
+          components:
+          - Implanter
+      sg:
+        whitelist:
+          components:
+          - SmartWeapon
+      mg:
+        whitelist:
+          components:
+          - BallisticAmmoProvider
+  - type: StorageFill
+    contents:
+    - id: WeaponSmartCappa
+    - id: MagazineSmartWeaponCappa
+    - id: MagazineSmartWeaponCappa
+    - id: SmartLinkImplanter
+  - type: ItemCounter
+    count:
+      components: [Item]
+    composite: true
+    layerStates:
+    - mg
+    - sg
+    - sl
+  - type: Appearance

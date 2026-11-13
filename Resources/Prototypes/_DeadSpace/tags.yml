@@ -80,6 +80,9 @@
   id: CartridgeHeavyPistol
 
 - type: Tag
+  id: CartridgeSaidwinder
+
+- type: Tag
   id: CatEmotes
 
 - type: Tag
@@ -300,6 +303,18 @@
 
 - type: Tag
   id: MagazineSmartWeaponShingen
+
+- type: Tag
+  id: MagazineSmartWeaponChao
+
+- type: Tag
+  id: MagazineSmartWeaponDian
+
+- type: Tag
+  id: MagazineSmartWeaponSaidwinder
+
+- type: Tag
+  id: MagazineSmartWeaponCappa
 
 - type: Tag
   id: Magmite
