@@ -23,6 +23,7 @@
     loadOnStart: true
     saveOnRoundEnd: false
     deleteSaveOnRoundEnd: true
+    suppressRoundstartGrids: true
     nextPreset: null
   - type: GameRule
     minPlayers: 0

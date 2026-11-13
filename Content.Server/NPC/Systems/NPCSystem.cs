@@ -237,7 +237,10 @@ namespace Content.Server.NPC.Systems
                 {
                     _lastPlayerNearby[uid] = curTime;
 
-                    if (!active && _proximitySleeping.Contains(uid))
+                    // DS14: будить нужно любого неактивного NPC, а не только усыпленного системой.
+                    // Для сущности с сохранённой карты это единственный путь: ActiveNPCComponent ставит
+                    // WakeNPC, а он штатно зовётся только из OnNPCMapInit, которого у неё не было.
+                    if (!active)
                     {
                         component.PlanAccumulator = 0f;
                         WakeNPC(uid, component);

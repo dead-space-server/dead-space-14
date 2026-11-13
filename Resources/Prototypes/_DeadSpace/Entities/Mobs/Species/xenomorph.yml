@@ -1,5 +1,5 @@
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   parent: BaseMobSpeciesOrganic
   id: BaseMobSpeciesXenomorph
   abstract: true

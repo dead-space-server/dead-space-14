@@ -35,6 +35,14 @@ public sealed partial class SaveGamemodeRuleComponent : Component
     public bool DeleteSaveOnRoundEnd;
 
     /// <summary>
+    ///     Не спавнить обязательные гриды станции (карго-шаттл, торговую станцию, шаттл утилизаторов,
+    ///     руины) при регистрации карты, поднятой из сохранения: в файле они уже есть, иначе в раунде
+    ///     будет по два комплекта.
+    /// </summary>
+    [DataField]
+    public bool SuppressRoundstartGrids = true;
+
+    /// <summary>
     ///     ID следующего пресета, который будет автоматически выставлен при конце раунда.
     ///     Если пустое — пресет не меняется.
     /// </summary>

@@ -18,9 +18,17 @@ public sealed class SaveGamemodeCommand : LocalizedCommands
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (args.Length != 1)
+        // «repair <слот>» чинит уже записанный файл: прогоняет по нему пост-процессор и подменяет его,
+        // сохранив предыдущую версию в .bak. Нужен, когда сохранение уже есть, но не грузится.
+        if (args.Length > 0 && args[0].Equals("repair", StringComparison.OrdinalIgnoreCase))
         {
-            shell.WriteLine(Loc.GetString("shell-need-exactly-one-argument"));
+            Repair(shell, args);
+            return;
+        }
+
+        if (args.Length is < 1 or > 2)
+        {
+            shell.WriteLine("Использование: savegamemode <название сохранения> [raw] | savegamemode repair <название сохранения>");
             return;
         }
 
@@ -39,23 +47,61 @@ public sealed class SaveGamemodeCommand : LocalizedCommands
         var saveSystem = _entityManager.System<SaveSystem>();
         var path = SaveDir / args[0] / "map.yml";
 
-        if (saveSystem.TrySaveMap(mapId, path, force: true))
+        // По умолчанию сохраняем через пост-процессор — ровно так же, как это делает конец раунда.
+        // Второй аргумент «raw» пишет карту как есть, для отладки самой сериализации.
+        var raw = args.Length == 2 && args[1].Equals("raw", StringComparison.OrdinalIgnoreCase);
+
+        if (raw)
         {
-            shell.WriteLine($"Сохранение '{args[0]}' выполнено успешно.");
+            if (saveSystem.TrySaveMap(mapId, path, force: true))
+                shell.WriteLine($"Сохранение '{args[0]}' выполнено успешно (без пост-обработки).");
+            else
+                shell.WriteLine($"Не удалось сохранить '{args[0]}'. Смотрите логи сервера.");
+
+            return;
         }
+
+        if (saveSystem.TrySaveFilteredSlot(mapId, args[0], out var report))
+            shell.WriteLine($"Сохранение '{args[0]}' выполнено успешно. {report}");
         else
-        {
-            shell.WriteLine($"Не удалось сохранить '{args[0]}'. Смотрите логи сервера.");
-        }
+            shell.WriteLine($"Не удалось сохранить '{args[0]}'. Старое сохранение не тронуто, смотрите логи сервера.");
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         return args.Length switch
         {
-            1 => CompletionResult.FromHint("Название сохранения"),
+            1 => CompletionResult.FromHintOptions(["repair"], "Название сохранения либо «repair»"),
+            2 => args[0].Equals("repair", StringComparison.OrdinalIgnoreCase)
+                ? CompletionResult.FromHint("Название исправляемого сохранения")
+                : CompletionResult.FromHintOptions(["raw"], "raw — без пост-обработки карты"),
             _ => CompletionResult.Empty,
         };
+    }
+
+    /// <summary>
+    ///     Повторно прогоняет пост-процессор по файлу сохранения на диске.
+    /// </summary>
+    private void Repair(IConsoleShell shell, string[] args)
+    {
+        if (args.Length != 2)
+        {
+            shell.WriteLine("Использование: savegamemode repair <название сохранения>");
+            return;
+        }
+
+        var saveSystem = _entityManager.System<SaveSystem>();
+
+        if (!saveSystem.SlotExists(args[1]))
+        {
+            shell.WriteLine($"Сохранение '{args[1]}' не найдено.");
+            return;
+        }
+
+        if (saveSystem.TryFilterSaveFile(SaveSystem.GetSavePath(args[1]), out var report))
+            shell.WriteLine($"Сохранение '{args[1]}' исправлено. {report}");
+        else
+            shell.WriteLine($"Не удалось исправить '{args[1]}'. Файл не тронут, смотрите логи сервера.");
     }
 
     private bool TryGetAttachedEntityMap(ICommonSession player, out MapId mapId)
