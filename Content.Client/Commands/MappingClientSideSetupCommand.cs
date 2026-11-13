@@ -24,6 +24,11 @@ internal sealed class MappingClientSideSetupCommand : LocalizedEntityCommands
         _lightManager.Enabled = false;
         _subfloorSystem.ShowAll = true;
         _actionSystem.LoadActionAssignments("/mapping_actions.yml", false);
+
+        // DeadSpace14 BetterMappingEditor start
+        shell.ExecuteCommand("zoom 1.5");
+        shell.ExecuteCommand("scene DeadSpaceMappingState");
+        // DeadSpace14 BetterMappingEditor end
     }
 }
 

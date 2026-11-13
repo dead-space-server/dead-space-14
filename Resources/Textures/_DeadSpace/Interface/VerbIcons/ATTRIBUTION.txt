@@ -1,2 +1,8 @@
 CC-BY-SA-3.0
 Pen icon by k1llarooo (discord) for https://github.com/dead-space-server/space-station-14-fobos
+
+collapse.svg by varttist (discord)
+
+caret-left-solid.svg, caret-right-solid.svg, chevron-down-solid.svg, chevron-right-solid.svg,
+star-regular.svg, star-solid-yellow.svg and xmark-solid.svg from Font Awesome Free 6.7.2
+by @fontawesome under CC BY 4.0 https://fontawesome.com/license/free

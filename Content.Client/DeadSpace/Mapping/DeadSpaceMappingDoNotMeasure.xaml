@@ -1,0 +1,4 @@
+﻿<mapping:DeadSpaceMappingDoNotMeasure
+    xmlns="https://spacestation14.io"
+    xmlns:mapping="clr-namespace:Content.Client.DeadSpace.Mapping">
+</mapping:DeadSpaceMappingDoNotMeasure>
