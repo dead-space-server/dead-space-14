@@ -43,7 +43,6 @@ namespace Content.Server.DeadSpace.Arena;
 
 public sealed class ArenaSystem : EntitySystem
 {
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPrototypeManager _protos = default!;
     [Dependency] private readonly ITileDefinitionManager _tiles = default!;
     [Dependency] private readonly MapLoaderSystem _loader = default!;
@@ -746,7 +745,7 @@ public sealed class ArenaSystem : EntitySystem
         var mapUid = _maps.CreateMap(out _);
         _arenaMap = mapUid;
 
-        var (platform, gridComp) = _mapManager.CreateGridEntity(mapUid);
+        var (platform, gridComp) = _maps.CreateGridEntity(mapUid);
         var tile = new Tile(_tiles["FloorSteel"].TileId);
         var tileList = new List<(Vector2i, Tile)>();
 

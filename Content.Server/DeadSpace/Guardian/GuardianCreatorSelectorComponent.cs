@@ -1,5 +1,4 @@
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.DeadSpace.Guardian;
 
@@ -35,7 +34,7 @@ public sealed partial class GuardianCreatorSelectorOption
     /// <summary>
     /// Prototype spawned by GuardianCreator when this option is selected.
     /// </summary>
-    [DataField(required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField(required: true)]
     public string Prototype = string.Empty;
 
     /// <summary>

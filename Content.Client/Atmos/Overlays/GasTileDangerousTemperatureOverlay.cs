@@ -18,7 +18,8 @@ public sealed class GasTileDangerousTemperatureOverlay : Overlay
     public override bool RequestScreenTexture { get; set; } = false;
 
     [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    private SharedMapSystem? _mapManagerCache;
+    private SharedMapSystem _mapManager => _mapManagerCache ??= _entManager.System<SharedMapSystem>();
     [Dependency] private readonly IClyde _clyde = default!;
 
     private GasTileOverlaySystem? _gasTileOverlay;

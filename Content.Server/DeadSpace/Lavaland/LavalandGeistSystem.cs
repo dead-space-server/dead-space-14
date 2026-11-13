@@ -34,7 +34,6 @@ public sealed class LavalandGeistSystem : EntitySystem
 {
     [Dependency] private readonly BearTrapSystem _bearTrap = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly Content.Shared.Examine.ExamineSystemShared _examine = default!;
@@ -262,7 +261,7 @@ public sealed class LavalandGeistSystem : EntitySystem
     private bool TryFindChasmNear(MapCoordinates player, float range, out MapCoordinates spot)
     {
         spot = default;
-        if (!_mapManager.TryFindGridAt(player, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(player, out var gridUid, out var grid))
             return false;
 
         var center = _map.TileIndicesFor(gridUid, grid, player);
@@ -435,7 +434,7 @@ public sealed class LavalandGeistSystem : EntitySystem
             return;
 
         var center = _transform.GetMapCoordinates(player);
-        if (!_mapManager.TryFindGridAt(center, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(center, out var gridUid, out var grid))
             return;
 
         var origin = _map.TileIndicesFor(gridUid, grid, center);
@@ -550,7 +549,7 @@ public sealed class LavalandGeistSystem : EntitySystem
     /// <summary>A floor tile with nothing solid on it.</summary>
     private bool IsOpenGround(MapCoordinates coords)
     {
-        if (!_mapManager.TryFindGridAt(coords, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coords, out var gridUid, out var grid))
             return false;
 
         var tile = _map.TileIndicesFor(gridUid, grid, coords);

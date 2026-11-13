@@ -11,7 +11,6 @@ namespace Content.Client.DeadSpace.Tiles;
 public sealed class InvisibleTileOverlay : Overlay
 {
     [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
 
     private readonly SharedMapSystem _map;
     private readonly SharedTransformSystem _transform;
@@ -39,7 +38,7 @@ public sealed class InvisibleTileOverlay : Overlay
 
         var handle = args.WorldHandle;
         _grids.Clear();
-        _mapManager.FindGridsIntersecting(args.MapId, args.WorldBounds, ref _grids);
+        _map.FindGridsIntersecting(args.MapId, args.WorldBounds, ref _grids);
 
         foreach (var grid in _grids)
         {

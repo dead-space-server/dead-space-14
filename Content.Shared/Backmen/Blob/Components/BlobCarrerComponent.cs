@@ -2,7 +2,6 @@ using Content.Shared.Actions;
 using Content.Shared.StatusIcon;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Backmen.Blob.Components;
 
@@ -25,11 +24,11 @@ public sealed partial class BlobCarrierComponent : Component
     public float TransformationTimer = 0;
 
     [ViewVariables(VVAccess.ReadWrite),
-     DataField("corePrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+     DataField("corePrototype")]
     public string CoreBlobPrototype = "CoreBlobTile";
 
     [ViewVariables(VVAccess.ReadWrite),
-     DataField("coreBlobGhostRolePrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+     DataField("coreBlobGhostRolePrototype")]
     public string CoreBlobGhostRolePrototype = "CoreBlobTileGhostRole";
 
     public EntityUid? TransformToBlob = null;

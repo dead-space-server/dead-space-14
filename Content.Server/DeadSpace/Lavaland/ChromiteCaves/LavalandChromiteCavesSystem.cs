@@ -38,6 +38,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Timer = Robust.Shared.Timing.Timer;
+using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 
@@ -67,7 +68,6 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly EuiManager _eui = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -308,7 +308,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
                 continue;
 
             var clear = true;
-            foreach (var other in _mapManager.FindGridsIntersecting(mapId, Box2.CenteredAround(candidate, new Vector2((radius + separation) * 2f))))
+            foreach (var other in _map.GridsIntersecting(mapId, Box2.CenteredAround(candidate, new Vector2((radius + separation) * 2f))))
             {
                 if (other.Owner == mapUid || other.Owner == custom)
                     continue;
@@ -526,7 +526,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
         if (!_tileDefinition.TryGetDefinition(config.LandingTile, out var tileDef))
             return;
 
-        var holding = _mapManager.CreateGridEntity(mapId);
+        var holding = _map.CreateGridEntity(mapId);
         _metaData.SetEntityName(holding.Owner, "Chromite caves shaft");
         _transform.SetMapCoordinates(holding.Owner, new MapCoordinates(new Vector2(half + 500, half + 500), mapId));
         var tiles = new List<(Vector2i, Tile)>();
@@ -620,7 +620,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
             // Not on the outpost or any other grid.
             var box = new Box2(center.X - clear - 2, center.Y - clear - 2, center.X + clear + 3, center.Y + clear + 3);
             var blocked = false;
-            foreach (var other in _mapManager.FindGridsIntersecting(mapId, box))
+            foreach (var other in _map.GridsIntersecting(mapId, box))
             {
                 if (other.Owner != lavalandMap)
                 {

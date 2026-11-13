@@ -24,7 +24,6 @@ public sealed class LavalandSnowCoverOverlay : Overlay
 
     private readonly IEntityManager _entities;
     private readonly IGameTiming _timing;
-    private readonly IMapManager _mapManager;
     private readonly ITileDefinitionManager _tileDefinitions;
     private readonly SharedMapSystem _map;
     private readonly SharedRoofSystem _roof;
@@ -33,12 +32,10 @@ public sealed class LavalandSnowCoverOverlay : Overlay
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
-    public LavalandSnowCoverOverlay(IEntityManager entities, IGameTiming timing, IMapManager mapManager,
-        ITileDefinitionManager tileDefinitions)
+    public LavalandSnowCoverOverlay(IEntityManager entities, IGameTiming timing, ITileDefinitionManager tileDefinitions)
     {
         _entities = entities;
         _timing = timing;
-        _mapManager = mapManager;
         _tileDefinitions = tileDefinitions;
         _map = entities.System<SharedMapSystem>();
         _roof = entities.System<SharedRoofSystem>();
@@ -68,7 +65,7 @@ public sealed class LavalandSnowCoverOverlay : Overlay
         _entities.TryGetComponent<RoofComponent>(args.MapUid, out var roof);
 
         _otherGrids.Clear();
-        _mapManager.FindGridsIntersecting(args.MapId, args.WorldAABB, ref _otherGrids);
+        _map.FindGridsIntersecting(args.MapId, args.WorldAABB, ref _otherGrids);
         var planetUid = args.MapUid;
         _otherGrids.RemoveAll(grid => grid.Owner == planetUid);
 
@@ -170,7 +167,6 @@ public sealed class LavalandSnowCoverSystem : EntitySystem
 {
     [Dependency] private readonly IOverlayManager _overlays = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinitions = default!;
 
     private LavalandSnowCoverOverlay _overlay = default!;
@@ -178,7 +174,7 @@ public sealed class LavalandSnowCoverSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        _overlay = new LavalandSnowCoverOverlay(EntityManager, _timing, _mapManager, _tileDefinitions);
+        _overlay = new LavalandSnowCoverOverlay(EntityManager, _timing, _tileDefinitions);
         _overlays.AddOverlay(_overlay);
     }
 

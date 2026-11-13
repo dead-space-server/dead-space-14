@@ -29,7 +29,6 @@ public sealed class LavalandShelterCapsuleSystem : EntitySystem
 
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly MetaDataSystem _metadata = default!;
@@ -211,7 +210,7 @@ public sealed class LavalandShelterCapsuleSystem : EntitySystem
 
         var mapId = Transform(mapUid).MapID;
         var bounds = Box2.CenteredAround(center, Vector2.One * (radius * 2 + 1));
-        _mapManager.FindGridsIntersecting(mapId, bounds, ref _nearbyGrids);
+        _map.FindGridsIntersecting(mapId, bounds, ref _nearbyGrids);
 
         foreach (var grid in _nearbyGrids)
         {

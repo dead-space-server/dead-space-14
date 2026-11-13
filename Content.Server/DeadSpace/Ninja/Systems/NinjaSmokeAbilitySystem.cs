@@ -22,7 +22,6 @@ public sealed class NinjaSmokeAbilitySystem : SharedNinjaSmokeAbilitySystem
     [Dependency] private readonly SpreaderSystem _spreader = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedSpaceNinjaSystem _ninja = default!;
@@ -97,7 +96,7 @@ public sealed class NinjaSmokeAbilitySystem : SharedNinjaSmokeAbilitySystem
 
         var xform = Transform(user);
         var mapCoords = _xform.GetMapCoordinates(user);
-        if (!_mapManager.TryFindGridAt(mapCoords, out var gridUid, out var grid) ||
+        if (!_map.TryFindGridAt(mapCoords, out var gridUid, out var grid) ||
             !_map.TryGetTileRef(gridUid, grid, xform.Coordinates, out var tileRef))
             return false;
 

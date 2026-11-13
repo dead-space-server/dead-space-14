@@ -46,7 +46,6 @@ namespace Content.Shared.Magic;
 public abstract class SharedMagicSystem : EntitySystem
 {
     [Dependency] private readonly ISerializationManager _seriMan = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
@@ -340,7 +339,7 @@ public abstract class SharedMagicSystem : EntitySystem
         if (!_net.IsServer)
             return;
 
-        var ent = Spawn(proto, position.SnapToGrid(EntityManager, _mapManager));
+        var ent = Spawn(proto, position.SnapToGrid(EntityManager));
 
         if (lifetime != null)
         {

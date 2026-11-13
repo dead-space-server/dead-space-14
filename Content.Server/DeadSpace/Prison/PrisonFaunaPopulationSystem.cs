@@ -39,7 +39,6 @@ public sealed class PrisonFaunaPopulationSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly BiomeSystem _biome = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -409,7 +408,7 @@ public sealed class PrisonFaunaPopulationSystem : EntitySystem
     {
         _nearbyGrids.Clear();
         var bounds = Box2.CenteredAround(center, Vector2.One * (radius * 2f + 1f));
-        _mapManager.FindGridsIntersecting(Transform(mapUid).MapID, bounds, ref _nearbyGrids);
+        _map.FindGridsIntersecting(Transform(mapUid).MapID, bounds, ref _nearbyGrids);
         foreach (var grid in _nearbyGrids)
         {
             if (grid.Owner != mapUid)

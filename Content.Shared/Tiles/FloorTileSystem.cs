@@ -24,7 +24,6 @@ namespace Content.Shared.Tiles;
 public sealed class FloorTileSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinitionManager = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
@@ -77,7 +76,7 @@ public sealed class FloorTileSystem : EntitySystem
         if (mapGrid == null || _map.GetTileRef(location.EntityId, mapGrid, location).Tile.IsEmpty)
         {
             var state = (InRange: true, Grid: location.EntityId);
-            _mapManager.FindGridsIntersecting(locationMap.MapId,
+            _map.FindGridsIntersecting(locationMap.MapId,
                 new Box2(locationMap.Position - CheckRange, locationMap.Position + CheckRange), ref state,
                 static (EntityUid entityUid, MapGridComponent grid, ref (bool InRange, EntityUid Grid) state) =>
                 {
@@ -160,7 +159,7 @@ public sealed class FloorTileSystem : EntitySystem
                 if (_netManager.IsClient)
                     return;
 
-                var grid = _mapManager.CreateGridEntity(locationMap.MapId);
+                var grid = _map.CreateGridEntity(locationMap.MapId);
                 var gridXform = Transform(grid);
                 _transform.SetWorldPosition((grid, gridXform), locationMap.Position);
                 location = new EntityCoordinates(grid, Vector2.Zero);

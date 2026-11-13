@@ -14,7 +14,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 
 public sealed class LavalandMinebotCrossSystem : EntitySystem
 {
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly SharedMoverController _mover = default!;

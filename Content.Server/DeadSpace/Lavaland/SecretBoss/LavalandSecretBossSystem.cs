@@ -74,7 +74,6 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly EuiManager _eui = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
 
@@ -602,7 +601,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             OpenRoom(fx, fy, tx, ty);
         }
 
-        var grid = _mapManager.CreateGridEntity(mapId);
+        var grid = _map.CreateGridEntity(mapId);
         _metaData.SetEntityName(grid.Owner, "Celestial maze");
         RemComp<ImplicitRoofComponent>(grid.Owner);
         if (!_tileDefinition.TryGetDefinition(config.MazeFloorTile, out var floorDef))
@@ -644,7 +643,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             comp.FlowerRoom.Add(_transform.ToMapCoordinates(_map.GridTileToLocal(grid.Owner, grid.Comp, new Vector2i(x, y))));
 
         // A tiny grid far away where falling players wait: they see only each other.
-        var holding = _mapManager.CreateGridEntity(mapId);
+        var holding = _map.CreateGridEntity(mapId);
         _transform.SetMapCoordinates(holding.Owner, new MapCoordinates(new Vector2(size + 500, size + 500), mapId));
         var holdingTiles = new List<(Vector2i, Tile)>();
         for (var x = -1; x <= 1; x++)
@@ -679,7 +678,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         parallax.Parallax = config.ArenaParallax;
         Dirty(mapUid, parallax);
 
-        var grid = _mapManager.CreateGridEntity(mapId);
+        var grid = _map.CreateGridEntity(mapId);
         _metaData.SetEntityName(grid.Owner, "Celestial arena");
         RemComp<ImplicitRoofComponent>(grid.Owner);
         if (!_tileDefinition.TryGetDefinition(config.ArenaTile, out var glass))

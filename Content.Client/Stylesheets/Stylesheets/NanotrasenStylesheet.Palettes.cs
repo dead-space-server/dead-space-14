@@ -5,7 +5,7 @@ using Content.Client.DeadSpace.Stylesheets;
 
 namespace Content.Client.Stylesheets.Stylesheets;
 
-public sealed partial class NanotrasenStylesheet
+public partial class NanotrasenStylesheet
 {
     // DS14-start: safe dark chrome for interfaces that have not been explicitly migrated yet
     public override ColorPalette PrimaryPalette => DeadSpaceStylePalette.PrimaryPalette;

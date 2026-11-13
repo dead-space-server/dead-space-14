@@ -1,6 +1,5 @@
 ﻿using Content.Server.StationEvents.Events;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.StationEvents.Components;
 
@@ -11,6 +10,6 @@ namespace Content.Server.StationEvents.Components;
 [RegisterComponent, Access(typeof(AnomalySpawnRule))]
 public sealed partial class AnomalySpawnRuleComponent : Component
 {
-    [DataField("anomalySpawnerPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("anomalySpawnerPrototype")]
     public string AnomalySpawnerPrototype = "RandomAnomalySpawner";
 }

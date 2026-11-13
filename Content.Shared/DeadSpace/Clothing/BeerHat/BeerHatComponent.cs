@@ -6,7 +6,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Prototypes;
 using Content.Shared.Clothing.EntitySystems;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.DeadSpace.Clothing;
 
@@ -27,7 +26,7 @@ public sealed partial class BeerHatComponent : Component
     [DataField]
     public ProtoId<EdiblePrototype> Edible = IngestionSystem.Drink;
 
-    [DataField("Action", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("Action")]
 
     public string Action = "ActionDrinkFromBeerHat";
     [DataField("ActionEntity")]

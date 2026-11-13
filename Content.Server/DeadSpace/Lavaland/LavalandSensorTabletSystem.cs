@@ -40,7 +40,6 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!;
     [Dependency] private readonly LavalandSecretBossSystem _secretBoss = default!;
@@ -451,7 +450,7 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
         }
 
         var grids = new List<Entity<MapGridComponent>>();
-        _mapManager.FindGridsIntersecting(userXform.MapID,
+        _map.FindGridsIntersecting(userXform.MapID,
             Box2.CenteredAround(userPosition, new Vector2(ent.Comp.ScanRadius * 2)),
             ref grids, includeMap: true);
         foreach (var grid in grids)

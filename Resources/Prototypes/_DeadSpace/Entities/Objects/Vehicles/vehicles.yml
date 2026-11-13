@@ -75,7 +75,7 @@
     enabled: false
     radius: 10.5
     softness: 2
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
   - type: Destructible
     thresholds:
@@ -167,7 +167,7 @@
     enabled: false
     radius: 10.5
     softness: 2
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
   - type: Destructible
     thresholds:
@@ -273,7 +273,7 @@
     enabled: false
     radius: 10.5
     softness: 2
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
   - type: Destructible
     thresholds:
@@ -372,7 +372,7 @@
     enabled: false
     radius: 10.5
     softness: 2
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
   - type: Destructible
     thresholds:

@@ -290,13 +290,13 @@
     speedModifier: 2.0
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: /Textures/_DeadSpace/SecurityBorg/borg_sec_jaws.rsi
           state: sec_borg_jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: /Textures/_DeadSpace/SecurityBorg/borg_sec_jaws.rsi
           state: sec_borg_jaws_cutter

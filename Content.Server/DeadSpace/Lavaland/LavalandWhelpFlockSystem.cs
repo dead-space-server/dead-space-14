@@ -27,7 +27,6 @@ public sealed class LavalandWhelpFlockSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
 
     private static readonly TimeSpan TriggerInterval = TimeSpan.FromSeconds(0.5);
@@ -160,7 +159,7 @@ public sealed class LavalandWhelpFlockSystem : EntitySystem
     /// <summary>A floor tile with nothing solid on it: no rock, no wall.</summary>
     private bool IsOpenGround(MapCoordinates coords)
     {
-        if (!_mapManager.TryFindGridAt(coords, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coords, out var gridUid, out var grid))
             return false;
 
         var tile = _map.TileIndicesFor(gridUid, grid, coords);

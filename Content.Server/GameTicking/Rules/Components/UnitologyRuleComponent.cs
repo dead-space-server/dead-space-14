@@ -1,7 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Robust.Shared.Audio;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Prototypes;
 using Content.Shared.Damage;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Prototypes;
@@ -68,10 +67,10 @@ public sealed partial class UnitologyRuleComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public bool CburnSended = false;
 
-    [DataField("obeliskPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("obeliskPrototype")]
     public string ObeliskPrototype = "StructureObelisk";
 
-    [DataField("blackObeliskPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("blackObeliskPrototype")]
     public string BlackObeliskPrototype = "StructureBlackObelisk";
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
@@ -145,7 +144,7 @@ public sealed partial class UnitologyRuleComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public SoundSpecifier TransformationsSound = new SoundCollectionSpecifier("DevaEat");
 
-    [DataField("afterGibNecroPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<NecromorfPrototype>))]
+    [DataField("afterGibNecroPrototype")]
     public string AfterGibNecroPrototype = "NecroCorpseCollector";
 
     [DataField]

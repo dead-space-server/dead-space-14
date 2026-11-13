@@ -2,7 +2,6 @@ using System.Threading;
 using Content.Shared.DeadSpace.CodeLock;
 using Robust.Shared.Audio;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.DeadSpace.CodeLock
 {

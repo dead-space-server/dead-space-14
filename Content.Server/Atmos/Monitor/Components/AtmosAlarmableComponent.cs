@@ -1,7 +1,6 @@
 using Content.Shared.Atmos.Monitor;
 using Content.Shared.Tag;
 using Robust.Shared.Audio;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
 
 namespace Content.Server.Atmos.Monitor.Components;
 // AtmosAlarmables are entities that can be alarmed
@@ -44,7 +43,7 @@ public sealed partial class AtmosAlarmableComponent : Component
     /// <summary>
     ///     List of tags to check for when synchronizing alarms.
     /// </summary>
-    [DataField("syncWith", customTypeSerializer: typeof(PrototypeIdHashSetSerializer<TagPrototype>))]
+    [DataField("syncWith")]
     public HashSet<string> SyncWithTags { get; private set; } = new();
 
     [DataField("monitorAlertTypes")]

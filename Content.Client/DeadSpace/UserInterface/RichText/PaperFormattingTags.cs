@@ -280,6 +280,19 @@ internal sealed class PaperFormattingFont : Font
         return advance;
     }
 
+    public override float DrawCharOutline(
+        DrawingHandleBase handle,
+        Rune rune,
+        Vector2 baseline,
+        float scale,
+        TextOutline outline,
+        bool fallback = true)
+    {
+        // The handwriting jitter belongs to the fill pass: the outline stays on the plain glyph and does not
+        // advance the jitter sequence, which would shift the letters drawn after it.
+        return _inner.DrawCharOutline(handle, rune, baseline, scale, outline, fallback);
+    }
+
     public override CharMetrics? GetCharMetrics(Rune rune, float scale, bool fallback = true)
     {
         if (_effects.ConfusionStrength <= 0 || rune.Value == '\n' || rune.Value == '\r')

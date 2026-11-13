@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Content.Server.NPC.Queries;
 using Content.Server.NPC.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.NPC.HTN.PrimitiveTasks.Operators;
 
@@ -26,7 +25,7 @@ public sealed partial class UtilityOperator : HTNOperator
     [DataField("keyCoordinates")]
     public string KeyCoordinates = "TargetCoordinates";
 
-    [DataField("proto", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<UtilityQueryPrototype>))]
+    [DataField("proto", required: true)]
     public string Prototype = string.Empty;
 
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(NPCBlackboard blackboard,

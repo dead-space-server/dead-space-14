@@ -132,14 +132,14 @@ public sealed class ComponentModeSwitcherSystem : EntitySystem
     {
         var state = new ComponentRegistry();
 
-        foreach (var (name, entry) in components)
+        foreach (var (name, _) in components)
         {
             var registration = Factory.GetRegistration(name);
             if (!EntityManager.TryGetComponent(uid, registration.Type, out var component))
                 continue;
 
             var copy = (IComponent) _serialization.CreateCopy(component, notNullableOverride: true);
-            state.Add(name, new EntityPrototype.ComponentRegistryEntry(copy, entry.Mapping));
+            state.Add(name, new EntityPrototype.ComponentRegistryEntry(copy));
         }
 
         return state;

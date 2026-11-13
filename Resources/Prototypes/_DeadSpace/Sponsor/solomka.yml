@@ -297,13 +297,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/solomka/tools_jawsoflife.rsi
           state: jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/solomka/tools_jawsoflife.rsi
           state: jaws_cutter
@@ -341,7 +341,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/solomka/tools_drill.rsi
           state: drill_screw
@@ -349,7 +349,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/solomka/tools_drill.rsi
           state: drill_bolt

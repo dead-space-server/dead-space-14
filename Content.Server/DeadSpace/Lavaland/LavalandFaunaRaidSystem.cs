@@ -36,6 +36,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
+using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
@@ -51,7 +52,6 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
@@ -693,7 +693,7 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
 
             // No grid right around it but the land itself: not in the outpost's walls, not on a shuttle.
             var clear = true;
-            foreach (var grid in _mapManager.FindGridsIntersecting(mapId, Box2.CenteredAround(candidate, new Vector2(2.5f))))
+            foreach (var grid in _map.GridsIntersecting(mapId, Box2.CenteredAround(candidate, new Vector2(2.5f))))
             {
                 if (grid.Owner != map.Owner)
                 {

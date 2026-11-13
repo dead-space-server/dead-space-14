@@ -704,7 +704,7 @@ namespace Content.Server.Communications
             else if (!hex.StartsWith('#'))
                 hex = $"#{hex}";
 
-            return Color.TryFromHex(hex) is { } color
+            return Color.TryFromHex(hex, out var color)
                 ? (hex, color)
                 : (DefaultEmagAnnouncementColor, Color.FromHex(DefaultEmagAnnouncementColor));
         }

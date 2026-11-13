@@ -3,7 +3,6 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Teleportation.Components;
 
@@ -32,10 +31,10 @@ public sealed partial class HandTeleporterComponent : Component
     [DataField]
     public bool AllowPortalsOnDifferentMaps;
 
-    [DataField("firstPortalPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("firstPortalPrototype")]
     public string FirstPortalPrototype = "PortalRed";
 
-    [DataField("secondPortalPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("secondPortalPrototype")]
     public string SecondPortalPrototype = "PortalBlue";
 
     [DataField("newPortalSound")] public SoundSpecifier NewPortalSound =

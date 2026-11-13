@@ -31,7 +31,6 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
 {
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
     [Dependency] private readonly IRobustSerializer _serializer = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
@@ -93,7 +92,7 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
         var mapLight = EnsureComp<MapLightComponent>(mapUid);
         mapLight.AmbientLightColor = Color.FromSrgb(new Color(0.85f, 0.85f, 0.85f));
 
-        var grid = _mapMan.CreateGridEntity(mapId);
+        var grid = _map.CreateGridEntity(mapId);
         var gravity = EnsureComp<GravityComponent>(grid.Owner);
         gravity.Enabled = true;
         gravity.Inherent = true;
@@ -118,13 +117,6 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
             if (entry.Parent < 0)
                 place -= origin;
             var uid = EntityManager.CreateEntityUninitialized(entry.Prototype, new EntityCoordinates(parent, entry.Container.Length == 0 || entry.ShowContents ? place : Vector2.Zero), rotation: entry.LocalRotation);
-            if (entry.Parent < 0 && (entry.Container.Length == 0 || entry.ShowContents))
-            {
-                var xform = Transform(uid);
-#pragma warning disable CS0618
-                xform.Anchored = entry.Anchored;
-#pragma warning restore CS0618
-            }
 
             if (TryComp<GravityAffectedComponent>(uid, out var weight))
                 weight.Weightless = false;
@@ -150,6 +142,20 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
         HideCloaked(spawned, still);
 
         _map.SetTiles(grid.Owner, grid.Comp, finalTiles);
+
+        // Anchoring goes through the transform system now, and needs the floor laid first.
+        for (var i = 0; i < spawned.Count; i++)
+        {
+            var entry = still.Entities[i];
+            if (entry.Parent >= 0 || entry.Container.Length != 0 && !entry.ShowContents)
+                continue;
+
+            var xform = Transform(spawned[i]);
+            if (entry.Anchored && !xform.Anchored)
+                _xform.AnchorEntity(spawned[i], xform);
+            else if (!entry.Anchored && xform.Anchored)
+                _xform.Unanchor(spawned[i], xform);
+        }
 
         for (var i = 0; i < spawned.Count; i++)
             ApplyAppearance(spawned[i], still.Entities[i].Appearance);

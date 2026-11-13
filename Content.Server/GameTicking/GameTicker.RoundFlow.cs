@@ -29,6 +29,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -1132,7 +1133,18 @@ namespace Content.Server.GameTicking
 
             EntityManager.FlushEntities();
 
-            _mapManager.Restart();
+            // The engine no longer has a map manager restart: delete whatever maps survived the flush.
+            var maps = new List<EntityUid>();
+            var mapQuery = EntityQueryEnumerator<MapComponent>();
+            while (mapQuery.MoveNext(out var mapUid, out _))
+            {
+                maps.Add(mapUid);
+            }
+
+            foreach (var mapUid in maps)
+            {
+                Del(mapUid);
+            }
 
             _banManager.Restart();
 

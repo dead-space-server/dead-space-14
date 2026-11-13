@@ -28,7 +28,7 @@ public sealed class BSAConsoleSystem : EntitySystem
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly DeviceListSystem _deviceList = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
 
     private static readonly TimeSpan UiUpdateInterval = TimeSpan.FromMilliseconds(250);
     private const float RadarMaxRange = 512f;

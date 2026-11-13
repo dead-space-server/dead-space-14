@@ -1,8 +1,8 @@
 using Content.Shared.Inventory;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Generic;
 
 namespace Content.Shared.Cloning;
@@ -18,7 +18,7 @@ public sealed partial class CloningSettingsPrototype : IPrototype, IInheritingPr
     [IdDataField]
     public string ID { get; private set; } = default!;
 
-    [ParentDataField(typeof(PrototypeIdArraySerializer<CloningSettingsPrototype>))]
+    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<CloningSettingsPrototype>))]
     public string[]? Parents { get; private set; }
 
     [AbstractDataField]
