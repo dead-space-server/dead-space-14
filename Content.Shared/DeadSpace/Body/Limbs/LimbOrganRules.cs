@@ -122,26 +122,42 @@ public static class LimbOrganRules
         if (chance <= 0f || roll >= chance)
             return 0;
 
-        Span<int> eligible = stackalloc int[Count];
-        var eligibleCount = 0;
         var count = Math.Min(organs.Length, Count);
+        var eligible = 0;
         for (var i = 0; i < count; i++)
         {
-            if (LimbOrganHomes.Home((LimbOrgan) i) != zone || (present & (LimbOrganMask) (1 << i)) == 0)
-                continue;
-
-            if (organs[i].Missing || organs[i].Ruptured)
-                continue;
-
-            eligible[eligibleCount++] = i;
+            if (MayRupture(organs, present, zone, i))
+                eligible++;
         }
 
-        if (eligibleCount == 0)
+        if (eligible == 0)
             return 0;
 
-        var target = eligible[Math.Clamp((int) (pick * eligibleCount), 0, eligibleCount - 1)];
-        organs[target].Ruptured = true;
-        return (LimbOrgan) target == LimbOrgan.Eyes ? EyeRuptureDamage : 0;
+        var wanted = Math.Clamp((int) (pick * eligible), 0, eligible - 1);
+        for (var i = 0; i < count; i++)
+        {
+            if (!MayRupture(organs, present, zone, i))
+                continue;
+
+            if (wanted > 0)
+            {
+                wanted--;
+                continue;
+            }
+
+            organs[i].Ruptured = true;
+            return (LimbOrgan) i == LimbOrgan.Eyes ? EyeRuptureDamage : 0;
+        }
+
+        return 0;
+    }
+
+    private static bool MayRupture(ReadOnlySpan<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, int index)
+    {
+        return LimbOrganHomes.Home((LimbOrgan) index) == zone
+               && (present & (LimbOrganMask) (1 << index)) != 0
+               && !organs[index].Missing
+               && !organs[index].Ruptured;
     }
 
     private static bool Hurt(Span<LimbOrganState> organs, OrganShare share, LimbMark mark, float scaled)
