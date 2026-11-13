@@ -331,7 +331,7 @@
         - to: girder
           completed:
             - !type:SnapToGrid
-              southRotation: true
+              southRotation: false # DS14
             - !type:SpawnPrototype
               prototype: SheetPlasteel1
               amount: 2
