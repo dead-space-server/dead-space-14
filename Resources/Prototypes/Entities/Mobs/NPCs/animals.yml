@@ -249,6 +249,7 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
+      seekBelow: 75 # DS14: looks for food at 75, for water at 50
       decayPerMinute: 0.5
       deprivationDamage:
         types:
@@ -766,6 +767,7 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
+      seekBelow: 75 # DS14: looks for food at 75, for water at 50
       decayPerMinute: 0.5
       deprivationDamage:
         types:
@@ -1004,6 +1006,7 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
+      seekBelow: 75 # DS14: looks for food at 75, for water at 50
       decayPerMinute: 0.7
       deprivationDamage:
         types:
@@ -1225,6 +1228,7 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
+      seekBelow: 75 # DS14: looks for food at 75, for water at 50
       decayPerMinute: 0.7
       deprivationDamage:
         types:
@@ -1389,6 +1393,7 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
+      seekBelow: 75 # DS14: looks for food at 75, for water at 50
       decayPerMinute: 0.7
       deprivationDamage:
         types:
@@ -4243,6 +4248,7 @@
   # DS14-start: husbandry rules instead of the vanilla Satiation and Reproductive
   - type: AnimalNeeds
     satiety:
+      seekBelow: 75 # DS14: looks for food at 75, for water at 50
       decayPerMinute: 0.7
       deprivationDamage:
         types:

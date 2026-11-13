@@ -45,8 +45,9 @@ public sealed class BeeAISystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private readonly HashSet<Entity<PollinationComponent>> _flowers = new();
-    private readonly List<EntityCoordinates> _players = new();
+    private readonly List<MapCoordinates> _players = new();
     private TimeSpan _nextPlayerScan;
+    private static readonly TimeSpan SleepingThinkInterval = TimeSpan.FromSeconds(2);
 
     public override void Initialize()
     {
@@ -95,6 +96,8 @@ public sealed class BeeAISystem : EntitySystem
             if (!IsPlayerNear(xform.Coordinates, bee.ActiveRange))
             {
                 StopFlying((uid, bee));
+                // Nobody is around: look again rarely, a player does not arrive in a second from 40 tiles away.
+                bee.NextThink = now + SleepingThinkInterval;
                 continue;
             }
 
@@ -131,13 +134,16 @@ public sealed class BeeAISystem : EntitySystem
             while (players.MoveNext(out var uid, out _, out var xform))
             {
                 if (!HasComp<GhostComponent>(uid))
-                    _players.Add(xform.Coordinates);
+                    _players.Add(_transform.GetMapCoordinates(uid, xform));
             }
         }
 
+        // One conversion, then only squared distances: this is called for every bee and every hive.
+        var map = _transform.ToMapCoordinates(coordinates);
+        var rangeSquared = range * range;
         foreach (var player in _players)
         {
-            if (coordinates.TryDistance(EntityManager, player, out var distance) && distance <= range)
+            if (player.MapId == map.MapId && (player.Position - map.Position).LengthSquared() <= rangeSquared)
                 return true;
         }
 

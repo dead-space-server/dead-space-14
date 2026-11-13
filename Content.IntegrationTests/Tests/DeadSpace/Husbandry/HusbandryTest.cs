@@ -56,6 +56,11 @@ public sealed class HusbandryTest
                     Assert.That(server.EntMan.HasComponent<AnimalBreedingComponent>(animal), Is.True, $"{id} breeds");
                     Assert.That(server.EntMan.HasComponent<SatiationComponent>(animal), Is.False, $"{id} has no vanilla satiation");
                     Assert.That(server.EntMan.HasComponent<ReproductiveComponent>(animal), Is.False, $"{id} has no vanilla breeding");
+
+                    // Hunts for food at 75 of 100, for water at 50.
+                    var needs = server.EntMan.GetComponent<AnimalNeedsComponent>(animal);
+                    Assert.That(needs.Satiety.SeekBelow, Is.EqualTo(75f), $"{id} looks for food at 75");
+                    Assert.That(needs.Hydration.SeekBelow, Is.EqualTo(50f), $"{id} looks for water at 50");
                 });
             }
         });
@@ -370,6 +375,8 @@ public sealed class HusbandryTest
             var ents = server.EntMan;
             var xforms = server.System<SharedTransformSystem>();
             bee = ents.SpawnEntity("MobBeeWorker", map.GridCoords);
+            // Only the flight is under test: with nobody near, the brain of a bee would stop it (see BeeAISystem).
+            ents.RemoveComponent<BeeComponent>(bee);
             start = xforms.GetWorldPosition(bee);
 
             var target = map.GridCoords.Offset(new System.Numerics.Vector2(4f, 0f));

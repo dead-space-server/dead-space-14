@@ -7,9 +7,11 @@ using Content.Server.NPC.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.DeadSpace.Husbandry.Needs;
+using Content.Shared.DeadSpace.Husbandry.Pen;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
+using Prometheus;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -41,13 +43,49 @@ public sealed class AnimalFarmSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
+    [Dependency] private readonly SharedAnimalNeedsSystem _needs = default!;
+
+    private static readonly Gauge CycleMsGauge = Metrics.CreateGauge(
+        "husbandry_farm_cycle_ms",
+        "Time the last cycle of the animal farm took, in milliseconds");
+
+    private static readonly Gauge ProcessedGauge = Metrics.CreateGauge(
+        "husbandry_farm_animals_processed",
+        "Animals the last cycle of the animal farm looked at");
+
+    private static readonly Gauge WaitingGauge = Metrics.CreateGauge(
+        "husbandry_farm_animals_waiting",
+        "Hungry or thirsty animals with a sleeping AI at the last cycle of the animal farm");
 
     private TimeSpan _next;
     private int _cursor;
     private readonly List<EntityUid> _animals = new();
-    private readonly HashSet<Entity<AnimalFeederComponent>> _feeders = new();
-    private readonly HashSet<Entity<EdibleComponent>> _foods = new();
-    private readonly HashSet<Entity<DrainableSolutionComponent>> _waters = new();
+    private readonly System.Diagnostics.Stopwatch _watch = new();
+
+    // What lies in a pen, looked up once per cycle for all the animals of that pen.
+    private readonly Dictionary<AnimalPen, PenView> _views = new();
+    private readonly Stack<PenView> _spareViews = new();
+    private readonly HashSet<Entity<AnimalFeederComponent>> _feederSet = new();
+    private readonly HashSet<Entity<EdibleComponent>> _foodSet = new();
+    private readonly HashSet<Entity<DrainableSolutionComponent>> _waterSet = new();
+
+    private sealed class PenView
+    {
+        public readonly List<Entity<AnimalFeederComponent>> Feeders = new();
+        public readonly List<Entity<EdibleComponent>> Foods = new();
+        public readonly List<Entity<DrainableSolutionComponent>> Waters = new();
+        public bool FeedersKnown;
+        public bool FoodsKnown;
+        public bool WatersKnown;
+
+        public void Reset()
+        {
+            Feeders.Clear();
+            Foods.Clear();
+            Waters.Clear();
+            FeedersKnown = FoodsKnown = WatersKnown = false;
+        }
+    }
 
     public override void Update(float frameTime)
     {
@@ -62,20 +100,25 @@ public sealed class AnimalFarmSystem : EntitySystem
         if (!_cfg.GetCVar(CCVars.HusbandryFarmEnabled))
             return;
 
+        _watch.Restart();
         _animals.Clear();
         var query = EntityQueryEnumerator<AnimalNeedsComponent, DietComponent, AnimalPenComponent, HTNComponent>();
         while (query.MoveNext(out var uid, out var needs, out _, out _, out var htn))
         {
             // The cheapest tests first: most animals are not hungry and cost nothing here.
-            if (!IsHungryOrThirsty(needs) || !IsAsleepOnTheFarm(uid, htn))
+            if (!WantsToSearch((uid, needs)) || !IsAsleepOnTheFarm(uid, htn))
                 continue;
 
             _animals.Add(uid);
         }
 
+        WaitingGauge.Set(_animals.Count);
+
         if (_animals.Count == 0)
         {
             _cursor = 0;
+            ProcessedGauge.Set(0);
+            CycleMsGauge.Set(_watch.Elapsed.TotalMilliseconds);
             return;
         }
 
@@ -83,19 +126,47 @@ public sealed class AnimalFarmSystem : EntitySystem
         if (_cursor >= _animals.Count)
             _cursor = 0;
 
-        for (var i = 0; i < budget; i++)
+        var done = 0;
+        for (; done < budget; done++)
         {
-            var animal = _animals[(_cursor + i) % _animals.Count];
+            var animal = _animals[(_cursor + done) % _animals.Count];
             if (!TerminatingOrDeleted(animal))
                 Simulate(animal);
         }
 
-        _cursor = (_cursor + budget) % _animals.Count;
+        _cursor = (_cursor + done) % _animals.Count;
+
+        foreach (var view in _views.Values)
+        {
+            view.Reset();
+            _spareViews.Push(view);
+        }
+
+        _views.Clear();
+
+        ProcessedGauge.Set(done);
+        CycleMsGauge.Set(_watch.Elapsed.TotalMilliseconds);
     }
 
-    private static bool IsHungryOrThirsty(AnimalNeedsComponent needs)
+    /// <summary>
+    /// The animal is hungry (thirsty) and has not looked for it lately: a search that found nothing, or a meal, is
+    /// put off with <see cref="SharedAnimalNeedsSystem.DelaySearch"/>, so an empty pen costs nothing for a while.
+    /// </summary>
+    private bool WantsToSearch(Entity<AnimalNeedsComponent> animal)
     {
-        return needs.Satiety.Value <= needs.Satiety.SeekBelow || needs.Hydration.Value <= needs.Hydration.SeekBelow;
+        var needs = animal.Comp;
+        return needs.Satiety.Value <= needs.Satiety.SeekBelow && _needs.CanSearch(animal, true) ||
+               needs.Hydration.Value <= needs.Hydration.SeekBelow && _needs.CanSearch(animal, false);
+    }
+
+    private PenView ViewOf(AnimalPen pen)
+    {
+        if (_views.TryGetValue(pen, out var view))
+            return view;
+
+        view = _spareViews.Count > 0 ? _spareViews.Pop() : new PenView();
+        _views[pen] = view;
+        return view;
     }
 
     /// <summary>
@@ -117,35 +188,57 @@ public sealed class AnimalFarmSystem : EntitySystem
             _pens.GetPen((animal, penComp)) is not { } pen)
             return;
 
-        // Each need on its own: what it takes, where it takes it from and how much is different.
-        if (needs.Satiety.Value <= needs.Satiety.SeekBelow)
-            TryEat((animal, diet), pen);
+        var view = ViewOf(pen);
 
-        if (needs.Hydration.Value <= needs.Hydration.SeekBelow)
-            TryDrink((animal, diet), pen);
+        // Each need on its own: what it takes, where it takes it from and how much is different. An animal that
+        // found nothing does not look again for a while (an empty pen is remembered); one that ate goes on at the
+        // next cycle, until it is full, so the animals of a pen eat together.
+        if (needs.Satiety.Value <= needs.Satiety.SeekBelow && _needs.CanSearch((animal, needs), true) &&
+            !TryEat((animal, diet), pen, view))
+        {
+            _needs.DelaySearch((animal, needs), true);
+        }
+
+        if (needs.Hydration.Value <= needs.Hydration.SeekBelow && _needs.CanSearch((animal, needs), false) &&
+            !TryDrink((animal, diet), pen, view))
+        {
+            _needs.DelaySearch((animal, needs), false);
+        }
     }
 
     /// <summary>
     /// Eats from a feeder of the pen, or else what lies on the floor of it, a few bites at most.
     /// </summary>
-    private void TryEat(Entity<DietComponent> animal, Content.Shared.DeadSpace.Husbandry.Pen.AnimalPen pen)
+    private bool TryEat(Entity<DietComponent> animal, AnimalPen pen, PenView view)
     {
         var bites = animal.Comp.OfflineBites;
 
-        _pens.GetEntitiesInPen(pen, _feeders, adjacent: true);
-        foreach (var feeder in _feeders)
+        if (!view.FeedersKnown)
         {
-            while (bites > 0 && _feeding.TryFindFood(animal, feeder, out var item) && _feeding.EatNow(animal, item))
+            _pens.GetEntitiesInPen(pen, _feederSet, adjacent: true);
+            view.Feeders.AddRange(_feederSet);
+            view.FeedersKnown = true;
+        }
+
+        foreach (var feeder in view.Feeders)
+        {
+            while (bites > 0 && !TerminatingOrDeleted(feeder) && _feeding.TryFindFood(animal, feeder, out var item) && _feeding.EatNow(animal, item))
             {
                 bites--;
             }
 
             if (bites <= 0)
-                return;
+                return true;
         }
 
-        _pens.GetEntitiesInPen(pen, _foods, adjacent: true);
-        foreach (var food in _foods)
+        if (!view.FoodsKnown)
+        {
+            _pens.GetEntitiesInPen(pen, _foodSet, adjacent: true);
+            view.Foods.AddRange(_foodSet);
+            view.FoodsKnown = true;
+        }
+
+        foreach (var food in view.Foods)
         {
             while (bites > 0 && !TerminatingOrDeleted(food) && _feeding.CanEat(animal, food) && _feeding.EatNow(animal, food))
             {
@@ -153,27 +246,37 @@ public sealed class AnimalFarmSystem : EntitySystem
             }
 
             if (bites <= 0)
-                return;
+                return true;
         }
+
+        return bites < animal.Comp.OfflineBites;
     }
 
     /// <summary>
     /// Drinks from a container of the pen that has a drink in it, a few sips at most.
     /// </summary>
-    private void TryDrink(Entity<DietComponent> animal, Content.Shared.DeadSpace.Husbandry.Pen.AnimalPen pen)
+    private bool TryDrink(Entity<DietComponent> animal, AnimalPen pen, PenView view)
     {
         var sips = animal.Comp.OfflineBites;
 
-        _pens.GetEntitiesInPen(pen, _waters, adjacent: true);
-        foreach (var water in _waters)
+        if (!view.WatersKnown)
         {
-            while (sips > 0 && _feeding.CanDrink(animal, water) && _feeding.DrinkNow(animal, water))
+            _pens.GetEntitiesInPen(pen, _waterSet, adjacent: true);
+            view.Waters.AddRange(_waterSet);
+            view.WatersKnown = true;
+        }
+
+        foreach (var water in view.Waters)
+        {
+            while (sips > 0 && !TerminatingOrDeleted(water) && _feeding.CanDrink(animal, water) && _feeding.DrinkNow(animal, water))
             {
                 sips--;
             }
 
             if (sips <= 0)
-                return;
+                return true;
         }
+
+        return sips < animal.Comp.OfflineBites;
     }
 }
