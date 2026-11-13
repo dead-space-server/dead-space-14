@@ -126,7 +126,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private readonly Dictionary<string, int> _fields = new();
     private readonly bool[] _fireBlocked = new bool[LimbWoundRules.BodyZoneCount];
-    private readonly float[] _wornBefore = new float[LimbWoundRules.BodyZoneCount];
     private readonly HashSet<EntityUid> _legless = new();
 
     private const SlotFlags Worn = SlotFlags.WITHOUT_POCKET;
@@ -244,12 +243,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         var bleed = BleedTotal(uid, limbs);
-        LostShares(limbs, _wornBefore);
         if (!Machine(uid) && LimbWoundRules.DrainBleed(zones, limbs.TorsoPool))
             Dirty(uid, limbs);
         ApplyLife(uid, limbs);
-        if (RuptureWorn(uid, limbs, _wornBefore))
-            Dirty(uid, limbs);
         var failure = LimbOrganRules.Tick(CollectionsMarshal.AsSpan(limbs.Organs));
         if (_mobs.IsCritical(uid))
             failure = failure with { Asphyxiation = failure.Asphyxiation + LimbWoundRules.CritAir };
@@ -1689,6 +1685,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var count = Math.Min(zones.Length, LimbWoundRules.BodyZoneCount);
         var worn = new float[LimbWoundRules.BodyZoneCount];
         LostShares(ent.Comp, worn);
+        var mech = new bool[LimbWoundRules.BodyZoneCount];
         var heat = new float[count];
         var pierce = new float[count];
         var blunt = new float[count];
@@ -1736,6 +1733,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 }
 
                 var zoneDamage = heat[i] + pierce[i] + blunt[i] + slash[i] + caustic[i] + other[i];
+                mech[i] = pierce[i] > 0f || blunt[i] > 0f || slash[i] > 0f;
                 if (LimbWoundRules.TryBlastSever(args.Distance, BlastBlocked(ent, (LimbZone) i), _random.NextFloat(), (LimbZone) i, zoneDamage))
                     sever.Add((LimbZone) i);
             }
@@ -1760,7 +1758,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!changed)
             return;
 
-        RuptureWorn(ent.Owner, ent.Comp, worn);
+        RuptureWorn(ent.Owner, ent.Comp, worn, mech);
         Dirty(ent);
         ApplyLife(ent.Owner, ent.Comp);
         RefreshActive(ent.Owner, ent.Comp);
@@ -2122,7 +2120,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
     }
 
-    private bool RuptureWorn(EntityUid uid, LimbBodyComponent limbs, float[] before)
+    private bool RuptureWorn(EntityUid uid, LimbBodyComponent limbs, float[] before, bool[] mechanical)
     {
         EnsureZones(limbs);
         var zones = CollectionsMarshal.AsSpan(limbs.Zones);
@@ -2130,11 +2128,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var any = false;
         for (var i = 0; i < count; i++)
         {
-            if (zones[i].Severed || before[i] >= LimbOrganRules.RuptureShare)
+            if (zones[i].Severed || !LimbOrganRules.ShouldRupture(before[i]))
                 continue;
 
-            var zone = (LimbZone) i;
-            any |= RuptureIf(uid, limbs, zone, LimbWoundRules.LostShare(zones[i], LimbWoundRules.HealthFor(zone, limbs)));
+            if (i >= mechanical.Length || !mechanical[i])
+                continue;
+
+            any |= RuptureIf(uid, limbs, (LimbZone) i, before[i]);
         }
 
         return any;
@@ -2142,7 +2142,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private bool RuptureIf(EntityUid uid, LimbBodyComponent limbs, LimbZone zone, float lost)
     {
-        if (lost < LimbOrganRules.RuptureShare || !LimbWoundRules.IsBody(zone))
+        if (!LimbWoundRules.IsBody(zone) || !LimbOrganRules.ShouldRupture(lost))
             return false;
 
         EnsureOrgans(limbs);
@@ -2151,7 +2151,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var heart = (int) LimbOrgan.Heart;
         var brainWas = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartWas = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
-        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, lost);
+        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), _random.NextFloat());
         var brainNow = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartNow = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
         if (eyes > 0 && TryComp<BlindableComponent>(uid, out var blind))
@@ -2185,8 +2185,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 RefreshPosture(uid, limbs);
             if (_net.IsServer && !limbs.Soft && !state.Severed)
                 LimbWoundRules.RollCrack(ref state, lost, _random.NextFloat());
-            if (_net.IsServer)
-                RuptureIf(uid, limbs, strike.Zone, LimbWoundRules.LostShare(state, LimbWoundRules.HealthFor(strike.Zone, limbs)));
+            if (_net.IsServer && !state.Severed
+                && LimbOrganRules.ShouldRupture(lost)
+                && strike.Mark is LimbMark.Edge or LimbMark.Point or LimbMark.Blunt)
+                RuptureIf(uid, limbs, strike.Zone, lost);
             Dirty(uid, limbs);
         }
 
