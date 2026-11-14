@@ -3,6 +3,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
 using Content.Shared.DeadSpace.Player;
+using Content.Shared.DeadSpace.Wizard.Runes; //DS-14
 using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Hitscan.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -11,6 +12,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Timing; //DS-14
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Weapons.Hitscan.Systems;
@@ -22,6 +24,7 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
     [Dependency] private readonly ISharedAdminLogManager _log = default!;
     [Dependency] private readonly SharedPointLightSystem _lights = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IGameTiming _timing = default!; //DS-14
 
     private EntityQuery<HitscanBasicVisualsComponent> _visualsQuery;
 
@@ -54,6 +57,8 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
                 (hit.HitEntity == target || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true));
 
         var distanceTried = result?.Distance ?? ent.Comp.MaxDistance;
+        var hold = 0f; //DS-14
+        var stopInside = TryStopHitscan(ent, mapCords, ref args, ref result, ref distanceTried, out hold); //DS-14
 
         // DS14-start: aggregate the visual trace and render it after reflection handling.
         var isRoot = false;
@@ -64,7 +69,18 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
         }
 
         if (GenerateTraceStep(args.FromCoordinates, distanceTried, args.ShotDirection.ToAngle(), result?.HitEntity) is { } trace)
+        {
+            trace.HoldSeconds = hold;
             args.OutputTrace.Add(trace);
+        }
+
+        if (stopInside)
+        {
+            if (isRoot)
+                FireEffects(ent.Owner, args.OutputTrace);
+
+            return;
+        }
         // DS14-end
 
         // Do visuals without an event. They should always happen and putting it on the attempt event is weird!
@@ -236,6 +252,119 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
             CastShadows = light.CastShadows,
             Offset = light.Offset,
         };
+    }
+
+    private bool TryStopHitscan(
+        Entity<HitscanBasicRaycastComponent> ent,
+        MapCoordinates from,
+        ref HitscanTraceEvent args,
+        ref RayCastResults? result,
+        ref float distanceTried,
+        out float hold)
+    {
+        hold = 0f;
+        var direction = args.ShotDirection;
+        var length = direction.Length();
+        if (length < 0.001f)
+            return false;
+
+        direction /= length;
+        RuneTimeStopCircleComponent? nearest = null;
+        var enter = float.MaxValue;
+        var inside = false;
+
+        var query = EntityQueryEnumerator<RuneTimeStopCircleComponent>();
+        while (query.MoveNext(out var circle))
+        {
+            if (circle.MapId != from.MapId || _timing.CurTime >= circle.End)
+                continue;
+
+            if ((from.Position - circle.Origin).LengthSquared() <= circle.Radius * circle.Radius)
+            {
+                nearest = circle;
+                inside = true;
+                break;
+            }
+
+            if (!TryEnterCircle(from.Position, direction, circle.Origin, circle.Radius, out var distance))
+                continue;
+
+            if (distance >= distanceTried || distance >= enter)
+                continue;
+
+            nearest = circle;
+            enter = distance;
+        }
+
+        if (nearest == null)
+            return false;
+
+        var proto = MetaData(ent.Owner).EntityPrototype?.ID;
+        if (string.IsNullOrEmpty(proto))
+            return false;
+
+        if (inside)
+        {
+            distanceTried = 0f;
+            result = null;
+            hold = (float) (nearest.End - _timing.CurTime).TotalSeconds;
+            nearest.Held.Add(new RuneHeldHitscan
+            {
+                Proto = proto,
+                From = from,
+                Direction = direction,
+                MaxDistance = ent.Comp.MaxDistance,
+                Gun = args.Gun,
+                Shooter = args.Shooter,
+                Target = args.Target,
+                Ignored = args.IgnoredEntities is { } ignored ? new List<EntityUid>(ignored) : null,
+            });
+            return true;
+        }
+
+        distanceTried = enter;
+        result = null;
+        var speed = 315f;
+        if (_visualsQuery.TryComp(ent.Owner, out var visuals))
+            speed = MathF.Max(visuals.Speed, 1f);
+
+        var flight = enter * 5f / speed;
+        hold = MathF.Max(0f, (float) (nearest.End - _timing.CurTime).TotalSeconds - flight);
+        var left = ent.Comp.MaxDistance - enter;
+        if (left > 0.05f)
+        {
+            nearest.Held.Add(new RuneHeldHitscan
+            {
+                Proto = proto,
+                From = new MapCoordinates(from.Position + direction * enter, from.MapId),
+                Direction = direction,
+                MaxDistance = left,
+                Gun = args.Gun,
+                Shooter = args.Shooter,
+                Target = args.Target,
+                Ignored = args.IgnoredEntities is { } ignored ? new List<EntityUid>(ignored) : null,
+            });
+        }
+
+        return false;
+    }
+
+    private static bool TryEnterCircle(Vector2 origin, Vector2 direction, Vector2 center, float radius, out float distance)
+    {
+        var from = origin - center;
+        var b = 2f * Vector2.Dot(from, direction);
+        var c = from.LengthSquared() - radius * radius;
+        var disc = b * b - 4f * c;
+        distance = 0f;
+        if (disc < 0f)
+            return false;
+
+        var near = (-b - MathF.Sqrt(disc)) * 0.5f;
+        if (near < 0f)
+            return false;
+
+        distance = near;
+        return true;
     }
     // DS14-end
 }

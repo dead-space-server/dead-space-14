@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Shared.Friction;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -15,8 +16,9 @@ public sealed class RuneProjectileHoldSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<PhysicsUpdateBeforeSolveEvent>(OnPhysics);
-        SubscribeLocalEvent<PhysicsUpdateAfterSolveEvent>(OnPhysicsAfter);
+        var after = new[] { typeof(TileFrictionController) };
+        SubscribeLocalEvent<PhysicsUpdateBeforeSolveEvent>(OnPhysics, null, after);
+        SubscribeLocalEvent<PhysicsUpdateAfterSolveEvent>(OnPhysicsAfter, null, after);
     }
 
     private void OnPhysics(ref PhysicsUpdateBeforeSolveEvent ev)

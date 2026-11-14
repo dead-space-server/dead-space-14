@@ -12,6 +12,8 @@ using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
+using Content.Shared.Weapons.Hitscan.Components;
+using Content.Shared.Weapons.Hitscan.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
@@ -65,7 +67,7 @@ public sealed partial class RuneCasterSystem
         SubscribeLocalEvent<RuneFrozenComponent, ChangeDirectionAttemptEvent>(OnFrozenDirection);
         SubscribeLocalEvent<RuneTimeStopFieldComponent, ComponentShutdown>(OnFieldShutdown);
         SubscribeLocalEvent<PhysicsUpdateAfterSolveEvent>(OnPhysicsAfter);
-        SubscribeLocalEvent<PhysicsUpdateBeforeSolveEvent>(OnPhysicsBefore);
+        SubscribeLocalEvent<PhysicsUpdateBeforeSolveEvent>(OnPhysicsBefore, new[] { typeof(RuneProjectileHoldSystem) }, null);
     }
 
     private void StartTimeStop(RuneCastContext ctx, RuneTimeStopEffect effect)
@@ -81,6 +83,12 @@ public sealed partial class RuneCasterSystem
         comp.Origin = center.Position;
         comp.MapId = center.MapId;
         comp.End = Timing.CurTime + TimeSpan.FromSeconds(duration);
+
+        var circle = EnsureComp<RuneTimeStopCircleComponent>(field);
+        circle.Origin = comp.Origin;
+        circle.Radius = comp.Radius;
+        circle.MapId = comp.MapId;
+        circle.End = comp.End;
 
         foreach (var (coords, _) in Positions(ctx, RuneSpawnPattern.AreaAtPoint, (int) MathF.Ceiling(radius) + 1))
         {
@@ -171,7 +179,22 @@ public sealed partial class RuneCasterSystem
         while (query.MoveNext(out var uid, out var field))
         {
             if (Timing.CurTime < field.End)
+            {
+                CatchMobs(uid, field);
                 CatchProjectiles(uid, field, dt);
+            }
+        }
+    }
+
+    private void CatchMobs(EntityUid fieldUid, RuneTimeStopFieldComponent field)
+    {
+        var center = new MapCoordinates(field.Origin, field.MapId);
+        foreach (var mob in _lookup.GetEntitiesInRange<MobStateComponent>(center, field.Radius))
+        {
+            if (mob.Owner == field.Caster || mob.Owner == fieldUid || field.Frozen.Contains(mob.Owner))
+                continue;
+
+            Freeze(mob.Owner, fieldUid, field, true);
         }
     }
 
@@ -337,6 +360,20 @@ public sealed partial class RuneCasterSystem
 
         if (mob)
         {
+            var here = _transform.GetWorldPosition(ent);
+            if (TryComp<PhysicsComponent>(ent, out var mobBody))
+            {
+                state.Velocity = _physics.GetMapLinearVelocity(ent, mobBody);
+                state.Angular = mobBody.AngularVelocity;
+                if (mobBody.BodyType != BodyType.Static)
+                    state.Body = mobBody.BodyType;
+            }
+
+            state.Hold = true;
+            state.HoldPosition = here;
+            var pin = EnsureComp<RuneProjectileHoldComponent>(ent);
+            pin.Position = here;
+            Dirty(ent, pin);
             _blocker.UpdateCanMove(ent);
             return;
         }
@@ -399,6 +436,8 @@ public sealed partial class RuneCasterSystem
 
     private void OnFieldShutdown(Entity<RuneTimeStopFieldComponent> ent, ref ComponentShutdown args)
     {
+        var held = TakeHeldShots(ent.Owner);
+
         foreach (var frozen in ent.Comp.Frozen)
         {
             if (TerminatingOrDeleted(frozen) || !TryComp<RuneFrozenComponent>(frozen, out var state))
@@ -423,14 +462,13 @@ public sealed partial class RuneCasterSystem
             if (stoppedNpc && TryComp<HTNComponent>(frozen, out var htn))
                 _htn.SetHTNEnabled((frozen, htn), true);
 
-            if (!mob)
-            {
-                if (bodyType is { } restored)
-                    _physics.SetBodyType(frozen, restored);
-                _physics.SetLinearVelocity(frozen, velocity);
-                _physics.SetAngularVelocity(frozen, angular);
-            }
-            else
+            if (bodyType is { } restored)
+                _physics.SetBodyType(frozen, restored);
+
+            _physics.SetLinearVelocity(frozen, velocity);
+            _physics.SetAngularVelocity(frozen, angular);
+
+            if (mob)
             {
                 _blocker.UpdateCanMove(frozen);
                 _popup.PopupEntity(Loc.GetString("rune-time-stop-end"), frozen, frozen, PopupType.LargeCaution);
@@ -441,5 +479,45 @@ public sealed partial class RuneCasterSystem
         }
 
         ent.Comp.Frozen.Clear();
+        ReleaseHitscans(held);
+    }
+
+    private List<RuneHeldHitscan> TakeHeldShots(EntityUid field)
+    {
+        if (!TryComp<RuneTimeStopCircleComponent>(field, out var circle))
+            return new();
+
+        var held = circle.Held;
+        circle.Held = new();
+        circle.End = TimeSpan.Zero;
+        return held;
+    }
+
+    private void ReleaseHitscans(List<RuneHeldHitscan> held)
+    {
+        foreach (var shot in held)
+        {
+            if (shot.Proto.Length == 0 || shot.MaxDistance <= 0.05f)
+                continue;
+
+            var spawned = Spawn(shot.Proto, shot.From);
+            if (!Exists(spawned))
+                continue;
+
+            if (TryComp<HitscanBasicRaycastComponent>(spawned, out var ray))
+                ray.MaxDistance = shot.MaxDistance;
+
+            var trace = new HitscanTraceEvent
+            {
+                FromCoordinates = _transform.ToCoordinates(shot.From),
+                ShotDirection = shot.Direction,
+                Gun = Exists(shot.Gun) ? shot.Gun : spawned,
+                Shooter = shot.Shooter is { } shooter && Exists(shooter) ? shooter : null,
+                Target = shot.Target is { } target && Exists(target) ? target : null,
+                IgnoredEntities = shot.Ignored,
+            };
+            RaiseLocalEvent(spawned, ref trace);
+            Del(spawned);
+        }
     }
 }
