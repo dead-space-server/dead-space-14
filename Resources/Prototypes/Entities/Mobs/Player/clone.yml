@@ -58,6 +58,7 @@
   - SouthernAccent
   - SpanishAccent
   - StutteringAccent
+  - KillPersonConditionMarker #DS14 для антагов
   eventComponents:
   - Vocal # voice sounds
 
