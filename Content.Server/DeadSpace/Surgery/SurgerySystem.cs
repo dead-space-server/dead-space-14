@@ -1226,16 +1226,20 @@ public sealed class SurgerySystem : EntitySystem
     {
         return _prototype.TryIndex<SurgeryAppendagePrototype>(id, out var appendage)
                && TryComp<HumanoidAppearanceComponent>(patient, out var look)
-               && look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list)
-               && list.Count > 0;
+               && SurgeryAppendageRules.Present(look, appendage, _prototype);
     }
 
     private void RemoveAppendage(EntityUid patient, string id)
     {
         if (!_prototype.TryIndex<SurgeryAppendagePrototype>(id, out var appendage)
-            || !TryComp<HumanoidAppearanceComponent>(patient, out var look)
-            || !look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list)
-            || list.Count == 0)
+            || !TryComp<HumanoidAppearanceComponent>(patient, out var look))
+            return;
+
+        look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list);
+        var markings = list is { Count: > 0 };
+        var baseLayer = default(HumanoidVisualLayers);
+        var baseSprite = SurgeryAppendageRules.BaseSprite(look, appendage, _prototype, out baseLayer, out _);
+        if (!markings && !baseSprite)
             return;
 
         TryComp<SurgeryTemplateSwapComponent>(patient, out var swap);
@@ -1246,9 +1250,13 @@ public sealed class SurgerySystem : EntitySystem
         if (part.Revoke.Count > 0)
             EntityManager.AddComponents(patient, part.Revoke);
         part.Appendage = id;
+        part.Base = baseSprite;
         part.Markings.Clear();
-        foreach (var marking in list)
-            part.Markings.Add(new Marking(marking));
+        if (markings)
+        {
+            foreach (var marking in list!)
+                part.Markings.Add(new Marking(marking));
+        }
 
         part.Carry.Clear();
         foreach (var name in appendage.Carry)
@@ -1261,8 +1269,16 @@ public sealed class SurgerySystem : EntitySystem
         }
 
         Dirty(item, part);
-        for (var i = list.Count - 1; i >= 0; i--)
-            _humanoid.RemoveMarking(patient, appendage.Category, i, look);
+        if (markings)
+        {
+            for (var i = list!.Count - 1; i >= 0; i--)
+                _humanoid.RemoveMarking(patient, appendage.Category, i, look);
+        }
+        if (baseSprite)
+        {
+            _humanoid.SetBaseLayerId(patient, baseLayer, SurgeryAppendageRules.MarkingAnchor, false, look);
+            Dirty(patient, look);
+        }
 
         if (appendage.Slots.Count == 0)
             return;
@@ -1300,6 +1316,14 @@ public sealed class SurgerySystem : EntitySystem
         _graft.Grafted(patient, item, LimbZone.Groin, null, part.Appendage);
         foreach (var marking in part.Markings)
             _humanoid.AddMarking(patient, marking.MarkingId, marking.MarkingColors, true, true, look);
+
+        if (part.Base
+            && _prototype.TryIndex<SurgeryAppendagePrototype>(part.Appendage, out var restore)
+            && SurgeryAppendageRules.BaseSprite(look, restore, _prototype, out var tailLayer, out var tailSprite))
+        {
+            _humanoid.SetBaseLayerId(patient, tailLayer, tailSprite, false, look);
+            Dirty(patient, look);
+        }
 
         foreach (var name in part.Carry)
         {

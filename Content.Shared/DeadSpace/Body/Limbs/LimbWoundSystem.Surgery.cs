@@ -55,6 +55,8 @@ public sealed partial class LimbWoundSystem
             state.Bone = 0f;
             state.Bleed = 0f;
         }
+        if (!limbs.Bleeds)
+            state.Bleed = 0f;
         state.Scar = Math.Max(0, state.Scar + edit.Scar);
         var cap = LimbWoundRules.HealthFor(zone, limbs);
         state.Health = edit.SetHealth
@@ -163,7 +165,13 @@ public sealed partial class LimbWoundSystem
             ? MathF.Max(0f, edit.Damage)
             : MathF.Max(0f, state.Damage + edit.Damage);
         if (edit.SetRuptured)
+        {
             state.Ruptured = edit.Ruptured;
+            if (edit.Ruptured)
+                state.BleedStopped = false;
+        }
+        if (edit.SetBleedStopped)
+            state.BleedStopped = edit.BleedStopped;
         if (edit.SetMissing)
             state.Missing = edit.Missing;
         limbs.Organs[index] = state;
@@ -440,6 +448,8 @@ public sealed partial class LimbWoundSystem
             state.Bone = 0f;
             state.Bleed = 0f;
         }
+        if (!limbs.Bleeds)
+            state.Bleed = 0f;
 
         if (LimbWoundRules.TryCarried(zone, out var child))
         {

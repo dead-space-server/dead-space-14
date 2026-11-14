@@ -31,6 +31,12 @@ public sealed class StorageWindow : BaseWindow
 
     public EntityUid? StorageEntity;
 
+    // DS14-start
+    public bool OpenedAsNested;
+
+    private bool _pendingOverlapCheck;
+    // DS14-end
+
     private readonly GridContainer _pieceGrid;
     private readonly GridContainer _backgroundGrid;
     private readonly StorageGridBorderOverlay _gridBorders; // DS14
@@ -205,6 +211,8 @@ public sealed class StorageWindow : BaseWindow
         }
 
         BuildGridRepresentation();
+
+        _pendingOverlapCheck = true; // DS14
     }
 
     private void CloseParent()
@@ -571,6 +579,14 @@ public sealed class StorageWindow : BaseWindow
         if (!IsOpen)
             return;
 
+        // DS14-start
+        if (_pendingOverlapCheck && Visible && Parent != null && Size.X > 0 && Size.Y > 0 && Parent.Size.X > 0)
+        {
+            _pendingOverlapCheck = false;
+            AvoidOverlapWithOtherWindows();
+        }
+        // DS14-end
+
         if (_isDirty)
         {
             _isDirty = false;
@@ -706,13 +722,74 @@ public sealed class StorageWindow : BaseWindow
         if (_storageController.StaticStorageUIEnabled)
             return DragMode.None;
 
-        if (_sidebar.SizeBox.Contains(relativeMousePos - _sidebar.Position))
-        {
+        // DS14-start
+        if (IsInDragGrip(_sidebar, relativeMousePos))
             return DragMode.Move;
-        }
+
+        if (_titleContainer.Visible && IsInDragGrip(_titleContainer, relativeMousePos))
+            return DragMode.Move;
+        // DS14-end
 
         return DragMode.None;
     }
+
+    // DS14-start
+    private const float DragGripMargin = 10f;
+
+    private bool IsInDragGrip(Control control, Vector2 relativeMousePos)
+    {
+        var local = control.GlobalPosition - GlobalPosition;
+        var box = new UIBox2(
+            local - new Vector2(DragGripMargin, DragGripMargin),
+            local + control.Size + new Vector2(DragGripMargin, DragGripMargin));
+        return box.Contains(relativeMousePos);
+    }
+
+    private void AvoidOverlapWithOtherWindows()
+    {
+        if (_storageController.StaticStorageUIEnabled || OpenedAsNested || Parent == null)
+            return;
+
+        const float step = 24f;
+        const int maxTries = 40;
+        var size = Size;
+        var bounds = Parent.Size;
+        var pos = Position;
+        var moved = false;
+
+        for (var i = 0; i < maxTries; i++)
+        {
+            var selfRect = new UIBox2(pos, pos + size);
+            var overlaps = false;
+
+            foreach (var sibling in Parent.Children)
+            {
+                if (sibling == this || sibling is not StorageWindow other || !other.Visible)
+                    continue;
+
+                if (new UIBox2(other.Position, other.Position + other.Size).Intersects(selfRect))
+                {
+                    overlaps = true;
+                    break;
+                }
+            }
+
+            if (!overlaps)
+                break;
+
+            pos += new Vector2(step, step);
+            if (pos.X + size.X > bounds.X || pos.Y + size.Y > bounds.Y)
+                pos = new Vector2(step, step);
+
+            moved = true;
+        }
+
+        if (!moved)
+            return;
+
+        LayoutContainer.SetPosition(this, pos);
+    }
+    // DS14-end
 
     public Vector2i GetMouseGridPieceLocation(Entity<ItemComponent?> entity, ItemStorageLocation location)
     {

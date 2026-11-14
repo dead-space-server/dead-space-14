@@ -9,6 +9,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC;
+using Content.Shared.DeadSpace.Critters; // DS14
 using Content.Shared.NPC.Systems;
 using Prometheus;
 using Robust.Server.GameObjects;
@@ -231,7 +232,7 @@ namespace Content.Server.NPC.Systems
                     continue;
 
                 var active = HasComp<ActiveNPCComponent>(uid);
-                var nearPlayer = HasNearbyPlayer(xform, GetProximitySleepRange(component));
+                var nearPlayer = HasNearbyPlayer(xform, GetProximitySleepRange(uid, component));
 
                 if (nearPlayer)
                 {
@@ -292,8 +293,11 @@ namespace Content.Server.NPC.Systems
             return false;
         }
 
-        private float GetProximitySleepRange(HTNComponent component)
+        private float GetProximitySleepRange(EntityUid uid, HTNComponent component)
         {
+            if (TryComp<CritterGrazeComponent>(uid, out var graze))
+                return graze.SleepRange;
+
             var radius = component.Blackboard.GetValueOrDefault<float>(
                 component.Blackboard.GetVisionRadiusKey(EntityManager),
                 EntityManager);

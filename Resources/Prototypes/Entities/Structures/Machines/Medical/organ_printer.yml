@@ -28,481 +28,514 @@
     entries:
     # сердца
     - product: OrganHumanHeart
-      cost: 30
+      cost: 6
       group: Humanoid
     - product: OrganAnimalHeart
-      cost: 30
+      cost: 6
       group: Feline
     - product: OrganAnimalHeart
-      cost: 30
+      cost: 6
       group: Canine
     - product: OrganAnimalHeart
-      cost: 30
+      cost: 6
       group: Reptilian
     - product: OrganAnimalHeart
-      cost: 30
+      cost: 6
       group: Moth
     - product: OrganAnimalHeart
-      cost: 30
+      cost: 6
       group: Kobolt
     - product: OrganAnimalHeart
-      cost: 30
+      cost: 6
       group: Shark
     - product: OrganAnimalHeart
-      cost: 30
+      cost: 6
       group: Demon
     - product: OrganAnimalHeart
-      cost: 30
+      cost: 6
       group: Felinid
     - product: OrganVoxHeart
-      cost: 30
+      cost: 6
       group: Vox
     - product: OrganArachnidHeart
-      cost: 30
+      cost: 6
       group: Arachnid
+    - product: OrganXenoHeart
+      cost: 6
+      group: Xenomorph
     # лёгкие
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Humanoid
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Feline
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Canine
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Reptilian
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Moth
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Kobolt
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Shark
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Demon
     - product: OrganHumanLungs
-      cost: 25
+      cost: 5
       group: Felinid
     - product: OrganVoxLungs
-      cost: 25
+      cost: 5
       group: Vox
     - product: OrganArachnidLungs
-      cost: 25
+      cost: 5
       group: Arachnid
     # желудки
     - product: OrganHumanStomach
-      cost: 20
+      cost: 4
       group: Humanoid
     - product: OrganTajaranStomach
-      cost: 20
+      cost: 4
       group: Feline
     - product: OrganVulpkaninStomach
-      cost: 20
+      cost: 4
       group: Canine
     - product: OrganReptilianStomach
-      cost: 20
+      cost: 4
       group: Reptilian
     - product: OrganMothStomach
-      cost: 20
+      cost: 4
       group: Moth
     - product: OrganKoboltStomach
-      cost: 20
+      cost: 4
       group: Kobolt
     - product: OrganSharkStomach
-      cost: 20
+      cost: 4
       group: Shark
     - product: OrganDemonStomach
-      cost: 20
+      cost: 4
       group: Demon
     - product: OrganReptilianStomach
-      cost: 20
+      cost: 4
       group: Felinid
     - product: OrganVoxStomach
-      cost: 20
+      cost: 4
       group: Vox
     - product: OrganArachnidStomach
-      cost: 20
+      cost: 4
       group: Arachnid
+    - product: OrganXenoStomach
+      cost: 4
+      group: Xenomorph
     # печень
     - product: OrganHumanLiver
-      cost: 25
+      cost: 5
       group: Humanoid
     - product: OrganAnimalLiver
-      cost: 25
+      cost: 5
       group: Feline
     - product: OrganAnimalLiver
-      cost: 25
+      cost: 5
       group: Canine
     - product: OrganAnimalLiver
-      cost: 25
+      cost: 5
       group: Reptilian
     - product: OrganAnimalLiver
-      cost: 25
+      cost: 5
       group: Moth
     - product: OrganAnimalLiver
-      cost: 25
+      cost: 5
       group: Kobolt
     - product: OrganAnimalLiver
-      cost: 25
+      cost: 5
       group: Shark
     - product: OrganAnimalLiver
-      cost: 25
+      cost: 5
       group: Demon
     - product: OrganVoxLiver
-      cost: 25
+      cost: 5
       group: Vox
     - product: OrganArachnidLiver
-      cost: 25
+      cost: 5
       group: Arachnid
     # почки
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Humanoid
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Feline
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Canine
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Reptilian
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Moth
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Kobolt
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Shark
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Demon
     - product: OrganHumanKidneys
-      cost: 20
+      cost: 4
       group: Felinid
     - product: OrganVoxKidneys
-      cost: 20
+      cost: 4
       group: Vox
     - product: OrganArachnidKidneys
-      cost: 20
+      cost: 4
       group: Arachnid
     # глаза
     - product: OrganHumanEyes
-      cost: 15
+      cost: 3
       group: Humanoid
     - product: OrganHumanEyes
-      cost: 15
+      cost: 3
       group: Feline
     - product: OrganHumanEyes
-      cost: 15
+      cost: 3
       group: Canine
     - product: OrganHumanEyes
-      cost: 15
+      cost: 3
       group: Reptilian
     - product: OrganHumanEyes
-      cost: 15
+      cost: 3
       group: Moth
     - product: OrganHumanEyes
-      cost: 15
+      cost: 3
       group: Kobolt
     - product: OrganHumanEyes
-      cost: 15
+      cost: 3
       group: Shark
     - product: OrganHumanEyes
-      cost: 15
+      cost: 3
       group: Demon
     - product: OrganFelinidEyes
-      cost: 15
+      cost: 3
       group: Felinid
     - product: OrganVoxEyes
-      cost: 15
+      cost: 3
       group: Vox
     - product: OrganArachnidEyes
-      cost: 15
+      cost: 3
       group: Arachnid
+    - product: OrganXenoEyes
+      cost: 3
+      group: Xenomorph
     # уши
     - product: OrganHumanEars
-      cost: 15
+      cost: 3
       group: Humanoid
     # язык
     - product: OrganHumanTongue
-      cost: 15
+      cost: 3
       group: Humanoid
     # руки
     - product: LeftArmHuman
-      cost: 40
+      cost: 8
       group: Humanoid
     - product: RightArmHuman
-      cost: 40
+      cost: 8
       group: Humanoid
     - product: LeftArmTajaran
-      cost: 40
+      cost: 8
       group: Feline
     - product: RightArmTajaran
-      cost: 40
+      cost: 8
       group: Feline
     - product: LeftArmVulpkanin
-      cost: 40
+      cost: 8
       group: Canine
     - product: RightArmVulpkanin
-      cost: 40
+      cost: 8
       group: Canine
     - product: LeftArmReptilian
-      cost: 40
+      cost: 8
       group: Reptilian
     - product: RightArmReptilian
-      cost: 40
+      cost: 8
       group: Reptilian
     - product: LeftArmMoth
-      cost: 40
+      cost: 8
       group: Moth
     - product: RightArmMoth
-      cost: 40
+      cost: 8
       group: Moth
     - product: LeftArmKobolt
-      cost: 40
+      cost: 8
       group: Kobolt
     - product: RightArmKobolt
-      cost: 40
+      cost: 8
       group: Kobolt
     - product: LeftArmShark
-      cost: 40
+      cost: 8
       group: Shark
     - product: RightArmShark
-      cost: 40
+      cost: 8
       group: Shark
     - product: LeftArmDemon
-      cost: 40
+      cost: 8
       group: Demon
     - product: RightArmDemon
-      cost: 40
+      cost: 8
       group: Demon
-    - product: LeftArmHuman
-      cost: 40
+    - product: LeftArmFelinid
+      cost: 8
       group: Felinid
-    - product: RightArmHuman
-      cost: 40
+    - product: RightArmFelinid
+      cost: 8
       group: Felinid
     - product: LeftArmVox
-      cost: 40
+      cost: 8
       group: Vox
     - product: RightArmVox
-      cost: 40
+      cost: 8
       group: Vox
     - product: LeftArmArachnid
-      cost: 40
+      cost: 8
       group: Arachnid
     - product: RightArmArachnid
-      cost: 40
+      cost: 8
       group: Arachnid
+    - product: LeftArmXeno
+      cost: 8
+      group: Xenomorph
+    - product: RightArmXeno
+      cost: 8
+      group: Xenomorph
     # кисти
     - product: LeftHandHuman
-      cost: 25
+      cost: 5
       group: Humanoid
     - product: RightHandHuman
-      cost: 25
+      cost: 5
       group: Humanoid
     - product: LeftHandTajaran
-      cost: 25
+      cost: 5
       group: Feline
     - product: RightHandTajaran
-      cost: 25
+      cost: 5
       group: Feline
     - product: LeftHandVulpkanin
-      cost: 25
+      cost: 5
       group: Canine
     - product: RightHandVulpkanin
-      cost: 25
+      cost: 5
       group: Canine
     - product: LeftHandReptilian
-      cost: 25
+      cost: 5
       group: Reptilian
     - product: RightHandReptilian
-      cost: 25
+      cost: 5
       group: Reptilian
     - product: LeftHandMoth
-      cost: 25
+      cost: 5
       group: Moth
     - product: RightHandMoth
-      cost: 25
+      cost: 5
       group: Moth
     - product: LeftHandKobolt
-      cost: 25
+      cost: 5
       group: Kobolt
     - product: RightHandKobolt
-      cost: 25
+      cost: 5
       group: Kobolt
     - product: LeftHandShark
-      cost: 25
+      cost: 5
       group: Shark
     - product: RightHandShark
-      cost: 25
+      cost: 5
       group: Shark
     - product: LeftHandDemon
-      cost: 25
+      cost: 5
       group: Demon
     - product: RightHandDemon
-      cost: 25
+      cost: 5
       group: Demon
-    - product: LeftHandHuman
-      cost: 25
+    - product: LeftHandFelinid
+      cost: 5
       group: Felinid
-    - product: RightHandHuman
-      cost: 25
+    - product: RightHandFelinid
+      cost: 5
       group: Felinid
     - product: LeftHandVox
-      cost: 25
+      cost: 5
       group: Vox
     - product: RightHandVox
-      cost: 25
+      cost: 5
       group: Vox
     - product: LeftHandArachnid
-      cost: 25
+      cost: 5
       group: Arachnid
     - product: RightHandArachnid
-      cost: 25
+      cost: 5
       group: Arachnid
+    - product: LeftHandXeno
+      cost: 5
+      group: Xenomorph
+    - product: RightHandXeno
+      cost: 5
+      group: Xenomorph
     # ноги
     - product: LeftLegHuman
-      cost: 40
+      cost: 8
       group: Humanoid
     - product: RightLegHuman
-      cost: 40
+      cost: 8
       group: Humanoid
     - product: LeftLegTajaran
-      cost: 40
+      cost: 8
       group: Feline
     - product: RightLegTajaran
-      cost: 40
+      cost: 8
       group: Feline
     - product: LeftLegVulpkanin
-      cost: 40
+      cost: 8
       group: Canine
     - product: RightLegVulpkanin
-      cost: 40
+      cost: 8
       group: Canine
     - product: LeftLegReptilian
-      cost: 40
+      cost: 8
       group: Reptilian
     - product: RightLegReptilian
-      cost: 40
+      cost: 8
       group: Reptilian
     - product: LeftLegMoth
-      cost: 40
+      cost: 8
       group: Moth
     - product: RightLegMoth
-      cost: 40
+      cost: 8
       group: Moth
     - product: LeftLegKobolt
-      cost: 40
+      cost: 8
       group: Kobolt
     - product: RightLegKobolt
-      cost: 40
+      cost: 8
       group: Kobolt
     - product: LeftLegShark
-      cost: 40
+      cost: 8
       group: Shark
     - product: RightLegShark
-      cost: 40
+      cost: 8
       group: Shark
     - product: LeftLegDemon
-      cost: 40
+      cost: 8
       group: Demon
     - product: RightLegDemon
-      cost: 40
+      cost: 8
       group: Demon
-    - product: LeftLegHuman
-      cost: 40
+    - product: LeftLegFelinid
+      cost: 8
       group: Felinid
-    - product: RightLegHuman
-      cost: 40
+    - product: RightLegFelinid
+      cost: 8
       group: Felinid
     - product: LeftLegVox
-      cost: 40
+      cost: 8
       group: Vox
     - product: RightLegVox
-      cost: 40
+      cost: 8
       group: Vox
     - product: LeftLegArachnid
-      cost: 40
+      cost: 8
       group: Arachnid
     - product: RightLegArachnid
-      cost: 40
+      cost: 8
       group: Arachnid
+    - product: LeftLegXeno
+      cost: 8
+      group: Xenomorph
+    - product: RightLegXeno
+      cost: 8
+      group: Xenomorph
     # стопы
     - product: LeftFootHuman
-      cost: 25
+      cost: 5
       group: Humanoid
     - product: RightFootHuman
-      cost: 25
+      cost: 5
       group: Humanoid
     - product: LeftFootTajaran
-      cost: 25
+      cost: 5
       group: Feline
     - product: RightFootTajaran
-      cost: 25
+      cost: 5
       group: Feline
     - product: LeftFootVulpkanin
-      cost: 25
+      cost: 5
       group: Canine
     - product: RightFootVulpkanin
-      cost: 25
+      cost: 5
       group: Canine
     - product: LeftFootReptilian
-      cost: 25
+      cost: 5
       group: Reptilian
     - product: RightFootReptilian
-      cost: 25
+      cost: 5
       group: Reptilian
     - product: LeftFootMoth
-      cost: 25
+      cost: 5
       group: Moth
     - product: RightFootMoth
-      cost: 25
+      cost: 5
       group: Moth
     - product: LeftFootKobolt
-      cost: 25
+      cost: 5
       group: Kobolt
     - product: RightFootKobolt
-      cost: 25
+      cost: 5
       group: Kobolt
     - product: LeftFootShark
-      cost: 25
+      cost: 5
       group: Shark
     - product: RightFootShark
-      cost: 25
+      cost: 5
       group: Shark
     - product: LeftFootDemon
-      cost: 25
+      cost: 5
       group: Demon
     - product: RightFootDemon
-      cost: 25
+      cost: 5
       group: Demon
-    - product: LeftFootHuman
-      cost: 25
+    - product: LeftFootFelinid
+      cost: 5
       group: Felinid
-    - product: RightFootHuman
-      cost: 25
+    - product: RightFootFelinid
+      cost: 5
       group: Felinid
     - product: LeftFootVox
-      cost: 25
+      cost: 5
       group: Vox
     - product: RightFootVox
-      cost: 25
+      cost: 5
       group: Vox
     - product: LeftFootArachnid
-      cost: 25
+      cost: 5
       group: Arachnid
     - product: RightFootArachnid
-      cost: 25
+      cost: 5
       group: Arachnid
+    - product: LeftFootXeno
+      cost: 5
+      group: Xenomorph
+    - product: RightFootXeno
+      cost: 5
+      group: Xenomorph
   - type: MaterialStorage
     materialWhiteList:
     - Biomass

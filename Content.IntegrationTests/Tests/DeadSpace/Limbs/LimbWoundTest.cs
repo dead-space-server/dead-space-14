@@ -184,6 +184,38 @@ public sealed class LimbWoundTest
     }
 
     [Test]
+    public async Task APrintedArmGraftsOntoAFelinid()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            var graft = server.EntMan.System<Content.Server.DeadSpace.Surgery.SurgeryGraftSystem>();
+
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            Assert.That(wounds.Amputate(human, LimbZone.ArmLeft), Is.True);
+            var arm = server.EntMan.SpawnEntity("LeftArmHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            graft.MarkPrinted(arm, "Human");
+            Assert.That(wounds.TryReattach(human, LimbZone.ArmLeft, arm, false), Is.True, "a printed arm must graft onto a human");
+
+            var felinid = server.EntMan.SpawnEntity("MobFelinid", new MapCoordinates(Vector2.Zero, map.MapId));
+            Assert.That(wounds.Amputate(felinid, LimbZone.ArmLeft), Is.True);
+            var felinidArm = server.EntMan.SpawnEntity("LeftArmHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            graft.MarkPrinted(felinidArm, "Felinid");
+            var reattached = wounds.TryReattach(felinid, LimbZone.ArmLeft, felinidArm, false);
+            Assert.That(reattached, Is.True, "a printed arm must graft onto a felinid");
+
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(felinid);
+            Assert.That(limbs.Zones[(int) LimbZone.ArmLeft].Severed, Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task NoLegsBlocksStandingUpFromKnockdown()
     {
         await using var pair = await PoolManager.GetServerClient();

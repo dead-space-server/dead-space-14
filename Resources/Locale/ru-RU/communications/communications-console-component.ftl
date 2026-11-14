@@ -1,6 +1,6 @@
 # Comms console variant titles
 comms-console-announcement-title-station = Консоль связи
-comms-console-announcement-title-centcom = Центральное командование
+comms-console-announcement-title-centcom = Центральное Командование
 comms-console-announcement-title-soc = Корпус Специальных Операций
 comms-console-announcement-title-nukie = Ядерные оперативники
 comms-console-announcement-title-taipan = ННКСС Тайпан
@@ -69,7 +69,7 @@ comms-console-level-gamma-flavour-label = Соблюдайте крайнюю о
 comms-console-level-sierra-flavour-label = Соблюдайте полный карантин
 comms-console-level-enigma-flavour-label = Подготовьтесь к немедленной эвакуации
 comms-console-level-delta-flavour-label = Удачи
-comms-console-level-epsilon-flavour-label = Вы уволены
+comms-console-level-epsilon-flavour-label = Ваш контракт расторгнут
 comms-console-level-white-flavour-label = Опасайтесь вражеской разведки
 comms-console-level-zeta-flavour-label = Используйте средства индивидуальной защиты
 comms-console-level-omega-flavour-label = Защищайте объект любой ценой

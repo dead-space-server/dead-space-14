@@ -25,5 +25,6 @@ organ-printer-group-demon = Arkans
 organ-printer-group-felinid = Felinids
 organ-printer-group-vox = Voxes
 organ-printer-group-arachnid = Arachnids
+organ-printer-group-xenomorph = Xenomorphs
 organ-printer-eject-button = Eject biomass
 organ-printer-eject-empty = No biomass inside.

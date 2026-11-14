@@ -243,6 +243,22 @@ public sealed partial class LimbWoundSystem : EntitySystem
             Dirty(uid, limbs);
         }
 
+        if (!limbs.Bleeds)
+        {
+            var zeroed = false;
+            for (var i = 0; i < zones.Length; i++)
+            {
+                if (zones[i].Bleed <= 0f)
+                    continue;
+
+                zones[i].Bleed = 0f;
+                zeroed = true;
+            }
+
+            if (zeroed)
+                Dirty(uid, limbs);
+        }
+
         var bleed = BleedTotal(uid, limbs);
         LostShares(limbs, _wornBefore);
         if (!Machine(uid) && LimbWoundRules.DrainBleed(zones, limbs.TorsoPool))
@@ -383,7 +399,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (LimbWoundRules.IsSmall(strike.Zone))
         {
             var dummy = span[LimbWoundRules.Index(LimbZone.Head)];
-            var small = LimbWoundRules.Apply(ref dummy, strike, limbs.Soft);
+            var small = LimbWoundRules.Apply(ref dummy, strike, limbs.Soft, limbs.Bleeds);
             if (small.Applied)
                 ApplySmallToHead(span, strike);
             ApplyOrgans(uid, limbs, strike, small, ready);
@@ -395,7 +411,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var index = LimbWoundRules.Index(strike.Zone);
         ref var state = ref span[index];
         var boneBefore = state.Bone;
-        var result = LimbWoundRules.Apply(ref state, strike, limbs.Soft);
+        var result = LimbWoundRules.Apply(ref state, strike, limbs.Soft, limbs.Bleeds);
         ApplyOrgans(uid, limbs, strike, result, ready);
         var pelletSevered = ApplyPelletSever(uid, limbs, strike);
         Dirty(uid, limbs);
@@ -456,7 +472,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 return true;
         }
 
-        return OrganBleeds(limbs, LimbOrgan.Heart);
+        return false;
     }
 
     public bool StopOneBleed(EntityUid uid, LimbBodyComponent? limbs = null)
@@ -484,12 +500,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
             zones[best].Bleed = 0f;
             Dirty(uid, limbs);
             RefreshActive(uid, limbs);
-            return true;
-        }
-
-        if (StopOrganBleed(limbs, LimbOrgan.Heart))
-        {
-            Dirty(uid, limbs);
             return true;
         }
 
@@ -1318,6 +1328,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.Burn = profile.Burn;
         ent.Comp.LiquidSever = profile.LiquidSever;
         ent.Comp.Soft = profile.Soft;
+        ent.Comp.Bleeds = profile.Bleeds;
         ent.Comp.Plant = profile.Plant;
         ent.Comp.HeadVital = profile.HeadVital;
         ent.Comp.HasEars = profile.Ears;
@@ -1430,6 +1441,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.Burn = profile.Burn;
         ent.Comp.LiquidSever = profile.LiquidSever;
         ent.Comp.Soft = profile.Soft;
+        ent.Comp.Bleeds = profile.Bleeds;
         ent.Comp.Plant = profile.Plant;
         ent.Comp.HeadVital = profile.HeadVital;
         ent.Comp.HasEars = profile.Ears;
@@ -1732,7 +1744,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 if (zones[i].Severed)
                     continue;
 
-                if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * ent.Comp.Burn * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share, ent.Comp.Soft))
+                if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * ent.Comp.Burn * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share, ent.Comp.Soft, ent.Comp.Bleeds))
                     changed = true;
 
                 if (caustic[i] > 0f || other[i] > 0f)

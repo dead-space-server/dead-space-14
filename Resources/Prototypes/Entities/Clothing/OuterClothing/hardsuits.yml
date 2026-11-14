@@ -1107,6 +1107,11 @@
         Caustic: 0.5
   - type: ExplosionResistance
     damageCoefficient: 0.5
+  - type: PointLight
+    color: "#FFE08A"
+    radius: 3
+    energy: 1.5
+    softness: 1
   #DS14-end
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTChaplain

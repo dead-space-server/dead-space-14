@@ -6,7 +6,7 @@
   # Blue flowers over most of the floor.
   - !type:BiomeDecalLayer
     divisions: 1
-    threshold: -0.45
+    threshold: 0.35
     noise:
       seed: 81
       noiseType: OpenSimplex2

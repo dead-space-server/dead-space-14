@@ -1,0 +1,21 @@
+- type: entity
+  parent: ClothingOuterArmorBase
+  id: ClothingOuterArmorCentcomSecurityGreen
+  name: бронежилет офицера Центком
+  description: Бронежилет офицера службы безопасности Центрального Командования, усиленный дополнительными бронепластинами.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Armor/centcom_security_green.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Armor/centcom_security_green.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.4
+        Heat: 0.5
+  - type: StaminaResistance
+    damageCoefficient: 0.5
+  - type: ExplosionResistance
+    damageCoefficient: 0.8

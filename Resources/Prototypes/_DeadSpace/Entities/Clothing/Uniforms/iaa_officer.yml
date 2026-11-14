@@ -1,7 +1,7 @@
 - type: entity
   parent: [ClothingUniformBase, BaseSecurityContraband]
   id: ClothingUniformJumpsuitIAAOfficer1
-  name: форма офицера ВД
+  name: комбинезон офицера ВД
   description: Форма офицера отдела внутренних дел юридического департамента.
   components:
   - type: Sprite
@@ -12,7 +12,7 @@
 - type: entity
   parent: [ClothingUniformBase, BaseSecurityContraband]
   id: ClothingUniformJumpsuitIAAOfficer2
-  name: форма офицера ВД
+  name: комбинезон офицера ВД
   description: Форма офицера отдела внутренних дел юридического департамента.
   components:
   - type: Sprite
@@ -23,7 +23,7 @@
 - type: entity
   parent: [ClothingUniformBase, BaseSecurityContraband]
   id: ClothingUniformJumpsuitIAAOfficer3
-  name: форма офицера ВД
+  name: комбинезон офицера ВД
   description: Форма офицера отдела внутренних дел юридического департамента.
   components:
   - type: Sprite

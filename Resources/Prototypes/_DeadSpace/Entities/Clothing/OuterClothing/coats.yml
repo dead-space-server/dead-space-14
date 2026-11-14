@@ -236,8 +236,8 @@
 - type: entity
   parent: ClothingOuterStorageBase
   id: ClothingOuterCoatCentcomOfficer
-  name: шинель офицера Центком
-  description: Шинель из плотной ткани с вшитыми элементами брони, которую носят офицеры Центком.
+  name: шинель офицера ЦК
+  description: Шинель из плотной ткани с вшитыми элементами брони, которую носят офицеры безопасности ЦК.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/centcom_officer.rsi
@@ -285,7 +285,7 @@
 - type: entity
   parent: ClothingOuterStorageFoldableBase
   id: ClothingOuterCoatSuitJacketCC
-  name: пиджак агента Центком
+  name: пиджак агента ЦК
   description: Дорогущий пиджак сотрудника ЦК. Придаёт вид человека, который одним росчерком пера рушит жизни людей.
   components:
   - type: Sprite
@@ -296,4 +296,4 @@
 - type: entity
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterCoatSuitJacketCC]
   id: ClothingOuterCoatSuitJacketCCOpened
-  name: пиджак агента Центком
+  name: пиджак агента ЦК

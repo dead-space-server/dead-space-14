@@ -164,8 +164,10 @@
   - verb: Clamp
     layer: Cavity
     game: Clamp
-  - verb: Stanch
+  - verb: MendBone
     layer: Cavity
+    game: Glue
+    hint: SlimeStir
     effect: BrainMend
   close:
   - verb: MendBone

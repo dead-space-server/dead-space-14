@@ -14,6 +14,9 @@ public sealed partial class LimbMend : EntityEffectBase<LimbMend>
     public float Bleed;
 
     [DataField]
+    public bool OrganBleed;
+
+    [DataField]
     public float Bone;
 
     [DataField]
@@ -97,6 +100,18 @@ public sealed partial class LimbMendSystem : EntityEffectSystem<LimbBodyComponen
 
             if (touched)
                 _limbs.ApplyEdit(entity, zone, edit);
+        }
+
+        if (effect.OrganBleed && effect.Bleed > 0f)
+        {
+            for (var i = 0; i < entity.Comp.Organs.Count && i < LimbOrganRules.Count; i++)
+            {
+                var organ = entity.Comp.Organs[i];
+                if (!organ.Ruptured || organ.BleedStopped)
+                    continue;
+
+                _limbs.ApplyOrganEdit(entity, (LimbOrgan) i, new LimbOrganEdit { SetBleedStopped = true, BleedStopped = true });
+            }
         }
     }
 

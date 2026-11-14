@@ -29,6 +29,9 @@
   id: BorgModuleSecurity
 
 - type: Tag
+  id: BorgRemoteModule
+
+- type: Tag
   id: BorgSecHead
 
 - type: Tag
@@ -96,7 +99,7 @@
 
 - type: Tag
   id: CloningPodMachineCircuitboard
-  
+
 - type: Tag
   id: CorruptTeleportItem
 
@@ -146,10 +149,13 @@
   id: SealWearable
 
 - type: Tag
-  id: DonkCo
+  id: Demon
 
 - type: Tag
-  id: Demon
+  id: DevourImmune
+
+- type: Tag
+  id: DonkCo
 
 - type: Tag
   id: Durf
@@ -307,7 +313,6 @@
 - type: Tag
   id: MagazineEagleAP
 
-
 - type: Tag
   id: MagazineGurza
 
@@ -340,6 +345,9 @@
 
 - type: Tag
   id: Medipen
+
+- type: Tag
+  id: MetalTable # Used by Hooligan smash objectives for metal/iron tables.
 
 - type: Tag
   id: MaskGasVoice
@@ -504,7 +512,7 @@
   id: VulpkaninEmotes
 
 - type: Tag
-  id: voicesensor 
+  id: voicesensor
 
 - type: Tag
   id: WeldingMaskFlame

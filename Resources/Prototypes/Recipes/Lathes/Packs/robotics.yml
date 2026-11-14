@@ -40,6 +40,31 @@
   - CyborgEndoskeletonSec
 # DS14-end
 
+# DS14-start
+- type: latheRecipePack
+  id: IPCLimbsStatic
+  recipes:
+  - TorsoIPC
+  - HeadIPC
+  - LeftArmIPC
+  - RightArmIPC
+  - LeftHandIPC
+  - RightHandIPC
+  - LeftLegIPC
+  - RightLegIPC
+  - LeftFootIPC
+  - RightFootIPC
+
+- type: latheRecipePack
+  id: IPCOrgansStatic
+  recipes:
+  - OrganIPCPositronic
+  - OrganIPCBattery
+  - OrganIPCStatusModule
+  - OrganIPCVoiceModule
+  - OrganIPCEyes
+# DS14-end
+
 ## Dynamic
 
 - type: latheRecipePack
@@ -47,6 +72,7 @@
   recipes:
   - ProximitySensor
   - Nanopaste # DS14
+  - BorgRemoteModule # DS14
 
 - type: latheRecipePack
   id: BorgModules

@@ -43,7 +43,7 @@ namespace Content.Server.Decals
         private readonly Dictionary<ICommonSession, Dictionary<NetEntity, HashSet<Vector2i>>> _previousSentChunks = new();
         private static readonly Vector2 _boundsMinExpansion = new(0.01f, 0.01f);
         private static readonly Vector2 _boundsMaxExpansion = new(1.01f, 1.01f);
-        private const float FullUpdateInterval = 0.25f;
+        private const float FullUpdateInterval = 1f; //DS-14
 
         private UpdatePlayerJob _updateJob;
         private UpdateDirtyPlayerJob _dirtyUpdateJob;
@@ -456,11 +456,16 @@ namespace Content.Server.Decals
             base.Update(frameTime);
             _fullUpdateAccumulator += frameTime;
 
-            foreach (var ent in _dirtyChunks.Keys)
+            //DS-14 start
+            if (!PvsEnabled)
             {
-                if (TryGetEntity(ent, out var uid) && TryComp(uid, out DecalGridComponent? decals))
-                    Dirty(uid.Value, decals);
+                foreach (var ent in _dirtyChunks.Keys)
+                {
+                    if (TryGetEntity(ent, out var uid) && TryComp(uid, out DecalGridComponent? decals))
+                        Dirty(uid.Value, decals);
+                }
             }
+            //DS-14 end
 
             if (!PvsEnabled)
             {

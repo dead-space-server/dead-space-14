@@ -38,7 +38,7 @@
       - LoneOpsUplink
 
 - type: listing
-  id: UplinkEswordDoubleLone
+  id: UplinkEswordDouble
   name: uplink-esword-double-name
   description: uplink-esword-double-desc
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
@@ -49,9 +49,10 @@
   - UplinkWeaponry
   conditions:
   - !type:StoreWhitelistCondition
-    whitelist:
+    blacklist:
       tags:
       - LoneOpsUplink
+      - NukeOpsUplink
   - !type:ListingLimitedStockCondition
     stock: 1
   - !type:BuyerWhitelistCondition

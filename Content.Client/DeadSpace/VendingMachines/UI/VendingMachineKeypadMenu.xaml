@@ -3,15 +3,19 @@
     xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     MinSize="440 520"
-    SetSize="460 620">
+    SetSize="660 640">
     <BoxContainer Orientation="Vertical" Margin="4">
+        <LineEdit Name="SearchBar"
+                  PlaceHolder="{Loc 'vending-machine-keypad-search'}"
+                  HorizontalExpand="True"
+                  Margin="0 0 0 4" />
         <PanelContainer VerticalExpand="True">
             <PanelContainer.PanelOverride>
                 <gfx:StyleBoxFlat BackgroundColor="#0b1418" BorderColor="#4a6a78" BorderThickness="2" />
             </PanelContainer.PanelOverride>
-            <ScrollContainer HScrollEnabled="False" VerticalExpand="True" Margin="4">
+            <ScrollContainer Name="SpiralScroll" HScrollEnabled="False" VerticalExpand="True" Margin="4">
                 <BoxContainer Orientation="Vertical">
-                    <GridContainer Name="SpiralGrid" HorizontalAlignment="Center" />
+                    <GridContainer Name="SpiralGrid" HorizontalAlignment="Stretch" HorizontalExpand="True" />
                     <Label Name="EmptyLabel"
                            Visible="False"
                            HorizontalAlignment="Center"
@@ -28,6 +32,12 @@
                 <BoxContainer Orientation="Vertical" Margin="6 4">
                     <Label Name="CodeDisplay" FontColorOverride="#4cff4c" />
                     <Label Name="StatusDisplay" FontColorOverride="#4cff4c" ClipText="True" />
+                    <Label Name="BalanceDisplay" FontColorOverride="#e8c547" ClipText="True" Visible="False" />
+                    <Button Name="WithdrawButton"
+                            Text="{Loc 'vending-machine-keypad-withdraw'}"
+                            HorizontalAlignment="Left"
+                            Margin="0 4 0 0"
+                            Visible="False" />
                 </BoxContainer>
             </PanelContainer>
             <GridContainer Name="KeypadGrid" Columns="3" />

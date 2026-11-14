@@ -1,5 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Server.DeadSpace.Lavaland;
+using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Storage.Components;
 using Content.Shared.DeadSpace.Prison;
 using Content.Shared.DragDrop;
@@ -14,6 +16,7 @@ public sealed class OreBoxTransferSystem : EntitySystem
 {
     [Dependency] private readonly SharedMaterialStorageSystem _materialStorage = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly LavalandMiningSystem _lavalandMining = default!;
 
     public override void Initialize()
     {
@@ -35,6 +38,13 @@ public sealed class OreBoxTransferSystem : EntitySystem
         }
 
         if (!HasComp<LatheComponent>(args.Target)) return;
+
+        if (TryComp<LavalandOreRedeemerComponent>(args.Target, out var redeemer))
+        {
+            _lavalandMining.RedeemStorageIntoLathe(args.User, uid, (args.Target, redeemer));
+            args.Handled = true;
+            return;
+        }
 
         if (!_container.TryGetContainer(uid, "storagebase", out var container))
             return;

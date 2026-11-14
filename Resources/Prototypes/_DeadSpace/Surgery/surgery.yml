@@ -2617,7 +2617,6 @@
   alcoholNumb: 120
   clashPoison: 2
   calm:
-  - AdrenalImplant
   - CombatAdrenalineImplant
   flinchChance: 0.35
   flinchProgress: 0.5

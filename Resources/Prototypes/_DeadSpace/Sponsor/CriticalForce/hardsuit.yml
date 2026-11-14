@@ -41,6 +41,14 @@
   name: шлем скафандра офицера CriticalForce Apollo
   description: Герметичный шлем спасателя со встроенным фонарём.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.75
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet1.rsi
   - type: Clothing
@@ -66,6 +74,14 @@
   name: шлем скафандра офицера CriticalForce Security
   description: Герметичный шлем спасателя со встроенным фонарём.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.75
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet2.rsi
   - type: Clothing

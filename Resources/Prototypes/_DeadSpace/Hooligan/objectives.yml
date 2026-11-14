@@ -94,6 +94,7 @@
     max: 8
   - type: HooliganVandalismCondition
     range: 8
+    highSecurityChance: 0.4
   - type: RandomObjectiveDescription
     descriptions:
       - objective-condition-hooligan-vandalism-description
@@ -149,6 +150,55 @@
       - objective-condition-hooligan-smash-glasses-description-1
       - objective-condition-hooligan-smash-glasses-description-2
 
+
+- type: entity
+  parent: BaseObjective
+  id: HooliganSmashFurnitureObjective
+  description: Эта мебель слишком ухоженная. Пора ей узнать, что такое настоящая жизнь.
+  components:
+  - type: Objective
+    difficulty: 1.5
+    issuer: objective-issuer-hooligan
+    icon:
+      sprite: Structures/Furniture/Tables/generic.rsi
+      state: full
+  - type: NumberObjective
+    min: 4
+    max: 6
+    title: objective-condition-hooligan-smash-furniture-title
+  - type: HooliganDestroyCondition
+    targets:
+      - Wooden
+      - LightBulb
+      - MetalTable
+  - type: RandomObjectiveDescription
+    descriptions:
+      - objective-condition-hooligan-smash-furniture-description
+      - objective-condition-hooligan-smash-furniture-description-1
+      - objective-condition-hooligan-smash-furniture-description-2
+
+- type: entity
+  parent: BaseObjective
+  id: HooliganBombObjective
+  description: Самоделки из банок колы не взорвут себя сами. Пора устроить фейерверк в разных отделах станции.
+  components:
+  - type: Objective
+    difficulty: 1.5
+    issuer: objective-issuer-hooligan
+    icon:
+      sprite: Objects/Weapons/Bombs/ied.rsi
+      state: base
+  - type: NumberObjective
+    min: 1
+    max: 4
+    title: objective-condition-hooligan-bomb-title
+  - type: HooliganBombCondition
+    range: 30
+  - type: RandomObjectiveDescription
+    descriptions:
+      - objective-condition-hooligan-bomb-description
+      - objective-condition-hooligan-bomb-description-1
+      - objective-condition-hooligan-bomb-description-2
 
 - type: entity
   parent: BaseObjective

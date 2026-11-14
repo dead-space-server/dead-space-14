@@ -23,7 +23,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
-        Radiation: 0.9
+        Radiation: 0.5 #ds14
 
 - type: entity
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
@@ -52,7 +52,7 @@
         Slash: 0.4
         Piercing: 0.4
         Heat: 0.4
-        Radiation: 0
+        Radiation: 0.1 #ds14
 
 - type: entity
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
@@ -76,7 +76,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
-        Radiation: 0.9
+        Radiation: 0.4 #ds14
 
 - type: entity
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
@@ -105,7 +105,7 @@
         Slash: 0.4
         Piercing: 0.4
         Heat: 0.4
-        Radiation: 0
+        Radiation: 0.5 #ds14
 
 - type: entity
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
@@ -128,4 +128,4 @@
         Blunt: 0.90
         Slash: 0.65
         Heat: 0.80
-        Radiation: 0.95
+        Radiation: 0.85 #ds14

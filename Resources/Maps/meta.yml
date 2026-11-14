@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 276.0.0
-  forkId: dsfobos
-  forkVersion: 1a3c9ff167dd98e31edd122ea507ca02011eec27
-  time: 11/05/2026 19:04:59
-  entityCount: 27818
+  engineVersion: 276.0.6
+  forkId: ""
+  forkVersion: ""
+  time: 11/11/2026 15:26:10
+  entityCount: 27821
 maps:
 - 1
 grids:
@@ -12154,7 +12154,7 @@ entities:
       pos: 4.5,-1.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -13618.947
+      secondsUntilStateChange: -13686.347
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -13192,7 +13192,7 @@ entities:
       pos: -24.5,-1.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -59651.953
+      secondsUntilStateChange: -59719.35
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -14303,7 +14303,7 @@ entities:
       pos: -12.5,46.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -29464.938
+      secondsUntilStateChange: -29532.338
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -67656,7 +67656,7 @@ entities:
       pos: -15.5,54.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -30587.787
+      secondsUntilStateChange: -30655.188
       state: Opening
 - proto: CutterMachine
   entities:
@@ -78201,7 +78201,7 @@ entities:
       pos: 34.5,3.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -27690.637
+      secondsUntilStateChange: -27758.037
       state: Closing
   - uid: 11938
     components:
@@ -100880,7 +100880,6 @@ entities:
     - type: AtmosPipeColor
       color: '#0000FFFF'
     - type: Physics
-      canCollide: True
       bodyType: Dynamic
   - uid: 14918
     components:
@@ -143843,7 +143842,7 @@ entities:
       pos: 13.5,49.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -19774.691
+      secondsUntilStateChange: -19842.092
       state: Closing
     - type: DeviceLinkSource
       lastSignals:
@@ -149630,6 +149629,23 @@ entities:
     components:
     - type: Transform
       pos: -0.5,44.5
+      parent: 2
+- proto: SpawnPointSecurityPilot
+  entities:
+  - uid: 27819
+    components:
+    - type: Transform
+      pos: 7.5,56.5
+      parent: 2
+  - uid: 27820
+    components:
+    - type: Transform
+      pos: -0.5,43.5
+      parent: 2
+  - uid: 27821
+    components:
+    - type: Transform
+      pos: 9.5,35.5
       parent: 2
 - proto: SpawnPointSeniorAdministrator
   entities:

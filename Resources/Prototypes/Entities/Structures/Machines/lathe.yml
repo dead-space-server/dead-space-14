@@ -327,6 +327,8 @@
     - BorgModulesStatic
     - BorgLimbsStatic
     - BorgSecLimbsStatic # DS14
+    - IPCLimbsStatic # DS14
+    - IPCOrgansStatic # DS14
     dynamicPacks:
     - Robotics
     - BorgModules
