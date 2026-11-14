@@ -659,10 +659,12 @@
   conditions:
     - !type:TileNotBlocked
       failIfSpace: false
-    - !type:TileType
-      targets:
-        - Lattice
-        - Plating
+    #DS14-start
+    # - !type:TileType
+    #   targets:
+    #     - Lattice
+    #     - Plating
+    #DS14-end
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false

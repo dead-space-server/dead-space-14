@@ -1,3 +1,5 @@
+using System.Numerics; // DS14
+using Content.Shared.Sprite; // DS14
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Changeling.Components;
@@ -32,6 +34,7 @@ public sealed partial class ChangelingTransformSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly IdentitySystem _identity = default!;
     [Dependency] private readonly SharedChangelingIdentitySystem _changelingIdentity = default!;
+    [Dependency] private readonly SharedScaleVisualsSystem _scaleVisuals = default!; //DS14
 
     private const string ChangelingBuiXmlGeneratedName = "ChangelingTransformBoundUserInterface";
     public override void Initialize()
@@ -206,6 +209,17 @@ public sealed partial class ChangelingTransformSystem : EntitySystem
         // DS14: visual bodies are not available on this content baseline.
         _humanoidAppearance.CloneAppearance(targetIdentity, args.User);
         _cloning.CloneComponents(targetIdentity, args.User, settings);
+
+        // DS14-start
+        if (!_net.IsClient)
+        {
+            var scale = TryComp<ScaleVisualsComponent>(args.User, out var userScale)
+                ? userScale.Scale
+                : Vector2.One;
+
+            _scaleVisuals.SetSpriteScale(args.User, scale);
+        }
+        // DS14-end
 
         if (settings.CopyStatusEffects)
             _cloning.CopyStatusEffects(

@@ -6,6 +6,7 @@ using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Maps;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
 using Content.Shared.Tag;
@@ -490,7 +491,9 @@ public sealed partial class ExplosionSystem
                 var origin = cause;
                 if (origin != null && (TerminatingOrDeleted(origin.Value) || !HasComp<TransformComponent>(origin.Value)))
                     origin = null;
-                _damageableSystem.TryChangeDamage((entity, damageable), damage, ignoreResistances: false, ignoreGlobalModifiers: true, origin: origin);
+
+                var ignoreResistances = !HasComp<MobStateComponent>(entity);
+                _damageableSystem.TryChangeDamage((entity, damageable), damage, ignoreResistances: ignoreResistances, ignoreGlobalModifiers: true, origin: origin);
                 //DS-14 end
 
                 if (_actorQuery.HasComp(entity))

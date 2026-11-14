@@ -72,7 +72,7 @@
   delay: 1
   collisionMask: InteractImpassable
   rules:
-    - MustBuildOnSubfloor
+    # - MustBuildOnSubfloor DS14
     - IsCatwalk
   rotation: Fixed
   fx: EffectRCDConstruct1

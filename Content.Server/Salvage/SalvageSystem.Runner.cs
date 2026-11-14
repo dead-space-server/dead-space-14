@@ -12,6 +12,7 @@ using Content.Shared.Localizations;
 using Content.Shared.Station.Components;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
+using Content.Server.Ghost.Roles.Components; // DS14
 
 namespace Content.Server.Salvage;
 
@@ -40,11 +41,14 @@ public sealed partial class SalvageSystem
         }
 
         // TODO: This is terrible but need bluespace harnesses or something.
-        var query = EntityQueryEnumerator<HumanoidAppearanceComponent, MobStateComponent, TransformComponent>();
+        var query = EntityQueryEnumerator<ActorComponent, HumanoidAppearanceComponent, MobStateComponent, TransformComponent>(); //DS14
 
-        while (query.MoveNext(out var uid, out _, out var mobState, out var mobXform))
+        while (query.MoveNext(out var uid, out _, out _, out var mobState, out var mobXform)) //DS14
         {
             if (mobXform.MapUid != xform.MapUid)
+                continue;
+
+            if (HasComp<GhostRoleComponent>(uid)) //DS14
                 continue;
 
             // Don't count unidentified humans (loot) or anyone you murdered so you can still maroon them once dead.
