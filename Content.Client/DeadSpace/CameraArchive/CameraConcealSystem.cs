@@ -4,6 +4,7 @@ using System.Numerics;
 using Content.Shared.DeadSpace.CameraArchives;
 using Content.Shared.Stealth.Components;
 using Content.Shared.SurveillanceCamera.Components;
+using Content.Client.DeadSpace.PostShaders;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.GameObjects;
@@ -19,6 +20,7 @@ public sealed partial class CameraConcealSystem : EntitySystem
 
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private ShaderInstance _shader = default!;
     private ShaderInstance _hide = default!;
@@ -49,9 +51,7 @@ public sealed partial class CameraConcealSystem : EntitySystem
             if (sprite.PostShader != null && sprite.PostShader != _shader && sprite.PostShader != _hide)
                 continue;
 
-            sprite.PostShader = _shader;
-            sprite.GetScreenTexture = true;
-            sprite.RaiseShaderEvent = true;
+            _sprite.SetSinglePostShader(sprite, _shader, true, true);
         }
     }
 
@@ -61,9 +61,7 @@ public sealed partial class CameraConcealSystem : EntitySystem
             return;
 
         _saved[ent] = (sprite.PostShader, sprite.GetScreenTexture, sprite.RaiseShaderEvent);
-        sprite.PostShader = _shader;
-        sprite.GetScreenTexture = true;
-        sprite.RaiseShaderEvent = true;
+        _sprite.SetSinglePostShader(sprite, _shader, true, true);
     }
 
     private void OnShutdown(Entity<CameraConcealedComponent> ent, ref ComponentShutdown args)
@@ -71,9 +69,7 @@ public sealed partial class CameraConcealSystem : EntitySystem
         if (!_saved.Remove(ent, out var saved) || Terminating(ent) || !TryComp<SpriteComponent>(ent, out var sprite))
             return;
 
-        sprite.PostShader = saved.Shader;
-        sprite.GetScreenTexture = saved.Screen;
-        sprite.RaiseShaderEvent = saved.Raise;
+        _sprite.SetSinglePostShader(sprite, saved.Shader, saved.Screen, saved.Raise);
     }
 
     private void OnShader(Entity<CameraConcealedComponent> ent, ref BeforePostShaderRenderEvent args)
@@ -87,13 +83,12 @@ public sealed partial class CameraConcealSystem : EntitySystem
             : _transform.GetWorldPosition(ent);
         if (IsCameraEye(args.Viewport.Eye))
         {
-            args.Sprite.PostShader = _hide;
+            // keep the flags, so the next viewport still raises this event and can swap back
+            _sprite.SetSinglePostShader(args.Sprite, _hide, true, true);
             return;
         }
 
-        args.Sprite.PostShader = _shader;
-        args.Sprite.GetScreenTexture = true;
-        args.Sprite.RaiseShaderEvent = true;
+        _sprite.SetSinglePostShader(args.Sprite, _shader, true, true);
         var screen = args.Viewport.WorldToLocal(reference);
         _shader.SetParameter("reference", new Vector2(-screen.X, screen.Y));
         _shader.SetParameter("visibility", 1f);

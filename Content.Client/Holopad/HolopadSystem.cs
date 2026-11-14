@@ -1,5 +1,6 @@
 using Content.Shared.Chat.TypingIndicator;
 using Content.Shared.Holopad;
+using Content.Client.DeadSpace.PostShaders; // DS14
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
@@ -128,7 +129,6 @@ public sealed partial class HolopadSystem : SharedHolopadSystem
         instance.SetParameter("texHeight", texHeight);
         instance.SetParameter("t", (float)_timing.CurTime.TotalSeconds * holopadHologram.ScrollRate);
 
-        sprite.PostShader = instance;
-        sprite.RaiseShaderEvent = true;
+        _sprite.SetSinglePostShader(sprite, instance, raiseShaderEvent: true); // DS14: v295 reads the flags per post-shader entry
     }
 }
