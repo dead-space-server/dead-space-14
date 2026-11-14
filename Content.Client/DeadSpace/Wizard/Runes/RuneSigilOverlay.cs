@@ -436,7 +436,7 @@ public sealed class RuneSigilOverlay : Overlay
 
     private void DrawAim(DrawingHandleWorld handle, in OverlayDrawArgs args, Angle eye, RuneAim aim)
     {
-        if (aim.Targeting == RuneTargeting.Self || !_entity.TryGetComponent(aim.Caster, out TransformComponent? xform) || xform.MapID != args.MapId)
+        if (!_entity.TryGetComponent(aim.Caster, out TransformComponent? xform) || xform.MapID != args.MapId)
             return;
 
         var now = _system.Now;
@@ -445,6 +445,12 @@ public sealed class RuneSigilOverlay : Overlay
         var marker = good ? aim.Color : Danger;
 
         handle.UseShader(_glow);
+        if (aim.CasterArea > 0f)
+            DrawArea(handle, eye, from, aim.CasterArea, aim.Color, now);
+
+        if (aim.Targeting == RuneTargeting.Self)
+            return;
+
         handle.SetTransform(Matrix3x2.Multiply(Matrix3Helpers.CreateRotation(-eye), Matrix3Helpers.CreateTranslation(from)));
         var dashes = Math.Clamp((int) (aim.Range * 8f), 12, 96);
         Ring(handle, Vector2.Zero, aim.Range, 1.5f, dashes, 0.55f, now * 0.08f, aim.Color.WithAlpha(aim.InRange ? 0.35f : 0.6f));
@@ -465,10 +471,21 @@ public sealed class RuneSigilOverlay : Overlay
                 Line(handle, from + direction * reach, to, 0.02f, Danger.WithAlpha(0.45f));
         }
 
+        if (aim.PointArea > 0f)
+            DrawArea(handle, eye, to, aim.PointArea, marker, now);
+
         handle.SetTransform(Matrix3x2.Multiply(Matrix3Helpers.CreateRotation(-eye), Matrix3Helpers.CreateTranslation(to)));
         var pulse = 0.9f + 0.1f * MathF.Sin(now * 6f);
         Ring(handle, Vector2.Zero, 0.26f * pulse, 1.6f, 4, 0.6f, now * 0.8f, marker.WithAlpha(0.9f));
         Texture(handle, RuneCircleArt.Glow(_clyde), Vector2.Zero, 0.35f, 0f, marker.WithAlpha(0.3f));
+    }
+
+    private void DrawArea(DrawingHandleWorld handle, Angle eye, Vector2 center, float radius, Color color, float now)
+    {
+        handle.SetTransform(Matrix3x2.Multiply(Matrix3Helpers.CreateRotation(-eye), Matrix3Helpers.CreateTranslation(center)));
+        handle.DrawCircle(Vector2.Zero, radius, color.WithAlpha(0.07f));
+        var dashes = Math.Clamp((int) (radius * 10f), 12, 120);
+        Ring(handle, Vector2.Zero, radius, 2f, dashes, 0.7f, -now * 0.12f, color.WithAlpha(0.55f));
     }
 
     private void DrawImpacts(DrawingHandleWorld handle, in OverlayDrawArgs args, Angle eye)

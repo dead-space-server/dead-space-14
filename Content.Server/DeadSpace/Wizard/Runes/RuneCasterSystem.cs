@@ -13,14 +13,11 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Actions;
 using Content.Shared.DeadSpace.Wizard.Runes;
-using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
-using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Magic.Components;
 using Content.Shared.Mobs.Components;
-using Content.Shared.Paper;
 using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -35,7 +32,6 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
     [Dependency] private readonly IAdminLogManager _adminLog = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
@@ -46,8 +42,6 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
 
-    private static readonly EntProtoId ScrollPrototype = "WizardRuneScroll";
-    private const int ScrollRunes = 2;
     private static readonly ProtoId<RuneSurgePrototype> MisfireSurge = "WizardRuneSurge";
     private const string BloodDamage = "Slash";
     private readonly HashSet<string> _usedThisRound = new();
@@ -65,10 +59,6 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         SubscribeLocalEvent<RuneCasterComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<RuneCasterComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<RuneCasterComponent, RuneLearnProductEvent>(OnLearn);
-        SubscribeLocalEvent<RuneCasterComponent, RuneInscribeDoAfterEvent>(OnInscribed);
-        SubscribeLocalEvent<RuneCasterComponent, RuneScrollActionEvent>(OnScrollAction);
-        SubscribeLocalEvent<RuneScrollComponent, UseInHandEvent>(OnScrollUse);
-        SubscribeLocalEvent<RuneScrollComponent, ComponentShutdown>(OnScrollShutdown);
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         SubscribeNetworkEvent<RuneDrawnMessage>(OnDrawn);
@@ -81,8 +71,9 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         InitializeMarks();
         InitializeSigil();
         InitializeHazards();
-        SubscribeNetworkEvent<RuneScrollCastMessage>(OnScrollCast);
-        SubscribeLocalEvent<RuneQuillComponent, AfterInteractEvent>(OnQuillInteract);
+        InitializeScrolls();
+        InitializeCreatures();
+        InitializeDoom();
     }
 
     public override void Update(float frameTime)
@@ -99,6 +90,8 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         UpdateBlood(frameTime);
         UpdateTimeStop(frameTime);
         UpdateArena();
+        UpdateCreatures(frameTime);
+        UpdateDoom();
     }
 
     private void OnMapInit(Entity<RuneCasterComponent> ent, ref MapInitEvent args)
@@ -120,8 +113,6 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
     private void OnShutdown(Entity<RuneCasterComponent> ent, ref ComponentShutdown args)
     {
         _actions.RemoveAction(ent.Owner, ent.Comp.CircleActionEntity);
-        foreach (var scroll in ent.Comp.Scrolls.ToArray())
-            Unbind(scroll);
     }
 
     private void OnLearn(Entity<RuneCasterComponent> ent, ref RuneLearnProductEvent args)
@@ -225,12 +216,6 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
             SetStrain(caster, caster.Comp, GetStrain(caster.Comp) + MismatchStrain);
             EndSigil(caster, RuneSigilState.Fizzle);
             Reply(args, false, Loc.GetString("rune-cast-mismatch"));
-            return;
-        }
-
-        if (msg.Inscribe)
-        {
-            StartInscribe(caster, msg.Runes, msg.Paper);
             return;
         }
 
@@ -351,15 +336,13 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         var before = GetStrain(caster.Comp);
         var after = before + strain;
 
-        if (caster.Comp.LastElement == composition.Element.ID)
-        {
+        if (RepeatsElement(caster.Comp, composition))
             caster.Comp.ElementStreak++;
-        }
         else
-        {
-            caster.Comp.LastElement = composition.Element.ID;
             caster.Comp.ElementStreak = 0;
-        }
+
+        caster.Comp.LastElement = composition.Element.ID;
+        caster.Comp.LastSecond = composition.Second?.ID;
 
         StartCooldown(caster, composition.Key, spell.Cooldown, spell.Name);
         if (!scroll)
@@ -543,287 +526,5 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         var plain = RuneIncantation.Plain(text, loudness, absurdity);
         var markup = RuneIncantation.Markup(text, loudness, absurdity, seed + _random.Next(100));
         _chat.SendIncantation(caster, plain, markup, RuneIncantation.HearingRange(loudness));
-    }
-
-    private void StartInscribe(Entity<RuneCasterComponent> caster, List<string> runes, NetEntity? chosen)
-    {
-        if (runes.Count > ScrollRunes)
-        {
-            _popup.PopupEntity(Loc.GetString("rune-inscribe-too-complex"), caster, caster, PopupType.SmallCaution);
-            EndSigil(caster, RuneSigilState.Fizzle);
-            return;
-        }
-
-        if (!HoldsQuill(caster))
-        {
-            _popup.PopupEntity(Loc.GetString("rune-inscribe-need-quill"), caster, caster, PopupType.SmallCaution);
-            EndSigil(caster, RuneSigilState.Fade);
-            return;
-        }
-
-        if (FindPaper(caster, chosen) is not { } paper)
-        {
-            _popup.PopupEntity(Loc.GetString("rune-inscribe-need-paper"), caster, caster, PopupType.SmallCaution);
-            EndSigil(caster, RuneSigilState.Fade);
-            return;
-        }
-
-        var args = new DoAfterArgs(EntityManager, caster, caster.Comp.InscribeTime, new RuneInscribeDoAfterEvent(runes), caster, paper, paper)
-        {
-            BreakOnMove = true,
-            BreakOnDamage = true,
-            NeedHand = true,
-        };
-
-        if (_doAfter.TryStartDoAfter(args))
-            _popup.PopupEntity(Loc.GetString("rune-inscribe-start"), caster, caster);
-    }
-
-    private bool HoldsQuill(EntityUid uid)
-    {
-        foreach (var held in _hands.EnumerateHeld(uid))
-        {
-            if (HasComp<RuneQuillComponent>(held))
-                return true;
-        }
-
-        return false;
-    }
-
-    private bool IsBlankPaper(EntityUid uid)
-    {
-        return HasComp<PaperComponent>(uid) && !HasComp<RuneScrollComponent>(uid) && !TerminatingOrDeleted(uid);
-    }
-
-    private EntityUid? FindPaper(EntityUid caster, NetEntity? chosen)
-    {
-        if (chosen is { } net && TryGetEntity(net, out var picked) && IsBlankPaper(picked.Value) && _interaction.InRangeUnobstructed(caster, picked.Value))
-            return picked;
-
-        foreach (var held in _hands.EnumerateHeld(caster))
-        {
-            if (IsBlankPaper(held))
-                return held;
-        }
-
-        return null;
-    }
-
-    private void OnQuillInteract(Entity<RuneQuillComponent> ent, ref AfterInteractEvent args)
-    {
-        if (args.Handled || !args.CanReach || args.Target is not { } paper || !IsBlankPaper(paper))
-            return;
-
-        args.Handled = true;
-        if (!HasComp<RuneCasterComponent>(args.User))
-        {
-            _popup.PopupEntity(Loc.GetString("rune-quill-silent"), args.User, args.User);
-            return;
-        }
-
-        if (TryComp<ActorComponent>(args.User, out var actor))
-            RaiseNetworkEvent(new RuneQuillOpenEvent(GetNetEntity(paper)), actor.PlayerSession);
-    }
-
-    private void OnScrollCast(RuneScrollCastMessage msg, EntitySessionEventArgs args)
-    {
-        if (!TryGetCaster(args, out var caster) ||
-            !TryGetEntity(msg.Scroll, out var scroll) ||
-            !TryComp<RuneScrollComponent>(scroll, out var comp) ||
-            comp.BoundTo != caster.Owner)
-            return;
-
-        if (!IsCarried(scroll.Value, caster))
-        {
-            Reply(args, false, Loc.GetString("rune-scroll-not-carried"));
-            return;
-        }
-
-        if (!_blocker.CanInteract(caster, null))
-        {
-            Reply(args, false, Loc.GetString("rune-cast-incapacitated"));
-            return;
-        }
-
-        var chain = comp.Runes.Select(r => r.Id).ToList();
-        if (!TryCompose(chain, out var composition) || composition.Spell == null)
-            return;
-
-        _quiet = true;
-        _failure = null;
-        try
-        {
-            var cast = TryCast(caster, composition, GetCoordinates(msg.Target), true);
-            if (cast && comp.Action is { } action && TryGetCooldown(caster.Comp, composition.Key, out var left, out _))
-                _actions.SetCooldown(action, TimeSpan.FromSeconds(left));
-
-            Reply(args, cast, _failure);
-            if (cast)
-                QueueDel(scroll.Value);
-        }
-        finally
-        {
-            _quiet = false;
-        }
-    }
-
-    private void OnInscribed(Entity<RuneCasterComponent> ent, ref RuneInscribeDoAfterEvent args)
-    {
-        if (args.Cancelled || args.Handled || args.Used is not { } paper || Deleted(paper) || !ValidChain(ent.Comp, args.Runes) || args.Runes.Count > ScrollRunes)
-            return;
-
-        args.Handled = true;
-        EndSigil(ent, RuneSigilState.Cast);
-        var coords = Transform(paper).Coordinates;
-        QueueDel(paper);
-
-        var scroll = Spawn(ScrollPrototype, coords);
-        var comp = EnsureComp<RuneScrollComponent>(scroll);
-        comp.Runes = args.Runes.Select(r => new ProtoId<RunePrototype>(r)).ToList();
-        Dirty(scroll, comp);
-
-        if (TryCompose(args.Runes, out var composition) && composition.Spell != null)
-            _meta.SetEntityName(scroll, Loc.GetString("rune-scroll-name", ("spell", Loc.GetString(composition.Spell.Name))));
-
-        _hands.PickupOrDrop(ent, scroll);
-        _adminLog.Add(LogType.Action, LogImpact.Medium, $"{ToPrettyString(ent):user} inscribed rune scroll {ToPrettyString(scroll):entity} ({string.Join(",", args.Runes)})");
-        _popup.PopupEntity(Loc.GetString("rune-inscribe-done"), ent, ent);
-    }
-
-    private void OnScrollUse(Entity<RuneScrollComponent> ent, ref UseInHandEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        args.Handled = true;
-
-        if (!TryComp<RuneCasterComponent>(args.User, out var caster))
-        {
-            Misfire(ent, args.User);
-            return;
-        }
-
-        if (ent.Comp.BoundTo == args.User)
-        {
-            Unbind(ent);
-            _popup.PopupEntity(Loc.GetString("rune-scroll-unbound"), args.User, args.User);
-            return;
-        }
-
-        if (ent.Comp.BoundTo != null)
-            Unbind(ent);
-
-        if (caster.Scrolls.Count >= caster.MaxScrolls)
-        {
-            _popup.PopupEntity(Loc.GetString("rune-scroll-full", ("max", caster.MaxScrolls)), args.User, args.User, PopupType.SmallCaution);
-            return;
-        }
-
-        EntityUid? action = null;
-        if (!_actions.AddAction(args.User, ref action, ent.Comp.ActionPrototype))
-            return;
-
-        _meta.SetEntityName(action.Value, Name(ent));
-        EnsureComp<RuneScrollActionComponent>(action.Value).Scroll = ent;
-        ent.Comp.Action = action;
-        ent.Comp.BoundTo = args.User;
-        caster.Scrolls.Add(ent);
-        Dirty(ent);
-        Dirty(args.User, caster);
-        _popup.PopupEntity(Loc.GetString("rune-scroll-bound"), args.User, args.User);
-    }
-
-    private void Misfire(Entity<RuneScrollComponent> scroll, EntityUid user)
-    {
-        var chain = scroll.Comp.Runes.Select(r => r.Id).ToList();
-        _adminLog.Add(LogType.Action, LogImpact.Medium, $"{ToPrettyString(user):user} used rune scroll {ToPrettyString(scroll):entity} without magic ({string.Join(",", chain)})");
-        QueueDel(scroll);
-
-        if (!TryCompose(chain, out var composition) || composition.Spell == null || _random.Prob(scroll.Comp.MisfireChance))
-        {
-            _popup.PopupEntity(Loc.GetString("rune-scroll-misfire"), user, PopupType.MediumCaution);
-            if (Proto.TryIndex(MisfireSurge, out var surge) && surge.Entries.Count > 0)
-            {
-                var entry = _random.Pick(surge.Entries);
-                var context = new RuneCastContext(user, Transform(user).Coordinates, user, null);
-                foreach (var effect in entry.Effects)
-                    Apply(context, effect);
-            }
-
-            return;
-        }
-
-        var self = Transform(user).Coordinates;
-        var near = new RuneCastContext(user, self, user, composition);
-        foreach (var effect in composition.Spell.Effects)
-            Apply(near, effect);
-    }
-
-    private void OnScrollAction(Entity<RuneCasterComponent> ent, ref RuneScrollActionEvent args)
-    {
-        if (args.Handled ||
-            !TryComp<RuneScrollActionComponent>(args.Action, out var link) ||
-            link.Scroll is not { } scroll ||
-            !TryComp<RuneScrollComponent>(scroll, out var comp))
-            return;
-
-        args.Handled = true;
-
-        if (!IsCarried(scroll, ent))
-        {
-            _popup.PopupEntity(Loc.GetString("rune-scroll-not-carried"), ent, ent, PopupType.SmallCaution);
-            return;
-        }
-
-        var chain = comp.Runes.Select(r => r.Id).ToList();
-        if (!TryCompose(chain, out var composition) || composition.Spell == null)
-            return;
-
-        if (!TryCast(ent, composition, args.Target, true))
-            return;
-
-        if (TryGetCooldown(ent.Comp, composition.Key, out var left, out _))
-            _actions.SetCooldown(args.Action.Owner, TimeSpan.FromSeconds(left));
-
-        QueueDel(scroll);
-    }
-
-    private bool IsCarried(EntityUid item, EntityUid holder)
-    {
-        var parent = Transform(item).ParentUid;
-        while (parent.IsValid())
-        {
-            if (parent == holder)
-                return true;
-
-            parent = Transform(parent).ParentUid;
-        }
-
-        return false;
-    }
-
-    private void OnScrollShutdown(Entity<RuneScrollComponent> ent, ref ComponentShutdown args)
-    {
-        Unbind(ent);
-    }
-
-    private void Unbind(EntityUid scroll)
-    {
-        if (!TryComp<RuneScrollComponent>(scroll, out var comp))
-            return;
-
-        if (comp.BoundTo is { } owner && TryComp<RuneCasterComponent>(owner, out var caster))
-        {
-            caster.Scrolls.Remove(scroll);
-            Dirty(owner, caster);
-        }
-
-        if (comp.Action is { } action)
-            _actions.RemoveAction(action);
-
-        comp.Action = null;
-        comp.BoundTo = null;
-        if (!TerminatingOrDeleted(scroll))
-            Dirty(scroll, comp);
     }
 }

@@ -287,27 +287,28 @@
         types:
           Heat: 300
     - !type:RuneSpawnEffect
-      prototype: RuneFireTile
-      pattern: RingAroundCaster
-      size: 1
+      prototype: RuneFatalLava
+      pattern: AreaAtPoint
+      size: 2
+      skipBlocked: false
 
 - type: wizardRuneSurge
   id: RuneFatalIce
   entries:
   - popup: rune-fatal-ice
     effects:
-    - !type:RunePolymorphEffect
+    - !type:RunePetrifyEffect
       target: Caster
-      polymorph: RuneDoomIceStatue
+      color: "#9fe3ff"
 
 - type: wizardRuneSurge
   id: RuneFatalEarth
   entries:
   - popup: rune-fatal-earth
     effects:
-    - !type:RunePolymorphEffect
+    - !type:RunePetrifyEffect
       target: Caster
-      polymorph: RuneDoomStoneStatue
+      color: "#8a8178"
 
 - type: wizardRuneSurge
   id: RuneFatalLightning
@@ -328,6 +329,7 @@
     - !type:RunePolymorphEffect
       target: Caster
       polymorph: RuneDoomTree
+      petrify: true
 
 - type: wizardRuneSurge
   id: RuneFatalVoid
@@ -337,8 +339,13 @@
     - !type:RunePushEffect
       speed: -20
       radius: 6
-    - !type:RuneGibEffect
+    - !type:RuneVanishEffect
       target: Caster
+      delay: 1.5
+      portal: RuneVanishPortal
+      emote: Scream
+      sound:
+        path: /Audio/Effects/teleport_departure.ogg
 
 - type: wizardRuneSurge
   id: RuneFatalChaos
@@ -361,9 +368,15 @@
         types:
           Asphyxiation: 400
     - !type:RuneSpawnEffect
-      prototype: RuneSlickTile
+      prototype: RuneFatalWater
       pattern: AreaAtPoint
       size: 2
+      skipBlocked: false
+    - !type:RuneVanishEffect
+      target: Caster
+      delay: 1
+      sound:
+        path: /Audio/Effects/Fluids/watersplash.ogg
 
 - type: wizardRuneSurge
   id: RuneFatalAir
@@ -373,5 +386,9 @@
     - !type:RunePushEffect
       speed: 20
       radius: 6
+    - !type:RuneSpawnEffect
+      prototype: WizardSmoke
+      pattern: AtCaster
+      skipBlocked: false
     - !type:RuneGibEffect
       target: Caster

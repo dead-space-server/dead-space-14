@@ -17,6 +17,7 @@ public enum RuneButtonIcon : byte
     Close,
     Swap,
     Collapse,
+    Quick,
 }
 
 public sealed class RuneButton : Control
@@ -25,6 +26,8 @@ public sealed class RuneButton : Control
     public const float SmallDiameter = 20f;
 
     public event Action? Pressed;
+
+    public Func<bool>? Lit;
 
     private static readonly Color Gold = Color.FromHex("#e8c77a");
     private static readonly Color Night = Color.FromHex("#0b0614");
@@ -89,10 +92,11 @@ public sealed class RuneButton : Control
         var radius = (_small ? SmallDiameter : Diameter) / 2f * scale * (1f - _press * 0.4f);
         var center = new Vector2(PixelSize.X / 2f, radius + 2f * scale);
         var accent = _icon == RuneButtonIcon.Close ? Color.FromHex("#ff7a86") : Gold;
+        var lit = Lit?.Invoke() == true;
 
-        Glow(handle, center, radius * (3f + _glow), accent.WithAlpha(0.15f + 0.3f * _glow));
+        Glow(handle, center, radius * (3f + _glow + (lit ? 1f : 0f)), accent.WithAlpha(0.15f + 0.3f * _glow + (lit ? 0.3f : 0f)));
         handle.DrawCircle(center, radius, Night.WithAlpha(0.92f));
-        handle.DrawCircle(center, radius * 0.86f, Color.InterpolateBetween(Night, accent, 0.08f + 0.1f * _glow));
+        handle.DrawCircle(center, radius * 0.86f, Color.InterpolateBetween(Night, accent, 0.08f + 0.1f * _glow + (lit ? 0.35f : 0f)));
         RingTexture(handle, center, radius, 1.6f * scale, accent.WithAlpha(0.65f + 0.35f * _glow));
         RingTexture(handle, center, radius * 0.8f, 1f * scale, accent.WithAlpha(0.25f + 0.2f * _glow));
 
@@ -143,6 +147,14 @@ public sealed class RuneButton : Control
                 Line(handle, center + new Vector2(-s * 0.1f, -s), center + new Vector2(-s * 0.1f, s), w, ink);
                 handle.DrawCircle(center + new Vector2(-s * 0.55f, 0f), s * 0.32f, ink.WithAlpha(0.8f));
                 break;
+            case RuneButtonIcon.Quick:
+            {
+                var bolt = lit ? Color.White : ink;
+                Line(handle, center + new Vector2(s * 0.35f, -s * 1.1f), center + new Vector2(-s * 0.45f, s * 0.1f), w, bolt);
+                Line(handle, center + new Vector2(-s * 0.45f, s * 0.1f), center + new Vector2(s * 0.45f, -s * 0.1f), w, bolt);
+                Line(handle, center + new Vector2(s * 0.45f, -s * 0.1f), center + new Vector2(-s * 0.35f, s * 1.1f), w, bolt);
+                break;
+            }
         }
 
         if (_small)

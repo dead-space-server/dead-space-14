@@ -15,7 +15,7 @@
     speed: 24
     onHit:
     - !type:RuneBloodEffect
-      fraction: -0.3
+      fraction: -0.2
       drink: 0.5
 
 - type: wizardRuneSpell
@@ -68,16 +68,13 @@
   cooldown: 10
   loudness: 2
   effects:
-  - !type:RuneDamageEffect
-    damage:
-      types:
-        Bloodloss: 20
+  - !type:RuneBloodEffect
+    fraction: -0.35
+    drink: 1
   - !type:RuneDamageEffect
     target: Caster
     ignoreResistances: true
     damage:
-      types:
-        Bloodloss: -15
       groups:
         Brute: -10
 
@@ -161,6 +158,10 @@
   strain: 12
   loudness: 2
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: 10
   - !type:RuneDamageEffect
     target: Auto
     radius: 2.5
@@ -177,6 +178,10 @@
   strain: 12
   loudness: 1
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: -8
   - !type:RuneDamageEffect
     target: Auto
     radius: 2.5
@@ -225,7 +230,7 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 2.5
-    amount: 35
+    amount: 23
 
 - type: wizardRuneFusion
   id: RuneFusionTransfusion
@@ -445,6 +450,8 @@
     color: "#d4141f"
     radius: 1.5
     energy: 1
+  - type: RuneAnimateStrike
+    bloodFraction: 0.025
 
 - type: entity
   parent: MobFleshGolem

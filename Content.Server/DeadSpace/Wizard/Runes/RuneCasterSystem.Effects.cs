@@ -148,7 +148,7 @@ public sealed partial class RuneCasterSystem
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
 
-    private const float AnimateHealthScale = 0.6f;
+    private const float AnimateHealthScale = 0.06f;
     private const float BlastWardTail = 3f;
     private const float AnimateNormalWeight = 4f;
     private const float AnimateMinSize = 0.35f;
@@ -367,6 +367,22 @@ public sealed partial class RuneCasterSystem
             case RuneRandomEffect random when random.Options.Count > 0:
                 ApplyEffect(ctx, _random.Pick(random.Options));
                 break;
+            case RuneScreenFlashEffect flash:
+                ApplyScreenFlash(ctx, flash);
+                break;
+            case RuneLastWordsEffect lastWords:
+                ApplyLastWords(ctx, lastWords);
+                break;
+            case RunePetrifyEffect petrify:
+                foreach (var target in Targets(ctx, petrify))
+                    Petrify(target, petrify.Color);
+                break;
+            case RuneVanishEffect vanish:
+                ApplyVanish(ctx, vanish);
+                break;
+            case RuneRotEffect rot:
+                ApplyRot(ctx, rot);
+                break;
         }
     }
 
@@ -496,6 +512,8 @@ public sealed partial class RuneCasterSystem
 
             if (effect.PassableByCaster)
                 EnsureComp<PreventCollideComponent>(ent).Uid = ctx.Caster;
+
+            BindSpawned(ctx, ent);
         }
     }
 
@@ -518,6 +536,8 @@ public sealed partial class RuneCasterSystem
                 RemComp<GhostRoleComponent>(ent);
                 RemComp<GhostTakeoverAvailableComponent>(ent);
             }
+
+            BindSpawned(ctx, ent);
         }
     }
 
@@ -613,8 +633,34 @@ public sealed partial class RuneCasterSystem
     private void ApplyPush(RuneCastContext ctx, RunePushEffect effect)
     {
         var center = AtPoint(ctx, effect.AtPoint, effect.Auto) ? _transform.ToMapCoordinates(ctx.Point) : _transform.GetMapCoordinates(ctx.Caster);
-        _repulse.TryRepulseAttract(center, ctx.Caster, effect.Speed * ctx.Power, effect.Radius * ctx.RangeScale, _pushWhitelist, CollisionGroup.MobMask);
+        if (effect.Distance is { } distance)
+            Shove(ctx, center, effect.Speed * ctx.Power, effect.Radius * ctx.RangeScale, distance * ctx.Power);
+        else
+            _repulse.TryRepulseAttract(center, ctx.Caster, effect.Speed * ctx.Power, effect.Radius * ctx.RangeScale, _pushWhitelist, CollisionGroup.MobMask);
+
         PushDisplaced(ctx, center, effect.Speed * ctx.Power, effect.Radius * ctx.RangeScale);
+    }
+
+    private void Shove(RuneCastContext ctx, MapCoordinates center, float speed, float radius, float distance)
+    {
+        var targets = new HashSet<EntityUid>();
+        foreach (var mob in _lookup.GetEntitiesInRange<MobMoverComponent>(center, radius))
+            targets.Add(mob);
+        foreach (var item in _lookup.GetEntitiesInRange<ItemComponent>(center, radius))
+            targets.Add(item);
+
+        foreach (var target in targets)
+        {
+            if (target == ctx.Caster || _container.IsEntityInContainer(target) || Transform(target).Anchored)
+                continue;
+
+            var direction = _transform.GetWorldPosition(target) - center.Position;
+            if (direction.LengthSquared() < 0.001f)
+                continue;
+
+            var throwDirection = speed < 0 ? -direction : Vector2.Normalize(direction) * distance;
+            _throwing.TryThrow(target, throwDirection, MathF.Abs(speed), ctx.Caster, recoil: false, compensateFriction: true);
+        }
     }
 
     private static bool AtPoint(RuneCastContext ctx, bool atPoint, bool auto)
@@ -761,9 +807,6 @@ public sealed partial class RuneCasterSystem
         if (!TryComp<RuneCasterComponent>(from, out var source))
             return;
 
-        foreach (var scroll in source.Scrolls.ToArray())
-            Unbind(scroll);
-
         var copy = EnsureComp<RuneCasterComponent>(to);
         copy.Known = new HashSet<ProtoId<RunePrototype>>(source.Known);
         copy.Affinity = source.Affinity;
@@ -855,6 +898,8 @@ public sealed partial class RuneCasterSystem
         for (var i = 0; i < count; i++)
         {
             var uid = candidates[i].Uid;
+            var animated = SnapshotAnimated(uid, change, template);
+            var size = AnimateSize(uid);
             if (change != null)
             {
                 foreach (var name in change.ToRemove)
@@ -867,8 +912,13 @@ public sealed partial class RuneCasterSystem
             }
 
             EntityManager.AddComponents(uid, template.Components, true);
-            ScaleAnimateHealth(uid);
-            EnsureComp<TimedDespawnComponent>(uid).Lifetime = effect.Lifetime * ctx.DurationScale;
+            ScaleAnimateHealth(uid, size);
+            ScaleAnimateDamage(uid, size);
+            animated.End = Timing.CurTime + TimeSpan.FromSeconds(effect.Lifetime * ctx.DurationScale);
+            AddComp(uid, animated, true);
+            if (TryComp<RuneAnimateStrikeComponent>(uid, out var strike))
+                strike.Caster = ctx.Caster;
+
             if (ctx.Element != null && Proto.TryIndex<RunePrototype>(ctx.Element, out var element))
             {
                 var tint = EnsureComp<RuneTintComponent>(uid);
@@ -904,14 +954,10 @@ public sealed partial class RuneCasterSystem
         return !HasComp<MovementSpeedModifierComponent>(uid);
     }
 
-    private void ScaleAnimateHealth(EntityUid uid)
+    private void ScaleAnimateHealth(EntityUid uid, float size)
     {
         if (!TryComp<DestructibleComponent>(uid, out var destructible))
             return;
-
-        var size = AnimateLargeSize;
-        if (TryComp<ItemComponent>(uid, out var item))
-            size = Math.Clamp(_item.GetSizePrototype(item.Size).Weight / AnimateNormalWeight, AnimateMinSize, AnimateLargeSize);
 
         foreach (var threshold in destructible.Thresholds)
         {
@@ -923,14 +969,19 @@ public sealed partial class RuneCasterSystem
     private void ApplyPolymorph(RuneCastContext ctx, EntityUid target, RunePolymorphEffect effect)
     {
         var id = target == ctx.Caster && effect.OnCaster is { } own ? own : effect.Polymorph;
+        EntityUid? result;
         if (!effect.ScaleDuration || !Proto.TryIndex(id, out var proto) || proto.Configuration.Duration is not { } duration)
         {
-            _polymorph.PolymorphEntity(target, id);
-            return;
+            result = _polymorph.PolymorphEntity(target, id);
+        }
+        else
+        {
+            var configuration = proto.Configuration with { Duration = (int) MathF.Round(duration * ctx.DurationScale) };
+            result = _polymorph.PolymorphEntity(target, configuration);
         }
 
-        var configuration = proto.Configuration with { Duration = (int) MathF.Round(duration * ctx.DurationScale) };
-        _polymorph.PolymorphEntity(target, configuration);
+        if (effect.Petrify && result is { } morphed)
+            EnsureComp<RunePetrifiedComponent>(morphed);
     }
 
     private void GrantImmortality(EntityUid target, float seconds)

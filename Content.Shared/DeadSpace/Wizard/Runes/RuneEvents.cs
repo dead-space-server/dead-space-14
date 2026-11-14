@@ -1,7 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Actions;
-using Content.Shared.DoAfter;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -9,10 +8,6 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.DeadSpace.Wizard.Runes;
 
 public sealed partial class RuneCircleActionEvent : InstantActionEvent
-{
-}
-
-public sealed partial class RuneScrollActionEvent : WorldTargetActionEvent
 {
 }
 
@@ -44,27 +39,10 @@ public sealed class RuneCastMessage : EntityEventArgs
 {
     public readonly List<string> Runes;
     public readonly NetCoordinates Target;
-    public readonly bool Inscribe;
-    public readonly NetEntity? Paper;
 
-    public RuneCastMessage(List<string> runes, NetCoordinates target, bool inscribe, NetEntity? paper = null)
+    public RuneCastMessage(List<string> runes, NetCoordinates target)
     {
         Runes = runes;
-        Target = target;
-        Inscribe = inscribe;
-        Paper = paper;
-    }
-}
-
-[Serializable, NetSerializable]
-public sealed class RuneScrollCastMessage : EntityEventArgs
-{
-    public readonly NetEntity Scroll;
-    public readonly NetCoordinates Target;
-
-    public RuneScrollCastMessage(NetEntity scroll, NetCoordinates target)
-    {
-        Scroll = scroll;
         Target = target;
     }
 }
@@ -85,32 +63,35 @@ public sealed class RuneCastResultEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class RuneQuillOpenEvent : EntityEventArgs
 {
-    public readonly NetEntity Paper;
+    public readonly NetEntity Scroll;
 
-    public RuneQuillOpenEvent(NetEntity paper)
+    public RuneQuillOpenEvent(NetEntity scroll)
     {
-        Paper = paper;
+        Scroll = scroll;
     }
 }
 
 [Serializable, NetSerializable]
-public sealed partial class RuneInscribeDoAfterEvent : DoAfterEvent
+public sealed class RuneQuillInscribeMessage : EntityEventArgs
 {
-    [DataField]
-    public List<string> Runes = new();
+    public readonly NetEntity Scroll;
+    public readonly List<string> Runes;
 
-    private RuneInscribeDoAfterEvent()
+    public RuneQuillInscribeMessage(NetEntity scroll, List<string> runes)
     {
-    }
-
-    public RuneInscribeDoAfterEvent(List<string> runes)
-    {
+        Scroll = scroll;
         Runes = runes;
     }
+}
 
-    public override DoAfterEvent Clone()
+[Serializable, NetSerializable]
+public sealed class RuneQuillBurnMessage : EntityEventArgs
+{
+    public readonly NetEntity Scroll;
+
+    public RuneQuillBurnMessage(NetEntity scroll)
     {
-        return this;
+        Scroll = scroll;
     }
 }
 

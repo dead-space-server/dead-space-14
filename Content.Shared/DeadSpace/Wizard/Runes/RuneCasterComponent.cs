@@ -78,12 +78,6 @@ public sealed partial class RuneCasterComponent : Component
     public float ScrollStrainScale = 1.5f;
 
     [DataField]
-    public int MaxScrolls = 3;
-
-    [DataField]
-    public float InscribeTime = 6f;
-
-    [DataField]
     public ProtoId<RuneSurgePrototype> Surge = "WizardRuneSurge";
 
     [DataField]
@@ -137,10 +131,9 @@ public sealed partial class RuneCasterComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? CircleActionEntity;
 
-    [DataField, AutoNetworkedField]
-    public List<EntityUid> Scrolls = new();
-
     public ProtoId<RunePrototype>? LastElement;
+
+    public ProtoId<RunePrototype>? LastSecond;
 
     public int ElementStreak;
 

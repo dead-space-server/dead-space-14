@@ -353,6 +353,8 @@ public sealed partial class RuneCasterSystem
         var state = EnsureComp<RuneFrozenComponent>(ent);
         state.Field = fieldUid;
         state.Mob = mob;
+        if (mob)
+            EnsureComp<RuneTimeHeldComponent>(ent);
         if (!mob && TryComp<PhysicsComponent>(ent, out var physics))
         {
             state.Velocity = physics.LinearVelocity;
@@ -464,6 +466,7 @@ public sealed partial class RuneCasterSystem
             var rotationSpeed = state.RotationSpeed;
             var bodyType = state.Body;
             RemComp<RuneFrozenComponent>(frozen);
+            RemComp<RuneTimeHeldComponent>(frozen);
             RemComp<RuneProjectileHoldComponent>(frozen);
 
             if (rotationSpeed is { } speed && TryComp<MouseRotatorComponent>(frozen, out var rotator))

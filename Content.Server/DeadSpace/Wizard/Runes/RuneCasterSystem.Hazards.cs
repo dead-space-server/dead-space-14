@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Temperature.Systems;
 using Content.Shared.Body.Components;
@@ -70,7 +71,8 @@ public sealed partial class RuneCasterSystem
     private const float SoakKnockdown = 1.2f;
     private const float SoakInterval = 1.4f;
     private const float VacuumPopupInterval = 2f;
-    private const float VampireHeal = 0.25f;
+    private const float VampireHeal = 0.35f;
+    private const float VampireHealCap = 35f;
     private const string AirlossDamage = "Asphyxiation";
     private const string BruteGroup = "Brute";
 
@@ -148,10 +150,7 @@ public sealed partial class RuneCasterSystem
     private void ApplyTemperature(RuneCastContext ctx, RuneTemperatureEffect effect)
     {
         foreach (var target in Targets(ctx, effect))
-        {
-            if (TryComp<TemperatureComponent>(target, out var temperature))
-                _temperature.ForceChangeTemperature(target, MathF.Max(0f, temperature.CurrentTemperature + effect.Delta * ctx.Power), temperature);
-        }
+            ShiftTemperature(target, effect.Delta * ctx.Power);
     }
 
     private void ApplyInject(RuneCastContext ctx, RuneInjectEffect effect)
@@ -172,30 +171,49 @@ public sealed partial class RuneCasterSystem
     {
         foreach (var target in Targets(ctx, effect))
         {
-            if (!TryComp<BloodstreamComponent>(target, out var bloodstream) ||
-                !_solutions.ResolveSolution(target, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var blood))
-                continue;
-
-            var normal = blood.MaxVolume.Float() / MathF.Max(1f, bloodstream.MaxVolumeModifier);
-            var amount = normal * MathF.Abs(effect.Fraction) * ctx.Power;
-            if (amount <= 0f)
-                continue;
-
-            if (effect.Fraction > 0f)
+            var fraction = MathF.Abs(effect.Fraction) * ctx.Power;
+            if (effect.Fraction < 0f)
             {
-                _bloodstream.TryModifyBloodLevel((target, bloodstream), FixedPoint2.New(amount));
+                DrainBlood(ctx.Caster, target, fraction, effect.Drink);
                 continue;
             }
 
-            _bloodstream.TryModifyBloodLevel((target, bloodstream), FixedPoint2.New(-amount));
-            if (effect.Drink <= 0f || target == ctx.Caster)
-                continue;
-
-            var drunk = amount * effect.Drink;
-            _bloodstream.TryModifyBloodLevel(ctx.Caster, FixedPoint2.New(drunk));
-            if (Proto.TryIndex<DamageGroupPrototype>(BruteGroup, out var brute))
-                _damageable.TryChangeDamage(ctx.Caster, new DamageSpecifier(brute, FixedPoint2.New(-drunk * VampireHeal)), true, interruptsDoAfters: false);
+            if (TryNormalBlood(target, out var bloodstream, out var normal))
+                _bloodstream.TryModifyBloodLevel((target, bloodstream), FixedPoint2.New(normal * fraction));
         }
+    }
+
+    private bool TryNormalBlood(EntityUid target, [NotNullWhen(true)] out BloodstreamComponent? bloodstream, out float normal)
+    {
+        normal = 0f;
+        if (!TryComp(target, out bloodstream) ||
+            !_solutions.ResolveSolution(target, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var blood))
+            return false;
+
+        normal = blood.MaxVolume.Float() / MathF.Max(1f, bloodstream.MaxVolumeModifier);
+        return normal > 0f;
+    }
+
+    private void DrainBlood(EntityUid caster, EntityUid target, float fraction, float drink)
+    {
+        if (fraction <= 0f || !TryNormalBlood(target, out var bloodstream, out var normal))
+            return;
+
+        var amount = normal * fraction;
+        _bloodstream.TryModifyBloodLevel((target, bloodstream), FixedPoint2.New(-amount));
+        if (drink <= 0f || target == caster)
+            return;
+
+        var drunk = amount * drink;
+        _bloodstream.TryModifyBloodLevel(caster, FixedPoint2.New(drunk));
+        var heal = MathF.Min(drunk * VampireHeal, VampireHealCap);
+        if (Proto.TryIndex<DamageGroupPrototype>(BruteGroup, out var brute) && Proto.TryIndex(BurnGroup, out var burn))
+        {
+            var mend = new DamageSpecifier(brute, FixedPoint2.New(-heal)) + new DamageSpecifier(burn, FixedPoint2.New(-heal * 0.5f));
+            _damageable.TryChangeDamage(caster, mend, true, interruptsDoAfters: false);
+        }
+
+        _popup.PopupEntity(Loc.GetString("rune-blood-drink"), caster, caster, PopupType.Small);
     }
 
     private void ApplyDisarm(RuneCastContext ctx, RuneDisarmEffect effect)

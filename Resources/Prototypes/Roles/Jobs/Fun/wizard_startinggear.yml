@@ -15,9 +15,9 @@
   storage: #DS14
     back: #DS14
     - WizardRuneQuill #DS14
-    - Paper #DS14
-    - Paper #DS14
-    - Paper #DS14
+    - WizardRuneScroll #DS14
+    - WizardRuneScroll #DS14
+    - WizardRuneScroll #DS14
 
 - type: startingGear
   id: WizardRedGear

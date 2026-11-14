@@ -53,7 +53,7 @@
   - !type:RuneStaminaEffect
     target: AroundCaster
     radius: 4
-    amount: 15
+    amount: 10
   - !type:RuneExtinguishEffect
     target: AroundCaster
     radius: 4
@@ -155,14 +155,15 @@
   strain: 12
   cooldown: 4
   effects:
-  - !type:RuneKnockdownEffect
-    target: AroundPoint
-    radius: 2
-    time: 1.5
   - !type:RunePushEffect
     atPoint: true
     speed: 35
     radius: 2
+    distance: 5
+  - !type:RuneKnockdownEffect
+    target: AroundPoint
+    radius: 2.5
+    time: 2
   - !type:RuneStaminaEffect
     target: AroundPoint
     radius: 2
@@ -208,15 +209,11 @@
   cooldown: 8
   loudness: 1
   effects:
-  - !type:RuneDamageEffect
-    damage:
-      types:
-        Asphyxiation: 15
   - !type:RuneStaminaEffect
     amount: 25
   - !type:RuneVacuumEffect
-    time: 30
-    airlossPerSecond: 1
+    time: 60
+    airlossPerSecond: 0.5
 
 - type: wizardRuneSpell
   id: RuneSpellRecall

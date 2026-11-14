@@ -316,10 +316,95 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         else if (caster.Weakness == composition.Element.ID)
             scale *= 1.35f;
 
-        if (caster.LastElement == composition.Element.ID)
+        if (RepeatsElement(caster, composition))
             scale *= 1f + caster.FatigueStep * caster.ElementStreak;
 
         return strain * scale;
+    }
+
+    public static (float Caster, float Point) EffectAreas(RuneSpellPrototype spell, RuneComposition composition)
+    {
+        var caster = 0f;
+        var point = 0f;
+        foreach (var effect in spell.Effects)
+            AddArea(effect, composition, ref caster, ref point);
+
+        return spell.Targeting == RuneTargeting.Self ? (MathF.Max(caster, point), 0f) : (caster, point);
+    }
+
+    private static void AddArea(RuneSpellEffect effect, RuneComposition composition, ref float caster, ref float point)
+    {
+        var form = composition.Form;
+        var scale = composition.RangeScale;
+        switch (effect)
+        {
+            case RuneTargetedEffect targeted:
+            {
+                var mode = targeted.Target == RuneEffectTarget.Auto ? form.AutoTarget : targeted.Target;
+                if (mode == RuneEffectTarget.AroundCaster)
+                    caster = MathF.Max(caster, targeted.Radius * scale);
+                else if (mode == RuneEffectTarget.AroundPoint)
+                    point = MathF.Max(point, targeted.Radius * scale);
+                break;
+            }
+            case RunePushEffect push:
+            {
+                var atPoint = push.Auto ? form.AutoTarget is not (RuneEffectTarget.AroundCaster or RuneEffectTarget.Caster) : push.AtPoint;
+                if (atPoint)
+                    point = MathF.Max(point, push.Radius * scale);
+                else
+                    caster = MathF.Max(caster, push.Radius * scale);
+                break;
+            }
+            case RuneSpawnEffect spawn:
+                AddPatternArea(spawn.Pattern, spawn.Size + composition.Extra, form, ref caster, ref point);
+                break;
+            case RuneSpawnRandomEffect spawn:
+                AddPatternArea(spawn.Pattern, spawn.Size + composition.Extra, form, ref caster, ref point);
+                break;
+            case RuneDecayEffect decay:
+                if (decay.AroundCaster)
+                    caster = MathF.Max(caster, decay.Radius * scale);
+                else
+                    point = MathF.Max(point, decay.Radius * scale);
+                break;
+            case RuneLightningEffect lightning:
+                point = MathF.Max(point, lightning.Range * scale);
+                break;
+            case RuneRandomEffect random:
+                foreach (var option in random.Options)
+                    AddArea(option, composition, ref caster, ref point);
+                break;
+        }
+    }
+
+    private static void AddPatternArea(RuneSpawnPattern pattern, int size, RunePrototype form, ref float caster, ref float point)
+    {
+        if (pattern == RuneSpawnPattern.Auto)
+            pattern = form.AutoPattern;
+
+        switch (pattern)
+        {
+            case RuneSpawnPattern.RingAroundCaster:
+                caster = MathF.Max(caster, Math.Max(1, size) + 0.5f);
+                break;
+            case RuneSpawnPattern.RingAtPoint:
+                point = MathF.Max(point, Math.Max(1, size) + 0.5f);
+                break;
+            case RuneSpawnPattern.AreaAtPoint when size > 1:
+                point = MathF.Max(point, size - 0.5f);
+                break;
+        }
+    }
+
+    public static bool RepeatsElement(RuneCasterComponent caster, RuneComposition composition)
+    {
+        return Matches(caster, composition.Element.ID) || composition.Second is { } second && Matches(caster, second.ID);
+    }
+
+    private static bool Matches(RuneCasterComponent caster, string element)
+    {
+        return caster.LastElement == element || caster.LastSecond == element;
     }
 
     public int ComputeLoudness(IReadOnlyList<RunePrototype> runes, RuneSpellPrototype? spell)
@@ -362,8 +447,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
             names.Add(Loc.GetString(rune.Name));
 
         args.PushMarkup(Loc.GetString("rune-scroll-examine", ("runes", string.Join(" · ", names))));
-
-        if (ent.Comp.BoundTo is { } bound && bound == args.Examiner)
-            args.PushMarkup(Loc.GetString("rune-scroll-examine-bound"));
+        if (HasComp<RuneCasterComponent>(args.Examiner))
+            args.PushMarkup(Loc.GetString("rune-scroll-examine-use"));
     }
 }

@@ -12,7 +12,11 @@
   effects:
   - !type:RuneTelekinesisEffect
   - !type:RuneIgniteEffect
-    fireStacks: 1.5
+    fireStacks: 5
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Heat: 12
 
 - type: wizardRuneSpell
   id: RuneSpellGraspIce
@@ -25,8 +29,16 @@
   effects:
   - !type:RuneTelekinesisEffect
   - !type:RuneSlowEffect
-    time: 3
-    multiplier: 0.6
+    time: 10
+    multiplier: 0.3
+  - !type:RuneStaminaEffect
+    amount: 36
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Cold: 25
+  - !type:RuneTemperatureEffect
+    delta: -40
 
 - type: wizardRuneSpell
   id: RuneSpellGraspEarth
@@ -42,7 +54,11 @@
     pullSpeed: 9
     hurlSpeed: 16
   - !type:RuneKnockdownEffect
-    time: 1.5
+    time: 2
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Blunt: 12
 
 - type: wizardRuneSpell
   id: RuneSpellGraspLightning
@@ -56,7 +72,12 @@
   - !type:RuneTelekinesisEffect
     pullSpeed: 16
   - !type:RuneStaminaEffect
-    amount: 25
+    amount: 52
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Shock: 10
+  - !type:RuneLightningStrikeEffect
 
 - type: wizardRuneSpell
   id: RuneSpellGraspLife
@@ -70,9 +91,13 @@
   - !type:RuneTelekinesisEffect
     pullSpeed: 8
   - !type:RuneDamageEffect
+    ignoreResistances: true
     damage:
       groups:
-        Brute: -10
+        Brute: -36
+        Burn: -36
+        Toxin: -18
+        Airloss: -24
 
 - type: wizardRuneSpell
   id: RuneSpellGraspVoid
@@ -123,6 +148,8 @@
   effects:
   - !type:RuneTelekinesisEffect
   - !type:RuneExtinguishEffect
+  - !type:RuneSoakEffect
+    time: 10
 
 - type: wizardRuneSpell
   id: RuneSpellGraspAir
@@ -137,6 +164,11 @@
     pullSpeed: 18
     hurlSpeed: 28
     grabRadius: 1.2
+  - !type:RuneStaminaEffect
+    amount: 30
+  - !type:RuneVacuumEffect
+    time: 75
+    airlossPerSecond: 0.5
 
 - type: wizardRuneSpell
   id: RuneSpellGraspBlood
@@ -149,7 +181,12 @@
   loudness: 1
   effects:
   - !type:RuneTelekinesisEffect
+  - !type:RuneBloodEffect
+    fraction: -0.4
+    drink: 1
   - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
     damage:
-      types:
-        Bloodloss: 8
+      groups:
+        Brute: -12

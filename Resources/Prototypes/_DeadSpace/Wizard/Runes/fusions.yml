@@ -28,6 +28,10 @@
   second: RuneElementWater
   strain: 8
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: 8
   - !type:RuneSpawnEffect
     prototype: WizardSmoke
     pattern: Auto
@@ -51,6 +55,10 @@
   strain: 14
   loudness: 1
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: 10
   - !type:RuneSpawnEffect
     prototype: RuneMagmaTile
     pattern: Auto
@@ -80,6 +88,10 @@
   strain: 16
   loudness: 2
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: 10
   - !type:RuneDamageEffect
     target: Auto
     radius: 2
@@ -98,6 +110,10 @@
   second: RuneElementLife
   strain: 10
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: 5
   - !type:RuneDamageEffect
     target: Auto
     radius: 2.5
@@ -121,6 +137,10 @@
   strain: 20
   loudness: 2
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: 15
   - !type:RuneDamageEffect
     target: Auto
     radius: 2
@@ -141,6 +161,10 @@
   strain: 6
   absurdity: 2
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: 5
   - !type:RuneStaminaEffect
     target: Auto
     radius: 3
@@ -164,6 +188,10 @@
   strain: 14
   loudness: 1
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: -10
   - !type:RuneKnockdownEffect
     target: Auto
     radius: 2.5
@@ -182,6 +210,10 @@
   strain: 14
   loudness: 1
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: -10
   - !type:RuneDamageEffect
     target: Auto
     radius: 3
@@ -192,7 +224,7 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 3
-    amount: 35
+    amount: 23
   - !type:RuneSlowEffect
     target: Auto
     radius: 3
@@ -206,6 +238,10 @@
   second: RuneElementLife
   strain: 12
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: -8
   - !type:RuneDamageEffect
     target: Auto
     radius: 2
@@ -232,6 +268,10 @@
   strain: 20
   loudness: 2
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: -24
   - !type:RuneDamageEffect
     target: Auto
     radius: 2
@@ -253,6 +293,10 @@
   strain: 6
   absurdity: 2
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: -5
   - !type:RuneSpawnEffect
     prototype: RuneSlickTile
     pattern: AreaAtPoint
@@ -413,10 +457,20 @@
     target: Auto
     radius: 4
     lines: RuneChaosLines
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - RuneDiscoLight
+    pattern: AreaAtPoint
+    size: 3
+    count: 5
   - !type:RuneStaminaEffect
     target: Auto
     radius: 4
-    amount: 20
+    amount: 13
+  - !type:RuneEmoteEffect
+    target: Auto
+    radius: 4
+    emote: rune-emote-dance
   - !type:RuneSlowEffect
     target: Auto
     radius: 4
@@ -506,6 +560,10 @@
   strain: 12
   loudness: 1
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: -8
   - !type:RuneDamageEffect
     target: Auto
     radius: 2.5
@@ -571,7 +629,7 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 3
-    amount: 45
+    amount: 29
 
 - type: wizardRuneFusion
   id: RuneFusionLivingWater
@@ -647,7 +705,7 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 3
-    amount: 20
+    amount: 13
   - !type:RuneExtinguishEffect
     target: Auto
     radius: 3
@@ -663,26 +721,33 @@
   strain: 22
   loudness: 2
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: 8
   - !type:RuneSpawnEffect
-    prototype: WizardFireSpawn
+    prototype: RuneFireTile
     pattern: Auto
-    skipBlocked: false
+  - !type:RuneIgniteEffect
+    target: Auto
+    radius: 1.5
+    fireStacks: 1
   formEffects:
     RuneFormWall:
     - !type:RuneSpawnEffect
-      prototype: WizardFireSpawn
+      prototype: RuneFireTile
       pattern: LineAtPoint
       size: 3
     RuneFormWave:
     - !type:RuneIgniteEffect
       target: AroundCaster
-      radius: 3
-      fireStacks: 2
+      radius: 2.5
+      fireStacks: 1
     RuneFormSelf:
     - !type:RuneSpawnEffect
-      prototype: WizardFireSpawn
+      prototype: RuneFireTile
       pattern: RingAroundCaster
-      size: 2
+      size: 1
 
 - type: wizardRuneFusion
   id: RuneFusionBlizzardWind
@@ -691,6 +756,10 @@
   second: RuneElementIce
   strain: 14
   effects:
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    delta: -8
   - !type:RuneSpawnEffect
     prototype: WizardSmoke
     pattern: Auto

@@ -14,22 +14,26 @@ rune-strain-shaking = Руки начинают дрожать от напряж
 rune-strain-high = Вас окутывают искры. Ещё немного, и магия сорвётся!
 rune-animate-nothing = Рядом нет ничего, что можно оживить.
 
-rune-inscribe-need-paper = Чтобы записать формулу, возьмите в руку чистый лист.
-rune-inscribe-start = Вы выводите руны на бумаге...
-rune-inscribe-done = Свиток готов. Используйте его в руке, чтобы привязать к себе.
+rune-inscribe-done = Свиток готов.
+rune-inscribe-no-ultimate = Ультиму не удержит ни один свиток.
 
 rune-scroll-name = свиток «{ $spell }»
-rune-scroll-bound = Свиток привязан. Его заклинание теперь на панели действий.
-rune-scroll-unbound = Вы отвязываете свиток.
-rune-scroll-full = Можно держать наготове не больше { $max } свитков.
+rune-scroll-desc = Свиток, исписанный светящимися рунами. Прочесть его может кто угодно. Пережить сможет не каждый.
+rune-scroll-blank = Свиток пуст. Сначала начертите на нём руны пером.
 rune-scroll-misfire = Руны вспыхивают в неумелых руках!
-rune-scroll-not-carried = Свиток должен быть при вас.
+rune-scroll-aim = Кликните свитком туда, куда направить заклинание.
 rune-scroll-examine = Руны на свитке: [color=#d9b3ff]{ $runes }[/color].
-rune-scroll-examine-bound = [color=#b07bff]Свиток привязан к вам.[/color]
+rune-scroll-examine-use = [color=#b07bff]Кликните свитком по цели, чтобы прочесть. Формы на себя читаются в руке.[/color]
+
+rune-quill-title = Чистый свиток
+rune-quill-hint-form = Начертите руну формы
+rune-quill-hint-element = Начертите руну стихии
+rune-quill-done = Руны легли на свиток
+rune-quill-burned = Свиток сгорает в эфире
+rune-quill-burn-popup = Свиток вспыхивает и рассыпается пеплом.
 
 ## Рунный круг
 
-rune-circle-inscribe = На свиток
 rune-circle-clear = Стереть
 rune-circle-close = Закрыть
 rune-circle-hint-form = Начертите руну формы
@@ -40,18 +44,13 @@ rune-circle-hint-full = Формула заполнена · ПКМ: сотво�
 rune-circle-strain = Напряжение эфира: { $percent }%
 rune-circle-preview = → { $spell }
 rune-circle-preview-mismatch = руны не сочетаются
-rune-circle-preview-scroll = свиток → { $spell }
-rune-circle-preview-quill = вписать → { $spell }
-rune-circle-scrolls = Свитки
-rune-circle-scroll-armed = ПКМ читает свиток. Начертите руну или нажмите на свиток снова, чтобы отложить.
-rune-circle-quill-open = Перо касается листа. Начертите форму и стихию.
-rune-circle-hint-quill = Начертите форму для свитка
-rune-circle-hint-quill-ready = ПКМ вписывает формулу в лист
-rune-inscribe-need-quill = Чтобы записать формулу, держите в руке рунное перо.
 rune-quill-silent = Перо оставляет лишь бледную черту. Без магии оно молчит.
 rune-soak-slip = Вы поскальзываетесь, вода хлюпает в ботинках!
-rune-vacuum-start = Воздух вырывается из лёгких!
-rune-vacuum-mute = У вас во рту вакуум. Звук не рождается.
+rune-vacuum-start = В вашем рту вакуум!
+rune-vacuum-mute = В вашем рту вакуум. Звук не рождается.
+rune-blood-drink = Чужая кровь затягивает ваши раны.
+rune-seeker-slip = Вы поскальзываетесь на волшебной кожуре!
+rune-animate-revert = { CAPITALIZE($item) } замирает и снова становится вещью.
 rune-emote-dance = танцует
 rune-circle-need-two = Нужны минимум форма и стихия
 rune-circle-unrecognized = Руна не распознана
@@ -64,6 +63,7 @@ rune-circle-ultimate-cooldown = Ультимативная форма
 rune-circle-seconds = { $seconds } с
 rune-circle-toggle-mode = Компактный или полный вид
 rune-circle-toggle-circle = Скрыть или показать круг
+rune-circle-toggle-quick = Быстрый каст: заклинание срывается в курсор само через 0,4 с после последней руны
 rune-circle-sheet-title = Известные руны
 rune-circle-part-form = ФОРМА
 rune-circle-part-element = СТИХИЯ
@@ -287,7 +287,6 @@ rune-spell-grasp-water = Течением ко мне!
 rune-spell-grasp-air = Ветер, принеси!
 rune-spell-grasp-blood = Кровь, тянись ко мне!
 rune-telekinesis-nothing = Длани нечего схватить и нечего метнуть.
-rune-inscribe-too-complex = На свиток ложится только простая формула: форма и стихия, без модификаторов.
 rune-shield-break = Каменный щит рассыпается, приняв удар. Осталось: { $left }.
 
 ## Яд

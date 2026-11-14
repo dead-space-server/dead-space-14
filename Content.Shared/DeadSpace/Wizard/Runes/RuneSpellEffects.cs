@@ -1,12 +1,15 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Alert;
+using Content.Shared.Chat.Prototypes;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Dataset;
 using Content.Shared.Polymorph;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.DeadSpace.Wizard.Runes;
 
@@ -305,6 +308,9 @@ public sealed partial class RunePushEffect : RuneSpellEffect
 
     [DataField]
     public bool Auto;
+
+    [DataField]
+    public float? Distance;
 }
 
 public sealed partial class RuneTeleportEffect : RuneSpellEffect
@@ -329,6 +335,9 @@ public sealed partial class RunePolymorphEffect : RuneTargetedEffect
 
     [DataField]
     public bool ScaleDuration;
+
+    [DataField]
+    public bool Petrify;
 }
 
 public sealed partial class RuneComponentsEffect : RuneTargetedEffect
@@ -490,4 +499,53 @@ public sealed partial class RuneRandomEffect : RuneSpellEffect
 {
     [DataField(required: true)]
     public List<RuneSpellEffect> Options = new();
+}
+
+public sealed partial class RuneScreenFlashEffect : RuneTargetedEffect
+{
+    [DataField(required: true)]
+    public SpriteSpecifier Sprite = default!;
+
+    [DataField]
+    public float MinTime = 1f;
+
+    [DataField]
+    public float MaxTime = 2f;
+}
+
+public sealed partial class RuneLastWordsEffect : RuneTargetedEffect
+{
+    [DataField]
+    public int Lines = 5;
+
+    [DataField]
+    public float MinDelay = 15f;
+
+    [DataField]
+    public float MaxDelay = 60f;
+}
+
+public sealed partial class RunePetrifyEffect : RuneTargetedEffect
+{
+    [DataField]
+    public Color Color = Color.White;
+}
+
+public sealed partial class RuneVanishEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Delay = 1.2f;
+
+    [DataField]
+    public EntProtoId? Portal;
+
+    [DataField]
+    public SoundSpecifier? Sound;
+
+    [DataField]
+    public ProtoId<EmotePrototype>? Emote;
+}
+
+public sealed partial class RuneRotEffect : RuneTargetedEffect
+{
 }

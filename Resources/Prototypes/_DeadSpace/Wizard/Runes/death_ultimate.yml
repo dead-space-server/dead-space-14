@@ -15,10 +15,10 @@
     damage:
       types:
         Heat: 12
-  - !type:RuneGibEffect
+  - !type:RuneIgniteEffect
     target: Auto
     radius: 2.5
-    onlyDead: true
+    fireStacks: 4
 
 - type: wizardRuneFusion
   id: RuneFusionIceGrave
@@ -74,7 +74,7 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 2.5
-    amount: 50
+    amount: 33
 
 - type: wizardRuneFusion
   id: RuneFusionTime
@@ -171,6 +171,9 @@
     radius: 4
     onlyDead: true
     lines: RuneDeadLines
+  - !type:RuneLastWordsEffect
+    target: Auto
+    radius: 4
   - !type:RuneSlowEffect
     target: Auto
     radius: 4
@@ -405,7 +408,7 @@
   effects:
   - !type:RunePushEffect
     atPoint: true
-    speed: 16
+    speed: -16
     radius: 8
   - !type:RuneExtinguishEffect
     target: AroundPoint
@@ -414,7 +417,7 @@
   - !type:RuneStaminaEffect
     target: AroundPoint
     radius: 6
-    amount: 40
+    amount: 26
   - !type:RuneSpawnEffect
     prototype: RuneWaterPuddle
     pattern: AreaAtPoint
@@ -645,8 +648,9 @@
       shader: unshaded
   - type: PointLight
     color: "#ff7a2e"
-    radius: 3
-    energy: 3
+    radius: 6
+    energy: 8
+    castShadows: false
   - type: TimedDespawn
     lifetime: 1
   - type: SpawnOnDespawn
@@ -657,6 +661,11 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: TriggerOnSpawn
+  - type: PointLight
+    color: "#ffb03a"
+    radius: 8
+    energy: 10
+    castShadows: false
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default

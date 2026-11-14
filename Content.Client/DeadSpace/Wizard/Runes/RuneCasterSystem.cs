@@ -4,8 +4,6 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Viewport;
 using Content.Shared.DeadSpace.Wizard.Runes;
-using Content.Shared.Hands.Components;
-using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item;
 using Content.Shared.Magic.Components;
 using Content.Shared.Mind.Components;
@@ -34,12 +32,12 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly RuneVisualsSystem _visuals = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
 
     private const float MinStrokePixels = 16f;
     private const float RangeSlack = 0.5f;
     private const float TargetRadius = 0.9f;
     private const float SelfRadius = 0.6f;
+    private const float QuickCastDelay = 0.4f;
     private static readonly ProtoId<ShaderPrototype> OutlineInRange = "SelectionOutlineInrange";
     private static readonly ProtoId<ShaderPrototype> OutlineOutOfRange = "SelectionOutline";
 
@@ -49,19 +47,29 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
 
     private RuneCircleControl? _circle;
     private EntityUid? _caster;
+    private EntityUid? _chainOwner;
     private bool _inBlood;
+    private float? _quickLeft;
     private readonly List<string> _chain = new();
-    private readonly List<string> _scrollChain = new();
     private readonly Dictionary<RuneKind, List<(string Id, Vector2[] Template)>> _templates = new();
-    private EntityUid? _armed;
-    private EntityUid? _quillPaper;
+
+    private RuneQuillControl? _quill;
+    private EntityUid? _quillScroll;
+    private EntityUid? _quillCaster;
+    private readonly List<string> _quillRunes = new();
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<RuneCasterComponent, RuneCircleActionEvent>(OnToggle);
         SubscribeLocalEvent<RuneCasterComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<LocalPlayerDetachedEvent>(_ => Close(false));
+        SubscribeLocalEvent<LocalPlayerDetachedEvent>(_ =>
+        {
+            Close();
+            CloseQuill();
+            _chain.Clear();
+            _chainOwner = null;
+        });
         SubscribeNetworkEvent<RuneQuillOpenEvent>(OnQuillOpen);
         SubscribeNetworkEvent<RuneCastResultEvent>(OnCastResult);
         _outlineIn = Proto.Index(OutlineInRange).InstanceUnique();
@@ -71,30 +79,50 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
     public override void FrameUpdate(float frameTime)
     {
         base.FrameUpdate(frameTime);
-        UpdateScrolls();
+        if (_quill is { Expired: true } || _quill is { Finished: false } && (_quillScroll is not { } scroll || TerminatingOrDeleted(scroll)))
+            CloseQuill();
+
+        UpdateQuickCast(frameTime);
+
         var aim = ComputeAim();
         _visuals.Aim = aim;
         SetOutline(aim?.Targets, aim is { InRange: true });
     }
 
-    private void OnQuillOpen(RuneQuillOpenEvent ev)
+    private void UpdateQuickCast(float frameTime)
     {
-        if (_player.LocalEntity is not { } local || !TryComp<RuneCasterComponent>(local, out var comp) || !TryGetEntity(ev.Paper, out var paper))
+        if (_quickLeft is not { } left)
             return;
 
-        if (_circle == null)
-            Open((local, comp));
-
-        if (_circle == null)
+        if (_circle == null || !RuneCircleControl.QuickCast)
+        {
+            _quickLeft = null;
             return;
+        }
 
-        _quillPaper = paper;
-        _armed = null;
-        _chain.Clear();
-        _circle.Quill = true;
-        _circle.Armed = null;
-        _circle.Say(Loc.GetString("rune-circle-quill-open"));
-        Refresh();
+        if (_circle.Drawing)
+        {
+            _quickLeft = QuickCastDelay;
+            return;
+        }
+
+        left -= frameTime;
+        if (left > 0f)
+        {
+            _quickLeft = left;
+            return;
+        }
+
+        _quickLeft = null;
+        _circle.CastFlash();
+        Send();
+    }
+
+    private void ScheduleQuickCast()
+    {
+        _quickLeft = RuneCircleControl.QuickCast && TryCompose(_chain, out var composition) && composition.Spell != null
+            ? QuickCastDelay
+            : null;
     }
 
     private void OnCastResult(RuneCastResultEvent ev)
@@ -109,82 +137,14 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             return;
         }
 
-        if (_armed != null)
-            return;
-
         _chain.Clear();
         Refresh();
     }
 
-    private List<string> ActiveChain()
-    {
-        if (_armed is not { } scroll || !TryComp<RuneScrollComponent>(scroll, out var comp))
-            return _chain;
-
-        _scrollChain.Clear();
-        foreach (var rune in comp.Runes)
-            _scrollChain.Add(rune.Id);
-
-        return _scrollChain;
-    }
-
-    private void UpdateScrolls()
-    {
-        if (_circle == null || _caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp))
-            return;
-
-        _circle.Scrolls.Clear();
-        foreach (var scroll in comp.Scrolls)
-        {
-            if (!TryComp<RuneScrollComponent>(scroll, out var data) || data.Runes.Count < 2 ||
-                !Proto.TryIndex(data.Runes[0], out var form) || !Proto.TryIndex(data.Runes[1], out var element))
-                continue;
-
-            var left = 0f;
-            var fraction = 0f;
-            var chain = data.Runes.Select(r => r.Id).ToList();
-            if (TryCompose(chain, out var composition))
-                TryGetCooldown(comp, composition.Key, out left, out fraction);
-
-            _circle.Scrolls.Add(new RuneScrollChip(scroll, form, element, left, fraction));
-        }
-
-        if (_armed is { } armed && !comp.Scrolls.Contains(armed))
-        {
-            _armed = null;
-            _circle.Armed = null;
-            Refresh();
-        }
-    }
-
-    private void ToggleScroll(EntityUid scroll)
-    {
-        if (_circle == null)
-            return;
-
-        _armed = _armed == scroll ? null : scroll;
-        _quillPaper = null;
-        _circle.Quill = false;
-        _circle.Armed = _armed;
-        Refresh();
-    }
-
-    private void SendScroll()
-    {
-        if (_circle == null || _armed is not { } scroll || !CheckAim())
-            return;
-
-        var map = _eye.PixelToMap(_input.MouseScreenPosition.Position);
-        if (map.MapId == MapId.Nullspace)
-            return;
-
-        RaiseNetworkEvent(new RuneScrollCastMessage(GetNetEntity(scroll), GetNetCoordinates(_transform.ToCoordinates(map))));
-    }
-
     private RuneAim? ComputeAim()
     {
-        if (_circle == null || _quillPaper != null || _caster is not { } caster || TerminatingOrDeleted(caster) ||
-            !TryCompose(ActiveChain(), out var composition) || composition.Spell is not { } spell)
+        if (_circle == null || _caster is not { } caster || TerminatingOrDeleted(caster) ||
+            !TryCompose(_chain, out var composition) || composition.Spell is not { } spell)
             return null;
 
         var from = _transform.GetMapCoordinates(caster);
@@ -197,6 +157,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             Color = composition.Element.Color,
             Point = to,
         };
+        (aim.CasterArea, aim.PointArea) = EffectAreas(spell, composition);
 
         if (spell.Targeting == RuneTargeting.Self)
         {
@@ -303,7 +264,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             return;
 
         var shader = inRange ? _outlineIn : _outlineOut;
-        shader?.SetParameter("outline_width", _eye.MainViewport.GetRenderScale());
+        shader?.SetParameter("outline_width", (float) _eye.MainViewport.GetRenderScale());
         foreach (var uid in targets)
         {
             _outlined.Add(uid);
@@ -315,7 +276,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
     private bool CheckAim()
     {
         if (_circle == null || _caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp) ||
-            !TryCompose(ActiveChain(), out var composition) || composition.Spell == null)
+            !TryCompose(_chain, out var composition) || composition.Spell == null)
             return true;
 
         if (TryGetCooldown(comp, composition.Key, out var left, out _) && left > 0f)
@@ -351,7 +312,8 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
     public override void Shutdown()
     {
         base.Shutdown();
-        Close(false);
+        Close();
+        CloseQuill();
     }
 
     private void OnToggle(Entity<RuneCasterComponent> ent, ref RuneCircleActionEvent args)
@@ -370,6 +332,15 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
     {
         if (_caster == ent.Owner)
             Close();
+
+        if (_quillCaster == ent.Owner)
+            CloseQuill();
+
+        if (_chainOwner == ent.Owner)
+        {
+            _chain.Clear();
+            _chainOwner = null;
+        }
     }
 
     public override void Update(float frameTime)
@@ -382,16 +353,13 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         RebuildKnown(comp);
 
         if (!comp.InBlood && _chain.Contains(comp.BloodRune.Id))
-            _chain.Clear();
+            ClearChain();
 
         Refresh();
     }
 
-    private void RebuildKnown(RuneCasterComponent comp)
+    private List<string> KnownIds(RuneCasterComponent comp)
     {
-        _inBlood = comp.InBlood;
-        _templates.Clear();
-
         var ids = new List<string>();
         foreach (var id in comp.Known)
             ids.Add(id);
@@ -399,8 +367,16 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         if (comp.InBlood && !ids.Contains(comp.BloodRune.Id))
             ids.Add(comp.BloodRune.Id);
 
+        return ids;
+    }
+
+    private void RebuildKnown(RuneCasterComponent comp)
+    {
+        _inBlood = comp.InBlood;
+        _templates.Clear();
+
         var known = new List<RunePrototype>();
-        foreach (var id in ids)
+        foreach (var id in KnownIds(comp))
         {
             if (!Proto.TryIndex<RunePrototype>(id, out var rune))
                 continue;
@@ -423,7 +399,10 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
     private void Open(Entity<RuneCasterComponent> ent)
     {
         _caster = ent;
-        _chain.Clear();
+        if (_chainOwner != ent.Owner || !_chain.TrueForAll(id => Knows(ent.Comp, id)))
+            ClearChain();
+
+        _chainOwner = ent.Owner;
 
         _circle = new RuneCircleControl
         {
@@ -439,43 +418,34 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         RebuildKnown(ent.Comp);
 
         _circle.StrokeFinished += OnStroke;
-        _circle.CastRequested += () =>
-        {
-            if (_quillPaper != null)
-                Send(true);
-            else if (_armed != null)
-                SendScroll();
-            else
-                Send(false);
-        };
-        _circle.InscribeRequested += () => Send(true);
-        _circle.ScrollToggled += ToggleScroll;
+        _circle.CastRequested += Send;
         _circle.ClearRequested += () =>
         {
-            if (_chain.Count > 0)
-                RaiseNetworkEvent(new RuneSigilClearMessage());
-
-            _chain.Clear();
+            ClearChain();
             Refresh();
         };
-        _circle.CloseRequested += () => Close();
+        _circle.CloseRequested += Close;
 
         _ui.PopupRoot.AddChild(_circle);
         LayoutContainer.SetAnchorAndMarginPreset(_circle, LayoutContainer.LayoutPreset.Wide);
         Refresh();
     }
 
-    private void Close(bool notify = true)
+    private void ClearChain()
     {
-        if (notify && _circle != null && _chain.Count > 0)
+        if (_chain.Count > 0)
             RaiseNetworkEvent(new RuneSigilClearMessage());
 
+        _chain.Clear();
+        _quickLeft = null;
+    }
+
+    private void Close()
+    {
+        _quickLeft = null;
         _circle?.Orphan();
         _circle = null;
         _caster = null;
-        _armed = null;
-        _quillPaper = null;
-        _chain.Clear();
     }
 
     private void OnStroke(List<Vector2> points)
@@ -483,24 +453,10 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         if (_circle == null || _caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp) || points.Count < 2)
             return;
 
-        var min = points[0];
-        var max = points[0];
-        foreach (var point in points)
-        {
-            min = Vector2.Min(min, point);
-            max = Vector2.Max(max, point);
-        }
-
-        if (MathF.Max(max.X - min.X, max.Y - min.Y) < MinStrokePixels * _circle.UIScale)
+        if (StrokeSize(points) < MinStrokePixels * _circle.UIScale)
             return;
 
-        if (_armed != null)
-        {
-            _armed = null;
-            _circle.Armed = null;
-        }
-
-        var expected = ExpectedNext(comp);
+        var expected = NextKind(_chain, comp.MaxRunes);
         var threshold = GetStrainFraction(comp) > 0.5f ? comp.ShakenRecognition : comp.Recognition;
 
         if (expected is { } kind &&
@@ -512,17 +468,35 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             RaiseNetworkEvent(new RuneDrawnMessage(id, _chain.Count - 1, new List<string>(_chain)));
             _circle.Flash(true);
             Refresh();
+            ScheduleQuickCast();
             return;
         }
+
+        if (_quickLeft != null)
+            _quickLeft = QuickCastDelay;
 
         _circle.Flash(false);
         _circle.Say(Loc.GetString("rune-circle-unrecognized"));
         RaiseNetworkEvent(new RuneFizzleMessage());
     }
 
-    private void Send(bool inscribe)
+    private static float StrokeSize(List<Vector2> points)
     {
-        if (_circle == null || _caster is not { } caster)
+        var min = points[0];
+        var max = points[0];
+        foreach (var point in points)
+        {
+            min = Vector2.Min(min, point);
+            max = Vector2.Max(max, point);
+        }
+
+        return MathF.Max(max.X - min.X, max.Y - min.Y);
+    }
+
+    private void Send()
+    {
+        _quickLeft = null;
+        if (_circle == null || _caster == null)
             return;
 
         if (_chain.Count < 2)
@@ -531,73 +505,20 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             return;
         }
 
-        if (inscribe && _quillPaper == null && !HoldsQuill(caster))
-        {
-            _circle.Warn(Loc.GetString("rune-inscribe-need-quill"));
-            return;
-        }
-
-        if (inscribe && _chain.Count > 2)
-        {
-            _circle.Warn(Loc.GetString("rune-inscribe-too-complex"));
-            return;
-        }
-
-        if (!inscribe && !CheckAim())
+        if (!CheckAim())
             return;
 
-        EntityCoordinates coords;
-        if (inscribe)
-        {
-            coords = Transform(caster).Coordinates;
-        }
-        else
-        {
-            var map = _eye.PixelToMap(_input.MouseScreenPosition.Position);
-            if (map.MapId == MapId.Nullspace)
-                return;
+        var map = _eye.PixelToMap(_input.MouseScreenPosition.Position);
+        if (map.MapId == MapId.Nullspace)
+            return;
 
-            coords = _transform.ToCoordinates(map);
-        }
-
-        NetEntity? paper = inscribe && _quillPaper is { } chosen ? GetNetEntity(chosen) : null;
-        RaiseNetworkEvent(new RuneCastMessage(new List<string>(_chain), GetNetCoordinates(coords), inscribe, paper));
-        if (inscribe)
-            _chain.Clear();
-        if (inscribe && _quillPaper != null)
-        {
-            _quillPaper = null;
-            _circle.Quill = false;
-        }
-
+        RaiseNetworkEvent(new RuneCastMessage(new List<string>(_chain), GetNetCoordinates(_transform.ToCoordinates(map))));
         Refresh();
-    }
-
-    private RuneKind? ExpectedNext(RuneCasterComponent comp)
-    {
-        if (_armed != null || _quillPaper != null && _chain.Count >= 2)
-            return null;
-
-        return NextKind(_chain, comp.MaxRunes);
-    }
-
-    private bool HoldsQuill(EntityUid uid)
-    {
-        if (!TryComp<HandsComponent>(uid, out var hands))
-            return false;
-
-        foreach (var held in _hands.EnumerateHeld((uid, hands)))
-        {
-            if (HasComp<RuneQuillComponent>(held))
-                return true;
-        }
-
-        return false;
     }
 
     private (float Left, float Fraction)? CurrentCooldown()
     {
-        if (_caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp) || !TryCompose(ActiveChain(), out var composition))
+        if (_caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp) || !TryCompose(_chain, out var composition))
             return null;
 
         (float Left, float Fraction)? result = null;
@@ -615,21 +536,115 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         if (_circle == null || _caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp))
             return;
 
-        var chain = ActiveChain();
         _circle.Chain.Clear();
-        _circle.Chain.AddRange(ResolveRunes(chain));
-        _circle.Expected = ExpectedNext(comp);
-        _circle.SecondElement = chain.Count == 3 && IsFusion(chain[2]);
+        _circle.Chain.AddRange(ResolveRunes(_chain));
+        _circle.Expected = NextKind(_chain, comp.MaxRunes);
+        _circle.SecondElement = _chain.Count == 3 && IsFusion(_chain[2]);
 
-        if (chain.Count < 2)
+        if (_chain.Count < 2)
         {
             _circle.Preview = null;
             return;
         }
 
-        var preview = _armed != null ? "rune-circle-preview-scroll" : _quillPaper != null ? "rune-circle-preview-quill" : "rune-circle-preview";
-        _circle.Preview = TryCompose(chain, out var composition) && composition.Spell != null
-            ? Loc.GetString(preview, ("spell", Loc.GetString(composition.Spell.Name)))
+        _circle.Preview = TryCompose(_chain, out var composition) && composition.Spell != null
+            ? Loc.GetString("rune-circle-preview", ("spell", Loc.GetString(composition.Spell.Name)))
             : Loc.GetString("rune-circle-preview-mismatch");
+    }
+
+    private void OnQuillOpen(RuneQuillOpenEvent ev)
+    {
+        if (_player.LocalEntity is not { } local || !TryComp<RuneCasterComponent>(local, out var comp) || !TryGetEntity(ev.Scroll, out var scroll))
+            return;
+
+        CloseQuill();
+        if (_circle != null)
+            Close();
+
+        RebuildKnown(comp);
+        _quillScroll = scroll;
+        _quillCaster = local;
+        _quillRunes.Clear();
+        _quill = new RuneQuillControl();
+        _quill.StrokeFinished += OnQuillStroke;
+        _quill.CloseRequested += CloseQuill;
+        _ui.PopupRoot.AddChild(_quill);
+        LayoutContainer.SetAnchorAndMarginPreset(_quill, LayoutContainer.LayoutPreset.Wide);
+        RefreshQuill(comp);
+    }
+
+    private void CloseQuill()
+    {
+        _quill?.Orphan();
+        _quill = null;
+        _quillScroll = null;
+        _quillCaster = null;
+        _quillRunes.Clear();
+    }
+
+    private void RefreshQuill(RuneCasterComponent comp)
+    {
+        if (_quill == null)
+            return;
+
+        _quill.Expected = _quillRunes.Count switch
+        {
+            0 => RuneKind.Form,
+            1 => RuneKind.Element,
+            _ => null,
+        };
+
+        _quill.Hints.Clear();
+        if (_quill.Expected is not { } kind)
+            return;
+
+        foreach (var id in KnownIds(comp))
+        {
+            if (Proto.TryIndex<RunePrototype>(id, out var rune) && rune.Kind == kind && !rune.Ultimate)
+                _quill.Hints.Add(rune);
+        }
+
+        _quill.Hints.Sort((a, b) => a.Order.CompareTo(b.Order));
+    }
+
+    private void OnQuillStroke(List<Vector2> points)
+    {
+        if (_quill == null || _quill.Finished || _quillScroll is not { } scroll || _quillCaster is not { } caster ||
+            !TryComp<RuneCasterComponent>(caster, out var comp) || points.Count < 2 || _quill.Expected is not { } kind)
+            return;
+
+        if (StrokeSize(points) < MinStrokePixels * _quill.UIScale)
+            return;
+
+        if (_templates.TryGetValue(kind, out var templates) &&
+            RuneRecognizer.TryMatch(points, templates.Where(t => !IsFusion(t.Id)), comp.Recognition, out var id, out _) &&
+            id != null && Proto.TryIndex<RunePrototype>(id, out var rune))
+        {
+            if (rune.Ultimate)
+            {
+                _quill.Warn(Loc.GetString("rune-inscribe-no-ultimate"));
+                return;
+            }
+
+            var chain = new List<string>(_quillRunes) { id };
+            if (chain.Count == 2 && (!TryCompose(chain, out var composition) || composition.Spell == null))
+            {
+                _quill.Warn(Loc.GetString("rune-circle-preview-mismatch"));
+                return;
+            }
+
+            _quillRunes.Add(id);
+            _quill.Accept(rune);
+            RefreshQuill(comp);
+            if (_quillRunes.Count < 2)
+                return;
+
+            RaiseNetworkEvent(new RuneQuillInscribeMessage(GetNetEntity(scroll), new List<string>(_quillRunes)));
+            _quill.Done();
+            return;
+        }
+
+        RaiseNetworkEvent(new RuneQuillBurnMessage(GetNetEntity(scroll)));
+        _quill.Burn();
     }
 }

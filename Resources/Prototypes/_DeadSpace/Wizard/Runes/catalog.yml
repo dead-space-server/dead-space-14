@@ -163,7 +163,7 @@
   raiseProductEventOnUser: true
   disableRefund: true
   cost:
-    WizCoin: 2
+    WizCoin: 3
   categories:
   - SpellbookRuneElements
   conditions:

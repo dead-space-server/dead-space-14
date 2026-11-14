@@ -61,7 +61,7 @@
     speed: 26
     onHit:
     - !type:RuneStaminaEffect
-      amount: 80
+      amount: 52
       resistAs: Shock
 
 - type: wizardRuneSpell
@@ -105,20 +105,23 @@
       prototype: RuneProjectileRubberDuck
       count: 5
       spread: 8
+      onHit:
+      - !type:RuneScreenFlashEffect
+        sprite:
+          sprite: Objects/Fun/ducky.rsi
+          state: icon
     - !type:RuneSpawnRandomEffect
       prototypes:
-      - TrashBananaPeel
+      - RuneChaosBanana
       pattern: AreaAtPoint
       size: 2
       count: 6
-      lifetime: 30
     - !type:RuneSpawnRandomEffect
       prototypes:
-      - FoodPieBananaCream
+      - RuneChaosPie
       pattern: AreaAtPoint
       size: 1
       count: 3
-      lifetime: 30
 
 # Стена
 
@@ -204,6 +207,7 @@
     prototype: RuneHedge
     pattern: LineAtPoint
     size: 3
+    rows: 3
     lifetime: 25
 
 - type: wizardRuneSpell
@@ -473,7 +477,7 @@
   loudness: 1
   effects:
   - !type:RuneStaminaEffect
-    amount: 70
+    amount: 46
   - !type:RuneDamageEffect
     damage:
       types:
@@ -785,12 +789,12 @@
   effects:
   - !type:RuneSpawnRandomEffect
     prototypes:
-    - MobGoose
-    - MobGorilla
-    - MobKangaroo
-    - MobClownSpider
-    - MobDuckMallard
-    - MobPig
+    - RuneChaosGoose
+    - RuneChaosGorilla
+    - RuneChaosKangaroo
+    - RuneChaosClownSpider
+    - RuneChaosDuck
+    - RuneChaosPig
     pattern: AreaAtPoint
     size: 2
     count: 3

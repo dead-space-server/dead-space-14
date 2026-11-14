@@ -8,7 +8,6 @@ namespace Content.Server.DeadSpace.Wizard.Runes;
 
 public sealed partial class RuneCasterSystem
 {
-    private const float SigilIdle = 8f;
     private const float SigilLinger = 1f;
     private const float ImpactMaxRadius = 6f;
 
@@ -75,13 +74,12 @@ public sealed partial class RuneCasterSystem
         var query = EntityQueryEnumerator<RuneSigilComponent>();
         while (query.MoveNext(out var uid, out var sigil))
         {
-            var age = (float) (Timing.CurTime - sigil.Changed).TotalSeconds;
             if (sigil.State == RuneSigilState.Drawing)
             {
-                if (age > SigilIdle)
+                if (!HasComp<ActorComponent>(uid) || !HasComp<RuneCasterComponent>(uid) || !_blocker.CanInteract(uid, null))
                     EndSigil(uid, RuneSigilState.Fade);
             }
-            else if (age > SigilLinger)
+            else if ((Timing.CurTime - sigil.Changed).TotalSeconds > SigilLinger)
             {
                 RemCompDeferred<RuneSigilComponent>(uid);
             }

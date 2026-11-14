@@ -64,6 +64,7 @@ using Content.Shared.Throwing;
 using Content.Shared.Traits.Assorted;
 using Content.Shared.DeadSpace.TheCircle.Geist;
 using Content.Shared.DeadSpace.Weapons.Parry;
+using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Hitscan.Components;
@@ -373,9 +374,14 @@ public sealed partial class LimbWoundSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString(aiming ? "limb-aim-on" : "limb-aim-off"), uid, uid);
     }
 
+    private bool Untouchable(EntityUid uid)
+    {
+        return HasComp<GodmodeComponent>(uid) || HasComp<RuneTimeHeldComponent>(uid);
+    }
+
     public LimbStrikeResult Strike(EntityUid uid, LimbStrike strike, LimbBodyComponent? limbs = null, bool ready = false)
     {
-        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(uid) || !Resolve(uid, ref limbs))
+        if (!LimbTuning.Enabled || Untouchable(uid) || !Resolve(uid, ref limbs))
             return LimbStrikeResult.Miss();
 
         EnsureZones(limbs);
@@ -726,7 +732,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnMelee(EntityUid uid, LimbBodyComponent limbs, AttackedEvent args)
     {
-        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(uid) || !TryComp<MeleeWeaponComponent>(args.Used, out var melee))
+        if (!LimbTuning.Enabled || Untouchable(uid) || !TryComp<MeleeWeaponComponent>(args.Used, out var melee))
             return;
 
         var zone = LimbZone.Torso;
@@ -1131,7 +1137,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnProjectile(Entity<ProjectileComponent> ent, ref ProjectileHitEvent args)
     {
-        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(args.Target) || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
+        if (!LimbTuning.Enabled || Untouchable(args.Target) || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
             return;
 
         var shooter = args.Shooter;
@@ -1221,7 +1227,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnHitscan(Entity<HitscanBasicDamageComponent> ent, ref HitscanDamageDealtEvent args)
     {
-        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(args.Target) || args.Data.Shooter is not { } shooter || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
+        if (!LimbTuning.Enabled || Untouchable(args.Target) || args.Data.Shooter is not { } shooter || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
             return;
 
         var aiming = TryComp<LimbAimComponent>(shooter, out var aim) && aim.Aiming && AimPrecise(shooter);
@@ -1684,7 +1690,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnBlast(Entity<LimbBodyComponent> ent, ref BeforeExplodeEvent args)
     {
-        if (!LimbTuning.Enabled || _net.IsClient || HasComp<GodmodeComponent>(ent))
+        if (!LimbTuning.Enabled || _net.IsClient || Untouchable(ent))
             return;
 
         if (args.Damage.GetTotal() <= 0)

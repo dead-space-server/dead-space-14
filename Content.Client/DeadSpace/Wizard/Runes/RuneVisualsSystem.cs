@@ -31,6 +31,8 @@ public sealed class RuneAim
     public RuneTargeting Targeting;
     public Color Color;
     public MapCoordinates Point;
+    public float CasterArea;
+    public float PointArea;
     public readonly List<EntityUid> Targets = new();
     public bool InRange;
     public bool Valid;
@@ -85,12 +87,14 @@ public sealed class RuneVisualsSystem : EntitySystem
         SubscribeLocalEvent<RuneSigilComponent, ComponentShutdown>(OnSigilShutdown);
         SubscribeNetworkEvent<RuneImpactEvent>(OnImpact);
         _overlays.AddOverlay(new RuneSigilOverlay(this));
+        _overlays.AddOverlay(new RuneScreenFlashOverlay());
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
         _overlays.RemoveOverlay<RuneSigilOverlay>();
+        _overlays.RemoveOverlay<RuneScreenFlashOverlay>();
         foreach (var track in Tracks.Values)
         {
             if (track.Light is { } light)

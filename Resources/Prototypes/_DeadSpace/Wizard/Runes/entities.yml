@@ -17,31 +17,13 @@
   - type: InstantAction
     event: !type:RuneCircleActionEvent
 
-- type: entity
-  parent: BaseAction
-  id: ActionWizardRuneScroll
-  name: Рунный свиток
-  description: Мгновенно прочесть записанную формулу. Свиток сгорит.
-  components:
-  - type: Action
-    itemIconStyle: BigAction
-    priority: -19
-    icon:
-      sprite: Objects/Magic/magicactions.rsi
-      state: spell_default
-  - type: TargetAction
-    range: 30
-    checkCanAccess: false
-  - type: WorldTargetAction
-    event: !type:RuneScrollActionEvent
-
 # Свиток и перо
 
 - type: entity
   parent: BaseItem
   id: WizardRuneQuill
   name: рунное перо
-  description: Перо, что пишет светом. Коснитесь им чистого листа и начертите форму со стихией, чтобы вложить их в свиток.
+  description: Перо, что пишет светом. Коснитесь им чистого рунного свитка и начертите на нём форму и стихию. Неверный штрих сожжёт свиток.
   components:
   - type: Sprite
     sprite: Objects/Misc/pens.rsi
@@ -85,8 +67,8 @@
 - type: entity
   parent: [ BaseItem, BaseMagicalContraband ]
   id: WizardRuneScroll
-  name: рунный свиток
-  description: Бумага, исписанная светящимися рунами. Прочесть её может кто угодно. Пережить сможет не каждый.
+  name: чистый рунный свиток
+  description: Пустой свиток, готовый принять руны. Коснитесь его рунным пером и начертите форму и стихию.
   components:
   - type: Sprite
     sprite: _DeadSpace/Wizard/rune_scroll.rsi
@@ -101,7 +83,7 @@
       visible: false
       shader: unshaded
   - type: Item
-    size: Tiny
+    size: Small
   - type: RuneScroll
   - type: PointLight
     color: "#b07bff"
@@ -230,11 +212,52 @@
     damage:
       types:
         Blunt: 1
+    soundHit:
+      path: /Audio/Items/Toys/quack.ogg
+    forceSound: true
   - type: StaminaDamageOnCollide
     damage: 8
-  - type: EmitSoundOnCollide
+
+- type: entity
+  parent: TrashBananaPeel
+  id: RuneChaosBanana
+  suffix: Маг, хаос
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RuneSeeker
+    mode: Slip
+    speed: 4
+    range: 8
+    knockdown: 2
+    rest: 2.5
     sound:
-      path: /Audio/Items/Toys/quack.ogg
+      path: /Audio/Effects/slip.ogg
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 15
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: entity
+  parent: FoodPieBananaCream
+  id: RuneChaosPie
+  suffix: Маг, хаос
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RuneSeeker
+    mode: Throw
+    speed: 4
+    range: 8
+    reach: 1.6
+  - type: TimedDespawn
+    lifetime: 10
 
 # Плитки и стены
 
@@ -465,6 +488,10 @@
     color: "#ff8c00"
     radius: 2
     energy: 2
+  - type: RuneAnimateStrike
+    minTemperature: 2.5
+    maxTemperature: 5
+    igniteChance: 0.1
 
 - type: entity
   id: RuneAnimateIceTemplate
@@ -491,7 +518,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 200
+        damage: 150
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -499,6 +526,11 @@
     color: "#7fd4ff"
     radius: 1.5
     energy: 1
+  - type: RuneAnimateStrike
+    minTemperature: -5
+    maxTemperature: -2.5
+    slowChance: 0.1
+    slowTime: 3
 
 - type: entity
   id: RuneAnimateEarthTemplate
@@ -516,8 +548,8 @@
     angle: 0.0
     damage:
       types:
-        Blunt: 14
-        Structural: 20
+        Blunt: 5
+        Structural: 45
   - type: Destructible
     thresholds:
     - trigger:
@@ -535,8 +567,8 @@
     factions:
     - Wizard
   - type: MovementSpeedModifier
-    baseWalkSpeed: 4.5
-    baseSprintSpeed: 5.5
+    baseWalkSpeed: 9
+    baseSprintSpeed: 11
   - type: MeleeWeapon
     animation: WeaponArcPunch
     wideAnimation: WeaponArcPunch
@@ -551,7 +583,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 60
+        damage: 15
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -586,6 +618,8 @@
     color: "#6dff8f"
     radius: 1.5
     energy: 1
+  - type: RuneAnimateStrike
+    healFraction: 0.25
 
 - type: entity
   id: RuneAnimateVoidTemplate
@@ -611,6 +645,11 @@
     color: "#a77bff"
     radius: 1.5
     energy: 1
+  - type: Stealth
+    maxVisibility: 1.2
+  - type: StealthOnMove
+    passiveVisibilityRate: -0.25
+    movementVisibilityRate: 0.25
 
 - type: entity
   id: RuneAnimateChaosTemplate
@@ -631,11 +670,22 @@
     angle: 0.0
     damage:
       types:
-        Blunt: 9
+        Blunt: 3
   - type: PointLight
     color: "#ff6ad5"
     radius: 1.5
     energy: 1.5
+  - type: RuneAnimateStrike
+    randomTypes:
+    - Blunt
+    - Slash
+    - Piercing
+    - Heat
+    - Cold
+    - Shock
+    - Caustic
+    randomMin: 1
+    randomMax: 4
 
 # Призывы
 
@@ -721,13 +771,172 @@
   - type: NpcFactionMember
     factions:
     - Wizard
-  - type: PassiveDamage
-    allowedStates:
-    - Alive
-    damage:
+  - type: HTN
+    rootTask:
+      task: FollowCompound
+    blackboard:
+      FollowCloseRange: !type:Single
+        1.5
+      FollowRange: !type:Single
+        3
+  - type: RuneMedic
+    interval: 2
+    range: 2.5
+    heal:
       groups:
-        Brute: -1
-        Burn: -1
+        Brute: -3
+        Burn: -3
+        Airloss: -2
+
+- type: entity
+  parent: MobGoose
+  id: RuneChaosGoose
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavSmash: !type:Bool
+        true
+  - type: CombatMode
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Animals/goose_honk.ogg
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      types:
+        Piercing: 6
+
+- type: entity
+  parent: MobDuckMallard
+  id: RuneChaosDuck
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavSmash: !type:Bool
+        true
+  - type: CombatMode
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Items/Toys/quack.ogg
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      types:
+        Piercing: 4
+
+- type: entity
+  parent: MobPig
+  id: RuneChaosPig
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavSmash: !type:Bool
+        true
+  - type: CombatMode
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Items/bikehorn.ogg
+    angle: 0
+    animation: WeaponArcPunch
+    damage:
+      types:
+        Blunt: 7
+
+- type: entity
+  parent: MobGorilla
+  id: RuneChaosGorilla
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavSmash: !type:Bool
+        true
+  - type: CombatMode
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Weapons/punch1.ogg
+    angle: 0
+    animation: WeaponArcFist
+    damage:
+      types:
+        Blunt: 14
+
+- type: entity
+  parent: MobKangaroo
+  id: RuneChaosKangaroo
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavSmash: !type:Bool
+        true
+  - type: CombatMode
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Weapons/punch1.ogg
+    angle: 0
+    animation: WeaponArcFist
+    damage:
+      types:
+        Blunt: 10
+
+- type: entity
+  parent: MobClownSpider
+  id: RuneChaosClownSpider
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavSmash: !type:Bool
+        true
+  - type: CombatMode
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Items/bikehorn.ogg
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      types:
+        Piercing: 8
 
 - type: entity
   parent: MobBasilisk
@@ -817,8 +1026,63 @@
   - type: Kudzu
     growthTickChance: 0
     spreadChance: 0
+  - type: DamageContacts
+    damage:
+      groups:
+        Brute: -1.5
+        Burn: -1.5
+        Toxin: -1
+  - type: PointLight
+    color: "#7dff8a"
+    radius: 1.5
+    energy: 0.8
   - type: TimedDespawn
     lifetime: 30
+
+- type: entity
+  id: RuneLifeOrb
+  name: сфера жизни
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#6dff8f"
+      shader: unshaded
+    scale: 0.6, 0.6
+  - type: PointLight
+    color: "#6dff8f"
+    radius: 1.5
+    energy: 2
+  - type: TimedDespawn
+    lifetime: 5
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: RuneDiscoLight
+  name: диско-огонёк
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      shader: unshaded
+  - type: PointLight
+    radius: 3.5
+    energy: 3
+  - type: RgbLightController
+    cycleRate: 0.8
+  - type: TimedDespawn
+    lifetime: 6
+  - type: Tag
+    tags:
+    - HideContextMenu
 
 # Модификаторы урона
 
@@ -932,7 +1196,7 @@
       types:
         Blunt: 8
   - type: StaminaDamageOnCollide
-    damage: 60
+    damage: 39
   - type: StunOnCollide
     slowdownAmount: 2
     walkSpeedModifier: 0.7
@@ -1017,6 +1281,22 @@
     color: "#4aa8ff"
     radius: 1.5
     energy: 1
+  - type: RuneAnimateStrike
+    puddle: RuneWaterPuddleSmall
+
+- type: entity
+  id: RuneWaterPuddleSmall
+  parent: PuddleTemporary
+  suffix: Маг, вода
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      puddle:
+        maxVol: 1000
+        reagents:
+        - ReagentId: Water
+          Quantity: 5
 
 - type: entity
   id: RuneAnimateAirTemplate
@@ -1046,6 +1326,9 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: RuneAnimateStrike
+    disarmChance: 0.15
+    pushChance: 0.25
 
 - type: entity
   parent: MobBat
@@ -1135,25 +1418,45 @@
 
 # Смертельные превращения
 
-- type: polymorph
-  id: RuneDoomIceStatue
-  configuration:
-    entity: StatueVenusBlue
-    forced: true
-    transferName: true
-    inventory: Drop
-    revertOnCrit: false
-    revertOnDeath: false
+- type: entity
+  parent: FloorLavaEntity
+  id: RuneFatalLava
+  suffix: Маг, срыв
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 60
 
-- type: polymorph
-  id: RuneDoomStoneStatue
-  configuration:
-    entity: StatueIronsandTall
-    forced: true
-    transferName: true
-    inventory: Drop
-    revertOnCrit: false
-    revertOnDeath: false
+- type: entity
+  parent: FloorWaterEntity
+  id: RuneFatalWater
+  suffix: Маг, срыв
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 60
+
+- type: entity
+  id: RuneVanishPortal
+  name: разрыв пустоты
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/Effects/portal.rsi
+    drawdepth: Effects
+    layers:
+    - state: portal-blue
+      color: "#c08aff"
+      shader: unshaded
+  - type: PointLight
+    color: "#a77bff"
+    radius: 3
+    energy: 2
+  - type: TimedDespawn
+    lifetime: 3
+  - type: Tag
+    tags:
+    - HideContextMenu
 
 - type: polymorph
   id: RuneDoomTree
