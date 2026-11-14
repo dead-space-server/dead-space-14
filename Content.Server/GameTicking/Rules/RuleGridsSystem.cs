@@ -56,7 +56,8 @@ public sealed class RuleGridsSystem : GameRuleSystem<RuleGridsComponent>
         var query = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
         {
-            if (xform.MapID != ent.Comp.Map)
+            //if (xform.MapID != ent.Comp.Map)
+            //    continue;
                 continue;
 
             if (xform.GridUid is not {} grid || !ent.Comp.MapGrids.Contains(grid))
