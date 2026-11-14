@@ -413,11 +413,16 @@
     - sgm-dm
   name: save-gamemode-deathmatch-title
   description: save-gamemode-deathmatch-description
-  showInVote: false
-  showInAdminVote: true # DS14
-  voteType: admin # DS14
+  showInVote: true
+  voteType: rdm
+  showInAdminVote: true
   rules:
     - SaveGamemodeDeathmatch
+    - WageScheduler # backmen: currency
+    - Changeling
+    - MeteorSwarmScheduler
+    - SurvivalRampingStationEventScheduler
+    - BasicRoundstartVariation
 
 - type: gamePreset
   id: SaveGamemodeExtended
@@ -427,8 +432,16 @@
     - sgm-ext
   name: save-gamemode-extended-title
   description: save-gamemode-extended-description
-  showInVote: false
-  showInAdminVote: true # DS14
-  voteType: admin # DS14
+  showInVote: true
+  showInAdminVote: true
+  voteType: calm # DS14
   rules:
     - SaveGamemodeExtended
+    - BrokenTechEvent #DS14
+    - WageScheduler # backmen: currency
+    - BasicStationEventScheduler
+    - MeteorSwarmScheduler
+    - SpaceTrafficControlEventScheduler
+    - BasicRoundstartVariation
+    - SubGamemodesRuleNoWizardNoXenoborg # DS14
+
