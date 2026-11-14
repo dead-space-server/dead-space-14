@@ -74,7 +74,10 @@ public sealed partial class LimbWoundSystem
         if (edit.ClearSkinBare)
             state.SkinBare = false;
         if (edit.ClearSevered)
+        {
             state.Severed = false;
+            ShowZone(body, zone);
+        }
 
         if (!state.Severed && !state.Atrophied && state.Health >= cap - 0.05f)
             ClearStrikeLedger(body, limbs, ref state);

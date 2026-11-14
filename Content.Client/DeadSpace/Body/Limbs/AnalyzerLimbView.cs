@@ -70,7 +70,8 @@ public sealed class AnalyzerLimbView : Control
                 continue;
 
             var part = sprite[index];
-            if (!part.Visible)
+            var tintZone = zone == LimbZone.Eyes ? LimbZone.Head : zone;
+            if (!part.Visible && Missing(tintZone))
                 continue;
 
             Texture? texture = part.Texture;
@@ -83,7 +84,6 @@ public sealed class AnalyzerLimbView : Control
             if (texture == null)
                 continue;
 
-            var tintZone = zone == LimbZone.Eyes ? LimbZone.Head : zone;
             if (zone != LimbZone.Torso || texture.Height <= 0)
             {
                 handle.DrawTextureRect(texture, box, Color.White);
@@ -101,6 +101,12 @@ public sealed class AnalyzerLimbView : Control
             handle.DrawTextureRectRegion(texture, groinDst, groinSrc, Color.White);
             handle.DrawTextureRectRegion(texture, groinDst, groinSrc, Tint(LimbZone.Groin));
         }
+    }
+
+    private bool Missing(LimbZone zone)
+    {
+        var index = (int) zone;
+        return (uint) index < (uint) Shades.Length && Shades[index] == LimbScan.Missing;
     }
 
     private Color Tint(LimbZone zone)
