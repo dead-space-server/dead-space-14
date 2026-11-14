@@ -1,7 +1,7 @@
 - type: entity
   parent: ClothingShoesBase
   id: ClothingShoesBootsMagDeathSquad
-  name: чёрные магнитные ботинки
+  name: чёрные магнитные сапоги
   suffix: Эскадрон Смерти
   description: Магнитные ботинки, специально разработанные для непрерывной работы без снижения эффективности.
   components:
@@ -26,7 +26,7 @@
 - type: entity
   parent: ClothingShoesBootsMag
   id: ClothingShoesBootsMagSecurity
-  name: магнитные ботинки службы безопасности
+  name: магнитные сапоги службы безопасности
   description: Несколько лет в них пытались засунуть ещё одну светяшку.
   components:
   - type: Sprite
@@ -43,7 +43,7 @@
 - type: entity
   parent: ClothingShoesBootsMag
   id: ClothingShoesBootsMagHos
-  name: магнитные ботинки главы службы безопасности
+  name: магнитные сапоги главы службы безопасности
   description: Элитные магнитки для элиты. Золото не настоящее, кстати.
   components:
   - type: Sprite
@@ -56,5 +56,22 @@
     sprintModifier: 0.9
   - type: ClothingSlowOnDamageModifier
     modifier: 0.5
+  - type: StaticPrice
+    price: 750
+
+- type: entity
+  parent: ClothingShoesBootsMag
+  id: ClothingShoesBootsMagCaptain
+  name: магнитные сапоги капитана
+  description: Тёмно-синие магнитные сапоги с золотыми украшениями. Великолепно!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/captain_magboots.rsi
+    state: icon
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/captain_magboots.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
   - type: StaticPrice
     price: 750

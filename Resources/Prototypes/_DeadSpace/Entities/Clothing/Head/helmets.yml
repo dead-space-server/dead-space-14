@@ -8,3 +8,167 @@
     sprite: _DeadSpace/Clothing/Head/Helmets/samurai_helmet.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Head/Helmets/samurai_helmet.rsi
+
+# Centcom helmets
+
+- type: entity
+  parent: ClothingHeadHelmetBase
+  id: ClothingHeadHelmetCentcomSecurityGreen
+  name: шлем офицера ЦК
+  description: Лёгкий тактический шлем офицера безопасности Центрального Командования.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Helmets/centcom_security_green.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Helmets/centcom_security_green.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.85
+        Heat: 0.85
+  - type: StaminaResistance
+    damageCoefficient: 0.8
+
+- type: entity
+  parent: ClothingHeadHelmetBase
+  id: ClothingHeadHelmetCentcomSecurityUSSP
+  name: бронешлем офицера ЦК
+  description: Тяжёлый бронешлем типа "БЗ-3", изготовленный для Службы безопасности ЦК.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Helmets/centcom_security_ussp.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Helmets/centcom_security_ussp.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.85
+        Slash: 0.85
+        Piercing: 0.75
+        Heat: 0.75
+  - type: StaminaResistance
+    damageCoefficient: 0.8
+
+# Sec helmets
+
+- type: entity
+  parent: [ClothingHeadHatHardhatBase, BaseSecurityContraband]
+  id: ClothingHeadHelmetSecurityFlashlight
+  name: тактический шлем
+  description: Стандартная защитная экипировка со встроенным фонариком. Защищает голову от ударов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Helmets/securityflash.rsi
+    layers:
+    - state: icon
+    - state: light-icon
+      shader: unshaded
+      visible: false
+      map: [ "light" ]
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Helmets/securityflash.rsi
+    clothingVisuals: {}
+  - type: ToggleableVisuals
+    spriteLayer: light
+    inhandVisuals:
+      left:
+      - state: on-inhand-left
+      right:
+      - state: on-inhand-right
+    clothingVisuals:
+      head:
+      - state: on-equipped-HELMET
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+    - SecurityHelmet
+  - type: Construction
+    graph: ClothingHeadHelmetSecurityFlashlight
+    node: securityHelmetFlashlight
+
+- type: entity
+  parent: ClothingHeadHelmetBasic
+  id: ClothingHeadHelmetBasicNeko
+  name: шлем с ушками
+  description: Нестандартная защитная экипировка. Защищает голову от ударов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Helmets/security-neko.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Helmets/security-neko.rsi
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+
+# Blueshield
+
+- type: entity
+  parent: ClothingHeadHelmetSwat
+  id: ClothingHeadHelmetBlueShield
+  name: шлем Офицера "Синий Щит"
+  description: Очень прочный шлем, широко используемый военизированными организациями. На его верхней части выгравирован логотип Корпуса "Синий Щит".
+  components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.5
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Helmets/blueshieldhelmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Helmets/blueshieldhelmet.rsi
+  - type: Tag
+    tags:
+    - BlueShieldHatUpdateArmor
+
+# Makeshift
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatHardhatCraft
+  name: самодельный бронированный шлем
+  description: Жёлтая каска с приделанной к ней металлической пластиной.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/crafthelmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/crafthelmet.rsi
+  - type: Armor 
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.8
+  - type: Construction
+    graph: ClothingCraftHelmet
+    node: clothingCraftHelmet
+
+# Iaa officer
+
+- type: entity
+  parent: [ClothingHeadHelmetArmoredBase, BaseSecurityContraband]
+  id: ClothingHeadHelmetIAAOfficer
+  name: шлем офицера ВД
+  description: Защитный шлем офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Helmets/iaa_officer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Helmets/iaa_officer.rsi

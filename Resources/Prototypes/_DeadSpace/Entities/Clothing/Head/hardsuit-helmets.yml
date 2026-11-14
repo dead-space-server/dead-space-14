@@ -285,3 +285,183 @@
     color: "#ffeead"
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
+
+# Senior officer
+
+- type: entity
+  parent: [ClothingHeadHelmetHardsuitSecurity]
+  id: ClothingHeadHelmetHardsuitSeniorOfficer
+  categories: [ HideSpawnMenu ]
+  name: шлем скафандра инструктора СБ
+  description: Шлем скафандра инструктора службы безопасности, на лицевой части шлема есть четыре ярко голубых визора, что словно смотрят вам в душу?
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/senior_officer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/senior_officer.rsi
+
+# QM
+
+- type: entity
+  parent: [ClothingHeadHelmetHardsuitSalvage]
+  id: ClothingHeadHelmetHardsuitQM
+  categories: [ HideSpawnMenu ]
+  name: шлем скафандра квартирмейстера
+  description: Шлем скафандра квартирмейстера.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/qm.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/qm.rsi
+
+# Pilot
+
+- type: entity
+  parent: [ClothingHeadHelmetHardsuitSecurity]
+  id: ClothingHeadHelmetHardsuitPilot
+  categories: [ HideSpawnMenu ]
+  name: pilot hardsuit helmet
+  description: The steering wheel is imprinted in the visor of this helmet.
+  components:
+  - type: Sprite
+    sprite: _ADT/Clothing/Head/Hardsuits/pilotsuithelm.rsi
+  - type: Clothing
+    sprite: _ADT/Clothing/Head/Hardsuits/pilotsuithelm.rsi
+  - type: PointLight
+    color: white
+
+- type: entity
+  parent: [ClothingHeadHelmetHardsuitSecurity]
+  id: ClothingHeadHelmetHardsuitSecurityPilot
+  categories: [ HideSpawnMenu ]
+  name: security pilot hardsuit helmet
+  description: Looks like something that inspires order.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/pilotsuithelmsec.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/pilotsuithelmsec.rsi
+  - type: PointLight
+    color: '#3fb594'
+    radius: 6
+    energy: 3
+
+# Blueshields
+
+- type: entity
+  parent: [ClothingHeadHelmetHardsuitSecurityRed]
+  id: ClothingHeadHelmetHardsuitBlueShield
+  categories: [ HideSpawnMenu, DoNotMap ]
+  name: шлем скафандра офицера "Синий Щит"
+  description: Предназначен для защитника командования.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/blueshield.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/blueshield.rsi
+  - type: PointLight
+    color: '#4ac4ff'
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+
+- type: entity
+  parent: [ClothingHeadHelmetHardsuitSecurityRed]
+  id: ClothingHeadHelmetHardsuitRedSword
+  categories: [ HideSpawnMenu, DoNotMap ]
+  name: шлем скафандра офицера "Красный Меч"
+  description: Предназначен для спасателя.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/redsword.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/redsword.rsi
+  - type: PointLight
+    color: '#ff2400'
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    
+- type: entity
+  parent: [ClothingHeadHelmetHardsuitSecurityRed]
+  id: ClothingHeadHelmetHardsuitGreenBeret
+  categories: [ HideSpawnMenu, DoNotMap ]
+  name: шлем скафандра офицера "Зелёный Берет"
+  description: Предназначен для спасателя.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/greenberet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/greenberet.rsi
+  - type: PointLight
+    color: '#339900'
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+
+# ne ebu, FSCP?
+
+- type: entity
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  id: ClothingHeadHelmetHardsuitFSCP
+  categories: [ HideSpawnMenu ]
+  name: шлем штурмового cкафандра армии КПСК
+  description: Бронированный шлем скафандра для нужд армии КПСК.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/fscp.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/fscp.rsi
+  - type: PointLight
+    color: red
+  - type: PressureProtection
+    highPressureMultiplier: 0.525
+    lowPressureMultiplier: 1000
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.85
+        Slash: 0.85
+        Piercing: 0.85
+        Heat: 0.85
+        Radiation: 0.6
+        Caustic: 0.85
+
+# Centcom
+
+- type: entity
+  parent: [ClothingHeadHelmetHardsuitSecurityRed]
+  id: ClothingHeadHelmetHardsuitCentcomBlack
+  categories: [ HideSpawnMenu, DoNotMap ]
+  name: шлем скафандра Полевого Офицера
+  description: Предназначен для элитного офицера КСО.
+  components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.1
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/centcom_officer_black.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/centcom_officer_black.rsi
+  - type: PointLight
+    color: '#4ac4ff'
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide

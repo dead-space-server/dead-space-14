@@ -15,3 +15,30 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Back/Duffels/captain_black.rsi
+
+- type: entity
+  parent: ClothingBackpackDuffel
+  id: ClothingBackpackDuffelRobotics
+  name: вещмешок робототехника
+  description: Большой вещмешок для хранения дополнительных запчастей киборгов и инструментов.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Back/Duffels/robotics.rsi
+
+- type: entity
+  parent: ClothingBackpackDuffelSecurity
+  id: ClothingBackpackDuffelIAAOfficer
+  name: вещмешок офицера ВД
+  description: Большой вещмешок офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Duffels/iaa_officer.rsi
+
+- type: entity
+  parent: ClothingBackpackDuffel
+  id: ClothingBackpackDuffelCoroner
+  name: вещмешок коронера
+  description: Большой вещмешок для хранения дополнительных медицинских припасов.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Back/Duffels/coroner.rsi

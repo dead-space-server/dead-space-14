@@ -26,3 +26,17 @@
     sprite: _DeadSpace/Clothing/Head/Hoods/Bio/chem.rsi
   - type: VirusResistance
     virusResistanceCoefficient: 0.9
+
+# Coroner
+
+- type: entity
+  parent: ClothingHeadHatHoodWinterBase
+  id: ClothingHeadHatHoodWinterCoroner
+  categories: [ HideSpawnMenu ]
+  name: капюшон зимней куртки коронера
+  description: Капюшон, чтобы держать голову в тепле.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hoods/Coat/coroner.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hoods/Coat/coroner.rsi

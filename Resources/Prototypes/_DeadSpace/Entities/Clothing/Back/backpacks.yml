@@ -15,3 +15,75 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Back/Backpacks/captain_black.rsi
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackCoroner
+  name: рюкзак коронера
+  description: Рюкзак коронера - донеси свою любовь к трупам, не говоря даже слов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Backpacks/coroner.rsi
+
+- type: entity
+  parent: ClothingBackpackSecurity
+  id: ClothingBackpackIAAOfficer
+  name: рюкзак офицера ВД
+  description: Прочный рюкзак офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Backpacks/iaa_officer.rsi
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackRobotics
+  name: рюкзак робототехника
+  description: Этот рюкзак был разработан специально, чтобы сварочное масло и механические повреждения не могли его испортить.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Backpacks/robotics.rsi
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackCentcomBlack
+  name: модифицированный рюкзак Полевого Офицера
+  description: Рюкзак элитного Офицера КСО.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/centcom_officer_black.rsi
+  - type: Storage
+    grid:
+    - 0,0,9,7
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: ToggleableClothing
+    toggleDelay: 1
+    clothingPrototype: ClothingOuterHardsuitCentcomBlack
+    requiredSlot: BACK
+    slot: outerClothing
+  - type: Clothing
+    equipDelay: 1
+    unequipDelay: 1
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
+  - type: StorageFill
+    contents:
+        - id: BoxCardboardERT
+        - id: JawsOfLifeSpecialOperationsOfficer
+        - id: BSAACombatKitFilled
+        - id: InjectorCaseERTFilled
+        - id: InjectorCaseStimFilled
+        - id: ADTCombatHypo
+        - id: PinpointerNuclear
+        - id: SpeedLoaderMagnum
+        - id: SpeedLoaderMagnum
+        - id: SpeedLoaderMagnum
+        - id: SpeedLoaderMagnum
+        - id: MagazineBoxMagnum
+        - id: MacroBombImplanter
+  - type: ExplosionResistance
+    damageCoefficient: 0.6
