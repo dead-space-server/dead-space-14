@@ -391,7 +391,7 @@
       sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
       state: icon
     - type: Item
-      heldPrefix: ratvarian
+      heldPrefix: icon #DS14
       sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
     - type: Clothing
       sprite: Objects/Weapons/Melee/ratvarian-shield.rsi

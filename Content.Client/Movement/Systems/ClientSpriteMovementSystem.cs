@@ -43,7 +43,7 @@ public sealed class ClientSpriteMovementSystem : SharedSpriteMovementSystem
 
         // DS14-start
         // Keep the incapacitated body sprite when the last movement update arrives after a mob-state change.
-        if (ent.Comp.EquipmentAnimationLayer != null && _mobState.IsIncapacitated(ent.Owner))
+        if (_mobState.IsIncapacitated(ent.Owner))
         {
             UpdateEquipment(ent);
             return;
