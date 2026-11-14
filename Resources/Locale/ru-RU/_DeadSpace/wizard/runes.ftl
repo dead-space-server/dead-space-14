@@ -343,7 +343,7 @@ rune-fusion-ash = Прах к праху!
 rune-fusion-ice-grave = Ледяная могила!
 rune-fusion-burial = Ложись в землю!
 rune-fusion-galvanism = Гальванизм!
-rune-fusion-time = Время, беги быстрее!
+rune-fusion-time = Время
 rune-fusion-reaper = Коса жнеца!
 rune-fusion-dance-macabre = Мертвецы, пляшите!
 rune-fusion-drowning = Тони!
@@ -392,6 +392,8 @@ rune-ultimate-blood-moon = КРОВАВАЯ ЛУНА ВОСХОДИТ!
 
 rune-time-stop-start = Время останавливается.
 rune-time-stop-end = Время снова идёт. И всё, что вы пропустили, случается разом.
+rune-time-stop-speak = МИР - ВРЕМЯ ОСТАНОВИСЬ
+rune-time-stop-resume = ВРЕМЯ ВОЗОБНОВИЛО СВОЙ ХОД
 
 rune-portal-first = Первая точка портала. Прочтите формулу ещё раз, чтобы открыть вторую.
 rune-portal-open = Портал открыт.

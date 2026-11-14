@@ -369,7 +369,8 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         if (composition.Second != null)
             runes.Add(composition.Second);
         runes.AddRange(composition.Modifiers);
-        Shout(caster, Loc.GetString(spell.Name), ComputeLoudness(runes, spell), ComputeAbsurdity(runes, spell), 7);
+        if (!spell.Effects.Exists(effect => effect is RuneTimeStopEffect))
+            Shout(caster, Loc.GetString(spell.Name), ComputeLoudness(runes, spell), ComputeAbsurdity(runes, spell), 7);
 
         var impact = ultimate ? LogImpact.High : LogImpact.Medium;
         var chain = string.Join(",", runes.Select(r => r.ID));

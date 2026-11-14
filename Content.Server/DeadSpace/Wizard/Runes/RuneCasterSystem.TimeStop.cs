@@ -9,6 +9,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Components;
 using Content.Shared.MouseRotator;
 using Content.Shared.Movement.Events;
+using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
@@ -107,6 +108,8 @@ public sealed partial class RuneCasterSystem
 
         foreach (var mob in _lookup.GetEntitiesInRange<MobStateComponent>(center, radius + 4f))
             _popup.PopupEntity(Loc.GetString("rune-time-stop-start"), mob, mob, PopupType.LargeCaution);
+
+        SayTime(ctx.Caster, "rune-time-stop-speak");
     }
 
     private void UpdateTimeStop(float frameTime)
@@ -166,7 +169,20 @@ public sealed partial class RuneCasterSystem
         var query = EntityQueryEnumerator<RuneFrozenComponent>();
         while (query.MoveNext(out var uid, out var state))
         {
-            if (!state.Hold || TerminatingOrDeleted(uid))
+            if (TerminatingOrDeleted(uid))
+                continue;
+
+            if (state.Mob)
+            {
+                if (TryComp<PullableComponent>(uid, out var pull) && pull.Puller != null)
+                    continue;
+
+                _physics.SetLinearVelocity(uid, Vector2.Zero);
+                _physics.SetAngularVelocity(uid, 0f);
+                continue;
+            }
+
+            if (!state.Hold)
                 continue;
 
             _transform.SetWorldPosition(uid, state.HoldPosition);
@@ -360,7 +376,6 @@ public sealed partial class RuneCasterSystem
 
         if (mob)
         {
-            var here = _transform.GetWorldPosition(ent);
             if (TryComp<PhysicsComponent>(ent, out var mobBody))
             {
                 state.Velocity = _physics.GetMapLinearVelocity(ent, mobBody);
@@ -369,11 +384,8 @@ public sealed partial class RuneCasterSystem
                     state.Body = mobBody.BodyType;
             }
 
-            state.Hold = true;
-            state.HoldPosition = here;
-            var pin = EnsureComp<RuneProjectileHoldComponent>(ent);
-            pin.Position = here;
-            Dirty(ent, pin);
+            _physics.SetLinearVelocity(ent, Vector2.Zero);
+            _physics.SetAngularVelocity(ent, 0f);
             _blocker.UpdateCanMove(ent);
             return;
         }
@@ -436,6 +448,7 @@ public sealed partial class RuneCasterSystem
 
     private void OnFieldShutdown(Entity<RuneTimeStopFieldComponent> ent, ref ComponentShutdown args)
     {
+        SayTime(ent.Comp.Caster, "rune-time-stop-resume");
         var held = TakeHeldShots(ent.Owner);
 
         foreach (var frozen in ent.Comp.Frozen)
@@ -480,6 +493,15 @@ public sealed partial class RuneCasterSystem
 
         ent.Comp.Frozen.Clear();
         ReleaseHitscans(held);
+    }
+
+    private void SayTime(EntityUid speaker, string key)
+    {
+        if (!Exists(speaker))
+            return;
+
+        var plain = Loc.GetString(key);
+        _chat.SendIncantation(speaker, plain, RuneIncantation.Gold(plain), RuneIncantation.HearingRange(5));
     }
 
     private List<RuneHeldHitscan> TakeHeldShots(EntityUid field)

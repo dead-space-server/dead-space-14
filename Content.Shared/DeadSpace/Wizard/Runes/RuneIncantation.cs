@@ -100,6 +100,65 @@ public static class RuneIncantation
         return result.ToString();
     }
 
+    public static string Gold(string text)
+    {
+        var glyphs = 0;
+        foreach (var rune in text.EnumerateRunes())
+        {
+            if (!Rune.IsWhiteSpace(rune))
+                glyphs++;
+        }
+
+        var body = new StringBuilder();
+        var index = 0;
+        var last = Math.Max(glyphs - 1, 1);
+        foreach (var rune in text.EnumerateRunes())
+        {
+            var piece = FormattedMessage.EscapeText(rune.ToString());
+            if (Rune.IsWhiteSpace(rune))
+            {
+                body.Append(piece);
+                continue;
+            }
+
+            body.Append("[color=").Append(GoldHex(index / (float) last)).Append(']').Append(piece).Append("[/color]");
+            index++;
+        }
+
+        return "[font size=16][bold]" + body + "[/bold][/font]";
+    }
+
+    private static string GoldHex(float t)
+    {
+        int ar, ag, ab, br, bg, bb;
+        float u;
+        if (t < 0.5f)
+        {
+            ar = 255;
+            ag = 244;
+            ab = 196;
+            br = 255;
+            bg = 196;
+            bb = 58;
+            u = t * 2f;
+        }
+        else
+        {
+            ar = 255;
+            ag = 196;
+            ab = 58;
+            br = 184;
+            bg = 122;
+            bb = 28;
+            u = (t - 0.5f) * 2f;
+        }
+
+        var r = (int) MathF.Round(ar + (br - ar) * u);
+        var g = (int) MathF.Round(ag + (bg - ag) * u);
+        var b = (int) MathF.Round(ab + (bb - ab) * u);
+        return $"#{r:X2}{g:X2}{b:X2}";
+    }
+
     public static string Shape(string text, int loudness, int absurdity)
     {
         loudness = Math.Clamp(loudness, 0, SharedRuneCasterSystem.MaxLoudness);
