@@ -1,9 +1,11 @@
 using System.Numerics;
 using Content.Shared.Damage;
+using Content.Shared.DeadSpace.Weapons.Ranged; // DS14
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs.Components; // DS14
 using Content.Shared.Storage;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Components; //DS-14
@@ -39,6 +41,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<ProjectileComponent, PreventCollideEvent>(PreventCollision);
+        SubscribeLocalEvent<GunExecutionProjectileComponent, PreventCollideEvent>(PreventExecutionCollision); // DS14
         SubscribeLocalEvent<EmbeddableProjectileComponent, ProjectileHitEvent>(OnEmbedProjectileHit);
         SubscribeLocalEvent<EmbeddableProjectileComponent, ThrowDoHitEvent>(OnEmbedThrowDoHit);
         SubscribeLocalEvent<EmbeddableProjectileComponent, ActivateInWorldEvent>(OnEmbedActivate);
@@ -249,6 +252,17 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             args.Cancelled = true;
         }
     }
+
+    // DS14-start
+    private void PreventExecutionCollision(Entity<GunExecutionProjectileComponent> ent, ref PreventCollideEvent args)
+    {
+        if (args.OtherEntity == ent.Comp.Target)
+            return;
+
+        if (HasComp<MobStateComponent>(args.OtherEntity))
+            args.Cancelled = true;
+    }
+    // DS14-end
 
     public void SetShooter(EntityUid id, ProjectileComponent component, EntityUid shooterId)
     {
