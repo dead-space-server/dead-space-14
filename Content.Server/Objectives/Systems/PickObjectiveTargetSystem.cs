@@ -52,6 +52,7 @@ public sealed class PickObjectiveTargetSystem : EntitySystem
         }
 
         _target.SetTarget(ent.Owner, targetComp.Target.Value);
+        AddTarget(ent.Owner); //DS14
     }
 
     private void OnRandomPersonAssigned(Entity<PickRandomPersonComponent> ent, ref ObjectiveAssignedEvent args)
@@ -75,5 +76,18 @@ public sealed class PickObjectiveTargetSystem : EntitySystem
         }
 
         _target.SetTarget(ent, picked, target);
+        AddTarget(ent.Owner); //DS14-Start
+    }
+    private void AddTarget(EntityUid uid)
+    {
+        _target.GetTarget(uid, out var target);
+        if (!target.HasValue)
+        {
+            return;
+        }
+        if (TryComp<MindComponent>(target.Value, out var mind) && mind.OwnedEntity.HasValue)
+        {
+            AddComp<KillPersonConditionMarkerComponent>(mind.OwnedEntity.Value);
+        } //DS14-End
     }
 }
