@@ -11,3 +11,7 @@ job-name-taipan-technician = Ремонтник
 job-name-taipan-technical-supervisor = Руководитель техобеспечения
 job-name-taipan-communications-officer = Офицер телекоммуникаций
 job-name-taipan-station-ai = Станционный ИИ Синдиката
+job-name-dismissed = Разжалован
+job-name-centcom-officer-armor = Офицер ЦК
+job-name-centcom-officer-alt = Офицер ЦК
+job-name-iaa-officer = Офицер ВД

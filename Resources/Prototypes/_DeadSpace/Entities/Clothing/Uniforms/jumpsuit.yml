@@ -231,3 +231,365 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/captain_formal_black.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/captain_formal_black.rsi
+
+# Blueshields
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitBlueShield
+  name: комбинезон офицера "Синий щит"
+  description: Текстилевый комбинезон, обшитый в некоторых местах толстой кожей.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/blueshield.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/blueshield.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitGreenBeret
+  name: комбинезон офицера "Зелёный Берет"
+  description: Текстилевый комбинезон, обшитый в некоторых местах толстой кожей.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/greenberet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/greenberet.rsi
+
+# Cargo
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitSalvageFormal
+  name: официальный костюм утилизатора
+  description: Если копать, то только стильно!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/salvageformal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/salvageformal.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitCargoAlt
+  name: чёрный комбинезон грузчика
+  description: Хороший костюм для работников отдела снабжения.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargo.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargo.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitCargoFormal
+  name: официальный костюм грузчика
+  description: Для модных показов на конвеерной ленте.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargoformal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargoformal.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitSeniorCourier
+  name: комбинезон ведущего логиста
+  description: Эффектный рабочий комбинезон ведущего логиста с аккуратной голубой рубашкой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/senior_courier.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/senior_courier.rsi
+
+# Centcom officer
+
+- type: entity
+  parent: [ ClothingUniformBase, ClothingUniformFoldableBase ]
+  id: ClothingUniformJumpsuitCentcomOfficerGreen
+  name: комбинезон офицера ЦК
+  description: Практичный комбинезон офицера безопасности Центрального Командования.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/centcom_security_green.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/centcom_security_green.rsi
+
+#Clown
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitClownJester
+  name: костюм клоуна-шута
+  description: Тёмно-красный клоунский костюм с золотой отделкой. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/clown_jester.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/clown_jester.rsi
+  - type: Tag
+    tags:
+    - ClownSuit
+    - WhitelistChameleon
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitClownStriped
+  name: полосатый костюм клоуна
+  description: Красно-чёрный клоунский костюм в полоску. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/clown_striped.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/clown_striped.rsi
+  - type: Tag
+    tags:
+    - ClownSuit
+    - WhitelistChameleon
+
+# Coroner
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitCoroner
+  name: комбинезон коронера
+  description: Форма, выдаваемая квалифицированным и прошедшим обучение лицам. Имеется надпись "я не просто работаю с мертвецами, я танцую с ними на их последнем параде!"
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/coroner.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/coroner.rs
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitCoronerAlt
+  name: медицинская роба коронера
+  description: Гарантированно сбережет ваш гардероб от кровавых подробностей, но мы не уверены в этом.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/coroneralt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/coroneralt.rsi
+
+# HOP
+
+- type: entity
+  parent: [ClothingUniformBase, BaseCommandContraband, ClothingUniformFoldableBase]
+  id: ClothingUniformJumpsuitHoPWhite
+  name: белый костюм главы персонала
+  description: Белоснежный костюм главы персонала. Ни единого пятнышка - ровно до первой подписанной бумаги.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/hop_white.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/hop_white.rsi
+
+# IAA officer
+
+- type: entity
+  parent: [ClothingUniformBase, BaseSecurityContraband]
+  id: ClothingUniformJumpsuitIAAOfficer1
+  name: комбинезон офицера ВД
+  description: Форма офицера отдела внутренних дел юридического департамента.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_1.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_1.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseSecurityContraband]
+  id: ClothingUniformJumpsuitIAAOfficer2
+  name: комбинезон офицера ВД
+  description: Форма офицера отдела внутренних дел юридического департамента.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_2.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_2.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseSecurityContraband]
+  id: ClothingUniformJumpsuitIAAOfficer3
+  name: комбинезон офицера ВД
+  description: Форма офицера отдела внутренних дел юридического департамента.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_3.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_3.rsi
+
+# Law
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitMagistrat
+  name: костюм магистрата
+  description: Строгий костюм, в котором выносят приговоры. Сшит так, чтобы протесты отклонялись ещё до того, как их произнесут.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/magistrate.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/magistrate.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitIAA
+  name: костюм агента внутренних дел
+  description: Опрятная униформа агента внутренних дел. Каждая складка на нём соответствует стандартным рабочим процедурам.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa.rsi
+
+# Mime
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitMimeSexyWhite
+  name: застенчивый костюм мима с белыми штанами
+  description: ...
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/sexy-mime.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/sexy-mime.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitMimeSexyBlack
+  name: застенчивый костюм мима с чёрными штанами
+  description: ...
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/sexy-mime-black.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/sexy-mime-black.rsi
+
+# RND
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitResearchDirectorShirt
+  name: костюм научного руководителя
+  description: Простая рабочая рубашка фиолетового цвета с бежевыми штанами.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/rnd_shirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/rnd_shirt.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitResearchDirectorSuit
+  name: официальный костюм научного руководителя
+  description: Официально-выглядящий фиолетовый костюм с чёрным галстуком и бежевыми брюками.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/rnd_director.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/rnd_director.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitRoboticistOveralls
+  name: повседневный комбинезон робототехника
+  description: Красная рубашка с чёрными подтяжками, вытканная из особой ткани, специально для робототехников.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/roboticist_overalls.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/roboticist_overalls.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitRoboticistWhite
+  name: белый комбинезон робототехника
+  description: Белый комбинезон, сотканный из специальной ткани. На нём есть отметки, указывающие, что носящий его - робототехник.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/roboticist_white.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/roboticist_white.rsi
+
+# Sec
+
+- type: entity
+  parent: [ClothingUniformBase, BaseCommandContraband]
+  id: ClothingUniformJumpsuitDetectiveAlt
+  name: костюм детектива с жилетом
+  description: Тот, кто носит это, олицетворяет занятость.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/detective.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/detective.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseCommandContraband]
+  id: ClothingUniformJumpsuitDetectiveGreyAlt
+  name: нуарный костюм с жилетом
+  description: Крутой серый костюм частного сыщика с зажимом для галстука.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/detective_grey.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/detective_grey.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseCommandContraband]
+  id: ClothingUniformJumpsuitSecPilot
+  name: комбинезон пилота службы безопасности
+  description: Комбинезон из прочного материала, обеспечивающий надёжную защиту.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/pilot.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/pilot.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseCommandContraband]
+  id: ClothingUniformJumpsuitSecBlack
+  name: чёрный комбинезон службы безопасности
+  description: Комбинезон из прочного материала, обеспечивающий надёжную защиту.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/security_black.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/security_black.rsi
+
+# chuiomoio
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpsuitSuitCheckered
+  name: вечерний клетчатый костюм
+  description: Этот клетчатый костюм сочетает в себе строгость и стиль. Превосходно сшитый пиджак и прямые брюки создают современный силуэт, а клетчатый узор добавляет модный шарм. Подходит для офисных заседаний и повседневных деловых встреч.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/suit_checkered.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/suit_checkered.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpsuitSuitTan
+  name: вечерний бежевый костюм
+  description: Этот вечерний костюм в шоколадном цвете олицетворяет роскошь и элегантность. Обтягивающий пиджак и расклешенные брюки создают изысканный силуэт, а насыщенный шоколадный оттенок придает образу теплоту и изысканность. Подходит для особых вечерних событий.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/suit_tan.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/suit_tan.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpsuitSuitWaiter
+  name: комбинезон официанта
+  description: Этот костюм официанта сочетает в себе стиль и удобство. 
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/suit_waiter.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/suit_waiter.rsi

@@ -71,3 +71,23 @@
     sprite: _DeadSpace/Clothing/Neck/blueshield.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Neck/blueshield.rsi
+
+# Syndie
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckSyndicateCloak
+  name: плащ Синдиката
+  description: Кодовое слово. Кровь на ноуслипах.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/syndicate_cloak.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckNukeOpsCloak
+  name: плащ ядерных оперативников
+  description: Discipline.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/nukeops_cloak.rsi

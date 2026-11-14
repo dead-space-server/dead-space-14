@@ -39,3 +39,15 @@
     gloves: ClothingHandsGlovesCombat
     ears: ClothingHeadsetAltCentCom
     belt: ClothingBeltCentcomSecurityFilled
+
+- type: chameleonOutfit
+  id: CentralCommandOfficerArmoredChameleonOutfit
+  job: CentralCommandOfficerArmored
+  equipment:
+    mask: ClothingMaskGasCentcomSecurity
+    shoes: ClothingShoesBootsCombat
+    outerClothing: ClothingOuterVestWeb
+    eyes: ClothingEyesGlassesSecurity
+    head: ClothingHeadHatBeretCentcomNaval
+    gloves: ClothingHandsGlovesCombat
+    belt: ClothingBeltCentcomSecurityFilled
