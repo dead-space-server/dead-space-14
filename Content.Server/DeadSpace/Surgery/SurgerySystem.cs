@@ -850,8 +850,10 @@ public sealed class SurgerySystem : EntitySystem
         }
         var stepVerb = SurgeryVerbKind.Inspect;
         string stepOrgan = "";
+        SurgeryOperationPrototype? stepOperation = null;
         if (Operation(patient.Value, site, out var operation) && site.Step < operation.Steps.Count)
         {
+            stepOperation = operation;
             stepVerb = operation.Steps[site.Step].Verb;
             stepOrgan = operation.Steps[site.Step].Organ;
         }
@@ -913,6 +915,20 @@ public sealed class SurgerySystem : EntitySystem
             result.Rejected = true;
             result.Key = "surgery-organ-gone";
             advance = false;
+        }
+        else if (result.RemoveOrgan && stepOperation != null && site.Step < stepOperation.Steps.Count
+                 && (stepOperation.Steps[site.Step].Drop != null || stepOperation.Steps[site.Step].DropBySpecies.Count > 0))
+        {
+            var partId = site.Part.Length > 0 ? site.Part : SurgeryPartPrototype.For(_prototype, stepOperation.ID);
+            if (partId.Length > 0
+                && TryComp<SurgeryPartsGoneComponent>(patient.Value, out var lostParts)
+                && lostParts.Parts.Contains(partId))
+            {
+                result.RemoveOrgan = false;
+                result.Rejected = true;
+                result.Key = "surgery-organ-gone";
+                advance = false;
+            }
         }
 
         if (result.RemoveImplant && (implantSlot.Length == 0 || !_implants.Occupied(patient.Value, implantSlot)))
