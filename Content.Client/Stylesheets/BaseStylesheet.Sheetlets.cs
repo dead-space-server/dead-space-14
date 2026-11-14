@@ -39,8 +39,9 @@ public abstract partial class BaseStylesheet
     {
         var tys = ReflectionManager.FindTypesWithAttribute<TAttrib>()
             // DS14-start: the DS theme sheetlets go last so their rules win ties against the base ones;
-            // reflection order alone is not stable between builds.
-            .OrderBy(ty => ty.Namespace?.StartsWith("Content.Client.DeadSpace", StringComparison.Ordinal) == true ? 1 : 0);
+            // reflection order alone is not stable between builds, so the rest is ordered by name.
+            .OrderBy(ty => ty.Namespace?.StartsWith("Content.Client.DeadSpace", StringComparison.Ordinal) == true ? 1 : 0)
+            .ThenBy(ty => ty.FullName, StringComparer.Ordinal);
             // DS14-end
         var rules = new List<StyleRule>();
 
