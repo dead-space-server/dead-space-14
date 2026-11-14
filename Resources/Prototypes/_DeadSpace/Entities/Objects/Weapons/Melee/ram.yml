@@ -1,0 +1,31 @@
+- type: entity
+  name: таран
+  parent: BaseItem
+  id: WeaponMeleeRam
+  description: Breaching!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Melee/ram.rsi
+    state: icon
+  - type: MeleeWeapon
+    wideAnimationRotation: 270
+    angle: 0
+    attackRate: 0.75
+    range: 1.5
+    damage:
+      types:
+        Blunt: 15
+        Structural: 100
+    soundHit:
+      collection: MetalThud
+  - type: MultiHandedItem
+  - type: ClothingSpeedModifier
+    walkModifier: 0.75
+    sprintModifier: 0.75
+  - type: HeldSpeedModifier
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitStorage
+  - type: Item
+    size: Ginormous
