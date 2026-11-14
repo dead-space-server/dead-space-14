@@ -34,6 +34,7 @@ public sealed class EntityHealthBarOverlay : Overlay
     private readonly StatusIconSystem _statusIconSystem;
     private readonly SpriteSystem _spriteSystem;
     private readonly ProgressColorSystem _progressColor;
+    private readonly Content.Client.DeadSpace.Surgery.SurgeryClientSystem _surgery; //DS-14
 
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
@@ -51,6 +52,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         _statusIconSystem = _entManager.System<StatusIconSystem>();
         _spriteSystem = _entManager.System<SpriteSystem>();
         _progressColor = _entManager.System<ProgressColorSystem>();
+        _surgery = _entManager.System<Content.Client.DeadSpace.Surgery.SurgeryClientSystem>(); //DS-14
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -92,6 +94,12 @@ public sealed class EntityHealthBarOverlay : Overlay
                 continue;
             }
 
+            if (_surgery.Operating == uid) //DS-14
+                continue; //DS-14
+
+            if (_entManager.HasComponent<Content.Shared.DeadSpace.Surgery.SurgeryNoHealthIconComponent>(uid)) //DS-14
+                continue; //DS-14
+
             // we use the status icon component bounds if specified otherwise use sprite
             var bounds = _entManager.GetComponentOrNull<StatusIconComponent>(uid)?.Bounds ?? _spriteSystem.GetLocalBounds((uid, spriteComponent));
             var worldPos = _transform.GetWorldPosition(xform, xformQuery);
@@ -121,7 +129,7 @@ public sealed class EntityHealthBarOverlay : Overlay
             const float startX = 8f;
             var endX = widthOfMob - 8f;
 
-            var xProgress = (endX - startX) * deathProgress.ratio + startX;
+            var xProgress = Math.Clamp((endX - startX) * deathProgress.ratio + startX, startX, endX); // DS14
 
             var boxBackground = new Box2(new Vector2(startX, 0f) / EyeManager.PixelsPerMeter, new Vector2(endX, 3f) / EyeManager.PixelsPerMeter);
             boxBackground = boxBackground.Translated(position);
@@ -144,6 +152,17 @@ public sealed class EntityHealthBarOverlay : Overlay
     /// </summary>
     private (float ratio, bool inCrit)? CalcProgress(EntityUid uid, MobStateComponent component, DamageableComponent dmg, MobThresholdsComponent thresholds)
     {
+        // DS14-start: a boss that keeps its own health: the bar counts from it, not from the thresholds
+        if (_entManager.TryGetComponent<Content.Shared.DeadSpace.Lavaland.Components.LavalandHealthBarComponent>(uid, out var ownHealth) &&
+            ownHealth.MaxHealth > 0f)
+        {
+            if (ownHealth.Hidden)
+                return null;
+
+            return (Math.Clamp(1f - dmg.TotalDamage.Float() / ownHealth.MaxHealth, 0f, 1f), false);
+        }
+        // DS14-end
+
         if (_mobStateSystem.IsAlive(uid, component))
         {
             if (dmg.HealthBarThreshold != null && dmg.TotalDamage < dmg.HealthBarThreshold)
@@ -154,7 +173,7 @@ public sealed class EntityHealthBarOverlay : Overlay
                 return (1, false);
 
             var ratio = 1 - ((FixedPoint2)(dmg.TotalDamage / threshold)).Float();
-            return (ratio, false);
+            return (Math.Clamp(ratio, 0f, 1f), false); // DS14
         }
 
         if (_mobStateSystem.IsCritical(uid, component))
@@ -167,7 +186,7 @@ public sealed class EntityHealthBarOverlay : Overlay
 
             var ratio = 1 - ((dmg.TotalDamage - critThreshold) / (deadThreshold - critThreshold)).Value.Float();
 
-            return (ratio, true);
+            return (Math.Clamp(ratio, 0f, 1f), true); // DS14
         }
 
         return (0, true);

@@ -23,6 +23,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed class LavalandWeatherSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly LavalandStrongStormSystem _strongStorm = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -94,6 +95,25 @@ public sealed class LavalandWeatherSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Out in the open on the planet itself: on its land (not on a grid of its own), under the sky (no roof), and not
+    /// a creature the weather does not touch. Clothes do not count: the strong storm's wind throws everyone.
+    /// </summary>
+    public bool IsUnderOpenSky(EntityUid uid, TransformComponent xform)
+    {
+        if (xform.MapUid is not { } mapUid ||
+            xform.GridUid != mapUid ||
+            !_gridQuery.TryGetComponent(mapUid, out var grid) ||
+            !_map.TryGetTileRef(mapUid, grid, xform.Coordinates, out var tile) ||
+            tile.Tile.IsEmpty ||
+            _immuneQuery.HasComponent(uid))
+        {
+            return false;
+        }
+
+        return _weather.CanWeatherAffect(mapUid, grid, tile);
+    }
+
     public bool IsStormActive(EntityUid mapUid)
     {
         return TryComp<LavalandMapComponent>(mapUid, out var lavaland) &&
@@ -122,6 +142,13 @@ public sealed class LavalandWeatherSystem : EntitySystem
         LavalandPlanetPrototype planet,
         TimeSpan curTime)
     {
+        // Now and then the strong storm comes in its place; the next ash storm is due after it.
+        if (_strongStorm.TryReplaceAshStorm(mapUid, lavaland))
+        {
+            ScheduleNextStorm(lavaland, planet, curTime);
+            return;
+        }
+
         var duration = ClampDuration(planet.AshStormWarningDuration);
         lavaland.SnowStorm = planet.SnowStormChance > 0f && _random.Prob(Math.Clamp(planet.SnowStormChance, 0f, 1f));
         if (lavaland.SnowStorm)
@@ -286,7 +313,10 @@ public sealed class LavalandWeatherSystem : EntitySystem
         _weatherEntities.Clear();
     }
 
-    private bool IsWeatherImmune(EntityUid uid, TransformComponent xform)
+    /// <summary>
+    /// The mob, or whatever it sits in, is immune to the weather, or wears protection on both head and body.
+    /// </summary>
+    public bool IsWeatherImmune(EntityUid uid, TransformComponent xform)
     {
         while (true)
         {

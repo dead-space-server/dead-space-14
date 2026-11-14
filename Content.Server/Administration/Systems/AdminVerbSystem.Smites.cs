@@ -1,3 +1,4 @@
+using System.Linq; //DS-14
 using System.Numerics;
 using System.Threading;
 using Content.Server.Atmos.EntitySystems;
@@ -28,6 +29,7 @@ using Content.Shared.Cluwne;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.Body.Limbs; //DS-14
 using Content.Shared.Electrocution;
 using Content.Shared.Gibbing;
 using Content.Shared.Gravity;
@@ -99,6 +101,7 @@ public sealed partial class AdminVerbSystem
     [Dependency] private readonly SlipperySystem _slipperySystem = default!;
     [Dependency] private readonly GibbingSystem _gibbing = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!; // DS14: current engine IoC requires readonly fields.
+    [Dependency] private readonly LimbWoundSystem _limbWounds = default!; //DS-14
 
     private readonly EntProtoId _actionViewLawsProtoId = "ActionViewLaws";
     private readonly ProtoId<SiliconLawsetPrototype> _crewsimovLawset = "Crewsimov";
@@ -353,8 +356,10 @@ public sealed partial class AdminVerbSystem
                 Act = () =>
                 {
                     var baseXform = Transform(args.Target);
-                    foreach (var part in _bodySystem.GetBodyChildrenOfType(args.Target, BodyPartType.Hand))
+                    foreach (var part in _bodySystem.GetBodyChildrenOfType(args.Target, BodyPartType.Hand).ToList()) //DS-14
                     {
+                        if (SmiteHand(args.Target, part.Component)) //DS-14
+                            continue; //DS-14
                         _transformSystem.AttachToGridOrMap(part.Id);
                     }
                     _popupSystem.PopupEntity(Loc.GetString("admin-smite-remove-hands-self"), args.Target,
@@ -378,7 +383,8 @@ public sealed partial class AdminVerbSystem
                     var baseXform = Transform(args.Target);
                     foreach (var part in _bodySystem.GetBodyChildrenOfType(args.Target, BodyPartType.Hand, body))
                     {
-                        _transformSystem.AttachToGridOrMap(part.Id);
+                        if (!SmiteHand(args.Target, part.Component)) //DS-14
+                            _transformSystem.AttachToGridOrMap(part.Id);
                         break;
                     }
                     _popupSystem.PopupEntity(Loc.GetString("admin-smite-remove-hands-self"), args.Target,
@@ -1094,4 +1100,16 @@ public sealed partial class AdminVerbSystem
         if (TryComp<TimedDespawnComponent>(rod, out var despawn))
             despawn.Lifetime = offset.Length() / speed * 3; // exists thrice as long as it takes to get to you.
     }
+
+    //DS-14 start
+    private bool SmiteHand(EntityUid target, BodyPartComponent hand)
+    {
+        if (!HasComp<LimbBodyComponent>(target))
+            return false;
+
+        var zone = hand.Symmetry == BodyPartSymmetry.Left ? LimbZone.HandLeft : LimbZone.HandRight;
+        _limbWounds.Amputate(target, zone);
+        return true;
+    }
+    //DS-14 end
 }

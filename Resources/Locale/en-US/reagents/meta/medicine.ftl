@@ -156,3 +156,7 @@ reagent-desc-haloperidol = Removes most stimulating and hallucinogenic drugs. Re
 
 reagent-name-heparin = heparin
 reagent-desc-heparin = Commonly used as an anticoagulant medication. Causes blood to have difficulty forming clots. Can cause internal bleeding when overdosed.
+
+reagent-name-chiyurizine = chiyurizine
+reagent-desc-chiyurizine = A mysterious medicine that closes wounds and clears a wide range of damage, from poisoning to burns. Every 15 metabolized units fixes one limb problem, one internal injury, and regrows one missing limb.
+reagent-effect-guidebook-chiyuri = Every { $dose } metabolized units fixes one limb problem (fracture, bleeding, shard), one internal injury, and regrows one missing limb

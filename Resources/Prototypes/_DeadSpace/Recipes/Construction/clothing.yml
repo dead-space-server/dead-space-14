@@ -21,3 +21,11 @@
   targetNode: medcomHud
   category: construction-category-clothing
   objectType: Item
+
+- type: construction
+  id: ClothingHeadHelmetSecurityFlashlight
+  graph: ClothingHeadHelmetSecurityFlashlight
+  startNode: start
+  targetNode: securityHelmetFlashlight
+  category: construction-category-clothing
+  objectType: Item

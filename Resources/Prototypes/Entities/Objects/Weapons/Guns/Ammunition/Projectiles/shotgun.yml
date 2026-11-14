@@ -65,6 +65,7 @@
     damage:
       types:
         Heat: 5
+  - type: DemonShadowFlareDamage
 
 - type: entity
   parent: BaseBullet

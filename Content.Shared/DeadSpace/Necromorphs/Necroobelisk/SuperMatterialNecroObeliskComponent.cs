@@ -101,6 +101,10 @@ public sealed partial class SuperMatterialNecroObeliskComponent : Component
     #region Super
     [ViewVariables]
     public bool SequenceStarted = false;
+
+    /// <summary>The Circle's geist lifted the cap: it reaches 100% with no unitologists' mode running.</summary>
+    [ViewVariables]
+    public bool ForceCompletion;
     [ViewVariables(VVAccess.ReadWrite)]
     public int Percents = 0;
     [ViewVariables]

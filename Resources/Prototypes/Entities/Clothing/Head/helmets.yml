@@ -39,6 +39,10 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+  # DS14
+  - type: LimbCover
+    zones:
+    - Head
 
 #Basic Helmet (Security Helmet)
 - type: entity
@@ -47,6 +51,15 @@
   name: helmet
   description: Standard security gear. Protects the head from impacts.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Helmets/security.rsi
   - type: Clothing
@@ -55,6 +68,12 @@
     tags:
     - WhitelistChameleon
     - SecurityHelmet
+  #ds14-start
+  - type: LimbCover
+    zones:
+    - Head
+    ricochet: true
+  #ds14-end
 
 #Mercenary Helmet
 - type: entity
@@ -82,15 +101,22 @@
     sprite: Clothing/Head/Helmets/swat.rsi
   - type: Clothing
     sprite: Clothing/Head/Helmets/swat.rsi
+  #ds14-start
   - type: Armor #This is intentionally not spaceproof, when the time comes to port the values from SS13 this should be buffed from what it was.
     modifiers:
       coefficients:
-        Blunt: 0.80
-        Slash: 0.80
-        Piercing: 0.80
-        Heat: 0.80
-        Radiation: 0.80
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
         Caustic: 0.95
+  #ds14-end
+  # DS14
+  - type: LimbCover
+    zones:
+    - Head
+    face: true
+    ricochet: true
   - type: ExplosionResistance
     damageCoefficient: 0.75
   - type: HideLayerClothing
@@ -125,13 +151,15 @@
   - type: Clothing
     sprite: Clothing/Head/Helmets/light_riot.rsi
   - type: IngestionBlocker
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.8
-        Slash: 0.8
-        Piercing: 0.95
-        Heat: 0.95 # DS14-value
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+  #ds14-end
 
 #Bombsuit Helmet
 - type: entity
@@ -153,6 +181,13 @@
         Blunt: 0.95
         Slash: 0.95
         Piercing: 0.95
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: HideLayerClothing
     layers:
       Hair: HEAD
@@ -204,6 +239,16 @@
   name: space ninja helmet
   description: What may appear to be a simple black garment is in fact a highly sophisticated nano-weave helmet. Standard issue ninja gear.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.6
+  #ds14-end
   - type: BreathMask
   - type: Item
     size: Normal
@@ -242,6 +287,12 @@
   - type: NinjaAppearanceItem
     itemType: Helmet
   - type: NinjaSuitItem
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   #DS14-end
   - type: Tag
     tags:
@@ -276,12 +327,14 @@
   - type: HideLayerClothing
     layers:
       Hair: HEAD
-  - type: Armor # DS14
+  #ds14-start
+  - type: Armor
     modifiers:
       coefficients:
         Blunt: 0.95
         Slash: 0.9
         Piercing: 0.95
+  #ds14-end
   - type: ExplosionResistance # DS14
     damageCoefficient: 0.9
 
@@ -342,6 +395,13 @@
     coolingCoefficient: 0.8
   - type: FireProtection
     reduction: 0.15 # not fully sealed so less protection
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: IdentityBlocker
   - type: Tag
     tags:
@@ -387,6 +447,13 @@
   - type: PressureProtection
     highPressureMultiplier: 0.25
     lowPressureMultiplier: 1000
+  # DS14
+  - type: LimbCover
+    face: true
+    sever: true
+    stopsFire: true
+    zones:
+    - Head
   - type: IdentityBlocker
   - type: Tag
     tags:
@@ -510,13 +577,15 @@
     sprite: Clothing/Head/Helmets/syndie-raid.rsi
   - type: Clothing
     sprite: Clothing/Head/Helmets/syndie-raid.rsi
+  #ds14-start
   - type: Armor
     modifiers: #There's gotta be SOME reason to use this over other helmets.
       coefficients:
-        Blunt: 0.85
-        Slash: 0.85
-        Piercing: 0.85
-        Heat: 0.85
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+  #ds14-end
   - type: HideLayerClothing
     layers:
       Hair: HEAD

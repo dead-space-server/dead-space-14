@@ -16,6 +16,16 @@ objective-condition-hooligan-smash-glasses-title = Разбей { $count } { $co
     [few] стакана
    *[other] стаканов
 }
+objective-condition-hooligan-smash-furniture-title = Разбей { $count } { $count ->
+    [one] предмет мебели
+    [few] предмета мебели
+   *[other] предметов мебели
+}
+objective-condition-hooligan-bomb-title = { $count ->
+    [one] Взорви самодельную бомбу в одном из отделов станции.
+    [few] Взорви { $count } самодельные бомбы в разных отделах станции.
+   *[other] Взорви { $count } самодельных бомб в разных отделах станции.
+}
 
 objective-condition-hooligan-profit-title = Накопи на своём счету { $count } кредитов.
 
@@ -50,6 +60,14 @@ objective-condition-hooligan-smash-windows-description-2 = Я великий... 
 objective-condition-hooligan-smash-glasses-description = Ничто так не [color=#faff66]разряжает[/color] обстановку, как звон бьющегося стекла. Пусть бар звенит.
 objective-condition-hooligan-smash-glasses-description-1 = Этот бар не платит мне [color=green]процентик[/color]... Расхуярюка я им все стаканы!
 objective-condition-hooligan-smash-glasses-description-2 = Пусть звенит стекло! Летят бокалы! Плачут люди и боятся, летят в меня разъярённые оскорбления! Я буду сдесь как и всегда веселить вас. by Неизвестный фауст
+
+objective-condition-hooligan-smash-furniture-description = Эта мебель слишком [color=#1cc6ff]ухоженная[/color]. Пора ей узнать, что такое настоящая жизнь.
+objective-condition-hooligan-smash-furniture-description-1 = Стоит только отвернуться, как эти [color=#ff0019]столы и лампочки[/color] начинают строить из себя невесть что. Пора их проучить!
+objective-condition-hooligan-smash-furniture-description-2 = Ничто так не поднимает настроение, как хруст [color=#ff8c00]дерева[/color] и звон [color=#faff66]стекла[/color] под кулаком.
+
+objective-condition-hooligan-bomb-description = Самоделки из банок колы не взорвут себя сами. Пора устроить [color=#ff5e00]фейерверк[/color] в разных отделах станции.
+objective-condition-hooligan-bomb-description-1 = Слышал, что банка колы и немного топлива творят чудеса? Проверим, насколько [color=#ff0019]громко[/color] это работает в каждом отделе.
+objective-condition-hooligan-bomb-description-2 = [color=#ff5e00]БУМ![/color] И так в каждом отделе, чтобы никто не скучал. Только не подорвись сам, придурок.
 
 objective-condition-hooligan-profit-description-1 = Мне не хватает на новенький ховербайк. Придётся немного [color=#00ff44]"поработать"[/color] с местным населением.
 objective-condition-hooligan-profit-description-2 = БАБКИ! БАБКИ! СУКА БАБКИ!! Их нехваток... Мне нужно больше [color=#00ff44]$$$[/color]

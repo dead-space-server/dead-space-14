@@ -7,6 +7,7 @@ using Content.Shared.Singularity.Components;
 using Content.Shared.Singularity.EntitySystems;
 using Content.Shared.Station.Components;
 using Content.Shared.Tag;
+using Content.Shared.Wall; //DS-14
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -180,7 +181,8 @@ public sealed class EventHorizonSystem : SharedEventHorizonSystem
                 continue;
 
             // See TODO above
-            if (_physicsQuery.TryComp(entity, out var otherBody) && !_physics.IsHardCollidable((uid, null, body), (entity, null, otherBody)))
+            var forceConsume = HasComp<WallMountComponent>(entity) || Transform(entity).Anchored; //DS-14
+            if (!forceConsume && _physicsQuery.TryComp(entity, out var otherBody) && !_physics.IsHardCollidable((uid, null, body), (entity, null, otherBody))) //DS-14
                 continue;
 
             AttemptConsumeEntity(uid, entity, eventHorizon);

@@ -155,9 +155,11 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
             return;
         }
 
-        // DS14-start: the right button of the kinetic machete charges its marker shot instead.
+        // DS14-start: the right button of the kinetic machete charges its marker shot instead; a crusher (a gun shot
+        // with the right button) only shoots its mark there, it does not swing as well.
         if (altDown == BoundKeyState.Down &&
-            HasComp<Content.Shared.DeadSpace.Lavaland.LavalandChargedMarkerComponent>(weaponUid))
+            (HasComp<Content.Shared.DeadSpace.Lavaland.LavalandChargedMarkerComponent>(weaponUid) ||
+             gun is { UseKey: false }))
         {
             return;
         }

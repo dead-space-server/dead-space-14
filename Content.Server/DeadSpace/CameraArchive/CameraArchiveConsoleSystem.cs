@@ -15,7 +15,10 @@ using Content.Shared.Popups;
 using Content.Shared.Station.Components;
 using Content.Shared.SurveillanceCamera;
 using Content.Shared.SurveillanceCamera.Components;
+using System.IO;
+using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Serialization;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Player;
@@ -40,14 +43,34 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IRobustSerializer _serializer = default!;
+    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<CameraArchiveSystem.CameraArchiveHistoryEvent>(OnHistory);
+    }
 
     public bool AcceptPrint(EntityUid monitor, CameraArchivePrintMessage message)
     {
         if (!TryComp<CameraArchiveConsoleComponent>(monitor, out var comp) || _timing.CurTime < comp.NextPrint)
             return false;
 
-        if (!TryPrint(monitor, message.Actor, GetEntity(message.Camera), message.FrameIndex, message.Image, out _))
+        var camera = GetEntity(message.Camera);
+        var index = message.FrameIndex;
+        if (message.FrameId != 0 && !_stills.TryFindFrame(camera, message.FrameId, out index))
             return false;
+
+        if (!TryPrint(monitor, message.Actor, camera, index, out var paper))
+            return false;
+
+        if (TryComp<CameraArchivePrintComponent>(paper, out var shot))
+        {
+            shot.Magnification = Math.Clamp(message.Magnification, 1f, 4f);
+            shot.Pan = message.Pan;
+            Dirty(paper, shot);
+        }
 
         comp.NextPrint = _timing.CurTime + comp.PrintDelay;
         _audio.PlayPvs(comp.PrintSound, monitor);
@@ -59,12 +82,14 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         EntityUid actor,
         EntityUid camera,
         int index,
-        byte[]? image,
         out EntityUid paper)
     {
         paper = default;
         if (!TryComp<CameraArchiveConsoleComponent>(console, out var comp))
             return false;
+
+        if (index < 0)
+            index = _stills.Count(camera) - 1;
 
         if (!_stills.TryGetFrame(camera, index, out var frame))
             return false;
@@ -86,16 +111,18 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
                 authorJob = card.Comp.LocalizedJobTitle ?? string.Empty;
         }
 
-        text = text.Replace("{{AUTHOR.NAME}}", authorName);
-        text = text.Replace("{{AUTHOR.JOB}}", authorJob);
-        text = text.Replace("{{CAMERA.NAME}}", CameraLabel(camera));
+        text = text.Replace("{{AUTHOR.NAME}}", BreakLongWords(authorName));
+        text = text.Replace("{{AUTHOR.JOB}}", BreakLongWords(authorJob));
+        text = text.Replace("{{CAMERA.NAME}}", BreakLongWords(CameraLabel(camera)));
         text = text.Replace("{{FRAME.TIME}}", frame.RoundTime.ToString("hh\\:mm\\:ss"));
         var chat = string.Empty;
         if (frame.Still.Chat.Count > 0)
         {
-            const string rule = "═════════════════════════════════════";
             var title = Loc.GetString("camera-archive-chat");
-            chat = $"\n{rule}\n[bold]{title}[/bold]\n{string.Join('\n', frame.Still.Chat)}\n{rule}";
+            var lines = new string[frame.Still.Chat.Count];
+            for (var i = 0; i < lines.Length; i++)
+                lines[i] = BreakLongWords(frame.Still.Chat[i]);
+            chat = $"\n[bold]{title}[/bold]\n{string.Join('\n', lines)}\n";
         }
 
         text = text.Replace("{ЧАТ}", chat);
@@ -104,17 +131,86 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         if (TryComp<PaperComponent>(paper, out var paperComp))
             _paper.SetContent((paper, paperComp), text);
 
-        if (image != null && image.Length > 0 && image.Length <= CameraArchivePrintMessage.MaxImageBytes)
+        var shot = EnsureComp<CameraArchivePrintComponent>(paper);
+        using (var stream = new MemoryStream())
         {
-            var shot = EnsureComp<CameraArchivePrintComponent>(paper);
-            shot.Image = image;
-            Dirty(paper, shot);
+            _serializer.SerializeDirect(stream, frame.Still);
+            shot.Still = stream.ToArray();
         }
+
+        Dirty(paper, shot);
 
         if (actor.IsValid())
             _popup.PopupEntity(Loc.GetString("camera-archive-printed"), console, actor);
 
         return true;
+    }
+
+    private static string BreakLongWords(string text)
+    {
+        const int limit = 24;
+        var built = new char[text.Length + text.Length / limit + 1];
+        var count = 0;
+        var run = 0;
+        foreach (var c in text)
+        {
+            if (c is ' ' or '\n' or '-' or '\t')
+            {
+                run = 0;
+                built[count++] = c;
+                continue;
+            }
+
+            if (run == limit)
+            {
+                built[count++] = ' ';
+                run = 0;
+            }
+
+            built[count++] = c;
+            run++;
+        }
+
+        return new string(built, 0, count);
+    }
+
+    public void Opened(EntityUid monitor)
+    {
+        if (!TryComp<CameraArchiveConsoleComponent>(monitor, out var comp))
+            return;
+
+        comp.ArchiveOpen = true;
+        comp.Watching = default;
+        comp.WatchingId = 0;
+        comp.WatchingIndex = -1;
+    }
+
+    public void Closed(EntityUid monitor)
+    {
+        if (!TryComp<CameraArchiveConsoleComponent>(monitor, out var comp))
+            return;
+
+        comp.ArchiveOpen = false;
+        comp.Watching = default;
+        comp.WatchingId = 0;
+        comp.WatchingIndex = -1;
+    }
+
+    public SurveillanceCameraArchiveBrowseMessage Answer(EntityUid monitor, SurveillanceCameraArchivePickMessage message)
+    {
+        var camera = GetEntity(message.Camera);
+        var index = message.FrameIndex;
+        if (message.FrameId != 0)
+        {
+            if (!_stills.TryFindFrame(camera, message.FrameId, out var current))
+                index = int.MaxValue;
+            else
+                index = current + message.FrameIndex;
+        }
+
+        var browse = Browse(message.Camera, index);
+        Note(monitor, camera, browse);
+        return browse;
     }
 
     public SurveillanceCameraArchiveBrowseMessage Browse(NetEntity selected, int index)
@@ -125,12 +221,62 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
             Cameras = state.Cameras,
             Selected = state.Selected,
             FrameIndex = state.FrameIndex,
+            FrameId = state.FrameId,
             FrameCount = state.FrameCount,
             FrameTime = state.FrameTime,
             Frame = state.Frame,
             Covered = state.Covered,
             BodyLog = !state.Selected.Equals(default(NetEntity)) && _stills.IsBodyCamera(GetEntity(state.Selected)),
         };
+    }
+
+    private void OnHistory(ref CameraArchiveSystem.CameraArchiveHistoryEvent ev)
+    {
+        var query = EntityQueryEnumerator<CameraArchiveConsoleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (!comp.ArchiveOpen || comp.WatchingId == 0)
+                continue;
+
+            if (ev.Camera is { } camera && camera != comp.Watching)
+                continue;
+
+            if (!Exists(comp.Watching) || !_stills.TryFindFrame(comp.Watching, comp.WatchingId, out var index))
+            {
+                if (Exists(comp.Watching) && _stills.TryFindNearest(comp.Watching, comp.WatchingTime, out var nearest))
+                {
+                    var browse = Browse(GetNetEntity(comp.Watching), nearest);
+                    Note(uid, comp.Watching, browse);
+                    Send(uid, browse);
+                    continue;
+                }
+
+                comp.Watching = default;
+                comp.WatchingId = 0;
+                comp.WatchingIndex = -1;
+                Send(uid, Browse(default, int.MaxValue));
+                continue;
+            }
+
+            comp.WatchingIndex = index;
+        }
+    }
+
+    private void Note(EntityUid monitor, EntityUid camera, SurveillanceCameraArchiveBrowseMessage browse)
+    {
+        if (!TryComp<CameraArchiveConsoleComponent>(monitor, out var comp))
+            return;
+
+        comp.ArchiveOpen = true;
+        comp.Watching = camera;
+        comp.WatchingId = browse.FrameId;
+        comp.WatchingIndex = browse.Frame == null ? -1 : browse.FrameIndex;
+        comp.WatchingTime = browse.FrameTime;
+    }
+
+    private void Send(EntityUid monitor, SurveillanceCameraArchiveBrowseMessage browse)
+    {
+        _ui.ServerSendUiMessage(monitor, SurveillanceCameraMonitorUiKey.Key, browse);
     }
 
     private CameraArchiveState Build(NetEntity selected, int index, int request)
@@ -180,10 +326,20 @@ public sealed class CameraArchiveConsoleSystem : EntitySystem
         state.Selected = picked.Camera;
         state.FrameCount = countFrames;
         state.Covered = picked.Covered;
-        if (countFrames > 0 && _stills.TryGetFrame(cameraUid, index, out var frame))
+        if (index < 0)
         {
-            var resolved = index < 0 || index >= countFrames ? countFrames - 1 : index;
-            state.FrameIndex = resolved;
+            if (countFrames > 0 && _stills.TryGetFrame(cameraUid, countFrames - 1, out var latest))
+            {
+                state.FrameIndex = countFrames - 1;
+                state.FrameId = latest.Id;
+                state.FrameTime = latest.RoundTime;
+                state.Frame = latest.Still;
+            }
+        }
+        else if (_stills.TryGetFrame(cameraUid, index, out var frame))
+        {
+            state.FrameIndex = index;
+            state.FrameId = frame.Id;
             state.FrameTime = frame.RoundTime;
             state.Frame = frame.Still;
         }

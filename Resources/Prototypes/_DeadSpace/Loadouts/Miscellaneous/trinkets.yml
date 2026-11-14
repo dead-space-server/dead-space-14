@@ -950,3 +950,45 @@
     back:
     - PlushieSastrBon
   groupBy: "plushie"
+
+- type: loadout
+  id: PlushieIvanKuvalda
+  storage:
+    back:
+    - PlushieIvanKuvalda
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieBog
+  storage:
+    back:
+    - PlushieBog
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieMargo
+  storage:
+    back:
+    - PlushieMargo
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieGenesis
+  storage:
+    back:
+    - PlushieGenesis
+  groupBy: "plushie"
+  
+- type: loadout
+  id: PlushieGnar
+  storage:
+    back:
+    - PlushieGnar
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieFyrmorAlt
+  storage:
+    back:
+    - PlushieFyrmorAlt
+  groupBy: "plushie"

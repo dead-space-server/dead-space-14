@@ -35,6 +35,8 @@ admin-overlay-antag-classic = АНТАГ
 #DS14-start
 admin-verb-text-make-dragon = Сделать цель Драконом
 admin-verb-make-dragon = Сделать Драконом
+admin-verb-text-make-circle-geist = Сделать цель Гейстом Круга
+admin-verb-make-circle-geist = Сделать Гейстом Круга
 admin-verb-text-make-ninja = Сделть цель Ниндзей
 admin-verb-make-ninja = Сделать Ниндзей
 admin-verb-text-make-renegade = Сделать цель Ренегатом

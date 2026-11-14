@@ -271,6 +271,7 @@
     dynamicPacks:
     - EngineeringBoards
     - CargoBoards
+    - BluespaceBoards # DS14
     - MedicalBoards
     - ServiceBoards
     - ScienceBoards
@@ -326,6 +327,8 @@
     - BorgModulesStatic
     - BorgLimbsStatic
     - BorgSecLimbsStatic # DS14
+    - IPCLimbsStatic # DS14
+    - IPCOrgansStatic # DS14
     dynamicPacks:
     - Robotics
     - BorgModules
@@ -372,6 +375,7 @@
     - SecurityWeaponsStatic
     - SecurityBorgModulesStatic # DS14
     - SecDetailTechFab # DS14
+    - DeadSpaceSecurityImplantsStatic # DS14
     dynamicPacks:
     - SalvageSecurityBoards
     - SalvageSecurityWeapons
@@ -466,6 +470,7 @@
     - MedicalClothingStatic
     - EmptyMedkitsStatic
     - SurgeryStatic
+    - DeadSpaceSurgeryStatic # DS14
     dynamicPacks:
     - Chemistry
     - MedicalDynamic # DS14

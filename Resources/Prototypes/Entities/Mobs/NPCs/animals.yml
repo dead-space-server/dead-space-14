@@ -1,6 +1,6 @@
 - type: entity
   name: bat
-  parent: [ SimpleMobBase, FlyingMobBase ] # DS14
+  parent: [ CritterMobBase, FlyingMobBase ] # DS14
   id: MobBat
   description: Some cultures find them terrifying, others crunchy on the teeth.
   components:
@@ -49,11 +49,6 @@
       path: /Audio/Animals/fox_squeak.ogg
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-organic
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 50
   - type: ReplacementAccent
     accent: mouse
   - type: MeleeWeapon
@@ -90,7 +85,7 @@
 
 - type: entity
   name: bee
-  parent: [ SimpleMobBase, FlyingMobBase ]
+  parent: [ CritterMobBase, FlyingMobBase ] # DS14
   id: MobBee
   description: Nice to have, but you can't build a civilization on a foundation of honey alone.
   components:
@@ -148,11 +143,6 @@
     tags:
     - Bee
     - Trash
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: InsectBlood
-        Quantity: 0.1
   - type: MobPrice
     price: 50
   - type: NPCRetaliation
@@ -162,7 +152,7 @@
     - Passive
   - type: HTN
     rootTask:
-      task: SimpleHostileCompound
+      task: CritterHostileCompound # DS14
   - type: ZombieImmune
   - type: Destructible
     thresholds:
@@ -193,15 +183,10 @@
   - type: MobMover
   - type: HTN
     rootTask:
-      task: SimpleHostileCompound
+      task: CritterHostileCompound # DS14
   - type: NpcFactionMember
     factions:
     - SimpleHostile
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 0.1
   - type: ZombieImmune
 
 
@@ -364,7 +349,7 @@
 
 - type: entity
   name: cockroach
-  parent: SimpleMobBase
+  parent: CritterMobBase # DS14
   id: MobCockroach
   description: This station is just crawling with bugs.
   components:
@@ -383,7 +368,7 @@
   - type: HTN
     constantlyReplan: false
     rootTask:
-      task: MouseCompound
+      task: CritterSnackCompound # DS14
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -412,21 +397,12 @@
         Base: cockroach_dead
       Dead:
         Base: cockroach_dead
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: InsectBlood
-        Quantity: 20
   - type: Edible
   - type: FlavorProfile
     flavors:
     - horrible
     - terrible
     - chewy
-  - type: Satiation
-    satiations:
-      Hunger:
-        prototype: CockroachHunger
   - type: Extractable
     grindableSolutionName: food
   - type: SolutionContainerManager
@@ -588,18 +564,6 @@
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Moth
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: InsectBlood
-        Quantity: 20
-  - type: Respirator
-    damage:
-      types:
-        Asphyxiation: 0.5
-    damageRecovery:
-      types:
-        Asphyxiation: -0.5
   - type: CombatMode
   - type: Butcherable
     spawned:
@@ -634,8 +598,6 @@
   - type: NpcFactionMember
     factions:
     - Mouse
-  - type: Body
-    prototype: Mothroach
   - type: TypingIndicator
     proto: moth
   - type: Destructible
@@ -831,7 +793,7 @@
 
 - type: entity
   name: butterfly
-  parent: [ SimpleMobBase, FlyingMobBase ]
+  parent: [ CritterMobBase, FlyingMobBase ] # DS14
   id: MobButterfly
   description: Despite popular misconceptions, it's not actually made of butter.
   components:
@@ -888,11 +850,6 @@
   - type: Tag
     tags:
     - Trash
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: InsectBlood
-        Quantity: 0.1
   - type: MobPrice
     price: 50
   - type: Destructible
@@ -1677,7 +1634,7 @@
           True: {visible: true}
           False: {visible: false}
   - type: Body
-    prototype: Primate
+    prototype: Ancestor # DS14
     requiredLegs: 1 # TODO: More than 1 leg
   - type: CreamPied
   - type: FireVisuals
@@ -2029,7 +1986,7 @@
 
 - type: entity
   name: mouse
-  parent: SimpleMobBase
+  parent: CritterMobBase # DS14
   id: MobMouse
   description: Squeak!
   components:
@@ -2037,8 +1994,6 @@
   - type: CarrySize
     size: Small
   # DS14-end
-  - type: Body
-    prototype: Mouse
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -2081,7 +2036,7 @@
   - type: HTN
     constantlyReplan: false
     rootTask:
-      task: MouseCompound
+      task: CritterSnackCompound # DS14
   - type: Physics
   - type: FaxableObject
     insertingState: inserting_mouse
@@ -2126,12 +2081,6 @@
   - type: FlavorProfile
     flavors:
     - meaty
-  - type: Satiation
-    satiations:
-      Hunger:
-        prototype: MouseHunger
-      Thirst:
-        prototype: MouseThirst
   - type: Extractable
     grindableSolutionName: food
   - type: SolutionContainerManager
@@ -2154,17 +2103,6 @@
     - Mouse
     - Meat
     - FelinidFood # DS14
-  - type: Respirator
-    damage:
-      types:
-        Asphyxiation: 0.25
-    damageRecovery:
-      types:
-        Asphyxiation: -0.25
-  - type: Barotrauma
-    damage:
-      types:
-        Blunt: 0.1
   - type: Vocal
     sounds:
       Male: Mouse
@@ -2181,11 +2119,6 @@
     damage:
       types:
         Piercing: 0
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 50
   - type: CanEscapeInventory
   - type: MobPrice
     price: 50
@@ -2241,6 +2174,26 @@
   # intended for swarms that eat pills so only temporary
   - type: TimedDespawn
     lifetime: 60
+  - type: CritterGraze
+    sleepRange: 24
+  # DS14: this swarm exists to metabolize pills, so it keeps the old mouse body.
+  - type: Body
+    prototype: Mouse
+  - type: Bloodstream
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 50
+  - type: HTN
+    constantlyReplan: false
+    rootTask:
+      task: MouseCompound
   - type: Satiation
     satiations:
       Hunger:
@@ -3665,8 +3618,6 @@
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
       path: /Audio/Animals/cat_meow.ogg
-  - type: Respirator #It just works?
-    minSaturation: 5.0
 
 - type: entity
   name: caracal cat
@@ -3951,17 +3902,6 @@
     - Trash
     - Hamster
     - Meat
-  - type: Respirator
-    damage:
-      types:
-        Asphyxiation: 0.25
-    damageRecovery:
-      types:
-        Asphyxiation: -0.25
-  - type: Barotrauma
-    damage:
-      types:
-        Blunt: 0.1
   - type: CombatMode
   - type: MeleeWeapon
     soundHit:

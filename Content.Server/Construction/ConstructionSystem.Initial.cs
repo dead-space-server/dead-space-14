@@ -93,6 +93,16 @@ namespace Content.Server.Construction
             }
         }
 
+        //DS-14
+        private void DropSecretStash(EntityUid entity, EntityCoordinates coords)
+        {
+            if (!TryComp<Content.Shared.Storage.Components.SecretStashComponent>(entity, out var stash)
+                || stash.ItemContainer.Count == 0)
+                return;
+
+            _container.EmptyContainer(stash.ItemContainer, force: true, destination: coords);
+        }
+
         // LEGACY CODE. See warning at the top of the file!
         private async Task<EntityUid?> Construct(
             EntityUid user,
@@ -221,6 +231,10 @@ namespace Content.Server.Construction
                             {
                                 _container.EmptyContainer(storage.Container);
                             }
+
+                            // DS14-start: and what was hidden in it (a nuke disk in a plushie sewn into slippers)
+                            DropSecretStash(entity, coords);
+                            // DS14-end
 
                             if (string.IsNullOrEmpty(arbitraryStep.Store))
                             {

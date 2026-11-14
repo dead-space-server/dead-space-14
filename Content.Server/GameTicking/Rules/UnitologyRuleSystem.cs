@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Server.Antag;
+using Content.Shared.DeadSpace.TheCircle.Geist;
 using Content.Server.DeadSpace.Prison;
 using Content.Server.GameTicking.Rules.Components;
 using Robust.Shared.Timing;
@@ -383,7 +384,8 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
                 return true;
         }
 
-        return false;
+        // The Circle's geist has no head's objectives: it raises the obelisk over a body alone, no slaves needed.
+        return HasComp<TheCircleGeistComponent>(head);
     }
 
     public bool TrySummonObelisk(EntityUid head, bool black)
@@ -473,7 +475,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
         while (query.MoveNext(out var uniUid, out _))
         {
-            if (HasComp<NecromorfComponent>(uniUid) || HasComp<ZombieComponent>(uniUid))
+            if (IsSparedFromTransformation(uniUid))
                 continue;
 
             _necromorfSystem.Necrofication(uniUid, component.AfterGibNecroPrototype, new InfectionDeadStrainData());
@@ -481,7 +483,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
         while (queryUni.MoveNext(out var uniUid, out _))
         {
-            if (HasComp<NecromorfComponent>(uniUid) || HasComp<ZombieComponent>(uniUid))
+            if (IsSparedFromTransformation(uniUid))
                 continue;
 
             var necromorf = _infectionDead.GetRandomNecromorfPrototypeId();
@@ -491,7 +493,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
         while (queryEnsl.MoveNext(out var uniUid, out _))
         {
-            if (HasComp<NecromorfComponent>(uniUid) || HasComp<ZombieComponent>(uniUid))
+            if (IsSparedFromTransformation(uniUid))
                 continue;
 
             var necromorf = _infectionDead.GetRandomNecromorfPrototypeId();
@@ -500,6 +502,14 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
         }
 
         component.IsTransformationEnd = true;
+    }
+
+    /// <summary>
+    /// Already turned, or the Circle's geist: it leads the unitologists to the obelisk but neither writhes nor turns.
+    /// </summary>
+    private bool IsSparedFromTransformation(EntityUid uid)
+    {
+        return HasComp<NecromorfComponent>(uid) || HasComp<ZombieComponent>(uid) || HasComp<TheCircleGeistComponent>(uid);
     }
 
     private void VictimTransformations(EntityUid uid, UnitologyRuleComponent? component = null)
@@ -516,7 +526,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
         while (query.MoveNext(out var uniUid, out _))
         {
-            if (HasComp<NecromorfComponent>(uniUid) || HasComp<ZombieComponent>(uniUid))
+            if (IsSparedFromTransformation(uniUid))
                 continue;
 
             VictimDamage(uid, uniUid, component);
@@ -524,7 +534,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
         while (queryUni.MoveNext(out var uniUid, out _))
         {
-            if (HasComp<NecromorfComponent>(uniUid) || HasComp<ZombieComponent>(uniUid))
+            if (IsSparedFromTransformation(uniUid))
                 continue;
 
             VictimDamage(uid, uniUid, component);
@@ -532,7 +542,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
         while (queryEnsl.MoveNext(out var uniUid, out _))
         {
-            if (HasComp<NecromorfComponent>(uniUid) || HasComp<ZombieComponent>(uniUid))
+            if (IsSparedFromTransformation(uniUid))
                 continue;
 
             VictimDamage(uid, uniUid, component);

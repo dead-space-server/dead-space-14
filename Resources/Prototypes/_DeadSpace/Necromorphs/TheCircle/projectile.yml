@@ -62,6 +62,10 @@
       types:
         Piercing: 13
         Blunt: 4
+  - type: LimbRound
+    bone: 12
+    organ: 0.9
+    bleed: 0.06
   - type: StaminaDamageOnCollide
     damage: 15
 
@@ -73,6 +77,10 @@
   description: Если вы можете видеть это, вы вероятно мертвы!
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    bone: 26
+    organ: 1.25
+    bleed: 0.14
   - type: HitscanBasicDamage
     damage:
       types:
@@ -115,6 +123,10 @@
   parent: BulletTrace
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    bone: 14
+    organ: 1.05
+    bleed: 0.08
   - type: HitscanBasicDamage
     damage:
       types:
@@ -146,6 +158,10 @@
   name: патрон (12,7х55 мм)
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    bone: 32
+    organ: 1.3
+    bleed: 0.16
   - type: HitscanBasicDamage
     damage:
       types:
@@ -178,6 +194,10 @@
   name: патрон (6,8х51 мм)
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    bone: 8
+    organ: 0.5
+    bleed: 0.05
   - type: HitscanBasicDamage
     damage:
       types:
@@ -211,6 +231,10 @@
   name: патрон (9.39 мм)
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    bone: 16
+    organ: 1.1
+    bleed: 0.09
   - type: HitscanBasicDamage
     damage:
       types:
@@ -253,6 +277,10 @@
   parent: BulletTrace
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    bone: 12
+    organ: 1
+    bleed: 0.07
   - type: HitscanBasicDamage
     damage:
       types:
@@ -281,6 +309,12 @@
   parent: BulletTrace
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    pellet: true
+    sever: true
+    bone: 3
+    organ: 0.2
+    bleed: 0.03
   - type: HitscanBasicDamage
     damage:
       types:

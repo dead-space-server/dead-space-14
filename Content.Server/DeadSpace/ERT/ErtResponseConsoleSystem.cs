@@ -4,6 +4,7 @@ using Content.Server.Access.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Station.Systems;
+using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeadSpace.ERT;
@@ -12,6 +13,7 @@ using Content.Shared.Popups;
 using Content.Shared.Power;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
+using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 
@@ -27,6 +29,7 @@ public sealed class ErtResponseConsoleSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IdCardSystem _idCardSystem = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     public override void Initialize()
     {
@@ -45,6 +48,16 @@ public sealed class ErtResponseConsoleSystem : EntitySystem
     {
         if (!_powerReceiver.IsPowered(uid) || !IsConsoleAuthorized((uid, component)) || string.IsNullOrEmpty(args.Team))
             return;
+
+        // Only a team this console offers: the id comes from the client, and other teams are for admins to send.
+        if (!component.Teams.Contains(args.Team))
+            return;
+
+        // The reason goes into announcements and admin alerts: no longer than a chat message.
+        var callReason = args.CallReason?.Trim();
+        var maxReasonLength = _cfg.GetCVar(CCVars.ChatMaxMessageLength);
+        if (callReason != null && callReason.Length > maxReasonLength)
+            callReason = callReason[..maxReasonLength];
 
         var station = _stationSystem.GetOwningStation(uid);
         var requesterName = args.Actor is { Valid: true } actor
@@ -65,7 +78,7 @@ public sealed class ErtResponseConsoleSystem : EntitySystem
                 requesterName,
                 uid,
                 out reason,
-                args.CallReason);
+                callReason);
         }
         else
         {
@@ -73,7 +86,7 @@ public sealed class ErtResponseConsoleSystem : EntitySystem
                 args.Team,
                 station,
                 out reason,
-                callReason: args.CallReason);
+                callReason: callReason);
         }
 
         if (!success)

@@ -40,6 +40,13 @@ public sealed partial class LavalandHierophantComponent : Component
     [DataField]
     public TimeSpan BurstStepDelay = TimeSpan.FromSeconds(0.1);
 
+    /// <summary>
+    /// How fast the square under it spreads when someone comes close, as a multiplier of <see cref="BurstStepDelay"/>:
+    /// below 1 it is faster, and much below it is all over the floor at once, with no time to step out.
+    /// </summary>
+    [DataField]
+    public float CloseBurstSpread = 1f;
+
     [DataField]
     public TimeSpan ChaserStepDelay = TimeSpan.FromSeconds(0.32);
 

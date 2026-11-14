@@ -19,6 +19,7 @@ using Content.Shared.Timing;
 using Content.Shared.Verbs;
 using Content.Shared.Wall;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -46,6 +47,7 @@ public sealed class LavalandResonatorSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
@@ -178,6 +180,10 @@ public sealed class LavalandResonatorSystem : EntitySystem
         EntityCoordinates targetCoords,
         bool showInvalidPopup = true)
     {
+        // Shut in a body bag, a locker or the like, the user can't reach the rock outside to set a field on it.
+        if (_container.IsEntityInContainer(user))
+            return true;
+
         if (!_turf.TryGetTileRef(targetCoords, out var tileRef))
             return false;
 
@@ -435,20 +441,33 @@ public sealed class LavalandResonatorSystem : EntitySystem
             args.Damage = args.Damage * multiplier;
     }
 
+    /// <summary>Share of the usual boss falloff the Legion gets.</summary>
+    private const float LegionFalloffScale = 0.4f;
+
+    /// <summary>The least a resonator hit does to the Legion, however often it is hit.</summary>
+    private const float LegionMinMultiplier = 0.5f;
+
     /// <summary>
     /// Returns the damage multiplier for a resonator hit on a boss and records the hit:
     /// every hit within the window makes the next one weaker.
     /// </summary>
     private float ConsumeBossDamageMultiplier(EntityUid target, float falloff, float minMultiplier, TimeSpan window)
     {
-        // Not the Legion: its many bodies (and hands) are fought with resonators at full strength.
+        var legion = HasComp<LavalandLegionMegafaunaComponent>(target);
         if (falloff <= 0f ||
-            HasComp<LavalandLegionMegafaunaComponent>(target) ||
+            !legion &&
             !HasComp<LavalandBossComponent>(target) &&
             !HasComp<LavalandMadMinerComponent>(target) &&
             !HasComp<LavalandEliteComponent>(target))
         {
             return 1f;
+        }
+
+        // The Legion is fought with resonators by design: its falloff is mild and never takes off more than half.
+        if (legion)
+        {
+            falloff *= LegionFalloffScale;
+            minMultiplier = MathF.Max(minMultiplier, LegionMinMultiplier);
         }
 
         var now = _timing.CurTime;

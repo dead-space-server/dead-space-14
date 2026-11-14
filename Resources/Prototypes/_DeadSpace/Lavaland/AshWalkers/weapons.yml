@@ -4,6 +4,13 @@
   name: bone dagger
   description: A sharpened bone with a comfortable grip, suited to skinning prey and cutting sinew.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: AshWalkerRitualDagger
   - type: Sprite
     sprite: _DeadSpace/Lavaland/AshWalkers/bone_dagger.rsi
@@ -31,6 +38,13 @@
   name: bone axe
   description: Heavy bone plates lashed to a sturdy haft. A two-handed grip gives its edge the weight to split timber and thick hides.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/AshWalkers/bone_axe.rsi
     state: icon

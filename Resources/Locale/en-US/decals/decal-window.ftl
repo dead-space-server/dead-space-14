@@ -1,6 +1,8 @@
 ﻿decal-placer-window-title = Decal Placer
 decal-placer-window-use-color = Custom Color
 decal-placer-window-rotation = Rotation
+decal-placer-window-offset-x = Offset X
+decal-placer-window-offset-y = Offset Y
 decal-placer-window-zindex = Draw Depth
 decal-placer-window-enable-auto = Use Automatic Settings
 decal-placer-window-enable-snap = Snap To Tile

@@ -4,10 +4,46 @@
   name: operating table
   description: Special medical table for surgery. This one just seems to be a useless prop, though.
   components:
+  - type: SurgerySurface
+    place: Table
+  - type: SurgeryTankMount # DS14
+  - type: InteractionOutline # DS14
+  - type: ContainerContainer # DS14
+    containers:
+      surgery_tank: !type:ContainerSlot
+  - type: ItemSlots # DS14
+    slots:
+      surgery_tank:
+        name: surgery-tank-slot
+        whitelist:
+          components:
+          - GasTank
+  # DS14-start
+  - type: Construction
+    graph: OperatingTable
+    node: table
+  - type: Appearance
+  - type: SurgeryXrayTable
   - type: Sprite
-    sprite: Structures/Furniture/Tables/optable.rsi
-    state: operating_table
     noRot: true
+    sprite: _DeadSpace/Structures/Furniture/Tables/xraytable.rsi
+    state: table
+    layers:
+    - state: table
+      map: [ "enum.AutopsyTableLayers.Base" ]
+    - state: device
+      map: [ "enum.AutopsyTableLayers.WithDevice" ]
+      shader: unshaded
+      visible: false
+    - state: device1
+      map: [ "enum.AutopsyTableLayers.WithDevice1" ]
+      shader: unshaded
+      visible: false
+    - state: device2
+      map: [ "enum.AutopsyTableLayers.WithDevice2" ]
+      shader: unshaded
+      visible: false
   - type: Icon
-    sprite: Structures/Furniture/Tables/optable.rsi
-    state: operating_table
+    sprite: _DeadSpace/Structures/Furniture/Tables/xraytable.rsi
+    state: table
+  # DS14-end

@@ -30,6 +30,7 @@ public sealed partial class PlantSystem : EntitySystem
     // DS14-start
     [Dependency] private readonly BotanySystem _botany = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!; //DS-14
     [Dependency] private readonly PlantMutationSystem _mutation = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
 
@@ -334,6 +335,11 @@ public sealed partial class PlantSystem : EntitySystem
 
         plantHolder.Health = healthOverride ?? ent.Comp.Endurance;
         DirtyFields(ent, plantHolder, null, nameof(plantHolder.Health));
+
+        //DS-14 start
+        if (TryComp<PlantDataComponent>(ent.Owner, out var data))
+            _metaData.SetEntityName(ent.Owner, Loc.GetString(data.Name));
+        //DS-14 end
     }
 
     /// <summary>

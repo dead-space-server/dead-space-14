@@ -8,7 +8,9 @@ using Content.Shared.CombatMode;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Weapons.Akimbo;
+using Content.Shared.Movement.Components;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
@@ -366,7 +368,15 @@ public abstract partial class SharedGunSystem : EntitySystem
         var fireRate = TimeSpan.FromSeconds(1f / gun.Comp.FireRateModified);
 
         if (gun.Comp.SelectedMode == SelectiveFire.Burst || gun.Comp.BurstActivated)
-            fireRate = TimeSpan.FromSeconds(1f / gun.Comp.BurstFireRate);
+        {
+            var burst = gun.Comp.BurstFireRate;
+            // DS14-start
+            if (TryComp<LimbAimComponent>(user, out var aim) && aim.Aiming
+                && (!TryComp<InputMoverComponent>(user, out var mover) || LimbWoundRules.AimIsPrecise(mover.HasDirectionalMovement, mover.Sprinting)))
+                burst *= LimbWoundRules.AimFireRate;
+            // DS14-end
+            fireRate = TimeSpan.FromSeconds(1f / burst);
+        }
 
         // First shot
         // Previously we checked shotcounter but in some cases all the bullets got dumped at once

@@ -45,6 +45,9 @@ public sealed class DashAbilitySystem : SharedDashAbilitySystem
         Del(point);
 
         if (pulled is { } pulledUid)
+        {
             _transform.SetCoordinates(pulledUid, target);
+            _transform.AttachToGridOrMap(pulledUid);
+        }
     }
 }

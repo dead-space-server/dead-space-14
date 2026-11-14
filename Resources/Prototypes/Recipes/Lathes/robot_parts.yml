@@ -81,13 +81,126 @@
   id: TorsoBorg
   result: TorsoBorg
 
+# DS14-start
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: TorsoIPC
+  result: TorsoIPC
+  materials:
+    Steel: 500
+    Glass: 100
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: HeadIPC
+  result: HeadIPC
+  materials:
+    Steel: 200
+    Glass: 200
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: LeftArmIPC
+  result: LeftArmIPC
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: RightArmIPC
+  result: RightArmIPC
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: LeftLegIPC
+  result: LeftLegIPC
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: RightLegIPC
+  result: RightLegIPC
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: LeftHandIPC
+  result: LeftHandIPC
+  materials:
+    Steel: 100
+    Glass: 50
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: RightHandIPC
+  result: RightHandIPC
+  materials:
+    Steel: 100
+    Glass: 50
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: LeftFootIPC
+  result: LeftFootIPC
+  materials:
+    Steel: 100
+    Glass: 50
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: RightFootIPC
+  result: RightFootIPC
+  materials:
+    Steel: 100
+    Glass: 50
+
+# IPC (КПБ) organs
+- type: latheRecipe
+  parent: BaseRoboticsRecipe
+  id: OrganIPCPositronic
+  result: OrganIPCPositronic
+  materials:
+    Steel: 500
+    Plastic: 500
+    Gold: 100
+
+- type: latheRecipe
+  parent: BaseRoboticsRecipe
+  id: OrganIPCBattery
+  result: OrganIPCBattery
+  materials:
+    Steel: 300
+    Glass: 100
+    Gold: 50
+
+- type: latheRecipe
+  parent: BaseRoboticsRecipe
+  id: OrganIPCStatusModule
+  result: OrganIPCStatusModule
+  materials:
+    Steel: 100
+    Glass: 200
+
+- type: latheRecipe
+  parent: BaseRoboticsRecipe
+  id: OrganIPCVoiceModule
+  result: OrganIPCVoiceModule
+  materials:
+    Steel: 100
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseRoboticsRecipe
+  id: OrganIPCEyes
+  result: OrganIPCEyes
+  materials:
+    Steel: 50
+    Glass: 200
+# DS14-end
+
 # Brains
 - type: latheRecipe
   parent: BaseRoboticsRecipe
   id: MMI
   result: MMI
   icon:
-    sprite: Objects/Specific/Robotics/mmi.rsi
+    sprite: _DeadSpace/Objects/Specific/Robotics/mmi.rsi # DS14
     state: mmi_off
   materials:
     Steel: 1000

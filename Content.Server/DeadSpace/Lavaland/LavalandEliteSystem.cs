@@ -103,6 +103,16 @@ public sealed class LavalandEliteSystem : EntitySystem
             if (_mobState.IsDead(uid))
                 continue;
 
+            if (elite.AwakeUntil != TimeSpan.Zero)
+            {
+                if (now < elite.AwakeUntil)
+                    continue;
+
+                elite.AwakeUntil = TimeSpan.Zero;
+                elite.NextAttack = now + TimeSpan.FromSeconds(1);
+                SetAi(uid, true);
+            }
+
             UpdateHeadRegrow(uid, now);
             if (UpdateLegionnaireCharge(uid, xform, now))
                 continue;
@@ -140,11 +150,17 @@ public sealed class LavalandEliteSystem : EntitySystem
 
         var coordinates = Transform(ent).Coordinates;
         var elite = Spawn(_random.Pick(ent.Comp.Elites), coordinates.Offset(new Vector2(0f, 1f)));
-        EnsureComp<LavalandEliteComponent>(elite).Tumor = ent.Owner;
+        var eliteComp = EnsureComp<LavalandEliteComponent>(elite);
+        eliteComp.Tumor = ent.Owner;
+        // A moment to come to: no blow straight in the face of whoever woke it.
+        eliteComp.AwakeUntil = _timing.CurTime + ent.Comp.AwakeningTime;
+        SetAi(elite, false);
         ent.Comp.Elite = elite;
         ent.Comp.Activator = args.User;
         ent.Comp.AwaySince = null;
         _appearance.SetData(ent, LavalandArtifactVisuals.Active, true);
+        // Opened, the tumor is only a mark on the ground: the elite got stuck in it.
+        _physics.SetCanCollide(ent, false);
         BuildArena(ent, coordinates);
 
         _popup.PopupEntity(Loc.GetString("lavaland-elite-awakens", ("elite", elite)), ent, PopupType.LargeCaution);
@@ -233,6 +249,7 @@ public sealed class LavalandEliteSystem : EntitySystem
             tumor.Activator = null;
             tumor.AwaySince = null;
             _appearance.SetData(uid, LavalandArtifactVisuals.Active, false);
+            _physics.SetCanCollide(uid, true);
         }
     }
 
@@ -451,6 +468,11 @@ public sealed class LavalandEliteSystem : EntitySystem
     private TimeSpan BroodmotherAttack(Entity<LavalandBroodmotherComponent> ent, EntityUid target, int attack, TimeSpan now)
     {
         ent.Comp.Children.RemoveAll(child => TerminatingOrDeleted(child) || _mobState.IsDead(child));
+        // Never two rushes in a row: the stamina spent dodging one has no time to come back.
+        if (attack == 2 && ent.Comp.LastAttackWasRage)
+            attack = _random.Next(2) == 0 ? 0 : 3;
+        ent.Comp.LastAttackWasRage = attack == 2;
+
         switch (attack)
         {
             case 0:
@@ -469,10 +491,12 @@ public sealed class LavalandEliteSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("lavaland-broodmother-children", ("elite", ent.Owner)), ent, PopupType.MediumCaution);
                 return ent.Comp.ChildrenCooldown;
             case 2:
-                ent.Comp.RageUntil = now + ent.Comp.RageDuration;
-                _movement.RefreshMovementSpeedModifiers(ent);
+                // The roar first, the rush a moment later.
+                ent.Comp.RageStartAt = now + ent.Comp.RageWindup;
+                ent.Comp.RageUntil = ent.Comp.RageStartAt + ent.Comp.RageDuration;
                 _popup.PopupEntity(Loc.GetString("lavaland-broodmother-rage", ("elite", ent.Owner)), ent, PopupType.LargeCaution);
-                return ent.Comp.RageCooldown;
+                var rageOver = ent.Comp.RageWindup + ent.Comp.RageDuration + ent.Comp.RageRecovery;
+                return rageOver > ent.Comp.RageCooldown ? rageOver : ent.Comp.RageCooldown;
             default:
                 var origin = Transform(ent).Coordinates;
                 var index = 0;
@@ -509,6 +533,12 @@ public sealed class LavalandEliteSystem : EntitySystem
         if (!TryComp<LavalandBroodmotherComponent>(uid, out var brood))
             return;
 
+        if (brood.RageStartAt != TimeSpan.Zero && now >= brood.RageStartAt)
+        {
+            brood.RageStartAt = TimeSpan.Zero;
+            _movement.RefreshMovementSpeedModifiers(uid);
+        }
+
         if (brood.RageUntil != TimeSpan.Zero && now >= brood.RageUntil)
         {
             brood.RageUntil = TimeSpan.Zero;
@@ -532,7 +562,8 @@ public sealed class LavalandEliteSystem : EntitySystem
 
     private void OnBroodmotherSpeed(Entity<LavalandBroodmotherComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
-        if (ent.Comp.RageUntil > _timing.CurTime)
+        var now = _timing.CurTime;
+        if (ent.Comp.RageUntil > now && (ent.Comp.RageStartAt == TimeSpan.Zero || now >= ent.Comp.RageStartAt))
             args.ModifySpeed(ent.Comp.RageSpeed, ent.Comp.RageSpeed);
     }
 

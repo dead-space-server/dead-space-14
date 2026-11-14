@@ -32,7 +32,7 @@
   parent: ClothingBeltMilitaryWebbingBlueShieldFilled
   name: РПС офицера "Синий Щит"
   description: РПС, которую носят офицеры "Синий Щит"
-  suffix: Заполненный, ЦентКом
+  suffix: Заполненный, ЦК
   components:
   - type: StorageFill
     contents:
@@ -48,11 +48,47 @@
       - id: ChemistryBottleDermaline
 
 - type: entity
+  id: ClothingBeltHolsterBlueShield
+  parent: [ClothingBeltBase, ClothingSlotBase, ClothingBeltStorageBase]
+  name: кобура Офицера "Синий Щит"
+  description: Специальная кобура под два револьвера КР-19, благодаря открытой конструкции данная кобура позволяет быстро достать сразу два револьвера. Сама кобура создана из очень крепких материалов, а также имеет пару подсумков.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/holster_blueshield.rsi
+    state: icon
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/holster_blueshield.rsi
+    slots: [ belt ]
+  - type: Storage
+    grid:
+    - 0,0,9,1
+  - type: ItemMapper
+    mapLayers:
+      icon_1:
+        minCount: 1
+        whitelist:
+          tags:
+          - WeaponRevolverBlueShieldKR19
+      icon_2:
+        minCount: 2
+        whitelist:
+          tags:
+          - WeaponRevolverBlueShieldKR19
+  - type: HolsterDraw
+    actionProto: ActionHolsterDrawBlueShield
+    weaponProto: WeaponRevolverBlueShieldKR19
+  - type: Appearance
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot {}
+      storagebase: !type:Container {}
+
+- type: entity
   id: ClothingBeltMilitaryWebbingRedSwordCentComFilled
   parent: ClothingBeltMilitaryWebbingBlueShieldFilled
   name: РПС офицера "Красный Меч"
   description: РПС, которую носят офицеры "Красный Меч"
-  suffix: Заполненный, ЦентКом
+  suffix: Заполненный, ЦК
   components:
   - type: StorageFill
     contents:
@@ -72,7 +108,7 @@
   parent: ClothingBeltMilitaryWebbingBlueShieldFilled
   name: РПС офицера "Зелёный Берет"
   description: РПС, которую носят офицеры "Зелёный Берет"
-  suffix: Заполненный, ЦентКом
+  suffix: Заполненный, ЦК
   components:
   - type: StorageFill
     contents:

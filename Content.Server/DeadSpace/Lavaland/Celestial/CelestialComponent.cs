@@ -113,6 +113,15 @@ public sealed partial class CelestialComponent : Component
     [DataField]
     public float OrbLifetime = 12f;
 
+    /// <summary>
+    /// На каком расстоянии от цели открываются трещины с шарами, тайлы: не вплотную, чтобы было время уйти от их лучей.
+    /// </summary>
+    [DataField]
+    public float RiftMinDistance = 5f;
+
+    [DataField]
+    public float RiftMaxDistance = 7f;
+
     /// <summary>Сколько шаров выходит из одной трещины.</summary>
     [DataField]
     public int OrbsPerCrack = 3;

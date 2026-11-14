@@ -92,8 +92,6 @@
   - ServiceJumpsuitNew
   - ServiceJumpskirtNew
 
-# Cargo
-
 # Law
 - type: loadoutGroup
   id: MagistratJumpsuit

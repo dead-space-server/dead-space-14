@@ -5,6 +5,8 @@ using Content.Shared.Gravity;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Slippery;
+using Content.Shared.StepTrigger.Components;
+using Content.Shared.StepTrigger.Systems;
 using Content.Shared.Whitelist;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -20,6 +22,7 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _speedModifierSystem = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly StepTriggerSystem _stepTrigger = default!; //DS-14
 
     // TODO full-game-save
     // Either these need to be processed before a map is saved, or slowed/slowing entities need to update on init.
@@ -40,6 +43,18 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        //DS-14 start
+        var covered = EntityQueryEnumerator<StepTriggerActiveComponent, StepTriggerComponent, SpeedModifierContactsComponent>();
+        while (covered.MoveNext(out _, out _, out var trigger, out _))
+        {
+            if (trigger.Blacklist == null)
+                continue;
+
+            foreach (var mob in trigger.Colliding)
+                _toUpdate.Add(mob);
+        }
+        //DS-14 end
 
         _toRemove.Clear();
 
@@ -111,6 +126,12 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
 
         bool remove = true;
         var entries = 0;
+        // DS14-Start
+        var contactEntries = 0;
+        var slipperyEntries = 0;
+        var slipperyWalk = 0.0f;
+        var slipperySprint = 0.0f;
+        // DS14-end
         foreach (var ent in _physics.GetContactingEntities(uid, physicsComponent))
         {
             // DS14-start
@@ -133,8 +154,17 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
                 if (isAirborne && !slowContactsComponent.AffectAirborne)
                     continue;
 
+                //DS-14 start
+                if (_stepTrigger.IsBlacklistBlocked(ent))
+                {
+                    remove = false;
+                    continue;
+                }
+                //DS-14 end
+
                 walkSpeed += slowContactsComponent.WalkSpeedModifier;
                 sprintSpeed += slowContactsComponent.SprintSpeedModifier;
+                contactEntries++; // DS14
                 speedModified = true;
             }
 
@@ -146,8 +176,11 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
 
                 if (!MathHelper.CloseTo(evSlippery.SlowdownModifier, 1))
                 {
-                    walkSpeed += evSlippery.SlowdownModifier;
-                    sprintSpeed += evSlippery.SlowdownModifier;
+                    // DS14-start
+                    slipperyWalk += evSlippery.SlowdownModifier;
+                    slipperySprint += evSlippery.SlowdownModifier;
+                    slipperyEntries++;
+                    // DS14-end
                     speedModified = true;
                 }
             }
@@ -159,18 +192,44 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
             }
         }
 
-        if (entries > 0 && (!MathHelper.CloseTo(walkSpeed, entries) || !MathHelper.CloseTo(sprintSpeed, entries)))
+        if (entries > 0 && (!MathHelper.CloseTo(walkSpeed, contactEntries) || !MathHelper.CloseTo(sprintSpeed, contactEntries) || slipperyEntries > 0)) // DS14
         {
-            walkSpeed /= entries;
-            sprintSpeed /= entries;
-
+            // DS14-start
             var evMax = new GetSpeedModifierContactCapEvent();
             RaiseLocalEvent(uid, ref evMax);
+
+            if (contactEntries > 0)
+            {
+                walkSpeed /= contactEntries;
+                sprintSpeed /= contactEntries;
+
+                var resistance = Math.Clamp(evMax.SlowdownResistance, 0f, 1f);
+                if (resistance > 0f)
+                {
+                    if (walkSpeed < 1f)
+                        walkSpeed = 1f - (1f - walkSpeed) * (1f - resistance);
+
+                    if (sprintSpeed < 1f)
+                        sprintSpeed = 1f - (1f - sprintSpeed) * (1f - resistance);
+                }
+            }
+            else
+            {
+                walkSpeed = 1f;
+                sprintSpeed = 1f;
+            }
+
+            if (slipperyEntries > 0)
+            {
+                walkSpeed *= slipperyWalk / slipperyEntries;
+                sprintSpeed *= slipperySprint / slipperyEntries;
+            }
 
             walkSpeed = MathF.Max(walkSpeed, evMax.MaxWalkSlowdown);
             sprintSpeed = MathF.Max(sprintSpeed, evMax.MaxSprintSlowdown);
 
             args.ModifySpeed(walkSpeed, sprintSpeed);
+            // DS14-end
         }
 
         // no longer colliding with anything

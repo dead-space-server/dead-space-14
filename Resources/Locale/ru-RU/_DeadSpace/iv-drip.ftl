@@ -6,7 +6,7 @@ iv-drip-examine-attached = Подключена к [color=green]{$patient}[/colo
 iv-drip-examine-detached = Не подключена к пациенту.
 
 iv-drip-speed-off = Выкл
-iv-drip-speed-slow = Медленно (0.5 u/s)
+iv-drip-speed-slow = Медленно (0.25 u/s)
 iv-drip-speed-medium = Средне (1.5 u/s)
 iv-drip-speed-fast = Быстро (3 u/s)
 

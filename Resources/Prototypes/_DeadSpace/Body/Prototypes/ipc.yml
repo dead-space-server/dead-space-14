@@ -8,7 +8,7 @@
       connections:
       - torso
       organs:
-        brain: OrganIPCBrain
+        brain: OrganIPCVoiceModule
         eyes: OrganIPCEyes
     torso:
       part: TorsoIPC
@@ -18,11 +18,9 @@
       - right leg
       - left leg
       organs:
-        heart: OrganIPCHeart
-        lungs: OrganIPCLungs
-        stomach: OrganIPCStomach
-        liver: OrganIPCLiver
-        kidneys: OrganIPCKidneys
+        core: OrganIPCPositronic
+        heart: OrganIPCBattery
+        lungs: OrganIPCStatusModule
     right arm:
       part: RightArmIPC
       connections:

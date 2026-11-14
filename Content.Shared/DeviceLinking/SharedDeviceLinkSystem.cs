@@ -575,4 +575,13 @@ public abstract class SharedDeviceLinkSystem : EntitySystem
         sink.InvokeCounterTick = _gameTiming.CurTick;
         sink.InvokeCounter = value;
     }
+
+    //DS-14 start
+    public void CopyLinkedSinks(DeviceLinkSourceComponent source, List<EntityUid> sinks)
+    {
+        sinks.Clear();
+        foreach (var sink in source.LinkedPorts.Keys)
+            sinks.Add(sink);
+    }
+    //DS-14 end
 }

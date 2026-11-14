@@ -90,6 +90,7 @@
         Slash: 0.95
         Piercing: 0.95
         Heat: 0.95
+        Radiation: 0.45
   - type: PointLight
     color: "#8A2BE2"
     radius: 5

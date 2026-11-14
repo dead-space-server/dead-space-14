@@ -1,5 +1,6 @@
 // Dead Space 14, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Numerics;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.CameraArchives;
@@ -24,6 +25,7 @@ public sealed class CameraArchiveState : BoundUserInterfaceState
     public CameraArchiveEntry[] Cameras = [];
     public NetEntity Selected;
     public int FrameIndex;
+    public int FrameId;
     public int FrameCount;
     public TimeSpan FrameTime;
     public CameraArchive? Frame;
@@ -41,5 +43,7 @@ public sealed class CameraArchivePrintMessage : BoundUserInterfaceMessage
 
     public NetEntity Camera;
     public int FrameIndex;
-    public byte[] Image = [];
+    public int FrameId;
+    public float Magnification = 1f;
+    public Vector2 Pan;
 }

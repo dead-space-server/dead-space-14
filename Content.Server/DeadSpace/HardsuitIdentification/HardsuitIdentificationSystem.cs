@@ -33,6 +33,7 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
     [Dependency] private readonly VocalSystem _vocal = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedSubdermalImplantSystem _implants = default!;
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {
@@ -67,33 +68,32 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
 
     private void OnDnaChanged(Entity<DnaComponent> ent, ref GenerateDnaEvent args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: true);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.DnaChange);
     }
 
     private void OnZombieStartup(Entity<ZombieComponent> ent, ref ComponentStartup args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: false);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.Undead);
     }
 
     private void OnNecroficationStarted(Entity<DnaComponent> ent, ref NecroficationStartedEvent args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: false);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.Undead);
     }
 
-    private void TryActivateEquippedItems(EntityUid wearer, bool requireDnaMismatch)
+    private void TryActivateEquippedItems(EntityUid wearer, DissolveTrigger trigger)
     {
         var slots = _inventory.GetSlotEnumerator(wearer);
         while (slots.NextItem(out var equipment, out var slot))
         {
             if (!TryComp<HardsuitIdentificationComponent>(equipment, out var comp) ||
                 !comp.DNAWasStored ||
-                comp.Activated ||
-                !comp.DissolveOnDnaChange)
+                comp.Activated)
             {
                 continue;
             }
 
-            if (requireDnaMismatch && TryComp<DnaComponent>(wearer, out var dna) && comp.DNA == dna.DNA)
+            if (!ShouldDissolve(wearer, comp, trigger))
                 continue;
 
             ActivateProtection((equipment, comp), wearer, slot.Name);
@@ -102,6 +102,24 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
             if (!comp.Nonlethal)
                 return;
         }
+    }
+
+    private bool ShouldDissolve(EntityUid wearer, HardsuitIdentificationComponent comp, DissolveTrigger trigger)
+    {
+        return trigger switch
+        {
+            DissolveTrigger.DnaChange => comp.DissolveOnDnaChange
+                && (!TryComp<DnaComponent>(wearer, out var dna) || comp.DNA != dna.DNA),
+            DissolveTrigger.Undead => comp.DissolveOnUndead,
+            _ => false,
+        };
+    }
+
+    private enum DissolveTrigger
+    {
+        DnaChange,
+
+        Undead,
     }
 
     private void ActivateProtection(Entity<HardsuitIdentificationComponent> equipment, EntityUid wearer, string slot)
@@ -134,6 +152,9 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         EnsureComp<UnremoveableComponent>(uid);
 
         comp.PunishmentImplantEntity = _implants.AddImplant(wearer, comp.PunishmentImplant);
+        // The implant is the item's, not the wearer's: no button for them to press.
+        if (TryComp<SubdermalImplantComponent>(comp.PunishmentImplantEntity, out var implant) && implant.Action is { } action)
+            _actions.RemoveAction(wearer, action);
 
         _popupSystem.PopupEntity(
             Loc.GetString("hardsuit-identification-error-spikes"),
@@ -141,22 +162,23 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
             wearer,
             Shared.Popups.PopupType.Large);
 
+        // The item counts down itself, whether it has a voice or not (a backpack has none).
         Timer.Spawn(1000,
             () => _chat.TrySendInGameICMessage(uid,
                 Loc.GetString("hardsuit-identification-error"),
-                InGameICChatType.Speak, true));
+                InGameICChatType.Speak, true, ignoreActionBlocker: true));
 
         Timer.Spawn(1500,
             () => { if (TryComp(wearer, out VocalComponent? v)) _vocal.TryPlayScreamSound(wearer, v); });
 
         Timer.Spawn(2000,
-            () => _chat.TrySendInGameICMessage(uid, "3", InGameICChatType.Speak, true));
+            () => _chat.TrySendInGameICMessage(uid, "3", InGameICChatType.Speak, true, ignoreActionBlocker: true));
 
         Timer.Spawn(2500,
             () => { if (TryComp(wearer, out VocalComponent? v)) _vocal.TryPlayScreamSound(wearer, v); });
 
         Timer.Spawn(3000,
-            () => _chat.TrySendInGameICMessage(uid, "2", InGameICChatType.Speak, true));
+            () => _chat.TrySendInGameICMessage(uid, "2", InGameICChatType.Speak, true, ignoreActionBlocker: true));
 
         Timer.Spawn(3500,
             () => { if (TryComp(wearer, out VocalComponent? v)) _vocal.TryPlayScreamSound(wearer, v); });
@@ -164,7 +186,7 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         Timer.Spawn(4000,
             () =>
             {
-                _chat.TrySendInGameICMessage(uid, "1", InGameICChatType.Speak, true);
+                _chat.TrySendInGameICMessage(uid, "1", InGameICChatType.Speak, true, ignoreActionBlocker: true);
                 if (TryComp(wearer, out VocalComponent? v)) _vocal.TryPlayScreamSound(wearer, v);
             });
 
@@ -226,9 +248,9 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
     {
         if (!comp.CanEmag)
             return;
-    
+
         _audio.PlayPvs(comp.SparkSound, uid);
-    
+
         if (comp.Activated)
         {
             _popupSystem.PopupEntity(Loc.GetString("hardsuit-identification-on-emagged-late"), uid);
@@ -239,7 +261,7 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         }
 
         RemComp<HardsuitIdentificationComponent>(uid);
-    
+
         args.Handled = true;
     }
 }

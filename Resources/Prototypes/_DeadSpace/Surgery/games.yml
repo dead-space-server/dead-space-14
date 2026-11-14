@@ -1,0 +1,29 @@
+- type: surgeryGameRoll
+  id: Cauterize
+  games:
+  - Sear
+  - Dots
+
+- type: surgeryGameRoll
+  id: Inject
+  games:
+  - Inject
+  - Dots
+
+- type: surgeryGameRoll
+  id: Bandage
+  games:
+  - Hold
+  - Steady
+
+- type: surgeryGameRoll
+  id: Append
+  games:
+  - Hold
+  - Steady
+
+- type: surgeryGameRoll
+  id: Graft
+  games:
+  - Hold
+  - Steady

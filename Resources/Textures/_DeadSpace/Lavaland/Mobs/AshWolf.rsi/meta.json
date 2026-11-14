@@ -1,0 +1,79 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from vgstation13 (Bleeding-Edge) at icons/mob/robots.dmi",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "bladewolfmk2",
+            "directions": 4
+        },
+        {
+            "name": "eyes-bladewolfmk2",
+            "directions": 4
+        },
+        {
+            "name": "bladewolfmk2-shield",
+            "directions": 4,
+            "delays": [
+                [
+                    0.1,
+                    0.1
+                ],
+                [
+                    0.1,
+                    0.1
+                ],
+                [
+                    0.1,
+                    0.1
+                ],
+                [
+                    0.1,
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "bladewolfmk2-roll",
+            "directions": 4
+        },
+        {
+            "name": "bladewolfmk2-roll-moving",
+            "directions": 4,
+            "delays": [
+                [
+                    0.07,
+                    0.07,
+                    0.07,
+                    0.07
+                ],
+                [
+                    0.07,
+                    0.07,
+                    0.07,
+                    0.07
+                ],
+                [
+                    0.07,
+                    0.07,
+                    0.07,
+                    0.07
+                ],
+                [
+                    0.07,
+                    0.07,
+                    0.07,
+                    0.07
+                ]
+            ]
+        },
+        {
+            "name": "eyes-bladewolfmk2-roll",
+            "directions": 4
+        }
+    ]
+}

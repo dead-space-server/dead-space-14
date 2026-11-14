@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.DeadSpace.Lavaland.SecretBoss;
 using Content.Server.Parallax;
 using Content.Server.Tiles;
 using Content.Shared.Chasm;
@@ -46,6 +47,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly LavalandSecretBossSystem _secretBoss = default!;
 
     private readonly Dictionary<EntProtoId, int> _counts = new();
     private readonly List<Vector2i> _placed = new();
@@ -266,15 +268,41 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         List<Vector2i> placed,
         out Vector2i indices)
     {
+        return TryFindSpawnTile(mapUid,
+            grid,
+            biome,
+            planet,
+            placed,
+            planet.TendrilMinDistance,
+            planet.TendrilMaxDistance,
+            planet.TendrilMinSeparation,
+            out indices);
+    }
+
+    /// <summary>
+    /// A free open tile between these distances from the planet's centre, apart from the tiles already taken and
+    /// kept out of the outpost, the landing, the Celestial's pit and other grids, as for the tendrils.
+    /// </summary>
+    public bool TryFindSpawnTile(
+        EntityUid mapUid,
+        MapGridComponent grid,
+        BiomeComponent biome,
+        LavalandPlanetPrototype planet,
+        List<Vector2i> placed,
+        int minDistanceWanted,
+        int maxDistanceWanted,
+        int minSeparation,
+        out Vector2i indices)
+    {
         indices = default;
 
         var limit = GetSpawnLimit(planet);
         if (limit <= 0)
             return false;
 
-        var minDistance = Math.Min(Math.Max(0, planet.TendrilMinDistance), limit);
-        var maxDistance = Math.Clamp(planet.TendrilMaxDistance, minDistance, limit);
-        var minSeparationSquared = planet.TendrilMinSeparation * planet.TendrilMinSeparation;
+        var minDistance = Math.Min(Math.Max(0, minDistanceWanted), limit);
+        var maxDistance = Math.Clamp(maxDistanceWanted, minDistance, limit);
+        var minSeparationSquared = minSeparation * minSeparation;
 
         for (var attempt = 0; attempt < planet.TendrilSpawnAttempts; attempt++)
         {
@@ -285,6 +313,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
                 (int) MathF.Round(MathF.Sin(angle) * distance));
 
             if (IsInsideExclusion(candidate, planet) ||
+                IsNearCelestialPit(mapUid, candidate) ||
                 IsNearOtherGrid(mapUid, grid, candidate) ||
                 !IsSeparated(candidate, placed, minSeparationSquared) ||
                 !IsTileSafe(mapUid, grid, biome, candidate))
@@ -376,7 +405,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         return false;
     }
 
-    private void ReserveArea(
+    public void ReserveArea(
         EntityUid mapUid,
         MapGridComponent grid,
         BiomeComponent biome,
@@ -430,6 +459,18 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         }
 
         return false;
+    }
+
+    /// <summary>While the Celestial's pit is open, nothing grows in the area the players search it in.</summary>
+    private bool IsNearCelestialPit(EntityUid mapUid, Vector2i indices)
+    {
+        if (!_secretBoss.TryGetPit(mapUid, out var pit, out var noiseCenter, out var config))
+            return false;
+
+        var position = new Vector2(indices.X, indices.Y);
+        var radius = Math.Max(config.NoiseRadius, config.FaunaClearRadius);
+        return Vector2.DistanceSquared(position, noiseCenter) <= radius * radius ||
+               Vector2.DistanceSquared(position, pit) <= radius * radius;
     }
 
     private static float GetFtlBeaconExclusionRadius(float configuredRadius, LavalandPlanetPrototype planet)

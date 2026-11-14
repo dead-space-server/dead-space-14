@@ -68,6 +68,10 @@ public sealed partial class LavalandLazarusInjectorComponent : Component
     [DataField]
     public EntityWhitelist? Whitelist;
 
+    /// <summary>Never brought back, even if on the whitelist (the rock mimics).</summary>
+    [DataField]
+    public EntityWhitelist? Blacklist;
+
     [DataField]
     public SoundSpecifier? Sound;
 }
@@ -115,6 +119,8 @@ public sealed partial class LavalandMinebotComponent : Component
 
     [ViewVariables]
     public EntityUid? BoundUser;
+
+    public bool FollowPulledToGrid;
 
     public TimeSpan NextCollect;
 
@@ -212,6 +218,10 @@ public sealed partial class LavalandWarpCubeComponent : Component
 
     [ViewVariables]
     public EntityUid? Linked;
+
+    /// <summary>The twin just spawned loose at its feet: it goes where this one is put first (the chest it is in).</summary>
+    [ViewVariables]
+    public EntityUid? LooseTwin;
 }
 
 /// <summary>
@@ -226,6 +236,10 @@ public sealed partial class LavalandParadoxBagComponent : Component
 
     [ViewVariables]
     public EntityUid? Linked;
+
+    /// <summary>The twin just spawned loose at its feet: it goes where this one is put first (the chest it is in).</summary>
+    [ViewVariables]
+    public EntityUid? LooseTwin;
 }
 
 /// <summary>Takes its user out of reality for a while: invulnerable, untargetable and unable to act.</summary>
@@ -297,7 +311,7 @@ public sealed partial class LavalandRodOfAsclepiusComponent : Component
     public List<LocId> OathLines = new();
 
     [DataField]
-    public TimeSpan LineDelay = TimeSpan.FromSeconds(3);
+    public TimeSpan LineDelay = TimeSpan.FromSeconds(8);
 
     [DataField]
     public float AuraRange = 7f;

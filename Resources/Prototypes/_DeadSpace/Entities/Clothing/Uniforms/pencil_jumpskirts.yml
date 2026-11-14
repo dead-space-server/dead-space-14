@@ -128,7 +128,7 @@
 - type: entity
   parent: ClothingUniformSkirtBase
   id: ClothingUniformJumpskirtPencilCentcomOfficial
-  name: костюм-карандаш офицера Центкома
+  name: костюм-карандаш сотрудника ЦК
   description: Строгий зелёный костюм в стиле "карандаш" придает образу строгость. Облегающий пиджак и прямая юбка создают изысканный силуэт, подходящий для различных событий, от деловых встреч до увольнения капитана.
   components:
   - type: Sprite

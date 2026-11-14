@@ -1647,6 +1647,11 @@
     blacklist:
       tags:
       - NukeOpsUplink
+  - !type:PurchasedBlacklistCondition
+    blacklist:
+    - UplinkSmokingCarpInjector
+    - UplinkTraitorUltraSmokingCarpInjector
+    - UplinkTraitorUltraSmokingCarpInjectorDiscounted
 
 - type: listing
   id: UplinkTraitorUltraReinforcementRadioSyndicateAncestor
@@ -2975,9 +2980,10 @@
   - TraitorUltraUplinkWeaponry
   conditions:
   - !type:StoreWhitelistCondition
-    whitelist:
+    blacklist:
       tags:
       - LoneOpsUplink
+      - NukeOpsUplink
   - !type:ListingLimitedStockCondition
     stock: 1
   - !type:BuyerWhitelistCondition
@@ -3317,6 +3323,10 @@
     blacklist:
       tags:
       - NukeOpsUplink
+  - !type:PurchasedBlacklistCondition
+    blacklist:
+    - UplinkHoloparaKit
+    - UplinkTraitorUltraHoloparaKit
 
 - type: listing
   id: UplinkTraitorUltraSmokingCarpInjectorDiscounted
@@ -3336,6 +3346,10 @@
     blacklist:
       tags:
       - NukeOpsUplink
+  - !type:PurchasedBlacklistCondition
+    blacklist:
+    - UplinkHoloparaKit
+    - UplinkTraitorUltraHoloparaKit
 
 - type: listing
   id: UplinkTraitorUltraArkalyseBundleNukeOps

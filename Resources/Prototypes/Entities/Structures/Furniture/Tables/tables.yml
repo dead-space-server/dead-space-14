@@ -197,6 +197,12 @@
   - type: Construction
     graph: Table
     node: Table
+  #ds14-start
+  - type: Tag
+    tags:
+    - ForceFixRotations
+    - MetalTable
+  #ds14-end
   - type: FlippableTable
     flippedTableId: FlippedTableSteel
 
@@ -237,6 +243,12 @@
   - type: Construction
     graph: Table
     node: TableReinforced
+  #ds14-start
+  - type: Tag
+    tags:
+    - ForceFixRotations
+    - MetalTable
+  #ds14-end
   - type: Climbable
     # Reinforced tables are extra tough
   - type: Bonkable
@@ -506,6 +518,12 @@
   - type: Construction
     graph: Table
     node: TableBrass
+  #ds14-start
+  - type: Tag
+    tags:
+    - ForceFixRotations
+    - MetalTable
+  #ds14-end
 
 - type: entity
   id: TableWood
@@ -929,6 +947,12 @@
   - type: Construction
     graph: Table
     node: CounterWood
+  #ds14-start
+  - type: Tag
+    tags:
+    - ForceFixRotations
+    - Wooden
+  #ds14-end
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepWood
@@ -974,3 +998,9 @@
   - type: Construction
     graph: Table
     node: CounterMetal
+  #ds14-start
+  - type: Tag
+    tags:
+    - ForceFixRotations
+    - MetalTable
+  #ds14-end

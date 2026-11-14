@@ -8,4 +8,7 @@ public sealed partial class LavalandRedeemedOreComponent : Component
 
     [DataField]
     public int CreditedUnits;
+
+    [DataField]
+    public int OwedUnits;
 }

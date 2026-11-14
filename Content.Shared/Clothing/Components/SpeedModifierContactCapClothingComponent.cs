@@ -14,4 +14,7 @@ public sealed partial class SpeedModifierContactCapClothingComponent : Component
 
     [DataField, AutoNetworkedField]
     public float MaxContactWalkSlowdown = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float SlowdownResistance = 0f;
 }

@@ -21,6 +21,121 @@ public abstract class SharedBiomeSystem : EntitySystem
 
     protected const byte ChunkSize = 8;
 
+    // DS-14 start
+    private readonly Dictionary<NoiseKey, (FastNoiseLite Template, FastNoiseLite Copy)> _noiseCache = new();
+
+    private readonly struct NoiseKey : IEquatable<NoiseKey>
+    {
+        public readonly int Id;
+        public readonly int Seed;
+
+        public NoiseKey(FastNoiseLite template, int seed)
+        {
+            Id = System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(template);
+            Seed = seed;
+        }
+
+        public bool Equals(NoiseKey other)
+        {
+            return Id == other.Id && Seed == other.Seed;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is NoiseKey other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Seed);
+        }
+    }
+
+    protected void ClearBiomeNoiseCache()
+    {
+        _noiseCache.Clear();
+        _spacedCells.Clear();
+    }
+
+    private const int SpacedCellMinDistance = 25;
+    private readonly Dictionary<SpacedKey, SpacedCell> _spacedCells = new();
+
+    private readonly record struct SpacedKey(int Layer, int Seed, int Index, Vector2i Cell);
+
+    private readonly record struct SpacedCell(bool Found, Vector2i Tile, float Value);
+
+    private bool IsSpacedWinner(BiomeEntityLayer layer, FastNoiseLite noise, int index, int seed, Vector2i indices)
+    {
+        var size = layer.MinimumDistance;
+        var cell = new Vector2i(FloorDiv(indices.X, size), FloorDiv(indices.Y, size));
+        var own = GetSpacedCell(layer, noise, index, seed, cell);
+        if (!own.Found || own.Tile != indices)
+            return false;
+
+        for (var x = -1; x <= 1; x++)
+        {
+            for (var y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0)
+                    continue;
+
+                var other = GetSpacedCell(layer, noise, index, seed, cell + new Vector2i(x, y));
+                if (!other.Found ||
+                    Math.Max(Math.Abs(other.Tile.X - indices.X), Math.Abs(other.Tile.Y - indices.Y)) > size)
+                {
+                    continue;
+                }
+
+                if (other.Value > own.Value)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    private SpacedCell GetSpacedCell(BiomeEntityLayer layer, FastNoiseLite noise, int index, int seed, Vector2i cell)
+    {
+        var key = new SpacedKey(System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(layer), seed, index, cell);
+        if (_spacedCells.TryGetValue(key, out var cached))
+            return cached;
+
+        var size = layer.MinimumDistance;
+        var found = false;
+        var best = default(Vector2i);
+        var bestValue = float.MinValue;
+        for (var x = 0; x < size; x++)
+        {
+            for (var y = 0; y < size; y++)
+            {
+                var tileX = cell.X * size + x;
+                var tileY = cell.Y * size + y;
+                var value = noise.GetNoise(tileX, tileY);
+                value = layer.Invert ? value * -1 : value;
+                if (value < layer.Threshold)
+                    continue;
+
+                var strength = noise.GetNoise(tileX, tileY, index);
+                if (found && strength <= bestValue)
+                    continue;
+
+                found = true;
+                best = new Vector2i(tileX, tileY);
+                bestValue = strength;
+            }
+        }
+
+        cached = new SpacedCell(found, best, bestValue);
+        _spacedCells[key] = cached;
+        return cached;
+    }
+
+    private static int FloorDiv(int value, int size)
+    {
+        return value >= 0 ? value / size : (value - size + 1) / size;
+    }
+    // DS-14 end
+
     public void SetBounds(EntityUid uid, BiomeComponent component, Box2i? bounds, bool dirty = true)
     {
         component.Bounds = bounds;
@@ -273,7 +388,15 @@ public abstract class SharedBiomeSystem : EntitySystem
             // DS14-start
             // Keep only the strongest candidate in the configured neighborhood. This gives
             // sparse deterministic placement without clusters or chunk-boundary seams.
-            if (biomeLayer.MinimumDistance > 0)
+            if (biomeLayer.MinimumDistance >= SpacedCellMinDistance)
+            {
+                if (!IsSpacedWinner(biomeLayer, noiseCopy, i, seed, indices))
+                {
+                    entity = null;
+                    return false;
+                }
+            }
+            else if (biomeLayer.MinimumDistance > 0)
             {
                 for (var x = -biomeLayer.MinimumDistance; x <= biomeLayer.MinimumDistance; x++)
                 {
@@ -412,11 +535,18 @@ public abstract class SharedBiomeSystem : EntitySystem
 
     private FastNoiseLite GetNoise(FastNoiseLite seedNoise, int seed)
     {
+        // DS-14 start
+        var key = new NoiseKey(seedNoise, seed);
+        if (_noiseCache.TryGetValue(key, out var cached) && ReferenceEquals(cached.Template, seedNoise))
+            return cached.Copy;
+        // DS-14 end
+
         var noiseCopy = new FastNoiseLite();
         _serManager.CopyTo(seedNoise, ref noiseCopy, notNullableOverride: true);
         noiseCopy.SetSeed(noiseCopy.GetSeed() + seed);
         // Ensure re-calculate is run.
         noiseCopy.SetFractalOctaves(noiseCopy.GetFractalOctaves());
+        _noiseCache[key] = (seedNoise, noiseCopy); //DS-14
         return noiseCopy;
     }
 }

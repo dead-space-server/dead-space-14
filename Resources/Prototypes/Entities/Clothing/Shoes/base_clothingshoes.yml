@@ -6,6 +6,11 @@
   - type: Clothing
     slots:
     - FEET
+  # DS14
+  - type: LimbCover
+    zones:
+    - FootLeft
+    - FootRight
   - type: Sprite
     state: icon
   - type: Item

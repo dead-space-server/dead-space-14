@@ -233,6 +233,12 @@ namespace Content.Server.Communications
             if (!comp.CanShuttle)
                 return false;
 
+            //DS14-start
+            var stationUid = _stationSystem.GetOwningStation(comp.Owner);
+            if (stationUid != null && _alertLevelSystem.IsCallEvacBlocked(stationUid.Value))
+                return false;
+            //DS14-end
+
             // Calling shuttle checks
             if (_roundEndSystem.ExpectedCountdownEnd is null)
                 return true;

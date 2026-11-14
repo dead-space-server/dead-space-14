@@ -11,13 +11,17 @@ public sealed partial class StencilOverlay
 {
     /// <summary>
     /// DS14: a storm visor over the local player's eyes lets almost all of the storm through: its weather is drawn
-    /// at a small fraction of its opacity. 1 without one.
+    /// at a small fraction of its opacity. A creature built to see through the storm (a borg with storm optics)
+    /// carries the visor itself. 1 without one.
     /// </summary>
     private float GetStormVisorOpacity(ProtoId<WeatherPrototype> weather)
     {
-        if (_player.LocalEntity is not { } player ||
-            !_entManager.System<InventorySystem>().TryGetSlotEntity(player, "eyes", out var eyes) ||
-            !_entManager.TryGetComponent(eyes, out LavalandStormVisorComponent? visor))
+        if (_player.LocalEntity is not { } player)
+            return 1f;
+
+        if (!_entManager.TryGetComponent(player, out LavalandStormVisorComponent? visor) &&
+            (!_entManager.System<InventorySystem>().TryGetSlotEntity(player, "eyes", out var eyes) ||
+             !_entManager.TryGetComponent(eyes, out visor)))
         {
             return 1f;
         }

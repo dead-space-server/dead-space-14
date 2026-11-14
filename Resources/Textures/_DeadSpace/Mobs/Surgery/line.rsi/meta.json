@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by Blue Dog Doc for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 16,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "cut1"
+    },
+    {
+      "name": "cut2"
+    },
+    {
+      "name": "cut3"
+    },
+    {
+      "name": "cut4"
+    },
+    {
+      "name": "open"
+    },
+    {
+      "name": "deep"
+    }
+  ]
+}

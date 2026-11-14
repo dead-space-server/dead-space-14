@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
 using Content.Server.Destructible;
 using Content.Server.NPC.Systems;
+using Content.Server.Parallax; //DS-14
 using Content.Shared.Access.Components;
 using Content.Shared.Administration;
 using Content.Shared.Climbing.Components;
 using Content.Shared.Doors.Components;
+using Content.Shared.Movement.Components; //DS-14
 using Content.Shared.NPC;
 using Robust.Server.Player;
 using Robust.Shared.Enums;
@@ -49,6 +51,7 @@ namespace Content.Server.NPC.Pathfinding
         [Dependency] private readonly EntityLookupSystem _lookup = default!;
         [Dependency] private readonly FixtureSystem _fixtures = default!;
         [Dependency] private readonly NPCSystem _npc = default!;
+        [Dependency] private readonly BiomeSystem _biome = default!; //DS-14
         [Dependency] private readonly SharedMapSystem _maps = default!;
         [Dependency] private readonly SharedPhysicsSystem _physics = default!;
         [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -115,7 +118,7 @@ namespace Content.Server.NPC.Pathfinding
                 MaxDegreeOfParallelism = _parallel.ParallelProcessCount,
             };
 
-            UpdateGrid(options);
+            UpdateGrid(options); //DS-14
             _stopwatch.Restart();
             var amount = Math.Min(PathTickLimit, _pathRequests.Count);
             var results = ArrayPool<PathResult>.Shared.Rent(amount);
@@ -514,6 +517,14 @@ namespace Content.Server.NPC.Pathfinding
             {
                 flags |= PathFlags.Interact;
             }
+
+            //DS-14 start
+            if (blackboard.TryGetValue<EntityUid>(NPCBlackboard.Owner, out var owner, EntityManager) &&
+                HasComp<CanMoveInAirComponent>(owner))
+            {
+                flags |= PathFlags.Space;
+            }
+            //DS-14 end
 
             return flags;
         }

@@ -2,7 +2,7 @@
   id: LavalandSurface
   layers:
   - !type:BiomeDecalLayer
-    divisions: 2
+    divisions: 1
     threshold: 0.84
     noise:
       seed: 51
@@ -62,7 +62,7 @@
     - FloorLavalandAsh
     - FloorLavalandPaleGrass
     entities:
-    - LavalandBasaltBoulder
+    - LavalandBasaltBoulderSpawner
 
   - !type:BiomeEntityLayer
     threshold: 0.96
@@ -88,7 +88,7 @@
     - FloorLavalandAsh
     - FloorLavalandPaleGrass
     entities:
-    - LavalandBasaltBoulder
+    - LavalandBasaltBoulderSpawner
     - FloraStalagmite
 
   - !type:BiomeEntityLayer
@@ -122,34 +122,6 @@
       cellularReturnType: Distance2
     entities:
     - WallRockBasalt
-
-  - !type:BiomeEntityLayer
-    threshold: 0.9994
-    minimumDistance: 120
-    noise:
-      seed: 66
-      noiseType: OpenSimplex2
-      frequency: 0.014
-    allowedTiles:
-    - FloorBasalt
-    - FloorLavalandAsh
-    - FloorLavalandPaleGrass
-    entities:
-    - LavalandMadMinerSpawner
-
-  - !type:BiomeEntityLayer
-    threshold: 0.9993
-    minimumDistance: 90
-    noise:
-      seed: 67
-      noiseType: OpenSimplex2
-      frequency: 0.014
-    allowedTiles:
-    - FloorBasalt
-    - FloorLavalandAsh
-    - FloorLavalandPaleGrass
-    entities:
-    - LavalandEliteTumor
 
   - !type:BiomeEntityLayer
     threshold: 0.997

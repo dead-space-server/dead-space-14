@@ -1,0 +1,15 @@
+- type: entity
+  parent: BaseItem
+  id: SurgerySkinRoll
+  name: donor skin roll
+  description: A sterile roll. It covers flayed and burned skin. Enough for four grafts.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/skin_roll.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Materials/materials.rsi
+    heldPrefix: cloth
+    size: Small
+  - type: SurgerySkinRoll
+    uses: 4

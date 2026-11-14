@@ -23,6 +23,7 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
 
     private readonly Dictionary<EntityUid, EmoteFrameRestore> _frames = new(); //DS-14
     private readonly Dictionary<EntityUid, int> _played = new(); //DS-14
+    private readonly Dictionary<EntityUid, EmoteSpriteRestore> _sprites = new(); //DS-14
 
     public override void Initialize()
     {
@@ -70,12 +71,14 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
             return;
 
         RestoreFrame(uid);
+        RestoreSprite(uid); //DS-14
     }
 
     private void OnShutdown(EntityUid uid, EmoteAnimationComponent component, ComponentShutdown args)
     {
         _played.Remove(uid); //DS-14
         RestoreFrame(uid);
+        RestoreSprite(uid); //DS-14
     }
 
     private void PlayFromPrototype(EntityUid uid, string id)
@@ -98,12 +101,32 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
         var spriteRotation = Angle.Zero;
         var spriteScale = Vector2.One;
         var spriteColor = Color.White;
+        var spriteOffset = Vector2.Zero;
         SpriteComponent? sprite = null;
         if (TryComp(uid, out sprite) && sprite != null)
         {
             spriteRotation = sprite.Rotation;
             spriteScale = sprite.Scale;
             spriteColor = sprite.Color;
+            spriteOffset = sprite.Offset;
+
+            //DS-14 start
+            if (!_sprites.ContainsKey(uid))
+            {
+                var bodyRotationHome = Angle.Zero;
+                if (TryComp(uid, out TransformComponent? homeXform) && homeXform != null)
+                    bodyRotationHome = homeXform.LocalRotation;
+
+                _sprites[uid] = new EmoteSpriteRestore
+                {
+                    Color = spriteColor,
+                    Offset = spriteOffset,
+                    Rotation = spriteRotation,
+                    Scale = spriteScale,
+                    BodyRotation = bodyRotationHome,
+                };
+            }
+            //DS-14 end
         }
 
         var bodyRotation = Angle.Zero;
@@ -292,6 +315,34 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
         public RSI.StateId State;
         public bool AutoAnimated;
     }
+
+    //DS-14 start
+    private struct EmoteSpriteRestore
+    {
+        public Color Color;
+        public Vector2 Offset;
+        public Angle Rotation;
+        public Vector2 Scale;
+        public Angle BodyRotation;
+    }
+
+    private void RestoreSprite(EntityUid uid)
+    {
+        if (!_sprites.Remove(uid, out var restore))
+            return;
+
+        if (TryComp(uid, out SpriteComponent? sprite) && sprite != null)
+        {
+            _sprite.SetColor((uid, sprite), restore.Color);
+            sprite.Offset = restore.Offset;
+            sprite.Rotation = restore.Rotation;
+            sprite.Scale = restore.Scale;
+        }
+
+        if (TryComp(uid, out TransformComponent? xform) && xform != null)
+            xform.LocalRotation = restore.BodyRotation;
+    }
+    //DS-14 end
     public void PlayEmoteStopTail(EntityUid uid)
     {
         var animationKey = "emoteAnimationKeyId";

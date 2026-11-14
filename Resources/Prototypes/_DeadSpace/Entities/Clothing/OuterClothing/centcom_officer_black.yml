@@ -40,6 +40,14 @@
   name: шлем скафандра Полевого Офицера
   description: Предназначен для элитного офицера КСО.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.1
   - type: Sprite
     sprite: _DeadSpace/Clothing/Head/Hardsuits/centcom_officer_black.rsi
   - type: Clothing

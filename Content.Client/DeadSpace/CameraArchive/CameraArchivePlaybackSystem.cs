@@ -39,10 +39,12 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
     [Dependency] private readonly StealthSystem _stealth = default!;
 
     private MapId? _mapId;
+    private MapId? _sheetMapId;
     private ushort _platingId;
     private bool _platingReady;
 
     private int _playId;
+    private int _sheetPlayId;
     private CameraArchive? _queued;
     private bool _busy;
     public override void Initialize()
@@ -63,7 +65,7 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
         {
             var next = _queued;
             _queued = null;
-            last = Play(next);
+            last = Play(next, ref _mapId, ref _playId);
         }
 
         _busy = false;
@@ -72,12 +74,22 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
 
     public CameraArchiveView Play(CameraArchive still)
     {
-        var playId = ++_playId;
-        Clear();
+        return Play(still, ref _mapId, ref _playId);
+    }
+
+    public CameraArchiveView PlaySheet(CameraArchive still)
+    {
+        return Play(still, ref _sheetMapId, ref _sheetPlayId);
+    }
+
+    private CameraArchiveView Play(CameraArchive still, ref MapId? slot, ref int generation)
+    {
+        var playId = ++generation;
+        ClearSlot(ref slot);
 
         var mapUid = _map.CreateMap(out var mapId, runMapInit: true);
         _map.SetPaused(mapId, false);
-        _mapId = mapId;
+        slot = mapId;
         var mapLight = EnsureComp<MapLightComponent>(mapUid);
         mapLight.AmbientLightColor = Color.FromSrgb(new Color(0.85f, 0.85f, 0.85f));
 
@@ -142,9 +154,9 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
         for (var i = 0; i < spawned.Count; i++)
             ApplyAppearance(spawned[i], still.Entities[i].Appearance);
 
-        if (playId != _playId)
+        if (playId != generation)
         {
-            Clear();
+            ClearSlot(ref slot);
             return new CameraArchiveView(EntityUid.Invalid, EntityUid.Invalid, MapId.Nullspace, new FixedEye());
         }
 
@@ -175,10 +187,20 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
 
     public void Clear()
     {
-        if (_mapId is { } mapId && _map.MapExists(mapId))
+        ClearSlot(ref _mapId);
+    }
+
+    public void ClearSheet()
+    {
+        ClearSlot(ref _sheetMapId);
+    }
+
+    private void ClearSlot(ref MapId? slot)
+    {
+        if (slot is { } mapId && _map.MapExists(mapId))
             _map.DeleteMap(mapId);
 
-        _mapId = null;
+        slot = null;
     }
 
     private void HideCloaked(List<EntityUid> spawned, CameraArchive still)

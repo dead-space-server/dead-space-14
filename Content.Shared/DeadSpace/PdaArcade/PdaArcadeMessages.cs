@@ -22,6 +22,7 @@ public static class PdaArcadeGame
     public const string Pong = "pong";
     public const string Chess = "chess";
     public const string Checks = "checks";
+    public const string Casino = "casino";
 
     public static readonly string[] Together =
     {

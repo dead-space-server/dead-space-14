@@ -16,5 +16,6 @@ public sealed class SpeedModifierContactCapClothingSystem : EntitySystem
     private void OnGetMaxSlow(Entity<SpeedModifierContactCapClothingComponent> ent, ref InventoryRelayedEvent<GetSpeedModifierContactCapEvent> args)
     {
         args.Args.SetIfMax(ent.Comp.MaxContactSprintSlowdown, ent.Comp.MaxContactWalkSlowdown);
+        args.Args.SetIfMaxResistance(ent.Comp.SlowdownResistance);
     }
 }

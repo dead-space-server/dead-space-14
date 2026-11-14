@@ -75,7 +75,7 @@
     damage:
       types:
         Piercing: 25
-        Holy: 20
+        Holy: 35
 
 - type: entity
   id: PresentQuiver

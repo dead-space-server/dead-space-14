@@ -266,7 +266,7 @@
     intensitySlope: 5
     canCreateVacuum: false
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Botsping
   #DS14-end
 
@@ -353,20 +353,26 @@
       Critical:
         reagent: SpaceDrugs
         quantity: 25
-  - type: RandomSprite
-    available:
-        - enum.DamageStateVisualLayers.Base:
-            medibot: ""
-          enum.DamageStateVisualLayers.BaseUnshaded:
-            powered: Rainbow
+#ds14-start
+#  - type: RandomSprite
+#    available:
+#        - enum.DamageStateVisualLayers.Base:
+#            medibot: ""
+#          enum.DamageStateVisualLayers.BaseUnshaded:
+#            powered: Rainbow
   - type: Sprite
     sprite: _DeadSpace/Mobs/Silicon/Bots/medibot.rsi
     layers:
-      - state: medibot
-        map: [ "enum.DamageStateVisualLayers.Base" ]
-      - state: powered
-        map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
-        shader: unshaded
+      - state: stay
+        map: [ "enum.DamageStateVisualLayers.Base", "movement" ]
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: walk
+    noMovementLayers:
+      movement:
+        state: stay
+#ds14-end
   - type: HTN
     rootTask:
       task: MedibotCompound
@@ -379,7 +385,7 @@
     interactFailureString: petting-failure-medibot
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
-      path: /Audio/Animals/cat_meow.ogg
+      path: /Audio/Ambience/Objects/periodic_beep.ogg #ds14
   - type: ShowHealthBars
     damageContainers:
     - Biological
@@ -424,7 +430,7 @@
   - type: Inventory
     templateId: head
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Botsping
   #DS14-end
 
@@ -499,7 +505,7 @@
   - type: Puller
     needsHands: false
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Botsping
   #DS14-end
 

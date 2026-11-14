@@ -31,6 +31,8 @@ public sealed class SpaceMufflingSystem : EntitySystem
 
     internal bool ListenerIsGhost => _ghost.IsGhost;
 
+    public float HearingOcclusion { get; set; }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -60,7 +62,7 @@ public sealed class SpaceMufflingSystem : EntitySystem
             occlusion += MathF.Max(GetAtmosphericOcclusion(listener),
                 GetAtmosphericOcclusion(new MapCoordinates(listener.Position + delta, listener.MapId)));
 
-        return occlusion;
+        return occlusion + HearingOcclusion;
     }
 
     internal float GetAtmosphericOcclusion(MapCoordinates position)

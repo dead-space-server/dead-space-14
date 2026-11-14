@@ -1,4 +1,5 @@
 using Content.Client.Administration.Managers;
+using Content.Client.DeadSpace.DeviceLinkVis; //DS-14
 using Content.Client.Movement.Systems;
 using Content.Shared.Sandbox;
 using Robust.Client.Console;
@@ -18,6 +19,7 @@ namespace Content.Client.Sandbox
         [Dependency] private readonly ContentEyeSystem _contentEye = default!;
         [Dependency] private readonly SharedTransformSystem _transform = default!;
         [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+        [Dependency] private readonly DeviceLinkVisSystem _deviceLinks = default!; //DS-14
 
         private bool _sandboxEnabled;
         public bool SandboxAllowed { get; private set; }
@@ -98,7 +100,7 @@ namespace Content.Client.Sandbox
                 && TryComp(uid, out MetaDataComponent? comp)
                 && !comp.EntityDeleted)
             {
-                if (comp.EntityPrototype == null || comp.EntityPrototype.HideSpawnMenu || comp.EntityPrototype.Abstract)
+                if (comp.EntityPrototype == null || comp.EntityPrototype.Abstract) //DS-14
                     return false;
 
                 if (_placement.Eraser)
@@ -148,10 +150,23 @@ namespace Content.Client.Sandbox
             _consoleHost.ExecuteCommand("toggleshadows");
         }
 
-        public void ToggleSubFloor()
+        public void ToggleSubfloor() //DS-14
         {
-            _consoleHost.ExecuteCommand("showsubfloor");
+            _consoleHost.ExecuteCommand("showsubfloor"); //DS-14
         }
+
+        public void ToggleSubfloorLayer(string layer) //DS-14
+        {
+            _consoleHost.ExecuteCommand($"showsubfloor {layer}"); //DS-14
+        }
+
+        //DS-14 start
+        public bool ToggleDeviceLinks()
+        {
+            _deviceLinks.Toggle();
+            return _deviceLinks.Enabled;
+        }
+        //DS-14 end
 
         public void ShowMarkers()
         {

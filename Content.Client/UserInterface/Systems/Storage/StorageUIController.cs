@@ -177,6 +177,7 @@ public sealed class StorageUIController : UIController, IOnSystemChanged<Storage
                     StorageComponent.StorageUiKey.Key, out var bui) && bui.Position != null)
             {
                 window.Open(bui.Position.Value);
+                window.OpenedAsNested = true; // DS14
             }
             // Open at the saved position if it exists.
             else if (_ui.TryGetPosition(sBui.Owner, StorageComponent.StorageUiKey.Key, out var pos))

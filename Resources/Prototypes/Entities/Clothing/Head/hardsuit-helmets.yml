@@ -12,6 +12,16 @@
   name: atmos hardsuit helmet
   description: A special hardsuit helmet designed for working in low-pressure, high thermal environments.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.5
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/atmospherics.rsi
     # DS14-start: restore this RSI's pre-upstream light layers.
@@ -90,6 +100,16 @@
   name: engineering hardsuit helmet
   description: An engineering hardsuit helmet designed for working in low-pressure, high radioactive environments.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.2
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/engineering.rsi
     # DS14-start: restore this RSI's pre-upstream light layers.
@@ -163,6 +183,16 @@
   name: spationaut hardsuit helmet
   description: A sturdy helmet designed for complex industrial operations in space.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.3
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/spatiohelm.rsi
   # DS14-start: restore the old worn states supplied by this RSI.
@@ -224,6 +254,16 @@
   name: salvage hardsuit helmet
   description: A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating for wildlife encounters and dual floodlights.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.3
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/salvage.rsi
   # DS14-start: use the RSI's pre-upstream worn states.
@@ -240,7 +280,7 @@
     tags:
     - CorgiWearable
     - WhitelistChameleon
- 
+
 #Senior Salvage
 - type: entity
   parent: ClothingHeadHelmetHardsuitSalvage
@@ -258,6 +298,16 @@
   name: goliath hardsuit helmet
   description: A sturdy hardsuit helmet, infused with a goliath's hide and an eerie, unblinking eye cut from its mass.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.3
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/goliathhelm.rsi
     # DS14-start: restore this RSI's pre-upstream light layers.
@@ -318,7 +368,7 @@
 
 #Maxim Hardsuit
 - type: entity
-  parent: ClothingHeadHardsuitBase 
+  parent: ClothingHeadHardsuitBase
   id: ClothingHeadHelmetHardsuitMaxim
   # categories: [ HideSpawnMenu ] #DS14
   name: salvager maxim helmet
@@ -333,6 +383,7 @@
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
@@ -340,6 +391,8 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.1
+  #ds14-end
   - type: Item #DS14
     size: Normal
 
@@ -365,13 +418,15 @@
   - type: PressureProtection
     highPressureMultiplier: 0.525
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+  #ds14-end
   - type: Tag
     tags:
     - CorgiWearable
@@ -396,15 +451,17 @@
     radius: 6
     energy: 3
   # DS14-end
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.95
-        Slash: 0.95
-        Piercing: 0.95
-        Heat: 0.95
-        Radiation: 0.90
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+        Radiation: 0.75
         Caustic: 0.90
+  #ds14-end
   - type: PressureProtection
     highPressureMultiplier: 0.6
     lowPressureMultiplier: 1000
@@ -431,13 +488,15 @@
   - type: PressureProtection
     highPressureMultiplier: 0.525
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.7
+        Heat: 0.7
+  #ds14-end
 
 #Captain's Hardsuit
 - type: entity
@@ -446,6 +505,16 @@
   name: captain's hardsuit helmet
   description: Special hardsuit helmet, made for the captain of the station.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.5
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/capspace.rsi
   # DS14-start: use the RSI's pre-upstream worn states.
@@ -467,6 +536,16 @@
   name: chief engineer's hardsuit helmet
   description: Special hardsuit helmet, made for the chief engineer of the station.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.0
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/engineering-white.rsi
     # DS14-start: restore this RSI's pre-upstream light layers.
@@ -565,6 +644,16 @@
   name: experimental research hardsuit helmet
   description: Lightweight hardsuit helmet that doesn't restrict your head movements.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.1
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/rd.rsi
   # DS14-start: use the RSI's pre-upstream worn states.
@@ -603,13 +692,16 @@
   - type: PressureProtection
     highPressureMultiplier: 0.45
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.5
+  #ds14-end
 
 #Luxury Mining Hardsuit
 - type: entity
@@ -619,6 +711,16 @@
   description: A refurbished mining hardsuit helmet, fitted with satin cushioning and an extra (non-functioning) antenna, because you're that extra.
   categories: [ DoNotMap ]
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.5
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/luxury.rsi
   # DS14-start: use the RSI's pre-upstream worn states.
@@ -659,13 +761,16 @@
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.5
+        Heat: 0.5
+        Radiation: 0.5
+  #ds14-end
   - type: Tag
     tags:
     - CorgiWearable
@@ -697,13 +802,16 @@
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.5
+        Heat: 0.5
+        Radiation: 0.5
+  #ds14-end
 
 #Syndicate Elite Hardsuit
 - type: entity
@@ -736,13 +844,16 @@
     coolingCoefficient: 0.005
   - type: FireProtection
     reduction: 0.2
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.4
+        Slash: 0.4
+        Piercing: 0.6
+        Heat: 0.2
+        Radiation: 0.05
+  #ds14-end
   - type: Tag
     tags:
     - CorgiWearable
@@ -774,13 +885,16 @@
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.5
+        Radiation: 0.25
+  #ds14-end
   - type: Tag
     tags:
     - CorgiWearable
@@ -812,13 +926,16 @@
   - type: PressureProtection
     highPressureMultiplier: 0.3
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.2
+        Slash: 0.2
+        Piercing: 0.2
+        Heat: 0.2
+        Radiation: 0.2
+  #ds14-end
   - type: Tag
     tags:
     - CorgiWearable
@@ -843,13 +960,16 @@
   - type: PressureProtection
     highPressureMultiplier: 0.27
     lowPressureMultiplier: 1000
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.5
+        Heat: 0.5
+        Radiation: 0.4
+  #ds14-end
   - type: Tag
     tags:
     - CorgiWearable
@@ -897,7 +1017,6 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
-        Radiation: 0.25
   #DS14-end
 
 #Pirate Captain Hardsuit
@@ -952,7 +1071,6 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
-        Radiation: 0.25 #DS14
 
 #CENTCOMM / ERT HARDSUITS
 #ERT Leader Hardsuit
@@ -970,13 +1088,16 @@
   # DS14-end
   - type: PointLight
     color: cyan # DS14
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.25
+  #ds14-end
 
 #ERT Chaplain Hardsuit
 - type: entity
@@ -985,6 +1106,16 @@
   name: ERT chaplain hardsuit helmet
   description: A special hardsuit helmet worn by members of an emergency response team.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.05
+  #ds14-end
   # DS14-start
   - type: Sprite
     sprite: _DeadSpace/Clothing/ERT/ERT_Priests/ERThelmets/ertsecurity.rsi
@@ -1011,13 +1142,16 @@
     color: "#f4ffad"
   - type: FireProtection
     reduction: 0.2
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.1
+  #ds14-end
 
 #ERT Medical Hardsuit
 - type: entity
@@ -1026,6 +1160,16 @@
   name: ERT medic hardsuit helmet
   description: A special hardsuit helmet worn by members of an emergency response team.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.6
+  #ds14-end
   # DS14-start
   - type: Sprite
     sprite: _DeadSpace/Clothing/ERT/ERT_Gamma/ERThelmets/ertmedical.rsi
@@ -1050,13 +1194,16 @@
   # DS14-end
   - type: PointLight
     color: "#ffadc6"
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.5
+  #ds14-end
 
 #ERT Janitor Hardsuit
 - type: entity
@@ -1065,6 +1212,16 @@
   name: ERT janitor hardsuit helmet
   description: A special hardsuit helmet worn by members of an emergency response team.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Radiation: 0.05
+  #ds14-end
   # DS14-start
   - type: Sprite
     sprite: _DeadSpace/Clothing/ERT/ERT_Gamma/ERThelmets/ertjanitor.rsi
@@ -1117,6 +1274,7 @@
   - type: TemperatureProtection
     heatingCoefficient: 0.005
     coolingCoefficient: 0.005
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
@@ -1124,6 +1282,8 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.1
+  #ds14-end
   - type: ZombificationResistance
     zombificationResistanceCoefficient: 0.75
 
@@ -1152,6 +1312,7 @@
     lowPressureMultiplier: 1000
   - type: FireProtection
     reduction: 0.2
+  #ds14-start
   - type: Armor
     modifiers:
       coefficients:
@@ -1159,12 +1320,13 @@
         Slash: 0.80
         Piercing: 0.80
         Heat: 0.80
-        Radiation: 0.80
+        Radiation: 0.1
         Caustic: 0.95
-        Poison: 0.80 # DS14
+        Poison: 0.80
+  #ds14-end
 # DS14-start
   - type: ClothingGrantComponent
-    component: 
+    component:
       - type: ImmunNecroobelisk
 # DS14-end
   - type: Tag

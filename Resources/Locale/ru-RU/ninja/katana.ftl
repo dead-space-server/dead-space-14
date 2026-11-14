@@ -10,4 +10,5 @@ dash-ability-blocked = В точке назначения недостаточн
 dash-alert-name = Рывок
 dash-alert-desc = Отображает перезарядку рывка.
 dash-alert-desc-alt = Отображает перезарядку рывка. Рывок выполняется через Alt+ЛКМ.
+dash-ability-corrupted = Телепортация [color=yellow]искажена[/color].
 # DS14-end

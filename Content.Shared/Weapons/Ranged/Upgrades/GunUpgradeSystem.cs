@@ -36,6 +36,7 @@ public sealed class GunUpgradeSystem : EntitySystem
 
         SubscribeLocalEvent<UpgradeableGunComponent, GunRefreshModifiersEvent>(RelayEvent);
         SubscribeLocalEvent<UpgradeableGunComponent, GunShotEvent>(RelayEvent);
+        SubscribeLocalEvent<UpgradeableGunComponent, AttemptShootEvent>(RelayEvent); // DS14
 
         SubscribeLocalEvent<GunUpgradeFireRateComponent, GunRefreshModifiersEvent>(OnFireRateRefresh);
         SubscribeLocalEvent<GunUpgradeSpeedComponent, GunRefreshModifiersEvent>(OnSpeedRefresh);

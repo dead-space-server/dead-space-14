@@ -90,8 +90,8 @@
     - xenoborgs
   name: xenoborgs-title
   description: xenoborgs-description
-  showInVote: false
-  showInAdminVote: true # DS14
+  showInVote: false # DS14
+  showInAdminVote: false # DS14
   voteType: rdm # DS14
   rules:
   - Xenoborgs
@@ -297,8 +297,8 @@
     - zombie
   name: zombie-title
   description: zombie-description
-  showInVote: true
-  showInAdminVote: true # DS14
+  showInVote: false # DS14
+  showInAdminVote: false # DS14
   voteType: rdm # DS14
   rules:
   - WageScheduler # backmen: currency

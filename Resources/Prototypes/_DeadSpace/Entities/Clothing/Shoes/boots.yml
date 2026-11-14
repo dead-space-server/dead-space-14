@@ -103,6 +103,20 @@
   description: Обувь Офицера "Зелёный Берет", для боевых операций или боевых действий. Борьба — всё, борьба — всегда.
 
 - type: entity
+  parent: ClothingShoesBootsBlueShield
+  id: ClothingShoesBootsShinobi
+  name: сапоги "Синоби"
+  description: "Обувь офицера \"Синий Щит\" с усиленным сцеплением: снижает замедление от луж и не даёт поскользнуться, но замедляет на скользких поверхностях."
+  components:
+  - type: NoSlip
+  - type: SlowedOverSlippery
+    slowdownModifier: 0.8
+  - type: SpeedModifierContactCapClothing
+    slowdownResistance: 0.7
+    maxContactWalkSlowdown: 0.8
+    maxContactSprintSlowdown: 0.8
+
+- type: entity
   parent: ClothingShoesBootsJack
   id: ClothingShoesBootsKirzachi
   name: кирзовые сапоги

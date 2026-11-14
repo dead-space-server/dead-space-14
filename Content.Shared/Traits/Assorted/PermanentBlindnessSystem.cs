@@ -1,4 +1,4 @@
-﻿using Content.Shared.Examine;
+using Content.Shared.Examine;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.IdentityManagement;
@@ -16,6 +16,7 @@ public sealed class PermanentBlindnessSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<PermanentBlindnessComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<PermanentBlindnessComponent, ComponentStartup>(OnStartup); //DS-14
         SubscribeLocalEvent<PermanentBlindnessComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<PermanentBlindnessComponent, ExaminedEvent>(OnExamined);
     }
@@ -46,6 +47,17 @@ public sealed class PermanentBlindnessSystem : EntitySystem
 
     private void OnMapInit(Entity<PermanentBlindnessComponent> blindness, ref MapInitEvent args)
     {
+        Apply(blindness);
+    }
+
+    //DS-14 start
+    private void OnStartup(Entity<PermanentBlindnessComponent> blindness, ref ComponentStartup args)
+    {
+        Apply(blindness);
+    }
+
+    private void Apply(Entity<PermanentBlindnessComponent> blindness)
+    {
         if (!TryComp<BlindableComponent>(blindness.Owner, out var blindable))
             return;
 
@@ -57,4 +69,5 @@ public sealed class PermanentBlindnessSystem : EntitySystem
             _blinding.SetMinDamage((blindness.Owner, blindable), maxMagnitudeInt);
         }
     }
+    //DS-14 end
 }

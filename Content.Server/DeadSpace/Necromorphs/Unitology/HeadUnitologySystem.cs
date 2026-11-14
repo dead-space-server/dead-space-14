@@ -23,7 +23,9 @@ using Content.Shared.Mindshield.Components;
 using Content.Server.GameTicking.Rules;
 using Robust.Shared.Prototypes;
 using Content.Server.Hands.Systems;
+using Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Server.DeadSpace.Necromorphs.Necroobelisk.Components;
+using Content.Shared.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;
 using Robust.Shared.Containers;
@@ -49,6 +51,7 @@ public sealed class UnitologyHeadSystem : EntitySystem
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly SharedSubdermalImplantSystem _implants = default!;
+    [Dependency] private readonly SuperNecroobeliskSystem _superObelisk = default!;
 
 
     public const float DistanceRecruitmentDetermination = 2f;
@@ -94,6 +97,28 @@ public sealed class UnitologyHeadSystem : EntitySystem
         if (args.Handled)
             return;
 
+        // The Circle's geist on its own instead lets a supermatter obelisk nearby reach 100% in any mode.
+        if (TryComp<TheCircleGeistSaboteurComponent>(uid, out var saboteur) &&
+            TryGetSuperObelisk(uid, saboteur.SuperObeliskRange, out var superObelisk))
+        {
+            var superDoAfter = new DoAfterArgs(EntityManager,
+                uid,
+                TimeSpan.FromSeconds(15),
+                new SummonUnitologyObeliskDoAfterEvent(),
+                uid,
+                target: superObelisk)
+            {
+                BreakOnDamage = true,
+                BreakOnMove = true,
+                BlockDuplicate = true,
+                CancelDuplicate = true,
+            };
+
+            if (_doAfter.TryStartDoAfter(superDoAfter))
+                args.Handled = true;
+            return;
+        }
+
         if (!_unitologyRule.AreSummoningConditionsComplete(uid))
         {
             _popup.PopupEntity(Loc.GetString("unitology-obelisk-summon-conditions-failed"), uid, uid);
@@ -101,7 +126,8 @@ public sealed class UnitologyHeadSystem : EntitySystem
         }
 
         if (!_hands.TryGetActiveItem(uid, out var splinter) ||
-            !HasComp<NecroobeliskSplinterComponent>(splinter))
+            !TryComp<NecroobeliskSplinterComponent>(splinter, out var heldSplinter) ||
+            !heldSplinter.CanSummonObelisk)
         {
             _popup.PopupEntity(Loc.GetString("unitology-obelisk-summon-no-splinter"), uid, uid);
             return;
@@ -131,13 +157,25 @@ public sealed class UnitologyHeadSystem : EntitySystem
         UnitologyHeadComponent component,
         SummonUnitologyObeliskDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled || args.Args.Used is not { } splinter)
+        if (args.Cancelled || args.Handled)
+            return;
+
+        if (args.Args.Target is { } target &&
+            TryComp<SuperMatterialNecroObeliskComponent>(target, out var superObelisk))
+        {
+            _superObelisk.LiftActivationCap(target, superObelisk);
+            args.Handled = true;
+            return;
+        }
+
+        if (args.Args.Used is not { } splinter)
             return;
 
         if (!_unitologyRule.AreSummoningConditionsComplete(uid) ||
             !_hands.TryGetActiveItem(uid, out var activeItem) ||
             activeItem != splinter ||
-            !TryComp<NecroobeliskSplinterComponent>(splinter, out var splinterComponent))
+            !TryComp<NecroobeliskSplinterComponent>(splinter, out var splinterComponent) ||
+            !splinterComponent.CanSummonObelisk)
         {
             _popup.PopupEntity(Loc.GetString("unitology-obelisk-summon-interrupted"), uid, uid);
             return;
@@ -148,6 +186,21 @@ public sealed class UnitologyHeadSystem : EntitySystem
 
         QueueDel(splinter);
         args.Handled = true;
+    }
+
+    private bool TryGetSuperObelisk(EntityUid uid, float range, out EntityUid obelisk)
+    {
+        obelisk = default;
+        foreach (var candidate in _lookup.GetEntitiesInRange<SuperMatterialNecroObeliskComponent>(Transform(uid).Coordinates, range))
+        {
+            if (candidate.Comp.StateEnum == SuperMatterialNecroObeliskState.Hundred)
+                continue;
+
+            obelisk = candidate;
+            return true;
+        }
+
+        return false;
     }
 
     private void OnSelectTargetRecruitment(EntityUid uid, UnitologyHeadComponent component, SelectTargetRecruitmentEvent args)

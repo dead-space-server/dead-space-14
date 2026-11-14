@@ -151,6 +151,8 @@ public sealed class PdaArcadeFragment : BoxContainer
 
         _board.Command("left", false);
         _board.Command("right", false);
+        _board.Command("turnLeft", false);
+        _board.Command("turnRight", false);
         _board.Command("up", false);
         _board.Command("down", false);
     }
@@ -266,6 +268,7 @@ public sealed class PdaArcadeFragment : BoxContainer
         [PdaArcadeGame.Match] = () => new PdaMatchBoard(),
         [PdaArcadeGame.Deck] = () => new PdaDeckBoard(),
         [PdaArcadeGame.Road] = () => new PdaRoadBoard(),
+        [PdaArcadeGame.Casino] = () => new PdaCasinoBoard(),
     };
 
     private void AddGameButton(PdaArcadeGamePrototype game)
@@ -406,6 +409,23 @@ public sealed class PdaArcadeFragment : BoxContainer
             command = "down";
         else if (args.Function == ContentKeyFunctions.Arcade1 || args.Function == EngineKeyFunctions.Use)
             command = "act";
+
+        if (_board is PdaDeckBoard && _play.Visible && !_overlay.Visible)
+        {
+            if (args.Function == ContentKeyFunctions.ShuttleRotateLeft || args.Function == ContentKeyFunctions.Drop)
+            {
+                args.Handle();
+                _board.Command("turnLeft", down);
+                return;
+            }
+
+            if (args.Function == ContentKeyFunctions.ShuttleRotateRight || args.Function == ContentKeyFunctions.ActivateItemInWorld)
+            {
+                args.Handle();
+                _board.Command("turnRight", down);
+                return;
+            }
+        }
 
         if (command == null)
             return;

@@ -337,6 +337,9 @@ public abstract partial class SharedGunSystem
 
     private void OnChamberAmmoCount(EntityUid uid, ChamberMagazineAmmoProviderComponent component, ref GetAmmoCountEvent args)
     {
+        if (UsesAmmoSlot(uid)) // DS14
+            return; // DS14
+
         OnMagazineAmmoCount(uid, component, ref args);
         args.Capacity += 1;
         var chambered = GetChamberEntity(uid);
@@ -355,6 +358,9 @@ public abstract partial class SharedGunSystem
 
     private void OnChamberMagazineTakeAmmo(EntityUid uid, ChamberMagazineAmmoProviderComponent component, TakeAmmoEvent args)
     {
+        if (UsesAmmoSlot(uid)) // DS14
+            return; // DS14
+
         if (component.BoltClosed == false)
         {
             args.Reason = Loc.GetString("gun-chamber-bolt-ammo");

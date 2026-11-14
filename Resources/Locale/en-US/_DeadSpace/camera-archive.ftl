@@ -13,6 +13,7 @@ camera-archive-label-burned-popup = The label burned off. The camera is recordin
 camera-archive-sealed-popup = The camera is labeled and dark. Recording stopped.
 camera-archive-peeled-popup = The label is off. The camera is recording again.
 camera-archive-printed = Sheet printed.
+camera-archive-one-sheet = Close the other snapshot first.
 camera-archive-chat = Message log
 camera-archive-off-station = off station
 camera-archive-chat-empty = Nobody has spoken yet.

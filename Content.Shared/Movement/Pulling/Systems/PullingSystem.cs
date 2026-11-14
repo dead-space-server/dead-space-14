@@ -5,6 +5,7 @@ using Content.Shared.Buckle.Components;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.HandPull; // DS-14
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -293,6 +294,15 @@ public sealed class PullingSystem : EntitySystem
 
     private void OnRefreshMovespeed(EntityUid uid, PullerComponent component, RefreshMovementSpeedModifiersEvent args)
     {
+        // DS-14-start
+        if (TryComp<HandPullerComponent>(uid, out var handPuller) &&
+            handPuller.LifeStage <= ComponentLifeStage.Running &&
+            handPuller.Target == component.Pulling)
+        {
+            return;
+        }
+        // DS-14-end
+
         if (TryComp<HeldSpeedModifierComponent>(component.Pulling, out var heldMoveSpeed) && component.Pulling.HasValue)
         {
             var (walkMod, sprintMod) =

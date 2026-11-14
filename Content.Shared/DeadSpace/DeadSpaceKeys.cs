@@ -8,4 +8,5 @@ namespace Content.Shared.DeadSpace;
 public static class DeadSpaceKeys
 {
     public static readonly BoundKeyFunction SwitchComponentMode = "SwitchComponentMode";
+    public static readonly BoundKeyFunction SwitchGunAmmoMode = "SwitchGunAmmoMode";
 }

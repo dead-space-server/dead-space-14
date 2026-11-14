@@ -79,10 +79,11 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+        Radiation: 0.6
   - type: PointLight
     color: "#00ff37"
     radius: 7
@@ -174,10 +175,11 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+        Radiation: 0.35
   - type: PointLight
     color: "#ffff00"
     radius: 12

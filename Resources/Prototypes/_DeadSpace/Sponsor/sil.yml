@@ -68,8 +68,6 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
-  - type: HardsuitIdentification
-    nonlethal: true
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -104,6 +102,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -391,6 +390,7 @@
       toggleable-clothing: !type:ContainerSlot {}
       storagebase: !type:Container
         ents: []
+  - type: HardsuitIdentification
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 

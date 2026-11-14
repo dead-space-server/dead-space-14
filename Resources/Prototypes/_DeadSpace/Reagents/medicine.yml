@@ -43,6 +43,7 @@
   color: "#E9FFCC"
   metabolisms:
     Medicine:
+      metabolismRate: 0.5
       effects:
       - !type:EvenHealthChange
         damage:
@@ -66,3 +67,6 @@
         - !type:ReagentCondition
           reagent: Chiyurizine
           min: 1
+      - !type:ChiyuriMend
+        dose: 15
+        rate: 1

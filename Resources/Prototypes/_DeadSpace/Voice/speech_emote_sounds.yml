@@ -217,6 +217,8 @@
       collection: TajaranMaleHisses
     Meow:
       collection: TajaranMaleMeows
+    Purr:
+      collection: FelinidPurrs
 
 - type: emoteSounds
   id: FemaleTajaran
@@ -265,6 +267,8 @@
       collection: TajaranFemaleHisses
     Meow:
       collection: TajaranFemaleMeows
+    Purr:
+      collection: FelinidPurrs
 
 - type: emoteSounds
   id: MaleMed

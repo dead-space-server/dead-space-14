@@ -40,6 +40,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Parallax;
 using Content.Shared.Parallax.Biomes;
 using Content.Shared.Popups;
+using Content.Shared.Throwing;
 using Content.Shared.Slippery;
 using Content.Shared.StatusEffectNew;
 using Robust.Server.Player;
@@ -87,11 +88,17 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
     [Dependency] private readonly LavalandPitDropSystem _pitDrop = default!;
     [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
+    [Dependency] private readonly LavalandDayNightSystem _dayNight = default!;
+
+    private static readonly Color CelestialTint = Color.FromHex("#b46bff");
+    private static readonly Color CelestialPulsePink = Color.FromHex("#ff7fc8");
+    private static readonly Color CelestialPulseWhite = Color.FromHex("#fff4fb");
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly Content.Shared.Camera.SharedCameraRecoilSystem _camera = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly SleepingSystem _sleeping = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
@@ -230,6 +237,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                     return;
                 comp.NextCheck = now + CheckInterval;
                 ClearFaunaNearPit(ent, config);
+                JumpHoveringIntoPit(ent, config);
                 UpdateGathering(ent, config, now);
                 return;
 
@@ -247,8 +255,19 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                 return;
 
             case LavalandSecretBossStage.Done:
-                if (!comp.PlayersAwake && now >= comp.StageTime)
+                if (comp.PlayersAwake)
+                    return;
+                if (now >= comp.StageTime)
+                {
                     WakeAndBless(ent, config);
+                    return;
+                }
+
+                // Asleep through its death by the pit: no fauna comes near them meanwhile.
+                if (now < comp.NextCheck)
+                    return;
+                comp.NextCheck = now + CheckInterval;
+                ClearFaunaNearPit(ent, config);
                 return;
         }
     }
@@ -365,10 +384,29 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             halfSize = planet.MapHalfSize - 24f;
         }
 
-        var angle = _random.NextAngle();
-        var distance = _random.NextFloat(config.PitMinDistance, Math.Max(config.PitMinDistance, config.PitMaxDistance));
-        var position = origin + angle.ToVec() * distance;
-        position = Vector2.Clamp(position, new Vector2(-halfSize), new Vector2(halfSize));
+        // Away from the necropolis tendrils: the fauna is driven off around the pit, a tendril there would be free loot.
+        var tendrils = new List<Vector2>();
+        var tendrilQuery = EntityQueryEnumerator<LavalandNecropolisTendrilComponent, TransformComponent>();
+        while (tendrilQuery.MoveNext(out _, out _, out var tendrilXform))
+        {
+            if (tendrilXform.MapUid == mapUid)
+                tendrils.Add(_transform.GetWorldPosition(tendrilXform));
+        }
+
+        var position = Vector2.Zero;
+        var attempts = Math.Max(1, config.PitPlacementAttempts);
+        for (var attempt = 0; attempt < attempts; attempt++)
+        {
+            var angle = _random.NextAngle();
+            var distance = _random.NextFloat(config.PitMinDistance, Math.Max(config.PitMinDistance, config.PitMaxDistance));
+            position = origin + angle.ToVec() * distance;
+            position = Vector2.Clamp(position, new Vector2(-halfSize), new Vector2(halfSize));
+
+            var candidate = position;
+            if (!tendrils.Any(t => Vector2.DistanceSquared(t, candidate) < config.TendrilClearRadius * config.TendrilClearRadius))
+                break;
+        }
+
         var center = new Vector2i((int) MathF.Round(position.X), (int) MathF.Round(position.Y));
 
         // Clear a small basalt patch around the pit so rock or lava doesn't swallow it.
@@ -654,8 +692,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         {
             for (var y = -half - 1; y <= half + 1; y++)
             {
-                // The Celestial hangs over a hole in the middle of the square.
-                if (Math.Max(Math.Abs(x), Math.Abs(y)) < hole)
+                // The Celestial hangs over a round hole in the middle of the square.
+                if (MathF.Sqrt(x * x + y * y) < hole)
                     continue;
                 tiles.Add((new Vector2i(x, y), new Tile(glass.TileId)));
             }
@@ -668,9 +706,12 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             for (var y = -half - 1; y <= half + 1; y++)
             {
                 var ring = Math.Max(Math.Abs(x), Math.Abs(y));
+                // Round, as its body: from anywhere along it the Celestial is within a blow (a square one kept
+                // the corners too far off).
+                var distance = MathF.Sqrt(x * x + y * y);
                 if (ring == half + 1)
                     Spawn(config.ArenaBorder, _map.GridTileToLocal(grid.Owner, grid.Comp, new Vector2i(x, y)));
-                else if (hole > 0 && ring == hole)
+                else if (hole > 0 && distance >= hole && distance < hole + 1)
                     Spawn(config.HoleFence, _map.GridTileToLocal(grid.Owner, grid.Comp, new Vector2i(x, y)));
             }
         }
@@ -729,6 +770,35 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Walking on air (the strange elixir's cloud and the like) never sets the pit off underfoot: whoever stands right
+    /// over it jumps in all the same, without waiting for the prompt.
+    /// </summary>
+    private void JumpHoveringIntoPit(Entity<LavalandSecretBossComponent> ent, LavalandSecretBossConfig config)
+    {
+        if (ent.Comp.Pit is not { } pit || TerminatingOrDeleted(pit))
+            return;
+
+        var pitXform = Transform(pit);
+        if (pitXform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return;
+
+        var pitTile = _map.TileIndicesFor(gridUid, grid, pitXform.Coordinates);
+        foreach (var (_, mob) in LivingPlayersOn(ent.Owner))
+        {
+            var xform = Transform(mob);
+            if (xform.GridUid != gridUid ||
+                HasComp<LavalandPitDescentComponent>(mob) ||
+                HasComp<ChasmFallingComponent>(mob) ||
+                _map.TileIndicesFor(gridUid, grid, xform.Coordinates) != pitTile)
+            {
+                continue;
+            }
+
+            StartJump(ent, config, mob);
+        }
+    }
+
     /// <summary>Answer to "you see something at the bottom, jump?".</summary>
     public void HandlePitResponse(ICommonSession session, EntityUid lavalandMap, bool accepted)
     {
@@ -762,7 +832,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
     private void OnChasmFallingAttempt(ChasmFallingAttemptEvent args)
     {
-        if (args.Cancelled ||
+        // Walking on clouds (the strange elixir) keeps one out of every chasm but this one: into it they still jump.
+        if (args.Cancelled && !HasComp<LavalandChasmImmuneComponent>(args.Tripper) ||
             !TryComp<LavalandCelestialPitComponent>(args.Chasm, out var pit) ||
             !TryComp<LavalandSecretBossComponent>(pit.LavalandMap, out var comp) ||
             comp.Stage == LavalandSecretBossStage.Done)
@@ -1085,19 +1156,20 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             RaiseNetworkEvent(hud, FightersFilter(comp));
         }
 
-        // Killed in the dream: the player is back in the body sleeping by the pit at once, without the fight's music,
-        // health bar or backdrop. As a ghost of the copy they would be out of reach of all of it, and when the copy
-        // was deleted the ghost was thrown off to the station.
+        // Killed (or downed: critical is the end of the dream too) in the dream: the player is back in the body
+        // sleeping by the pit at once, without the fight's music, health bar or backdrop. As a ghost of the copy they
+        // would be out of reach of all of it, and when the copy was deleted the ghost was thrown off to the station;
+        // left in a critical copy, they waited for the others to finish.
         foreach (var (copy, original) in comp.DreamOriginals)
         {
-            if (comp.WokenFromDream.Contains(copy) || !TerminatingOrDeleted(copy) && !_mobState.IsDead(copy))
+            if (comp.WokenFromDream.Contains(copy) || !TerminatingOrDeleted(copy) && _mobState.IsAlive(copy))
                 continue;
 
             comp.WokenFromDream.Add(copy);
             WakeFromDream(original);
         }
 
-        // Anyone teleported out of the fight by some trick is put back.
+        // Anyone teleported out of the fight by some trick is put back; anyone right in the Celestial is thrown off it.
         var alive = 0;
         foreach (var fighter in comp.Participants)
         {
@@ -1107,6 +1179,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             alive++;
             if (Transform(fighter).MapUid != comp.ArenaMap)
                 _transform.SetMapCoordinates(fighter, comp.ArenaCenter.Offset(new Vector2(0f, config.ArenaSize / 2f - 3f)));
+            else
+                RepelFromCenter(comp, config, fighter);
         }
 
         if (alive > 0)
@@ -1118,6 +1192,26 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         comp.WipeSince ??= now;
         if (now - comp.WipeSince >= config.WipeDelay)
             Fail(ent, config);
+    }
+
+    /// <summary>Too close to the Celestial's center: thrown back off it, away from the center.</summary>
+    private void RepelFromCenter(LavalandSecretBossComponent comp, LavalandSecretBossConfig config, EntityUid fighter)
+    {
+        if (config.CenterRepelRadius <= 0f || HasComp<ThrownItemComponent>(fighter))
+            return;
+
+        var position = _transform.GetMapCoordinates(fighter);
+        if (position.MapId != comp.ArenaCenter.MapId)
+            return;
+
+        var offset = position.Position - comp.ArenaCenter.Position;
+        var distance = offset.Length();
+        if (distance > config.CenterRepelRadius)
+            return;
+
+        var direction = distance > 0.01f ? offset / distance : _random.NextAngle().ToVec();
+        var push = MathF.Max(0.5f, config.CenterRepelDistance - distance);
+        _throwing.TryThrow(fighter, direction * push, config.CenterRepelSpeed, recoil: false, playSound: false);
     }
 
     /// <summary>The body asleep by the pit while its copy fights: nothing harms it meanwhile.</summary>
@@ -1351,7 +1445,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             if (comp.Snapshots.TryGetValue(fighter, out var snapshot))
                 RestoreFighter(fighter, snapshot);
 
-            // A minute of sleep as the price of the defeat.
+            // A minute of sleep as the price of the defeat - untouchable meanwhile, the storm and the fauna too.
+            EnsureComp<LavalandCelestialDreamerComponent>(fighter);
             Sleep(fighter, config.LossSleep, config);
             var penalty = EnsureComp<LavalandCelestialPenaltyComponent>(fighter);
             penalty.WakeAt = now + config.LossSleep;
@@ -1438,6 +1533,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                 _statusEffects.TryRemoveStatusEffect(uid, penalty.SleepEffect);
             _sleeping.TryWaking(new Entity<SleepingComponent?>(uid, null), true);
             Unfreeze(uid);
+            RemComp<LavalandCelestialDreamerComponent>(uid);
             RemComp<LavalandCelestialPenaltyComponent>(uid);
         }
     }
@@ -1473,27 +1569,37 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         StopHud(comp);
         var length = _celestial.PlayDeathCutscene(FightersFilter(comp));
+        // While its death plays, the whole lavaland shimmers pink and white, as the chromite caves' pit does.
+        _dayNight.Pulse(ent.Owner, CelestialPulsePink, CelestialPulseWhite,
+            TimeSpan.FromSeconds(Math.Max(length.TotalSeconds, config.RewardSleep.TotalSeconds)));
         if (comp.Boss is { } boss && !TerminatingOrDeleted(boss))
             QueueDel(boss);
         comp.Boss = null;
 
         var sleepFor = TimeSpan.FromSeconds(Math.Max(length.TotalSeconds, config.RewardSleep.TotalSeconds));
+        // Those killed in the dream are already awake by the pit: they do not see the cutscene, so they are not put
+        // to sleep for it either (they would only stand frozen).
+        var alreadyAwake = new HashSet<EntityUid>();
+        foreach (var copy in comp.WokenFromDream)
+        {
+            if (comp.DreamOriginals.TryGetValue(copy, out var original))
+                alreadyAwake.Add(original);
+        }
+
         EndDream(comp);
         foreach (var fighter in comp.Participants)
         {
             if (TerminatingOrDeleted(fighter))
                 continue;
 
-            if (_mobState.IsAlive(fighter))
+            if (_mobState.IsAlive(fighter) && !alreadyAwake.Contains(fighter))
                 Sleep(fighter, sleepFor + TimeSpan.FromSeconds(5));
             MoveNearPit(comp, fighter);
+            // Nothing harms them by the pit until the cutscene is over and they are up again.
+            EnsureComp<LavalandCelestialDreamerComponent>(fighter);
         }
 
-        // The way down is gone: the pit is an ordinary pit again.
-        if (comp.Pit is { } pit)
-            MakeOrdinaryPit(pit, config);
-        comp.Pit = null;
-
+        // The pit stays the Celestial's (with its shelter from the storm) until they wake.
         DeleteZone(comp);
         comp.Stage = LavalandSecretBossStage.Done;
         comp.StageTime = _timing.CurTime + sleepFor;
@@ -1507,6 +1613,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     private void WakeAndBless(Entity<LavalandSecretBossComponent> ent, LavalandSecretBossConfig config)
     {
         ent.Comp.PlayersAwake = true;
+        // The last of its cutscenes is over: from now on the lavaland's nights are the Celestial's purple, and glow.
+        _dayNight.SetTint(ent.Owner, CelestialTint, config.NightBrightness, config.NightMinBrightness);
         foreach (var fighter in ent.Comp.Participants)
         {
             if (TerminatingOrDeleted(fighter))
@@ -1534,6 +1642,11 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         }
 
         ent.Comp.Participants.Clear();
+
+        // The way down is gone: the pit is an ordinary pit again.
+        if (ent.Comp.Pit is { } pit)
+            MakeOrdinaryPit(pit, config);
+        ent.Comp.Pit = null;
     }
 
     private void ApplyBlessing(EntityUid mob, LavalandBlessing blessing, LavalandSecretBossConfig config)

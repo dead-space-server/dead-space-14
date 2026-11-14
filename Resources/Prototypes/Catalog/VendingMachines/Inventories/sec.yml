@@ -9,6 +9,9 @@
     GrenadeStinger: 4
     Flash: 5
     Tourniquet: 5
+    ChemistryBottleHemostatin: 2 # DS14
+    FieldSplint: 4 # DS14
+    ProstheticPegLeg: 2 # DS14
     FlashlightSeclite: 5
     ClothingEyesGlassesSunglasses: 2
     ClothingEyesHudSecurity: 2

@@ -1,4 +1,4 @@
-﻿using Content.Shared.Alert;
+using Content.Shared.Alert;
 using Content.Shared.DeadSpace.SecurityBorg;
 using Content.Shared.Mobs;
 using Content.Shared.Power.EntitySystems;
@@ -108,6 +108,10 @@ public sealed partial class BorgSystem : SharedBorgSystem
             hasMind = false;
 
         _sprite.LayerSetVisible((uid, sprite), MMIVisualLayers.Brain, brain);
+        // DS14-start
+        if (brain)
+            _sprite.LayerSetRsiState((uid, sprite), MMIVisualLayers.Brain, SpeciesBrainState(component, sprite));
+        // DS14-end
         if (!brain)
         {
             _sprite.LayerSetRsiState((uid, sprite), MMIVisualLayers.Base, component.NoBrainState);
@@ -120,6 +124,27 @@ public sealed partial class BorgSystem : SharedBorgSystem
             _sprite.LayerSetRsiState((uid, sprite), MMIVisualLayers.Base, state);
         }
     }
+
+    // DS14-start
+    /// <summary>A vox or diona brain in the jar looks like its own, scaled to the jar.</summary>
+    private string SpeciesBrainState(MMIComponent mmi, SpriteComponent sprite)
+    {
+        const string fallback = "mmi_brain";
+        if (mmi.BrainSlot.Item is not { } brain
+            || !TryComp<SpriteComponent>(brain, out var brainSprite)
+            || brainSprite.BaseRSI?.Path.ToString() is not { } path)
+            return fallback;
+
+        const string marker = "/Species/";
+        var at = path.IndexOf(marker, StringComparison.Ordinal);
+        if (at < 0)
+            return fallback;
+
+        var species = path[(at + marker.Length)..].Split('/')[0].ToLowerInvariant();
+        var state = fallback + "_" + species;
+        return sprite.BaseRSI != null && sprite.BaseRSI.TryGetState(state, out _) ? state : fallback;
+    }
+    // DS14-end
 
     /// <summary>
     /// Sets the sprite states used for the borg "is there a mind or not" indication.

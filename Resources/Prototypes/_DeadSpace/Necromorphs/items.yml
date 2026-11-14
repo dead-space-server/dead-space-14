@@ -216,6 +216,7 @@
     spawnsBlackObelisk: true
     soundHeadaches:
       collection: SoundsHeadaches
+  - type: BlackObeliskSplinter
 
 - type: entity
   name: пинпоинтер
@@ -273,6 +274,25 @@
   - type: Pinpointer
     component: NecroobeliskSplinter
     targetName: осколок обелиска
+
+- type: entity
+  name: пинпоинтер
+  suffix: осколок чёрного обелиска
+  id: PinpointerBlackObeliskSplinter
+  parent: PinpointerBase
+  description: Портативное устройство слежения. Хотя обычно оно обладает гораздо более широкими возможностями, это устройство настроено на обнаружение определённых сигналов. Держите вертикально для сохранения точности.
+  components:
+  - type: Sprite
+    layers:
+    - state: pinpointer-way
+      map: ["enum.PinpointerLayers.Base"]
+    - state: pinonnull
+      map: ["enum.PinpointerLayers.Screen"]
+      shader: unshaded
+      visible: false
+  - type: Pinpointer
+    component: BlackObeliskSplinter
+    targetName: осколок чёрного обелиска
 
 - type: entity
   id: ChemistryBottleStableMutagenInfectorDead

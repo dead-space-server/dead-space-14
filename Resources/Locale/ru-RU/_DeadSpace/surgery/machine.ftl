@@ -1,0 +1,16 @@
+surgery-organ-ipc-core = позитронный мозг
+surgery-organ-ipc-battery = батарея
+surgery-organ-ipc-status = модуль состояния
+surgery-organ-ipc-voice = голосовой модуль
+surgery-organ-ipc-eyes = оптические сенсоры
+surgery-hint-machine-unscrew = Открутить винты (провести по точкам)
+surgery-hint-machine-pry = Поддеть монтировкой (держать ЛКМ)
+surgery-hint-machine-wire = Проложить провода (держать ЛКМ)
+surgery-hint-machine-pulse = Прозвонить разъёмы (провести по точкам)
+surgery-hint-machine-weld = Заварить шов
+surgery-op-machine-open = Вскрытие корпуса
+surgery-op-machine-repair = Восстановление
+surgery-op-machine-shard = Извлечение осколка
+surgery-op-machine-amputate = Снятие конечности
+surgery-op-machine-attach = Установка конечности
+surgery-voice-missing = Голосовой модуль не отвечает.

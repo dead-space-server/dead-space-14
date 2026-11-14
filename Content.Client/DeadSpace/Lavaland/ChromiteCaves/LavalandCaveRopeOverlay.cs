@@ -47,7 +47,7 @@ public sealed class LavalandCaveRopeOverlay : Overlay
         var query = _entities.EntityQueryEnumerator<LavalandCaveClimbComponent, SpriteComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var climb, out var sprite, out var xform))
         {
-            if (climb.Stage == LavalandCaveClimbStage.Hanging || xform.MapID != args.MapId)
+            if (climb.Stage == LavalandCaveClimbStage.Hanging || climb.NoRope || xform.MapID != args.MapId)
                 continue;
 
             var rope = _sprite.Frame0(climb.RopeSprite ?? RopeSprite);

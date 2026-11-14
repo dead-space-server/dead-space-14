@@ -27,6 +27,8 @@ public sealed class CameraArchiveControl : Control
     public readonly Button ZoomInButton;
     public readonly Button ZoomOutButton;
     public readonly Button PrintButton;
+    public float Magnification => _zoomSteps[_zoomStep];
+    public Vector2 ViewPan => _pan;
     public readonly Slider Frames;
 
     private readonly float[] _zoomSteps = [1f, 2f, 4f];
@@ -288,6 +290,27 @@ public sealed class CameraArchiveControl : Control
             button.OnPressed += _ => CameraPicked?.Invoke(index);
             CameraRows.AddChild(button);
         }
+    }
+
+    public bool HoldingFrame => View.Visible && _eye != null;
+
+    public void Retitle(int index, int count, TimeSpan time)
+    {
+        if (!HoldingFrame)
+            return;
+
+        _frameIndex = index;
+        _frameCount = count;
+        FrameLabel.Text = Loc.GetString("camera-archive-frame",
+            ("time", time.ToString("hh\\:mm\\:ss")),
+            ("index", index + 1),
+            ("count", count));
+        BackButton.Disabled = index <= 0;
+        ForwardButton.Disabled = index >= count - 1;
+        PrintButton.Disabled = count <= 0;
+        Frames.MaxValue = Math.Max(1, count - 1);
+        Frames.Value = Math.Clamp(index, 0, (int) Frames.MaxValue);
+        Frames.Disabled = count < 2;
     }
 
     public void ShowFrame(FixedEye eye, int index, int count, TimeSpan time)

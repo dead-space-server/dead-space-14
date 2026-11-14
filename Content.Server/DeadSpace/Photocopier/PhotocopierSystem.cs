@@ -246,7 +246,11 @@ public sealed class PhotocopierSystem : EntitySystem
     private void OnFormButtonPressed(EntityUid uid, PhotocopierComponent component, PhotocopierChoseFormMessage args)
     {
         // Only an existing form: the id comes from the client.
-        if (!_proto.HasIndex(args.PaperworkForm))
+        if (!_proto.TryIndex(args.PaperworkForm, out var form))
+            return;
+
+        // And only of a category this photocopier offers (an emagged one offers them all), as the menu shows them.
+        if (!component.WasEmagged && component.AllowedFormCategories?.Contains(form.Category) != true)
             return;
 
         component.ChosenPaper = args.PaperworkForm;
@@ -354,7 +358,7 @@ public sealed class PhotocopierSystem : EntitySystem
 
     private void PrintForm(EntityUid uid, int сopiesAmount, PaperworkFormPrototype formPrototype, PhotocopierComponent? component = null)
     {
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref component) || !formPrototype.Listed)
             return;
 
         string text = _resourceManager.ContentFileReadText(formPrototype.Text).ReadToEnd();

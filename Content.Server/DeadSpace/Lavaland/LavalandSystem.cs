@@ -44,6 +44,7 @@ public sealed class LavalandSystem : EntitySystem
     [Dependency] private readonly LavalandChromiteCavesSystem _chromiteCaves = default!;
     [Dependency] private readonly LavalandFaunaPopulationSystem _faunaPopulation = default!;
     [Dependency] private readonly LavalandNecropolisTendrilPlacementSystem _tendrilPlacement = default!;
+    [Dependency] private readonly LavalandGuaranteedSpawnSystem _guaranteedSpawn = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
@@ -218,6 +219,7 @@ public sealed class LavalandSystem : EntitySystem
         // The custom grids (the ash walkers' base) first: the tendrils keep away from them.
         LoadCustomGrids(mapId, mapUid, grid, biome, planet, random, placedStructures, cancellation);
         await _tendrilPlacement.SetupMap(mapUid, planet, cancellation);
+        await _guaranteedSpawn.SetupMap(mapUid, planet, cancellation);
         await _bossArena.SpawnConfiguredArenas(mapUid, grid, biome, planet, random, cancellation);
         await _faunaPopulation.SetupMap(mapUid, planet, cancellation);
         await _chromiteCaves.SetupCaves(mapUid, grid, planet, random, cancellation);

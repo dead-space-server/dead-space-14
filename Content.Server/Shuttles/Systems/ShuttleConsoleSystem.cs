@@ -1,3 +1,4 @@
+using Content.Server.Administration.Logs; //DS-14
 using Content.Server.DeadSpace.Shuttles.Systems;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
@@ -5,6 +6,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Systems;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Buckle.Components; //DS-14
 using Content.Shared.Alert;
 using Content.Shared.Popups;
 using Content.Shared.Shuttles.BUIStates;
@@ -22,6 +24,7 @@ using Robust.Shared.Collections;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
+using Content.Shared.Database; //DS-14
 using Content.Shared.UserInterface;
 using Robust.Shared.Prototypes;
 using Content.Server.DeviceLinking.Systems;
@@ -45,12 +48,14 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     // DS14-start
     [Dependency] private readonly DeviceLinkSystem _link = default!;
     [Dependency] private readonly RadarBlipSystem _radarBlips = default!;
+    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     // DS14-end
 
     private EntityQuery<MetaDataComponent> _metaQuery;
     private EntityQuery<TransformComponent> _xformQuery;
 
     private readonly HashSet<Entity<ShuttleConsoleComponent>> _consoles = new();
+    private readonly Dictionary<EntityUid, EntityUid> _shuttleControl = new(); //DS-14
 
     private static readonly ProtoId<TagPrototype> CanPilotTag = "CanPilot";
 
@@ -87,6 +92,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
         SubscribeLocalEvent<PilotComponent, ComponentGetState>(OnGetState);
         SubscribeLocalEvent<PilotComponent, StopPilotingAlertEvent>(OnStopPilotingAlert);
+        SubscribeLocalEvent<PilotComponent, UnbuckledEvent>(OnPilotUnbuckled); //DS-14
 
         SubscribeLocalEvent<FTLDestinationComponent, ComponentStartup>(OnFtlDestStartup);
         SubscribeLocalEvent<FTLDestinationComponent, ComponentShutdown>(OnFtlDestShutdown);
@@ -385,6 +391,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
     public void RemovePilot(EntityUid pilotUid, PilotComponent pilotComponent)
     {
+        EndShuttleControl(pilotUid); //DS-14
+
         var console = pilotComponent.Console;
 
         if (!TryComp<ShuttleConsoleComponent>(console, out var helm))
@@ -489,6 +497,40 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
             beacons ?? new List<ShuttleBeaconObject>(),
             exclusions ?? new List<ShuttleExclusionObject>());
     }
+
+    //DS-14 start
+    public void NoteShuttleControl(EntityUid user, EntityUid console)
+    {
+        if (_shuttleControl.ContainsKey(user))
+            return;
+
+        var resolved = GetDroneConsole(console) ?? console;
+        if (!_xformQuery.TryGetComponent(resolved, out var xform) ||
+            xform.GridUid is not { } shuttle ||
+            !HasComp<ShuttleComponent>(shuttle))
+        {
+            return;
+        }
+
+        _shuttleControl[user] = shuttle;
+        _adminLogger.Add(LogType.ShuttlePilot, LogImpact.Low,
+            $"{ToPrettyString(user):player} started controlling shuttle {ToPrettyString(shuttle):shuttle}");
+    }
+
+    private void OnPilotUnbuckled(Entity<PilotComponent> ent, ref UnbuckledEvent args)
+    {
+        EndShuttleControl(ent);
+    }
+
+    public void EndShuttleControl(EntityUid user)
+    {
+        if (!_shuttleControl.Remove(user, out var shuttle))
+            return;
+
+        _adminLogger.Add(LogType.ShuttlePilot, LogImpact.Low,
+            $"{ToPrettyString(user):player} finished controlling shuttle {ToPrettyString(shuttle):shuttle}");
+    }
+    //DS-14 end
 
     // DS14-start
     private void OnSignalButton(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleSignalButtonPressedMessage args)
