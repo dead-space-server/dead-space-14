@@ -1332,6 +1332,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.Plant = profile.Plant;
         ent.Comp.HeadVital = profile.HeadVital;
         ent.Comp.HasEars = profile.Ears;
+        ent.Comp.HasJaw = profile.Jaw;
         Dirty(ent);
         _implants.EnsureSlots(ent.Owner);
     }
@@ -1445,6 +1446,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.Plant = profile.Plant;
         ent.Comp.HeadVital = profile.HeadVital;
         ent.Comp.HasEars = profile.Ears;
+        ent.Comp.HasJaw = profile.Jaw;
     }
 
     private void RestoreParts(EntityUid body)
@@ -2358,7 +2360,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void NoteFace(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike)
     {
-        if (strike.Zone == LimbZone.Mouth)
+        if (strike.Zone == LimbZone.Mouth && limbs.HasJaw)
         {
             var gain = strike.Amount * strike.WoundMultiplier;
             if (strike.Mark == LimbMark.Liquid)
