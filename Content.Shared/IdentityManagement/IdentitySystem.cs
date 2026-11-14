@@ -1,8 +1,12 @@
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.Clothing;
 using Content.Shared.CriminalRecords.Systems;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.Hands;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement.Components;
@@ -25,6 +29,7 @@ public sealed class IdentitySystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly SharedBodySystem _body = default!; //DS-14
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedCriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
     [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
@@ -55,7 +60,38 @@ public sealed class IdentitySystem : EntitySystem
         SubscribeLocalEvent<IdentityComponent, WearerMaskToggledEvent>((uid, _, _) => QueueIdentityUpdate(uid));
         SubscribeLocalEvent<IdentityComponent, EntityRenamedEvent>((uid, _, _) => QueueIdentityUpdate(uid));
         SubscribeLocalEvent<IdentityComponent, VoiceMaskNameUpdatedEvent>((uid, _, _) => QueueIdentityUpdate(uid));
+
+        //DS14-Start
+        SubscribeLocalEvent<IdentityComponent, BodyPartAddedEvent>(OnBodyHeadPartAdded);
+        SubscribeLocalEvent<IdentityComponent, BodyPartRemovedEvent>(OnBodyHeadPartRemoved);
+        SubscribeLocalEvent<IdentityComponent, LimbSeveredEvent>(OnLimbHeadSevered);
+        SubscribeLocalEvent<IdentityComponent, LimbGraftedEvent>(OnLimbHeadGrafted);
     }
+
+    private void OnBodyHeadPartAdded(Entity<IdentityComponent> ent, ref BodyPartAddedEvent args)
+    {
+        if (args.Part.Comp.PartType == BodyPartType.Head)
+            QueueIdentityUpdate(ent);
+    }
+
+    private void OnBodyHeadPartRemoved(Entity<IdentityComponent> ent, ref BodyPartRemovedEvent args)
+    {
+        if (args.Part.Comp.PartType == BodyPartType.Head)
+            QueueIdentityUpdate(ent);
+    }
+
+    private void OnLimbHeadSevered(Entity<IdentityComponent> ent, ref LimbSeveredEvent args)
+    {
+        if (args.Zone == LimbZone.Head)
+            QueueIdentityUpdate(ent);
+    }
+
+    private void OnLimbHeadGrafted(Entity<IdentityComponent> ent, ref LimbGraftedEvent args)
+    {
+        if (args.Zone == LimbZone.Head)
+            QueueIdentityUpdate(ent);
+    }
+        // DS14-End
 
     /// <summary>
     /// Iterates through all identities that need to be updated.
@@ -199,6 +235,14 @@ public sealed class IdentitySystem : EntitySystem
         var ev = new SeeIdentityAttemptEvent();
 
         RaiseLocalEvent(target, ev);
+
+        //DS-14: у тела без головы нет лица, опознать его нельзя
+        if (TryComp<BodyComponent>(target, out var body)
+            && !_body.BodyHasPartType(target, BodyPartType.Head, body))
+        {
+            ev.Cancel();
+        }
+
         return representation.ToStringKnown(!ev.Cancelled, ev.NameOverride);
     }
 
