@@ -67,6 +67,13 @@ public sealed class PrototypeSaveTest
             if (!prototype.MapSavable)
                 continue;
 
+            // DS14: режим сохранения специально делает существ сохраняемыми (у мобовых баз стоит
+            // save: true), иначе они теряются при записи карты и её последующей загрузке. При этом
+            // спавн моба всегда дописывает ему компоненты и меняет данные (экшены, контейнеры,
+            // растворы в кровотоке), поэтому требование «yaml = прототип» для мобов невыполнимо.
+            if (IsMobDerived(prototype, prototypeMan))
+                continue;
+
             if (prototype.SetSuffix == "DEBUG")
                 continue;
 
@@ -157,6 +164,28 @@ public sealed class PrototypeSaveTest
             });
         });
         await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// DS14: предки, от которых мобы наследуют наш save: true (см. Resources/Prototypes/Entities/Mobs).
+    /// </summary>
+    private static readonly HashSet<string> MobSaveRoots = new() { "BaseMob", "BaseControllable" };
+
+    /// <summary>
+    /// DS14: prototype — потомок мобовой базы? Такие прототипы стали сохраняемыми ради режима
+    /// сохранения, поэтому проверить их этой проверкой нельзя (см. UninitializedSaveTest).
+    /// </summary>
+    private static bool IsMobDerived(EntityPrototype prototype, IPrototypeManager prototypes)
+    {
+        // EnumerateAllParents, в отличие от EnumerateParents, видит и абстрактных предков,
+        // коими и являются мобовые базы.
+        foreach (var (parentId, _) in prototypes.EnumerateAllParents<EntityPrototype>(prototype.ID))
+        {
+            if (MobSaveRoots.Contains(parentId))
+                return true;
+        }
+
+        return false;
     }
 
     public sealed class TestEntityUidContext : ISerializationContext,

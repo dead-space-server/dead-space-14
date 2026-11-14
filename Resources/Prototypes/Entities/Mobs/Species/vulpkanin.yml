@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   parent: [BaseMobSpeciesOrganic]
   id: BaseMobVulpkanin
   name: Urist McBark

@@ -404,3 +404,44 @@
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - SubGamemodesRuleNoWizardNoXenoborg # DS14
+
+- type: gamePreset
+  id: SaveGamemodeDeathmatch
+  alias:
+    - savegamemode-dm
+    - sdm
+    - sgm-dm
+  name: save-gamemode-deathmatch-title
+  description: save-gamemode-deathmatch-description
+  showInVote: true
+  voteType: rdm
+  showInAdminVote: true
+  rules:
+    - SaveGamemodeDeathmatch
+    - WageScheduler # backmen: currency
+    - Changeling
+    - MeteorSwarmScheduler
+    - SurvivalRampingStationEventScheduler
+    - BasicRoundstartVariation
+
+- type: gamePreset
+  id: SaveGamemodeExtended
+  alias:
+    - savegamemode-ext
+    - sext
+    - sgm-ext
+  name: save-gamemode-extended-title
+  description: save-gamemode-extended-description
+  showInVote: true
+  showInAdminVote: true
+  voteType: calm # DS14
+  rules:
+    - SaveGamemodeExtended
+    - BrokenTechEvent #DS14
+    - WageScheduler # backmen: currency
+    - BasicStationEventScheduler
+    - MeteorSwarmScheduler
+    - SpaceTrafficControlEventScheduler
+    - BasicRoundstartVariation
+    - SubGamemodesRuleNoWizardNoXenoborg # DS14
+

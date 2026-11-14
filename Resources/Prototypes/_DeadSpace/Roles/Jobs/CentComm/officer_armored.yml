@@ -39,3 +39,15 @@
     gloves: ClothingHandsGlovesCombat
     ears: ClothingHeadsetAltCentCom
     belt: ClothingBeltCentcomSecurityFilled
+
+# DS14: ChameleonJobLoadoutTest требует chameleonOutfit у каждой работы со старта раунда.
+- type: chameleonOutfit
+  id: CentralCommandOfficerArmoredChameleonOutfit
+  job: CentralCommandOfficerArmored
+  equipment:
+    mask: ClothingMaskGasCentcomSecurity
+    shoes: ClothingShoesBootsCombat
+    outerClothing: ClothingOuterCoatCentcomOfficer
+    head: ClothingHeadHelmetCentcomSecurityUSSP
+    gloves: ClothingHandsGlovesCombat
+    belt: ClothingBeltCentcomSecurityFilled
