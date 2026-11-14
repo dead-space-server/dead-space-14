@@ -4,6 +4,8 @@
   id: MobFenek
   description: Миленький фенек, который любит, когда его гладят. Самый маленький представитель семейства псовых.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterFennec
   - type: CarrySize
     size: Small
   - type: Sprite
