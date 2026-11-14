@@ -368,19 +368,30 @@
   - !type:RunePortalEffect
 
 - type: wizardRuneSpell
-  id: RuneUltimateArena
-  name: rune-ultimate-arena
+  id: RuneUltimateChaosMorph
+  name: rune-ultimate-chaos-morph
   form: RuneFormUltimate
   element: RuneElementChaos
-  targeting: Self
+  range: 14
   strain: 30
   cooldown: 5
   loudness: 5
   absurdity: 5
-  requiresWounded: 0.5
-  oncePerRound: true
   effects:
-  - !type:RuneArenaEffect
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileChaosMorph
+    count: 5
+    spread: 14
+    speed: 18
+    onHit:
+    - !type:RuneRandomEffect
+      options:
+      - !type:RunePolymorphEffect
+        polymorph: RuneChaosMonkey
+        scaleDuration: true
+      - !type:RunePolymorphEffect
+        polymorph: RuneChaosBread
+        scaleDuration: true
 
 - type: wizardRuneSpell
   id: RuneUltimateFlood

@@ -1,0 +1,144 @@
+- type: shader
+  id: RuneAdditive
+  kind: canvas
+  light_mode: unshaded
+  blend_mode: Add
+
+- type: runeMarkIcon
+  id: RuneMarkIconBase
+  abstract: true
+  priority: 3
+  locationPreference: Right
+  isShaded: false
+  hideOnStealth: true
+  showTo:
+    components:
+    - RuneCaster
+
+- type: runeMarkIcon
+  parent: RuneMarkIconBase
+  id: RuneMarkIconBurning
+  icon:
+    sprite: /Textures/_DeadSpace/Wizard/rune_marks.rsi
+    state: burning
+
+- type: runeMarkIcon
+  parent: RuneMarkIconBase
+  id: RuneMarkIconWet
+  icon:
+    sprite: /Textures/_DeadSpace/Wizard/rune_marks.rsi
+    state: wet
+
+- type: runeMarkIcon
+  parent: RuneMarkIconBase
+  id: RuneMarkIconDirty
+  icon:
+    sprite: /Textures/_DeadSpace/Wizard/rune_marks.rsi
+    state: dirty
+
+- type: runeMarkIcon
+  parent: RuneMarkIconBase
+  id: RuneMarkIconFrozen
+  icon:
+    sprite: /Textures/_DeadSpace/Wizard/rune_marks.rsi
+    state: frozen
+
+- type: runeMarkIcon
+  parent: RuneMarkIconBase
+  id: RuneMarkIconPoisoned
+  icon:
+    sprite: /Textures/_DeadSpace/Wizard/rune_marks.rsi
+    state: poisoned
+
+- type: runeMarkIcon
+  parent: RuneMarkIconBase
+  id: RuneMarkIconBleeding
+  icon:
+    sprite: /Textures/_DeadSpace/Wizard/rune_marks.rsi
+    state: bleeding
+
+- type: runeMarkIcon
+  parent: RuneMarkIconBase
+  id: RuneMarkIconWithering
+  icon:
+    sprite: /Textures/_DeadSpace/Wizard/rune_marks.rsi
+    state: withering
+
+- type: runeMarkIcon
+  parent: RuneMarkIconBase
+  id: RuneMarkIconDisplaced
+  icon:
+    sprite: /Textures/_DeadSpace/Wizard/rune_marks.rsi
+    state: displaced
+
+- type: alert
+  id: RuneAlertPhoenix
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: phoenix
+  name: alerts-rune-phoenix-name
+  description: alerts-rune-phoenix-desc
+
+- type: alert
+  id: RuneAlertIceArmor
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: ice-armor
+  name: alerts-rune-ice-armor-name
+  description: alerts-rune-ice-armor-desc
+
+- type: alert
+  id: RuneAlertStoneSkin
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: stone-skin
+  name: alerts-rune-stone-skin-name
+  description: alerts-rune-stone-skin-desc
+
+- type: alert
+  id: RuneAlertStoneShields
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: stone-shields
+  name: alerts-rune-stone-shields-name
+  description: alerts-rune-stone-shields-desc
+
+- type: alert
+  id: RuneAlertLightningRod
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: lightning-rod
+  name: alerts-rune-lightning-rod-name
+  description: alerts-rune-lightning-rod-desc
+
+- type: alert
+  id: RuneAlertWaterBubble
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: water-bubble
+  name: alerts-rune-water-bubble-name
+  description: alerts-rune-water-bubble-desc
+
+- type: alert
+  id: RuneAlertRegeneration
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: regeneration
+  name: alerts-rune-regeneration-name
+  description: alerts-rune-regeneration-desc
+
+- type: alert
+  id: RuneAlertViperBlood
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: viper-blood
+  name: alerts-rune-viper-blood-name
+  description: alerts-rune-viper-blood-desc
+
+- type: alert
+  id: RuneAlertImmortal
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: immortal
+  name: alerts-rune-immortal-name
+  description: alerts-rune-immortal-desc

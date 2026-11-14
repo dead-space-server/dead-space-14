@@ -24,7 +24,9 @@ public sealed partial class RuneCasterSystem
 
         if (ctx.Target is { } mob && mob != ctx.Caster && !TerminatingOrDeleted(mob))
         {
-            Yank(mob, caster.Position, effect.PullSpeed * ctx.Power, ctx.Caster);
+            var pull = effect.PullSpeed * ctx.Power * DisplacedScale(mob, ctx);
+            Touch(ctx, mob);
+            Yank(mob, caster.Position, pull, ctx.Caster);
             return;
         }
 

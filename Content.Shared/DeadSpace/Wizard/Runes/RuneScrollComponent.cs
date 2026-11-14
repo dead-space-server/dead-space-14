@@ -5,7 +5,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Wizard.Runes;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class RuneScrollComponent : Component
 {
     [DataField, AutoNetworkedField]

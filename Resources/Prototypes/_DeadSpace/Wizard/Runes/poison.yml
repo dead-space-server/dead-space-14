@@ -12,6 +12,10 @@
   - !type:RuneProjectileEffect
     prototype: RuneProjectileVenom
     speed: 20
+    onHit:
+    - !type:RuneInjectEffect
+      reagent: Lead
+      amount: 2
 
 - type: wizardRuneSpell
   id: RuneSpellMiasmaWall
@@ -26,6 +30,7 @@
     prototype: RuneMiasmaTile
     pattern: LineAtPoint
     size: 3
+    rows: 3
     skipBlocked: false
 
 - type: wizardRuneSpell
@@ -38,12 +43,11 @@
   cooldown: 14
   loudness: 1
   effects:
-  - !type:RuneDamageEffect
+  - !type:RuneInjectEffect
     target: AroundCaster
     radius: 3
-    damage:
-      types:
-        Poison: 12
+    reagent: Lead
+    amount: 1
   - !type:RuneStaminaEffect
     target: AroundCaster
     radius: 3
@@ -59,10 +63,9 @@
   strain: 14
   cooldown: 8
   effects:
-  - !type:RuneDamageEffect
-    damage:
-      types:
-        Poison: 22
+  - !type:RuneInjectEffect
+    reagent: Lead
+    amount: 5
   - !type:RuneSlowEffect
     time: 4
     multiplier: 0.6
@@ -80,6 +83,7 @@
     target: Caster
     template: RuneViperBloodTemplate
     duration: 120
+    alert: RuneAlertViperBlood
   - !type:RuneRegenerationEffect
     target: Caster
     duration: 120
@@ -485,7 +489,7 @@
   - type: Projectile
     damage:
       types:
-        Poison: 14
+        Blunt: 1
 
 - type: entity
   id: RuneMiasmaTile
@@ -512,10 +516,9 @@
           bounds: "-0.45,-0.45,0.45,0.45"
         layer:
         - MidImpassable
-  - type: DamageContacts
-    damage:
-      types:
-        Poison: 3
+  - type: RuneReagentContact
+    reagent: Lead
+    amount: 0.25
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.75
     sprintSpeedModifier: 0.75

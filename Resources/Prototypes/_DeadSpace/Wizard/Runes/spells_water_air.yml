@@ -12,6 +12,12 @@
   - !type:RuneProjectileEffect
     prototype: RuneProjectileWater
     speed: 22
+    onHit:
+    - !type:RuneSpawnEffect
+      prototype: RuneWaterPuddle
+      pattern: AreaAtPoint
+      size: 2
+      skipBlocked: false
 
 - type: wizardRuneSpell
   id: RuneSpellWaterCurtain
@@ -26,6 +32,7 @@
     prototype: RuneWaterCurtain
     pattern: LineAtPoint
     size: 3
+    rows: 3
   - !type:RuneExtinguishEffect
     target: AroundPoint
     radius: 2
@@ -51,6 +58,10 @@
     target: AroundCaster
     radius: 4
     includeCaster: true
+  - !type:RuneSoakEffect
+    target: AroundCaster
+    radius: 4
+    time: 3
 
 - type: wizardRuneSpell
   id: RuneSpellSlippery
@@ -65,6 +76,8 @@
   effects:
   - !type:RuneComponentsEffect
     fromAction: ActionSlippery
+  - !type:RuneSoakEffect
+    time: 8
 
 - type: wizardRuneSpell
   id: RuneSpellCleanse
@@ -91,8 +104,13 @@
     time: 90
   - !type:RuneComponentsEffect
     target: Caster
+    template: RuneWaterGuardTemplate
+    duration: 90
+  - !type:RuneComponentsEffect
+    target: Caster
     template: RuneWaterBubbleTemplate
     duration: 90
+    alert: RuneAlertWaterBubble
 
 - type: wizardRuneSpell
   id: RuneSpellAnimateWater
@@ -137,9 +155,13 @@
   strain: 12
   cooldown: 4
   effects:
+  - !type:RuneKnockdownEffect
+    target: AroundPoint
+    radius: 2
+    time: 1.5
   - !type:RunePushEffect
     atPoint: true
-    speed: 14
+    speed: 35
     radius: 2
   - !type:RuneStaminaEffect
     target: AroundPoint
@@ -159,6 +181,7 @@
     prototype: RuneWindWall
     pattern: LineAtPoint
     size: 3
+    rows: 3
 
 - type: wizardRuneSpell
   id: RuneSpellSmokeScreen
@@ -188,9 +211,12 @@
   - !type:RuneDamageEffect
     damage:
       types:
-        Asphyxiation: 18
+        Asphyxiation: 15
   - !type:RuneStaminaEffect
     amount: 25
+  - !type:RuneVacuumEffect
+    time: 30
+    airlossPerSecond: 1
 
 - type: wizardRuneSpell
   id: RuneSpellRecall

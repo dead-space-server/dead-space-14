@@ -1,6 +1,9 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Alert;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Dataset;
 using Content.Shared.Polymorph;
 using Robust.Shared.Prototypes;
@@ -135,6 +138,9 @@ public sealed partial class RuneProjectileEffect : RuneSpellEffect
 
     [DataField]
     public float Spread = 12f;
+
+    [DataField]
+    public List<RuneSpellEffect> OnHit = new();
 }
 
 public sealed partial class RuneSpawnEffect : RuneSpellEffect
@@ -156,6 +162,9 @@ public sealed partial class RuneSpawnEffect : RuneSpellEffect
 
     [DataField]
     public bool PassableByCaster;
+
+    [DataField]
+    public int Rows = 1;
 }
 
 public sealed partial class RuneSpawnRandomEffect : RuneSpellEffect
@@ -195,12 +204,73 @@ public sealed partial class RuneStaminaEffect : RuneTargetedEffect
 {
     [DataField]
     public float Amount = 30f;
+
+    [DataField]
+    public ProtoId<DamageTypePrototype>? ResistAs;
 }
 
 public sealed partial class RuneKnockdownEffect : RuneTargetedEffect
 {
     [DataField]
     public float Time = 2f;
+
+    [DataField]
+    public bool PowerScales;
+}
+
+public sealed partial class RuneTemperatureEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Delta = -35f;
+}
+
+public sealed partial class RuneInjectEffect : RuneTargetedEffect
+{
+    [DataField(required: true)]
+    public ProtoId<ReagentPrototype> Reagent;
+
+    [DataField]
+    public float Amount = 2f;
+}
+
+public sealed partial class RuneBloodEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Fraction = -0.3f;
+
+    [DataField]
+    public float Drink;
+}
+
+public sealed partial class RuneDisarmEffect : RuneTargetedEffect
+{
+}
+
+public sealed partial class RuneEmoteEffect : RuneTargetedEffect
+{
+    [DataField(required: true)]
+    public LocId Emote;
+}
+
+public sealed partial class RuneLightningStrikeEffect : RuneTargetedEffect
+{
+    [DataField]
+    public EntProtoId Prototype = "WizardLightning";
+}
+
+public sealed partial class RuneSoakEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Time = 3f;
+}
+
+public sealed partial class RuneVacuumEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Time = 30f;
+
+    [DataField]
+    public float AirlossPerSecond = 1f;
 }
 
 public sealed partial class RuneSlowEffect : RuneTargetedEffect
@@ -256,6 +326,9 @@ public sealed partial class RunePolymorphEffect : RuneTargetedEffect
 
     [DataField]
     public ProtoId<PolymorphPrototype>? OnCaster;
+
+    [DataField]
+    public bool ScaleDuration;
 }
 
 public sealed partial class RuneComponentsEffect : RuneTargetedEffect
@@ -268,12 +341,18 @@ public sealed partial class RuneComponentsEffect : RuneTargetedEffect
 
     [DataField]
     public float? Duration;
+
+    [DataField]
+    public ProtoId<AlertPrototype>? Alert;
 }
 
 public sealed partial class RuneParalyzeEffect : RuneTargetedEffect
 {
     [DataField]
     public float Time = 3f;
+
+    [DataField]
+    public bool PowerScales;
 }
 
 public sealed partial class RuneRecallEffect : RuneSpellEffect
@@ -282,9 +361,6 @@ public sealed partial class RuneRecallEffect : RuneSpellEffect
 
 public sealed partial class RuneOrbitShieldEffect : RuneSpellEffect
 {
-    [DataField(required: true)]
-    public EntProtoId Prototype;
-
     [DataField]
     public int Count = 3;
 
@@ -299,6 +375,9 @@ public sealed partial class RuneOrbitShieldEffect : RuneSpellEffect
 
     [DataField]
     public float MinStamina = 15f;
+
+    [DataField]
+    public ProtoId<AlertPrototype>? Alert;
 }
 
 public sealed partial class RuneRegenerationEffect : RuneTargetedEffect
@@ -308,6 +387,9 @@ public sealed partial class RuneRegenerationEffect : RuneTargetedEffect
 
     [DataField]
     public float Duration = 20f;
+
+    [DataField]
+    public ProtoId<AlertPrototype>? Alert;
 }
 
 public sealed partial class RuneStatusEffect : RuneTargetedEffect
@@ -353,6 +435,9 @@ public sealed partial class RuneAnimateEffect : RuneSpellEffect
 
     [DataField]
     public float Radius = 1.5f;
+
+    [DataField]
+    public float Lifetime = 120f;
 }
 
 public sealed partial class RuneKnockEffect : RuneSpellEffect

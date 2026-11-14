@@ -1,0 +1,99 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created by Blue Dog Doc for Space Station 14 server Мёртвый Космос",
+    "size": {
+        "x": 10,
+        "y": 10
+    },
+    "states": [
+        {
+            "name": "burning",
+            "delays": [
+                [
+                    0.12,
+                    0.12,
+                    0.12,
+                    0.12
+                ]
+            ]
+        },
+        {
+            "name": "wet",
+            "delays": [
+                [
+                    0.3,
+                    0.2,
+                    0.3,
+                    0.2
+                ]
+            ]
+        },
+        {
+            "name": "dirty",
+            "delays": [
+                [
+                    0.5,
+                    0.25,
+                    0.25,
+                    0.35
+                ]
+            ]
+        },
+        {
+            "name": "frozen",
+            "delays": [
+                [
+                    0.25,
+                    0.25,
+                    0.25,
+                    0.25
+                ]
+            ]
+        },
+        {
+            "name": "poisoned",
+            "delays": [
+                [
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ]
+            ]
+        },
+        {
+            "name": "bleeding",
+            "delays": [
+                [
+                    0.6,
+                    0.12,
+                    0.12,
+                    0.12
+                ]
+            ]
+        },
+        {
+            "name": "withering",
+            "delays": [
+                [
+                    0.35,
+                    0.2,
+                    0.35,
+                    0.2
+                ]
+            ]
+        },
+        {
+            "name": "displaced",
+            "delays": [
+                [
+                    0.14,
+                    0.14,
+                    0.14,
+                    0.14
+                ]
+            ]
+        }
+    ]
+}

@@ -6,12 +6,12 @@
   form: RuneFormProjectile
   element: RuneElementFire
   range: 14
-  strain: 22
+  strain: 37.5
   cooldown: 6
   loudness: 2
   effects:
   - !type:RuneProjectileEffect
-    prototype: ProjectileFireball
+    prototype: RuneProjectileFireball
 
 - type: wizardRuneSpell
   id: RuneSpellIceball
@@ -24,6 +24,9 @@
   effects:
   - !type:RuneProjectileEffect
     prototype: RuneProjectileIce
+    onHit:
+    - !type:RuneTemperatureEffect
+      delta: -35
 
 - type: wizardRuneSpell
   id: RuneSpellBoulder
@@ -38,6 +41,10 @@
   - !type:RuneProjectileEffect
     prototype: RuneProjectileBoulder
     speed: 14
+    onHit:
+    - !type:RuneParalyzeEffect
+      time: 1
+      powerScales: true
 
 - type: wizardRuneSpell
   id: RuneSpellSpark
@@ -52,6 +59,10 @@
   - !type:RuneProjectileEffect
     prototype: RuneProjectileSpark
     speed: 26
+    onHit:
+    - !type:RuneStaminaEffect
+      amount: 80
+      resistAs: Shock
 
 - type: wizardRuneSpell
   id: RuneSpellMendingBolt
@@ -91,10 +102,6 @@
   - !type:RuneRandomEffect
     options:
     - !type:RuneProjectileEffect
-      prototype: ProjectilePolyboltMonkey
-    - !type:RuneProjectileEffect
-      prototype: ProjectilePolyboltBread
-    - !type:RuneProjectileEffect
       prototype: RuneProjectileRubberDuck
       count: 5
       spread: 8
@@ -104,6 +111,14 @@
       pattern: AreaAtPoint
       size: 2
       count: 6
+      lifetime: 30
+    - !type:RuneSpawnRandomEffect
+      prototypes:
+      - FoodPieBananaCream
+      pattern: AreaAtPoint
+      size: 1
+      count: 3
+      lifetime: 30
 
 # Стена
 
@@ -131,6 +146,13 @@
   strain: 18
   cooldown: 10
   effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneSlickTile
+    pattern: LineAtPoint
+    size: 3
+    rows: 3
+    skipBlocked: false
+    lifetime: 20
   - !type:RuneSpawnEffect
     prototype: RuneWallIce
     pattern: LineAtPoint
@@ -223,6 +245,7 @@
     pattern: LineAtPoint
     size: 3
     count: 6
+    lifetime: 20
 
 # Волна
 
@@ -265,7 +288,11 @@
     radius: 4
     damage:
       types:
-        Cold: 8
+        Cold: 11
+  - !type:RuneTemperatureEffect
+    target: AroundCaster
+    radius: 4
+    delta: -35
 
 - type: wizardRuneSpell
   id: RuneSpellQuake
@@ -281,12 +308,17 @@
     target: AroundCaster
     radius: 4
     time: 2
+  - !type:RuneParalyzeEffect
+    target: AroundCaster
+    radius: 4
+    time: 1
+    powerScales: true
   - !type:RuneDamageEffect
     target: AroundCaster
     radius: 4
     damage:
       types:
-        Blunt: 6
+        Blunt: 9
 
 - type: wizardRuneSpell
   id: RuneSpellStorm
@@ -320,8 +352,8 @@
     ignoreResistances: true
     damage:
       groups:
-        Brute: -12
-        Burn: -12
+        Brute: -20
+        Burn: -20
         Toxin: -6
 
 - type: wizardRuneSpell
@@ -334,8 +366,11 @@
   cooldown: 10
   loudness: 1
   effects:
+  - !type:RuneDisarmEffect
+    target: AroundCaster
+    radius: 5
   - !type:RunePushEffect
-    speed: 12
+    speed: 26
     radius: 5
   - !type:RuneKnockEffect
     range: 6
@@ -354,11 +389,20 @@
     target: AroundCaster
     radius: 6
     lines: RuneChaosLines
+  - !type:RuneEmoteEffect
+    target: AroundCaster
+    radius: 6
+    emote: rune-emote-dance
   - !type:RuneSlowEffect
     target: AroundCaster
     radius: 6
-    time: 4
+    time: 6
     multiplier: 0.6
+  - !type:RuneComponentsEffect
+    target: AroundCaster
+    radius: 6
+    template: RunePacifiedTemplate
+    duration: 6
 
 # Касание
 
@@ -398,7 +442,9 @@
   - !type:RuneDamageEffect
     damage:
       types:
-        Cold: 15
+        Cold: 21
+  - !type:RuneTemperatureEffect
+    delta: -35
 
 - type: wizardRuneSpell
   id: RuneSpellStoneSkin
@@ -413,6 +459,7 @@
   - !type:RuneComponentsEffect
     template: RuneStoneSkinTemplate
     duration: 20
+    alert: RuneAlertStoneSkin
 
 - type: wizardRuneSpell
   id: RuneSpellShock
@@ -431,6 +478,7 @@
     damage:
       types:
         Shock: 8
+  - !type:RuneLightningStrikeEffect
 
 - type: wizardRuneSpell
   id: RuneSpellHeal
@@ -459,7 +507,7 @@
   targeting: Entity
   range: 2
   strain: 70
-  cooldown: 90
+  cooldown: 180
   loudness: 4
   requiresClothes: true
   effects:
@@ -473,7 +521,7 @@
   targeting: Entity
   range: 2
   strain: 35
-  cooldown: 60
+  cooldown: 150
   absurdity: 2
   requiresClothes: true
   effects:
@@ -498,12 +546,18 @@
     target: Caster
     ignoreResistances: true
     damage:
+      types:
+        Cold: -40
       groups:
         Burn: -40
+  - !type:RuneTemperatureEffect
+    target: Caster
+    delta: 35
   - !type:RuneComponentsEffect
     target: Caster
     template: RunePhoenixTemplate
     duration: 45
+    alert: RuneAlertPhoenix
 
 - type: wizardRuneSpell
   id: RuneSpellIceArmor
@@ -518,6 +572,7 @@
     target: Caster
     template: RuneIceArmorTemplate
     duration: 30
+    alert: RuneAlertIceArmor
 
 - type: wizardRuneSpell
   id: RuneSpellStoneStride
@@ -530,9 +585,9 @@
   loudness: 1
   effects:
   - !type:RuneOrbitShieldEffect
-    prototype: RuneStoneShield
     count: 4
     duration: 60
+    alert: RuneAlertStoneShields
   - !type:RuneComponentsEffect
     target: Caster
     template: RuneStoneStrideTemplate
@@ -557,6 +612,7 @@
     target: Caster
     template: RuneLightningRodTemplate
     duration: 15
+    alert: RuneAlertLightningRod
 
 - type: wizardRuneSpell
   id: RuneSpellRegeneration
@@ -577,6 +633,7 @@
   - !type:RuneRegenerationEffect
     target: Caster
     duration: 20
+    alert: RuneAlertRegeneration
     perSecond:
       types:
         Bloodloss: -1

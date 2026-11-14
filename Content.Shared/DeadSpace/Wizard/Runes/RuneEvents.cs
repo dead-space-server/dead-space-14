@@ -45,12 +45,51 @@ public sealed class RuneCastMessage : EntityEventArgs
     public readonly List<string> Runes;
     public readonly NetCoordinates Target;
     public readonly bool Inscribe;
+    public readonly NetEntity? Paper;
 
-    public RuneCastMessage(List<string> runes, NetCoordinates target, bool inscribe)
+    public RuneCastMessage(List<string> runes, NetCoordinates target, bool inscribe, NetEntity? paper = null)
     {
         Runes = runes;
         Target = target;
         Inscribe = inscribe;
+        Paper = paper;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class RuneScrollCastMessage : EntityEventArgs
+{
+    public readonly NetEntity Scroll;
+    public readonly NetCoordinates Target;
+
+    public RuneScrollCastMessage(NetEntity scroll, NetCoordinates target)
+    {
+        Scroll = scroll;
+        Target = target;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class RuneCastResultEvent : EntityEventArgs
+{
+    public readonly bool Success;
+    public readonly string? Reason;
+
+    public RuneCastResultEvent(bool success, string? reason)
+    {
+        Success = success;
+        Reason = reason;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class RuneQuillOpenEvent : EntityEventArgs
+{
+    public readonly NetEntity Paper;
+
+    public RuneQuillOpenEvent(NetEntity paper)
+    {
+        Paper = paper;
     }
 }
 

@@ -5,7 +5,6 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Fluids.Components;
-using Content.Shared.Popups;
 
 namespace Content.Server.DeadSpace.Wizard.Runes;
 
@@ -34,7 +33,6 @@ public sealed partial class RuneCasterSystem
 
             caster.InBlood = inBlood;
             Dirty(uid, caster);
-            _popup.PopupEntity(Loc.GetString(inBlood ? "rune-blood-awaken" : "rune-blood-fade"), uid, uid, inBlood ? PopupType.Medium : PopupType.Small);
         }
     }
 

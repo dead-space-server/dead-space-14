@@ -13,9 +13,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Wizard.Runes;
 
+public sealed record RuneScrollChip(EntityUid Scroll, RunePrototype Form, RunePrototype Element, float Left, float Fraction);
+
 public sealed class RuneCircleControl : LayoutContainer
 {
     public event Action<List<Vector2>>? StrokeFinished;
+    public event Action<EntityUid>? ScrollToggled;
+    public readonly List<RuneScrollChip> Scrolls = new();
+    public EntityUid? Armed;
+    public bool Quill;
     public event Action? CastRequested;
     public event Action? InscribeRequested;
     public event Action? ClearRequested;
@@ -63,6 +69,9 @@ public sealed class RuneCircleControl : LayoutContainer
     private float _time;
     private string? _status;
     private float _statusFade;
+    private string? _warning;
+    private float _warningFade;
+    private const float WarningTime = 2.2f;
     private readonly Font _font;
     private readonly Font _small;
     private readonly Font _tiny;
@@ -91,6 +100,10 @@ public sealed class RuneCircleControl : LayoutContainer
     private RuneButton? _collapse;
     private bool _dragging;
     private Vector2 _dragOffset;
+    private Vector2 _mouse;
+    private RunePrototype? _hover;
+    private const float ChipSize = 44f;
+    private const float ChipGap = 8f;
 
     private bool CircleVisible => !_compact && _showCircle;
     private float PanelX => _origin.X;
@@ -101,7 +114,7 @@ public sealed class RuneCircleControl : LayoutContainer
     private Vector2 CircleCenter => new(PanelX + LeftWidth / 2f, PanelY + 44f + CircleRadius * 1.15f);
     private float ButtonsCenterX => CircleVisible ? CircleCenter.X : SheetX + RightWidth / 2f;
 
-    private readonly record struct FormStyle(int Dashes, float Duty, float Thickness, float Spin);
+    internal readonly record struct FormStyle(int Dashes, float Duty, float Thickness, float Spin);
 
     public RuneCircleControl()
     {
@@ -179,12 +192,34 @@ public sealed class RuneCircleControl : LayoutContainer
         _statusFade = 2.5f;
     }
 
+    public void Warn(string text)
+    {
+        _warning = text;
+        _warningFade = WarningTime;
+    }
+
+    private void DrawWarning(DrawingHandleScreen handle, float scale)
+    {
+        if (_warning == null || _warningFade <= 0f)
+            return;
+
+        var alpha = MathF.Min(1f, _warningFade / 0.4f);
+        var width = TextWidth(_font, _warning);
+        var at = _mouse + new Vector2(18f, 14f) * scale;
+        at.X = MathF.Min(at.X, PixelSize.X - width - 8f * scale);
+        var box = UIBox2.FromDimensions(at - new Vector2(6f, 3f) * scale, new Vector2(width + 12f * scale, 20f * scale));
+        handle.DrawRect(box, Night.WithAlpha(0.85f * alpha));
+        Frame(handle, box, Bad.WithAlpha(0.6f * alpha), 1f * scale);
+        handle.DrawString(_font, at, _warning, Bad.WithAlpha(alpha));
+    }
+
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
         _time += args.DeltaSeconds;
         _lastFade = MathF.Max(0f, _lastFade - args.DeltaSeconds);
         _statusFade = MathF.Max(0f, _statusFade - args.DeltaSeconds);
+        _warningFade = MathF.Max(0f, _warningFade - args.DeltaSeconds);
         _burst = MathF.Max(0f, _burst - args.DeltaSeconds);
         _castBurst = MathF.Max(0f, _castBurst - args.DeltaSeconds);
         LayoutButtons();
@@ -205,10 +240,26 @@ public sealed class RuneCircleControl : LayoutContainer
             return;
         }
 
+        if (args.Function == ContentKeyFunctions.MouseMiddle)
+        {
+            _drawing = false;
+            _stroke.Clear();
+            ClearRequested?.Invoke();
+            args.Handle();
+            return;
+        }
+
         if (args.Function == EngineKeyFunctions.UIClick && InHeader(args.RelativePosition))
         {
             _dragging = true;
             _dragOffset = args.RelativePosition - _origin;
+            args.Handle();
+            return;
+        }
+
+        if (args.Function == EngineKeyFunctions.UIClick && ChipAt(args.RelativePixelPosition) is { } chip)
+        {
+            ScrollToggled?.Invoke(chip.Scroll);
             args.Handle();
             return;
         }
@@ -253,6 +304,7 @@ public sealed class RuneCircleControl : LayoutContainer
     protected override void MouseMove(GUIMouseMoveEventArgs args)
     {
         base.MouseMove(args);
+        _mouse = args.RelativePixelPosition;
         if (_dragging)
         {
             var limit = Size - new Vector2(PanelWidth, HeaderHeight);
@@ -384,11 +436,70 @@ public sealed class RuneCircleControl : LayoutContainer
             Texture(handle, RuneCircleArt.Glow(_clyde), c, radius * (1.2f + 2f * ease), 0f, Color.White.WithAlpha(0.35f * (1f - t)));
         }
 
+        DrawScrolls(handle, scale);
+        DrawWarning(handle, scale);
+
         if (_status != null && _statusFade > 0f)
             Centered(handle, _font, _status, new Vector2(ButtonsCenterX * scale, (PanelY + PanelHeight + 8f) * scale), Bad.WithAlpha(MathF.Min(1f, _statusFade)));
     }
 
-    private static FormStyle StyleFor(string? form)
+    private UIBox2 ChipBox(int index, float scale)
+    {
+        var top = PanelY + PanelHeight + 30f;
+        var left = PanelX + 14f + index * (ChipSize + ChipGap);
+        return UIBox2.FromDimensions(new Vector2(left, top) * scale, new Vector2(ChipSize) * scale);
+    }
+
+    private RuneScrollChip? ChipAt(Vector2 pixel)
+    {
+        for (var i = 0; i < Scrolls.Count; i++)
+        {
+            if (ChipBox(i, UIScale).Contains(pixel))
+                return Scrolls[i];
+        }
+
+        return null;
+    }
+
+    private void DrawScrolls(DrawingHandleScreen handle, float scale)
+    {
+        if (Scrolls.Count == 0)
+            return;
+
+        var first = ChipBox(0, scale);
+        handle.DrawString(_label, new Vector2(first.Left, first.Top - 15f * scale), Loc.GetString("rune-circle-scrolls").ToUpperInvariant(), Ink.WithAlpha(0.7f));
+
+        for (var i = 0; i < Scrolls.Count; i++)
+        {
+            var chip = Scrolls[i];
+            var box = ChipBox(i, scale);
+            var center = box.Center;
+            var armed = Armed == chip.Scroll;
+            var hovered = box.Contains(_mouse);
+            var color = chip.Element.Color;
+            var pulse = armed ? 0.75f + 0.25f * MathF.Sin(_time * 5f) : 1f;
+
+            handle.DrawRect(box, Night.WithAlpha(0.85f));
+            if (armed)
+                Texture(handle, RuneCircleArt.Glow(_clyde), center, box.Width * 2.2f, 0f, color.WithAlpha(0.35f * pulse));
+            Frame(handle, box, (armed ? color : hovered ? color.WithAlpha(0.7f) : Color.White.WithAlpha(0.18f)).WithAlpha(armed ? pulse : 1f), (armed ? 2f : 1f) * scale);
+
+            var inner = UIBox2.FromDimensions(box.TopLeft + box.Size * 0.08f, box.Size * 0.84f);
+            DrawGlyph(handle, chip.Form.Stroke, inner, chip.Form.Color.WithAlpha(0.35f), 1.2f * scale);
+            DrawGlyph(handle, chip.Element.Stroke, inner, color.WithAlpha(armed ? 1f : 0.8f), 1.8f * scale);
+
+            if (chip.Left > 0f)
+            {
+                handle.DrawRect(new UIBox2(box.Left, box.Bottom - box.Height * chip.Fraction, box.Right, box.Bottom), Night.WithAlpha(0.6f));
+                Centered(handle, _small, FormatSeconds(chip.Left), new Vector2(center.X, center.Y - 7f * scale), CooldownColor);
+            }
+        }
+
+        if (Armed != null)
+            handle.DrawString(_small, new Vector2(first.Left, first.Bottom + 3f * scale), Loc.GetString("rune-circle-scroll-armed"), Ink.WithAlpha(0.85f));
+    }
+
+    internal static FormStyle StyleFor(string? form)
     {
         return form switch
         {
@@ -483,7 +594,7 @@ public sealed class RuneCircleControl : LayoutContainer
         return Color.FromHsv(new Vector4((_time * 0.15f + offset) % 1f, 0.75f, 1f, 1f));
     }
 
-    private static float ElementSpeed(string element)
+    internal static float ElementSpeed(string element)
     {
         return element switch
         {
@@ -750,16 +861,28 @@ public sealed class RuneCircleControl : LayoutContainer
 
     private void DrawGuide(DrawingHandleScreen handle, Vector2 c, float big, float scale)
     {
-        if (Expected is not { } kind || _stroke.Count > 0)
-            return;
-
-        var fusionAllowed = Chain.Count == 2;
-        var candidates = Known.FindAll(r => r.Kind == kind && (fusionAllowed || !r.Fusion));
-        if (candidates.Count == 0)
+        if (_stroke.Count > 0)
             return;
 
         var cycle = _time / GuideCycle;
-        var rune = candidates[(int) cycle % candidates.Count];
+        RunePrototype rune;
+        if (_hover != null)
+        {
+            rune = _hover;
+            cycle = _time / 1.4f;
+        }
+        else
+        {
+            if (Expected is not { } kind)
+                return;
+
+            var fusionAllowed = Chain.Count == 2;
+            var candidates = Known.FindAll(r => r.Kind == kind && (fusionAllowed || !r.Fusion));
+            if (candidates.Count == 0)
+                return;
+
+            rune = candidates[(int) cycle % candidates.Count];
+        }
         var progress = Math.Clamp((cycle - MathF.Floor(cycle)) / 0.7f, 0f, 1f);
         var size = big * 0.52f;
         var rect = UIBox2.FromDimensions(c - new Vector2(size / 2f), new Vector2(size));
@@ -943,6 +1066,8 @@ public sealed class RuneCircleControl : LayoutContainer
 
         var hint = Expected switch
         {
+            _ when Quill && Chain.Count >= 2 => Loc.GetString("rune-circle-hint-quill-ready"),
+            RuneKind.Form when Quill => Loc.GetString("rune-circle-hint-quill"),
             RuneKind.Form => Loc.GetString("rune-circle-hint-form"),
             RuneKind.Element when SecondElement => Loc.GetString("rune-circle-hint-second"),
             RuneKind.Element => Loc.GetString("rune-circle-hint-element"),
@@ -966,6 +1091,7 @@ public sealed class RuneCircleControl : LayoutContainer
 
         Header(handle, new Vector2((SheetX + RightWidth / 2f) * scale, y), Loc.GetString("rune-circle-sheet-title"), gold.WithAlpha(0.85f), scale * 0.75f);
         y += 32f * scale;
+        _hover = null;
 
         foreach (var kind in new[] { RuneKind.Form, RuneKind.Element, RuneKind.Modifier })
         {
@@ -991,7 +1117,10 @@ public sealed class RuneCircleControl : LayoutContainer
                     return;
 
                 var center = new Vector2(x + column * cell + cell / 2f - 4f * scale, y + box / 2f);
-                var alpha = active ? 1f : 0.35f;
+                var hovered = (_mouse - center).Length() <= box * 0.7f;
+                if (hovered)
+                    _hover = rune;
+                var alpha = active || hovered ? 1f : 0.35f;
                 var diameter = RuneCircleArt.RingDiameter(box / 2f);
                 handle.DrawCircle(center, box / 2f, Night);
                 Texture(handle, RuneCircleArt.Ring(_clyde, 1.3f * scale * RuneCircleArt.RingSize / diameter), center, diameter, 0f, rune.Color.WithAlpha(0.7f * alpha));
@@ -1061,6 +1190,10 @@ public sealed class RuneCircleControl : LayoutContainer
 
         for (var i = 1; i < points.Count; i++)
             Line(handle, Map(points[i - 1]), Map(points[i]), width, color);
+
+        var start = Map(points[0]);
+        handle.DrawCircle(start, width * 1.9f, Night.WithAlpha(color.A));
+        handle.DrawCircle(start, width * 1.4f, Color.InterpolateBetween(color, Color.White, 0.5f).WithAlpha(color.A));
     }
 
     private void Texture(DrawingHandleScreen handle, Texture texture, Vector2 center, float diameter, float rotation, Color color)

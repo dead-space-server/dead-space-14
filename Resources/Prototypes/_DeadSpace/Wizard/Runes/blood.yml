@@ -13,6 +13,10 @@
   - !type:RuneProjectileEffect
     prototype: RuneProjectileBloodSpear
     speed: 24
+    onHit:
+    - !type:RuneBloodEffect
+      fraction: -0.3
+      drink: 0.5
 
 - type: wizardRuneSpell
   id: RuneSpellBloodSpikes
@@ -28,6 +32,7 @@
     prototype: RuneBloodSpikes
     pattern: LineAtPoint
     size: 3
+    rows: 3
 
 - type: wizardRuneSpell
   id: RuneSpellBloodHarvest
@@ -95,6 +100,9 @@
       groups:
         Brute: -30
         Burn: -15
+  - !type:RuneBloodEffect
+    target: Caster
+    fraction: 0.3
 
 - type: wizardRuneSpell
   id: RuneSpellAnimateBlood
@@ -121,8 +129,12 @@
   cooldown: 40
   loudness: 3
   effects:
-  - !type:RuneSpawnEffect
-    prototype: RuneSummonFleshGolem
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - RuneSummonFleshGolem
+    pattern: AreaAtPoint
+    size: 2
+    count: 10
     lifetime: 40
 
 - type: wizardRuneSpell
@@ -379,8 +391,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 14
-        Slash: 8
+        Piercing: 10
+        Slash: 4
   - type: PointLight
     color: "#d4141f"
     radius: 1.5
@@ -403,6 +415,8 @@
     damage:
       types:
         Piercing: 6
+  - type: RuneReagentContact
+    extinguish: false
   - type: TimedDespawn
     lifetime: 12
 

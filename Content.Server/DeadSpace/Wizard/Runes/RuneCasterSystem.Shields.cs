@@ -1,29 +1,31 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Alert;
 using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Wizard.Runes;
-using Content.Shared.Follower;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffectNew;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Wizard.Runes;
 
 [RegisterComponent]
 public sealed partial class RuneOrbitShieldComponent : Component
 {
-    public readonly List<EntityUid> Shields = new();
+    public int Count;
 
     public TimeSpan End;
 
     public float MinDamage = 5f;
 
     public float MinStamina = 15f;
+
+    public ProtoId<AlertPrototype>? Alert;
 }
 
 public sealed partial class RuneCasterSystem
 {
-    [Dependency] private readonly FollowerSystem _follower = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
 
     private static readonly HashSet<string> ShieldedDamage = new()
@@ -50,21 +52,12 @@ public sealed partial class RuneCasterSystem
         comp.End = Timing.CurTime + TimeSpan.FromSeconds(effect.Duration * ctx.DurationScale);
         comp.MinDamage = effect.MinDamage;
         comp.MinStamina = effect.MinStamina;
+        comp.Count = Math.Min(effect.MaxShields, comp.Count + effect.Count + ctx.Extra + (ctx.Power > 1f ? 1 : 0));
+        SetAuraShields(ctx.Caster, comp.Count);
 
-        var coords = Transform(ctx.Caster).Coordinates;
-        var count = effect.Count + ctx.Extra + (ctx.Power > 1f ? 1 : 0);
-        for (var i = 0; i < count; i++)
-        {
-            var shield = Spawn(effect.Prototype, coords);
-            _follower.StartFollowingEntity(shield, ctx.Caster);
-            comp.Shields.Add(shield);
-        }
-
-        while (comp.Shields.Count > effect.MaxShields)
-        {
-            QueueDel(comp.Shields[0]);
-            comp.Shields.RemoveAt(0);
-        }
+        comp.Alert = effect.Alert;
+        if (effect.Alert is { } alert)
+            ShowCharm(ctx.Caster, alert, comp.End);
     }
 
     private void OnShieldDamage(Entity<RuneOrbitShieldComponent> ent, ref BeforeDamageChangedEvent args)
@@ -94,31 +87,27 @@ public sealed partial class RuneCasterSystem
 
     private bool TryBreakShield(Entity<RuneOrbitShieldComponent> ent)
     {
-        while (ent.Comp.Shields.Count > 0)
+        if (ent.Comp.Count <= 0)
         {
-            var shield = ent.Comp.Shields[^1];
-            ent.Comp.Shields.RemoveAt(ent.Comp.Shields.Count - 1);
-            if (TerminatingOrDeleted(shield))
-                continue;
-
-            QueueDel(shield);
-            _popup.PopupEntity(Loc.GetString("rune-shield-break", ("left", ent.Comp.Shields.Count)), ent, ent, PopupType.SmallCaution);
-            if (ent.Comp.Shields.Count == 0)
-                RemCompDeferred<RuneOrbitShieldComponent>(ent);
-
-            return true;
+            RemCompDeferred<RuneOrbitShieldComponent>(ent);
+            return false;
         }
 
-        RemCompDeferred<RuneOrbitShieldComponent>(ent);
-        return false;
+        ent.Comp.Count--;
+        SetAuraShields(ent, ent.Comp.Count);
+        _popup.PopupEntity(Loc.GetString("rune-shield-break", ("left", ent.Comp.Count)), ent, ent, PopupType.SmallCaution);
+        if (ent.Comp.Count == 0)
+            RemCompDeferred<RuneOrbitShieldComponent>(ent);
+
+        return true;
     }
 
     private void OnShieldShutdown(Entity<RuneOrbitShieldComponent> ent, ref ComponentShutdown args)
     {
-        foreach (var shield in ent.Comp.Shields)
-            QueueDel(shield);
-
-        ent.Comp.Shields.Clear();
+        ent.Comp.Count = 0;
+        SetAuraShields(ent, 0);
+        if (ent.Comp.Alert is { } alert)
+            ClearCharm(ent.Owner, alert);
     }
 
     private void UpdateShields()
@@ -129,5 +118,42 @@ public sealed partial class RuneCasterSystem
             if (Timing.CurTime >= comp.End)
                 RemCompDeferred<RuneOrbitShieldComponent>(uid);
         }
+    }
+
+    private void ShowCharm(EntityUid target, ProtoId<AlertPrototype> alert, TimeSpan end)
+    {
+        _alerts.ShowAlert(target, alert, cooldown: (Timing.CurTime, end));
+        var aura = EnsureComp<RuneAuraComponent>(target);
+        if (aura.Charms.Contains(alert.Id))
+            return;
+
+        aura.Charms.Add(alert.Id);
+        Dirty(target, aura);
+    }
+
+    private void ClearCharm(EntityUid target, ProtoId<AlertPrototype> alert)
+    {
+        _alerts.ClearAlert(target, alert);
+        if (!TryComp<RuneAuraComponent>(target, out var aura) || !aura.Charms.Remove(alert.Id))
+            return;
+
+        Dirty(target, aura);
+        if (aura.Charms.Count == 0 && aura.Shields == 0)
+            RemCompDeferred<RuneAuraComponent>(target);
+    }
+
+    private void SetAuraShields(EntityUid target, int count)
+    {
+        if (count <= 0 && !HasComp<RuneAuraComponent>(target))
+            return;
+
+        var aura = EnsureComp<RuneAuraComponent>(target);
+        if (aura.Shields == count)
+            return;
+
+        aura.Shields = count;
+        Dirty(target, aura);
+        if (aura.Charms.Count == 0 && aura.Shields == 0)
+            RemCompDeferred<RuneAuraComponent>(target);
     }
 }

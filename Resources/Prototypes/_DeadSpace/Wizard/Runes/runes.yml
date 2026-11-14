@@ -405,7 +405,7 @@
   description: rune-element-air-desc
   kind: Element
   syllable: rune-element-air-syllable
-  color: "#d8f4ff"
+  color: "#6fe8cf"
   strain: 5
   order: 8
   surge: RuneSurgeAir
@@ -448,7 +448,7 @@
   description: rune-element-death-desc
   kind: Element
   syllable: rune-element-death-syllable
-  color: "#8c8c9e"
+  color: "#e6d6a8"
   strain: 6
   loudness: 2
   order: 10

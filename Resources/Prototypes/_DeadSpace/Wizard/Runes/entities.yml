@@ -35,7 +35,52 @@
   - type: WorldTargetAction
     event: !type:RuneScrollActionEvent
 
-# Свиток
+# Свиток и перо
+
+- type: entity
+  parent: BaseItem
+  id: WizardRuneQuill
+  name: рунное перо
+  description: Перо, что пишет светом. Коснитесь им чистого листа и начертите форму со стихией, чтобы вложить их в свиток.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/pens.rsi
+    layers:
+    - state: pen
+      color: "#b07bff"
+    - state: pen
+      color: "#e6d6ff66"
+      shader: unshaded
+  - type: Item
+    sprite: Objects/Misc/pens.rsi
+    heldPrefix: pen
+    size: Tiny
+  - type: RuneQuill
+  - type: PointLight
+    color: "#b07bff"
+    radius: 1
+    energy: 0.8
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileChaosMorph
+  name: болт превращения
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#ff6ad5"
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 1
+  - type: PointLight
+    color: "#ff6ad5"
+    radius: 1.5
+    energy: 2
 
 - type: entity
   parent: [ BaseItem, BaseMagicalContraband ]
@@ -44,10 +89,17 @@
   description: Бумага, исписанная светящимися рунами. Прочесть её может кто угодно. Пережить сможет не каждый.
   components:
   - type: Sprite
-    sprite: Objects/Magic/magicactions.rsi
+    sprite: _DeadSpace/Wizard/rune_scroll.rsi
     layers:
-    - state: spell_default
-      color: "#d9b3ff"
+    - state: scroll
+    - state: form-RuneFormProjectile
+      map: [ "rune-form" ]
+      visible: false
+      shader: unshaded
+    - state: element-RuneElementFire
+      map: [ "rune-element" ]
+      visible: false
+      shader: unshaded
   - type: Item
     size: Tiny
   - type: RuneScroll
@@ -66,6 +118,22 @@
 # Снаряды
 
 - type: entity
+  parent: ProjectileFireball
+  id: RuneProjectileFireball
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 6
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 6
+    intensitySlope: 3
+    totalIntensity: 30
+    maxTileBreak: 0
+
+- type: entity
   parent: BaseBullet
   id: RuneProjectileIce
   name: ледяной шар
@@ -79,7 +147,7 @@
   - type: Projectile
     damage:
       types:
-        Cold: 14
+        Cold: 20
   - type: StunOnCollide
     slowdownAmount: 4
     walkSpeedModifier: 0.5
@@ -102,11 +170,8 @@
   - type: Projectile
     damage:
       types:
-        Blunt: 20
-        Structural: 40
-  - type: StunOnCollide
-    knockdownAmount: 1.5
-    drop: true
+        Blunt: 30
+        Structural: 60
 
 - type: entity
   parent: BaseBullet
@@ -123,8 +188,6 @@
     damage:
       types:
         Shock: 10
-  - type: StaminaDamageOnCollide
-    damage: 40
   - type: PointLight
     color: "#fff36b"
     radius: 1.5
@@ -146,8 +209,8 @@
     ignoreResistances: true
     damage:
       groups:
-        Brute: -15
-        Burn: -15
+        Brute: -20
+        Burn: -20
   - type: PointLight
     color: "#6dff8f"
     radius: 1.5
@@ -358,23 +421,17 @@
   - type: RespiratorImmunity
 
 - type: entity
-  id: RuneStoneShield
-  name: каменный щит
+  id: RuneWaterGuardTemplate
   categories: [ HideSpawnMenu ]
   components:
-  - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/meteor.rsi
-    drawdepth: Overdoors
-    scale: 0.4,0.4
-    layers:
-    - state: large
-  - type: PointLight
-    color: "#c9b59a"
-    radius: 1
-    energy: 0.6
-  - type: Tag
-    tags:
-    - HideContextMenu
+  - type: RuneWard
+    modifier: RuneWaterGuard
+
+- type: entity
+  id: RunePacifiedTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Pacified
 
 - type: entity
   id: RuneStoneStrideTemplate
@@ -611,7 +668,7 @@
       119: Dead
 
 - type: entity
-  parent: MobGoliath
+  parent: MobLavalandGoliath
   id: RuneSummonGoliath
   suffix: Призыв мага
   categories: [ HideSpawnMenu ]
@@ -650,6 +707,9 @@
     radius: 1.5
     energy: 3
     color: yellow
+  - type: BatteryAmmoProvider
+    proto: RuneProjectileSpark
+    fireCost: 50
 
 - type: entity
   parent: MobPenguin
@@ -678,6 +738,21 @@
   - type: NpcFactionMember
     factions:
     - Wizard
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      150: Dead
+  - type: RechargeBasicEntityAmmo
+    showExamineText: false
+    rechargeCooldown: 3
+    rechargeSound: null
+  - type: BasicEntityAmmoProvider
+    proto: BasiliskRay
+    capacity: 3
+    count: 3
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 4
 
 # Плитки сплавов
 
@@ -770,7 +845,37 @@
     Heat: 0
     Caustic: 0.5
 
+- type: damageModifierSet
+  id: RuneWaterGuard
+  coefficients:
+    Heat: 0.3
+
 # Полиморфы хаоса
+
+- type: polymorph
+  id: RuneChaosMonkey
+  configuration:
+    entity: MobMonkey
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: false
+    revertOnDeath: true
+    duration: 30
+
+- type: polymorph
+  id: RuneChaosBread
+  configuration:
+    entity: FoodBreadPlain
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: false
+    revertOnDeath: true
+    revertOnEat: true
+    duration: 30
 
 - type: polymorph
   id: RuneChaosChicken
@@ -825,9 +930,9 @@
   - type: Projectile
     damage:
       types:
-        Blunt: 4
+        Blunt: 8
   - type: StaminaDamageOnCollide
-    damage: 30
+    damage: 60
   - type: StunOnCollide
     slowdownAmount: 2
     walkSpeedModifier: 0.7
@@ -860,6 +965,9 @@
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.45
     sprintSpeedModifier: 0.45
+  - type: RuneReagentContact
+    extinguish: true
+    interval: 0.5
   - type: TimedDespawn
     lifetime: 15
   - type: Tag
@@ -876,10 +984,12 @@
     sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
     layers:
     - state: spell
-      color: "#d8f4ff88"
+      color: "#6fe8cf88"
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.25
     sprintSpeedModifier: 0.25
+  - type: RuneReagentContact
+    extinguish: false
   - type: TimedDespawn
     lifetime: 10
 
@@ -946,6 +1056,22 @@
   - type: NpcFactionMember
     factions:
     - Wizard
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavSmash: !type:Bool
+        true
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    angle: 0
+    animation: WeaponArcBite
+    attackRate: 1.5
+    damage:
+      types:
+        Piercing: 6
+        Bloodloss: 2
 
 # Превращения
 

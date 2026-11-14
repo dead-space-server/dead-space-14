@@ -55,6 +55,8 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
     private const float SyllableInterval = 0.25f;
     private const float FizzleStrain = 3f;
     private const float MismatchStrain = 6f;
+    private bool _quiet;
+    private string? _failure;
 
     public override void Initialize()
     {
@@ -76,11 +78,20 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         InitializeEffects();
         InitializeTimeStop();
         InitializeShields();
+        InitializeMarks();
+        InitializeSigil();
+        InitializeHazards();
+        SubscribeNetworkEvent<RuneScrollCastMessage>(OnScrollCast);
+        SubscribeLocalEvent<RuneQuillComponent, AfterInteractEvent>(OnQuillInteract);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+        UpdateMarks();
+        UpdateSigils();
+        UpdateHazards();
+        UpdateBlastWards();
         UpdateTimedComponents();
         UpdateImmortality();
         UpdateShields();
@@ -159,12 +170,17 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
             msg.Index != msg.Chain.Count - 1 ||
             msg.Chain[^1] != msg.Rune ||
             !ValidChain(caster.Comp, msg.Chain) ||
-            Timing.CurTime < caster.Comp.NextSyllable)
+            !_blocker.CanInteract(caster, null))
+            return;
+
+        DrawSigil(caster, msg.Chain);
+
+        if (Timing.CurTime < caster.Comp.NextSyllable)
             return;
 
         caster.Comp.NextSyllable = Timing.CurTime + TimeSpan.FromSeconds(SyllableInterval);
 
-        if (!_blocker.CanInteract(caster, null) || !_blocker.CanSpeak(caster))
+        if (!_blocker.CanSpeak(caster))
             return;
 
         var runes = ResolveRunes(msg.Chain);
@@ -181,6 +197,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
 
         caster.Comp.NextSyllable = Timing.CurTime + TimeSpan.FromSeconds(SyllableInterval);
         SetStrain(caster, caster.Comp, GetStrain(caster.Comp) + FizzleStrain);
+        StumbleSigil(caster);
     }
 
     private void OnCast(RuneCastMessage msg, EntitySessionEventArgs args)
@@ -190,7 +207,8 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
 
         if (!ValidChain(caster.Comp, msg.Runes))
         {
-            _popup.PopupEntity(Loc.GetString("rune-cast-unknown"), caster, caster, PopupType.SmallCaution);
+            EndSigil(caster, RuneSigilState.Fizzle);
+            Reply(args, false, Loc.GetString("rune-cast-unknown"));
             return;
         }
 
@@ -198,30 +216,55 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
 
         if (!_blocker.CanInteract(caster, null))
         {
-            _popup.PopupEntity(Loc.GetString("rune-cast-incapacitated"), caster, caster, PopupType.SmallCaution);
+            Reply(args, false, Loc.GetString("rune-cast-incapacitated"));
             return;
         }
 
         if (!TryCompose(msg.Runes, out var composition) || composition.Spell == null)
         {
             SetStrain(caster, caster.Comp, GetStrain(caster.Comp) + MismatchStrain);
-            _popup.PopupEntity(Loc.GetString("rune-cast-mismatch"), caster, caster, PopupType.SmallCaution);
+            EndSigil(caster, RuneSigilState.Fizzle);
+            Reply(args, false, Loc.GetString("rune-cast-mismatch"));
             return;
         }
 
         if (msg.Inscribe)
         {
-            StartInscribe(caster, msg.Runes);
+            StartInscribe(caster, msg.Runes, msg.Paper);
             return;
         }
 
         if (!_blocker.CanSpeak(caster))
         {
-            _popup.PopupEntity(Loc.GetString("rune-cast-mute"), caster, caster, PopupType.SmallCaution);
+            Reply(args, false, Loc.GetString("rune-cast-mute"));
             return;
         }
 
-        TryCast(caster, composition, target, false);
+        _quiet = true;
+        _failure = null;
+        try
+        {
+            var cast = TryCast(caster, composition, target, false);
+            Reply(args, cast, _failure);
+        }
+        finally
+        {
+            _quiet = false;
+        }
+    }
+
+    private void Reply(EntitySessionEventArgs args, bool success, string? reason)
+    {
+        RaiseNetworkEvent(new RuneCastResultEvent(success, reason), args.SenderSession);
+    }
+
+    private bool Fail(EntityUid caster, string message)
+    {
+        _failure = message;
+        if (!_quiet)
+            _popup.PopupEntity(message, caster, caster, PopupType.SmallCaution);
+
+        return false;
     }
 
     private bool TryCast(Entity<RuneCasterComponent> caster, RuneComposition composition, EntityCoordinates target, bool scroll)
@@ -231,33 +274,28 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
 
         if (!_arenaCastsEnabled && spell.ID == "RuneUltimateArena")
         {
-            _popup.PopupEntity(Loc.GetString("rune-cast-arena-disabled"), caster, caster, PopupType.SmallCaution);
-            return false;
+            return Fail(caster, Loc.GetString("rune-cast-arena-disabled"));
         }
 
         if (HasComp<RuneArenaFighterComponent>(caster))
         {
-            _popup.PopupEntity(Loc.GetString("rune-arena-no-magic"), caster, caster, PopupType.SmallCaution);
-            return false;
+            return Fail(caster, Loc.GetString("rune-arena-no-magic"));
         }
 
         if (ultimate && Timing.CurTime < caster.Comp.UltimateReady)
         {
             var left = (int) MathF.Ceiling((float) (caster.Comp.UltimateReady - Timing.CurTime).TotalSeconds);
-            _popup.PopupEntity(Loc.GetString("rune-ultimate-cooldown", ("seconds", left)), caster, caster, PopupType.SmallCaution);
-            return false;
+            return Fail(caster, Loc.GetString("rune-ultimate-cooldown", ("seconds", left)));
         }
 
         if (spell.RequiresWounded > 0f && !IsWounded(caster, spell.RequiresWounded))
         {
-            _popup.PopupEntity(Loc.GetString("rune-cast-not-wounded"), caster, caster, PopupType.SmallCaution);
-            return false;
+            return Fail(caster, Loc.GetString("rune-cast-not-wounded"));
         }
 
         if (spell.OncePerRound && _usedThisRound.Contains(spell.ID))
         {
-            _popup.PopupEntity(Loc.GetString("rune-cast-once"), caster, caster, PopupType.SmallCaution);
-            return false;
+            return Fail(caster, Loc.GetString("rune-cast-once"));
         }
 
         if (caster.Comp.PortalPending is { } pending && !spell.Effects.Exists(e => e is RunePortalEffect))
@@ -269,15 +307,13 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
 
         if (spell.RequiresClothes && !WearsRobes(caster))
         {
-            _popup.PopupEntity(Loc.GetString("spell-requirements-failed"), caster, caster, PopupType.SmallCaution);
-            return false;
+            return Fail(caster, Loc.GetString("spell-requirements-failed"));
         }
 
         if (caster.Comp.Cooldowns.TryGetValue(composition.Key, out var cooldown) && Timing.CurTime < cooldown.Ready)
         {
             var left = (int) MathF.Ceiling((float) (cooldown.Ready - Timing.CurTime).TotalSeconds);
-            _popup.PopupEntity(Loc.GetString("rune-cast-cooldown", ("seconds", left)), caster, caster, PopupType.SmallCaution);
-            return false;
+            return Fail(caster, Loc.GetString("rune-cast-cooldown", ("seconds", left)));
         }
 
         if (spell.Targeting == RuneTargeting.Self)
@@ -290,16 +326,14 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
             var to = _transform.ToMapCoordinates(target);
             if (from.MapId != to.MapId || (from.Position - to.Position).Length() > spell.Range * composition.RangeScale + 0.5f)
             {
-                _popup.PopupEntity(Loc.GetString("rune-cast-range"), caster, caster, PopupType.SmallCaution);
-                return false;
+                return Fail(caster, Loc.GetString("rune-cast-range"));
             }
         }
 
         var entity = FindTarget(caster, target, spell.Targeting == RuneTargeting.EntityOrSelf);
         if (entity == null && spell.Targeting is RuneTargeting.Entity or RuneTargeting.EntityOrSelf)
         {
-            _popup.PopupEntity(Loc.GetString("rune-cast-no-target"), caster, caster, PopupType.SmallCaution);
-            return false;
+            return Fail(caster, Loc.GetString("rune-cast-no-target"));
         }
 
         var strain = ComputeStrain(caster.Comp, composition) * (scroll ? caster.Comp.ScrollStrainScale : 1f);
@@ -351,6 +385,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
                 StartUltimateCooldown(caster);
 
             SetStrain(caster, caster.Comp, caster.Comp.MaxStrain * 0.5f);
+            FinishSigil(caster, composition, RuneSigilState.Fizzle);
             var element = composition.Second != null && _random.Prob(0.5f) ? composition.Second : composition.Element;
             var fatal = after > caster.Comp.MaxStrain * caster.Comp.FatalOverload && strain >= FatalMinimumStrain;
             Surge(caster, fatal ? element.FatalSurge ?? element.Surge : element.Surge);
@@ -363,6 +398,9 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         var context = new RuneCastContext(caster, target, entity, composition);
         foreach (var effect in spell.Effects)
             Apply(context, effect);
+
+        FinishSigil(caster, composition, RuneSigilState.Cast);
+        RaiseImpact(caster, composition, spell, target, entity);
 
         if (ultimate && !context.KeepUltimateReady)
             StartUltimateCooldown(caster);
@@ -506,17 +544,26 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         _chat.SendIncantation(caster, plain, markup, RuneIncantation.HearingRange(loudness));
     }
 
-    private void StartInscribe(Entity<RuneCasterComponent> caster, List<string> runes)
+    private void StartInscribe(Entity<RuneCasterComponent> caster, List<string> runes, NetEntity? chosen)
     {
         if (runes.Count > ScrollRunes)
         {
             _popup.PopupEntity(Loc.GetString("rune-inscribe-too-complex"), caster, caster, PopupType.SmallCaution);
+            EndSigil(caster, RuneSigilState.Fizzle);
             return;
         }
 
-        if (_hands.GetActiveItem(caster.Owner) is not { } paper || !HasComp<PaperComponent>(paper) || HasComp<RuneScrollComponent>(paper))
+        if (!HoldsQuill(caster))
+        {
+            _popup.PopupEntity(Loc.GetString("rune-inscribe-need-quill"), caster, caster, PopupType.SmallCaution);
+            EndSigil(caster, RuneSigilState.Fade);
+            return;
+        }
+
+        if (FindPaper(caster, chosen) is not { } paper)
         {
             _popup.PopupEntity(Loc.GetString("rune-inscribe-need-paper"), caster, caster, PopupType.SmallCaution);
+            EndSigil(caster, RuneSigilState.Fade);
             return;
         }
 
@@ -531,12 +578,101 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
             _popup.PopupEntity(Loc.GetString("rune-inscribe-start"), caster, caster);
     }
 
+    private bool HoldsQuill(EntityUid uid)
+    {
+        foreach (var held in _hands.EnumerateHeld(uid))
+        {
+            if (HasComp<RuneQuillComponent>(held))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool IsBlankPaper(EntityUid uid)
+    {
+        return HasComp<PaperComponent>(uid) && !HasComp<RuneScrollComponent>(uid) && !TerminatingOrDeleted(uid);
+    }
+
+    private EntityUid? FindPaper(EntityUid caster, NetEntity? chosen)
+    {
+        if (chosen is { } net && TryGetEntity(net, out var picked) && IsBlankPaper(picked.Value) && _interaction.InRangeUnobstructed(caster, picked.Value))
+            return picked;
+
+        foreach (var held in _hands.EnumerateHeld(caster))
+        {
+            if (IsBlankPaper(held))
+                return held;
+        }
+
+        return null;
+    }
+
+    private void OnQuillInteract(Entity<RuneQuillComponent> ent, ref AfterInteractEvent args)
+    {
+        if (args.Handled || !args.CanReach || args.Target is not { } paper || !IsBlankPaper(paper))
+            return;
+
+        args.Handled = true;
+        if (!HasComp<RuneCasterComponent>(args.User))
+        {
+            _popup.PopupEntity(Loc.GetString("rune-quill-silent"), args.User, args.User);
+            return;
+        }
+
+        if (TryComp<ActorComponent>(args.User, out var actor))
+            RaiseNetworkEvent(new RuneQuillOpenEvent(GetNetEntity(paper)), actor.PlayerSession);
+    }
+
+    private void OnScrollCast(RuneScrollCastMessage msg, EntitySessionEventArgs args)
+    {
+        if (!TryGetCaster(args, out var caster) ||
+            !TryGetEntity(msg.Scroll, out var scroll) ||
+            !TryComp<RuneScrollComponent>(scroll, out var comp) ||
+            comp.BoundTo != caster.Owner)
+            return;
+
+        if (!IsCarried(scroll.Value, caster))
+        {
+            Reply(args, false, Loc.GetString("rune-scroll-not-carried"));
+            return;
+        }
+
+        if (!_blocker.CanInteract(caster, null))
+        {
+            Reply(args, false, Loc.GetString("rune-cast-incapacitated"));
+            return;
+        }
+
+        var chain = comp.Runes.Select(r => r.Id).ToList();
+        if (!TryCompose(chain, out var composition) || composition.Spell == null)
+            return;
+
+        _quiet = true;
+        _failure = null;
+        try
+        {
+            var cast = TryCast(caster, composition, GetCoordinates(msg.Target), true);
+            if (cast && comp.Action is { } action && TryGetCooldown(caster.Comp, composition.Key, out var left, out _))
+                _actions.SetCooldown(action, TimeSpan.FromSeconds(left));
+
+            Reply(args, cast, _failure);
+            if (cast)
+                QueueDel(scroll.Value);
+        }
+        finally
+        {
+            _quiet = false;
+        }
+    }
+
     private void OnInscribed(Entity<RuneCasterComponent> ent, ref RuneInscribeDoAfterEvent args)
     {
         if (args.Cancelled || args.Handled || args.Used is not { } paper || Deleted(paper) || !ValidChain(ent.Comp, args.Runes) || args.Runes.Count > ScrollRunes)
             return;
 
         args.Handled = true;
+        EndSigil(ent, RuneSigilState.Cast);
         var coords = Transform(paper).Coordinates;
         QueueDel(paper);
 
@@ -642,8 +778,13 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         if (!TryCompose(chain, out var composition) || composition.Spell == null)
             return;
 
-        if (TryCast(ent, composition, args.Target, true) && TryGetCooldown(ent.Comp, composition.Key, out var left, out _))
+        if (!TryCast(ent, composition, args.Target, true))
+            return;
+
+        if (TryGetCooldown(ent.Comp, composition.Key, out var left, out _))
             _actions.SetCooldown(args.Action.Owner, TimeSpan.FromSeconds(left));
+
+        QueueDel(scroll);
     }
 
     private bool IsCarried(EntityUid item, EntityUid holder)
