@@ -1,0 +1,110 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created by Blue Dog Doc for Space Station 14 server Мёртвый Космос",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "phoenix",
+            "delays": [
+                [
+                    0.15,
+                    0.15,
+                    0.15,
+                    0.15
+                ]
+            ]
+        },
+        {
+            "name": "ice-armor",
+            "delays": [
+                [
+                    0.4,
+                    0.3,
+                    0.4,
+                    0.3
+                ]
+            ]
+        },
+        {
+            "name": "stone-skin",
+            "delays": [
+                [
+                    0.6,
+                    0.2,
+                    0.2,
+                    0.3
+                ]
+            ]
+        },
+        {
+            "name": "stone-shields",
+            "delays": [
+                [
+                    0.15,
+                    0.15,
+                    0.15,
+                    0.15
+                ]
+            ]
+        },
+        {
+            "name": "lightning-rod",
+            "delays": [
+                [
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "water-bubble",
+            "delays": [
+                [
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.3
+                ]
+            ]
+        },
+        {
+            "name": "regeneration",
+            "delays": [
+                [
+                    0.5,
+                    0.15,
+                    0.2,
+                    0.3
+                ]
+            ]
+        },
+        {
+            "name": "viper-blood",
+            "delays": [
+                [
+                    0.4,
+                    0.15,
+                    0.15,
+                    0.4
+                ]
+            ]
+        },
+        {
+            "name": "immortal",
+            "delays": [
+                [
+                    0.25,
+                    0.25,
+                    0.25,
+                    0.25
+                ]
+            ]
+        }
+    ]
+}

@@ -1,0 +1,618 @@
+# Яд
+
+- type: wizardRuneSpell
+  id: RuneSpellVenomSpit
+  name: rune-spell-venom-spit
+  form: RuneFormProjectile
+  element: RuneElementPoison
+  range: 12
+  strain: 12
+  cooldown: 3
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileVenom
+    speed: 20
+    onHit:
+    - !type:RuneInjectEffect
+      reagent: Lead
+      amount: 2
+
+- type: wizardRuneSpell
+  id: RuneSpellMiasmaWall
+  name: rune-spell-miasma-wall
+  form: RuneFormWall
+  element: RuneElementPoison
+  range: 8
+  strain: 14
+  cooldown: 10
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneMiasmaTile
+    pattern: LineAtPoint
+    size: 3
+    rows: 3
+    skipBlocked: false
+
+- type: wizardRuneSpell
+  id: RuneSpellRotBreath
+  name: rune-spell-rot-breath
+  form: RuneFormWave
+  element: RuneElementPoison
+  targeting: Self
+  strain: 20
+  cooldown: 14
+  loudness: 1
+  effects:
+  - !type:RuneInjectEffect
+    target: AroundCaster
+    radius: 3
+    reagent: Lead
+    amount: 1
+  - !type:RuneStaminaEffect
+    target: AroundCaster
+    radius: 3
+    amount: 20
+
+- type: wizardRuneSpell
+  id: RuneSpellViperBite
+  name: rune-spell-viper-bite
+  form: RuneFormTouch
+  element: RuneElementPoison
+  targeting: Entity
+  range: 2
+  strain: 14
+  cooldown: 8
+  effects:
+  - !type:RuneInjectEffect
+    reagent: Lead
+    amount: 5
+  - !type:RuneSlowEffect
+    time: 4
+    multiplier: 0.6
+
+- type: wizardRuneSpell
+  id: RuneSpellViperBlood
+  name: rune-spell-viper-blood
+  form: RuneFormSelf
+  element: RuneElementPoison
+  targeting: Self
+  strain: 16
+  cooldown: 30
+  effects:
+  - !type:RuneComponentsEffect
+    target: Caster
+    template: RuneViperBloodTemplate
+    duration: 120
+    alert: RuneAlertViperBlood
+  - !type:RuneRegenerationEffect
+    target: Caster
+    duration: 120
+    perSecond:
+      groups:
+        Toxin: -1
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Toxin: -15
+
+- type: wizardRuneSpell
+  id: RuneSpellAnimatePoison
+  name: rune-spell-animate-poison
+  form: RuneFormAnimate
+  element: RuneElementPoison
+  range: 8
+  strain: 28
+  cooldown: 25
+  effects:
+  - !type:RuneAnimateEffect
+    template: RuneAnimatePoisonTemplate
+    count: 2
+    radius: 2
+
+- type: wizardRuneSpell
+  id: RuneSpellSummonSnakes
+  name: rune-spell-summon-snakes
+  form: RuneFormSummon
+  element: RuneElementPoison
+  range: 6
+  strain: 24
+  cooldown: 30
+  loudness: 1
+  effects:
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - RuneSummonSnake
+    - RuneSummonSnake
+    - RuneSummonCobra
+    pattern: AreaAtPoint
+    size: 1
+    count: 3
+    lifetime: 45
+    noGhostRole: true
+
+- type: wizardRuneSpell
+  id: RuneSpellMorphPoison
+  name: rune-spell-morph-poison
+  form: RuneFormPolymorph
+  element: RuneElementPoison
+  targeting: EntityOrSelf
+  range: 6
+  strain: 20
+  cooldown: 30
+  absurdity: 1
+  effects:
+  - !type:RunePolymorphEffect
+    polymorph: RuneMorphCockroach
+
+- type: wizardRuneSpell
+  id: RuneSpellGraspPoison
+  name: rune-spell-grasp-poison
+  form: RuneFormGrasp
+  element: RuneElementPoison
+  range: 9
+  strain: 14
+  cooldown: 8
+  effects:
+  - !type:RuneTelekinesisEffect
+  - !type:RuneDamageEffect
+    damage:
+      types:
+        Poison: 10
+
+- type: wizardRuneSpell
+  id: RuneUltimatePlague
+  name: rune-ultimate-plague
+  form: RuneFormUltimate
+  element: RuneElementPoison
+  range: 10
+  strain: 45
+  cooldown: 5
+  loudness: 5
+  effects:
+  - !type:RuneDamageEffect
+    target: AroundPoint
+    radius: 8
+    damage:
+      types:
+        Poison: 25
+  - !type:RuneSlowEffect
+    target: AroundPoint
+    radius: 8
+    time: 8
+    multiplier: 0.6
+  - !type:RuneSpawnEffect
+    prototype: RuneMiasmaTile
+    pattern: AreaAtPoint
+    size: 3
+    skipBlocked: false
+    lifetime: 20
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - RuneSummonSnake
+    pattern: AreaAtPoint
+    size: 3
+    count: 4
+    lifetime: 60
+    noGhostRole: true
+
+# Сплавы яда
+
+- type: wizardRuneFusion
+  id: RuneFusionToxicSmoke
+  name: rune-fusion-toxic-smoke
+  first: RuneElementPoison
+  second: RuneElementFire
+  strain: 12
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Poison: 8
+        Heat: 6
+  - !type:RuneIgniteEffect
+    target: Auto
+    radius: 2
+    fireStacks: 1
+
+- type: wizardRuneFusion
+  id: RuneFusionPoisonFrost
+  name: rune-fusion-poison-frost
+  first: RuneElementPoison
+  second: RuneElementIce
+  strain: 12
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Poison: 8
+        Cold: 6
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 2.5
+    time: 5
+    multiplier: 0.5
+
+- type: wizardRuneFusion
+  id: RuneFusionMold
+  name: rune-fusion-mold
+  first: RuneElementPoison
+  second: RuneElementEarth
+  strain: 12
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneMiasmaTile
+    pattern: Auto
+    size: 1
+    skipBlocked: false
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    damage:
+      types:
+        Poison: 6
+
+- type: wizardRuneFusion
+  id: RuneFusionNeurotoxin
+  name: rune-fusion-neurotoxin
+  first: RuneElementPoison
+  second: RuneElementLightning
+  strain: 16
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Poison: 8
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 2.5
+    amount: 40
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 2.5
+    time: 1
+
+- type: wizardRuneFusion
+  id: RuneFusionRemedy
+  name: rune-fusion-remedy
+  first: RuneElementPoison
+  second: RuneElementLife
+  strain: 12
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Poison: 10
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Toxin: -20
+
+- type: wizardRuneFusion
+  id: RuneFusionAbyssPlague
+  name: rune-fusion-abyss-plague
+  first: RuneElementPoison
+  second: RuneElementVoid
+  strain: 18
+  loudness: 2
+  effects:
+  - !type:RunePushEffect
+    auto: true
+    speed: -8
+    radius: 3
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Poison: 14
+        Asphyxiation: 6
+
+- type: wizardRuneFusion
+  id: RuneFusionRandomAlchemy
+  name: rune-fusion-random-alchemy
+  first: RuneElementPoison
+  second: RuneElementChaos
+  strain: 6
+  absurdity: 3
+  effects:
+  - !type:RuneRandomEffect
+    options:
+    - !type:RunePolymorphEffect
+      target: Auto
+      radius: 2
+      polymorph: RuneMorphCockroach
+    - !type:RuneDamageEffect
+      target: Auto
+      radius: 2.5
+      damage:
+        types:
+          Poison: 20
+    - !type:RuneDamageEffect
+      target: Auto
+      radius: 2.5
+      includeCaster: true
+      ignoreResistances: true
+      damage:
+        groups:
+          Toxin: -20
+    - !type:RuneSpeakEffect
+      target: Auto
+      radius: 3
+      lines: RuneChaosLines
+
+- type: wizardRuneFusion
+  id: RuneFusionPoisonedWell
+  name: rune-fusion-poisoned-well
+  first: RuneElementPoison
+  second: RuneElementWater
+  strain: 12
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneToxinPuddle
+    pattern: Auto
+    size: 1
+    skipBlocked: false
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    damage:
+      types:
+        Poison: 6
+
+- type: wizardRuneFusion
+  id: RuneFusionToxicFog
+  name: rune-fusion-toxic-fog
+  first: RuneElementPoison
+  second: RuneElementAir
+  strain: 14
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 3.5
+    damage:
+      types:
+        Poison: 6
+        Asphyxiation: 4
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 3.5
+    time: 4
+    multiplier: 0.7
+
+- type: wizardRuneFusion
+  id: RuneFusionSepsis
+  name: rune-fusion-sepsis
+  first: RuneElementPoison
+  second: RuneElementBlood
+  strain: 14
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Poison: 10
+        Bloodloss: 10
+
+- type: wizardRuneFusion
+  id: RuneFusionDecay
+  name: rune-fusion-decay
+  first: RuneElementDeath
+  second: RuneElementPoison
+  strain: 16
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Poison: 16
+        Cellular: 6
+  - !type:RuneDecayEffect
+    radius: 2
+    damage:
+      types:
+        Structural: 20
+
+# Срывы
+
+- type: wizardRuneSurge
+  id: RuneSurgePoison
+  entries:
+  - weight: 3
+    popup: rune-surge-poison-self
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Poison: 15
+    - !type:RuneStaminaEffect
+      target: Caster
+      amount: 30
+  - weight: 2
+    popup: rune-surge-poison-cloud
+    effects:
+    - !type:RuneSpawnEffect
+      prototype: RuneMiasmaTile
+      pattern: RingAroundCaster
+      size: 1
+      skipBlocked: false
+
+- type: wizardRuneSurge
+  id: RuneFatalPoison
+  entries:
+  - popup: rune-fatal-poison
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      ignoreResistances: true
+      damage:
+        types:
+          Poison: 400
+    - !type:RuneSpawnEffect
+      prototype: RuneMiasmaTile
+      pattern: AreaAtPoint
+      size: 2
+      skipBlocked: false
+
+# Сущности
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileVenom
+  name: ядовитый плевок
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#8bd450"
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 1
+
+- type: entity
+  id: RuneMiasmaTile
+  name: миазмы
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#8bd45088"
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        layer:
+        - MidImpassable
+  - type: RuneReagentContact
+    reagent: Lead
+    amount: 0.25
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.75
+    sprintSpeedModifier: 0.75
+  - type: PointLight
+    color: "#8bd450"
+    radius: 1.5
+    energy: 1
+  - type: TimedDespawn
+    lifetime: 12
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: RuneToxinPuddle
+  parent: PuddleTemporary
+  suffix: Маг, токсин
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      puddle:
+        maxVol: 1000
+        reagents:
+        - ReagentId: Toxin
+          Quantity: 20
+
+- type: entity
+  id: RuneViperBloodTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RuneWard
+    modifier: RuneViperBlood
+
+- type: damageModifierSet
+  id: RuneViperBlood
+  coefficients:
+    Poison: 0
+    Radiation: 0.5
+
+- type: entity
+  id: RuneAnimatePoisonTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 4
+  - type: MeleeWeapon
+    animation: WeaponArcBite
+    wideAnimation: WeaponArcBite
+    altDisarm: false
+    soundHit: /Audio/Effects/bite.ogg
+    range: 1.2
+    angle: 0.0
+    damage:
+      types:
+        Blunt: 3
+        Poison: 6
+  - type: PointLight
+    color: "#8bd450"
+    radius: 1.5
+    energy: 1
+
+- type: entity
+  parent: MobSmallPurpleSnake
+  id: RuneSummonSnake
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+
+- type: entity
+  parent: MobCobraSpace
+  id: RuneSummonCobra
+  suffix: Призыв мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Wizard
+
+- type: polymorph
+  id: RuneMorphCockroach
+  configuration:
+    entity: MobCockroach
+    forced: true
+    transferName: true
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 20

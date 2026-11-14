@@ -1,0 +1,730 @@
+# Смерть
+
+- type: wizardRuneFusion
+  id: RuneFusionAsh
+  name: rune-fusion-ash
+  first: RuneElementDeath
+  second: RuneElementFire
+  strain: 14
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    ignoreResistances: true
+    damage:
+      types:
+        Heat: 12
+  - !type:RuneGibEffect
+    target: Auto
+    radius: 2.5
+    onlyDead: true
+
+- type: wizardRuneFusion
+  id: RuneFusionIceGrave
+  name: rune-fusion-ice-grave
+  first: RuneElementDeath
+  second: RuneElementIce
+  strain: 16
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Cold: 15
+  - !type:RuneParalyzeEffect
+    target: Auto
+    radius: 2.5
+    time: 3
+
+- type: wizardRuneFusion
+  id: RuneFusionBurial
+  name: rune-fusion-burial
+  first: RuneElementDeath
+  second: RuneElementEarth
+  strain: 18
+  loudness: 2
+  effects:
+  - !type:RuneSpawnEffect
+    prototype: RuneWallMud
+    pattern: RingAtPoint
+    size: 1
+    lifetime: 15
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 1.5
+    time: 3
+
+- type: wizardRuneFusion
+  id: RuneFusionGalvanism
+  name: rune-fusion-galvanism
+  first: RuneElementDeath
+  second: RuneElementLightning
+  strain: 16
+  loudness: 2
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Shock: 15
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 2.5
+    amount: 50
+
+- type: wizardRuneFusion
+  id: RuneFusionTime
+  name: rune-fusion-time
+  first: RuneElementDeath
+  second: RuneElementLife
+  strain: 8
+  loudness: 1
+  absurdity: 1
+  effects:
+  - !type:RuneDecayEffect
+    radius: 2.5
+    damage:
+      types:
+        Structural: 40
+        Blunt: 20
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 2.5
+    time: 15
+    multiplier: 0.7
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 2.5
+    amount: 25
+  - !type:RuneSpeakEffect
+    target: Auto
+    radius: 2.5
+    lines: RuneOldAgeLines
+  formEffects:
+    RuneFormSelf:
+    - !type:RuneDamageEffect
+      target: Caster
+      ignoreResistances: true
+      damage:
+        groups:
+          Brute: -20
+          Burn: -20
+          Toxin: -10
+    - !type:RuneExtinguishEffect
+      target: Caster
+    RuneFormWave:
+    - !type:RuneDecayEffect
+      aroundCaster: true
+      radius: 4
+      damage:
+        types:
+          Structural: 30
+          Blunt: 15
+    - !type:RuneSlowEffect
+      target: AroundCaster
+      radius: 4
+      time: 12
+      multiplier: 0.7
+    - !type:RuneSpeakEffect
+      target: AroundCaster
+      radius: 4
+      lines: RuneOldAgeLines
+    RuneFormUltimate:
+    - !type:RuneTimeStopEffect
+      radius: 5
+      duration: 30
+
+- type: wizardRuneFusion
+  id: RuneFusionReaper
+  name: rune-fusion-reaper
+  first: RuneElementDeath
+  second: RuneElementVoid
+  strain: 20
+  loudness: 3
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2
+    ignoreResistances: true
+    damage:
+      types:
+        Slash: 20
+  - !type:RuneGibEffect
+    target: Auto
+    radius: 2
+    onlyDead: true
+
+- type: wizardRuneFusion
+  id: RuneFusionDanceMacabre
+  name: rune-fusion-dance-macabre
+  first: RuneElementDeath
+  second: RuneElementChaos
+  strain: 10
+  absurdity: 3
+  effects:
+  - !type:RuneSpeakEffect
+    target: Auto
+    radius: 4
+    onlyDead: true
+    lines: RuneDeadLines
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 4
+    time: 6
+    multiplier: 0.6
+
+- type: wizardRuneFusion
+  id: RuneFusionDrowning
+  name: rune-fusion-drowning
+  first: RuneElementDeath
+  second: RuneElementWater
+  strain: 16
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Asphyxiation: 22
+  - !type:RuneSlowEffect
+    target: Auto
+    radius: 2.5
+    time: 5
+    multiplier: 0.5
+
+- type: wizardRuneFusion
+  id: RuneFusionLastBreath
+  name: rune-fusion-last-breath
+  first: RuneElementDeath
+  second: RuneElementAir
+  strain: 14
+  loudness: 1
+  effects:
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Asphyxiation: 15
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      groups:
+        Airloss: -30
+
+- type: wizardRuneFusion
+  id: RuneFusionSacrifice
+  name: rune-fusion-sacrifice
+  first: RuneElementDeath
+  second: RuneElementBlood
+  strain: 14
+  loudness: 3
+  effects:
+  - !type:RuneGibEffect
+    target: Auto
+    radius: 2.5
+    onlyDead: true
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      types:
+        Bloodloss: -40
+      groups:
+        Brute: -40
+        Burn: -20
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - PuddleBloodSmall
+    pattern: Auto
+    size: 2
+    count: 4
+
+# Ультима
+
+- type: wizardRuneSpell
+  id: RuneUltimateMeteors
+  name: rune-ultimate-meteors
+  form: RuneFormUltimate
+  element: RuneElementFire
+  range: 12
+  strain: 45
+  cooldown: 5
+  loudness: 5
+  effects:
+  - !type:RuneBarrageEffect
+    prototype: RuneMeteorStrike
+    count: 8
+    radius: 5
+    interval: 0.35
+
+- type: wizardRuneSpell
+  id: RuneUltimateIceAge
+  name: rune-ultimate-ice-age
+  form: RuneFormUltimate
+  element: RuneElementIce
+  range: 10
+  strain: 45
+  cooldown: 5
+  loudness: 4
+  effects:
+  - !type:RuneParalyzeEffect
+    target: AroundPoint
+    radius: 7
+    time: 6
+  - !type:RuneDamageEffect
+    target: AroundPoint
+    radius: 7
+    damage:
+      types:
+        Cold: 20
+  - !type:RuneSpawnEffect
+    prototype: RuneSlickTile
+    pattern: AreaAtPoint
+    size: 4
+
+- type: wizardRuneSpell
+  id: RuneUltimateQuake
+  name: rune-ultimate-quake
+  form: RuneFormUltimate
+  element: RuneElementEarth
+  range: 10
+  strain: 45
+  cooldown: 5
+  loudness: 5
+  effects:
+  - !type:RuneKnockdownEffect
+    target: AroundPoint
+    radius: 9
+    time: 4
+  - !type:RuneDamageEffect
+    target: AroundPoint
+    radius: 9
+    damage:
+      types:
+        Blunt: 15
+  - !type:RuneDecayEffect
+    radius: 6
+    damage:
+      types:
+        Structural: 60
+
+- type: wizardRuneSpell
+  id: RuneUltimateWrath
+  name: rune-ultimate-wrath
+  form: RuneFormUltimate
+  element: RuneElementLightning
+  range: 12
+  strain: 45
+  cooldown: 5
+  loudness: 5
+  effects:
+  - !type:RuneBarrageEffect
+    prototype: WizardEffectLightning
+    count: 6
+    radius: 6
+    interval: 0.5
+
+- type: wizardRuneSpell
+  id: RuneUltimateResurrection
+  name: rune-ultimate-resurrection
+  form: RuneFormUltimate
+  element: RuneElementLife
+  targeting: EntityOrSelf
+  range: 3
+  strain: 40
+  cooldown: 5
+  loudness: 3
+  effects:
+  - !type:RuneReviveEffect
+    immortality: 15
+  - !type:RuneDamageEffect
+    target: AroundPoint
+    radius: 3
+    includeCaster: true
+    ignoreResistances: true
+    mendInternal: true
+    damage:
+      groups:
+        Brute: -30
+        Burn: -30
+
+- type: wizardRuneSpell
+  id: RuneUltimatePortal
+  name: rune-ultimate-portal
+  form: RuneFormUltimate
+  element: RuneElementVoid
+  range: 12
+  strain: 30
+  cooldown: 1
+  loudness: 3
+  effects:
+  - !type:RunePortalEffect
+
+- type: wizardRuneSpell
+  id: RuneUltimateChaosMorph
+  name: rune-ultimate-chaos-morph
+  form: RuneFormUltimate
+  element: RuneElementChaos
+  range: 14
+  strain: 30
+  cooldown: 5
+  loudness: 5
+  absurdity: 5
+  effects:
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileChaosMorph
+    count: 5
+    spread: 14
+    speed: 18
+    onHit:
+    - !type:RuneRandomEffect
+      options:
+      - !type:RunePolymorphEffect
+        polymorph: RuneChaosMonkey
+        scaleDuration: true
+      - !type:RunePolymorphEffect
+        polymorph: RuneChaosBread
+        scaleDuration: true
+
+- type: wizardRuneSpell
+  id: RuneUltimateFlood
+  name: rune-ultimate-flood
+  form: RuneFormUltimate
+  element: RuneElementWater
+  range: 10
+  strain: 45
+  cooldown: 5
+  loudness: 4
+  effects:
+  - !type:RunePushEffect
+    atPoint: true
+    speed: 16
+    radius: 8
+  - !type:RuneExtinguishEffect
+    target: AroundPoint
+    radius: 8
+    includeCaster: true
+  - !type:RuneStaminaEffect
+    target: AroundPoint
+    radius: 6
+    amount: 40
+  - !type:RuneSpawnEffect
+    prototype: RuneWaterPuddle
+    pattern: AreaAtPoint
+    size: 3
+
+- type: wizardRuneSpell
+  id: RuneUltimateTornado
+  name: rune-ultimate-tornado
+  form: RuneFormUltimate
+  element: RuneElementAir
+  range: 10
+  strain: 45
+  cooldown: 5
+  loudness: 4
+  effects:
+  - !type:RuneTeleportEffect
+    mode: ScatterTargets
+    radius: 10
+    reach: 6
+  - !type:RuneSpawnEffect
+    prototype: WizardSmoke
+    pattern: AtPoint
+    skipBlocked: false
+
+- type: wizardRuneSpell
+  id: RuneUltimateBloodMoon
+  name: rune-ultimate-blood-moon
+  form: RuneFormUltimate
+  element: RuneElementBlood
+  range: 10
+  strain: 40
+  cooldown: 5
+  loudness: 5
+  effects:
+  - !type:RuneDamageEffect
+    target: AroundPoint
+    radius: 7
+    damage:
+      types:
+        Bloodloss: 25
+  - !type:RuneDamageEffect
+    target: Caster
+    ignoreResistances: true
+    damage:
+      types:
+        Bloodloss: -50
+      groups:
+        Brute: -50
+        Burn: -30
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - PuddleBlood
+    pattern: AreaAtPoint
+    size: 4
+    count: 8
+
+# Срывы смерти
+
+- type: wizardRuneSurge
+  id: RuneSurgeDeath
+  entries:
+  - weight: 3
+    popup: rune-surge-death-touch
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      damage:
+        types:
+          Asphyxiation: 20
+          Cold: 10
+  - weight: 2
+    popup: rune-surge-death-vision
+    effects:
+    - !type:RuneParalyzeEffect
+      target: Caster
+      time: 4
+
+- type: wizardRuneSurge
+  id: RuneFatalDeath
+  entries:
+  - popup: rune-fatal-death
+    effects:
+    - !type:RuneDamageEffect
+      target: Caster
+      ignoreResistances: true
+      damage:
+        types:
+          Asphyxiation: 500
+
+# Сущности
+
+- type: entity
+  id: RuneTimeStopField
+  name: остановленное время
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Structures/Walls/clock.rsi
+    drawdepth: Overdoors
+    layers:
+    - state: wall_gear
+      shader: unshaded
+      color: "#ffe9a8"
+  - type: PointLight
+    color: "#ffe9a8"
+    radius: 6
+    energy: 1.5
+  - type: TimedDespawn
+    lifetime: 120
+
+- type: entity
+  id: RuneTimeStopTile
+  name: застывший миг
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Tiles/Misc/clockwork/clockwork_lattice.rsi
+    drawdepth: FloorObjects
+    layers:
+    - state: clock_lattice
+      color: "#ffe9a8aa"
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: RuneTimeStopGear
+  name: часовая шестерня
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Structures/Walls/clock.rsi
+    drawdepth: Overdoors
+    layers:
+    - state: clock0
+      shader: unshaded
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: BasePortal
+  id: RuneWizardPortal
+  name: рунный портал
+  description: Мерцающая дверь в пространстве. Ведёт туда, куда захотел маг.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: portal-blue
+      color: "#c08aff"
+  - type: PointLight
+    color: "#a77bff"
+    radius: 3
+    energy: 1.5
+    netsync: false
+
+- type: entity
+  id: RuneArenaBarrier
+  name: барьер арены
+  description: Отсюда только смотреть.
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - GlassLayer
+  - type: Sprite
+    sprite: Structures/Magic/forcewall.rsi
+    layers:
+    - state: forcewall
+      color: "#ff6ad5aa"
+
+- type: startingGear
+  id: RuneArenaChallengerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorPurple
+    head: ClothingHeadHatVioletwizard
+    outerClothing: ClothingOuterWizardViolet
+    shoes: ClothingShoesWizard
+
+- type: entity
+  parent: MobHuman
+  id: RuneArenaChallenger
+  suffix: Арена мага
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GhostRole
+    name: ghost-role-information-rune-challenger-name
+    description: ghost-role-information-rune-challenger-description
+    rules: ghost-role-information-rune-challenger-rules
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes:
+    - RuneArenaChallengerGear
+  - type: RandomMetadata
+    nameSegments:
+    - NamesWizardFirst
+    - NamesWizardLast
+    nameFormat: name-format-wizard
+
+- type: entity
+  id: RuneMeteorStrike
+  name: падающий метеор
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/meteor.rsi
+    drawdepth: Overdoors
+    layers:
+    - state: large
+      shader: unshaded
+  - type: PointLight
+    color: "#ff7a2e"
+    radius: 3
+    energy: 3
+  - type: TimedDespawn
+    lifetime: 1
+  - type: SpawnOnDespawn
+    prototype: RuneMeteorBlast
+
+- type: entity
+  id: RuneMeteorBlast
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TriggerOnSpawn
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 40
+    intensitySlope: 5
+    maxIntensity: 8
+    maxTileBreak: 0
+    canCreateVacuum: false
+    deleteAfterExplosion: true
+  - type: TimedDespawn
+    lifetime: 0.5
+
+- type: entity
+  id: RuneFuelPuddle
+  parent: PuddleTemporary
+  suffix: Маг, топливо
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      puddle:
+        maxVol: 1000
+        reagents:
+        - ReagentId: WeldingFuel
+          Quantity: 20
+
+- type: entity
+  id: RuneWaterPuddle
+  parent: PuddleTemporary
+  suffix: Маг, вода
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      puddle:
+        maxVol: 1000
+        reagents:
+        - ReagentId: Water
+          Quantity: 30
+
+- type: localizedDataset
+  id: RuneOldAgeLines
+  values:
+    prefix: rune-old-age-line-
+    count: 6
+
+- type: localizedDataset
+  id: RuneDeadLines
+  values:
+    prefix: rune-dead-line-
+    count: 6
+
+# Гримуар
+
+- type: listing
+  id: SpellbookRuneElementDeath
+  name: rune-element-death-name
+  description: rune-element-death-desc
+  icon: { sprite: Objects/Magic/magicactions.rsi, state: gib }
+  productEvent: !type:RuneLearnProductEvent
+    rune: RuneElementDeath
+  raiseProductEventOnUser: true
+  disableRefund: true
+  cost:
+    WizCoin: 2
+  categories:
+  - SpellbookRuneElements
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+

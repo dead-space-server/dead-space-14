@@ -127,6 +127,31 @@ public sealed partial class GunSystem : SharedGunSystem
     {
         var speed = MathF.Max(visuals.Speed, 1f);
         var length = trace.Distance / (speed / 5000f);
+        var hold = trace.HoldSeconds * 1000f;
+
+        if (hold > 0f && visuals.Bullet is { } held)
+        {
+            if (trace.Distance > 1f && trace.MuzzleCoordinates is { } heldMuzzle)
+            {
+                if (visuals.MuzzleFlash is { } heldFlash)
+                    RenderHitscanFlash(heldMuzzle, trace.Angle, heldFlash, 1f, false, false, length, delay);
+
+                RenderHitscanBullet(heldMuzzle, trace.Angle, held, visuals.BulletLight, MathF.Max(trace.Distance - 1.5f, 0f), length, delay, hold);
+
+                if (visuals.TravelFlash is { } heldTravel &&
+                    trace.TravelCoordinates is { } heldTravelCoordinates &&
+                    trace.Distance > 1.5f)
+                {
+                    RenderHitscanFlash(heldTravelCoordinates, trace.Angle, heldTravel, MathF.Max(trace.Distance - 1.5f, 0f), true, false, length, delay);
+                }
+            }
+            else
+            {
+                RenderHitscanBullet(trace.ImpactCoordinates, trace.Angle, held, visuals.BulletLight, 0f, 0f, delay, hold);
+            }
+
+            return delay + length + hold;
+        }
 
         if (trace.MuzzleCoordinates is { } muzzleCoordinates)
         {
@@ -198,7 +223,7 @@ public sealed partial class GunSystem : SharedGunSystem
         }
     }
 
-    private void RenderHitscanBullet(NetCoordinates coordinates, Angle angle, ExtendedSpriteSpecifier sprite, HitscanLightVisual? lightVisual, float distance, float length, float delay)
+    private void RenderHitscanBullet(NetCoordinates coordinates, Angle angle, ExtendedSpriteSpecifier sprite, HitscanLightVisual? lightVisual, float distance, float length, float delay, float hold = 0f)
     {
         if (sprite.Sprite is not SpriteSpecifier.Rsi rsi)
             return;
@@ -224,15 +249,17 @@ public sealed partial class GunSystem : SharedGunSystem
         spriteComp[EffectLayers.Unshaded].Visible = true;
         _sprite.LayerSetSprite(spriteEnt, EffectLayers.Unshaded, rsi);
         _sprite.LayerSetRsiState(spriteEnt, EffectLayers.Unshaded, rsi.RsiState);
-        _sprite.SetOffset(spriteEnt, new Vector2(1f, 0f));
+        var parked = distance <= 0f && hold > 0f;
+        _sprite.SetOffset(spriteEnt, parked ? Vector2.Zero : new Vector2(1f, 0f));
         _sprite.SetScale(spriteEnt, sprite.SpriteScale);
         _sprite.SetRotation(spriteEnt, sprite.SpriteRotation ? 1.5708f : 0f);
         _sprite.SetColor(spriteEnt, sprite.SpriteColor);
         _sprite.SetVisible(spriteEnt, delay == 0f);
 
         var time = delay + length;
+        var visibleFor = time + hold;
         var despawn = EnsureComp<TimedDespawnComponent>(ent);
-        despawn.Lifetime = (time / 1000f) + 0.25f;
+        despawn.Lifetime = (visibleFor / 1000f) + 0.25f;
 
         if (delay != 0f)
         {
@@ -246,7 +273,7 @@ public sealed partial class GunSystem : SharedGunSystem
             });
         }
 
-        Timer.Spawn((int) time, () =>
+        Timer.Spawn((int) visibleFor, () =>
         {
             if (TryComp(ent, out SpriteComponent? currentSprite))
                 _sprite.SetVisible((ent, currentSprite), false);
@@ -255,9 +282,11 @@ public sealed partial class GunSystem : SharedGunSystem
                 Lights.SetEnabled(ent, false, currentLight);
         });
 
+        var end = distance <= 0f && hold > 0f ? Vector2.Zero : new Vector2(distance + 1f, 0f);
+        var start = distance <= 0f && hold > 0f ? Vector2.Zero : new Vector2(1f, 0f);
         var anim = new Animation
         {
-            Length = TimeSpan.FromMilliseconds(time),
+            Length = TimeSpan.FromMilliseconds(visibleFor),
             AnimationTracks =
             {
                 new AnimationTrackComponentProperty
@@ -265,11 +294,7 @@ public sealed partial class GunSystem : SharedGunSystem
                     ComponentType = typeof(SpriteComponent),
                     Property = nameof(SpriteComponent.Offset),
                     InterpolationMode = AnimationInterpolationMode.Linear,
-                    KeyFrames =
-                    {
-                        new AnimationTrackProperty.KeyFrame(new Vector2(1f, 0f), delay / 1000f),
-                        new AnimationTrackProperty.KeyFrame(new Vector2(distance + 1f, 0f), time / 1000f),
-                    }
+                    KeyFrames = HoldKeys(start, end, delay / 1000f, time / 1000f, visibleFor / 1000f),
                 }
             }
         };
@@ -282,16 +307,26 @@ public sealed partial class GunSystem : SharedGunSystem
                 ComponentType = typeof(PointLightComponent),
                 Property = nameof(PointLightComponent.Offset),
                 InterpolationMode = AnimationInterpolationMode.Linear,
-                KeyFrames =
-                {
-                    new AnimationTrackProperty.KeyFrame(lightVisual.Offset + new Vector2(1f, 0f), delay / 1000f),
-                    new AnimationTrackProperty.KeyFrame(lightVisual.Offset + new Vector2(distance + 1f, 0f), time / 1000f),
-                }
+                    KeyFrames = HoldKeys(lightVisual.Offset + start, lightVisual.Offset + end, delay / 1000f, time / 1000f, visibleFor / 1000f),
             });
         }
         // DS14-end
 
         _animPlayer.Play(ent, anim, "hitscan-effect");
+    }
+
+    private static List<AnimationTrackProperty.KeyFrame> HoldKeys(Vector2 from, Vector2 to, float delay, float flight, float total)
+    {
+        var keys = new List<AnimationTrackProperty.KeyFrame>
+        {
+            new(from, delay),
+            new(to, flight),
+        };
+
+        if (total > flight)
+            keys.Add(new AnimationTrackProperty.KeyFrame(to, total - flight));
+
+        return keys;
     }
 
     private SharedPointLightComponent SetupHitscanBulletLight(EntityUid uid, HitscanLightVisual lightVisual, Vector2 offset, bool enabled)

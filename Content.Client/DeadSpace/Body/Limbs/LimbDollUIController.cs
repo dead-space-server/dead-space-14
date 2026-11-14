@@ -2,11 +2,13 @@
 
 using System.Numerics;
 using Content.Client.DeadSpace.Surgery;
+using Content.Client.DeadSpace.Wizard.Runes;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Systems.Alerts.Widgets;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Ghost;
 using Content.Shared.Input;
 using Robust.Client.Graphics;
@@ -90,6 +92,9 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
         {
             _health.Zones = Body();
             _health.Pools = Pools();
+            _health.Ether = _entities.TryGetComponent(_player.LocalEntity, out RuneCasterComponent? caster)
+                ? _entities.System<RuneCasterSystem>().GetStrainFraction(caster)
+                : null;
         }
         if (_aim != null)
         {

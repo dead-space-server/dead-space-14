@@ -12,6 +12,12 @@
     belt: ClothingBeltWand
     pocket1: WizardTeleportScroll
     pocket2: WizardsGrimoire
+  storage: #DS14
+    back: #DS14
+    - WizardRuneQuill #DS14
+    - Paper #DS14
+    - Paper #DS14
+    - Paper #DS14
 
 - type: startingGear
   id: WizardRedGear
