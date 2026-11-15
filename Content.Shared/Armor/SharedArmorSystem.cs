@@ -123,7 +123,11 @@ public abstract class SharedArmorSystem : EntitySystem
             if (!LimbCoverRules.Covers(uid, zone, EntityManager))
                 continue;
 
-            zones.Add(Loc.GetString("armor-zone-" + ZoneKey(zone)));
+            var key = ZoneKey(zone);
+            if (key == null)
+                continue;
+
+            zones.Add(Loc.GetString("armor-zone-" + key));
         }
 
         if (zones.Count > 0)
@@ -177,7 +181,7 @@ public abstract class SharedArmorSystem : EntitySystem
     }
 
     // DS14-start
-    private static string ZoneKey(LimbZone zone)
+    private static string? ZoneKey(LimbZone zone)
     {
         return zone switch
         {
@@ -194,6 +198,7 @@ public abstract class SharedArmorSystem : EntitySystem
             LimbZone.LegRight => "leg-right",
             LimbZone.FootLeft => "foot-left",
             LimbZone.FootRight => "foot-right",
+            _ => null,
         };
     }
     // DS14-end
