@@ -2,6 +2,7 @@
 
 using System.Linq;
 using System.Numerics;
+using Content.Server.Ghost;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Chat;
 using Content.Shared.DeadSpace.Wizard.Runes;
@@ -10,6 +11,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Popups;
+using Content.Shared.Rotation;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -56,6 +58,9 @@ public sealed partial class RuneDanceComponent : Component
 
 public sealed partial class RuneCasterSystem
 {
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly GhostSystem _ghost = default!;
+
     private const float DanceFollowGap = 1.2f;
     private const int LastWordsKept = 5;
     private bool _echoing;
@@ -131,7 +136,16 @@ public sealed partial class RuneCasterSystem
             dance.Target = _random.Prob(effect.FollowChance) ? PickWitness(target, effect.FollowRange) : null;
             dance.NextTurn = now;
             dance.NextPoint = now + TimeSpan.FromSeconds(_random.NextFloat(0.5f, 1.5f));
+            _appearance.SetData(target, RotationVisuals.RotationState, RotationState.Vertical);
         }
+    }
+
+    private void EndDance(EntityUid uid)
+    {
+        _physics.SetLinearVelocity(uid, Vector2.Zero);
+        RemCompDeferred<RuneDanceComponent>(uid);
+        if (_standing.IsDown(uid))
+            _appearance.SetData(uid, RotationVisuals.RotationState, RotationState.Horizontal);
     }
 
     private EntityUid? PickWitness(EntityUid corpse, float range)
@@ -162,8 +176,7 @@ public sealed partial class RuneCasterSystem
         {
             if (now >= dance.End || !_mobState.IsDead(uid))
             {
-                _physics.SetLinearVelocity(uid, Vector2.Zero);
-                RemCompDeferred<RuneDanceComponent>(uid);
+                EndDance(uid);
                 continue;
             }
 
@@ -251,8 +264,10 @@ public sealed partial class RuneCasterSystem
         _flammable.Extinguish(target);
         var tint = EnsureComp<RuneTintComponent>(target);
         tint.Color = color;
-        tint.Strength = 1f;
+        tint.Stone = true;
         Dirty(target, tint);
+        if (_mind.TryGetMind(target, out var mindId, out var mind))
+            _ghost.OnGhostAttempt(mindId, false, forced: true, mind: mind);
     }
 
     private void ApplyVanish(RuneCastContext ctx, RuneVanishEffect effect)

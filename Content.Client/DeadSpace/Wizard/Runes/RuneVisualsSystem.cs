@@ -67,6 +67,8 @@ public sealed class RuneVisualsSystem : EntitySystem
     private readonly List<(EntityUid Light, float Start, float Energy)> _flashes = new();
     private readonly List<EntityUid> _gone = new();
     private readonly Dictionary<RuneMark, ProtoId<RuneMarkIconPrototype>> _icons = new();
+    private readonly Dictionary<EntityUid, ShaderInstance> _stones = new();
+    private static readonly ProtoId<ShaderPrototype> PetrifyShader = "RunePetrify";
     private int _seed;
 
     public float Now => (float) _timing.RealTime.TotalSeconds;
@@ -80,9 +82,9 @@ public sealed class RuneVisualsSystem : EntitySystem
         SubscribeLocalEvent<RuneMarkComponent, GetStatusIconsEvent>(OnMarkIcons);
         SubscribeLocalEvent<RuneScrollComponent, ComponentStartup>((uid, comp, _) => UpdateScroll(uid, comp));
         SubscribeLocalEvent<RuneScrollComponent, AfterAutoHandleStateEvent>((uid, comp, _) => UpdateScroll(uid, comp));
-        SubscribeLocalEvent<RuneTintComponent, ComponentStartup>((uid, comp, _) => UpdateTint(uid, comp.Color, comp.Strength));
-        SubscribeLocalEvent<RuneTintComponent, AfterAutoHandleStateEvent>((uid, comp, _) => UpdateTint(uid, comp.Color, comp.Strength));
-        SubscribeLocalEvent<RuneTintComponent, ComponentShutdown>((uid, _, _) => UpdateTint(uid, Color.White, 0f));
+        SubscribeLocalEvent<RuneTintComponent, ComponentStartup>((uid, comp, _) => UpdateTint(uid, comp));
+        SubscribeLocalEvent<RuneTintComponent, AfterAutoHandleStateEvent>((uid, comp, _) => UpdateTint(uid, comp));
+        SubscribeLocalEvent<RuneTintComponent, ComponentShutdown>((uid, _, _) => ClearTint(uid));
         SubscribeLocalEvent<RuneSigilComponent, ComponentShutdown>(OnSigilShutdown);
         SubscribeNetworkEvent<RuneImpactEvent>(OnImpact);
         _overlays.AddOverlay(new RuneSigilOverlay(this));
@@ -142,10 +144,67 @@ public sealed class RuneVisualsSystem : EntitySystem
         _sprite.LayerSetVisible(sprite.AsNullable(), layer, true);
     }
 
-    private void UpdateTint(EntityUid uid, Color color, float strength)
+    private void UpdateTint(EntityUid uid, RuneTintComponent tint)
     {
-        if (TryComp<SpriteComponent>(uid, out var sprite))
-            _sprite.SetColor((uid, sprite), color == Color.White ? Color.White : Color.InterpolateBetween(Color.White, color, strength));
+        if (!TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+
+        if (!tint.Stone)
+        {
+            DropStone(uid, sprite);
+            _sprite.SetColor((uid, sprite), tint.Color == Color.White ? Color.White : Color.InterpolateBetween(Color.White, tint.Color, tint.Strength));
+            return;
+        }
+
+        _sprite.SetColor((uid, sprite), Color.White);
+        if (!_stones.TryGetValue(uid, out var shader))
+        {
+            shader = _proto.Index(PetrifyShader).InstanceUnique();
+            _stones[uid] = shader;
+        }
+
+        shader.SetParameter("tint", new Vector3(tint.Color.R, tint.Color.G, tint.Color.B));
+        sprite.PostShader = shader;
+    }
+
+    private void ClearTint(EntityUid uid)
+    {
+        if (!TryComp<SpriteComponent>(uid, out var sprite))
+        {
+            _stones.Remove(uid);
+            return;
+        }
+
+        DropStone(uid, sprite);
+        _sprite.SetColor((uid, sprite), Color.White);
+    }
+
+    private void DropStone(EntityUid uid, SpriteComponent sprite)
+    {
+        if (!_stones.Remove(uid, out var shader))
+            return;
+
+        if (sprite.PostShader == shader)
+            sprite.PostShader = null;
+    }
+
+    private void KeepStones()
+    {
+        _gone.Clear();
+        foreach (var (uid, shader) in _stones)
+        {
+            if (!TryComp<SpriteComponent>(uid, out var sprite))
+            {
+                _gone.Add(uid);
+                continue;
+            }
+
+            if (sprite.PostShader == null)
+                sprite.PostShader = shader;
+        }
+
+        foreach (var uid in _gone)
+            _stones.Remove(uid);
     }
 
     private void OnSigilShutdown(Entity<RuneSigilComponent> ent, ref ComponentShutdown args)
@@ -192,6 +251,7 @@ public sealed class RuneVisualsSystem : EntitySystem
         var now = Now;
 
         Impacts.RemoveAll(i => now - i.Start > ImpactLength);
+        KeepStones();
 
         for (var i = _flashes.Count - 1; i >= 0; i--)
         {

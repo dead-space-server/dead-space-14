@@ -1,0 +1,7 @@
+uniform highp vec3 tint;
+
+void fragment() {
+    highp vec4 color = zTexture(UV);
+    highp float grey = zGrayscale(color.rgb);
+    COLOR = vec4(clamp(tint * (0.3 + grey * 1.15), 0.0, 1.0), color.a);
+}

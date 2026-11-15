@@ -13,6 +13,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Item;
 using Content.Shared.Magic.Events;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Content.Shared.Temperature.Components;
@@ -22,6 +23,7 @@ using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
@@ -225,6 +227,8 @@ public sealed partial class RuneCasterSystem
     private static readonly EntProtoId HealOrbPrototype = "RuneLifeOrb";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
     private static readonly string[] AnimateScaled = { "Destructible", "MeleeWeapon" };
+    private static readonly Vector2i[] CardinalTiles = { new(0, 1), new(1, 0), new(0, -1), new(-1, 0) };
+    private const string GirderId = "Girder";
 
     private void InitializeCreatures()
     {
@@ -301,12 +305,14 @@ public sealed partial class RuneCasterSystem
         }
 
         var position = _transform.GetWorldPosition(xform);
-        var wallPosition = _transform.GetWorldPosition(wall);
-        var delta = position - wallPosition;
-        if (delta.Length() > breaker.Reach)
+        if ((position - _transform.GetWorldPosition(wall)).Length() > breaker.Reach)
         {
-            var side = delta.LengthSquared() > 0.001f ? Vector2.Normalize(delta) : Vector2.UnitY;
-            var stand = _transform.ToCoordinates(new MapCoordinates(wallPosition + side, xform.MapID));
+            if (StandBy(wall, position) is not { } stand)
+            {
+                breaker.Wall = null;
+                return;
+            }
+
             _npc.SetBlackboard(uid, NPCBlackboard.FollowTarget, stand);
             return;
         }
@@ -316,18 +322,46 @@ public sealed partial class RuneCasterSystem
             _audio.PlayPvs(breaker.Sound, wall);
     }
 
+    private EntityCoordinates? StandBy(EntityUid wall, Vector2 from)
+    {
+        var wallXform = Transform(wall);
+        if (wallXform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return null;
+
+        var tile = _map.TileIndicesFor(gridUid, grid, wallXform.Coordinates);
+        EntityCoordinates? best = null;
+        var bestDistance = float.MaxValue;
+        foreach (var offset in CardinalTiles)
+        {
+            var next = tile + offset;
+            if (!_map.TryGetTileRef(gridUid, grid, next, out var tileRef) || tileRef.Tile.IsEmpty ||
+                _turf.IsTileBlocked(gridUid, next, CollisionGroup.Impassable, grid))
+                continue;
+
+            var coords = _map.GridTileToLocal(gridUid, grid, next);
+            var distance = (_transform.ToMapCoordinates(coords).Position - from).LengthSquared();
+            if (distance >= bestDistance)
+                continue;
+
+            best = coords;
+            bestDistance = distance;
+        }
+
+        return best;
+    }
+
     private EntityUid? FindWall(EntityUid uid, TransformComponent xform, float range)
     {
         EntityUid? best = null;
         var bestDistance = float.MaxValue;
         var position = _transform.GetWorldPosition(xform);
-        foreach (var candidate in _lookup.GetEntitiesInRange<WallComponent>(xform.Coordinates, range, LookupFlags.Static))
+        foreach (var candidate in _lookup.GetEntitiesInRange<DamageableComponent>(xform.Coordinates, range, LookupFlags.Static))
         {
-            if (candidate.Owner == uid || !HasComp<DamageableComponent>(candidate) || !Transform(candidate).Anchored)
+            if (candidate.Owner == uid || !Transform(candidate).Anchored || !IsBreakable(candidate))
                 continue;
 
             var distance = (_transform.GetWorldPosition(candidate) - position).LengthSquared();
-            if (distance >= bestDistance)
+            if (distance >= bestDistance || StandBy(candidate, position) == null)
                 continue;
 
             best = candidate;
@@ -335,6 +369,11 @@ public sealed partial class RuneCasterSystem
         }
 
         return best;
+    }
+
+    private bool IsBreakable(EntityUid uid)
+    {
+        return HasComp<WallComponent>(uid) || MetaData(uid).EntityPrototype?.ID.Contains(GirderId, StringComparison.Ordinal) == true;
     }
 
     private RuneAnimatedComponent SnapshotAnimated(EntityUid uid, ChangeComponentsSpellEvent? change, EntityPrototype template)

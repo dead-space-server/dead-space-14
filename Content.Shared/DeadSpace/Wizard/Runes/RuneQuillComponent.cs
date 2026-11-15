@@ -17,4 +17,7 @@ public sealed partial class RuneTintComponent : Component
 
     [DataField, AutoNetworkedField]
     public float Strength = 0.6f;
+
+    [DataField, AutoNetworkedField]
+    public bool Stone;
 }

@@ -92,7 +92,8 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
         {
             _health.Zones = Body();
             _health.Pools = Pools();
-            _health.Ether = _entities.TryGetComponent(_player.LocalEntity, out RuneCasterComponent? caster)
+            _health.Ether = !_entities.HasComponent<RunePetrifiedComponent>(_player.LocalEntity)
+                && _entities.TryGetComponent(_player.LocalEntity, out RuneCasterComponent? caster)
                 ? _entities.System<RuneCasterSystem>().GetStrainFraction(caster)
                 : null;
         }

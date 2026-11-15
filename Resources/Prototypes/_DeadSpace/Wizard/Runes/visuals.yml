@@ -4,6 +4,11 @@
   light_mode: unshaded
   blend_mode: Add
 
+- type: shader
+  id: RunePetrify
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/rune_petrify.swsl"
+
 - type: runeMarkIcon
   id: RuneMarkIconBase
   abstract: true

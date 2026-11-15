@@ -371,6 +371,9 @@ public abstract class SharedRuneCasterSystem : EntitySystem
             case RuneLightningEffect lightning:
                 point = MathF.Max(point, lightning.Range * scale);
                 break;
+            case RuneTimeStopEffect timeStop:
+                point = MathF.Max(point, timeStop.Radius * scale);
+                break;
             case RuneRandomEffect random:
                 foreach (var option in random.Options)
                     AddArea(option, composition, ref caster, ref point);

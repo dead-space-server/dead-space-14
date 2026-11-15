@@ -26,16 +26,13 @@
   description: Перо, что пишет светом. Коснитесь им чистого рунного свитка и начертите на нём форму и стихию. Неверный штрих сожжёт свиток.
   components:
   - type: Sprite
-    sprite: Objects/Misc/pens.rsi
+    sprite: _DeadSpace/Wizard/rune_quill.rsi
     layers:
-    - state: pen
-      color: "#b07bff"
-    - state: pen
-      color: "#e6d6ff66"
+    - state: icon
+    - state: glow
       shader: unshaded
   - type: Item
-    sprite: Objects/Misc/pens.rsi
-    heldPrefix: pen
+    sprite: _DeadSpace/Wizard/rune_quill.rsi
     size: Tiny
   - type: RuneQuill
   - type: PointLight

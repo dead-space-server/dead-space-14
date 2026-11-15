@@ -2,6 +2,7 @@
 
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Weapons.Parry;
 using Content.Shared.Emoting;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
@@ -38,6 +39,13 @@ public sealed class RunePetrifySystem : EntitySystem
         SubscribeLocalEvent<RunePetrifiedComponent, IsEquippingAttemptEvent>(OnCancel);
         SubscribeLocalEvent<RunePetrifiedComponent, IsUnequippingAttemptEvent>(OnCancel);
         SubscribeLocalEvent<RuneTimeHeldComponent, BeforeDamageChangedEvent>(OnHeldDamage);
+        SubscribeLocalEvent<RuneTimeHeldComponent, BeforeMeleeDamageEvent>(OnHeldMelee);
+    }
+
+    private void OnHeldMelee(Entity<RuneTimeHeldComponent> ent, ref BeforeMeleeDamageEvent args)
+    {
+        if (_net.IsClient)
+            args.Cancelled = true;
     }
 
     private void OnConscious(Entity<RunePetrifiedComponent> ent, ref ConsciousAttemptEvent args)

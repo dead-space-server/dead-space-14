@@ -25,7 +25,7 @@ public sealed partial class RuneScrollHatComponent : Component
     public EntProtoId Scroll = "WizardRuneScroll";
 
     [DataField]
-    public float Interval = 120f;
+    public float Interval = 60f;
 
     public EntityUid? Wearer;
 
