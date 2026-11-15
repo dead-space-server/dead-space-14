@@ -256,7 +256,10 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     // DS14-start
     private void PreventExecutionCollision(Entity<GunExecutionProjectileComponent> ent, ref PreventCollideEvent args)
     {
-        if (args.OtherEntity == ent.Comp.Target)
+        if (ent.Comp.Target is not { } target || !Exists(target))
+            return;
+
+        if (args.OtherEntity == target)
             return;
 
         if (HasComp<MobStateComponent>(args.OtherEntity))

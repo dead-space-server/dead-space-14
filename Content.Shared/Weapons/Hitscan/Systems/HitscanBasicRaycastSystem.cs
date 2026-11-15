@@ -53,13 +53,15 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
         var result = executionTarget != null
             ? rayCastResults.FirstOrNull(hit =>
                 ignored?.Contains(hit.HitEntity) != true &&
-                (hit.HitEntity == executionTarget || !HasComp<MobStateComponent>(hit.HitEntity)))
+                (hit.HitEntity == executionTarget ||
+                 !HasComp<MobStateComponent>(hit.HitEntity) &&
+                  CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true))
             : _container.IsEntityOrParentInContainer(shooter)
                 ? rayCastResults.FirstOrNull(hit => ignored?.Contains(hit.HitEntity) != true)
                 : rayCastResults.FirstOrNull(hit =>
                     ignored?.Contains(hit.HitEntity) != true &&
                     (hit.HitEntity == target || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true));
-        // DS14-Start
+        // DS14-end
 
         var distanceTried = result?.Distance ?? ent.Comp.MaxDistance;
 
