@@ -10224,3 +10224,10 @@ Entries:
   changes:
   - type: Fix
     message: Хитрега аномалий
+- id: 978
+  author: BlueDogDoc
+  time: '2026-11-15T05:02:05.609890+00:00'
+  pr: 2764
+  changes:
+  - type: Tweak
+    message: Субботник
