@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Server.DeadSpace.Husbandry.Feeding;
 using Content.Shared.CCVar;
 using Content.Shared.DeadSpace.Husbandry.Core;
 using Content.Shared.DeadSpace.Husbandry.Pen;
@@ -14,67 +15,384 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Physics.Systems;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Husbandry.Pen;
 
 /// <summary>
-/// The pen of an animal, see <see cref="AnimalPenComponent"/>, and what the animals do with it:
+/// The pens of the animals, see <see cref="AnimalPenComponent"/>.
 /// <list type="bullet">
-/// <item>The pen is worked out from the <b>home</b> of the animal, not from where it stands now: the walls round the
-/// home, but no more than a square round it. So an animal that was pushed out of its pen still belongs to it (it
-/// is taken for a new home only after it has stood outside for <see cref="AnimalPenComponent.RehomeTime"/>).</item>
-/// <item>The animal answers <see cref="AnimalTargetCheckEvent"/> here: it does not pick a place, a food or a water
-/// that lies outside its pen, so it does not walk away from it.</item>
-/// <item>The things in the pen (food, water, feeders) are looked for here, and the way to them is a breadth-first
-/// search over the tiles of the pen (<see cref="TryGetRoute"/>): one run finds the nearest of all of them, and
-/// there is no pathfinder job for the AI.</item>
+/// <item>A pen is made by the <b>devices</b> in it, the anchored feeders and troughs (not by the animals): the tiles
+/// round them that can be walked, up to <c>husbandry.pen.max_tiles</c> (300). If there are walls the pen is the whole
+/// room, if there are none it is the 300 tiles nearest to the devices. Devices that stand in the same place are one
+/// pen, a device that is taken away or put in does not change the pen. The pen is gone with its last device.</item>
+/// <item>The tiles are worked out once and again every <c>husbandry.pen.refresh_time</c> (5 minutes), nothing is done
+/// per animal: an animal finds its pen by the tile it stands on. When the tiles of two pens meet, they are one pen.</item>
+/// <item>An animal answers <see cref="AnimalTargetCheckEvent"/> here: it does not pick a place, a food or a water that
+/// lies outside its pen. The things in the pen are looked for here and kept for a few seconds for everybody, and the way
+/// to them is a breadth-first search over the tiles of the pen (<see cref="TryGetRoute"/>), no pathfinder.</item>
+/// <item>An animal that is in no pen looks for the way to the nearest one (<see cref="TryGetRouteToPen"/>): doors need no
+/// care, a door that is open is a free tile, a door that is shut is a wall.</item>
 /// </list>
-/// A pen is not worked out every time: a pen that is closed in is the same for every animal inside it, so it is
-/// worked out once and given to all of them, and every result is kept for the cvar
-/// <c>husbandry.pen.cache_time</c> (walls and doors change, but not often).
 /// </summary>
 public sealed class AnimalPenSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
 
     /// <summary>
-    /// Pens that are closed in, by every tile of them: whoever has a home on one of the tiles has that pen.
+    /// Whose tile it is, for every tile of every pen.
     /// </summary>
-    private readonly Dictionary<(EntityUid Grid, Vector2i Tile), (AnimalPen Pen, TimeSpan Time)> _enclosures = new();
+    private readonly Dictionary<(EntityUid Grid, Vector2i Tile), AnimalPen> _tiles = new();
+
+    private readonly List<AnimalPen> _pens = new();
+    private readonly Dictionary<EntityUid, AnimalPen> _deviceOf = new();
 
     /// <summary>
-    /// Pens of animals of an open pen, one for each of them.
+    /// Devices that are put down but have no pen yet. The pens are made when somebody asks for one, not while the map
+    /// is loading and the walls are not there yet.
     /// </summary>
-    private readonly Dictionary<EntityUid, (AnimalPen Pen, TimeSpan Time)> _open = new();
+    private readonly HashSet<EntityUid> _unplaced = new();
 
-    private TimeSpan _nextSweep;
-    private TimeSpan _cacheTime = TimeSpan.FromSeconds(30);
+    // Scratch, so that a flood allocates nothing but the pen.
+    private readonly List<EntityUid> _batch = new();
+    private readonly HashSet<(int X, int Y)> _cells = new();
+    private readonly List<(int X, int Y)> _seeds = new();
+    private readonly HashSet<AnimalPen> _overlapping = new();
+
+    private TimeSpan _itemsCacheTime = TimeSpan.FromSeconds(10);
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<AnimalPenComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<AnimalPenComponent, AnimalTargetCheckEvent>(OnTargetCheck);
-        Subs.CVar(_cfg, CCVars.HusbandryPenCacheTime, value => _cacheTime = TimeSpan.FromSeconds(value), true);
+
+        SubscribeLocalEvent<AnimalFeederComponent, ComponentStartup>((uid, _, _) => Register(uid));
+        SubscribeLocalEvent<AnimalFeederComponent, ComponentShutdown>((uid, _, _) => Unregister(uid));
+        SubscribeLocalEvent<AnimalFeederComponent, AnchorStateChangedEvent>(OnFeederAnchorChanged);
+        SubscribeLocalEvent<WaterSourceComponent, ComponentStartup>((uid, _, _) => Register(uid));
+        SubscribeLocalEvent<WaterSourceComponent, ComponentShutdown>((uid, _, _) => Unregister(uid));
+        SubscribeLocalEvent<WaterSourceComponent, AnchorStateChangedEvent>(OnTroughAnchorChanged);
+
+        Subs.CVar(_cfg, CCVars.HusbandryPenItemsCacheTime, value => _itemsCacheTime = TimeSpan.FromSeconds(value), true);
     }
 
-    private void OnShutdown(Entity<AnimalPenComponent> animal, ref ComponentShutdown args)
+    #region Devices
+
+    private void OnFeederAnchorChanged(Entity<AnimalFeederComponent> device, ref AnchorStateChangedEvent args)
     {
-        _open.Remove(animal);
+        OnAnchorChanged(device.Owner, args.Anchored);
+    }
+
+    private void OnTroughAnchorChanged(Entity<WaterSourceComponent> device, ref AnchorStateChangedEvent args)
+    {
+        OnAnchorChanged(device.Owner, args.Anchored);
+    }
+
+    private void OnAnchorChanged(EntityUid device, bool anchored)
+    {
+        if (anchored)
+            Register(device);
+        else
+            Unregister(device);
+    }
+
+    private void Register(EntityUid device)
+    {
+        if (_deviceOf.ContainsKey(device) || TerminatingOrDeleted(device))
+            return;
+
+        var xform = Transform(device);
+        if (xform.Anchored && xform.GridUid != null)
+            _unplaced.Add(device);
+    }
+
+    private void Unregister(EntityUid device)
+    {
+        _unplaced.Remove(device);
+
+        if (!_deviceOf.Remove(device, out var pen))
+            return;
+
+        // The pen does not change by itself, it lives while there is a device.
+        pen.Devices.Remove(device);
+        if (pen.Devices.Count == 0)
+            Dissolve(pen);
     }
 
     /// <summary>
+    /// Gives the devices that were put down a pen: the one that stands round them, or a new one.
+    /// </summary>
+    private void ResolveDevices()
+    {
+        if (_unplaced.Count == 0)
+            return;
+
+        _batch.Clear();
+        _batch.AddRange(_unplaced);
+        _unplaced.Clear();
+
+        foreach (var device in _batch)
+        {
+            Place(device);
+        }
+    }
+
+    private void Place(EntityUid device)
+    {
+        if (TerminatingOrDeleted(device) || _deviceOf.ContainsKey(device))
+            return;
+
+        var xform = Transform(device);
+        if (!xform.Anchored || xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return;
+
+        var tile = _map.CoordinatesToTile(gridUid, grid, xform.Coordinates);
+        var pen = TileOwner(gridUid, tile) ??
+                  TileOwner(gridUid, tile + new Vector2i(1, 0)) ??
+                  TileOwner(gridUid, tile + new Vector2i(-1, 0)) ??
+                  TileOwner(gridUid, tile + new Vector2i(0, 1)) ??
+                  TileOwner(gridUid, tile + new Vector2i(0, -1));
+
+        if (pen != null)
+        {
+            // It stands in a pen that is there: it joins it, the pen itself stays as it is.
+            pen.Devices.Add(device);
+            _deviceOf[device] = pen;
+            return;
+        }
+
+        pen = new AnimalPen(gridUid);
+        pen.Devices.Add(device);
+        _deviceOf[device] = pen;
+        _pens.Add(pen);
+        Rebuild(pen);
+    }
+
+    private AnimalPen? TileOwner(EntityUid grid, Vector2i tile)
+    {
+        return _tiles.TryGetValue((grid, tile), out var pen) && !pen.Removed ? pen : null;
+    }
+
+    private void Dissolve(AnimalPen pen)
+    {
+        pen.Removed = true;
+        RemoveTiles(pen);
+        _pens.Remove(pen);
+
+        foreach (var device in pen.Devices)
+        {
+            _deviceOf.Remove(device);
+        }
+
+        pen.Devices.Clear();
+    }
+
+    private void RemoveTiles(AnimalPen pen)
+    {
+        foreach (var tile in pen.Tiles)
+        {
+            if (_tiles.TryGetValue((pen.Grid, tile), out var owner) && owner == pen)
+                _tiles.Remove((pen.Grid, tile));
+        }
+
+        pen.Tiles = new HashSet<Vector2i>();
+    }
+
+    private void Merge(AnimalPen pen, AnimalPen other)
+    {
+        pen.Devices.UnionWith(other.Devices);
+        foreach (var device in other.Devices)
+        {
+            _deviceOf[device] = pen;
+        }
+
+        other.Devices.Clear();
+        other.Removed = true;
+        other.MergedInto = pen;
+        RemoveTiles(other);
+        _pens.Remove(other);
+    }
+
+    #endregion
+
+    #region Tiles
+
+    /// <summary>
+    /// Works the tiles of the pen out again: a flood from the devices over the tiles that can be walked, cut at the
+    /// limit. A pen that the flood runs into is taken in, the devices of both make one pen.
+    /// </summary>
+    private void Rebuild(AnimalPen pen)
+    {
+        if (!TryComp<MapGridComponent>(pen.Grid, out var grid))
+        {
+            Dissolve(pen);
+            return;
+        }
+
+        var maxTiles = Math.Max(1, _cfg.GetCVar(CCVars.HusbandryPenMaxTiles));
+        var wallArea = _cfg.GetCVar(CCVars.HusbandryPenWallArea);
+        Func<(int X, int Y), bool> free = cell => IsFree(pen.Grid, grid, cell, CollisionGroup.MobMask, wallArea);
+
+        for (var attempt = 0; attempt < 3; attempt++)
+        {
+            CollectSeeds(pen, grid, free);
+            if (pen.Devices.Count == 0)
+            {
+                Dissolve(pen);
+                return;
+            }
+
+            pen.Truncated = PenRules.Flood(_seeds, free, _cells, maxTiles);
+
+            _overlapping.Clear();
+            foreach (var (x, y) in _cells)
+            {
+                if (_tiles.TryGetValue((pen.Grid, new Vector2i(x, y)), out var other) && other != pen && !other.Removed)
+                    _overlapping.Add(other);
+            }
+
+            if (_overlapping.Count == 0)
+                break;
+
+            foreach (var other in _overlapping)
+            {
+                Merge(pen, other);
+            }
+        }
+
+        RemoveTiles(pen);
+
+        var tiles = new HashSet<Vector2i>(_cells.Count);
+        long sumX = 0;
+        long sumY = 0;
+        foreach (var (x, y) in _cells)
+        {
+            var tile = new Vector2i(x, y);
+            tiles.Add(tile);
+            _tiles[(pen.Grid, tile)] = pen;
+            sumX += x;
+            sumY += y;
+        }
+
+        pen.Tiles = tiles;
+        pen.Found.Clear();
+
+        if (tiles.Count > 0)
+        {
+            pen.Anchor = new Vector2i((int) Math.Round((double) sumX / tiles.Count), (int) Math.Round((double) sumY / tiles.Count));
+
+            var farthest = 0f;
+            foreach (var tile in tiles)
+            {
+                farthest = Math.Max(farthest, Vector2.Distance(new Vector2(tile.X, tile.Y), new Vector2(pen.Anchor.X, pen.Anchor.Y)));
+            }
+
+            pen.Radius = (farthest + 1.5f) * grid.TileSize;
+        }
+
+        // Not all the pens at the same moment.
+        var refresh = Math.Max(1f, _cfg.GetCVar(CCVars.HusbandryPenRefreshTime));
+        pen.RefreshAt = _timing.CurTime + TimeSpan.FromSeconds(refresh * (1f + _random.NextFloat(0f, 0.2f)));
+    }
+
+    /// <summary>
+    /// Where the flood starts: the tile of every device, or, if the device itself blocks it, the free tiles next to it.
+    /// A device that is gone or not fixed any more is dropped.
+    /// </summary>
+    private void CollectSeeds(AnimalPen pen, MapGridComponent grid, Func<(int X, int Y), bool> free)
+    {
+        _seeds.Clear();
+        List<EntityUid>? gone = null;
+
+        foreach (var device in pen.Devices)
+        {
+            if (TerminatingOrDeleted(device) || Transform(device) is not { Anchored: true } xform || xform.GridUid != pen.Grid)
+            {
+                (gone ??= new()).Add(device);
+                continue;
+            }
+
+            var tile = _map.CoordinatesToTile(pen.Grid, grid, xform.Coordinates);
+            var cell = (tile.X, tile.Y);
+            if (free(cell))
+            {
+                _seeds.Add(cell);
+                continue;
+            }
+
+            foreach (var next in new[] { (cell.X + 1, cell.Y), (cell.X - 1, cell.Y), (cell.X, cell.Y + 1), (cell.X, cell.Y - 1) })
+            {
+                if (free(next))
+                    _seeds.Add(next);
+            }
+        }
+
+        if (gone == null)
+            return;
+
+        foreach (var device in gone)
+        {
+            pen.Devices.Remove(device);
+            _deviceOf.Remove(device);
+        }
+    }
+
+    /// <summary>
+    /// The pen as it is now: what it was merged into, refreshed if its time is up. Null if it is gone.
+    /// </summary>
+    private AnimalPen? Live(AnimalPen? pen)
+    {
+        pen = Follow(pen);
+        if (pen == null)
+            return null;
+
+        if (_timing.CurTime >= pen.RefreshAt)
+        {
+            Rebuild(pen);
+            pen = Follow(pen);
+        }
+
+        return pen;
+    }
+
+    private static AnimalPen? Follow(AnimalPen? pen)
+    {
+        while (pen is { Removed: true, MergedInto: { } merged })
+        {
+            pen = merged;
+        }
+
+        return pen == null || pen.Removed ? null : pen;
+    }
+
+    /// <summary>
+    /// The pen that has this tile, if there is one.
+    /// </summary>
+    public AnimalPen? PenAt(EntityUid grid, Vector2i tile)
+    {
+        ResolveDevices();
+        if (!_tiles.TryGetValue((grid, tile), out var pen))
+            return null;
+
+        // The pen may be worked out again just now, and the tile may not be a part of it any more.
+        var live = Live(pen);
+        return live != null && live.Contains(tile) ? live : null;
+    }
+
+    #endregion
+
+    /// <summary>
     /// A place, a food or a water that is not in the pen is not allowed: the animal does not go there. A thing that
-    /// stands next to the pen (a feeder in the wall, say) is, it is reached from the pen.
+    /// stands next to the pen (a feeder in the wall, say) is, it is reached from the pen. An animal without a pen is
+    /// not held.
     /// </summary>
     private void OnTargetCheck(Entity<AnimalPenComponent> animal, ref AnimalTargetCheckEvent args)
     {
@@ -86,212 +404,58 @@ public sealed class AnimalPenSystem : EntitySystem
             args.Allowed = false;
     }
 
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        // Forget what is old, so that a deleted grid or a lot of old tiles are not kept forever.
-        var now = _timing.CurTime;
-        if (now < _nextSweep)
-            return;
-
-        _nextSweep = now + _cacheTime;
-
-        List<(EntityUid, Vector2i)>? oldTiles = null;
-        foreach (var (key, value) in _enclosures)
-        {
-            if (now - value.Time >= _cacheTime || TerminatingOrDeleted(key.Grid))
-                (oldTiles ??= new()).Add(key);
-        }
-
-        if (oldTiles != null)
-        {
-            foreach (var key in oldTiles)
-            {
-                _enclosures.Remove(key);
-            }
-        }
-
-        List<EntityUid>? oldAnimals = null;
-        foreach (var (key, value) in _open)
-        {
-            if (now - value.Time >= _cacheTime || TerminatingOrDeleted(key))
-                (oldAnimals ??= new()).Add(key);
-        }
-
-        if (oldAnimals != null)
-        {
-            foreach (var key in oldAnimals)
-            {
-                _open.Remove(key);
-            }
-        }
-    }
-
     /// <summary>
-    /// The pen of the animal: the one round its home. Null if it has no home yet and does not stand on a grid, or
-    /// has nowhere to stand.
+    /// The pen of the animal: the one it stands in, or else the one it was taken out of a short while ago. Null if it is
+    /// in no pen. Nothing is worked out for the animal, it is a lookup by its tile.
     /// </summary>
     public AnimalPen? GetPen(Entity<AnimalPenComponent> animal)
     {
-        var now = _timing.CurTime;
         var comp = animal.Comp;
         var xform = Transform(animal);
 
-        Vector2i? tileNow = null;
-        EntityUid? gridNow = null;
-        if (xform.GridUid is { } g && TryComp<MapGridComponent>(g, out var gridComp))
+        if (xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
         {
-            gridNow = g;
-            tileNow = _map.CoordinatesToTile(g, gridComp, xform.Coordinates);
+            var tile = _map.CoordinatesToTile(gridUid, grid, xform.Coordinates);
+            if (PenAt(gridUid, tile) is { } here)
+            {
+                comp.Pen = here;
+                comp.OutsideSince = null;
+                return here;
+            }
         }
 
-        // The home is where the animal was when its pen was asked for the first time.
-        if (comp.HomeGrid == null || TerminatingOrDeleted(comp.HomeGrid.Value))
+        // In no pen. For a moment (it is pushed, pulled, it is crossing something) that does not change anything, but an
+        // animal that was carried away and left there forgets its pen after a while.
+        var own = Live(comp.Pen);
+        if (own == null)
         {
-            if (gridNow == null || tileNow == null)
-                return null;
-
-            Rehome(comp, gridNow.Value, tileNow.Value);
-        }
-
-        var pen = PenAround(animal, comp.HomeGrid!.Value, comp.Home);
-
-        // The home itself became a wall or a hole: the animal takes the place where it stands for home.
-        if (pen == null)
-        {
-            if (gridNow == null || tileNow == null)
-                return null;
-
-            Rehome(comp, gridNow.Value, tileNow.Value);
-            pen = PenAround(animal, gridNow.Value, tileNow.Value);
-            if (pen == null)
-                return null;
-        }
-
-        if (gridNow == pen.Grid && tileNow is { } tile && pen.Contains(tile))
-        {
+            comp.Pen = null;
             comp.OutsideSince = null;
-            return pen;
-        }
-
-        // Outside of its pen. For a moment (it is pushed, pulled, it is crossing something) that does not change
-        // anything, but an animal that was carried away and left there has a new home after a while.
-        if (gridNow != null && tileNow != null)
-        {
-            comp.OutsideSince ??= now;
-            if (now - comp.OutsideSince >= comp.RehomeTime)
-            {
-                Rehome(comp, gridNow.Value, tileNow.Value);
-                pen = PenAround(animal, gridNow.Value, tileNow.Value) ?? pen;
-            }
-        }
-
-        return pen;
-    }
-
-    private static void Rehome(AnimalPenComponent comp, EntityUid grid, Vector2i tile)
-    {
-        comp.HomeGrid = grid;
-        comp.Home = tile;
-        comp.OutsideSince = null;
-    }
-
-    /// <summary>
-    /// The pen with the tile in it: the whole enclosure if it is closed in, otherwise the square round the tile as far
-    /// as the walls go.
-    /// </summary>
-    private AnimalPen? PenAround(Entity<AnimalPenComponent> animal, EntityUid gridUid, Vector2i start)
-    {
-        if (!TryComp<MapGridComponent>(gridUid, out var grid))
             return null;
+        }
 
+        comp.Pen = own;
         var now = _timing.CurTime;
-
-        if (_enclosures.TryGetValue((gridUid, start), out var shared) && now - shared.Time < _cacheTime)
-            return shared.Pen;
-
-        if (_open.TryGetValue(animal, out var cached) &&
-            now - cached.Time < _cacheTime &&
-            cached.Pen.Grid == gridUid &&
-            cached.Pen.Anchor == start)
+        comp.OutsideSince ??= now;
+        if (now - comp.OutsideSince >= comp.RehomeTime)
         {
-            return cached.Pen;
-        }
-
-        var comp = animal.Comp;
-        var mask = (CollisionGroup) _physics.GetHardCollision(animal).Mask;
-        Func<(int X, int Y), bool> free = cell => IsFree(gridUid, grid, cell, mask, comp.WallArea);
-        var cells = new HashSet<(int X, int Y)>();
-
-        // First the whole enclosure: the tiles up to the walls, the same for every animal inside. If it is closed
-        // there is nothing more to it.
-        var tooBig = PenRules.Fill((start.X, start.Y), free, _ => true, cells, comp.MaxTiles);
-        Vector2i anchor;
-        PenKind kind;
-
-        if (cells.Count > 0 && !tooBig)
-        {
-            kind = PenKind.Enclosed;
-            anchor = Centre(cells);
-        }
-        else
-        {
-            // Open (or too big to be a pen): the square round the home, as far as the walls go.
-            anchor = start;
-            var half = comp.HalfSize;
-            Func<(int X, int Y), bool> inSquare = cell => Math.Abs(cell.X - start.X) <= half && Math.Abs(cell.Y - start.Y) <= half;
-
-            var open = PenRules.Fill((start.X, start.Y), free, inSquare, cells, comp.MaxTiles);
-            kind = open ? PenKind.Open : PenKind.Enclosed;
-        }
-
-        if (cells.Count == 0)
+            comp.Pen = null;
+            comp.OutsideSince = null;
             return null;
-
-        var tiles = new HashSet<Vector2i>(cells.Count);
-        foreach (var (x, y) in cells)
-        {
-            tiles.Add(new Vector2i(x, y));
         }
 
-        var farthest = 0f;
-        foreach (var cell in tiles)
-        {
-            farthest = Math.Max(farthest, Vector2.Distance(new Vector2(cell.X, cell.Y), new Vector2(anchor.X, anchor.Y)));
-        }
-
-        var pen = new AnimalPen(gridUid, tiles, kind, anchor, (farthest + 1.5f) * grid.TileSize);
-
-        if (kind == PenKind.Enclosed)
-        {
-            foreach (var cell in tiles)
-            {
-                _enclosures[(gridUid, cell)] = (pen, now);
-            }
-        }
-        else
-        {
-            _open[animal] = (pen, now);
-        }
-
-        return pen;
+        return own;
     }
 
     /// <summary>
-    /// The middle of a set of tiles, as a tile: the same for the same set, so every animal of an enclosure has it.
+    /// Whether the animal stands in the tiles of its pen.
     /// </summary>
-    private static Vector2i Centre(HashSet<(int X, int Y)> cells)
+    public bool IsInPen(Entity<AnimalPenComponent> animal, AnimalPen pen)
     {
-        long x = 0;
-        long y = 0;
-        foreach (var (cx, cy) in cells)
-        {
-            x += cx;
-            y += cy;
-        }
-
-        return new Vector2i((int) Math.Round((double) x / cells.Count), (int) Math.Round((double) y / cells.Count));
+        var xform = Transform(animal);
+        return xform.GridUid == pen.Grid &&
+               TryComp<MapGridComponent>(pen.Grid, out var grid) &&
+               pen.Contains(_map.CoordinatesToTile(pen.Grid, grid, xform.Coordinates));
     }
 
     private static bool TouchesPen(AnimalPen pen, Vector2i tile)
@@ -303,34 +467,71 @@ public sealed class AnimalPenSystem : EntitySystem
     }
 
     /// <summary>
+    /// The feeders or the troughs of the pen, from the list of the pen: no lookup.
+    /// </summary>
+    public void GetDevices<T>(AnimalPen pen, HashSet<Entity<T>> result) where T : IComponent
+    {
+        result.Clear();
+        foreach (var device in pen.Devices)
+        {
+            if (!TerminatingOrDeleted(device) && TryComp<T>(device, out var comp))
+                result.Add((device, comp));
+        }
+    }
+
+    /// <summary>
     /// What lies in the pen: the things with the component that are on the floor of one of its tiles (not in a
-    /// container). With <paramref name="adjacent"/> also the things on a tile next to the pen: a feeder or a trough
-    /// that stands in the wall is eaten from the pen.
+    /// container). With <paramref name="adjacent"/> also the things on a tile next to the pen. The lookup of an area is
+    /// made once for everybody and kept for <c>husbandry.pen.items_cache_time</c>; what was found is checked again each
+    /// time (it may be picked up or gone by now).
     /// </summary>
     public void GetEntitiesInPen<T>(AnimalPen pen, HashSet<Entity<T>> result, bool adjacent = false) where T : IComponent
     {
         result.Clear();
-        if (!TryComp<MapGridComponent>(pen.Grid, out var grid))
+        if (pen.Removed || !TryComp<MapGridComponent>(pen.Grid, out var grid))
             return;
 
-        var centre = _map.GridTileToWorld(pen.Grid, grid, pen.Anchor);
-        // The lookup gets a set of its own for each kind, so that nothing is allocated for every call.
-        var found = PenLookupCache<T>.Set;
-        found.Clear();
-        _lookup.GetEntitiesInRange(centre, pen.Radius + (adjacent ? grid.TileSize : 0f), found, LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries);
-
-        foreach (var entity in found)
+        var now = _timing.CurTime;
+        var key = (typeof(T), adjacent);
+        if (!pen.Found.TryGetValue(key, out var found))
         {
-            if (_container.IsEntityInContainer(entity))
+            found = new PenFound();
+            pen.Found[key] = found;
+        }
+
+        if (!found.Fetched || now - found.Time >= _itemsCacheTime)
+        {
+            found.Fetched = true;
+            found.Time = now;
+            found.Items.Clear();
+
+            var centre = _map.GridTileToWorld(pen.Grid, grid, pen.Anchor);
+            // The lookup gets a set of its own for each kind, so that nothing is allocated for every call.
+            var set = PenLookupCache<T>.Set;
+            set.Clear();
+            _lookup.GetEntitiesInRange(centre, pen.Radius + (adjacent ? grid.TileSize : 0f), set, LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries);
+
+            foreach (var entity in set)
+            {
+                if (_container.IsEntityInContainer(entity))
+                    continue;
+
+                var xform = Transform(entity);
+                if (xform.GridUid != pen.Grid)
+                    continue;
+
+                var tile = _map.CoordinatesToTile(pen.Grid, grid, xform.Coordinates);
+                if (pen.Contains(tile) || (adjacent && TouchesPen(pen, tile)))
+                    found.Items.Add(entity);
+            }
+        }
+
+        foreach (var uid in found.Items)
+        {
+            if (TerminatingOrDeleted(uid) || _container.IsEntityInContainer(uid) || !TryComp<T>(uid, out var comp))
                 continue;
 
-            var xform = Transform(entity);
-            if (xform.GridUid != pen.Grid)
-                continue;
-
-            var tile = _map.CoordinatesToTile(pen.Grid, grid, xform.Coordinates);
-            if (pen.Contains(tile) || (adjacent && TouchesPen(pen, tile)))
-                result.Add(entity);
+            result.Add((uid, comp));
         }
     }
 
@@ -396,17 +597,86 @@ public sealed class AnimalPenSystem : EntitySystem
             return false;
 
         chosen = goals[cells[^1]];
+        AddTiles(route, pen.Grid, grid, cells);
+        route.Add(new EntityCoordinates(chosen, Vector2.Zero));
+        return true;
+    }
 
-        // From the second tile: the animal stands on the first. The middles of the tiles, in the coordinates of the
-        // grid, so the route stays where it is if the grid moves.
+    /// <summary>
+    /// The way from an animal that is in no pen to the nearest pen that it can get to (or to its own, if it was taken
+    /// out of it): the tiles one after another, the last one is in the pen. A breadth-first search over the tiles that
+    /// can be walked, no further than <c>husbandry.pen.max_tiles</c> tiles, and not again for
+    /// <see cref="AnimalPenComponent.ReturnSearchDelay"/> if there is no way. Open doors and gaps are free tiles, shut
+    /// doors and walls are not, so the animal finds the way in if there is one.
+    /// </summary>
+    public bool TryGetRouteToPen(Entity<AnimalPenComponent> animal, out List<EntityCoordinates> route)
+    {
+        route = new List<EntityCoordinates>();
+        var comp = animal.Comp;
+        var now = _timing.CurTime;
+        if (now < comp.NextReturnSearch)
+            return false;
+
+        var xform = Transform(animal);
+        if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
+
+        ResolveDevices();
+
+        var start = _map.CoordinatesToTile(gridUid, grid, xform.Coordinates);
+        var own = Live(comp.Pen);
+
+        // Cheap before the search: is there a pen of this grid in reach at all?
+        var range = _cfg.GetCVar(CCVars.HusbandryPenReturnRange);
+        var inReach = false;
+        foreach (var pen in _pens)
+        {
+            if (pen.Grid != gridUid || pen.Tiles.Count == 0 || own != null && pen != own)
+                continue;
+
+            if (Vector2.Distance(new Vector2(start.X, start.Y), new Vector2(pen.Anchor.X, pen.Anchor.Y)) <= range + pen.Radius / grid.TileSize)
+            {
+                inReach = true;
+                break;
+            }
+        }
+
+        if (!inReach)
+        {
+            comp.NextReturnSearch = now + comp.ReturnSearchDelay;
+            return false;
+        }
+
+        var wallArea = _cfg.GetCVar(CCVars.HusbandryPenWallArea);
+        var cells = PenRules.FindRoute(
+            (start.X, start.Y),
+            cell => IsFree(gridUid, grid, cell, CollisionGroup.MobMask, wallArea),
+            cell => own != null ? own.Contains(new Vector2i(cell.X, cell.Y)) : TileOwner(gridUid, new Vector2i(cell.X, cell.Y)) != null,
+            Math.Max(1, _cfg.GetCVar(CCVars.HusbandryPenMaxTiles)));
+
+        if (cells == null || cells.Count < 2)
+        {
+            comp.NextReturnSearch = now + comp.ReturnSearchDelay;
+            return false;
+        }
+
+        // Found: if the walk fails, not again at once.
+        comp.NextReturnSearch = now + comp.ReturnRetryDelay;
+        AddTiles(route, gridUid, grid, cells);
+        return true;
+    }
+
+    /// <summary>
+    /// From the second tile on (the animal stands on the first): the middles of the tiles, in the coordinates of the
+    /// grid, so the route stays where it is if the grid moves.
+    /// </summary>
+    private static void AddTiles(List<EntityCoordinates> route, EntityUid gridUid, MapGridComponent grid, List<(int X, int Y)> cells)
+    {
         for (var i = 1; i < cells.Count; i++)
         {
             var middle = (new Vector2(cells[i].X, cells[i].Y) + new Vector2(0.5f, 0.5f)) * grid.TileSize;
-            route.Add(new EntityCoordinates(pen.Grid, middle));
+            route.Add(new EntityCoordinates(gridUid, middle));
         }
-
-        route.Add(new EntityCoordinates(chosen, Vector2.Zero));
-        return true;
     }
 
     private static void AddGoal(AnimalPen pen, Dictionary<(int X, int Y), EntityUid> goals, Vector2i tile, EntityUid target)

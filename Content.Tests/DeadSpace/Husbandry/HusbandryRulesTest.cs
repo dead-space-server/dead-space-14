@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Content.Shared.DeadSpace.Husbandry.Core;
 using NUnit.Framework;
 
@@ -104,38 +105,53 @@ public sealed class HusbandryRulesTest
     }
 
     [Test]
-    public void PenFillStopsAtWallsAndReportsClosed()
+    public void PenFloodStopsAtWallsAndReportsClosed()
     {
         // A room of 3 by 3 with walls round it.
         Func<(int X, int Y), bool> free = c => c.X is >= 0 and <= 2 && c.Y is >= 0 and <= 2;
         var cells = new HashSet<(int X, int Y)>();
 
-        var open = PenRules.Fill((1, 1), free, _ => true, cells);
+        var cut = PenRules.Flood(new[] { (1, 1) }, free, cells, maxCells: 300);
 
-        Assert.That(open, Is.False, "closed in by walls");
+        Assert.That(cut, Is.False, "closed in by walls");
         Assert.That(cells, Has.Count.EqualTo(9));
     }
 
     [Test]
-    public void PenFillOfAFieldIsCutByTheLimitAndOpen()
+    public void PenFloodOfAFieldIsCutAtTheLimitToTheNearestCells()
     {
         Func<(int X, int Y), bool> free = _ => true;
         var cells = new HashSet<(int X, int Y)>();
 
-        var open = PenRules.Fill((0, 0), free, c => Math.Abs(c.X) <= 1 && Math.Abs(c.Y) <= 1, cells);
+        var cut = PenRules.Flood(new[] { (0, 0) }, free, cells, maxCells: 25);
 
-        Assert.That(open, Is.True, "free ground continues beyond the limit");
-        Assert.That(cells, Has.Count.EqualTo(9));
+        Assert.That(cut, Is.True, "free ground goes on beyond the limit");
+        Assert.That(cells, Has.Count.EqualTo(25));
+        Assert.That(cells, Does.Contain((0, 0)));
+        Assert.That(cells.Max(c => Math.Abs(c.X) + Math.Abs(c.Y)), Is.LessThanOrEqualTo(4), "the cells nearest to the start");
     }
 
     [Test]
-    public void PenFillDoesNotCrossDiagonalGaps()
+    public void PenFloodStartsFromAllTheDevicesAndSkipsTheOnesThatAreNotFree()
+    {
+        // Two separate rooms with a device each, and a device in a wall.
+        Func<(int X, int Y), bool> free = c => c is (0, 0) or (1, 0) or (10, 0) or (11, 0);
+        var cells = new HashSet<(int X, int Y)>();
+
+        var cut = PenRules.Flood(new[] { (0, 0), (10, 0), (5, 5) }, free, cells, maxCells: 300);
+
+        Assert.That(cut, Is.False);
+        Assert.That(cells, Has.Count.EqualTo(4));
+    }
+
+    [Test]
+    public void PenFloodDoesNotCrossDiagonalGaps()
     {
         // Two free cells that touch only by a corner are not connected.
         Func<(int X, int Y), bool> free = c => c is (0, 0) or (1, 1);
         var cells = new HashSet<(int X, int Y)>();
 
-        PenRules.Fill((0, 0), free, _ => true, cells);
+        PenRules.Flood(new[] { (0, 0) }, free, cells, maxCells: 300);
 
         Assert.That(cells, Has.Count.EqualTo(1));
     }

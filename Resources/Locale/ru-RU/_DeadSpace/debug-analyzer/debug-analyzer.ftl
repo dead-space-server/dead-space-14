@@ -48,7 +48,10 @@ debug-analyzer-breeding-cooldown = Пауза после родов
 debug-analyzer-breeding-attempt = До следующей попытки
 debug-analyzer-breeding-chance = Шанс за попытку
 
-debug-analyzer-pen-kind = Вид (Enclosed закрытый, Open открытый)
+debug-analyzer-pen-none = Загона нет (идёт к ближайшему, если он рядом)
+debug-analyzer-pen-devices = Кормушек и поилок в загоне
+debug-analyzer-pen-truncated = Загон обрезан по лимиту тайлов
+debug-analyzer-pen-refresh = До пересчёта загона
 debug-analyzer-pen-tiles = Тайлов в загоне
 debug-analyzer-pen-anchor = Центр загона (тайл)
 

@@ -47,11 +47,37 @@ public sealed partial class CCVars
         CVarDef.Create("husbandry.search_cooldown", 20f, CVar.SERVERONLY);
 
     /// <summary>
-    ///     How long the pen of an animal is kept before it is worked out again, in seconds (walls and doors change,
+    ///     How long the tiles of a pen are kept before they are worked out again, in seconds (walls and doors change,
     ///     but not often).
     /// </summary>
-    public static readonly CVarDef<float> HusbandryPenCacheTime =
-        CVarDef.Create("husbandry.pen.cache_time", 30f, CVar.SERVERONLY);
+    public static readonly CVarDef<float> HusbandryPenRefreshTime =
+        CVarDef.Create("husbandry.pen.refresh_time", 300f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     A pen is no bigger than this many tiles: the flood from the feeders and the troughs stops there. Also how far
+    ///     an animal that is in no pen looks for one.
+    /// </summary>
+    public static readonly CVarDef<int> HusbandryPenMaxTiles =
+        CVarDef.Create("husbandry.pen.max_tiles", 300, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     A fixed thing has to cover this share of a tile to count as a wall: a chair does not close a tile.
+    /// </summary>
+    public static readonly CVarDef<float> HusbandryPenWallArea =
+        CVarDef.Create("husbandry.pen.wall_area", 0.5f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     How long what lies in a pen (food, water, animals) is kept before it is looked for again, in seconds. All the
+    ///     animals of the pen use the same lookup.
+    /// </summary>
+    public static readonly CVarDef<float> HusbandryPenItemsCacheTime =
+        CVarDef.Create("husbandry.pen.items_cache_time", 10f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     An animal that is in no pen looks for the nearest one if it is within this many tiles.
+    /// </summary>
+    public static readonly CVarDef<float> HusbandryPenReturnRange =
+        CVarDef.Create("husbandry.pen.return_range", 20f, CVar.SERVERONLY);
 
     /// <summary>
     ///     How often the positions of the players are taken for the strolls of the animals that go round a player, in

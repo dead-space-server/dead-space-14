@@ -3,6 +3,16 @@
 - type: htnCompound
   id: LivestockCompound
   branches:
+    # Not in a pen (it has none, or it was carried out of it): to the nearest one. A pen is made by the feeders and the
+    # troughs. FindPenOperator fails for an animal that is where it should be, then the plan goes on.
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:FindPenOperator
+
+        - !type:HTNPrimitiveTask
+          operator: !type:AnimalGoToOperator
+            arriveDistance: 0.5
+
     # Food
     - tasks:
         - !type:HTNPrimitiveTask

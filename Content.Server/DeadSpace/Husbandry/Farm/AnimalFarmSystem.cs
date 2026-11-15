@@ -215,7 +215,7 @@ public sealed class AnimalFarmSystem : EntitySystem
 
         if (!view.FeedersKnown)
         {
-            _pens.GetEntitiesInPen(pen, _feederSet, adjacent: true);
+            _pens.GetDevices(pen, _feederSet);
             view.Feeders.AddRange(_feederSet);
             view.FeedersKnown = true;
         }

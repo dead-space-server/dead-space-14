@@ -3,38 +3,42 @@
 namespace Content.Shared.DeadSpace.Husbandry.Core;
 
 /// <summary>
-/// Rules for the place an animal lives in (its pen): a flood over the cells it can stand on, kept inside some limit.
-/// Engine independent on purpose: the cells are plain pairs, what is free and what is inside the limit is told by
-/// the caller.
+/// Rules for the place animals live in (a pen): a flood over the cells they can stand on, cut off at a number of
+/// cells. Engine independent on purpose: the cells are plain pairs, what is free is told by the caller.
 /// </summary>
 public static class PenRules
 {
     /// <summary>
-    /// Floods from <paramref name="start"/> over the free cells that are inside the limit, up and down and sideways
-    /// (not across the corners, a diagonal gap between two walls does not let anybody through).
+    /// Floods from the starting cells over the free cells, up and down and sideways (not across the corners, a
+    /// diagonal gap between two walls does not let anybody through). The cells are reached evenly from all the starts,
+    /// so a flood that is cut off gives the cells nearest to the starts.
     /// </summary>
-    /// <param name="start">Where it starts, it has to be free and inside.</param>
+    /// <param name="starts">Where it starts, the ones that are not free are left out.</param>
     /// <param name="isFree">Whether somebody can stand on the cell: no wall, no door, there is a floor.</param>
-    /// <param name="isInside">Whether the cell is within the limit (the square or the circle around the anchor).</param>
     /// <param name="cells">The cells that were reached.</param>
-    /// <param name="maxCells">A fill that gets bigger than this stops.</param>
-    /// <returns>True if the pen is open: there are free cells outside the limit that the animal could walk to, so
-    /// there is nothing round it and the limit is all that keeps it. False if it is closed in.</returns>
-    public static bool Fill(
-        (int X, int Y) start,
+    /// <param name="maxCells">The flood stops when it has this many cells.</param>
+    /// <returns>True if the flood was cut off: there are free cells that it did not take. False if the place is
+    /// closed in and the whole of it is in <paramref name="cells"/>.</returns>
+    public static bool Flood(
+        IEnumerable<(int X, int Y)> starts,
         Func<(int X, int Y), bool> isFree,
-        Func<(int X, int Y), bool> isInside,
         HashSet<(int X, int Y)> cells,
-        int maxCells = 1024)
+        int maxCells)
     {
         cells.Clear();
-        if (!isFree(start) || !isInside(start))
-            return false;
-
-        var open = false;
         var queue = new Queue<(int X, int Y)>();
-        cells.Add(start);
-        queue.Enqueue(start);
+
+        foreach (var start in starts)
+        {
+            if (cells.Contains(start) || !isFree(start))
+                continue;
+
+            if (cells.Count >= maxCells)
+                return true;
+
+            cells.Add(start);
+            queue.Enqueue(start);
+        }
 
         while (queue.Count > 0)
         {
@@ -54,12 +58,6 @@ public static class PenRules
                 if (cells.Contains(next) || !isFree(next))
                     continue;
 
-                if (!isInside(next))
-                {
-                    open = true;
-                    continue;
-                }
-
                 if (cells.Count >= maxCells)
                     return true;
 
@@ -68,7 +66,7 @@ public static class PenRules
             }
         }
 
-        return open;
+        return false;
     }
 
     /// <summary>

@@ -427,7 +427,7 @@ public sealed class DebugAnalyzerSystem : EntitySystem
         var feeders = new HashSet<Entity<AnimalFeederComponent>>();
         var foods = new HashSet<Entity<EdibleComponent>>();
         var waters = new HashSet<Entity<DrainableSolutionComponent>>();
-        _pens.GetEntitiesInPen(pen, feeders, adjacent: true);
+        _pens.GetDevices(pen, feeders);
         _pens.GetEntitiesInPen(pen, foods, adjacent: true);
         _pens.GetEntitiesInPen(pen, waters, adjacent: true);
 
@@ -482,11 +482,13 @@ public sealed class DebugAnalyzerSystem : EntitySystem
 
         if (pen == null)
         {
-            rows.Add(new(L("pen-kind"), "-"));
+            rows.Add(new(L("pen-none"), "-", null, DebugAnalyzerSeverity.Warning));
             return new DebugAnalyzerSection(L("section-pen"), rows);
         }
 
-        rows.Add(new(L("pen-kind"), pen.Kind.ToString(), null, pen.Kind == PenKind.Open ? DebugAnalyzerSeverity.Warning : DebugAnalyzerSeverity.Normal));
+        rows.Add(new(L("pen-devices"), pen.Devices.Count.ToString(CultureInfo.InvariantCulture)));
+        rows.Add(new(L("pen-truncated"), pen.Truncated ? "yes" : "no", null, pen.Truncated ? DebugAnalyzerSeverity.Warning : DebugAnalyzerSeverity.Normal));
+        rows.Add(new(L("pen-refresh"), FormatTime(pen.RefreshAt - _timing.CurTime)));
         rows.Add(new(L("pen-tiles"), pen.Tiles.Count.ToString(CultureInfo.InvariantCulture)));
         rows.Add(new(L("pen-anchor"), $"{pen.Anchor.X}, {pen.Anchor.Y}"));
         return new DebugAnalyzerSection(L("section-pen"), rows);

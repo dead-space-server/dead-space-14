@@ -72,7 +72,7 @@ public sealed partial class FindFoodOperator : HTNOperator
         }
 
         // A feeder with food in it comes first, then the food on the floor.
-        _pens.GetEntitiesInPen(pen, _feeders, adjacent: true);
+        _pens.GetDevices(pen, _feeders);
         _targets.Clear();
         foreach (var feeder in _feeders)
         {
