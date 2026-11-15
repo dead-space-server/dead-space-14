@@ -10296,3 +10296,10 @@ Entries:
   changes:
   - type: Add
     message: бабл подсказка при указании
+- id: 987
+  author: BlueDogDoc
+  time: '2026-11-15T11:23:54.274183+00:00'
+  pr: 2766
+  changes:
+  - type: Tweak
+    message: Включили назад архив камер после тестов нагрузки
