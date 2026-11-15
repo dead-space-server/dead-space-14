@@ -10231,3 +10231,10 @@ Entries:
   changes:
   - type: Tweak
     message: Субботник
+- id: 979
+  author: BlueDogDoc
+  time: '2026-11-15T05:05:37.175796+00:00'
+  pr: 2759
+  changes:
+  - type: Fix
+    message: Рега прожектайлов (метки лавы, рпг 70, чайна)
