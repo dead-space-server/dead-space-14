@@ -11,6 +11,7 @@ using Content.Shared.Input;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Mind;
+using Content.Shared.DeadSpace.Pointing; //DS-14
 using Content.Shared.Pointing;
 using Content.Shared.Popups;
 using JetBrains.Annotations;
@@ -206,9 +207,11 @@ namespace Content.Server.Pointing.EntitySystems
             string viewerMessage;
             string? viewerPointedAtMessage = null;
             var playerName = Identity.Entity(player, EntityManager);
+            EntityUid? bubbleTarget = null; //DS-14
 
             if (Exists(pointed))
             {
+                bubbleTarget = pointed; //DS-14
                 var pointedName = Identity.Entity(pointed, EntityManager);
 
                 EntityUid? containingInventory = null;
@@ -303,9 +306,33 @@ namespace Content.Server.Pointing.EntitySystems
             _pointers[session] = _gameTiming.CurTime;
 
             SendMessage(player, viewers, pointed, selfMessage, viewerMessage, viewerPointedAtMessage);
+            SendPointBubble(viewers, player, bubbleTarget); //DS-14
 
             return true;
         }
+
+        //DS-14 start
+        private void SendPointBubble(IEnumerable<ICommonSession> viewers, EntityUid pointer, EntityUid? target)
+        {
+            if (target is not { } shown)
+                return;
+
+            var ev = new PointingBubbleEvent(
+                GetNetEntity(pointer),
+                GetNetEntity(shown),
+                _gameTiming.CurTime + PointDuration);
+
+            foreach (var viewer in viewers)
+            {
+                if (viewer.AttachedEntity is not { Valid: true } viewerEntity)
+                    continue;
+
+                RaiseNetworkEvent(ev, viewerEntity);
+            }
+
+            _replay.RecordServerMessage(ev);
+        }
+        //DS-14 end
 
         public override void Initialize()
         {
