@@ -26,6 +26,7 @@
                 <CheckBox Name="ShowLoocAboveHeadCheckBox" Text="{Loc 'ui-options-show-looc-on-head'}" />
                 <CheckBox Name="FancySpeechBubblesCheckBox" Text="{Loc 'ui-options-fancy-speech'}" />
                 <CheckBox Name="FancyNameBackgroundsCheckBox" Text="{Loc 'ui-options-fancy-name-background'}" />
+                <CheckBox Name="PointingBubblesCheckBox" Text="{Loc 'ui-options-pointing-bubbles'}" /> <!--DS14-->
                 <CheckBox Name="PopOutChat" Text="{Loc 'ui-options-fancy-name-pop-out-chat'}" ToolTip="!!!ВНИМАНИЕ РАБОТАЕТ ТОЛЬКО ПОСЛЕ ПЕРЕЗАГРУЗКИ ИГРЫ!!!" /> <!--DS14-->
                 <!-- DS14-start -->
                 <Label Text="{Loc 'ui-options-general-cursor'}"
