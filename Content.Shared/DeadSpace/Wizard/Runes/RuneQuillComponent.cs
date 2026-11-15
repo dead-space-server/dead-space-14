@@ -14,4 +14,7 @@ public sealed partial class RuneTintComponent : Component
 {
     [DataField, AutoNetworkedField]
     public Color Color = Color.White;
+
+    [DataField, AutoNetworkedField]
+    public float Strength = 0.6f;
 }

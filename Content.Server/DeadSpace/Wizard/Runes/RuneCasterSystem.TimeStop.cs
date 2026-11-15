@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Server.NPC.HTN;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Wizard.Runes;
@@ -47,7 +48,7 @@ public sealed partial class RuneFrozenComponent : Component
     public BodyType? Body;
     public Vector2 Velocity;
     public float Angular;
-    public DamageSpecifier Stored = new();
+    public readonly List<(DamageSpecifier Damage, LimbZone? Zone)> Stored = new();
 }
 
 public sealed partial class RuneCasterSystem
@@ -444,7 +445,7 @@ public sealed partial class RuneCasterSystem
         if (args.Damage.Empty)
             return;
 
-        ent.Comp.Stored += args.Damage;
+        ent.Comp.Stored.Add((new DamageSpecifier(args.Damage), _limbs.TakeLedgerZone(ent)));
         args.Cancelled = true;
     }
 
@@ -466,7 +467,7 @@ public sealed partial class RuneCasterSystem
             var rotationSpeed = state.RotationSpeed;
             var bodyType = state.Body;
             RemComp<RuneFrozenComponent>(frozen);
-            RemComp<RuneTimeHeldComponent>(frozen);
+            var strikes = _limbs.TakeHeldStrikes(frozen);
             RemComp<RuneProjectileHoldComponent>(frozen);
 
             if (rotationSpeed is { } speed && TryComp<MouseRotatorComponent>(frozen, out var rotator))
@@ -490,8 +491,16 @@ public sealed partial class RuneCasterSystem
                 _popup.PopupEntity(Loc.GetString("rune-time-stop-end"), frozen, frozen, PopupType.LargeCaution);
             }
 
-            if (!stored.Empty)
-                _damageable.TryChangeDamage(frozen, stored, origin: ent.Comp.Caster);
+            _limbs.ReplayHeldStrikes(frozen, strikes);
+            foreach (var (damage, zone) in stored)
+            {
+                if (TerminatingOrDeleted(frozen))
+                    break;
+
+                _limbs.SetLedgerZone(frozen, zone);
+                _damageable.TryChangeDamage(frozen, damage, origin: ent.Comp.Caster);
+                _limbs.SetLedgerZone(frozen, null);
+            }
         }
 
         ent.Comp.Frozen.Clear();

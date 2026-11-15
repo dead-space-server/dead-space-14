@@ -107,6 +107,8 @@
       spread: 8
       onHit:
       - !type:RuneScreenFlashEffect
+        minTime: 3
+        maxTime: 4
         sprite:
           sprite: Objects/Fun/ducky.rsi
           state: icon

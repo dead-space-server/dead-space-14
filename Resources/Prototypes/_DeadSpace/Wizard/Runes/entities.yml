@@ -304,6 +304,23 @@
     - HideContextMenu
 
 - type: entity
+  parent: WizardFireSpawn
+  id: RuneFirestormSpawn
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SpawnOnDespawn
+    prototype: RuneFirestormFire
+
+- type: entity
+  parent: WizardFireHELL
+  id: RuneFirestormFire
+  suffix: Маг, огненный шторм
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RuneBlaze
+    lifetime: 20
+
+- type: entity
   parent: WallIce
   id: RuneWallIce
   name: рунный лёд
@@ -550,6 +567,19 @@
       types:
         Blunt: 5
         Structural: 45
+  - type: HTN
+    rootTask:
+      task: FollowCompound
+    blackboard:
+      FollowCloseRange: !type:Single
+        0.5
+      FollowRange: !type:Single
+        1
+  - type: RuneWallBreaker
+    sound: /Audio/Weapons/smash.ogg
+    damage:
+      types:
+        Structural: 45
   - type: Destructible
     thresholds:
     - trigger:
@@ -619,7 +649,7 @@
     radius: 1.5
     energy: 1
   - type: RuneAnimateStrike
-    healFraction: 0.25
+    healFraction: 0.375
 
 - type: entity
   id: RuneAnimateVoidTemplate
@@ -686,6 +716,7 @@
     - Caustic
     randomMin: 1
     randomMax: 4
+    hitsCaster: true
 
 # Призывы
 
@@ -765,9 +796,16 @@
   parent: MobPenguin
   id: RuneSummonPenguin
   name: пингвин-санитар
+  description: Пингвин в медицинской шапочке. Ходит за магом и подлечивает его.
   suffix: Призыв мага
   categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: penguin
+      sprite: _DeadSpace/Wizard/penguin_medic.rsi
   - type: NpcFactionMember
     factions:
     - Wizard
@@ -796,7 +834,7 @@
   components:
   - type: NpcFactionMember
     factions:
-    - Wizard
+    - AllHostile
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
@@ -821,7 +859,7 @@
   components:
   - type: NpcFactionMember
     factions:
-    - Wizard
+    - AllHostile
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
@@ -846,7 +884,7 @@
   components:
   - type: NpcFactionMember
     factions:
-    - Wizard
+    - AllHostile
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
@@ -871,7 +909,7 @@
   components:
   - type: NpcFactionMember
     factions:
-    - Wizard
+    - AllHostile
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
@@ -896,7 +934,7 @@
   components:
   - type: NpcFactionMember
     factions:
-    - Wizard
+    - AllHostile
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
@@ -921,7 +959,7 @@
   components:
   - type: NpcFactionMember
     factions:
-    - Wizard
+    - AllHostile
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
@@ -1114,6 +1152,17 @@
   coefficients:
     Heat: 0.3
 
+- type: damageModifierSet
+  id: RuneRobe
+  coefficients:
+    Blunt: 0.7
+    Slash: 0.7
+    Piercing: 0.7
+    Heat: 0.7
+    Cold: 0.7
+    Shock: 0.7
+    Caustic: 0.7
+
 # Полиморфы хаоса
 
 - type: polymorph
@@ -1121,7 +1170,7 @@
   configuration:
     entity: MobMonkey
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: false
@@ -1146,7 +1195,7 @@
   configuration:
     entity: MobChicken
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true
@@ -1158,7 +1207,7 @@
   configuration:
     entity: MobCorgi
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true
@@ -1170,7 +1219,7 @@
   configuration:
     entity: MobMouse
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true
@@ -1296,7 +1345,7 @@
         maxVol: 1000
         reagents:
         - ReagentId: Water
-          Quantity: 5
+          Quantity: 25
 
 - type: entity
   id: RuneAnimateAirTemplate
@@ -1363,7 +1412,7 @@
   configuration:
     entity: MobPenguin
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true
@@ -1375,7 +1424,7 @@
   configuration:
     entity: FloraTree
     forced: true
-    transferName: true
+    transferName: false
     inventory: None
     revertOnDeath: true
     duration: 15
@@ -1385,7 +1434,7 @@
   configuration:
     entity: MobMonkey
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true
@@ -1397,7 +1446,7 @@
   configuration:
     entity: MobFrog
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true
@@ -1409,12 +1458,27 @@
   configuration:
     entity: MobBat
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true
     revertOnDeath: true
     duration: 20
+
+- type: polymorph
+  id: RuneMorphCarp
+  configuration:
+    entity: MobCarpMagic
+    forced: true
+    inventory: None
+    transferName: false
+    transferDamage: true
+    revertOnCrit: false
+    revertOnDeath: true
+    polymorphSound: !type:SoundPathSpecifier
+      path: /Audio/Magic/forcewall.ogg
+    exitPolymorphSound: !type:SoundPathSpecifier
+      path: /Audio/Magic/forcewall.ogg
 
 # Смертельные превращения
 
@@ -1423,18 +1487,12 @@
   id: RuneFatalLava
   suffix: Маг, срыв
   categories: [ HideSpawnMenu ]
-  components:
-  - type: TimedDespawn
-    lifetime: 60
 
 - type: entity
   parent: FloorWaterEntity
   id: RuneFatalWater
   suffix: Маг, срыв
   categories: [ HideSpawnMenu ]
-  components:
-  - type: TimedDespawn
-    lifetime: 60
 
 - type: entity
   id: RuneVanishPortal

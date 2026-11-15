@@ -15,6 +15,14 @@
     damage:
       types:
         Heat: 12
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    onlyDead: true
+    ignoreResistances: true
+    damage:
+      types:
+        Heat: 500
   - !type:RuneIgniteEffect
     target: Auto
     radius: 2.5
@@ -174,6 +182,11 @@
   - !type:RuneLastWordsEffect
     target: Auto
     radius: 4
+  - !type:RuneDanceEffect
+    target: Auto
+    radius: 4
+    onlyDead: true
+    duration: 8
   - !type:RuneSlowEffect
     target: Auto
     radius: 4

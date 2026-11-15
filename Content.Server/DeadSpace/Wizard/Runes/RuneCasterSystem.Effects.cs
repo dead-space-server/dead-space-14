@@ -38,10 +38,9 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
-using Content.Shared.RepulseAttract;
+using Content.Shared.RepulseAttract.Events;
 using Content.Shared.Stunnable;
 using Content.Shared.Tag;
-using Content.Shared.Whitelist;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Systems;
@@ -132,7 +131,6 @@ public sealed partial class RuneCasterSystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly MovementModStatusSystem _movementMod = default!;
     [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly RepulseAttractSystem _repulse = default!;
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
     [Dependency] private readonly GibbingSystem _gibbing = default!;
     [Dependency] private readonly MagicSystem _magic = default!;
@@ -172,11 +170,8 @@ public sealed partial class RuneCasterSystem
     private static readonly EntProtoId AnimateAction = "ActionAnimateSpell";
     private static readonly ProtoId<TagPrototype> WandTag = "WizardWand";
 
-    private EntityWhitelist _pushWhitelist = new();
-
     private void InitializeEffects()
     {
-        _pushWhitelist = new EntityWhitelist { Components = new[] { "MobMover", "Item" } };
         SubscribeLocalEvent<LightningComponent, ComponentInit>(OnWizardLightningInit);
         SubscribeLocalEvent<RuneBlastWardComponent, GetExplosionResistanceEvent>(OnBlastWard);
     }
@@ -382,6 +377,9 @@ public sealed partial class RuneCasterSystem
                 break;
             case RuneRotEffect rot:
                 ApplyRot(ctx, rot);
+                break;
+            case RuneDanceEffect dance:
+                ApplyDance(ctx, dance);
                 break;
         }
     }
@@ -633,15 +631,11 @@ public sealed partial class RuneCasterSystem
     private void ApplyPush(RuneCastContext ctx, RunePushEffect effect)
     {
         var center = AtPoint(ctx, effect.AtPoint, effect.Auto) ? _transform.ToMapCoordinates(ctx.Point) : _transform.GetMapCoordinates(ctx.Caster);
-        if (effect.Distance is { } distance)
-            Shove(ctx, center, effect.Speed * ctx.Power, effect.Radius * ctx.RangeScale, distance * ctx.Power);
-        else
-            _repulse.TryRepulseAttract(center, ctx.Caster, effect.Speed * ctx.Power, effect.Radius * ctx.RangeScale, _pushWhitelist, CollisionGroup.MobMask);
-
+        Shove(ctx, center, effect.Speed * ctx.Power, effect.Radius * ctx.RangeScale, effect.Distance * ctx.Power);
         PushDisplaced(ctx, center, effect.Speed * ctx.Power, effect.Radius * ctx.RangeScale);
     }
 
-    private void Shove(RuneCastContext ctx, MapCoordinates center, float speed, float radius, float distance)
+    private void Shove(RuneCastContext ctx, MapCoordinates center, float speed, float radius, float? distance)
     {
         var targets = new HashSet<EntityUid>();
         foreach (var mob in _lookup.GetEntitiesInRange<MobMoverComponent>(center, radius))
@@ -658,7 +652,9 @@ public sealed partial class RuneCasterSystem
             if (direction.LengthSquared() < 0.001f)
                 continue;
 
-            var throwDirection = speed < 0 ? -direction : Vector2.Normalize(direction) * distance;
+            var throwDirection = speed < 0 ? -direction : Vector2.Normalize(direction) * (distance ?? radius - direction.Length());
+            var before = new BeforeRepulseAttractThrownEvent(ctx.Caster, throwDirection, MathF.Abs(speed));
+            RaiseLocalEvent(target, ref before);
             _throwing.TryThrow(target, throwDirection, MathF.Abs(speed), ctx.Caster, recoil: false, compensateFriction: true);
         }
     }
@@ -918,6 +914,9 @@ public sealed partial class RuneCasterSystem
             AddComp(uid, animated, true);
             if (TryComp<RuneAnimateStrikeComponent>(uid, out var strike))
                 strike.Caster = ctx.Caster;
+
+            if (TryComp<RuneWallBreakerComponent>(uid, out var breaker))
+                breaker.Caster = ctx.Caster;
 
             if (ctx.Element != null && Proto.TryIndex<RunePrototype>(ctx.Element, out var element))
             {

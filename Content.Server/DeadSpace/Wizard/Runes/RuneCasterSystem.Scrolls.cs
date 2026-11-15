@@ -5,8 +5,12 @@ using Content.Shared.Database;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Inventory;
+using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
+using Content.Shared.Storage;
+using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -16,6 +20,8 @@ namespace Content.Server.DeadSpace.Wizard.Runes;
 
 public sealed partial class RuneCasterSystem
 {
+    [Dependency] private readonly SharedStorageSystem _storage = default!;
+
     private static readonly EntProtoId AshPrototype = "Ash";
     private const int ScrollRunes = 2;
 
@@ -26,6 +32,46 @@ public sealed partial class RuneCasterSystem
         SubscribeLocalEvent<RuneQuillComponent, AfterInteractEvent>(OnQuillInteract);
         SubscribeNetworkEvent<RuneQuillInscribeMessage>(OnQuillInscribe);
         SubscribeNetworkEvent<RuneQuillBurnMessage>(OnQuillBurn);
+        SubscribeLocalEvent<RuneScrollHatComponent, GotEquippedEvent>(OnHatEquipped);
+        SubscribeLocalEvent<RuneScrollHatComponent, GotUnequippedEvent>(OnHatUnequipped);
+    }
+
+    private void OnHatEquipped(Entity<RuneScrollHatComponent> ent, ref GotEquippedEvent args)
+    {
+        if ((args.SlotFlags & SlotFlags.HEAD) == 0)
+            return;
+
+        ent.Comp.Wearer = args.Equipee;
+        ent.Comp.Next = Timing.CurTime + TimeSpan.FromSeconds(ent.Comp.Interval);
+    }
+
+    private void OnHatUnequipped(Entity<RuneScrollHatComponent> ent, ref GotUnequippedEvent args)
+    {
+        ent.Comp.Wearer = null;
+    }
+
+    private void UpdateScrollHats()
+    {
+        var now = Timing.CurTime;
+        var hats = EntityQueryEnumerator<RuneScrollHatComponent, StorageComponent>();
+        while (hats.MoveNext(out var uid, out var hat, out var storage))
+        {
+            if (hat.Wearer is not { } wearer || now < hat.Next)
+                continue;
+
+            hat.Next = now + TimeSpan.FromSeconds(hat.Interval);
+            if (!HasComp<RuneCasterComponent>(wearer) || _mobState.IsDead(wearer))
+                continue;
+
+            var scroll = Spawn(hat.Scroll, Transform(uid).Coordinates);
+            if (!_storage.Insert(uid, scroll, out _, storageComp: storage, playSound: false))
+            {
+                Del(scroll);
+                continue;
+            }
+
+            _popup.PopupEntity(Loc.GetString("rune-hat-scroll"), wearer, wearer);
+        }
     }
 
     private bool HoldsQuill(EntityUid uid)

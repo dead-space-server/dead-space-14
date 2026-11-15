@@ -317,7 +317,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
             scale *= 1.35f;
 
         if (RepeatsElement(caster, composition))
-            scale *= 1f + caster.FatigueStep * caster.ElementStreak;
+            scale *= 1f + caster.FatigueStep * (caster.ElementStreak + 1);
 
         return strain * scale;
     }

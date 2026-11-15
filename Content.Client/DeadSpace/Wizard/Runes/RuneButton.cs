@@ -42,7 +42,7 @@ public sealed class RuneButton : Control
     private float _glow;
     private float _press;
 
-    public RuneButton(RuneButtonIcon icon, string caption, bool small = false)
+    public RuneButton(RuneButtonIcon icon, string caption, bool small = false, string? tooltip = null)
     {
         _icon = icon;
         _caption = caption;
@@ -51,7 +51,7 @@ public sealed class RuneButton : Control
         _font = IoCManager.Resolve<IResourceCache>().NotoStack(variation: "Bold", size: 8);
         MouseFilter = MouseFilterMode.Stop;
         SetSize = small ? new Vector2(SmallDiameter + 4f) : new Vector2(Diameter + 24f, Diameter + 16f);
-        ToolTip = caption;
+        ToolTip = tooltip ?? caption;
     }
 
     protected override void MouseEntered()

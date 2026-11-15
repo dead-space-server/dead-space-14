@@ -238,7 +238,7 @@
   effects:
   - !type:RuneAnimateEffect
     template: RuneAnimateAirTemplate
-    count: 3
+    count: 2
     radius: 2.5
 
 - type: wizardRuneSpell
@@ -341,7 +341,7 @@
   loudness: 2
   effects:
   - !type:RunePolymorphEffect
-    polymorph: WizardForcedCarp
+    polymorph: RuneMorphCarp
     onCaster: WizardSpider
 
 - type: wizardRuneSpell

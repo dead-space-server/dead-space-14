@@ -6,6 +6,7 @@ using Content.Server.NPC;
 using Content.Server.NPC.Systems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.FixedPoint;
@@ -15,6 +16,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Content.Shared.Temperature.Components;
+using Content.Shared.Wall;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
@@ -112,7 +114,35 @@ public sealed partial class RuneAnimateStrikeComponent : Component
     [DataField]
     public float RandomMax = 6f;
 
+    [DataField]
+    public bool HitsCaster;
+
     public EntityUid? Caster;
+}
+
+[RegisterComponent]
+public sealed partial class RuneWallBreakerComponent : Component
+{
+    [DataField]
+    public float Range = 8f;
+
+    [DataField]
+    public float Reach = 1.4f;
+
+    [DataField]
+    public float Interval = 1.2f;
+
+    [DataField(required: true)]
+    public DamageSpecifier Damage = new();
+
+    [DataField]
+    public SoundSpecifier? Sound;
+
+    public EntityUid? Caster;
+
+    public EntityUid? Wall;
+
+    public TimeSpan Next;
 }
 
 public enum RuneSeekerMode : byte
@@ -166,7 +196,7 @@ public sealed partial class RuneMedicComponent : Component
     [DataField]
     public float Range = 2.5f;
 
-    public EntityUid? Owner;
+    public EntityUid? Master;
 
     public TimeSpan Next;
 }
@@ -223,7 +253,7 @@ public sealed partial class RuneCasterSystem
         var medics = EntityQueryEnumerator<RuneMedicComponent>();
         while (medics.MoveNext(out var uid, out var medic))
         {
-            if (now < medic.Next || medic.Owner is not { } owner || TerminatingOrDeleted(owner) || _mobState.IsDead(uid) || _mobState.IsDead(owner))
+            if (now < medic.Next || medic.Master is not { } owner || TerminatingOrDeleted(owner) || _mobState.IsDead(uid) || _mobState.IsDead(owner))
                 continue;
 
             medic.Next = now + TimeSpan.FromSeconds(medic.Interval);
@@ -232,6 +262,10 @@ public sealed partial class RuneCasterSystem
 
             _damageable.TryChangeDamage(owner, medic.Heal, true, interruptsDoAfters: false, origin: uid);
         }
+
+        var breakers = EntityQueryEnumerator<RuneWallBreakerComponent, TransformComponent>();
+        while (breakers.MoveNext(out var uid, out var breaker, out var xform))
+            UpdateWallBreaker(uid, breaker, xform, now);
 
         var orbs = EntityQueryEnumerator<RuneHealOrbComponent, TransformComponent>();
         while (orbs.MoveNext(out var uid, out var orb, out var xform))
@@ -245,9 +279,62 @@ public sealed partial class RuneCasterSystem
 
         if (TryComp<RuneMedicComponent>(uid, out var medic))
         {
-            medic.Owner = ctx.Caster;
+            medic.Master = ctx.Caster;
             _npc.SetBlackboard(uid, NPCBlackboard.FollowTarget, new EntityCoordinates(ctx.Caster, Vector2.Zero));
         }
+    }
+
+    private void UpdateWallBreaker(EntityUid uid, RuneWallBreakerComponent breaker, TransformComponent xform, TimeSpan now)
+    {
+        if (now < breaker.Next)
+            return;
+
+        breaker.Next = now + TimeSpan.FromSeconds(breaker.Interval);
+        if (breaker.Wall is not { } current || TerminatingOrDeleted(current) || !Transform(current).Anchored)
+            breaker.Wall = FindWall(uid, xform, breaker.Range);
+
+        if (breaker.Wall is not { } wall)
+        {
+            if (breaker.Caster is { } caster && !TerminatingOrDeleted(caster))
+                _npc.SetBlackboard(uid, NPCBlackboard.FollowTarget, new EntityCoordinates(caster, Vector2.Zero));
+            return;
+        }
+
+        var position = _transform.GetWorldPosition(xform);
+        var wallPosition = _transform.GetWorldPosition(wall);
+        var delta = position - wallPosition;
+        if (delta.Length() > breaker.Reach)
+        {
+            var side = delta.LengthSquared() > 0.001f ? Vector2.Normalize(delta) : Vector2.UnitY;
+            var stand = _transform.ToCoordinates(new MapCoordinates(wallPosition + side, xform.MapID));
+            _npc.SetBlackboard(uid, NPCBlackboard.FollowTarget, stand);
+            return;
+        }
+
+        _damageable.TryChangeDamage(wall, breaker.Damage, origin: uid);
+        if (breaker.Sound != null)
+            _audio.PlayPvs(breaker.Sound, wall);
+    }
+
+    private EntityUid? FindWall(EntityUid uid, TransformComponent xform, float range)
+    {
+        EntityUid? best = null;
+        var bestDistance = float.MaxValue;
+        var position = _transform.GetWorldPosition(xform);
+        foreach (var candidate in _lookup.GetEntitiesInRange<WallComponent>(xform.Coordinates, range, LookupFlags.Static))
+        {
+            if (candidate.Owner == uid || !HasComp<DamageableComponent>(candidate) || !Transform(candidate).Anchored)
+                continue;
+
+            var distance = (_transform.GetWorldPosition(candidate) - position).LengthSquared();
+            if (distance >= bestDistance)
+                continue;
+
+            best = candidate;
+            bestDistance = distance;
+        }
+
+        return best;
     }
 
     private RuneAnimatedComponent SnapshotAnimated(EntityUid uid, ChangeComponentsSpellEvent? change, EntityPrototype template)
@@ -381,7 +468,7 @@ public sealed partial class RuneCasterSystem
         var dealt = 0f;
         foreach (var target in args.HitEntities)
         {
-            if (target == ent.Owner || target == strike.Caster || !HasComp<MobStateComponent>(target))
+            if (target == ent.Owner || target == strike.Caster && !strike.HitsCaster || !HasComp<MobStateComponent>(target))
                 continue;
 
             dealt += args.BaseDamage.GetTotal().Float();

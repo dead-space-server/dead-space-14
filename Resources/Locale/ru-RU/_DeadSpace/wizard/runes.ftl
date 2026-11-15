@@ -35,6 +35,7 @@ rune-quill-burn-popup = Свиток вспыхивает и рассыпает�
 ## Рунный круг
 
 rune-circle-clear = Стереть
+rune-circle-clear-tooltip = Стереть формулу. Горячая клавиша: СКМ
 rune-circle-close = Закрыть
 rune-circle-hint-form = Начертите руну формы
 rune-circle-hint-element = Начертите руну стихии
@@ -393,6 +394,12 @@ rune-time-stop-start = Время останавливается.
 rune-time-stop-end = Время снова идёт. И всё, что вы пропустили, случается разом.
 rune-time-stop-speak = МИР - ВРЕМЯ ОСТАНОВИСЬ
 rune-time-stop-resume = ВРЕМЯ ВОЗОБНОВИЛО СВОЙ ХОД
+
+rune-hat-scroll = В шляпе шуршит новый чистый свиток.
+rune-robe-examine = Рунная вязь гасит [color=lightblue]30%[/color] урона, если её носит маг рун.
+
+rune-dance-point = указывает на { $target }.
+rune-dance-point-target = Мертвец указывает прямо на вас.
 
 rune-portal-first = Первая точка портала. Прочтите формулу ещё раз, чтобы открыть вторую.
 rune-portal-open = Портал открыт.

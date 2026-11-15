@@ -71,7 +71,7 @@ public sealed partial class RuneSpellPrototype : IPrototype
             Targeting = form.Targeting,
             Range = form.SpellRange,
             Strain = form.SpellStrain + fusion.Strain,
-            Cooldown = form.SpellCooldown,
+            Cooldown = fusion.Cooldown ?? form.SpellCooldown,
             Loudness = form.SpellLoudness + fusion.Loudness,
             Absurdity = fusion.Absurdity,
             Effects = fusion.FormEffects.TryGetValue(form.ID, out var own) ? own : fusion.Effects,
@@ -96,6 +96,9 @@ public sealed partial class RuneFusionPrototype : IPrototype
 
     [DataField]
     public float Strain = 10f;
+
+    [DataField]
+    public float? Cooldown;
 
     [DataField]
     public int Loudness;

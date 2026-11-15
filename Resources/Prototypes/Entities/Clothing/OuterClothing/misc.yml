@@ -192,6 +192,8 @@
   - type: PhysicalComposition
     materialComposition:
       Cloth: 100
+  - type: RuneRobe
+    modifiers: RuneRobe
   # DS14-end
 
 # Is this wizard wearing a fanny pack???

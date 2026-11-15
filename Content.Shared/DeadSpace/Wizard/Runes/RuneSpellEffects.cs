@@ -544,8 +544,26 @@ public sealed partial class RuneVanishEffect : RuneTargetedEffect
 
     [DataField]
     public ProtoId<EmotePrototype>? Emote;
+
+    [DataField]
+    public bool KeepItems;
 }
 
 public sealed partial class RuneRotEffect : RuneTargetedEffect
 {
+}
+
+public sealed partial class RuneDanceEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Duration = 8f;
+
+    [DataField]
+    public float Speed = 1.6f;
+
+    [DataField]
+    public float FollowChance = 0.35f;
+
+    [DataField]
+    public float FollowRange = 8f;
 }

@@ -63,6 +63,15 @@ public sealed partial class RuneReagentContactComponent : Component
     public TimeSpan Next;
 }
 
+[RegisterComponent]
+public sealed partial class RuneBlazeComponent : Component
+{
+    [DataField]
+    public float Lifetime = 20f;
+
+    public TimeSpan End;
+}
+
 public sealed partial class RuneCasterSystem
 {
     [Dependency] private readonly TemperatureSystem _temperature = default!;
@@ -79,11 +88,29 @@ public sealed partial class RuneCasterSystem
     private void InitializeHazards()
     {
         SubscribeLocalEvent<RuneVacuumComponent, SpeakAttemptEvent>(OnVacuumSpeak);
+        SubscribeLocalEvent<RuneBlazeComponent, MapInitEvent>(OnBlazeInit);
+    }
+
+    private void OnBlazeInit(Entity<RuneBlazeComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.End = Timing.CurTime + TimeSpan.FromSeconds(ent.Comp.Lifetime);
+        foreach (var other in _lookup.GetEntitiesInRange<RuneBlazeComponent>(_transform.GetMapCoordinates(ent), 1.5f))
+        {
+            if (other.Owner != ent.Owner && other.Comp.End > TimeSpan.Zero && other.Comp.End < ent.Comp.End)
+                ent.Comp.End = other.Comp.End;
+        }
     }
 
     private void UpdateHazards()
     {
         var now = Timing.CurTime;
+
+        var blazes = EntityQueryEnumerator<RuneBlazeComponent>();
+        while (blazes.MoveNext(out var uid, out var blaze))
+        {
+            if (now >= blaze.End)
+                QueueDel(uid);
+        }
 
         var soaked = EntityQueryEnumerator<RuneSoakedComponent, PhysicsComponent>();
         while (soaked.MoveNext(out var uid, out var soak, out var physics))

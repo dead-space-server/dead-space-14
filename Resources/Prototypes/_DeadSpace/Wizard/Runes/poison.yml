@@ -158,7 +158,7 @@
   - !type:RuneTelekinesisEffect
   - !type:RuneInjectEffect
     reagent: Lead
-    amount: 6
+    amount: 4
   - !type:RuneSlowEffect
     time: 5
     multiplier: 0.5
@@ -623,7 +623,7 @@
     energy: 1
   - type: RuneAnimateStrike
     reagent: Lead
-    reagentAmount: 0.25
+    reagentAmount: 0.15
 
 - type: entity
   parent: MobSmallPurpleSnake
@@ -650,7 +650,7 @@
   configuration:
     entity: MobCockroach
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true

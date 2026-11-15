@@ -441,7 +441,7 @@
     angle: 0.0
     damage:
       types:
-        Slash: 12
+        Slash: 4
   - type: PassiveDamage
     damage:
       groups:
@@ -468,7 +468,7 @@
   configuration:
     entity: MobFleshClamp
     forced: true
-    transferName: true
+    transferName: false
     transferDamage: true
     inventory: None
     revertOnCrit: true

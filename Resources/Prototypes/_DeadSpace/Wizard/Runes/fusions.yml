@@ -271,7 +271,7 @@
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
-    delta: -24
+    delta: -36
   - !type:RuneDamageEffect
     target: Auto
     radius: 2
@@ -720,34 +720,32 @@
   second: RuneElementFire
   strain: 22
   loudness: 2
+  cooldown: 40
   effects:
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
     delta: 8
   - !type:RuneSpawnEffect
-    prototype: RuneFireTile
+    prototype: RuneFirestormSpawn
     pattern: Auto
-  - !type:RuneIgniteEffect
-    target: Auto
-    radius: 1.5
-    fireStacks: 1
+    skipBlocked: false
   formEffects:
     RuneFormWall:
     - !type:RuneSpawnEffect
-      prototype: RuneFireTile
+      prototype: RuneFirestormSpawn
       pattern: LineAtPoint
       size: 3
     RuneFormWave:
     - !type:RuneIgniteEffect
       target: AroundCaster
-      radius: 2.5
-      fireStacks: 1
+      radius: 3
+      fireStacks: 2
     RuneFormSelf:
     - !type:RuneSpawnEffect
-      prototype: RuneFireTile
+      prototype: RuneFirestormSpawn
       pattern: RingAroundCaster
-      size: 1
+      size: 2
 
 - type: wizardRuneFusion
   id: RuneFusionBlizzardWind

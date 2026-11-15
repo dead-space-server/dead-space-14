@@ -18,7 +18,7 @@ public sealed class RuneScreenFlashOverlay : Overlay
 
     private const float FadeIn = 0.15f;
     private const float FadeOut = 0.35f;
-    private const float ScreenShare = 0.85f;
+    private const float ScreenShare = 1.4f;
 
     private readonly SpriteSystem _sprite;
 
@@ -54,7 +54,7 @@ public sealed class RuneScreenFlashOverlay : Overlay
 
         var texture = _sprite.Frame0(sprite);
         UIBox2 bounds = args.ViewportBounds;
-        var side = MathF.Min(bounds.Width, bounds.Height) * ScreenShare;
+        var side = MathF.Max(bounds.Width, bounds.Height) * ScreenShare;
         var aspect = texture.Width / (float) Math.Max(1, texture.Height);
         var size = new Vector2(side * aspect, side);
         var wobble = MathF.Sin(shown * 9f) * 0.04f * side;

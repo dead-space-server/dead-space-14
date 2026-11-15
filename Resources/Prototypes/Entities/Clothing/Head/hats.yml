@@ -857,6 +857,24 @@
   id: ClothingHeadHatWizardBase
   components:
   - type: WizardClothes
+  # DS14-start
+  - type: RuneRobe
+    modifiers: RuneRobe
+  - type: Storage
+    grid:
+    - 0,0,1,1
+    whitelist:
+      components:
+      - RuneScroll
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+  - type: RuneScrollHat
+  # DS14-end
 
 - type: entity
   parent: ClothingHeadHatWizardBase

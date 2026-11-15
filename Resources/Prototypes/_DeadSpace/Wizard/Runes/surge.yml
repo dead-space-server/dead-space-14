@@ -375,6 +375,7 @@
     - !type:RuneVanishEffect
       target: Caster
       delay: 1
+      keepItems: true
       sound:
         path: /Audio/Effects/Fluids/watersplash.ogg
 

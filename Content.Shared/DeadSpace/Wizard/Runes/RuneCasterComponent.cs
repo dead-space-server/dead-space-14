@@ -131,10 +131,13 @@ public sealed partial class RuneCasterComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? CircleActionEntity;
 
+    [AutoNetworkedField]
     public ProtoId<RunePrototype>? LastElement;
 
+    [AutoNetworkedField]
     public ProtoId<RunePrototype>? LastSecond;
 
+    [AutoNetworkedField]
     public int ElementStreak;
 
     [AutoNetworkedField]

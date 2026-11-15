@@ -92,6 +92,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         UpdateArena();
         UpdateCreatures(frameTime);
         UpdateDoom();
+        UpdateScrollHats();
     }
 
     private void OnMapInit(Entity<RuneCasterComponent> ent, ref MapInitEvent args)

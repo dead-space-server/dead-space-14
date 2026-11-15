@@ -59,7 +59,6 @@ public sealed class RuneVisualsSystem : EntitySystem
     public const float ImpactLength = 0.9f;
     private const string FormLayer = "rune-form";
     private const string ElementLayer = "rune-element";
-    private const float TintStrength = 0.6f;
     private const float FlashLength = 0.5f;
 
     public readonly List<RuneImpact> Impacts = new();
@@ -81,9 +80,9 @@ public sealed class RuneVisualsSystem : EntitySystem
         SubscribeLocalEvent<RuneMarkComponent, GetStatusIconsEvent>(OnMarkIcons);
         SubscribeLocalEvent<RuneScrollComponent, ComponentStartup>((uid, comp, _) => UpdateScroll(uid, comp));
         SubscribeLocalEvent<RuneScrollComponent, AfterAutoHandleStateEvent>((uid, comp, _) => UpdateScroll(uid, comp));
-        SubscribeLocalEvent<RuneTintComponent, ComponentStartup>((uid, comp, _) => UpdateTint(uid, comp.Color));
-        SubscribeLocalEvent<RuneTintComponent, AfterAutoHandleStateEvent>((uid, comp, _) => UpdateTint(uid, comp.Color));
-        SubscribeLocalEvent<RuneTintComponent, ComponentShutdown>((uid, _, _) => UpdateTint(uid, Color.White));
+        SubscribeLocalEvent<RuneTintComponent, ComponentStartup>((uid, comp, _) => UpdateTint(uid, comp.Color, comp.Strength));
+        SubscribeLocalEvent<RuneTintComponent, AfterAutoHandleStateEvent>((uid, comp, _) => UpdateTint(uid, comp.Color, comp.Strength));
+        SubscribeLocalEvent<RuneTintComponent, ComponentShutdown>((uid, _, _) => UpdateTint(uid, Color.White, 0f));
         SubscribeLocalEvent<RuneSigilComponent, ComponentShutdown>(OnSigilShutdown);
         SubscribeNetworkEvent<RuneImpactEvent>(OnImpact);
         _overlays.AddOverlay(new RuneSigilOverlay(this));
@@ -143,10 +142,10 @@ public sealed class RuneVisualsSystem : EntitySystem
         _sprite.LayerSetVisible(sprite.AsNullable(), layer, true);
     }
 
-    private void UpdateTint(EntityUid uid, Color color)
+    private void UpdateTint(EntityUid uid, Color color, float strength)
     {
         if (TryComp<SpriteComponent>(uid, out var sprite))
-            _sprite.SetColor((uid, sprite), color == Color.White ? Color.White : Color.InterpolateBetween(Color.White, color, TintStrength));
+            _sprite.SetColor((uid, sprite), color == Color.White ? Color.White : Color.InterpolateBetween(Color.White, color, strength));
     }
 
     private void OnSigilShutdown(Entity<RuneSigilComponent> ent, ref ComponentShutdown args)

@@ -139,7 +139,7 @@ public sealed class RuneCircleControl : LayoutContainer
         _big = cache.NotoStack(variation: "Bold", size: 16);
         _title = cache.NotoStack(variation: "Bold", size: 14);
 
-        AddButton(RuneButtonIcon.Erase, "rune-circle-clear", -0.5f, () => ClearRequested?.Invoke());
+        AddButton(RuneButtonIcon.Erase, "rune-circle-clear", -0.5f, () => ClearRequested?.Invoke(), "rune-circle-clear-tooltip");
         AddButton(RuneButtonIcon.Close, "rune-circle-close", 0.5f, () => CloseRequested?.Invoke());
 
         AddToggle(RuneButtonIcon.Swap, "rune-circle-toggle-mode", 0, () => _compact = !_compact);
@@ -148,9 +148,9 @@ public sealed class RuneCircleControl : LayoutContainer
         LayoutButtons();
     }
 
-    private void AddButton(RuneButtonIcon icon, string loc, float slot, Action pressed)
+    private void AddButton(RuneButtonIcon icon, string loc, float slot, Action pressed, string? tooltip = null)
     {
-        var button = new RuneButton(icon, Loc.GetString(loc));
+        var button = new RuneButton(icon, Loc.GetString(loc), tooltip: tooltip == null ? null : Loc.GetString(tooltip));
         button.Pressed += pressed;
         AddChild(button);
         _actions.Add((button, slot));

@@ -379,9 +379,80 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return HasComp<GodmodeComponent>(uid) || HasComp<RuneTimeHeldComponent>(uid);
     }
 
+    public List<(LimbStrike Strike, bool Ready, EntityUid? Cause)> TakeHeldStrikes(EntityUid uid)
+    {
+        if (!TryComp<RuneTimeHeldComponent>(uid, out var held))
+            return new();
+
+        var strikes = new List<(LimbStrike Strike, bool Ready, EntityUid? Cause)>(held.Strikes);
+        RemComp<RuneTimeHeldComponent>(uid);
+        if (TryComp<LimbBodyComponent>(uid, out var limbs))
+            ClearLedger(limbs);
+
+        return strikes;
+    }
+
+    public void ReplayHeldStrikes(EntityUid uid, List<(LimbStrike Strike, bool Ready, EntityUid? Cause)> strikes)
+    {
+        if (strikes.Count == 0 || !TryComp<LimbBodyComponent>(uid, out var limbs))
+            return;
+
+        foreach (var (strike, ready, cause) in strikes)
+        {
+            if (TerminatingOrDeleted(uid))
+                break;
+
+            _cause = cause;
+            Strike(uid, strike, limbs, ready);
+            ClearLedger(limbs);
+        }
+
+        _cause = null;
+    }
+
+    private bool HoldStrike(EntityUid uid, LimbStrike strike, bool ready)
+    {
+        if (!TryComp<RuneTimeHeldComponent>(uid, out var held))
+            return false;
+
+        if (_net.IsServer)
+            held.Strikes.Add((strike, ready, _cause));
+        else if (TryComp<LimbBodyComponent>(uid, out var limbs))
+            ClearLedger(limbs);
+
+        return true;
+    }
+
+    public LimbZone? TakeLedgerZone(EntityUid uid)
+    {
+        if (!TryComp<LimbBodyComponent>(uid, out var limbs))
+            return null;
+
+        var zone = limbs.LedgerZone;
+        ClearLedger(limbs);
+        return zone;
+    }
+
+    public void SetLedgerZone(EntityUid uid, LimbZone? zone)
+    {
+        if (!TryComp<LimbBodyComponent>(uid, out var limbs))
+            return;
+
+        ClearLedger(limbs);
+        limbs.LedgerZone = zone;
+        limbs.ArmorZone = zone;
+    }
+
+    private static void ClearLedger(LimbBodyComponent limbs)
+    {
+        limbs.LedgerZone = null;
+        limbs.ArmorZone = null;
+        limbs.StrikeOpen = false;
+    }
+
     public LimbStrikeResult Strike(EntityUid uid, LimbStrike strike, LimbBodyComponent? limbs = null, bool ready = false)
     {
-        if (!LimbTuning.Enabled || Untouchable(uid) || !Resolve(uid, ref limbs))
+        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(uid) || HoldStrike(uid, strike, ready) || !Resolve(uid, ref limbs))
             return LimbStrikeResult.Miss();
 
         EnsureZones(limbs);
@@ -732,7 +803,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnMelee(EntityUid uid, LimbBodyComponent limbs, AttackedEvent args)
     {
-        if (!LimbTuning.Enabled || Untouchable(uid) || !TryComp<MeleeWeaponComponent>(args.Used, out var melee))
+        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(uid) || !TryComp<MeleeWeaponComponent>(args.Used, out var melee))
             return;
 
         var zone = LimbZone.Torso;
@@ -1137,7 +1208,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnProjectile(Entity<ProjectileComponent> ent, ref ProjectileHitEvent args)
     {
-        if (!LimbTuning.Enabled || Untouchable(args.Target) || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
+        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(args.Target) || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
             return;
 
         var shooter = args.Shooter;
@@ -1227,7 +1298,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnHitscan(Entity<HitscanBasicDamageComponent> ent, ref HitscanDamageDealtEvent args)
     {
-        if (!LimbTuning.Enabled || Untouchable(args.Target) || args.Data.Shooter is not { } shooter || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
+        if (!LimbTuning.Enabled || HasComp<GodmodeComponent>(args.Target) || args.Data.Shooter is not { } shooter || !TryComp<LimbBodyComponent>(args.Target, out var limbs))
             return;
 
         var aiming = TryComp<LimbAimComponent>(shooter, out var aim) && aim.Aiming && AimPrecise(shooter);
@@ -1253,7 +1324,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         Strike(args.Target, strike, limbs, ready);
         _cause = null;
         var landed = LimbWoundRules.IsSmall(zone) ? LimbZone.Head : zone;
-        if (!LimbWoundRules.IsBody(landed) || landed == LimbZone.Torso)
+        if (!LimbWoundRules.IsBody(landed) || landed == LimbZone.Torso || HasComp<RuneTimeHeldComponent>(args.Target))
             return;
 
         EnsureZones(limbs);
