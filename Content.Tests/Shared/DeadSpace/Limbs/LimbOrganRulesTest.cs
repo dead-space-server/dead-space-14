@@ -202,6 +202,22 @@ public sealed class LimbOrganRulesTest
         });
     }
 
+    [Test]
+    public void AnyMouthTraumaOffersJawSettingOnTheHead()
+    {
+        var hit = new LimbBodyComponent { Mouth = 0.5f };
+        var clean = new LimbBodyComponent();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(SurgeryConditions.JawBroken(hit, LimbZone.Head), Is.True);
+            Assert.That(SurgeryConditions.JawBroken(hit, LimbZone.Torso), Is.False);
+            Assert.That(SurgeryConditions.JawBroken(clean, LimbZone.Head), Is.False);
+            Assert.That(SurgeryConditions.Has("Jaw", new LimbZoneState(), true, false, jaw: true), Is.True);
+            Assert.That(SurgeryConditions.Has("Jaw", new LimbZoneState { Severed = true }, true, false, jaw: true), Is.False);
+        });
+    }
+
     private static LimbOrgan Target(LimbZone zone, LimbMark mark)
     {
         Assert.That(LimbOrganRules.TryTarget(zone, mark, out var organ), Is.True);
