@@ -16,6 +16,10 @@ public sealed class GrowthSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
 
+    private static readonly TimeSpan SweepInterval = TimeSpan.FromSeconds(5);
+
+    private SweepTimer _sweep;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -106,10 +110,15 @@ public sealed class GrowthSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        // A stage lasts minutes: looking once a second is soon enough.
+        var now = _timing.CurTime;
+        if (!_sweep.Due(now, SweepInterval))
+            return;
+
         var query = EntityQueryEnumerator<GrowthComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (comp.StageEndTime is not { } end || _timing.CurTime < end)
+            if (comp.StageEndTime is not { } end || now < end)
                 continue;
 
             if (_mobState.IsDead(uid))

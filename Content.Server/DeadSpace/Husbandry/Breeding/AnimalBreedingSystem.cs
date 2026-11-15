@@ -44,6 +44,9 @@ public sealed class AnimalBreedingSystem : EntitySystem
     [Dependency] private readonly SharedAnimalNeedsSystem _needs = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
+    private static readonly TimeSpan SweepInterval = TimeSpan.FromSeconds(5);
+
+    private SweepTimer _sweep;
     private readonly HashSet<Entity<AnimalBreedingComponent>> _nearby = new();
     private readonly List<EntityUid> _births = new();
 
@@ -76,10 +79,11 @@ public sealed class AnimalBreedingSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        if (!_cfg.GetCVar(CCVars.HusbandryBreedingEnabled))
+        // Attempts come every minute or two and a pregnancy lasts minutes: once a second is soon enough.
+        var now = _timing.CurTime;
+        if (!_sweep.Due(now, SweepInterval) || !_cfg.GetCVar(CCVars.HusbandryBreedingEnabled))
             return;
 
-        var now = _timing.CurTime;
         _births.Clear();
 
         var query = EntityQueryEnumerator<AnimalBreedingComponent>();

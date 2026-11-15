@@ -189,4 +189,16 @@ public sealed class HusbandryRulesTest
         Assert.That(PenRules.FindRoute((0, 0), walkable, c => c == (3, 0)), Is.Null);
         Assert.That(PenRules.FindRoute((0, 0), walkable, c => c == (0, 0)), Has.Count.EqualTo(1));
     }
+
+    [Test]
+    public void SweepIsDueOncePerInterval()
+    {
+        var sweep = new SweepTimer();
+        var interval = TimeSpan.FromSeconds(1);
+
+        Assert.That(sweep.Due(TimeSpan.FromSeconds(10), interval), Is.True, "the first call is due");
+        Assert.That(sweep.Due(TimeSpan.FromSeconds(10.5), interval), Is.False, "not within the interval");
+        Assert.That(sweep.Due(TimeSpan.FromSeconds(11), interval), Is.True, "due again after it");
+        Assert.That(sweep.Due(TimeSpan.FromSeconds(11.2), interval), Is.False);
+    }
 }

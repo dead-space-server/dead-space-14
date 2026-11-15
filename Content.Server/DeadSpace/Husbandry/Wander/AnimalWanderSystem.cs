@@ -38,6 +38,25 @@ public sealed class AnimalWanderSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
+    // The animals that are on a stroll: the rest cost nothing per tick.
+    private readonly HashSet<EntityUid> _strolling = new();
+    private readonly List<EntityUid> _scratch = new();
+    private static readonly TimeSpan SweepInterval = TimeSpan.FromMilliseconds(200);
+
+    private SweepTimer _sweep;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<AnimalWanderComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    private void OnShutdown(Entity<AnimalWanderComponent> ent, ref ComponentShutdown args)
+    {
+        _strolling.Remove(ent);
+    }
+
     /// <summary>
     /// Whether the animal goes for a stroll: rolls the chance, looks for room and starts the first leg.
     /// </summary>
@@ -74,6 +93,7 @@ public sealed class AnimalWanderSystem : EntitySystem
 
         wander.WalkStart = _timing.CurTime;
         wander.LegsLeft = _random.Next(wander.Legs.X, Math.Max(wander.Legs.X, wander.Legs.Y) + 1);
+        _strolling.Add(ent);
         BeginLeg(ent, walker, place, heading);
         return Roll(wander.StandTime);
     }
@@ -94,6 +114,7 @@ public sealed class AnimalWanderSystem : EntitySystem
         ent.Comp.Mode = WanderMode.Roam;
         ent.Comp.Subject = null;
         ent.Comp.LegsLeft = 0;
+        _strolling.Remove(ent);
         ent.Comp.PauseUntil = null;
 
         if (TryComp<AnimalWalkerComponent>(ent, out var walker))
@@ -104,12 +125,25 @@ public sealed class AnimalWanderSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        if (_strolling.Count == 0)
+            return;
+
+        // A leg ends and the next begins after a pause of seconds: a fifth of a second late is not seen.
         var now = _timing.CurTime;
-        var query = EntityQueryEnumerator<AnimalWanderComponent, AnimalWalkerComponent>();
-        while (query.MoveNext(out var uid, out var wander, out var walker))
+        if (!_sweep.Due(now, SweepInterval))
+            return;
+
+        // A stroll can end here and take the animal out of the set, so the set is copied.
+        _scratch.Clear();
+        _scratch.AddRange(_strolling);
+
+        foreach (var uid in _scratch)
         {
-            if (wander.LegsLeft <= 0)
+            if (!TryComp<AnimalWanderComponent>(uid, out var wander) || !TryComp<AnimalWalkerComponent>(uid, out var walker) || wander.LegsLeft <= 0)
+            {
+                _strolling.Remove(uid);
                 continue;
+            }
 
             var ent = (uid, wander);
             if (now - wander.WalkStart > wander.MaxWalkTime)

@@ -69,6 +69,10 @@ public sealed class DebugAnalyzerSystem : EntitySystem
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
 
+    private static readonly TimeSpan SweepInterval = TimeSpan.FromMilliseconds(500);
+
+    private SweepTimer _sweep;
+
     private const string ReportPrefix = "debug-analyzer";
 
     public override void Initialize()
@@ -131,6 +135,10 @@ public sealed class DebugAnalyzerSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        // A report goes out about once a second: a quick look for a scanned analyzer is enough.
+        if (!_sweep.Due(_timing.CurTime, SweepInterval))
+            return;
 
         var query = EntityQueryEnumerator<DebugAnalyzerComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var comp, out var xform))

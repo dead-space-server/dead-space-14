@@ -26,6 +26,10 @@ public sealed class SharedAnimalNeedsSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
+    private static readonly TimeSpan SweepInterval = TimeSpan.FromSeconds(2);
+
+    private SweepTimer _sweep;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -126,7 +130,12 @@ public sealed class SharedAnimalNeedsSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        // Each animal has its own timer (UpdateRate with a random start) and makes up for a late sweep, so the sweep
+        // over all of them can be a few times a second instead of every tick.
         var now = _timing.CurTime;
+        if (!_sweep.Due(now, SweepInterval))
+            return;
+
         var query = EntityQueryEnumerator<AnimalNeedsComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {

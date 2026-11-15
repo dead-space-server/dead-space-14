@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.DeadSpace.Husbandry.Core;
 using Content.Server.Popups;
 using Content.Shared.Botany.Components;
 using Content.Shared.Botany.Systems;
@@ -16,7 +17,7 @@ namespace Content.Server.DeadSpace.Beekeeping;
 /// </summary>
 public sealed class PollinationSystem : EntitySystem
 {
-    private static readonly TimeSpan SweepInterval = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan SweepInterval = TimeSpan.FromSeconds(5);
 
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PlantHolderSystem _holder = default!;
@@ -24,7 +25,7 @@ public sealed class PollinationSystem : EntitySystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
 
-    private TimeSpan _nextSweep;
+    private SweepTimer _sweep;
 
     public override void Initialize()
     {
@@ -51,10 +52,8 @@ public sealed class PollinationSystem : EntitySystem
 
         // Only the plants that carry a boost have anything to do, and they are checked once a second.
         var now = _timing.CurTime;
-        if (now < _nextSweep)
+        if (!_sweep.Due(now, SweepInterval))
             return;
-
-        _nextSweep = now + SweepInterval;
 
         var query = EntityQueryEnumerator<PollinationComponent>();
         while (query.MoveNext(out var uid, out var pollination))

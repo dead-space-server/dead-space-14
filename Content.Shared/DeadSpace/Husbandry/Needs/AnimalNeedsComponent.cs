@@ -32,7 +32,7 @@ public sealed partial class AnimalNeedsComponent : Component
     /// </summary>
     // How often the needs are processed: a setting, an admin may change it.
     [DataField, Access(Other = AccessPermissions.ReadWriteExecute)]
-    public TimeSpan UpdateRate = TimeSpan.FromSeconds(1);
+    public TimeSpan UpdateRate = TimeSpan.FromSeconds(5);
 
     /// <summary>
     /// How often the deprivation damage is applied.

@@ -30,6 +30,22 @@ public sealed class AnimalWalkerSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
 
+    // The animals that are walking now: the rest cost nothing per tick.
+    private readonly HashSet<EntityUid> _walking = new();
+    private readonly List<EntityUid> _scratch = new();
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<AnimalWalkerComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    private void OnShutdown(Entity<AnimalWalkerComponent> ent, ref ComponentShutdown args)
+    {
+        _walking.Remove(ent);
+    }
+
     /// <summary>
     /// Sends the animal along a route. The last waypoint is where it goes.
     /// </summary>
@@ -62,6 +78,7 @@ public sealed class AnimalWalkerSystem : EntitySystem
         walker.ProgressTime = now;
         walker.ProgressPosition = _transform.GetWorldPosition(ent);
         walker.Status = WalkStatus.Walking;
+        _walking.Add(ent);
         return true;
     }
 
@@ -97,11 +114,25 @@ public sealed class AnimalWalkerSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<AnimalWalkerComponent, InputMoverComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var walker, out var mover, out var xform))
+        if (_walking.Count == 0)
+            return;
+
+        // A step can end the walk and take the animal out of the set, so the set is copied.
+        _scratch.Clear();
+        _scratch.AddRange(_walking);
+
+        foreach (var uid in _scratch)
         {
-            if (walker.Status == WalkStatus.Walking)
-                Step((uid, walker), mover, xform);
+            if (TryComp<AnimalWalkerComponent>(uid, out var walker) &&
+                walker.Status == WalkStatus.Walking &&
+                TryComp<InputMoverComponent>(uid, out var mover))
+            {
+                Step((uid, walker), mover, Transform(uid));
+            }
+            else
+            {
+                _walking.Remove(uid);
+            }
         }
     }
 
@@ -170,28 +201,34 @@ public sealed class AnimalWalkerSystem : EntitySystem
             ? Math.Clamp(distance / walker.SlowDistance, walker.MinSpeedFraction, 1f)
             : 1f;
         var input = (-_mover.GetParentGridAngle(mover)).RotateVec(diff / distance) * speed;
-        SetInput(ent, mover, input, walker.Run, true);
+        SetInput(ent, walker, mover, input, walker.Run, true);
     }
 
     private void Finish(Entity<AnimalWalkerComponent> ent, WalkStatus status)
     {
+        _walking.Remove(ent);
         ent.Comp.Status = status;
         ent.Comp.Route.Clear();
 
         if (TryComp<InputMoverComponent>(ent, out var mover))
-            SetInput(ent, mover, Vector2.Zero, false, false);
+            SetInput(ent, ent.Comp, mover, Vector2.Zero, false, false);
     }
 
     /// <summary>
     /// The same way the AI gives the mover its input: the vector of this tick, the mover reads it after us.
     /// </summary>
-    private void SetInput(EntityUid uid, InputMoverComponent mover, Vector2 input, bool run, bool moving)
+    private void SetInput(EntityUid uid, AnimalWalkerComponent walker, InputMoverComponent mover, Vector2 input, bool run, bool moving)
     {
         mover.CurTickWalkMovement = run ? Vector2.Zero : input;
         mover.CurTickSprintMovement = run ? input : Vector2.Zero;
         mover.LastInputTick = _timing.CurTick;
         mover.LastInputSubTick = ushort.MaxValue;
 
+        // The sprite is told when the animal starts or stops, not every tick of the walk.
+        if (walker.Moving == moving)
+            return;
+
+        walker.Moving = moving;
         var ev = new SpriteMoveEvent(moving);
         RaiseLocalEvent(uid, ref ev);
     }

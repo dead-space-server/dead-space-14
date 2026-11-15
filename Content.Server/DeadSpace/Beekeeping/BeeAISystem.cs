@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.DeadSpace.Husbandry.Core;
 using System.Numerics;
 using Content.Server.DeadSpace.Husbandry.Walking;
 using Content.Server.NPC.HTN;
@@ -47,6 +48,9 @@ public sealed class BeeAISystem : EntitySystem
     private readonly HashSet<Entity<PollinationComponent>> _flowers = new();
     private readonly List<MapCoordinates> _players = new();
     private TimeSpan _nextPlayerScan;
+    private SweepTimer _sweep;
+
+    private static readonly TimeSpan SweepInterval = TimeSpan.FromMilliseconds(250);
     private static readonly TimeSpan SleepingThinkInterval = TimeSpan.FromSeconds(2);
 
     public override void Initialize()
@@ -80,6 +84,10 @@ public sealed class BeeAISystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+        // Every bee has its own think timer (twice a second): the sweep over all of them need not be every tick.
+        if (!_sweep.Due(now, SweepInterval))
+            return;
+
         var query = EntityQueryEnumerator<BeeComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var bee, out var xform))
         {

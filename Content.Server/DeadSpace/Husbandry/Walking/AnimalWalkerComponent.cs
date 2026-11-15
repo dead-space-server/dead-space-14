@@ -96,6 +96,12 @@ public sealed partial class AnimalWalkerComponent : Component
 
     [ViewVariables]
     public Vector2 ProgressPosition;
+
+    /// <summary>
+    /// Whether the sprite was told that the animal is moving (it is told when that changes).
+    /// </summary>
+    [ViewVariables]
+    public bool Moving;
 }
 
 public enum WalkStatus : byte

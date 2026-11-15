@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.DeadSpace.Husbandry.Core;
 using Content.Shared.CCVar;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeadSpace.Beekeeping;
@@ -19,7 +20,7 @@ namespace Content.Server.DeadSpace.Beekeeping;
 /// </summary>
 public sealed class BeeHiveSystem : EntitySystem
 {
-    private static readonly TimeSpan TickInterval = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan TickInterval = TimeSpan.FromSeconds(5);
 
     [Dependency] private readonly BeeAISystem _beeAI = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
@@ -29,7 +30,7 @@ public sealed class BeeHiveSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ItemSlotsSystem _slots = default!;
 
-    private TimeSpan _nextTick;
+    private SweepTimer _tick;
     private readonly HashSet<Entity<PollinationComponent>> _flowers = new();
 
     public override void Initialize()
@@ -58,10 +59,9 @@ public sealed class BeeHiveSystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
-        if (now < _nextTick)
+        if (!_tick.Due(now, TickInterval))
             return;
 
-        _nextTick = now + TickInterval;
         var dt = (float) TickInterval.TotalSeconds;
 
         var query = EntityQueryEnumerator<BeeHiveComponent>();
