@@ -57,7 +57,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         SubscribeLocalEvent<ComplexProjectileDamageComponent, BeforeProjectileHitEvent>(OnBeforeComplexProjectileHit);
         SubscribeLocalEvent<ProjectileComponent, ProjectileShotEvent>(OnBeingShot); // DS14 - pre-v288 explicit event subscription
         SubscribeLocalEvent<ProjectileComponent, ComponentShutdown>(OnProjectileShutdown); //DS-14
-        SubscribeLocalEvent<MetaDataComponent, EntityTerminatingEvent>(OnActorTerminating); //DS-14
+        SubscribeLocalEvent<EntityTerminatingEvent>(OnActorTerminating); //DS-14
     }
 
     private void OnEmbedActivate(Entity<EmbeddableProjectileComponent> embeddable, ref ActivateInWorldEvent args)
@@ -317,9 +317,10 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             Unlink(ent, weapon);
     }
 
-    private void OnActorTerminating(Entity<MetaDataComponent> ent, ref EntityTerminatingEvent args)
+    private void OnActorTerminating(ref EntityTerminatingEvent args)
     {
-        if (!_projectilesByActor.Remove(ent, out var projectiles))
+        var actor = args.Entity.Owner;
+        if (!_projectilesByActor.Remove(actor, out var projectiles))
             return;
 
         foreach (var projectile in projectiles)
@@ -327,8 +328,8 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             if (TerminatingOrDeleted(projectile) || !TryComp(projectile, out ProjectileComponent? component))
                 continue;
 
-            var clearedShooter = component.Shooter == ent.Owner;
-            var clearedWeapon = component.Weapon == ent.Owner;
+            var clearedShooter = component.Shooter == actor;
+            var clearedWeapon = component.Weapon == actor;
             if (!clearedShooter && !clearedWeapon)
                 continue;
 
@@ -345,7 +346,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             var role = clearedShooter && clearedWeapon
                 ? "shooter and weapon"
                 : clearedShooter ? "shooter" : "weapon";
-            Log.Warning($"Projectile {ToPrettyString(projectile)} dropped deleted {role} {ToPrettyString(ent.Owner)}");
+            Log.Warning($"Projectile {ToPrettyString(projectile)} dropped deleted {role} {ToPrettyString(actor)}");
         }
     }
 
