@@ -358,7 +358,7 @@
   - type: Sprite
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/coroner.rsi
   - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/coroner.rs
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/coroner.rsi
 
 - type: entity
   parent: ClothingUniformBase
