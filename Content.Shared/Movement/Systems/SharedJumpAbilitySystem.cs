@@ -1,3 +1,4 @@
+using System.Numerics; //DS-14
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Cloning.Events;
@@ -148,6 +149,9 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
             return true;
 
         var translation = end.Position - start.Position;
+        if (translation.LengthSquared() > 0.0001f && IsPressedIntoObstacle(performer, translation))
+            return true;
+
         var origin = _physics.GetPhysicsTransform(performer, xform);
 
         foreach (var fixture in fixtures.Fixtures.Values)
@@ -172,6 +176,38 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
             {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private bool IsPressedIntoObstacle(EntityUid performer, Vector2 translation)
+    {
+        var direction = translation.Normalized();
+        var contacts = _physics.GetContacts(performer);
+        while (contacts.MoveNext(out var contact))
+        {
+            if (!contact.IsTouching || !contact.Hard)
+                continue;
+
+            var other = contact.OtherEnt(performer);
+            if (!TryComp<PhysicsComponent>(other, out var otherBody) || otherBody.BodyType != BodyType.Static)
+                continue;
+
+            var (_, otherFixture) = contact.OtherFixture(performer);
+            var (_, ourFixture) = contact.OurFixture(performer);
+            if (!otherFixture.Hard || (otherFixture.CollisionLayer & ourFixture.CollisionMask) == 0)
+                continue;
+
+            var transformA = _physics.GetPhysicsTransform(contact.EntityA);
+            var transformB = _physics.GetPhysicsTransform(contact.EntityB);
+            contact.GetWorldManifold(transformA, transformB, out var normal);
+            var into = contact.EntityA == performer
+                ? Vector2.Dot(direction, normal)
+                : -Vector2.Dot(direction, normal);
+
+            if (into > 0.5f)
+                return true;
         }
 
         return false;

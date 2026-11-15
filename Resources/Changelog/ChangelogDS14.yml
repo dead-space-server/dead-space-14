@@ -10224,3 +10224,82 @@ Entries:
   changes:
   - type: Fix
     message: Хитрега аномалий
+- id: 978
+  author: BlueDogDoc
+  time: '2026-11-15T05:02:05.609890+00:00'
+  pr: 2764
+  changes:
+  - type: Tweak
+    message: Субботник
+- id: 979
+  author: BlueDogDoc
+  time: '2026-11-15T05:05:37.175796+00:00'
+  pr: 2759
+  changes:
+  - type: Fix
+    message: Рега прожектайлов (метки лавы, рпг 70, чайна)
+- id: 980
+  author: Atickov
+  time: '2026-11-15T05:07:35.520556+00:00'
+  pr: 2757
+  changes:
+  - type: Fix
+    message: Теперь чтобы получить список геймрулов необходимо быть администратором..
+- id: 981
+  author: BlueDogDoc
+  time: '2026-11-15T05:09:10.037232+00:00'
+  pr: 2760
+  changes:
+  - type: Fix
+    message: проверка дистанции у дефиба
+- id: 982
+  author: pe4enkakris
+  time: '2026-11-15T05:16:26.370491+00:00'
+  pr: 2752
+  changes:
+  - type: Add
+    message: Таран для выбивания структур - 100 структур 15 ушиб, спрайт by pivo_3amopckoe.
+      Доступен 1 шт в СбТех. Спрайт для маяка ниндзи by fyrmor. Медипен гемостатина
+      10u 4шт в сбтех, спрайт by kieru.
+  - type: Tweak
+    message: Деревянный протез в сбтех 2->4шт. Шлем с фонариком 3->5шт.
+  - type: Fix
+    message: В сбтех выдавалось по 1 жгуту вместо четырёх, итого 4->20шт. Фикс статов
+      шлемов.
+- id: 983
+  author: BlueDogDoc
+  time: '2026-11-15T06:33:21.287171+00:00'
+  pr: 2762
+  changes:
+  - type: Add
+    message: Станкрит сбивает снятие наручников.
+- id: 984
+  author: BlueDogDoc
+  time: '2026-11-15T06:35:01.090976+00:00'
+  pr: 2763
+  changes:
+  - type: Add
+    message: У брони отображаются зоны, которые она защищает.
+- id: 985
+  author: Manstari
+  time: '2026-11-15T08:45:53.406172+00:00'
+  pr: 2767
+  changes:
+  - type: Fix
+    message: Теперь в манифестах ну точно отображаются псевдонимы
+  - type: Fix
+    message: В тайпановской ветке изучение дубинки не уходит в никуда
+- id: 986
+  author: BlueDogDoc
+  time: '2026-11-15T11:09:35.928825+00:00'
+  pr: 2765
+  changes:
+  - type: Add
+    message: бабл подсказка при указании
+- id: 987
+  author: BlueDogDoc
+  time: '2026-11-15T11:23:54.274183+00:00'
+  pr: 2766
+  changes:
+  - type: Tweak
+    message: Включили назад архив камер после тестов нагрузки

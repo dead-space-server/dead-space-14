@@ -40,6 +40,8 @@ public record struct HitscanTraceEvent
     public List<HitscanTrace>? OutputTrace;
 
     public List<EntityUid>? IgnoredEntities;
+
+    public EntityUid? ExecutionTarget;
     // DS14-end
 }
 
@@ -84,6 +86,8 @@ public record struct HitscanRaycastFiredData
     public List<EntityUid>? IgnoredEntities;
 
     public MapCoordinates? HitPosition;
+
+    public EntityUid? ExecutionTarget;
     // DS14-end
 }
 

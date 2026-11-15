@@ -102,6 +102,35 @@
           Quantity: 20
 
 - type: entity
+  name: инъектор гемостатина
+  parent: ChemicalMedipen
+  id: HemostatinMedipen
+  description: Останавливает внутреннее кровотечение.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/medipen.rsi
+    layers:
+    - state: hemostatin
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: hemostatin_empty
+  - type: Injector
+    solutionName: pen
+    currentTransferAmount: null
+    activeModeProtoId: HyposprayInjectMode
+    allowedModes:
+    - HyposprayInjectMode
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 10
+        reagents:
+        - ReagentId: Hemostatin
+          Quantity: 10
+
+- type: entity
   parent: ADTCombatHypo
   id: CombatHypoBlueShield
   name: боевой гипоспрей офицера "Синий Щит"

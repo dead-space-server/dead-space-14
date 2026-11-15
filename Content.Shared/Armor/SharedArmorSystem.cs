@@ -102,7 +102,7 @@ public abstract class SharedArmorSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess || !component.ShowArmorOnExamine)
             return;
 
-        var examineMarkup = GetArmorExamine(component.Modifiers);
+        var examineMarkup = GetArmorExamine(uid, component.Modifiers); // DS14
 
         var ev = new ArmorExamineEvent(examineMarkup);
         RaiseLocalEvent(uid, ref ev);
@@ -112,9 +112,31 @@ public abstract class SharedArmorSystem : EntitySystem
             Loc.GetString("armor-examinable-verb-message"));
     }
 
-    private FormattedMessage GetArmorExamine(DamageModifierSet armorModifiers)
+    private FormattedMessage GetArmorExamine(EntityUid uid, DamageModifierSet armorModifiers) // DS14
     {
         var msg = new FormattedMessage();
+
+        // DS14-start
+        var zones = new List<string>();
+        foreach (var zone in LimbCoverRules.ExamineOrder)
+        {
+            if (!LimbCoverRules.Covers(uid, zone, EntityManager))
+                continue;
+
+            var key = ZoneKey(zone);
+            if (key == null)
+                continue;
+
+            zones.Add(Loc.GetString("armor-zone-" + key));
+        }
+
+        if (zones.Count > 0)
+        {
+            msg.AddMarkupOrThrow(Loc.GetString("armor-examine-zones", ("zones", string.Join(", ", zones))));
+            msg.PushNewline();
+        }
+        // DS14-end
+
         msg.AddMarkupOrThrow(Loc.GetString("armor-examine"));
 
         foreach (var coefficientArmor in armorModifiers.Coefficients)
@@ -157,4 +179,27 @@ public abstract class SharedArmorSystem : EntitySystem
 
         return msg;
     }
+
+    // DS14-start
+    private static string? ZoneKey(LimbZone zone)
+    {
+        return zone switch
+        {
+            LimbZone.Head => "head",
+            LimbZone.Eyes => "eyes",
+            LimbZone.Mouth => "mouth",
+            LimbZone.Torso => "torso",
+            LimbZone.Groin => "groin",
+            LimbZone.ArmLeft => "arm-left",
+            LimbZone.ArmRight => "arm-right",
+            LimbZone.HandLeft => "hand-left",
+            LimbZone.HandRight => "hand-right",
+            LimbZone.LegLeft => "leg-left",
+            LimbZone.LegRight => "leg-right",
+            LimbZone.FootLeft => "foot-left",
+            LimbZone.FootRight => "foot-right",
+            _ => null,
+        };
+    }
+    // DS14-end
 }

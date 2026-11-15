@@ -419,6 +419,11 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         EnsureComp<ActiveStaminaComponent>(uid);
         Dirty(uid, component);
         _adminLogger.Add(LogType.Stamina, LogImpact.Medium, $"{ToPrettyString(uid):user} entered stamina crit");
+
+        // DS14-start
+        var critEntered = new StaminaCritEnteredEvent();
+        RaiseLocalEvent(uid, ref critEntered);
+        // DS14-end
     }
 
     private void ExitStamCrit(EntityUid uid, StaminaComponent? component = null)
