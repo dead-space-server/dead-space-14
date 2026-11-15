@@ -10273,3 +10273,10 @@ Entries:
   changes:
   - type: Add
     message: Станкрит сбивает снятие наручников.
+- id: 984
+  author: BlueDogDoc
+  time: '2026-11-15T06:35:01.090976+00:00'
+  pr: 2763
+  changes:
+  - type: Add
+    message: У брони отображаются зоны, которые она защищает.
