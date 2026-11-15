@@ -49,5 +49,7 @@
     outerClothing: ClothingOuterVestWeb
     eyes: ClothingEyesGlassesSecurity
     head: ClothingHeadHatBeretCentcomNaval
+    outerClothing: ClothingOuterCoatCentcomOfficer
+    head: ClothingHeadHelmetCentcomSecurityUSSP
     gloves: ClothingHandsGlovesCombat
     belt: ClothingBeltCentcomSecurityFilled
