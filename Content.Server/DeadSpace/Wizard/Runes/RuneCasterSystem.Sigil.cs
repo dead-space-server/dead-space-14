@@ -86,7 +86,7 @@ public sealed partial class RuneCasterSystem
         }
     }
 
-    private void RaiseImpact(EntityUid caster, RuneComposition composition, RuneSpellPrototype spell, EntityCoordinates target, EntityUid? entity)
+    private void RaiseImpact(EntityUid caster, RuneComposition composition, RuneSpell spell, EntityCoordinates target, EntityUid? entity)
     {
         var projectile = spell.Effects.Exists(e => e is RuneProjectileEffect);
         var at = projectile || spell.Targeting == RuneTargeting.Self

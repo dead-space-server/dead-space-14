@@ -145,7 +145,7 @@ rune-modifier-fusion-name = Слияние
 rune-modifier-fusion-desc = Чертится сразу после стихии, за ним идёт вторая стихия. Стихии сплавляются в новую: огонь и лёд дают пар. Заметно тяжелее для эфира: сложный сплав лучше творить с пустой полоской.
 rune-modifier-fusion-syllable = Конфлюо
 rune-modifier-whisper-name = Шёпот
-rune-modifier-whisper-desc = Тише на два тона, но эфир сопротивляется сильнее.
+rune-modifier-whisper-desc = Тише на два тона.
 rune-modifier-whisper-syllable = Сусурро
 
 ## Заклинания

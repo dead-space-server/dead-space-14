@@ -661,6 +661,7 @@
   - !type:RunePolymorphEffect
     target: Caster
     polymorph: Jaunt
+    leaveContainer: true
 
 - type: wizardRuneSpell
   id: RuneSpellWildShape

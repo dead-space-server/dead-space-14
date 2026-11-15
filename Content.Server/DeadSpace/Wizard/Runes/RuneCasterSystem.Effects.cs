@@ -979,8 +979,14 @@ public sealed partial class RuneCasterSystem
             result = _polymorph.PolymorphEntity(target, configuration);
         }
 
-        if (effect.Petrify && result is { } morphed)
+        if (result is not { } morphed)
+            return;
+
+        if (effect.Petrify)
             EnsureComp<RunePetrifiedComponent>(morphed);
+
+        if (effect.LeaveContainer)
+            _container.TryRemoveFromContainer(morphed, true);
     }
 
     private void GrantImmortality(EntityUid target, float seconds)

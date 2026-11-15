@@ -610,7 +610,6 @@
   syllable: rune-modifier-whisper-syllable
   color: "#9a9aa8"
   strain: 3
-  strainScale: 1.15
   loudness: -2
   order: 4
   stroke:

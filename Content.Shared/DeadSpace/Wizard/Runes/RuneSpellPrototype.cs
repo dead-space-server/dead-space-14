@@ -56,13 +56,52 @@ public sealed partial class RuneSpellPrototype : IPrototype
 
     [DataField(required: true)]
     public List<RuneSpellEffect> Effects = new();
+}
 
-    public static RuneSpellPrototype? Fuse(RunePrototype form, RuneFusionPrototype fusion)
+public sealed class RuneSpell
+{
+    public string ID = string.Empty;
+    public LocId Name;
+    public ProtoId<RunePrototype> Form;
+    public ProtoId<RunePrototype> Element;
+    public RuneTargeting Targeting = RuneTargeting.Point;
+    public float Range = 10f;
+    public float Strain = 20f;
+    public float Cooldown = 5f;
+    public int Loudness = 1;
+    public int Absurdity;
+    public bool RequiresClothes;
+    public float RequiresWounded;
+    public bool OncePerRound;
+    public List<RuneSpellEffect> Effects = new();
+
+    public static RuneSpell From(RuneSpellPrototype proto)
+    {
+        return new RuneSpell
+        {
+            ID = proto.ID,
+            Name = proto.Name,
+            Form = proto.Form,
+            Element = proto.Element,
+            Targeting = proto.Targeting,
+            Range = proto.Range,
+            Strain = proto.Strain,
+            Cooldown = proto.Cooldown,
+            Loudness = proto.Loudness,
+            Absurdity = proto.Absurdity,
+            RequiresClothes = proto.RequiresClothes,
+            RequiresWounded = proto.RequiresWounded,
+            OncePerRound = proto.OncePerRound,
+            Effects = proto.Effects,
+        };
+    }
+
+    public static RuneSpell? Fuse(RunePrototype form, RuneFusionPrototype fusion)
     {
         if (form.Ultimate && !fusion.FormEffects.ContainsKey(form.ID))
             return null;
 
-        return new RuneSpellPrototype
+        return new RuneSpell
         {
             ID = form.ID + "+" + fusion.ID,
             Name = fusion.Name,

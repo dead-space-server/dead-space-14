@@ -46,6 +46,12 @@ public sealed class RuneSigilTrack
     public EntityUid? Light;
 }
 
+public sealed class RuneStone
+{
+    public ShaderInstance Shader = default!;
+    public readonly Dictionary<SpriteComponent.Layer, (ShaderInstance? Shader, ProtoId<ShaderPrototype>? Prototype, bool Animated)> Layers = new();
+}
+
 public sealed class RuneVisualsSystem : EntitySystem
 {
     [Dependency] private readonly IOverlayManager _overlays = default!;
@@ -67,8 +73,9 @@ public sealed class RuneVisualsSystem : EntitySystem
     private readonly List<(EntityUid Light, float Start, float Energy)> _flashes = new();
     private readonly List<EntityUid> _gone = new();
     private readonly Dictionary<RuneMark, ProtoId<RuneMarkIconPrototype>> _icons = new();
-    private readonly Dictionary<EntityUid, ShaderInstance> _stones = new();
+    private readonly Dictionary<EntityUid, RuneStone> _stones = new();
     private static readonly ProtoId<ShaderPrototype> PetrifyShader = "RunePetrify";
+    private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
     private int _seed;
 
     public float Now => (float) _timing.RealTime.TotalSeconds;
@@ -157,14 +164,32 @@ public sealed class RuneVisualsSystem : EntitySystem
         }
 
         _sprite.SetColor((uid, sprite), Color.White);
-        if (!_stones.TryGetValue(uid, out var shader))
+        if (!_stones.TryGetValue(uid, out var stone))
         {
-            shader = _proto.Index(PetrifyShader).InstanceUnique();
-            _stones[uid] = shader;
+            stone = new RuneStone { Shader = _proto.Index(PetrifyShader).InstanceUnique() };
+            _stones[uid] = stone;
         }
 
-        shader.SetParameter("tint", new Vector3(tint.Color.R, tint.Color.G, tint.Color.B));
-        sprite.PostShader = shader;
+        stone.Shader.SetParameter("tint", new Vector3(tint.Color.R, tint.Color.G, tint.Color.B));
+        Petrify(sprite, stone);
+    }
+
+    private void Petrify(SpriteComponent sprite, RuneStone stone)
+    {
+        var index = 0;
+        foreach (var layer in sprite.AllLayers)
+        {
+            if (layer is SpriteComponent.Layer real && real.Shader != stone.Shader)
+            {
+                if (!stone.Layers.ContainsKey(real))
+                    stone.Layers[real] = (real.Shader, real.ShaderPrototype, real.AutoAnimated);
+
+                sprite.LayerSetShader(index, stone.Shader);
+                _sprite.LayerSetAutoAnimated(real, false);
+            }
+
+            index++;
+        }
     }
 
     private void ClearTint(EntityUid uid)
@@ -181,17 +206,30 @@ public sealed class RuneVisualsSystem : EntitySystem
 
     private void DropStone(EntityUid uid, SpriteComponent sprite)
     {
-        if (!_stones.Remove(uid, out var shader))
+        if (!_stones.Remove(uid, out var stone))
             return;
 
-        if (sprite.PostShader == shader)
-            sprite.PostShader = null;
+        var index = 0;
+        foreach (var layer in sprite.AllLayers)
+        {
+            if (layer is SpriteComponent.Layer real && stone.Layers.TryGetValue(real, out var saved))
+            {
+                if (saved.Prototype == UnshadedShader)
+                    sprite.LayerSetShader(index, UnshadedShader.Id);
+                else
+                    sprite.LayerSetShader(index, saved.Shader, saved.Prototype);
+
+                _sprite.LayerSetAutoAnimated(real, saved.Animated);
+            }
+
+            index++;
+        }
     }
 
     private void KeepStones()
     {
         _gone.Clear();
-        foreach (var (uid, shader) in _stones)
+        foreach (var (uid, stone) in _stones)
         {
             if (!TryComp<SpriteComponent>(uid, out var sprite))
             {
@@ -199,8 +237,7 @@ public sealed class RuneVisualsSystem : EntitySystem
                 continue;
             }
 
-            if (sprite.PostShader == null)
-                sprite.PostShader = shader;
+            Petrify(sprite, stone);
         }
 
         foreach (var uid in _gone)

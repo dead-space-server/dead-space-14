@@ -338,6 +338,9 @@ public sealed partial class RunePolymorphEffect : RuneTargetedEffect
 
     [DataField]
     public bool Petrify;
+
+    [DataField]
+    public bool LeaveContainer;
 }
 
 public sealed partial class RuneComponentsEffect : RuneTargetedEffect

@@ -59,7 +59,7 @@
   raiseProductEventOnUser: true
   disableRefund: true
   cost:
-    WizCoin: 2
+    WizCoin: 3
   categories:
   - SpellbookRuneForms
   conditions:
@@ -233,7 +233,7 @@
   raiseProductEventOnUser: true
   disableRefund: true
   cost:
-    WizCoin: 1
+    WizCoin: 2
   categories:
   - SpellbookRuneModifiers
   conditions:

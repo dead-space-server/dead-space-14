@@ -182,7 +182,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         return aim;
     }
 
-    private static bool WantsTarget(RuneSpellPrototype spell)
+    private static bool WantsTarget(RuneSpell spell)
     {
         return spell.Targeting is RuneTargeting.Entity or RuneTargeting.EntityOrSelf ||
                spell.Effects.Exists(e => e is RuneTelekinesisEffect or RuneTeleportEffect { Mode: RuneTeleportMode.SwapWithTarget });
@@ -208,7 +208,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             found.Add(candidates[i].Uid);
     }
 
-    private EntityUid? FindAimTarget(EntityUid caster, MapCoordinates from, MapCoordinates to, RuneSpellPrototype spell)
+    private EntityUid? FindAimTarget(EntityUid caster, MapCoordinates from, MapCoordinates to, RuneSpell spell)
     {
         if (to.MapId != from.MapId)
             return null;

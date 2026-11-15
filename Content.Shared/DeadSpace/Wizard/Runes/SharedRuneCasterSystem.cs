@@ -15,9 +15,9 @@ public sealed class RuneComposition
     public readonly RunePrototype Element;
     public readonly RunePrototype? Second;
     public readonly List<RunePrototype> Modifiers;
-    public readonly RuneSpellPrototype? Spell;
+    public readonly RuneSpell? Spell;
 
-    public RuneComposition(RunePrototype form, RunePrototype element, RunePrototype? second, List<RunePrototype> modifiers, RuneSpellPrototype? spell)
+    public RuneComposition(RunePrototype form, RunePrototype element, RunePrototype? second, List<RunePrototype> modifiers, RuneSpell? spell)
     {
         Form = form;
         Element = element;
@@ -109,8 +109,8 @@ public abstract class SharedRuneCasterSystem : EntitySystem
     public const int MaxLoudness = 5;
     public const int MaxAbsurdity = 5;
 
-    private readonly Dictionary<(string, string), RuneSpellPrototype> _spells = new();
-    private readonly Dictionary<(string, string, string), RuneSpellPrototype> _fusions = new();
+    private readonly Dictionary<(string, string), RuneSpell> _spells = new();
+    private readonly Dictionary<(string, string, string), RuneSpell> _fusions = new();
 
     public override void Initialize()
     {
@@ -138,7 +138,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         _spells.Clear();
         _fusions.Clear();
         foreach (var spell in Proto.EnumeratePrototypes<RuneSpellPrototype>())
-            _spells[(spell.Form.Id, spell.Element.Id)] = spell;
+            _spells[(spell.Form.Id, spell.Element.Id)] = RuneSpell.From(spell);
 
         foreach (var fusion in Proto.EnumeratePrototypes<RuneFusionPrototype>())
         {
@@ -147,7 +147,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
                 if (form.Kind != RuneKind.Form)
                     continue;
 
-                if (RuneSpellPrototype.Fuse(form, fusion) is not { } spell)
+                if (RuneSpell.Fuse(form, fusion) is not { } spell)
                     continue;
 
                 _fusions[(form.ID, fusion.First.Id, fusion.Second.Id)] = spell;
@@ -256,7 +256,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
             modifiers.Add(rune);
         }
 
-        RuneSpellPrototype? spell;
+        RuneSpell? spell;
         if (second != null)
             _fusions.TryGetValue((form.ID, element.ID, second.ID), out spell);
         else if (modifiers.Count > 0 && modifiers[0].Fusion)
@@ -322,7 +322,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         return strain * scale;
     }
 
-    public static (float Caster, float Point) EffectAreas(RuneSpellPrototype spell, RuneComposition composition)
+    public static (float Caster, float Point) EffectAreas(RuneSpell spell, RuneComposition composition)
     {
         var caster = 0f;
         var point = 0f;
@@ -410,7 +410,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         return caster.LastElement == element || caster.LastSecond == element;
     }
 
-    public int ComputeLoudness(IReadOnlyList<RunePrototype> runes, RuneSpellPrototype? spell)
+    public int ComputeLoudness(IReadOnlyList<RunePrototype> runes, RuneSpell? spell)
     {
         var loudness = spell?.Loudness ?? 0;
         foreach (var rune in runes)
@@ -419,7 +419,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         return Math.Clamp(loudness, 0, MaxLoudness);
     }
 
-    public int ComputeAbsurdity(IReadOnlyList<RunePrototype> runes, RuneSpellPrototype? spell)
+    public int ComputeAbsurdity(IReadOnlyList<RunePrototype> runes, RuneSpell? spell)
     {
         var absurdity = spell?.Absurdity ?? 0;
         foreach (var rune in runes)
