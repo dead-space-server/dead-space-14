@@ -88,11 +88,12 @@ public sealed partial class AnimalPenSystem
     }
 
     /// <summary>
-    /// The way from an animal that is in no pen to the nearest pen that it can get to (or to its own, if it was taken
-    /// out of it): the tiles one after another, the last one is in the pen. A breadth-first search over the tiles that
-    /// can be walked, no further than <c>husbandry.pen.max_tiles</c> tiles, and not again for
-    /// <see cref="AnimalPenComponent.ReturnSearchDelay"/> if there is no way. Open doors and gaps are free tiles, shut
-    /// doors and walls are not, so the animal finds the way in if there is one.
+    /// The way from an animal that is outside of a pen to the middle of one: its own, if it was taken out of it, else
+    /// the nearest one (by the distance to its middle) that is within <c>husbandry.pen.return_range</c> tiles of it. The
+    /// way is straight, one point, no search: the animal walks towards the pen, and if something is in the way (a wall,
+    /// a shut door) it gets stuck there, which is as close as it gets. The next try is after
+    /// <see cref="AnimalPenComponent.ReturnRetryDelay"/>, and if there is no pen to go to, after
+    /// <see cref="AnimalPenComponent.ReturnSearchDelay"/>.
     /// </summary>
     public bool TryGetRouteToPen(Entity<AnimalPenComponent> animal, out List<EntityCoordinates> route)
     {
@@ -109,45 +110,38 @@ public sealed partial class AnimalPenSystem
         ResolveDevices();
 
         var start = _map.CoordinatesToTile(gridUid, grid, xform.Coordinates);
-        var own = Live(comp.Pen);
-
-        // Cheap before the search: is there a pen of this grid in reach at all?
-        var range = _cfg.GetCVar(CCVars.HusbandryPenReturnRange);
-        var inReach = false;
-        foreach (var pen in _pens)
+        var pen = Live(comp.Pen);
+        if (pen == null)
         {
-            if (pen.Grid != gridUid || pen.Tiles.Count == 0 || own != null && pen != own)
-                continue;
-
-            if (Vector2.Distance(new Vector2(start.X, start.Y), new Vector2(pen.Anchor.X, pen.Anchor.Y)) <= range + pen.Radius / grid.TileSize)
+            // The nearest by the middle, no further than the range from the edge of it.
+            var range = _cfg.GetCVar(CCVars.HusbandryPenReturnRange);
+            var best = float.MaxValue;
+            foreach (var other in _pens)
             {
-                inReach = true;
-                break;
+                if (other.Grid != gridUid || other.Tiles.Count == 0)
+                    continue;
+
+                var distance = Vector2.Distance(new Vector2(start.X, start.Y), new Vector2(other.Anchor.X, other.Anchor.Y));
+                if (distance - other.Radius / grid.TileSize <= range && distance < best)
+                {
+                    best = distance;
+                    pen = other;
+                }
             }
         }
 
-        if (!inReach)
+        if (pen == null || pen.Tiles.Count == 0 || pen.Grid != gridUid || pen.Contains(start))
         {
             comp.NextReturnSearch = now + comp.ReturnSearchDelay;
             return false;
         }
 
-        var wallArea = _cfg.GetCVar(CCVars.HusbandryPenWallArea);
-        var cells = PenRules.FindRoute(
-            (start.X, start.Y),
-            cell => IsFree(gridUid, grid, cell, CollisionGroup.MobMask, wallArea),
-            cell => own != null ? own.Contains(new Vector2i(cell.X, cell.Y)) : TileOwner(gridUid, new Vector2i(cell.X, cell.Y)) != null,
-            Math.Max(1, _cfg.GetCVar(CCVars.HusbandryPenMaxTiles)));
+        // In the grid coordinates, so that the point stays where it is if the grid moves.
+        var middle = (new Vector2(pen.Anchor.X, pen.Anchor.Y) + new Vector2(0.5f, 0.5f)) * grid.TileSize;
+        route.Add(new EntityCoordinates(gridUid, middle));
 
-        if (cells == null || cells.Count < 2)
-        {
-            comp.NextReturnSearch = now + comp.ReturnSearchDelay;
-            return false;
-        }
-
-        // Found: if the walk fails, not again at once.
+        // If the walk fails (it is stuck at a wall), not again at once.
         comp.NextReturnSearch = now + comp.ReturnRetryDelay;
-        AddTiles(route, gridUid, grid, cells);
         return true;
     }
 

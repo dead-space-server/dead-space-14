@@ -32,8 +32,8 @@ namespace Content.Server.DeadSpace.Husbandry.Pen;
 /// <item>An animal answers <see cref="AnimalTargetCheckEvent"/> here: it does not pick a place, a food or a water that
 /// lies outside its pen. The things in the pen are looked for here and kept for a few seconds for everybody, and the way
 /// to them is a breadth-first search over the tiles of the pen (<see cref="TryGetRoute"/>), no pathfinder.</item>
-/// <item>An animal that is in no pen looks for the way to the nearest one (<see cref="TryGetRouteToPen"/>): doors need no
-/// care, a door that is open is a free tile, a door that is shut is a wall.</item>
+/// <item>An animal that is in no pen walks straight towards the middle of its own pen, or of the nearest one
+/// (<see cref="TryGetRouteToPen"/>): no search for a way, if a wall or a shut door is in the way it stops there.</item>
 /// </list>
 /// </summary>
 public sealed partial class AnimalPenSystem : EntitySystem

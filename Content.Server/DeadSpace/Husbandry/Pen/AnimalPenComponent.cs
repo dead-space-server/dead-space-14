@@ -21,14 +21,14 @@ public sealed partial class AnimalPenComponent : Component
     public TimeSpan RehomeTime = TimeSpan.FromSeconds(60);
 
     /// <summary>
-    /// How long an animal that found no way to a pen waits before it looks again.
+    /// How long an animal that has no pen to go to waits before it looks again.
     /// </summary>
     [DataField]
     public TimeSpan ReturnSearchDelay = TimeSpan.FromSeconds(30);
 
     /// <summary>
-    /// How long an animal that found the way to a pen waits before it looks again: if the walk fails (it gets stuck,
-    /// it is dragged off) it does not search every plan.
+    /// How long an animal that was sent to a pen waits before it is sent again: if the walk fails (it gets stuck at a wall,
+    /// it is dragged off) it does not try on every plan.
     /// </summary>
     [DataField]
     public TimeSpan ReturnRetryDelay = TimeSpan.FromSeconds(5);

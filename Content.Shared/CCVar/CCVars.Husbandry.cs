@@ -54,8 +54,7 @@ public sealed partial class CCVars
         CVarDef.Create("husbandry.pen.refresh_time", 300f, CVar.SERVERONLY);
 
     /// <summary>
-    ///     A pen is no bigger than this many tiles: the flood from the feeders and the troughs stops there. Also how far
-    ///     an animal that is in no pen looks for one.
+    ///     A pen is no bigger than this many tiles: the flood from the feeders and the troughs stops there.
     /// </summary>
     public static readonly CVarDef<int> HusbandryPenMaxTiles =
         CVarDef.Create("husbandry.pen.max_tiles", 300, CVar.SERVERONLY);
