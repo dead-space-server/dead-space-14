@@ -35,6 +35,10 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!; // DS14 - pre-v288 IoC
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!; // DS14 - pre-v288 IoC
+    [Dependency] private readonly INetManager _net = default!; //DS-14
+
+    //DS-14
+    private readonly Dictionary<EntityUid, HashSet<EntityUid>> _projectilesByActor = new();
 
     public override void Initialize()
     {
@@ -52,6 +56,8 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         SubscribeLocalEvent<EmbeddedContainerComponent, ContainerGettingInsertedAttemptEvent>(OnEmbeddedContainerInsertAttempt); // DS14
         SubscribeLocalEvent<ComplexProjectileDamageComponent, BeforeProjectileHitEvent>(OnBeforeComplexProjectileHit);
         SubscribeLocalEvent<ProjectileComponent, ProjectileShotEvent>(OnBeingShot); // DS14 - pre-v288 explicit event subscription
+        SubscribeLocalEvent<ProjectileComponent, ComponentShutdown>(OnProjectileShutdown); //DS-14
+        SubscribeLocalEvent<MetaDataComponent, EntityTerminatingEvent>(OnActorTerminating); //DS-14
     }
 
     private void OnEmbedActivate(Entity<EmbeddableProjectileComponent> embeddable, ref ActivateInWorldEvent args)
@@ -176,8 +182,8 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         // Reset whether the projectile has damaged anything if it successfully was removed
         if (TryComp<ProjectileComponent>(uid, out var projectile))
         {
-            projectile.Shooter = null;
-            projectile.Weapon = null;
+            AssignActor(uid, projectile, null, false); //DS-14
+            AssignActor(uid, projectile, null, true); //DS-14
             projectile.ProjectileSpent = false;
 
             Dirty(uid, projectile);
@@ -272,9 +278,106 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (component.Shooter == shooterId)
             return;
 
-        component.Shooter = shooterId;
+        AssignActor(id, component, shooterId, false); //DS-14
         Dirty(id, component);
     }
+
+    //DS-14 start
+    public void SetWeapon(EntityUid id, ProjectileComponent component, EntityUid? weaponId)
+    {
+        if (component.Weapon == weaponId)
+            return;
+
+        AssignActor(id, component, weaponId, true);
+        Dirty(id, component);
+    }
+
+    private void AssignActor(EntityUid projectile, ProjectileComponent component, EntityUid? actor, bool weapon)
+    {
+        var old = weapon ? component.Weapon : component.Shooter;
+        if (old == actor)
+            return;
+
+        if (weapon)
+            component.Weapon = actor;
+        else
+            component.Shooter = actor;
+
+        if (old != null)
+            UnlinkIfUnused(projectile, old.Value, component);
+        if (actor is { } linked && linked.IsValid())
+            Link(projectile, linked);
+    }
+
+    private void OnProjectileShutdown(Entity<ProjectileComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.Shooter is { } shooter)
+            Unlink(ent, shooter);
+        if (ent.Comp.Weapon is { } weapon && weapon != ent.Comp.Shooter)
+            Unlink(ent, weapon);
+    }
+
+    private void OnActorTerminating(Entity<MetaDataComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (!_projectilesByActor.Remove(ent, out var projectiles))
+            return;
+
+        foreach (var projectile in projectiles)
+        {
+            if (TerminatingOrDeleted(projectile) || !TryComp(projectile, out ProjectileComponent? component))
+                continue;
+
+            var clearedShooter = component.Shooter == ent.Owner;
+            var clearedWeapon = component.Weapon == ent.Owner;
+            if (!clearedShooter && !clearedWeapon)
+                continue;
+
+            if (clearedShooter)
+                component.Shooter = null;
+            if (clearedWeapon)
+                component.Weapon = null;
+
+            Dirty(projectile, component);
+
+            if (!_net.IsServer)
+                continue;
+
+            var role = clearedShooter && clearedWeapon
+                ? "shooter and weapon"
+                : clearedShooter ? "shooter" : "weapon";
+            Log.Warning($"Projectile {ToPrettyString(projectile)} dropped deleted {role} {ToPrettyString(ent.Owner)}");
+        }
+    }
+
+    private void Link(EntityUid projectile, EntityUid actor)
+    {
+        if (!_projectilesByActor.TryGetValue(actor, out var set))
+        {
+            set = new HashSet<EntityUid>();
+            _projectilesByActor.Add(actor, set);
+        }
+
+        set.Add(projectile);
+    }
+
+    private void UnlinkIfUnused(EntityUid projectile, EntityUid actor, ProjectileComponent component)
+    {
+        if (component.Shooter == actor || component.Weapon == actor)
+            return;
+
+        Unlink(projectile, actor);
+    }
+
+    private void Unlink(EntityUid projectile, EntityUid actor)
+    {
+        if (!_projectilesByActor.TryGetValue(actor, out var set))
+            return;
+
+        set.Remove(projectile);
+        if (set.Count == 0)
+            _projectilesByActor.Remove(actor);
+    }
+    //DS-14 end
 
     [Serializable, NetSerializable]
     private sealed partial class RemoveEmbeddedProjectileEvent : DoAfterEvent
