@@ -46,7 +46,6 @@
   equipment:
     mask: ClothingMaskGasCentcomSecurity
     shoes: ClothingShoesBootsCombat
-    outerClothing: ClothingOuterVestWeb
     eyes: ClothingEyesGlassesSecurity
     head: ClothingHeadHatBeretCentcomNaval
     outerClothing: ClothingOuterCoatCentcomOfficer
