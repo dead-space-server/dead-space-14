@@ -29,7 +29,7 @@ public sealed class IdentitySystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!; //DS14
+    [Dependency] private readonly SharedBodySystem _body = default!; //DS-14
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedCriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
     [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
@@ -236,7 +236,7 @@ public sealed class IdentitySystem : EntitySystem
 
         RaiseLocalEvent(target, ev);
 
-        //DS14-Start
+        //DS-14: у тела без головы нет лица, опознать его нельзя
         if (TryComp<BodyComponent>(target, out var body)
             && !_body.BodyHasPartType(target, BodyPartType.Head, body))
         {
@@ -245,7 +245,6 @@ public sealed class IdentitySystem : EntitySystem
 
         return representation.ToStringKnown(!ev.Cancelled, ev.NameOverride);
     }
-        //DS14-End
 
     /// <summary>
     /// Gets an 'identity representation' of an entity, with their true name being the entity name
