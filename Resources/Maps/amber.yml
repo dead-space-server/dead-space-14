@@ -65093,7 +65093,6 @@ entities:
     - type: Transform
       parent: 3105
     - type: SuitSensor
-      station: invalid
       nextUpdate: 0.4366193
       mode: SensorCords
     - type: DeviceNetwork
