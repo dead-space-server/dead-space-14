@@ -56,10 +56,6 @@ public sealed class RuleGridsSystem : GameRuleSystem<RuleGridsComponent>
         var query = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
         {
-            // DS14: no map check here. RuleGridsComponent.Map is set once at rule start and is
-            // never updated after FTL, so comparing MapID against it broke ghost-role spawns on
-            // moved rule shuttles (e.g. xenoborg mothership): antags spawned in nullspace instead
-            // of the shuttle. The MapGrids check below is the real filter; grid uids survive FTL.
             if (xform.GridUid is not {} grid || !ent.Comp.MapGrids.Contains(grid))
                 continue;
 
