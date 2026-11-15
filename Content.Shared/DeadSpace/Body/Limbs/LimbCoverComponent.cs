@@ -60,6 +60,23 @@ public sealed partial class LimbCoverComponent : Component
 
 public static class LimbCoverRules
 {
+    public static readonly LimbZone[] ExamineOrder =
+    {
+        LimbZone.Head,
+        LimbZone.Eyes,
+        LimbZone.Mouth,
+        LimbZone.Torso,
+        LimbZone.Groin,
+        LimbZone.ArmLeft,
+        LimbZone.ArmRight,
+        LimbZone.HandLeft,
+        LimbZone.HandRight,
+        LimbZone.LegLeft,
+        LimbZone.LegRight,
+        LimbZone.FootLeft,
+        LimbZone.FootRight,
+    };
+
     public static bool Covers(EntityUid clothing, LimbZone zone, IEntityManager entities)
     {
         if (entities.TryGetComponent(clothing, out LimbCoverComponent? cover))
