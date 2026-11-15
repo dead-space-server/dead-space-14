@@ -10245,3 +10245,10 @@ Entries:
   changes:
   - type: Fix
     message: Теперь чтобы получить список геймрулов необходимо быть администратором..
+- id: 981
+  author: BlueDogDoc
+  time: '2026-11-15T05:09:10.037232+00:00'
+  pr: 2760
+  changes:
+  - type: Fix
+    message: проверка дистанции у дефиба
