@@ -83,6 +83,9 @@
       map: ["enum.ToggleableVisuals.Layer"]
   - type: Clothing
     sprite: _DeadSpace/Sponsor/CriticalForce/magboots.rsi
+  - type: ClothingSpeedModifier
+    sprintModifier: 0.9
+    walkModifier: 0.9
   - type: Item
     sprite: null
     size: Normal
@@ -135,6 +138,9 @@
     sprite: _DeadSpace/Sponsor/CriticalForce/backpack.rsi
   - type: Tag
     tags: []
+  - type: Storage
+    grid:
+    - 0,0,7,4
 
 - type: entity
   parent: ClothingHandsGlovesCombat
@@ -163,6 +169,15 @@
     sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/gasmask1.rsi
   - type: Tag
     tags: []
+  - type: FlashImmunity
+  - type: EyeProtection
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.95
+        Piercing: 0.95
+        Heat: 0.95
 
 - type: entity
   parent: ClothingMaskGas
@@ -177,3 +192,12 @@
     sprite: _DeadSpace/Sponsor/CriticalForce/lead-emt/gasmask2.rsi
   - type: Tag
     tags: []
+  - type: FlashImmunity
+  - type: EyeProtection
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.95
+        Piercing: 0.95
+        Heat: 0.95
