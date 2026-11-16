@@ -10442,3 +10442,10 @@ Entries:
   changes:
   - type: Fix
     message: Ручной голопад пытался повысить энергопотребление станции
+- id: 1004
+  author: BlueDogDoc
+  time: '2026-11-16T15:12:28.441345+00:00'
+  pr: 2794
+  changes:
+  - type: Fix
+    message: Облака через стены
