@@ -10331,3 +10331,10 @@ Entries:
   changes:
   - type: Fix
     message: Бесконечно отрезать уши больше не получится
+- id: 992
+  author: IvanKuvalda
+  time: '2026-11-16T02:23:25.033732+00:00'
+  pr: 2744
+  changes:
+  - type: Add
+    message: Кнопка выкинуть обломок в магнит обломков
