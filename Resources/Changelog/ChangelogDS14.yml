@@ -10419,3 +10419,12 @@ Entries:
   changes:
   - type: Add
     message: В меню возможность отключать указание, через облако
+- id: 1001
+  author: BlueDogDoc
+  time: '2026-11-16T02:52:23.285279+00:00'
+  pr: 2761
+  changes:
+  - type: Add
+    message: Групповые анимации
+  - type: Add
+    message: Анимации животных
