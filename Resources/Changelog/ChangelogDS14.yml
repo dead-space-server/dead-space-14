@@ -10303,3 +10303,10 @@ Entries:
   changes:
   - type: Tweak
     message: Включили назад архив камер после тестов нагрузки
+- id: 988
+  author: IvanKuvalda
+  time: '2026-11-16T02:12:15.250081+00:00'
+  pr: 2770
+  changes:
+  - type: Fix
+    message: хотфикс ЧЕГО-ТО
