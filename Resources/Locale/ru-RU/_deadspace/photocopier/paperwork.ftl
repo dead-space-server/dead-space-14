@@ -34,6 +34,7 @@ paperwork-form-title-centcomm-32 = Отчёт о произведённых пр
 paperwork-form-title-centcomm-33 = Отчёт о проведённых сеансах психолога
 paperwork-form-title-centcomm-34 = Ответ на приветственный факс
 paperwork-form-title-centcomm-35 = Запрос на смену цели станции
+paperwork-form-title-centcomm-36 = Запрос на применение Блюспейс-Артилерии
 paperwork-form-title-civilian-0 = Стандартный шаблон документа
 paperwork-form-title-civilian-1 = Заказ на производство продукта
 paperwork-form-title-civilian-2 = Отчёт об изучении объекта
