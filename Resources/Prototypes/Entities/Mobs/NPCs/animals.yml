@@ -2282,6 +2282,12 @@
     intensity: 0.5
     slope: 0.3
   - type: Bloodstream
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
     bloodReferenceSolution:
       reagents:
       - ReagentId: UnstableMutagen
