@@ -10428,3 +10428,10 @@ Entries:
     message: Групповые анимации
   - type: Add
     message: Анимации животных
+- id: 1002
+  author: Manstari
+  time: '2026-11-16T02:54:24.785118+00:00'
+  pr: 2768
+  changes:
+  - type: Fix
+    message: Локализован знак PODS
