@@ -1,4 +1,5 @@
-﻿using Content.Server.Actions;
+﻿using System.Linq; // DS14
+using Content.Server.Actions; // DS14
 using Content.Server.Backmen.Blob.Components;
 using Content.Shared.Gibbing;
 using Content.Server.Ghost.Roles.Components;
@@ -12,6 +13,9 @@ using Content.Shared.Backmen.Blob.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.NPC;
+using Content.Shared.NPC.Components; //DS14
+using Content.Shared.NPC.Prototypes; //DS14
+using Content.Shared.NPC.Systems; //DS14
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -27,8 +31,10 @@ public sealed class BlobCarrierSystem : SharedBlobCarrierSystem
     // DS14-start
     [Dependency] private readonly BlobAntagRollbackSystem _rollback = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    // DS14-end
     [Dependency] private readonly NPCSystem _npc = default!;
+    [Dependency] private readonly NpcFactionSystem _faction = default!;
+    private static readonly ProtoId<NpcFactionPrototype> BlobFaction = "Blob";
+    // DS14-end
 
     public override void Initialize()
     {
@@ -121,6 +127,13 @@ public sealed class BlobCarrierSystem : SharedBlobCarrierSystem
         if (!component.HasMind)
             return;
 
+        // DS14-start
+        if (TryComp<NpcFactionMemberComponent>(uid, out var member))
+            component.OldFactions = member.Factions.ToList();
+        _faction.ClearFactions(uid, dirty: false);
+        _faction.AddFaction(uid, BlobFaction);
+        // DS14-end
+
         var htn = EnsureComp<HTNComponent>(uid);
         htn.RootTask = new HTNCompoundTask() { Task = "SimpleHostileCompound" };
         htn.Blackboard.SetValue(NPCBlackboard.Owner, uid);
@@ -130,6 +143,15 @@ public sealed class BlobCarrierSystem : SharedBlobCarrierSystem
 
     private void DeactivateNPC(EntityUid uid, BlobCarrierComponent component, ref PlayerAttachedEvent args)
     {
+        // DS14-start
+        _faction.ClearFactions(uid, dirty: false);
+        foreach (var faction in component.OldFactions)
+        {
+            _faction.AddFaction(uid, faction);
+        }
+        component.OldFactions.Clear();
+        // DS14-end
+
         RemCompDeferred<HTNComponent>(uid);
         RemCompDeferred<ActiveNPCComponent>(uid);
     }

@@ -1,4 +1,5 @@
 using Content.Shared.Actions;
+using Content.Shared.NPC.Prototypes; // DS14
 using Content.Shared.StatusIcon;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -35,6 +36,11 @@ public sealed partial class BlobCarrierComponent : Component
     public EntityUid? TransformToBlob = null;
 
     public ProtoId<FactionIconPrototype> StatusIcon { get; set; } = "BlobFaction";
+
+    // DS14-start
+    [ViewVariables(VVAccess.ReadWrite)]
+    public List<ProtoId<NpcFactionPrototype>> OldFactions = new();
+    // DS14-end
 }
 
 public sealed partial class TransformToBlobActionEvent : InstantActionEvent

@@ -13,7 +13,6 @@ using Content.Shared.Alert;
 using Content.Shared.Backmen.Blob;
 using Content.Shared.Backmen.Blob.Components;
 using Content.Shared.Coordinates.Helpers;
-using Content.Shared.Eye;
 using Content.Shared.Hands.Components;
 using Content.Shared.Mind;
 using Content.Shared.Popups;
@@ -49,7 +48,6 @@ public sealed class BlobObserverSystem : SharedBlobObserverSystem
     [Dependency] private readonly ViewSubscriberSystem _viewSubscriberSystem = default!;
     [Dependency] private readonly MapSystem _mapSystem = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
 
     private EntityQuery<BlobTileComponent> _tileQuery;
 
@@ -82,7 +80,6 @@ public sealed class BlobObserverSystem : SharedBlobObserverSystem
         SubscribeLocalEvent<BlobObserverComponent, BlobChemSwapPrototypeSelectedMessage>(OnChemSelected);
 
         SubscribeLocalEvent<BlobObserverComponent, ComponentStartup>(OnStartup);
-        SubscribeLocalEvent<BlobObserverComponent, GetVisMaskEvent>(OnGetVisMask);
 
 
         _logger = _logMan.GetSawmill("blob.core");
@@ -212,15 +209,9 @@ public sealed class BlobObserverSystem : SharedBlobObserverSystem
         if (coreComponent.CurrentChem == BlobChemType.BlazingOil && coreComponent.ActionPlantBlobMine is { } mineAction)
             _action.GrantActions(uid, new[] { mineAction }, component.Core.Value);
 
-        _eye.RefreshVisibilityMask(uid);
-
         _viewSubscriberSystem.AddViewSubscriber(component.Core.Value, playerSession); // GrantActions require keep in pvs
     }
 
-    private void OnGetVisMask(EntityUid uid, BlobObserverComponent component, ref GetVisMaskEvent args)
-    {
-        args.VisibilityMask |= (int) VisibilityFlags.Ghost;
-    }
 
     private void OnPlayerAttached(EntityUid uid, BlobObserverComponent component, PlayerAttachedEvent args)
     {

@@ -118,12 +118,12 @@ public sealed class BlobTileSystem : SharedBlobTileSystem
                 break;
             }
             case BlobChemType.ExplosiveLattice:
-                BlobDirectionalBlast(uid, component.Core.Value, blobCoreComponent, maxDamage: 30f, reach: 3);
+                BlobDirectionalBlast(uid, component.Core.Value, blobCoreComponent, damage: 30f, count: 3); // DS14
                 break;
         }
     }
 
-    private void BlobDirectionalBlast(EntityUid tile, EntityUid coreUid, BlobCoreComponent core, float maxDamage, int reach)
+    private void BlobDirectionalBlast(EntityUid tile, EntityUid coreUid, BlobCoreComponent core, float damage, int count) // DS14
     {
         var xform = Transform(tile);
         if (!TryComp<MapGridComponent>(xform.GridUid, out var grid))
@@ -132,13 +132,13 @@ public sealed class BlobTileSystem : SharedBlobTileSystem
         var tileRef = _mapSystem.GetTileRef(xform.GridUid.Value, grid, xform.Coordinates);
         var horizontal = core.ExplosionDirection == BlobExplosionDirection.Horizontal;
 
-        for (var offset = -reach; offset <= reach; offset++)
+        // DS14-start
+        for (var i = 1; i <= count; i++)
         {
             var indices = horizontal
-                ? new Vector2i(tileRef.GridIndices.X + offset, tileRef.GridIndices.Y)
-                : new Vector2i(tileRef.GridIndices.X, tileRef.GridIndices.Y + offset);
+                ? new Vector2i(tileRef.GridIndices.X + i, tileRef.GridIndices.Y)
+                : new Vector2i(tileRef.GridIndices.X, tileRef.GridIndices.Y + i);
 
-            var damage = maxDamage * (1f - Math.Abs(offset) / (float) (reach + 1));
             var blastDamage = new DamageSpecifier
             {
                 DamageDict =
@@ -168,6 +168,7 @@ public sealed class BlobTileSystem : SharedBlobTileSystem
                 _damageableSystem.TryChangeDamage(ent.Owner, blastDamage);
             }
         }
+        // DS14-end
 
         if (!BlobSilence.BeforeAnnouncement(EntityManager))
             _audioSystem.PlayPvs(BlastSound, tile, AudioParams.Default.WithVolume(3f));
