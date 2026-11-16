@@ -102,7 +102,7 @@ public sealed class StaleNetUidSystem : EntitySystem
 
         Unlink(uid, null);
 
-        foreach (var comp in EntityManager.GetComponents(uid))
+        foreach (var comp in AllComps(uid))
         {
             var type = comp.GetType();
             if (!_bindings.TryGetValue(type, out var bindings) || comp.LifeStage >= ComponentLifeStage.Stopping)
