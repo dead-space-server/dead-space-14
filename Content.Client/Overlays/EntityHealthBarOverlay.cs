@@ -129,7 +129,7 @@ public sealed class EntityHealthBarOverlay : Overlay
             const float startX = 8f;
             var endX = widthOfMob - 8f;
 
-            var xProgress = (endX - startX) * deathProgress.ratio + startX;
+            var xProgress = Math.Clamp((endX - startX) * deathProgress.ratio + startX, startX, endX); // DS14
 
             var boxBackground = new Box2(new Vector2(startX, 0f) / EyeManager.PixelsPerMeter, new Vector2(endX, 3f) / EyeManager.PixelsPerMeter);
             boxBackground = boxBackground.Translated(position);
@@ -173,7 +173,7 @@ public sealed class EntityHealthBarOverlay : Overlay
                 return (1, false);
 
             var ratio = 1 - ((FixedPoint2)(dmg.TotalDamage / threshold)).Float();
-            return (ratio, false);
+            return (Math.Clamp(ratio, 0f, 1f), false); // DS14
         }
 
         if (_mobStateSystem.IsCritical(uid, component))
@@ -186,7 +186,7 @@ public sealed class EntityHealthBarOverlay : Overlay
 
             var ratio = 1 - ((dmg.TotalDamage - critThreshold) / (deadThreshold - critThreshold)).Value.Float();
 
-            return (ratio, true);
+            return (Math.Clamp(ratio, 0f, 1f), true); // DS14
         }
 
         return (0, true);

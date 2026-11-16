@@ -8,9 +8,10 @@
     ClusterBangFull: 2
     GrenadeStinger: 4
     Flash: 5
-    Tourniquet: 5
+    Tourniquet4: 5 #ds14
+    HemostatinMedipen: 4 #ds14
     FieldSplint: 4 # DS14
-    ProstheticPegLeg: 2 # DS14
+    ProstheticPegLeg: 4 # DS14
     FlashlightSeclite: 5
     ClothingEyesGlassesSunglasses: 2
     ClothingEyesHudSecurity: 2
@@ -26,7 +27,8 @@
     ClothingNeckBodyCamera: 4 # DS14
     Bola: 2 # DS14-value
     EnergyBola: 2 # DS14
-    ClothingHeadHelmetSecurityFlashlight: 3 # DS14
+    ClothingHeadHelmetSecurityFlashlight: 5 # DS14
+    WeaponMeleeRam: 1 #ds14
   # security officers need to follow a diet regimen!
   contrabandInventory:
     FoodDonutHomer: 12

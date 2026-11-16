@@ -70,8 +70,7 @@
 
 - type: entity
   parent:
-  - MobRespirator
-  - MobAtmosStandard
+  - MobAtmosExposed # DS14: no lungs, so no respirator and no barotrauma
   - SimpleSpaceMobBase
   # DS14-start: keep satiation on the current air-breathing simple-mob base.
   - BaseHungerThirstSlowdown
@@ -104,3 +103,82 @@
   - type: MobPrice
     price: 150
   - type: FloatingVisuals
+  - type: ThermalRegulator
+    metabolismHeat: 800
+    radiatedHeat: 100
+    implicitHeatRegulation: 250
+    sweatHeatRegulation: 500
+    shiveringHeatRegulation: 500
+    normalBodyTemperature: 310.15
+    thermalRegulationTemperatureThreshold: 2
+  - type: Temperature
+    currentTemperature: 310.15
+    specificHeat: 42
+  - type: TemperatureDamage
+    heatDamageThreshold: 325
+    coldDamageThreshold: 260
+    coldDamage:
+      types:
+        Cold: 1
+    heatDamage:
+      types:
+        Heat: 1.5
+
+# DS14: cockroaches, mice, bees and butterflies. No blood, lungs, hunger or organs.
+- type: entity
+  parent:
+  - BaseMob
+  - MobDamageable
+  - MobPolymorphable
+  - MobCombat
+  - MobFlammable
+  id: CritterMobBase
+  suffix: AI
+  abstract: true
+  components:
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+      Acidic: [Touch, Ingestion]
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 4
+  - type: StatusEffects
+    allowed:
+    - Electrocution
+    - TemporaryBlindness
+    - Pacified
+    - Flashed
+    - RadiationProtection
+    - Adrenaline
+  - type: Buckle
+  - type: StandingState
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - StunImmune
+  - type: Language
+  - type: Blindable
+  - type: CritterGraze
+  - type: NpcFactionMember
+    factions:
+    - SimpleNeutral
+  - type: HTN
+    constantlyReplan: false
+    planCooldown: 2
+    rootTask:
+      task: CritterSnackCompound
+  - type: Body
+    prototype: Critter
+  - type: Climbing
+  - type: NameIdentifier
+    group: GenericNumber
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      60: 0.7
+      80: 0.5
+  - type: MobPrice
+    price: 50
+  - type: Perishable
+  - type: ThermalVisible

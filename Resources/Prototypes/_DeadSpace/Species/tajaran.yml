@@ -19,7 +19,7 @@
     Snout: MobHumanoidAnyMarking
     Chest: MobTajaranTorso
     HeadTop: MobHumanoidAnyMarking
-    Tail: MobTajaranTail
+    Tail: MobHumanoidAnyMarking
     Hair: MobHumanoidAnyMarking
     FacialHair: MobHumanoidAnyMarking
     Eyes: MobTajaranEyes
@@ -47,7 +47,8 @@
       required: false
     Tail:
       points: 1
-      required: false
+      required: true
+      defaultMarkings: [ TailColor ]
     Head:
       points: 3
       required: false

@@ -32,6 +32,8 @@ public sealed partial class PathfindingSystem
     /// </remarks>
     public bool PauseUpdating = false;
 
+    private const int MaxDirtyChunksPerUpdate = 8; //DS-14
+
     private readonly Stopwatch _stopwatch = new();
 
     // Probably can't pool polys as there might be old pathfinding refs to them.
@@ -89,9 +91,15 @@ public sealed partial class PathfindingSystem
         // We defer chunk updates because rebuilding a navmesh is hella costly
         // Still run even when paused.
         var query = AllEntityQuery<GridPathfindingComponent>();
+        var budget = MaxDirtyChunksPerUpdate; //DS-14
 
         while (query.MoveNext(out var uid, out var comp))
         {
+            //DS-14 start
+            if (budget <= 0)
+                break;
+            //DS-14 end
+
             var pathfinding = new Entity<GridPathfindingComponent>(uid, comp);
             // TODO: Dump all this shit and just do it live it's probably fast enough.
             if (comp.DirtyChunks.Count == 0 ||
@@ -106,15 +114,22 @@ public sealed partial class PathfindingSystem
 
             // TODO: Often we invalidate the entire chunk when it might be something as simple as an airlock change
             // Would be better to handle that though this was safer and max it's taking is like 1-2ms every half-second.
-            var dirt = new GridPathfindingChunk[comp.DirtyChunks.Count];
+            //DS-14 start
+            var dirt = new GridPathfindingChunk[Math.Min(comp.DirtyChunks.Count, budget)];
             var idx = 0;
 
             foreach (var origin in comp.DirtyChunks)
             {
+                if (idx >= dirt.Length)
+                    break;
+
                 var chunk = GetChunk(origin, uid, pathfinding);
                 dirt[idx] = chunk;
                 idx++;
             }
+
+            budget -= dirt.Length;
+            //DS-14 end
 
             // We force clear portals in a single-threaded context to be safe
             // as they may not be thread-safe to touch.
@@ -136,11 +151,12 @@ public sealed partial class PathfindingSystem
             // TODO: Inflate grid bounds slightly and get chunks.
             // This is for map <> grid pathfinding
 
-            // Without parallel this is roughly 3x slower on my desktop.
-            Parallel.For(0, dirt.Length, options, i =>
+            //DS-14 start
+            for (var i = 0; i < dirt.Length; i++)
             {
                 BuildBreadcrumbs(dirt[i], (uid, mapGridComp));
-            });
+            }
+            //DS-14 end
 
             const int Division = 4;
 
@@ -154,44 +170,42 @@ public sealed partial class PathfindingSystem
 
             for (var it = 0; it < Division; it++)
             {
-                var it1 = it;
-
-                Parallel.For(0, dirt.Length, options, j =>
+                //DS-14 start
+                foreach (var chunk in dirt)
                 {
-                    var chunk = dirt[j];
                     // Check if the chunk is safe on this iteration.
                     var x = Math.Abs(chunk.Origin.X % 2);
                     var y = Math.Abs(chunk.Origin.Y % 2);
                     var index = x * 2 + y;
 
-                    if (index != it1)
-                        return;
+                    if (index != it)
+                        continue;
 
                     ClearOldPolys(chunk);
-                });
+                }
+                //DS-14 end
             }
 
             // TODO: You can probably skimp on some neighbor chunk caches
             for (var it = 0; it < Division; it++)
             {
-                var it1 = it;
-
-                Parallel.For(0, dirt.Length, options, j =>
+                //DS-14 start
+                foreach (var chunk in dirt)
                 {
-                    var chunk = dirt[j];
                     // Check if the chunk is safe on this iteration.
                     var x = Math.Abs(chunk.Origin.X % 2);
                     var y = Math.Abs(chunk.Origin.Y % 2);
                     var index = x * 2 + y;
 
-                    if (index != it1)
-                        return;
+                    if (index != it)
+                        continue;
 
                     BuildNavmesh(chunk, pathfinding);
 #if DEBUG
-                    Interlocked.Increment(ref updateCount);
+                    updateCount++;
 #endif
-                });
+                }
+                //DS-14 end
             }
 
             // Handle portals at the end after having cleared their neighbors above.
@@ -214,7 +228,12 @@ public sealed partial class PathfindingSystem
                 AddNeighbors(polyA, polyB);
             }
 
-            comp.DirtyChunks.Clear();
+            //DS-14 start
+            foreach (var chunk in dirt)
+            {
+                comp.DirtyChunks.Remove(chunk.Origin);
+            }
+            //DS-14 end
         }
     }
 
@@ -427,6 +446,7 @@ public sealed partial class PathfindingSystem
 
                 var tile = _maps.GetTileRef(grid.Owner, grid.Comp, tilePos);
                 var flags = tile.Tile.IsEmpty ? PathfindingBreadcrumbFlag.Space : PathfindingBreadcrumbFlag.None;
+                var hiddenWall = _biome.IsHiddenWall(grid.Owner, tilePos); //DS-14
                 // var isBorder = x < 0 || y < 0 || x == ChunkSize - 1 || y == ChunkSize - 1;
 
                 tileEntities.Clear();
@@ -547,6 +567,14 @@ public sealed partial class PathfindingSystem
                                 damage += _destructible.DestroyedAt(ent, damageable).Float();
                             }
                         }
+
+                        //DS-14 start
+                        if (hiddenWall)
+                        {
+                            collisionLayer |= (int) CollisionGroup.WallLayer;
+                            collisionMask |= (int) CollisionGroup.FullTileMask;
+                        }
+                        //DS-14 end
 
                         /*This is causing too many issues and I'd rather just ignore it until pathfinder refactor
                           to just get tiles at runtime.

@@ -28,6 +28,7 @@ jobs:
           PR_NUMBER: ${{ steps.extract.outputs.PR_NUMBER }}
           AUTHOR: ${{ steps.extract.outputs.AUTHOR }}
           REPO: ${{ steps.extract.outputs.REPO }}
+          PING_ROLE_ID: "1487323270184173630" # Вардены вики
         run: |
           python <<'EOF'
           import base64
@@ -35,6 +36,8 @@ jobs:
           import os
           import re
           from datetime import datetime, timezone
+
+          PING_MARKER = "Нужны ли изменения в вики?"
 
           def set_output(name, value):
               with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
@@ -107,18 +110,40 @@ jobs:
               ],
           }
 
+          ping_pattern = rf"^\s*[-*]\s*\[[xXхХ]\]\s*{re.escape(PING_MARKER)}"
+          ping_requested = re.search(ping_pattern, desc, flags=re.MULTILINE | re.IGNORECASE) is not None
+          role_id = os.environ.get("PING_ROLE_ID", "").strip()
+
           payload_file = "/tmp/discord_payload.json"
           with open(payload_file, "w", encoding="utf-8") as f:
               json.dump(payload, f, ensure_ascii=False)
 
           set_output("payload_file", payload_file)
           set_output("should_send", "true")
+
+          if ping_requested:
+              if role_id.isdigit():
+                  ping_payload = {
+                      "username": "Капибарка МК-Изменения",
+                      "content": f"<@&{role_id}> Нужны изменения в вики: <https://github.com/{repo}/pull/{pr_number}>",
+                      "allowed_mentions": {"roles": [role_id]},
+                  }
+                  ping_file = "/tmp/discord_ping_payload.json"
+                  with open(ping_file, "w", encoding="utf-8") as f:
+                      json.dump(ping_payload, f, ensure_ascii=False)
+                  set_output("ping_file", ping_file)
+                  print(f"Ping checkbox is checked, will ping role {role_id}")
+              else:
+                  print("Ping checkbox is checked, but PING_ROLE_ID is missing or invalid. Skipping ping.")
+          else:
+              print("Ping checkbox is not checked")
           EOF
 
       - name: Send to Discord
         if: steps.parse.outputs.should_send == 'true'
         env:
           PAYLOAD_FILE: ${{ steps.parse.outputs.payload_file }}
+          PING_FILE: ${{ steps.parse.outputs.ping_file }}
           WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}
         run: |
           if [ -z "$WEBHOOK_URL" ]; then
@@ -135,3 +160,17 @@ jobs:
             --fail \
             --silent \
             --show-error
+
+          if [ -n "$PING_FILE" ]; then
+            sleep 2
+
+            PING_PAYLOAD=$(cat "$PING_FILE")
+
+            curl -X POST \
+              -H "Content-Type: application/json" \
+              -d "$PING_PAYLOAD" \
+              "$WEBHOOK_URL" \
+              --fail \
+              --silent \
+              --show-error
+          fi

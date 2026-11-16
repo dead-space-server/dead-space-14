@@ -664,9 +664,5 @@
   conditions:
     - !type:TileNotBlocked
       failIfSpace: false
-    - !type:TileType
-      targets:
-        - Lattice
-        - Plating
   objectType: Structure
   placementMode: SnapgridCenter

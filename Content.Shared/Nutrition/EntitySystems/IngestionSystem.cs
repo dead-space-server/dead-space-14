@@ -256,7 +256,10 @@ public sealed partial class IngestionSystem : EntitySystem
         var forceFed = args.User != entity.Owner;
 
         if (!_body.TryGetBodyOrganEntityComps<StomachComponent>(entity!, out var stomachs))
+        {
+            TryCritterGraze(entity, ref args); // DS14
             return;
+        }
 
         // Can we digest the specific item we're trying to eat?
         if (!IsDigestibleBy(args.Ingested, stomachs, out var popup))
@@ -327,7 +330,10 @@ public sealed partial class IngestionSystem : EntitySystem
             return;
 
         if (!_body.TryGetBodyOrganEntityComps<StomachComponent>(entity!, out var stomachs))
+        {
+            FinishCritterGraze(entity, ref args); // DS14
             return;
+        }
 
         var forceFed = args.User != entity.Owner;
 

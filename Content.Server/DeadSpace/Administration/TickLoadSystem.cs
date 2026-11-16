@@ -57,6 +57,16 @@ public sealed class TickLoadSystem : EntitySystem
     private double[] _worstParts = Array.Empty<double>();
     private double[] _physicsBefore = Array.Empty<double>();
     private double _worstSum;
+    private long _awakeSum;
+    private int _awakeMax;
+    private TimeSpan _startPause;
+    private TimeSpan _lastPause;
+    private readonly int[] _startGcCounts = new int[3];
+    private readonly int[] _lastGcCounts = new int[3];
+    private int _gcTicks;
+    private double _maxPause;
+    private int _worstGen;
+    private double _worstPause;
     private PhysicsSystem? _physicsSystem;
 
     public override void Initialize()
@@ -94,6 +104,15 @@ public sealed class TickLoadSystem : EntitySystem
         _worstParts = new double[count];
         _worstSum = 0d;
         _physicsBefore = Snapshot(_physics);
+        _awakeSum = 0;
+        _awakeMax = 0;
+        _startPause = _lastPause = GC.GetTotalPauseDuration();
+        for (var g = 0; g < 3; g++)
+            _startGcCounts[g] = _lastGcCounts[g] = GC.CollectionCount(g);
+        _gcTicks = 0;
+        _maxPause = 0;
+        _worstGen = -1;
+        _worstPause = 0;
         _ticks = 0;
         _need = seconds * rate;
         _running = true;
@@ -119,9 +138,36 @@ public sealed class TickLoadSystem : EntitySystem
         }
 
         _last = now;
+        var pause = GC.GetTotalPauseDuration();
+        var tickPause = (pause - _lastPause).TotalMilliseconds;
+        _lastPause = pause;
+        var gen = -1;
+        for (var g = 2; g >= 0; g--)
+        {
+            var count = GC.CollectionCount(g);
+            if (count != _lastGcCounts[g] && gen < 0)
+                gen = g;
+            _lastGcCounts[g] = count;
+        }
+
+        if (gen >= 0)
+            _gcTicks++;
+        if (tickPause > _maxPause)
+            _maxPause = tickPause;
+
+        if (_physicsSystem != null)
+        {
+            var awake = _physicsSystem.AwakeBodies.Count;
+            _awakeSum += awake;
+            if (awake > _awakeMax)
+                _awakeMax = awake;
+        }
+
         if (tickSum > _worstSum)
         {
             _worstSum = tickSum;
+            _worstGen = gen;
+            _worstPause = tickPause;
             Array.Copy(_tickMs, _worstParts, _rows.Count);
         }
 
@@ -160,6 +206,10 @@ public sealed class TickLoadSystem : EntitySystem
         var text = new StringBuilder();
         text.AppendLine($"tickload: {ticks} ticks, {_seconds} s, rate {rate}, budget {budget:F2} ms");
         text.AppendLine($"systems sum avg {perTick:F2} ms/tick, worst tick {_worstSum:F2} ms");
+        var gcPause = (GC.GetTotalPauseDuration() - _startPause).TotalMilliseconds;
+        text.AppendLine($"gc: gen0 {GC.CollectionCount(0) - _startGcCounts[0]}, gen1 {GC.CollectionCount(1) - _startGcCounts[1]}, gen2 {GC.CollectionCount(2) - _startGcCounts[2]}, " +
+                        $"paused {gcPause:F1} ms total, max {_maxPause:F1} ms in one tick, {_gcTicks} ticks with a gc; " +
+                        $"worst tick: {(_worstGen >= 0 ? $"gen{_worstGen} gc, paused {_worstPause:F1} ms" : "no gc")}");
         text.AppendLine("      avg ms    max ms   share  system");
 
         var shown = 0;
@@ -211,6 +261,8 @@ public sealed class TickLoadSystem : EntitySystem
             }
         }
 
+        AppendAwakeBodies(text, ticks);
+
         var report = text.ToString().TrimEnd();
         _log.Info(report);
         try
@@ -223,6 +275,73 @@ public sealed class TickLoadSystem : EntitySystem
         }
 
         _shell = null;
+    }
+
+    private void AppendAwakeBodies(StringBuilder text, int ticks)
+    {
+        if (_physicsSystem == null)
+            return;
+
+        var groups = new Dictionary<string, AwakeGroup>();
+        var contacts = 0;
+        var places = new Dictionary<string, int>();
+        foreach (var (uid, body, xform) in _physicsSystem.AwakeBodies)
+        {
+            var id = MetaData(uid).EntityPrototype?.ID ?? "(no prototype)";
+            var place = PlaceName(xform);
+            groups.TryGetValue(id, out var group);
+            group.Bodies++;
+            group.Contacts += body.ContactCount;
+            if (body.LinearVelocity.LengthSquared() > 0.0001f || MathF.Abs(body.AngularVelocity) > 0.01f)
+                group.Moving++;
+            group.Place ??= place;
+            groups[id] = group;
+            contacts += body.ContactCount;
+            places[place] = places.GetValueOrDefault(place) + 1;
+        }
+
+        var avgAwake = ticks > 0 ? (double) _awakeSum / ticks : 0d;
+        text.AppendLine($"awake bodies: avg {avgAwake:F0}, max {_awakeMax}, now {_physicsSystem.AwakeBodies.Count}, their contacts now {contacts}");
+
+        var top = new List<(string Id, AwakeGroup Group)>(groups.Count);
+        foreach (var (id, group) in groups)
+            top.Add((id, group));
+
+        top.Sort(static (a, b) => b.Group.Bodies.CompareTo(a.Group.Bodies));
+        for (var i = 0; i < top.Count && i < 10; i++)
+        {
+            var group = top[i].Group;
+            text.AppendLine($"   {group.Bodies,6}  moving {group.Moving,4}  contacts {group.Contacts,5}  {top[i].Id}  on {group.Place}");
+        }
+
+        var placeList = new List<(string Place, int Count)>(places.Count);
+        foreach (var (place, count) in places)
+            placeList.Add((place, count));
+
+        placeList.Sort(static (a, b) => b.Count.CompareTo(a.Count));
+        text.Append("awake by place:");
+        for (var i = 0; i < placeList.Count && i < 6; i++)
+            text.Append($" {placeList[i].Place} {placeList[i].Count};");
+        text.AppendLine();
+    }
+
+    private string PlaceName(TransformComponent xform)
+    {
+        if (xform.GridUid is { } grid)
+            return $"{MetaData(grid).EntityName} ({grid})";
+
+        if (xform.MapUid is { } map)
+            return $"{MetaData(map).EntityName} ({map}, no grid)";
+
+        return "nullspace";
+    }
+
+    private struct AwakeGroup
+    {
+        public int Bodies;
+        public int Moving;
+        public int Contacts;
+        public string? Place;
     }
 
     private bool Bind(out string error)

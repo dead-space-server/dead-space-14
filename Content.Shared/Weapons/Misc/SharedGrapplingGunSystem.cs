@@ -362,16 +362,25 @@ public abstract class SharedGrapplingGunSystem : VirtualController
         }
 
         var joint = _joints.CreateDistanceJoint(uid, args.Weapon.Value, id: GrapplingJoint);
-        joint.MaxLength = joint.Length + grapple.RopeMargin;
-        joint.Stiffness = grapple.RopeStiffness;
-        joint.MinLength = grapple.RopeMinLength; // Length of a tile to prevent pulling yourself into / through walls
-        joint.Breakpoint = grapple.RopeBreakPoint;
 
         var jointCompHook = _entities.GetComponent<JointComponent>(uid); // we use get here because if the component doesn't exist then something has fucked up bigtime
         var jointCompGrapple = _entities.GetComponent<JointComponent>(args.Weapon.Value);
 
         _joints.SetRelay(uid, args.Embedded, jointCompHook);
         _joints.RefreshRelay(args.Weapon.Value, jointCompGrapple);
+
+        //DS-14 start
+        var physicalHook = jointCompHook.Relay ?? uid;
+        var physicalGrapple = jointCompGrapple.Relay ?? args.Weapon.Value;
+        var span = (_transform.GetWorldPosition(physicalHook) - _transform.GetWorldPosition(physicalGrapple)).Length();
+        if (span > joint.Length)
+            joint.Length = span;
+        //DS-14 end
+
+        joint.MaxLength = joint.Length + grapple.RopeMargin;
+        joint.Stiffness = grapple.RopeStiffness;
+        joint.MinLength = grapple.RopeMinLength; // Length of a tile to prevent pulling yourself into / through walls
+        joint.Breakpoint = grapple.RopeBreakPoint;
     }
 
     [Serializable, NetSerializable]

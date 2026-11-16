@@ -172,9 +172,7 @@ public sealed class LavalandMiningSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("lavaland-ore-redeemer-already-credited"), machine, user);
             return;
         }
-
-        var delta = result.Points - result.Debt;
-        points.Balance += (result.Debt > 0) ? 0 : delta;
+        points.Balance += result.Points - result.Debt;
         Dirty(cardUid, points);
 
         if (result.Debt > 0)
@@ -291,10 +289,12 @@ public sealed class LavalandMiningSystem : EntitySystem
 
         var movedProcessed = Math.Min(ent.Comp.ProcessedUnits, args.Amount);
         var movedCredited = Math.Min(ent.Comp.CreditedUnits, movedProcessed);
+        var movedOwed = Math.Min(ent.Comp.OwedUnits, movedCredited);
 
         ent.Comp.ProcessedUnits -= movedProcessed;
         ent.Comp.CreditedUnits -= movedCredited;
-        AddRedeemedUnits(args.NewId, movedProcessed, movedCredited, args.Amount);
+        ent.Comp.OwedUnits -= movedOwed;
+        AddRedeemedUnits(args.NewId, movedProcessed, movedCredited, movedOwed, args.Amount);
 
         if (ent.Comp.ProcessedUnits <= 0)
             RemCompDeferred<LavalandRedeemedOreComponent>(ent.Owner);
@@ -311,16 +311,18 @@ public sealed class LavalandMiningSystem : EntitySystem
         var availableProcessed = Math.Min(ent.Comp.ProcessedUnits, donorCount);
         var movedProcessed = Math.Min(availableProcessed, args.Amount);
         var movedCredited = Math.Min(ent.Comp.CreditedUnits, movedProcessed);
+        var movedOwed = Math.Min(ent.Comp.OwedUnits, movedCredited);
         if (movedProcessed <= 0)
             return;
 
         ent.Comp.ProcessedUnits -= movedProcessed;
         ent.Comp.CreditedUnits -= movedCredited;
+        ent.Comp.OwedUnits -= movedOwed;
 
         var recipientCount = TryComp<StackComponent>(args.Recipient, out var recipientStack)
             ? recipientStack.Count
             : 0;
-        AddRedeemedUnits(args.Recipient, movedProcessed, movedCredited, recipientCount + args.Amount);
+        AddRedeemedUnits(args.Recipient, movedProcessed, movedCredited, movedOwed, recipientCount + args.Amount);
 
         if (ent.Comp.ProcessedUnits <= 0)
             RemCompDeferred<LavalandRedeemedOreComponent>(ent.Owner);
@@ -368,6 +370,33 @@ public sealed class LavalandMiningSystem : EntitySystem
         points = pointsComp;
         cardUid = idCard.Owner;
         return true;
+    }
+
+    public void RedeemStorageIntoLathe(EntityUid user, EntityUid storageUid, Entity<LavalandOreRedeemerComponent> lathe)
+    {
+        if (!TryComp<StorageComponent>(storageUid, out var storage))
+            return;
+
+        if (!this.IsPowered(lathe.Owner, EntityManager))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-ore-redeemer-unpowered"), lathe.Owner, user);
+            return;
+        }
+
+        var hasCard = TryGetMiningCard(user, lathe.Comp.MiningAccess, out var cardUid, out var points);
+        var result = new RedeemResult();
+
+        foreach (var contained in storage.Container.ContainedEntities.ToArray())
+        {
+            var unitsBefore = result.Units;
+            TryRedeemStack(user, contained, lathe.Owner, lathe.Comp, hasCard, ref result);
+
+            if (result.Units == unitsBefore && !TerminatingOrDeleted(contained))
+                _materialStorage.TryInsertMaterialEntity(user, contained, lathe.Owner);
+        }
+
+        if (result.Units > 0)
+            ApplyRedeemResult(lathe.Owner, user, result, hasCard, cardUid, points);
     }
 
     private RedeemResult Redeem(
@@ -420,17 +449,23 @@ public sealed class LavalandMiningSystem : EntitySystem
         var creditedUnits = redeemedOre != null
             ? Math.Clamp(redeemedOre.CreditedUnits, 0, processedUnits)
             : 0;
+        var owedUnits = redeemedOre != null
+            ? Math.Clamp(redeemedOre.OwedUnits, 0, creditedUnits)
+            : 0;
         var freshUnits = count - processedUnits;
         var redeemedUnits = count;
         var redeemedFreshUnits = freshUnits;
-        var redeemedCreditedUnits = creditedUnits;
+        var chargedOwedUnits = awardFreshOre ? owedUnits : 0;
         if (HasComp<LatheComponent>(receiver))
         {
             if (!_materialStorage.TryInsertMaterialEntity(user, uid, receiver, showPopup: false))
                 return;
 
             AddProcessedMaterials(component, composition, count);
-            AddCreditedMaterials(component, composition, creditedUnits + (awardFreshOre ? freshUnits : 0));
+            AddCreditedMaterials(
+                component,
+                composition,
+                creditedUnits - chargedOwedUnits + (awardFreshOre ? freshUnits : 0));
         }
         else if (TryComp<StorageComponent>(receiver, out var storage))
         {
@@ -444,11 +479,15 @@ public sealed class LavalandMiningSystem : EntitySystem
                 return;
 
             var insertedProcessedUnits = Math.Min(processedUnits, redeemedUnits);
-            redeemedCreditedUnits = Math.Min(creditedUnits, insertedProcessedUnits);
+            var insertedCreditedUnits = Math.Min(creditedUnits, insertedProcessedUnits);
+            chargedOwedUnits = awardFreshOre ? Math.Min(owedUnits, insertedCreditedUnits) : 0;
             redeemedFreshUnits = redeemedUnits - insertedProcessedUnits;
 
             AddProcessedMaterials(component, composition, redeemedUnits);
-            AddCreditedMaterials(component, composition, redeemedCreditedUnits + (awardFreshOre ? redeemedFreshUnits : 0));
+            AddCreditedMaterials(
+                component,
+                composition,
+                insertedCreditedUnits - chargedOwedUnits + (awardFreshOre ? redeemedFreshUnits : 0));
             AddRedeemedFreshUnitsToInsertedStacks(
                 (receiver, storage),
                 stack.StackTypeId,
@@ -456,6 +495,7 @@ public sealed class LavalandMiningSystem : EntitySystem
                 insertedProcessedUnits,
                 redeemedFreshUnits,
                 awardFreshOre ? redeemedFreshUnits : 0);
+            RepayOwedUnitsOnInsertedStacks((receiver, storage), stack.StackTypeId, beforeCounts, chargedOwedUnits);
         }
         else
         {
@@ -464,7 +504,38 @@ public sealed class LavalandMiningSystem : EntitySystem
 
         result.Units += redeemedUnits;
         result.Points += redeemedFreshUnits * pointsPerUnit;
-        result.Debt += redeemedCreditedUnits * pointsPerUnit;
+        result.Debt += chargedOwedUnits * pointsPerUnit;
+    }
+
+    private void RepayOwedUnitsOnInsertedStacks(
+        Entity<StorageComponent> storage,
+        ProtoId<StackPrototype> stackType,
+        IReadOnlyDictionary<EntityUid, int> beforeCounts,
+        int repaidUnits)
+    {
+        var remaining = repaidUnits;
+
+        foreach (var contained in storage.Comp.Container.ContainedEntities)
+        {
+            if (remaining <= 0)
+                break;
+
+            if (!TryComp<StackComponent>(contained, out var containedStack) ||
+                containedStack.StackTypeId != stackType ||
+                containedStack.Count <= beforeCounts.GetValueOrDefault(contained) ||
+                !TryComp<LavalandRedeemedOreComponent>(contained, out var redeemed))
+            {
+                continue;
+            }
+
+            var repaid = Math.Min(remaining, Math.Min(redeemed.OwedUnits, redeemed.CreditedUnits));
+            if (repaid <= 0)
+                continue;
+
+            redeemed.OwedUnits -= repaid;
+            redeemed.CreditedUnits -= repaid;
+            remaining -= repaid;
+        }
     }
 
     private Dictionary<EntityUid, int> GetStorageStackCounts(
@@ -548,7 +619,7 @@ public sealed class LavalandMiningSystem : EntitySystem
             var processed = Math.Min(freshRemaining, inserted);
             var credited = Math.Min(creditedRemaining, processed);
 
-            AddRedeemedUnits(contained, processed, credited, containedStack.Count);
+            AddRedeemedUnits(contained, processed, credited, 0, containedStack.Count);
 
             freshRemaining -= processed;
             creditedRemaining -= credited;
@@ -644,11 +715,11 @@ public sealed class LavalandMiningSystem : EntitySystem
         if (processedUnits <= 0)
             return default;
 
-        AddRedeemedUnits(uid, processedUnits, creditedUnits, stack.Count);
+        AddRedeemedUnits(uid, processedUnits, creditedUnits, creditedUnits, stack.Count);
         return (processedUnits * amountPerUnit, creditedUnits * amountPerUnit);
     }
 
-    private void AddRedeemedUnits(EntityUid uid, int processedUnits, int creditedUnits, int maxUnits)
+    private void AddRedeemedUnits(EntityUid uid, int processedUnits, int creditedUnits, int owedUnits, int maxUnits)
     {
         if (processedUnits <= 0 || maxUnits <= 0)
             return;
@@ -656,6 +727,7 @@ public sealed class LavalandMiningSystem : EntitySystem
         var redeemed = EnsureComp<LavalandRedeemedOreComponent>(uid);
         redeemed.ProcessedUnits = Math.Clamp(redeemed.ProcessedUnits + processedUnits, 0, maxUnits);
         redeemed.CreditedUnits = Math.Clamp(redeemed.CreditedUnits + creditedUnits, 0, redeemed.ProcessedUnits);
+        redeemed.OwedUnits = Math.Clamp(redeemed.OwedUnits + owedUnits, 0, redeemed.CreditedUnits);
     }
 
     private void OnShopBeforeOpen(Entity<LavalandMiningShopComponent> ent, ref BeforeActivatableUIOpenEvent args)

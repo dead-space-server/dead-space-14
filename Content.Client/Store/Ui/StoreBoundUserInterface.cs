@@ -5,6 +5,9 @@ using Content.Shared.Backmen.Store;
 using Content.Shared.Store.Components;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
+using Content.Client.DeadSpace.VendingMachines.UI; // DS14
+using Content.Shared.DeadSpace.VendingMachines; // DS14
+using Content.Shared.FixedPoint; // DS14
 
 namespace Content.Client.Store.Ui;
 
@@ -30,9 +33,32 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
         IoCManager.InjectDependencies(this); // DS14
     }
 
+    // DS14-start
+    [ViewVariables]
+    private VendingMachineKeypadMenu? _keypadMenu;
+
+    [ViewVariables]
+    private readonly List<ListingDataWithCostModifiers> _keypadListings = new();
+
+    [ViewVariables]
+    private Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2> _balance = new();
+    // DS14-end
+
     protected override void Open()
     {
         base.Open();
+
+        // DS14-start
+        if (EntMan.TryGetComponent(Owner, out VendingMachineKeypadComponent? keypad))
+        {
+            _keypadMenu = this.CreateWindowCenteredLeft<VendingMachineKeypadMenu>();
+            _keypadMenu.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
+            _keypadMenu.Configure(keypad.Columns, keypad.SpiralCapacity);
+            _keypadMenu.OnCodeApproved += OnKeypadCodeApproved;
+            _keypadMenu.OnWithdrawPressed += OnKeypadWithdraw;
+            return;
+        }
+        // DS14-end
 
         _menu = this.CreateWindow<StoreMenu>();
         if (EntMan.TryGetComponent<StoreComponent>(Owner, out var store))
@@ -83,6 +109,13 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
         switch (state)
         {
             case StoreUpdateState msg:
+                // DS14-start
+                if (_keypadMenu != null)
+                {
+                    UpdateKeypad(msg);
+                    break;
+                }
+                // DS14-end
                 // start-backmen: bank
                 _menu?.SetCanBuyFromBank(EntMan.HasComponent<BuyStoreBankComponent>(Owner)); // backmen: currency
                 // end-backmen: bank
@@ -118,4 +151,111 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
             resetScroll);
         // DS14-end
     }
+
+    // DS14-start
+    private void UpdateKeypad(StoreUpdateState msg)
+    {
+        if (_keypadMenu == null)
+            return;
+
+        _balance = msg.Balance;
+        var canBuyFromBank = EntMan.HasComponent<BuyStoreBankComponent>(Owner);
+        var available = msg.Listings.ToDictionary(listing => listing.ID);
+
+        for (var i = 0; i < _keypadListings.Count; i++)
+        {
+            if (available.TryGetValue(_keypadListings[i].ID, out var updated))
+                _keypadListings[i] = updated;
+        }
+
+        var known = _keypadListings.Select(listing => listing.ID).ToHashSet();
+        _keypadListings.AddRange(msg.Listings
+            .Where(listing => !known.Contains(listing.ID))
+            .OrderByDescending(listing => listing.Priority)
+            .ThenBy(listing => ListingLocalisationHelpers.GetLocalisedNameOrEntityName(listing, _prototypeManager)));
+
+        var entries = new List<VendingMachineKeypadEntry>(_keypadListings.Count);
+        foreach (var listing in _keypadListings)
+        {
+            uint? amount = !available.ContainsKey(listing.ID)
+                ? 0
+                : listing.RemainingStock is { } remaining ? (uint) Math.Max(remaining, 0) : null;
+
+            entries.Add(new VendingMachineKeypadEntry(
+                listing.ProductEntity,
+                ListingLocalisationHelpers.GetLocalisedNameOrEntityName(listing, _prototypeManager),
+                amount,
+                GetKeypadPrice(listing),
+                canBuyFromBank || listing.CanBuyWith(msg.Balance)));
+        }
+
+        _keypadMenu.SetEntries(entries, true);
+        _keypadMenu.SetBalance(GetKeypadBalance(msg.Balance));
+        _keypadMenu.SetWithdrawVisible(GetWithdrawable().Any());
+    }
+
+    private void OnKeypadCodeApproved(int index)
+    {
+        if (index < 0 || index >= _keypadListings.Count)
+            return;
+
+        SendMessage(new StoreBuyListingMessage(_keypadListings[index].ID));
+    }
+
+    private void OnKeypadWithdraw()
+    {
+        foreach (var (currency, amount) in GetWithdrawable())
+        {
+            SendMessage(new StoreRequestWithdrawMessage(currency, amount));
+        }
+    }
+
+    private IEnumerable<(string Currency, int Amount)> GetWithdrawable()
+    {
+        foreach (var (currency, amount) in _balance)
+        {
+            if (!_prototypeManager.TryIndex(currency, out var proto) || !proto.CanWithdraw || proto.Cash == null)
+                continue;
+
+            var whole = amount.Int();
+            if (whole > 0)
+                yield return (currency.Id, whole);
+        }
+    }
+
+    private string GetKeypadPrice(ListingDataWithCostModifiers listing)
+    {
+        if (listing.Cost.Count < 1)
+            return Loc.GetString("store-currency-free");
+
+        var text = string.Empty;
+        foreach (var (type, amount) in listing.Cost)
+        {
+            if (!_prototypeManager.TryIndex(type, out var currency))
+                continue;
+
+            text += Loc.GetString("store-ui-price-display",
+                ("amount", amount),
+                ("currency", Loc.GetString(currency.DisplayName, ("amount", amount)))) + " ";
+        }
+
+        return text.TrimEnd();
+    }
+
+    private string? GetKeypadBalance(Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2> balance)
+    {
+        var lines = new List<string>();
+        foreach (var (type, amount) in balance)
+        {
+            if (!_prototypeManager.TryIndex(type, out var currency))
+                continue;
+
+            lines.Add(Loc.GetString("store-ui-balance-display",
+                ("amount", amount),
+                ("currency", Loc.GetString(currency.DisplayName, ("amount", 1)))));
+        }
+
+        return lines.Count == 0 ? null : string.Join(" ", lines);
+    }
+    // DS14-end
 }

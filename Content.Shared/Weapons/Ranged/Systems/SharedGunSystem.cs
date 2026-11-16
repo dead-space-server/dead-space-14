@@ -541,7 +541,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         Physics.SetLinearVelocity(uid, finalLinear, body: physics);
 
         var projectile = EnsureComp<ProjectileComponent>(uid);
-        projectile.Weapon = gunUid;
+        Projectiles.SetWeapon(uid, projectile, gunUid); //DS-14
         var shooter = user ?? gunUid;
         if (shooter != null)
             Projectiles.SetShooter(uid, projectile, shooter.Value);
@@ -811,6 +811,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     {
         UpdateBattery(frameTime);
         UpdateBallistic(frameTime);
+        UpdateRevolver(); //DS-14
     }
 }
 

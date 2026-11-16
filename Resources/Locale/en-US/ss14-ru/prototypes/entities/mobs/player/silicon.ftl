@@ -76,3 +76,5 @@ ent-PlayerSyndicateAssaultBorgDerelict = { ent-SyndicateAssaultBorgChassisDereli
 ent-PlayerBorgSyndicateDerelictGhostRole = { ent-PlayerSyndicateAssaultBorgDerelict }
     .suffix = Ghost role
     .desc = { ent-PlayerSyndicateAssaultBorgDerelict.desc }
+ent-AIBorgChassisGenericSpawner = Station AI borg spawner
+    .desc = { ent-PlayerBorgDerelict.desc }

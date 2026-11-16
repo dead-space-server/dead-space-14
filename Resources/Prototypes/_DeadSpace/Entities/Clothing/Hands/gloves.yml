@@ -137,3 +137,56 @@
     sprite: _DeadSpace/Clothing/Hands/Gloves/samurai_gloves.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Hands/Gloves/samurai_gloves.rsi
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesClownWhite
+  name: белые перчатки клоуна
+  description: Белые клоунские перчатки. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/clown_white.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/clown_white.rsi
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesClownRed
+  name: красные перчатки клоуна
+  description: Красные клоунские перчатки. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/clown_red.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/clown_red.rsi
+
+- type: entity
+  parent: ClothingHandsButcherable
+  id: ClothingHandsGlovesArkalyse
+  name: перчатки "Аркалис"
+  description: Перчатки подпитанные наномашинными, которые усиливают удары носителя.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/gloves_arkalis.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/gloves_arkalis.rsi
+    unequipDelay: 1.5
+    equipDelay: 1
+  - type: Fiber
+    fiberMaterial: fibers-nanomachines
+  - type: ArkalyseGloves
+    params:
+      staminaDamageMuteAtack: 25.0
+      paralyzeTimeMuteAtack: 4
+      hitDamageForDamageAtack: 15
+      hitDamageForMuteAtack: 5
+      paralyzeTimeStunAtack: 0.3
+      ignoreResist: false
+      damageTypeForDamageAtack: Piercing
+      damageTypeForMuteAtack: Blunt
+      effectPunchForDamageAtack: WeaponArcKick
+      effectPunchForStunAtack: WeaponArcDisarm
+      hitSoundForDamageAtack: 
+        path: /Audio/_DeadSpace/Arkalyse/sound_effects_hit_kick.ogg
+      hitSoundForStunAtack: 
+        path: /Audio/_DeadSpace/Arkalyse/sound_effects_hit_punch.ogg

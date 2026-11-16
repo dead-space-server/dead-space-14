@@ -1,5 +1,10 @@
+using Content.Server.DeadSpace.Lavaland;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.Power.EntitySystems;
 using Content.Server.Stack;
+using Content.Shared.Construction;
+using Content.Shared.DeadSpace.Lavaland.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Stacks;
@@ -253,6 +258,170 @@ public sealed class LavalandOreRedeemerTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DeconstructedProcessorOreIsPenalizedInOreBox()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = false,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var (user, card, processor, oreBox) = await SetupMiner(pair);
+
+        await server.WaitPost(() =>
+        {
+            var ore = SpawnOre(entMan, server.System<StackSystem>(), SteelOre, 10);
+            Assert.That(InsertInto(entMan, user, ore, processor), Is.True);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            Assert.That(GetBalance(entMan, card), Is.EqualTo(10));
+            entMan.EventBus.RaiseLocalEvent(processor, new MachineDeconstructedEvent());
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var ejected = GetSteelOre(entMan);
+            Assert.That(ejected, Is.Not.Empty);
+            foreach (var ore in ejected)
+                InsertInto(entMan, user, ore, oreBox);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(GetBalance(entMan, card), Is.EqualTo(0));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task OreBoxToProcessorIsNotPenalizedUntilProcessorIsDeconstructed()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = false,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var mining = server.System<LavalandMiningSystem>();
+        var (user, card, processor, oreBox) = await SetupMiner(pair);
+
+        await server.WaitPost(() =>
+        {
+            var ore = SpawnOre(entMan, server.System<StackSystem>(), SteelOre, 10);
+            Assert.That(InsertInto(entMan, user, ore, oreBox), Is.True);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            Assert.That(GetBalance(entMan, card), Is.EqualTo(10));
+            mining.RedeemStorageIntoLathe(
+                user,
+                oreBox,
+                (processor, entMan.GetComponent<LavalandOreRedeemerComponent>(processor)));
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(GetSteelOre(entMan), Is.Empty);
+                Assert.That(GetBalance(entMan, card), Is.EqualTo(10));
+            });
+            entMan.EventBus.RaiseLocalEvent(processor, new MachineDeconstructedEvent());
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            foreach (var ore in GetSteelOre(entMan))
+                InsertInto(entMan, user, ore, oreBox);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            Assert.That(GetBalance(entMan, card), Is.EqualTo(0));
+            mining.RedeemStorageIntoLathe(
+                user,
+                oreBox,
+                (processor, entMan.GetComponent<LavalandOreRedeemerComponent>(processor)));
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(GetBalance(entMan, card), Is.EqualTo(0));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static async Task<(EntityUid User, EntityUid Card, EntityUid Processor, EntityUid OreBox)> SetupMiner(
+        Pair.TestPair pair)
+    {
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var map = await pair.CreateTestMap();
+
+        EntityUid user = default;
+        EntityUid card = default;
+        EntityUid processor = default;
+        EntityUid oreBox = default;
+
+        await server.WaitPost(() =>
+        {
+            user = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            card = entMan.SpawnEntity("SalvageIDCard", map.GridCoords);
+            Assert.That(server.System<SharedHandsSystem>().TryPickupAnyHand(user, card), Is.True);
+
+            processor = entMan.SpawnEntity("OreProcessor", map.GridCoords);
+            server.System<PowerReceiverSystem>().SetNeedsPower(processor, false);
+            oreBox = entMan.SpawnEntity("OreBox", map.GridCoords);
+        });
+
+        await pair.RunTicksSync(5);
+        return (user, card, processor, oreBox);
+    }
+
+    private static bool InsertInto(IEntityManager entMan, EntityUid user, EntityUid used, EntityUid target)
+    {
+        var coordinates = entMan.GetComponent<TransformComponent>(target).Coordinates;
+        var ev = new InteractUsingEvent(user, used, target, coordinates);
+        entMan.EventBus.RaiseLocalEvent(target, ev);
+        return ev.Handled;
+    }
+
+    private static int GetBalance(IEntityManager entMan, EntityUid card)
+    {
+        return entMan.GetComponent<LavalandMiningPointsComponent>(card).Balance;
+    }
+
+    private static System.Collections.Generic.List<EntityUid> GetSteelOre(IEntityManager entMan)
+    {
+        var ores = new System.Collections.Generic.List<EntityUid>();
+        var query = entMan.EntityQueryEnumerator<StackComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.StackTypeId == SteelOre && !entMan.IsQueuedForDeletion(uid))
+                ores.Add(uid);
+        }
+
+        return ores;
     }
 
     private static EntityUid SpawnOre(IEntityManager entMan, StackSystem stack, string prototype, int count)

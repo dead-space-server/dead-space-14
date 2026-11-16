@@ -156,8 +156,17 @@ public sealed class SurgeryGraftSystem : EntitySystem
         if (HasComp<ChangelingIdentityComponent>(ent))
             return;
 
-        if (!TryComp<HumanoidAppearanceComponent>(ent, out var look)
-            || flesh.Unstable
+        if (!TryComp<HumanoidAppearanceComponent>(ent, out var look))
+        {
+            args.Cancelled = true;
+            _popup.PopupEntity(Loc.GetString("surgery-graft-refused"), ent, PopupType.MediumCaution);
+            return;
+        }
+
+        if (!flesh.Unstable && !HasComp<UncloningComponent>(ent) && look.Species.Id == flesh.Species)
+            return;
+
+        if (flesh.Unstable
             || HasComp<UncloningComponent>(ent)
             || SurgerySpeciesPrototype.LineageOf(_prototype, look.Species.Id) == null
             || SurgerySpeciesPrototype.LineageOf(_prototype, flesh.Species) == null)
@@ -353,8 +362,7 @@ public sealed class SurgeryGraftSystem : EntitySystem
     {
         return _prototype.TryIndex<SurgeryAppendagePrototype>(id, out var appendage)
                && TryComp<HumanoidAppearanceComponent>(body, out var look)
-               && look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list)
-               && list.Count > 0;
+               && SurgeryAppendageRules.Present(look, appendage, _prototype);
     }
 
     private void KeepCells(SurgeryGraftPrototype rules)

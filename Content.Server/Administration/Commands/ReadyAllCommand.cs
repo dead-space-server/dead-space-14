@@ -4,7 +4,7 @@ using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands;
 
-[AdminCommand(AdminFlags.Round)]
+[AdminCommand(AdminFlags.Server)] //DS-14
 public sealed class ReadyAllCommand : LocalizedEntityCommands
 {
     [Dependency] private readonly GameTicker _gameTicker = default!;

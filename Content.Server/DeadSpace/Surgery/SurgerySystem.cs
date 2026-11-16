@@ -850,8 +850,10 @@ public sealed class SurgerySystem : EntitySystem
         }
         var stepVerb = SurgeryVerbKind.Inspect;
         string stepOrgan = "";
+        SurgeryOperationPrototype? stepOperation = null;
         if (Operation(patient.Value, site, out var operation) && site.Step < operation.Steps.Count)
         {
+            stepOperation = operation;
             stepVerb = operation.Steps[site.Step].Verb;
             stepOrgan = operation.Steps[site.Step].Organ;
         }
@@ -913,6 +915,20 @@ public sealed class SurgerySystem : EntitySystem
             result.Rejected = true;
             result.Key = "surgery-organ-gone";
             advance = false;
+        }
+        else if (result.RemoveOrgan && stepOperation != null && site.Step < stepOperation.Steps.Count
+                 && (stepOperation.Steps[site.Step].Drop != null || stepOperation.Steps[site.Step].DropBySpecies.Count > 0))
+        {
+            var partId = site.Part.Length > 0 ? site.Part : SurgeryPartPrototype.For(_prototype, stepOperation.ID);
+            if (partId.Length > 0
+                && TryComp<SurgeryPartsGoneComponent>(patient.Value, out var lostParts)
+                && lostParts.Parts.Contains(partId))
+            {
+                result.RemoveOrgan = false;
+                result.Rejected = true;
+                result.Key = "surgery-organ-gone";
+                advance = false;
+            }
         }
 
         if (result.RemoveImplant && (implantSlot.Length == 0 || !_implants.Occupied(patient.Value, implantSlot)))
@@ -1226,16 +1242,20 @@ public sealed class SurgerySystem : EntitySystem
     {
         return _prototype.TryIndex<SurgeryAppendagePrototype>(id, out var appendage)
                && TryComp<HumanoidAppearanceComponent>(patient, out var look)
-               && look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list)
-               && list.Count > 0;
+               && SurgeryAppendageRules.Present(look, appendage, _prototype);
     }
 
     private void RemoveAppendage(EntityUid patient, string id)
     {
         if (!_prototype.TryIndex<SurgeryAppendagePrototype>(id, out var appendage)
-            || !TryComp<HumanoidAppearanceComponent>(patient, out var look)
-            || !look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list)
-            || list.Count == 0)
+            || !TryComp<HumanoidAppearanceComponent>(patient, out var look))
+            return;
+
+        look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list);
+        var markings = list is { Count: > 0 };
+        var baseLayer = default(HumanoidVisualLayers);
+        var baseSprite = SurgeryAppendageRules.BaseSprite(look, appendage, _prototype, out baseLayer, out _);
+        if (!markings && !baseSprite)
             return;
 
         TryComp<SurgeryTemplateSwapComponent>(patient, out var swap);
@@ -1246,9 +1266,13 @@ public sealed class SurgerySystem : EntitySystem
         if (part.Revoke.Count > 0)
             EntityManager.AddComponents(patient, part.Revoke);
         part.Appendage = id;
+        part.Base = baseSprite;
         part.Markings.Clear();
-        foreach (var marking in list)
-            part.Markings.Add(new Marking(marking));
+        if (markings)
+        {
+            foreach (var marking in list!)
+                part.Markings.Add(new Marking(marking));
+        }
 
         part.Carry.Clear();
         foreach (var name in appendage.Carry)
@@ -1261,8 +1285,16 @@ public sealed class SurgerySystem : EntitySystem
         }
 
         Dirty(item, part);
-        for (var i = list.Count - 1; i >= 0; i--)
-            _humanoid.RemoveMarking(patient, appendage.Category, i, look);
+        if (markings)
+        {
+            for (var i = list!.Count - 1; i >= 0; i--)
+                _humanoid.RemoveMarking(patient, appendage.Category, i, look);
+        }
+        if (baseSprite)
+        {
+            _humanoid.SetBaseLayerId(patient, baseLayer, SurgeryAppendageRules.MarkingAnchor, false, look);
+            Dirty(patient, look);
+        }
 
         if (appendage.Slots.Count == 0)
             return;
@@ -1300,6 +1332,14 @@ public sealed class SurgerySystem : EntitySystem
         _graft.Grafted(patient, item, LimbZone.Groin, null, part.Appendage);
         foreach (var marking in part.Markings)
             _humanoid.AddMarking(patient, marking.MarkingId, marking.MarkingColors, true, true, look);
+
+        if (part.Base
+            && _prototype.TryIndex<SurgeryAppendagePrototype>(part.Appendage, out var restore)
+            && SurgeryAppendageRules.BaseSprite(look, restore, _prototype, out var tailLayer, out var tailSprite))
+        {
+            _humanoid.SetBaseLayerId(patient, tailLayer, tailSprite, false, look);
+            Dirty(patient, look);
+        }
 
         foreach (var name in part.Carry)
         {
@@ -2333,9 +2373,10 @@ public sealed class SurgerySystem : EntitySystem
         var cracked = SurgeryConditions.OrganCracked(limbs.Organs, zone);
         var mind = SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present);
         var foreign = Foreign(patient, zone);
+        var jaw = SurgeryConditions.JawBroken(limbs, zone);
         foreach (var when in SurgeryConditions.Order)
         {
-            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs), foreign: foreign, mind: mind))
+            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs), foreign: foreign, mind: mind, jaw: jaw))
                 continue;
 
             string? fallback = null;
@@ -2405,7 +2446,7 @@ public sealed class SurgerySystem : EntitySystem
         if (operation.When.Length > 0 && operation.When != "Severed"
             && !SurgeryConditions.Has(operation.When, limbs.Zones[index], HasLayer(patient, zone, SurgeryLayerKind.Bone), Infected(patient, zone),
                 SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs), SurgeryRot.Treatable(EntityManager, patient, zone, limbs), Foreign(patient, zone),
-                SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present)))
+                SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present), SurgeryConditions.JawBroken(limbs, zone)))
             return false;
 
         if (operation.Implant.Length > 0 && !ImplantMenuFits(patient, operation))

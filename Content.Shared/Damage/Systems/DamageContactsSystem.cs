@@ -1,5 +1,7 @@
+using Content.Shared.Atmos; // DS14
 using Content.Shared.Damage.Components;
 using Content.Shared.DeadSpace.Damage.Components; // DS14
+using Content.Shared.FixedPoint; // DS14
 using Content.Shared.Inventory; // DS14
 using Content.Shared.Whitelist;
 using Robust.Shared.Physics.Components;
@@ -45,9 +47,41 @@ public sealed class DamageContactsSystem : EntitySystem
             // DS14-end
 
             if (damaged.Damage != null)
-                _damageable.TryChangeDamage(ent, damaged.Damage, interruptsDoAfters: false);
+                ApplyContactDamage(ent, damaged.Damage);
         }
     }
+
+    // DS14-start
+    private void ApplyContactDamage(EntityUid target, DamageSpecifier damage)
+    {
+        const string heatType = "Heat";
+
+        if (damage.DamageDict.TryGetValue(heatType, out var heat) && heat > FixedPoint2.Zero)
+        {
+            var protection = new GetFireProtectionEvent();
+            RaiseLocalEvent(target, ref protection);
+            if (TryComp<InventoryComponent>(target, out var inventory))
+                _inventory.RelayEvent((target, inventory), ref protection);
+
+            if (protection.Multiplier < 1f)
+            {
+                var reduced = new DamageSpecifier(damage);
+                var scaled = heat * protection.Multiplier;
+                if (scaled <= FixedPoint2.Zero)
+                    reduced.DamageDict.Remove(heatType);
+                else
+                    reduced.DamageDict[heatType] = scaled;
+
+                if (reduced.Empty)
+                    return;
+
+                damage = reduced;
+            }
+        }
+
+        _damageable.TryChangeDamage(target, damage, interruptsDoAfters: false);
+    }
+    // DS14-end
 
     // DS14-start
     private bool IsProtectedFromContactDamage(EntityUid uid)

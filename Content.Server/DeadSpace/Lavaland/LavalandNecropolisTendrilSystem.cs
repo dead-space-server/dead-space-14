@@ -33,6 +33,8 @@ public sealed class LavalandNecropolisTendrilSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
 
+    private const int MaxSpawnsPerTick = 2;
+
     private readonly List<(Vector2i Index, Tile Tile)> _reservedTiles = new();
     private readonly List<Vector2i> _spawnTiles = new();
     private readonly HashSet<Vector2i> _collapseTiles = new();
@@ -52,6 +54,7 @@ public sealed class LavalandNecropolisTendrilSystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+        var spawns = 0;
         var tendrilQuery = EntityQueryEnumerator<LavalandNecropolisTendrilComponent, TransformComponent>();
         while (tendrilQuery.MoveNext(out var uid, out var tendril, out var xform))
         {
@@ -60,6 +63,9 @@ public sealed class LavalandNecropolisTendrilSystem : EntitySystem
             {
                 continue;
             }
+
+            if (spawns++ >= MaxSpawnsPerTick)
+                break;
 
             tendril.NextSpawnTime = now + ClampInterval(tendril.SpawnInterval);
             SpawnMob((uid, tendril, xform));
@@ -103,7 +109,7 @@ public sealed class LavalandNecropolisTendrilSystem : EntitySystem
 
     private void OnTendrilMapInit(Entity<LavalandNecropolisTendrilComponent> ent, ref MapInitEvent args)
     {
-        ent.Comp.NextSpawnTime = _timing.CurTime + ClampInterval(ent.Comp.SpawnInterval);
+        ent.Comp.NextSpawnTime = _timing.CurTime + ClampInterval(ent.Comp.SpawnInterval) * _random.NextDouble();
         ClearTerrainAround(ent.Owner, ent.Comp.ClearRadius);
     }
 

@@ -18,18 +18,23 @@ public sealed partial class VendingMachineSpiralSlot : PanelContainer
 
     private static readonly Color CoilLoaded = Color.FromHex("#b8bcc6");
     private static readonly Color CoilEmpty = Color.FromHex("#2c2f36");
+    private static readonly Color NameColor = Color.FromHex("#d8dce4");
 
-    private readonly EntProtoId _proto;
+    private readonly EntProtoId? _proto;
     private readonly int _capacity;
     private EntityUid? _previewEntity;
 
-    public VendingMachineSpiralSlot(EntProtoId proto, string code, string name, int capacity)
+    public string ItemName { get; }
+
+    public VendingMachineSpiralSlot(EntProtoId? proto, string code, string name, int capacity)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
         _proto = proto;
         _capacity = Math.Max(1, capacity);
+        ItemName = name;
+        NameLabel.SetMessage(name, NameColor);
         CodeLabel.Text = code;
         ToolTip = $"{code} — {name}";
     }
@@ -38,10 +43,10 @@ public sealed partial class VendingMachineSpiralSlot : PanelContainer
     {
         base.EnteredTree();
 
-        if (_previewEntity != null || !_prototypeManager.HasIndex(_proto))
+        if (_previewEntity != null || _proto is not { } proto || !_prototypeManager.HasIndex(proto))
             return;
 
-        _previewEntity = _entMan.Spawn(_proto);
+        _previewEntity = _entMan.Spawn(proto);
         ApplySolutionVisuals(_previewEntity.Value);
         _entMan.System<SpriteSystem>().ForceUpdate(_previewEntity.Value);
         ItemPrototype.SetEntity(_previewEntity);
@@ -91,9 +96,15 @@ public sealed partial class VendingMachineSpiralSlot : PanelContainer
             appearanceSystem.SetData(uid, SolutionContainerVisuals.BaseOverride, reagent.ToString(), appearance);
     }
 
-    public void SetAmount(uint amount)
+    public void SetPrice(string? price)
     {
-        AmountLabel.Text = $"×{amount}";
+        PriceLabel.Visible = price != null;
+        PriceLabel.Text = price ?? string.Empty;
+    }
+
+    public void SetAmount(uint? amount)
+    {
+        AmountLabel.Text = amount is { } count ? $"×{count}" : "×∞";
         ItemPrototype.Modulate = amount == 0 ? Color.White.WithAlpha(0.2f) : Color.White;
 
         SpiralCoils.RemoveAllChildren();
@@ -102,7 +113,7 @@ public sealed partial class VendingMachineSpiralSlot : PanelContainer
             SpiralCoils.AddChild(new PanelContainer
             {
                 MinSize = new(6, 8),
-                PanelOverride = new StyleBoxFlat(i < amount ? CoilLoaded : CoilEmpty),
+                PanelOverride = new StyleBoxFlat(amount == null || i < amount ? CoilLoaded : CoilEmpty),
             });
         }
     }

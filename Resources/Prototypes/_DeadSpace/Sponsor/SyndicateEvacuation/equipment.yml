@@ -21,6 +21,14 @@
   name: extraction crew hardsuit helmet
   description: A sealed helmet with a work light.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.75
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/syndiemedic.rsi
   - type: Clothing

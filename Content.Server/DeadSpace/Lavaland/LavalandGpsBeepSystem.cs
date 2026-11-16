@@ -7,6 +7,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
@@ -16,7 +17,6 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// </summary>
 public sealed class LavalandGpsBeepSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -29,12 +29,14 @@ public sealed class LavalandGpsBeepSystem : EntitySystem
 
     /// <summary>When each GPS checks (and maybe beeps) next.</summary>
     private readonly Dictionary<EntityUid, TimeSpan> _next = new();
+    private readonly List<(MapId Map, Vector2 Position)> _miniBosses = new();
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+        var collected = false;
         var query = EntityQueryEnumerator<HandheldGPSComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
         {
@@ -44,6 +46,12 @@ public sealed class LavalandGpsBeepSystem : EntitySystem
             _next[uid] = now + IdleCheck;
             if (xform.MapUid is not { } map || !HasComp<LavalandMapComponent>(map))
                 continue;
+
+            if (!collected)
+            {
+                CollectMiniBosses();
+                collected = true;
+            }
 
             var nearest = NearestMiniBoss(xform);
             if (nearest > Range)
@@ -65,18 +73,44 @@ public sealed class LavalandGpsBeepSystem : EntitySystem
         }
     }
 
+    private void CollectMiniBosses()
+    {
+        _miniBosses.Clear();
+
+        var tumors = EntityQueryEnumerator<LavalandEliteTumorComponent, TransformComponent>();
+        while (tumors.MoveNext(out _, out var xform))
+        {
+            _miniBosses.Add((xform.MapID, _transform.GetWorldPosition(xform)));
+        }
+
+        var miners = EntityQueryEnumerator<LavalandMadMinerComponent, MobStateComponent, TransformComponent>();
+        while (miners.MoveNext(out _, out var mob, out var xform))
+        {
+            if (mob.CurrentState == MobState.Alive)
+                _miniBosses.Add((xform.MapID, _transform.GetWorldPosition(xform)));
+        }
+
+        var elites = EntityQueryEnumerator<LavalandEliteComponent, MobStateComponent, TransformComponent>();
+        while (elites.MoveNext(out _, out var mob, out var xform))
+        {
+            if (mob.CurrentState == MobState.Alive)
+                _miniBosses.Add((xform.MapID, _transform.GetWorldPosition(xform)));
+        }
+    }
+
     /// <summary>Distance to the nearest living miniboss or elite tumor; MaxValue if none is in range.</summary>
     private float NearestMiniBoss(TransformComponent xform)
     {
         var position = _transform.GetWorldPosition(xform);
         var nearest = float.MaxValue;
-        foreach (var candidate in _lookup.GetEntitiesInRange(xform.MapID, position, Range))
+        foreach (var (mapId, bossPosition) in _miniBosses)
         {
-            var miniBoss = HasComp<LavalandEliteTumorComponent>(candidate) ||
-                           (HasComp<LavalandMadMinerComponent>(candidate) || HasComp<LavalandEliteComponent>(candidate)) &&
-                           TryComp<MobStateComponent>(candidate, out var mob) && mob.CurrentState == MobState.Alive;
-            if (miniBoss)
-                nearest = MathF.Min(nearest, Vector2.Distance(position, _transform.GetWorldPosition(candidate)));
+            if (mapId != xform.MapID)
+                continue;
+
+            var distance = Vector2.Distance(position, bossPosition);
+            if (distance <= Range)
+                nearest = MathF.Min(nearest, distance);
         }
 
         return nearest;

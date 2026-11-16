@@ -1,10 +1,12 @@
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 using Content.Server.Atmos;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Decals;
+using Content.Server.DeadSpace.Lavaland.Components; //DS-14
+using Content.Shared.DeadSpace.Lavaland.ChromiteCaves; //DS-14
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
@@ -31,7 +33,6 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Threading;
 using Robust.Shared.Utility;
 using ChunkIndicesEnumerator = Robust.Shared.Map.Enumerators.ChunkIndicesEnumerator;
 
@@ -42,12 +43,13 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
     [Dependency] private readonly IConfigurationManager _configManager = default!;
     [Dependency] private readonly IConsoleHost _console = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IParallelManager _parallel = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly AtmosphereSystem _atmos = default!;
     [Dependency] private readonly DecalSystem _decals = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!; //DS-14
+    [Dependency] private readonly Robust.Shared.Timing.IGameTiming _timing = default!; //DS-14
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -86,10 +88,71 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
     private readonly Dictionary<ProtoId<BiomeMarkerLayerPrototype>, BiomeMarkerLayerPrototype> _markerLayerPrototypeCache = new();
     // DS14-End
 
-    // DS14-Start: reuse biome unload buffers instead of allocating per unload pass.
-    private readonly List<Vector2i> _unloadChunksBuffer = new();
-    private readonly List<(Vector2i, Tile)> _unloadTilesBuffer = new();
     // DS14-End
+
+    private readonly List<(Vector2i, Tile)> _unloadTilesBuffer = new(); //DS-14
+
+    // DS-14 start
+    private const int MaxBiomeChunksPerTick = 2;
+    private const int MaxBiomeUnloadChunksPerTick = 3;
+    private const int MaxBiomeMarkerChunksPerTick = 1;
+    private const long ChunkBudgetMs = 6;
+    private readonly Dictionary<EntityUid, Robust.Shared.Timing.GameTick> _spawnStamps = new();
+    private const int HideDepth = 2;
+    private const int SolidGridSize = ChunkSize + HideDepth * 2;
+    private static readonly TimeSpan MobHiddenCheckInterval = TimeSpan.FromSeconds(0.5);
+    private readonly Dictionary<EntityUid, Dictionary<Vector2i, string>> _hiddenWalls = new();
+    private readonly Dictionary<string, bool> _solidPrototypes = new();
+    private readonly bool[] _solidGrid = new bool[SolidGridSize * SolidGridSize];
+    private readonly HashSet<(EntityUid Grid, Vector2i Tile)> _pendingReveals = new();
+    private readonly List<(EntityUid Grid, Vector2i Tile)> _revealBuffer = new();
+    private readonly List<Vector2i> _revealTiles = new();
+    private readonly List<EntityUid> _deadHiddenGrids = new();
+    private TimeSpan _nextMobHiddenCheck;
+    private bool _suppressReveal;
+    private const float UnloadMargin = 16f;
+    private readonly Dictionary<BiomeComponent, HashSet<Vector2i>> _keepChunks = new();
+    private long _chunkBudgetEnd;
+    private bool _chunkWorkDone;
+    private bool _unloadFirst;
+    private readonly List<int> _loadOrder = new();
+    private int _loadCursor;
+    private readonly Dictionary<BiomeComponent, int> _viewerOffsets = new();
+    private readonly Dictionary<int, int> _viewerBest = new();
+    private readonly List<int> _viewerOrder = new();
+    private readonly HashSet<int> _takenWork = new();
+    private readonly HashSet<Entity<MobStateComponent>> _chunkMobs = new();
+    private readonly HashSet<Vector2i> _mobTiles = new();
+    private readonly Dictionary<Vector2i, string?> _scanEntityCache = new();
+    private BiomeComponent? _scanCacheBiome;
+    private Vector2i _scanCacheChunk;
+    private int _markerChunksThisTick;
+    private readonly Dictionary<BiomeComponent, List<Vector2>> _viewerPositions = new();
+    private readonly Stack<List<Vector2>> _viewerListPool = new();
+    private readonly List<BiomeWork> _biomeWork = new();
+    private readonly List<ChunkWork> _chunkWork = new();
+    private readonly List<ProtoId<BiomeMarkerLayerPrototype>> _forcedRelease = new();
+    private readonly MarkerScan _markerScan = new();
+    private const long MarkerScanBudgetMs = 4;
+
+    private struct BiomeWork
+    {
+        public BiomeComponent Biome;
+        public EntityUid GridUid;
+        public MapGridComponent Grid;
+    }
+
+    private struct ChunkWork
+    {
+        public BiomeComponent Biome;
+        public EntityUid GridUid;
+        public MapGridComponent Grid;
+        public Vector2i Chunk;
+        public float Dist;
+        public int Viewer;
+        public bool MarkersOnly;
+    }
+    // DS-14 end
 
     public override void Initialize()
     {
@@ -102,6 +165,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
         SubscribeLocalEvent<BiomeComponent, MapInitEvent>(OnBiomeMapInit);
         SubscribeLocalEvent<FTLStartedEvent>(OnFTLStarted);
         SubscribeLocalEvent<ShuttleFlattenEvent>(OnShuttleFlatten);
+        SubscribeLocalEvent<AnchorStateChangedEvent>(OnAnchorChanged); //DS-14
         Subs.CVar(_configManager, CVars.NetMaxUpdateRange, SetLoadRange, true);
         InitializeCommands();
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(ProtoReload);
@@ -182,6 +246,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
     public void SetSeed(EntityUid uid, BiomeComponent component, int seed, bool dirty = true)
     {
         component.Seed = seed;
+        ClearBiomeNoiseCache(); //DS-14
 
         if (dirty)
             Dirty(uid, component);
@@ -191,6 +256,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
     {
         component.Layers.Clear();
         component.Template = null;
+        ClearBiomeNoiseCache(); //DS-14
 
         if (dirty)
             Dirty(uid, component);
@@ -202,6 +268,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
     public void SetTemplate(EntityUid uid, BiomeComponent component, BiomeTemplatePrototype template, bool dirty = true)
     {
         component.Layers.Clear();
+        ClearBiomeNoiseCache(); //DS-14
         component.Template = template.ID;
 
         foreach (var layer in template.Layers)
@@ -226,6 +293,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
                 continue;
 
             addedLayer.Noise.SetSeed(addedLayer.Noise.GetSeed() + seedOffset);
+            ClearBiomeNoiseCache(); //DS-14
             component.Layers.Insert(i, addedLayer);
             break;
         }
@@ -255,6 +323,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
             {
                 var addedLayer = template.Layers[j];
                 addedLayer.Noise.SetSeed(addedLayer.Noise.GetSeed() + seedOffset);
+                ClearBiomeNoiseCache(); //DS-14
                 component.Layers.Insert(i, addedLayer);
             }
 
@@ -308,6 +377,17 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
         }
 
         _mapSystem.SetTiles(ev.MapUid, grid, tiles);
+
+        // DS-14 start
+        foreach (var aabb in ev.AABBs)
+        {
+            OpenHiddenArea(ev.MapUid, TilesIn(new Box2(
+                MathF.Floor(aabb.Left),
+                MathF.Floor(aabb.Bottom),
+                MathF.Ceiling(aabb.Right) + 1,
+                MathF.Ceiling(aabb.Top) + 1)));
+        }
+        // DS-14 end
     }
 
     /// <summary>
@@ -351,6 +431,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
                 continue;
 
             _activeChunks.Add(biome, _tilePool.Get());
+            _keepChunks.Add(biome, _tilePool.Get()); //DS-14
             _markerChunks.GetOrNew(biome);
         }
 
@@ -365,6 +446,8 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
             {
                 var worldPos = _transform.GetWorldPosition(xform);
                 AddChunksInRange(biome, worldPos);
+                NoteViewer(biome, worldPos); //DS-14
+                AddKeepChunksInRange(biome, worldPos); //DS-14
 
                 foreach (var layer in biome.MarkerLayers)
                 {
@@ -386,6 +469,8 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
 
                 var worldPos = _transform.GetWorldPosition(xform);
                 AddChunksInRange(biome, worldPos);
+                NoteViewer(biome, worldPos); //DS-14
+                AddKeepChunksInRange(biome, worldPos); //DS-14
 
                 foreach (var layer in biome.MarkerLayers)
                 {
@@ -395,22 +480,44 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
             }
         }
 
+        // DS-14 start
+        _biomeWork.Clear();
+        _markerChunksThisTick = 0;
         var loadBiomes = AllEntityQuery<BiomeComponent, MapGridComponent>();
 
         while (loadBiomes.MoveNext(out var gridUid, out var biome, out var grid))
         {
-            // If not MapInit don't run it.
             if (biome.LifeStage < ComponentLifeStage.Running)
                 continue;
 
             if (!biome.Enabled)
                 continue;
 
-            // Load new chunks
-            LoadChunks(biome, gridUid, grid, biome.Seed);
-            // Unload old chunks
-            UnloadChunks(biome, gridUid, grid, biome.Seed);
+            _biomeWork.Add(new BiomeWork
+            {
+                Biome = biome,
+                GridUid = gridUid,
+                Grid = grid,
+            });
         }
+
+        BuildBudgetedMarkerChunk();
+        _chunkBudgetEnd = Stopwatch.GetTimestamp() + Stopwatch.Frequency * ChunkBudgetMs / 1000;
+        _chunkWorkDone = false;
+        _unloadFirst = !_unloadFirst;
+        if (_unloadFirst)
+        {
+            UnloadBudgeted();
+            LoadBudgeted();
+        }
+        else
+        {
+            LoadBudgeted();
+            UnloadBudgeted();
+        }
+
+        ProcessHiddenWalls();
+        // DS-14 end
 
         _handledEntities.Clear();
 
@@ -420,8 +527,17 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
         }
 
         _activeChunks.Clear();
+        // DS-14 start
+        foreach (var tiles in _keepChunks.Values)
+        {
+            _tilePool.Return(tiles);
+        }
+
+        _keepChunks.Clear();
+        // DS-14 end
         _markerChunks.Clear();
         _markerLayerPrototypeCache.Clear(); // DS14 Edit
+        ReturnViewers(); //DS-14
     }
 
     private void AddChunksInRange(BiomeComponent biome, Vector2 worldPos)
@@ -495,156 +611,970 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
 
     #region Load
 
-    /// <summary>
-    /// Loads all of the chunks for a particular biome, as well as handle any marker chunks.
-    /// </summary>
-    private void LoadChunks(
+    // DS-14 start
+    private void NoteViewer(BiomeComponent biome, Vector2 worldPos)
+    {
+        if (!_viewerPositions.TryGetValue(biome, out var viewers))
+        {
+            viewers = _viewerListPool.Count > 0 ? _viewerListPool.Pop() : new List<Vector2>();
+            _viewerPositions.Add(biome, viewers);
+        }
+
+        viewers.Add(worldPos);
+    }
+
+    private bool IsUntouched(EntityUid uid)
+    {
+        if (!_spawnStamps.Remove(uid, out var stamp) ||
+            !TryComp(uid, out MetaDataComponent? meta) ||
+            meta.EntityLastModifiedTick > stamp)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool IsHiddenWall(EntityUid gridUid, Vector2i indices)
+    {
+        return _hiddenWalls.TryGetValue(gridUid, out var hidden) && hidden.ContainsKey(indices);
+    }
+
+    private Dictionary<Vector2i, string>? GetHiddenWalls(EntityUid gridUid)
+    {
+        if (_hiddenWalls.TryGetValue(gridUid, out var hidden))
+            return hidden;
+
+        if (!HasComp<LavalandMapComponent>(gridUid) && !HasComp<LavalandChromiteCavesComponent>(gridUid))
+            return null;
+
+        hidden = new Dictionary<Vector2i, string>();
+        _hiddenWalls[gridUid] = hidden;
+        return hidden;
+    }
+
+    private bool IsSolidPrototype(string id)
+    {
+        if (_solidPrototypes.TryGetValue(id, out var solid))
+            return solid;
+
+        solid = ProtoManager.TryIndex<EntityPrototype>(id, out var proto) &&
+                proto.Components.ContainsKey("Airtight") &&
+                proto.Components.ContainsKey("Occluder") &&
+                !proto.Components.ContainsKey("MobState");
+        _solidPrototypes[id] = solid;
+        return solid;
+    }
+
+    private bool HasAnchoredSolid(EntityUid gridUid, MapGridComponent grid, Vector2i indices)
+    {
+        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, indices);
+        while (anchored.MoveNext(out var uid))
+        {
+            if (MetaData(uid.Value).EntityPrototype is { } proto && IsSolidPrototype(proto.ID))
+                return true;
+        }
+
+        return false;
+    }
+
+    private void BuildSolidGrid(
         BiomeComponent component,
         EntityUid gridUid,
         MapGridComponent grid,
-        int seed)
+        Vector2i chunk,
+        HashSet<Vector2i> modified,
+        Dictionary<Vector2i, string> hidden)
     {
-        BuildMarkerChunks(component, gridUid, grid, seed);
-
-        var active = _activeChunks[component];
-
-        foreach (var chunk in active)
+        for (var x = -HideDepth; x < ChunkSize + HideDepth; x++)
         {
-            LoadChunkMarkers(component, gridUid, grid, chunk, seed);
-
-            if (!component.LoadedChunks.Add(chunk))
-                continue;
-
-            // Load NOW!
-            LoadChunk(component, gridUid, grid, chunk, seed);
+            for (var y = -HideDepth; y < ChunkSize + HideDepth; y++)
+            {
+                var indices = new Vector2i(chunk.X + x, chunk.Y + y);
+                _solidGrid[(x + HideDepth) + (y + HideDepth) * SolidGridSize] = IsSolidAt(component, gridUid, grid, chunk, indices, modified, hidden);
+            }
         }
     }
 
-    /// <summary>
-    /// Goes through all marker chunks that haven't been calculated, then calculates what spawns there are and
-    /// allocates them to the relevant actual chunks in the biome (marker chunks may be many times larger than biome chunks).
-    /// </summary>
-    private void BuildMarkerChunks(BiomeComponent component, EntityUid gridUid, MapGridComponent grid, int seed)
+    private bool IsSolidAt(
+        BiomeComponent component,
+        EntityUid gridUid,
+        MapGridComponent grid,
+        Vector2i chunk,
+        Vector2i indices,
+        HashSet<Vector2i> modified,
+        Dictionary<Vector2i, string> hidden)
     {
-        var markers = _markerChunks[component];
-        var loadedMarkers = component.LoadedMarkers;
-        var idx = 0;
+        if (!TileInsideBiomeBounds(indices, component.Bounds))
+            return true;
 
-        foreach (var (layer, chunks) in markers)
+        var origin = SharedMapSystem.GetChunkIndices(indices, ChunkSize) * ChunkSize;
+        if (origin == chunk)
         {
-            // I know dictionary ordering isn't guaranteed but I just need something to differentiate seeds.
-            idx++;
-            var localIdx = idx;
+            if (_mobTiles.Contains(indices))
+                return false;
 
-            // DS14-Start: avoid scheduling marker jobs when this layer has no new chunks to build.
-            if (chunks.Count == 0)
-                continue;
+            if (modified.Contains(indices) || _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, indices).MoveNext(out _))
+                return HasAnchoredSolid(gridUid, grid, indices);
+        }
+        else if (component.LoadedChunks.Contains(origin))
+        {
+            return hidden.ContainsKey(indices) || HasAnchoredSolid(gridUid, grid, indices);
+        }
+        else if (component.ModifiedTiles.TryGetValue(origin, out var otherModified) && otherModified.Contains(indices))
+        {
+            return false;
+        }
 
-            if (loadedMarkers.TryGetValue(layer, out var loadedLayerMarkers))
+        return TryGetEntity(indices, component, (gridUid, grid), out var proto) && IsSolidPrototype(proto);
+    }
+
+    private bool IsEnclosed(Vector2i indices, Vector2i chunk)
+    {
+        var localX = indices.X - chunk.X + HideDepth;
+        var localY = indices.Y - chunk.Y + HideDepth;
+        for (var x = -HideDepth; x <= HideDepth; x++)
+        {
+            for (var y = -HideDepth; y <= HideDepth; y++)
             {
-                var hasUnloadedChunk = false;
-
-                foreach (var chunk in chunks)
-                {
-                    if (loadedLayerMarkers.Contains(chunk))
-                        continue;
-
-                    hasUnloadedChunk = true;
-                    break;
-                }
-
-                if (!hasUnloadedChunk)
+                if (x == 0 && y == 0)
                     continue;
+
+                if (!_solidGrid[(localX + x) + (localY + y) * SolidGridSize])
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void SpawnBiomeEntity(
+        EntityUid gridUid,
+        MapGridComponent grid,
+        Vector2i indices,
+        string prototype,
+        Dictionary<EntityUid, Vector2i> loadedEntities)
+    {
+        // TODO: Fix non-anchored ents spawning.
+        // Just track loaded chunks for now.
+        var ent = Spawn(prototype, _mapSystem.GridTileToLocal(gridUid, grid, indices));
+
+        // At least for now unless we do lookups or smth, only work with anchoring.
+        // DS14: never a creature - anchored it stands frozen on its tile forever (the chromite caves argocytes).
+        if (_xformQuery.TryGetComponent(ent, out var xform) && !xform.Anchored && !HasComp<MobStateComponent>(ent))
+        {
+            _transform.AnchorEntity((ent, xform), (gridUid, grid), indices);
+        }
+
+        loadedEntities.Add(ent, indices);
+        _spawnStamps[ent] = MetaData(ent).EntityLastModifiedTick;
+    }
+
+    private void OnAnchorChanged(ref AnchorStateChangedEvent args)
+    {
+        if (_suppressReveal || args.Anchored || args.Transform.GridUid is not { } gridUid ||
+            !_hiddenWalls.TryGetValue(gridUid, out var hidden) || hidden.Count == 0 ||
+            !TryComp<MapGridComponent>(gridUid, out var grid))
+        {
+            return;
+        }
+
+        _pendingReveals.Add((gridUid, _mapSystem.LocalToTile(gridUid, grid, args.Transform.Coordinates)));
+    }
+
+    private void OpenAround(EntityUid gridUid, Vector2i indices, bool openCenter)
+    {
+        if (!_hiddenWalls.TryGetValue(gridUid, out var hidden) || hidden.Count == 0 ||
+            !TryComp<BiomeComponent>(gridUid, out var biome) ||
+            !TryComp<MapGridComponent>(gridUid, out var grid))
+        {
+            return;
+        }
+
+        if (openCenter)
+            hidden.Remove(indices);
+
+        for (var x = -HideDepth; x <= HideDepth; x++)
+        {
+            for (var y = -HideDepth; y <= HideDepth; y++)
+            {
+                var tile = new Vector2i(indices.X + x, indices.Y + y);
+                if (!hidden.Remove(tile, out var proto))
+                    continue;
+
+                var origin = SharedMapSystem.GetChunkIndices(tile, ChunkSize) * ChunkSize;
+                if (!biome.LoadedEntities.TryGetValue(origin, out var loaded))
+                    continue;
+
+                SpawnBiomeEntity(gridUid, grid, tile, proto, loaded);
+            }
+        }
+    }
+
+    private void ProcessHiddenWalls()
+    {
+        if (_hiddenWalls.Count == 0)
+            return;
+
+        foreach (var gridUid in _hiddenWalls.Keys)
+        {
+            if (TerminatingOrDeleted(gridUid))
+                _deadHiddenGrids.Add(gridUid);
+        }
+
+        foreach (var gridUid in _deadHiddenGrids)
+        {
+            _hiddenWalls.Remove(gridUid);
+        }
+
+        _deadHiddenGrids.Clear();
+
+        if (_pendingReveals.Count > 0)
+        {
+            _revealBuffer.AddRange(_pendingReveals);
+            _pendingReveals.Clear();
+            foreach (var (gridUid, tile) in _revealBuffer)
+            {
+                if (TryComp<MapGridComponent>(gridUid, out var grid) && !HasAnchoredSolid(gridUid, grid, tile))
+                    OpenAround(gridUid, tile, false);
             }
 
-            var forced = component.ForcedMarkerLayers.Contains(layer);
-            var layerProto = ProtoManager.Index<BiomeMarkerLayerPrototype>(layer);
-            // DS14-End
-
-            Parallel.ForEach(chunks, new ParallelOptions() { MaxDegreeOfParallelism = _parallel.ParallelProcessCount }, chunk =>
-            {
-                if (loadedMarkers.TryGetValue(layer, out var mobChunks) && mobChunks.Contains(chunk))
-                    return;
-
-                // Make a temporary version and copy back in later.
-                var pending = new Dictionary<Vector2i, Dictionary<string, List<Vector2i>>>();
-
-                // Essentially get the seed + work out a buffer to adjacent chunks so we don't
-                // inadvertantly spawn too many near the edges.
-                var markerSeed = seed + chunk.X * ChunkSize + chunk.Y + localIdx;
-                var rand = new Random(markerSeed);
-                var buffer = (int)(layerProto.Radius / 2f);
-                var bounds = new Box2i(chunk + buffer, chunk + layerProto.Size - buffer);
-                var count = (int)(bounds.Area / (layerProto.Radius * layerProto.Radius));
-                count = Math.Min(count, layerProto.MaxCount);
-
-                GetMarkerNodes(gridUid, component, grid, layerProto, forced, bounds, count, rand,
-                    out var spawnSet, out var existing);
-
-                // Forcing markers to spawn so delete any that were found to be in the way.
-                if (forced && existing.Count > 0)
-                {
-                    // Lock something so we can delete these safely.
-                    lock (component.PendingMarkers)
-                    {
-                        foreach (var ent in existing)
-                        {
-                            Del(ent);
-                        }
-                    }
-                }
-
-                foreach (var node in spawnSet.Keys)
-                {
-                    if (!TileInsideBiomeBounds(node, component.Bounds))
-                        continue;
-
-                    var chunkOrigin = SharedMapSystem.GetChunkIndices(node, ChunkSize) * ChunkSize;
-
-                    if (!pending.TryGetValue(chunkOrigin, out var pendingMarkers))
-                    {
-                        pendingMarkers = new Dictionary<string, List<Vector2i>>();
-                        pending[chunkOrigin] = pendingMarkers;
-                    }
-
-                    if (!pendingMarkers.TryGetValue(layer, out var layerMarkers))
-                    {
-                        layerMarkers = new List<Vector2i>();
-                        pendingMarkers[layer] = layerMarkers;
-                    }
-
-                    layerMarkers.Add(node);
-                }
-
-                lock (loadedMarkers)
-                {
-                    if (!loadedMarkers.TryGetValue(layer, out var lockMobChunks))
-                    {
-                        lockMobChunks = new HashSet<Vector2i>();
-                        loadedMarkers[layer] = lockMobChunks;
-                    }
-
-                    lockMobChunks.Add(chunk);
-
-                    foreach (var (chunkOrigin, layers) in pending)
-                    {
-                        if (!component.PendingMarkers.TryGetValue(chunkOrigin, out var lockMarkers))
-                        {
-                            lockMarkers = new Dictionary<string, List<Vector2i>>();
-                            component.PendingMarkers[chunkOrigin] = lockMarkers;
-                        }
-
-                        foreach (var (lockLayer, nodes) in layers)
-                        {
-                            lockMarkers[lockLayer] = nodes;
-                        }
-                    }
-                }
-            });
+            _revealBuffer.Clear();
         }
 
-        component.ForcedMarkerLayers.Clear();
+        foreach (var work in _biomeWork)
+        {
+            if (!_hiddenWalls.TryGetValue(work.GridUid, out var hidden) || hidden.Count == 0 ||
+                !_viewerPositions.TryGetValue(work.Biome, out var viewers))
+            {
+                continue;
+            }
+
+            foreach (var viewer in viewers)
+            {
+                var tile = _mapSystem.WorldToTile(work.GridUid, work.Grid, viewer);
+                if (HiddenNear(hidden, tile))
+                    OpenAround(work.GridUid, tile, true);
+            }
+        }
+
+        var now = _timing.CurTime;
+        if (now < _nextMobHiddenCheck)
+            return;
+
+        _nextMobHiddenCheck = now + MobHiddenCheckInterval;
+        var mobs = EntityQueryEnumerator<MobStateComponent, TransformComponent>();
+        while (mobs.MoveNext(out _, out var xform))
+        {
+            if (xform.GridUid is not { } gridUid ||
+                !_hiddenWalls.TryGetValue(gridUid, out var hidden) || hidden.Count == 0 ||
+                !TryComp<MapGridComponent>(gridUid, out var grid))
+            {
+                continue;
+            }
+
+            var tile = _mapSystem.LocalToTile(gridUid, grid, xform.Coordinates);
+            if (HiddenNear(hidden, tile))
+                OpenAround(gridUid, tile, true);
+        }
     }
+
+    private static bool HiddenNear(Dictionary<Vector2i, string> hidden, Vector2i tile)
+    {
+        for (var x = -HideDepth; x <= HideDepth; x++)
+        {
+            for (var y = -HideDepth; y <= HideDepth; y++)
+            {
+                if (hidden.ContainsKey(new Vector2i(tile.X + x, tile.Y + y)))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void OpenHiddenArea(EntityUid gridUid, IEnumerable<Vector2i> tiles)
+    {
+        if (!_hiddenWalls.TryGetValue(gridUid, out var hidden) || hidden.Count == 0)
+            return;
+
+        _revealTiles.Clear();
+        foreach (var tile in tiles)
+        {
+            hidden.Remove(tile);
+            _revealTiles.Add(tile);
+        }
+
+        foreach (var tile in _revealTiles)
+        {
+            OpenAround(gridUid, tile, false);
+        }
+
+        _revealTiles.Clear();
+    }
+
+    private void AddKeepChunksInRange(BiomeComponent biome, Vector2 worldPos)
+    {
+        var range = _loadRange + UnloadMargin;
+        var area = new Box2(-range, -range, range, range).Translated(worldPos);
+        var enumerator = new ChunkIndicesEnumerator(area, ChunkSize);
+        var keep = _keepChunks[biome];
+
+        while (enumerator.MoveNext(out var chunkOrigin))
+        {
+            keep.Add(chunkOrigin.Value * ChunkSize);
+        }
+    }
+
+    private void CollectMobTiles(EntityUid gridUid, MapGridComponent grid, Vector2i chunk)
+    {
+        _mobTiles.Clear();
+        _chunkMobs.Clear();
+        var bounds = new Box2(chunk, chunk + new Vector2i(ChunkSize, ChunkSize));
+        _lookup.GetLocalEntitiesIntersecting(gridUid, bounds, _chunkMobs, LookupFlags.Dynamic);
+
+        foreach (var mob in _chunkMobs)
+        {
+            if (!_xformQuery.TryGetComponent(mob, out var xform) || xform.GridUid != gridUid)
+                continue;
+
+            var tile = _mapSystem.LocalToTile(gridUid, grid, xform.Coordinates);
+            if (tile.X >= chunk.X && tile.X < chunk.X + ChunkSize && tile.Y >= chunk.Y && tile.Y < chunk.Y + ChunkSize)
+                _mobTiles.Add(tile);
+        }
+
+        _chunkMobs.Clear();
+    }
+
+    private void ReturnViewers()
+    {
+        foreach (var viewers in _viewerPositions.Values)
+        {
+            viewers.Clear();
+            _viewerListPool.Push(viewers);
+        }
+
+        _viewerPositions.Clear();
+    }
+
+    private float DistanceSq(BiomeComponent biome, Vector2 center)
+    {
+        return DistanceSq(biome, center, out _);
+    }
+
+    private float DistanceSq(BiomeComponent biome, Vector2 center, out int nearest)
+    {
+        nearest = -1;
+        if (!_viewerPositions.TryGetValue(biome, out var viewers) || viewers.Count == 0)
+            return float.MaxValue;
+
+        var best = float.MaxValue;
+        for (var i = 0; i < viewers.Count; i++)
+        {
+            var delta = viewers[i] - center;
+            var dist = delta.X * delta.X + delta.Y * delta.Y;
+            if (dist >= best)
+                continue;
+
+            best = dist;
+            nearest = i;
+        }
+
+        return best;
+    }
+
+    private bool MarkersReady(BiomeComponent component, Vector2i chunk)
+    {
+        if (!_markerChunks.TryGetValue(component, out var markers))
+            return true;
+
+        foreach (var layer in component.MarkerLayers)
+        {
+            var proto = GetMarkerLayerPrototype(layer);
+            var origin = SharedMapSystem.GetChunkIndices(chunk, proto.Size) * proto.Size;
+            if (!markers.TryGetValue(proto.ID, out var queued) || !queued.Contains(origin))
+                continue;
+
+            if (!component.LoadedMarkers.TryGetValue(proto.ID, out var loaded) || !loaded.Contains(origin))
+                return false;
+        }
+
+        return true;
+    }
+
+    private bool TryNearestUnfinished(BiomeComponent biome, out Vector2i chunk)
+    {
+        var found = false;
+        chunk = default;
+        var dist = float.MaxValue;
+        foreach (var candidate in _activeChunks[biome])
+        {
+            if (biome.LoadedChunks.Contains(candidate))
+                continue;
+
+            if (MarkersReady(biome, candidate))
+                continue;
+
+            var candidateDist = DistanceSq(biome, candidate + new Vector2(ChunkSize / 2f, ChunkSize / 2f));
+            if (found && candidateDist >= dist)
+                continue;
+
+            found = true;
+            dist = candidateDist;
+            chunk = candidate;
+        }
+
+        return found;
+    }
+
+    private void BuildBudgetedMarkerChunk()
+    {
+        if (_markerChunksThisTick >= MaxBiomeMarkerChunksPerTick)
+            return;
+
+        if (_markerScan.Active)
+        {
+            StepMarkerScan();
+            _markerChunksThisTick++;
+            return;
+        }
+
+        var found = false;
+        var coversNearest = false;
+        var bestWork = default(BiomeWork);
+        var bestLayer = string.Empty;
+        var bestChunk = default(Vector2i);
+        var bestIdx = 0;
+        var bestDist = float.MaxValue;
+
+        foreach (var work in _biomeWork)
+        {
+            if (!_markerChunks.TryGetValue(work.Biome, out var markers))
+                continue;
+
+            var hasTerrain = TryNearestUnfinished(work.Biome, out var terrain);
+            var idx = 0;
+            foreach (var (layer, chunks) in markers)
+            {
+                idx++;
+                if (chunks.Count == 0)
+                    continue;
+
+                var needed = default(Vector2i);
+                var restrict = false;
+                if (hasTerrain)
+                {
+                    var proto = GetMarkerLayerPrototype(layer);
+                    needed = SharedMapSystem.GetChunkIndices(terrain, proto.Size) * proto.Size;
+                    restrict = true;
+                }
+
+                var hasLoaded = work.Biome.LoadedMarkers.TryGetValue(layer, out var loaded);
+                foreach (var chunk in chunks)
+                {
+                    if (hasLoaded && loaded!.Contains(chunk)) //DS-14
+                        continue;
+
+                    if (restrict && chunk != needed)
+                        continue;
+
+                    var proto = GetMarkerLayerPrototype(layer);
+                    var center = chunk + new Vector2(proto.Size / 2f, proto.Size / 2f);
+                    var dist = DistanceSq(work.Biome, center);
+                    if (found && restrict == coversNearest && dist >= bestDist)
+                        continue;
+
+                    if (found && !restrict && coversNearest)
+                        continue;
+
+                    found = true;
+                    coversNearest = restrict;
+                    bestDist = dist;
+                    bestWork = work;
+                    bestLayer = layer;
+                    bestChunk = chunk;
+                    bestIdx = idx;
+                }
+            }
+        }
+
+        if (!found)
+            return;
+
+        var biome = bestWork.Biome!;
+        var grid = bestWork.Grid!;
+        var forced = biome.ForcedMarkerLayers.Contains(bestLayer);
+        StartMarkerScan(biome, bestWork.GridUid, grid, biome.Seed, bestLayer, bestChunk, bestIdx, forced);
+        if (!_markerScan.Active)
+            return;
+
+        StepMarkerScan();
+        _markerChunksThisTick++;
+    }
+
+    private void StartMarkerScan(
+        BiomeComponent component,
+        EntityUid gridUid,
+        MapGridComponent grid,
+        int seed,
+        string layer,
+        Vector2i chunk,
+        int localIdx,
+        bool forced)
+    {
+        if (component.LoadedMarkers.TryGetValue(layer, out var existingChunks) && existingChunks.Contains(chunk))
+            return;
+
+        var layerProto = ProtoManager.Index<BiomeMarkerLayerPrototype>(layer);
+        var buffer = (int)(layerProto.Radius / 2f);
+        var bounds = new Box2i(chunk + buffer, chunk + layerProto.Size - buffer);
+        var count = (int)(bounds.Area / (layerProto.Radius * layerProto.Radius));
+        count = Math.Min(count, layerProto.MaxCount);
+        if (count <= 0)
+            return;
+
+        if (_scanCacheBiome != component || _scanCacheChunk != chunk)
+        {
+            _scanEntityCache.Clear();
+            _scanCacheBiome = component;
+            _scanCacheChunk = chunk;
+        }
+
+        var scan = _markerScan;
+        scan.Active = true;
+        scan.Biome = component;
+        scan.GridUid = gridUid;
+        scan.Grid = grid;
+        scan.Layer = layer;
+        scan.Chunk = chunk;
+        scan.LocalIdx = localIdx;
+        scan.Seed = seed;
+        scan.Forced = forced;
+        scan.Proto = layerProto;
+        scan.Bounds = bounds;
+        scan.Count = count;
+        scan.Rand = new Random(seed + chunk.X * ChunkSize + chunk.Y + localIdx);
+        scan.X = bounds.Left;
+        scan.Y = bounds.Bottom;
+        scan.Placing = false;
+        scan.GroupIndex = 0;
+        scan.GroupOpen = false;
+        scan.Remaining.Clear();
+        scan.Entities.Clear();
+        scan.Masks.Clear();
+        scan.Frontier.Clear();
+        scan.SpawnSet.Clear();
+    }
+
+    private void StepMarkerScan()
+    {
+        var scan = _markerScan;
+        if (!scan.Active)
+            return;
+
+        if (Deleted(scan.GridUid))
+        {
+            scan.Active = false;
+            scan.Placing = false;
+            _scanEntityCache.Clear();
+            _scanCacheBiome = null;
+            return;
+        }
+
+        var budget = Stopwatch.GetTimestamp() + Stopwatch.Frequency * MarkerScanBudgetMs / 1000;
+        if (scan.Placing)
+        {
+            PlaceMarkerScan(budget);
+            return;
+        }
+
+        var gridUid = scan.GridUid;
+        var grid = scan.Grid;
+        var biome = scan.Biome;
+        var layerProto = scan.Proto;
+        var forced = scan.Forced;
+
+        while (scan.X < scan.Bounds.Right)
+        {
+            while (scan.Y < scan.Bounds.Top)
+            {
+                var node = new Vector2i(scan.X, scan.Y);
+                scan.Y++;
+
+                var enumerator = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, node);
+                enumerator.MoveNext(out var existing);
+
+                if (!forced && existing != null)
+                    continue;
+
+                if (!_scanEntityCache.TryGetValue(node, out var proto))
+                {
+                    TryGetEntity(node, biome, (gridUid, grid), out proto);
+                    _scanEntityCache[node] = proto;
+                }
+
+                if (layerProto.EntityMask.Count > 0 &&
+                    (proto == null ||
+                     !layerProto.EntityMask.ContainsKey(proto)))
+                {
+                    continue;
+                }
+
+                if (proto != null && layerProto.Prototype != null)
+                    continue;
+
+                scan.Remaining.Add(node);
+                scan.Entities.Add(node, existing);
+                scan.Masks.Add(node, proto);
+
+                if (Stopwatch.GetTimestamp() >= budget)
+                    return;
+            }
+
+            scan.Y = scan.Bounds.Bottom;
+            scan.X++;
+            if (Stopwatch.GetTimestamp() >= budget)
+                return;
+        }
+
+        scan.Placing = true;
+        scan.GroupIndex = 0;
+        scan.GroupOpen = false;
+        scan.Frontier.Clear();
+        scan.SpawnSet.Clear();
+        PlaceMarkerScan(budget);
+    }
+
+    private void PlaceMarkerScan(long budget)
+    {
+        var scan = _markerScan;
+        var rand = scan.Rand;
+        var layerProto = scan.Proto;
+
+        while (scan.GroupIndex < scan.Count)
+        {
+            if (!scan.GroupOpen)
+            {
+                scan.GroupSize = rand.Next(layerProto.MinGroupSize, layerProto.MaxGroupSize + 1);
+                scan.GroupOpen = true;
+                scan.Frontier.Clear();
+            }
+
+            while (scan.GroupSize > 0 && (scan.Remaining.Count > 0 || scan.Frontier.Count > 0))
+            {
+                if (scan.Frontier.Count == 0)
+                {
+                    if (scan.Remaining.Count == 0)
+                        break;
+
+                    scan.Frontier.Add(rand.PickAndTake(scan.Remaining));
+                }
+
+                var frontierIndex = rand.Next(scan.Frontier.Count);
+                var node = scan.Frontier[frontierIndex];
+                scan.Frontier.RemoveAt(frontierIndex);
+                scan.Remaining.Remove(node);
+
+                for (var x = -1; x <= 1; x++)
+                {
+                    for (var y = -1; y <= 1; y++)
+                    {
+                        var neighbor = new Vector2i(node.X + x, node.Y + y);
+                        if (scan.Frontier.Contains(neighbor) || !scan.Remaining.Contains(neighbor))
+                            continue;
+
+                        scan.Frontier.Add(neighbor);
+                    }
+                }
+
+                scan.SpawnSet.Add(node, scan.Masks[node]);
+                scan.GroupSize--;
+
+                if (scan.Entities.TryGetValue(node, out var existing))
+                {
+                    _suppressReveal = true;
+                    Del(existing);
+                    _suppressReveal = false;
+                }
+
+                if (Stopwatch.GetTimestamp() >= budget)
+                    return;
+            }
+
+            scan.GroupIndex++;
+            scan.GroupOpen = false;
+        }
+
+        RegisterMarkerScan();
+    }
+
+    private void RegisterMarkerScan()
+    {
+        var scan = _markerScan;
+        var component = scan.Biome;
+        var layer = scan.Layer;
+        var pending = new Dictionary<Vector2i, Dictionary<string, List<Vector2i>>>();
+
+        foreach (var node in scan.SpawnSet.Keys)
+        {
+            if (!TileInsideBiomeBounds(node, component.Bounds))
+                continue;
+
+            var chunkOrigin = SharedMapSystem.GetChunkIndices(node, ChunkSize) * ChunkSize;
+            if (!pending.TryGetValue(chunkOrigin, out var pendingMarkers))
+            {
+                pendingMarkers = new Dictionary<string, List<Vector2i>>();
+                pending[chunkOrigin] = pendingMarkers;
+            }
+
+            if (!pendingMarkers.TryGetValue(layer, out var layerMarkers))
+            {
+                layerMarkers = new List<Vector2i>();
+                pendingMarkers[layer] = layerMarkers;
+            }
+
+            layerMarkers.Add(node);
+        }
+
+        var loadedMarkers = component.LoadedMarkers;
+        if (!loadedMarkers.TryGetValue(layer, out var mobChunks))
+        {
+            mobChunks = new HashSet<Vector2i>();
+            loadedMarkers[layer] = mobChunks;
+        }
+
+        mobChunks.Add(scan.Chunk);
+
+        foreach (var (chunkOrigin, layers) in pending)
+        {
+            if (!component.PendingMarkers.TryGetValue(chunkOrigin, out var lockMarkers))
+            {
+                lockMarkers = new Dictionary<string, List<Vector2i>>();
+                component.PendingMarkers[chunkOrigin] = lockMarkers;
+            }
+
+            foreach (var (lockLayer, nodes) in layers)
+                lockMarkers[lockLayer] = nodes;
+        }
+
+        scan.Active = false;
+        scan.Placing = false;
+        scan.Remaining.Clear();
+        scan.Entities.Clear();
+        scan.Masks.Clear();
+        scan.Frontier.Clear();
+        scan.SpawnSet.Clear();
+        ReleaseFinishedForced(component);
+    }
+
+    private sealed class MarkerScan
+    {
+        public bool Active;
+        public BiomeComponent Biome = default!;
+        public EntityUid GridUid;
+        public MapGridComponent Grid = default!;
+        public string Layer = "";
+        public Vector2i Chunk;
+        public int LocalIdx;
+        public int Seed;
+        public bool Forced;
+        public BiomeMarkerLayerPrototype Proto = default!;
+        public Box2i Bounds;
+        public int Count;
+        public Random Rand = default!;
+        public int X;
+        public int Y;
+        public bool Placing;
+        public int GroupIndex;
+        public int GroupSize;
+        public bool GroupOpen;
+        public readonly List<Vector2i> Frontier = new();
+        public readonly Dictionary<Vector2i, string?> SpawnSet = new();
+        public readonly HashSet<Vector2i> Remaining = new();
+        public readonly Dictionary<Vector2i, EntityUid?> Entities = new();
+        public readonly Dictionary<Vector2i, string?> Masks = new();
+    }
+
+    private void ReleaseFinishedForced(BiomeComponent component)
+    {
+        if (component.ForcedMarkerLayers.Count == 0)
+            return;
+
+        _forcedRelease.Clear();
+        foreach (var layer in component.ForcedMarkerLayers)
+        {
+            if (!_markerChunks.TryGetValue(component, out var markers) ||
+                !markers.TryGetValue(layer, out var chunks))
+            {
+                _forcedRelease.Add(layer);
+                continue;
+            }
+
+            if (!component.LoadedMarkers.TryGetValue(layer, out var loaded))
+                continue;
+
+            var done = true;
+            foreach (var chunk in chunks)
+            {
+                if (loaded.Contains(chunk))
+                    continue;
+
+                done = false;
+                break;
+            }
+
+            if (done)
+                _forcedRelease.Add(layer);
+        }
+
+        foreach (var layer in _forcedRelease)
+            component.ForcedMarkerLayers.Remove(layer);
+    }
+
+    private void LoadBudgeted()
+    {
+        _chunkWork.Clear();
+        _viewerOffsets.Clear();
+        var viewerOffset = 0;
+        foreach (var work in _biomeWork)
+        {
+            if (!_activeChunks.TryGetValue(work.Biome, out var active))
+                continue;
+
+            if (!_viewerOffsets.ContainsKey(work.Biome))
+            {
+                _viewerOffsets[work.Biome] = viewerOffset;
+                if (_viewerPositions.TryGetValue(work.Biome, out var viewers))
+                    viewerOffset += viewers.Count;
+            }
+
+            var offset = _viewerOffsets[work.Biome];
+            foreach (var chunk in active)
+            {
+                var loaded = work.Biome.LoadedChunks.Contains(chunk);
+                if (loaded)
+                {
+                    if (!work.Biome.PendingMarkers.ContainsKey(chunk))
+                        continue;
+                }
+                else if (!MarkersReady(work.Biome, chunk))
+                {
+                    continue;
+                }
+
+                var dist = DistanceSq(work.Biome, chunk + new Vector2(ChunkSize / 2f, ChunkSize / 2f), out var viewer);
+                _chunkWork.Add(new ChunkWork
+                {
+                    Biome = work.Biome,
+                    GridUid = work.GridUid,
+                    Grid = work.Grid,
+                    Chunk = chunk,
+                    Dist = dist,
+                    Viewer = viewer < 0 ? -1 : offset + viewer,
+                    MarkersOnly = loaded,
+                });
+            }
+        }
+
+        if (_chunkWork.Count == 0)
+            return;
+
+        _chunkWork.Sort(static (a, b) => a.Dist.CompareTo(b.Dist));
+
+        _viewerBest.Clear();
+        _viewerOrder.Clear();
+        for (var i = 0; i < _chunkWork.Count; i++)
+        {
+            var viewer = _chunkWork[i].Viewer;
+            if (_viewerBest.TryAdd(viewer, i))
+                _viewerOrder.Add(viewer);
+        }
+
+        _viewerOrder.Sort();
+        _takenWork.Clear();
+        _loadOrder.Clear();
+        var start = _loadCursor % _viewerOrder.Count;
+        var served = Math.Min(MaxBiomeChunksPerTick, _viewerOrder.Count);
+        for (var i = 0; i < served; i++)
+        {
+            var pick = _viewerBest[_viewerOrder[(start + i) % _viewerOrder.Count]];
+            if (_takenWork.Add(pick))
+                _loadOrder.Add(pick);
+        }
+
+        for (var i = 0; i < _chunkWork.Count && _loadOrder.Count < MaxBiomeChunksPerTick; i++)
+        {
+            if (_takenWork.Add(i))
+                _loadOrder.Add(i);
+        }
+
+        var rotated = 0;
+        for (var i = 0; i < _loadOrder.Count; i++)
+        {
+            if (!ChunkBudgetLeft())
+                break;
+
+            var work = _chunkWork[_loadOrder[i]];
+            if (i < served)
+                rotated++;
+
+            _chunkWorkDone = true;
+            LoadChunkMarkers(work.Biome, work.GridUid, work.Grid, work.Chunk, work.Biome.Seed);
+            if (work.MarkersOnly)
+                continue;
+
+            if (!work.Biome.LoadedChunks.Add(work.Chunk))
+                continue;
+
+            LoadChunk(work.Biome, work.GridUid, work.Grid, work.Chunk, work.Biome.Seed);
+        }
+
+        _loadCursor = (_loadCursor + rotated) % Math.Max(1, viewerOffset);
+    }
+
+    private bool ChunkBudgetLeft()
+    {
+        return !_chunkWorkDone || Stopwatch.GetTimestamp() < _chunkBudgetEnd;
+    }
+
+    private void UnloadBudgeted()
+    {
+        _chunkWork.Clear();
+        foreach (var work in _biomeWork)
+        {
+            if (!_keepChunks.TryGetValue(work.Biome, out var keep))
+                continue;
+
+            foreach (var chunk in work.Biome.LoadedChunks)
+            {
+                if (keep.Contains(chunk))
+                    continue;
+
+                _chunkWork.Add(new ChunkWork
+                {
+                    Biome = work.Biome,
+                    GridUid = work.GridUid,
+                    Grid = work.Grid,
+                    Chunk = chunk,
+                    Dist = DistanceSq(work.Biome, chunk + new Vector2(ChunkSize / 2f, ChunkSize / 2f)),
+                });
+            }
+        }
+
+        _chunkWork.Sort(static (a, b) => b.Dist.CompareTo(a.Dist));
+        var count = Math.Min(MaxBiomeUnloadChunksPerTick, _chunkWork.Count);
+        for (var i = 0; i < count; i++)
+        {
+            if (!ChunkBudgetLeft())
+                break;
+
+            _chunkWorkDone = true;
+            var work = _chunkWork[i];
+            work.Biome.LoadedChunks.Remove(work.Chunk);
+            UnloadChunk(work.Biome, work.GridUid, work.Grid, work.Chunk, work.Biome.Seed, _unloadTilesBuffer);
+        }
+    }
+    // DS-14 end
 
     /// <summary>
     /// Gets the marker nodes for the specified area.
@@ -833,6 +1763,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
                 // If it is a ghost role then purge it
                 // TODO: This is *kind* of a bandaid but natural mobs spawns needs a lot more work.
                 // Ideally we'd just have ghost role and non-ghost role variants for some stuff.
+                GetHiddenWalls(gridUid)?.Remove(node); //DS-14
                 var uid = EntityManager.CreateEntityUninitialized(prototype, _mapSystem.GridTileToLocal(gridUid, grid, node));
                 RemComp<GhostTakeoverAvailableComponent>(uid);
                 RemComp<GhostRoleComponent>(uid);
@@ -895,6 +1826,12 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
         // Now do entities
         var loadedEntities = new Dictionary<EntityUid, Vector2i>();
         component.LoadedEntities.Add(chunk, loadedEntities);
+        CollectMobTiles(gridUid, grid, chunk); //DS-14
+        // DS-14 start
+        var hidden = GetHiddenWalls(gridUid);
+        if (hidden != null)
+            BuildSolidGrid(component, gridUid, grid, chunk, modified, hidden);
+        // DS-14 end
 
         for (var x = 0; x < ChunkSize; x++)
         {
@@ -908,24 +1845,24 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
                 if (modified.Contains(indices))
                     continue;
 
+                if (_mobTiles.Contains(indices)) //DS-14
+                    continue;
+
                 // Don't mess with anything that's potentially anchored.
                 var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, indices);
 
                 if (anchored.MoveNext(out _) || !TryGetEntity(indices, component, (gridUid, grid), out var entPrototype))
                     continue;
 
-                // TODO: Fix non-anchored ents spawning.
-                // Just track loaded chunks for now.
-                var ent = Spawn(entPrototype, _mapSystem.GridTileToLocal(gridUid, grid, indices));
-
-                // At least for now unless we do lookups or smth, only work with anchoring.
-                // DS14: never a creature - anchored it stands frozen on its tile forever (the chromite caves argocytes).
-                if (_xformQuery.TryGetComponent(ent, out var xform) && !xform.Anchored && !HasComp<MobStateComponent>(ent))
+                // DS-14 start
+                if (hidden != null && IsSolidPrototype(entPrototype) && IsEnclosed(indices, chunk))
                 {
-                    _transform.AnchorEntity((ent, xform), (gridUid, grid), indices);
+                    hidden[indices] = entPrototype;
+                    continue;
                 }
 
-                loadedEntities.Add(ent, indices);
+                SpawnBiomeEntity(gridUid, grid, indices, entPrototype, loadedEntities);
+                // DS-14 end
             }
         }
 
@@ -977,33 +1914,6 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
     #region Unload
 
     /// <summary>
-    /// Handles all of the queued chunk unloads for a particular biome.
-    /// </summary>
-    private void UnloadChunks(BiomeComponent component, EntityUid gridUid, MapGridComponent grid, int seed)
-    {
-        var active = _activeChunks[component];
-        _unloadChunksBuffer.Clear();
-        _unloadTilesBuffer.Clear();
-
-        foreach (var chunk in component.LoadedChunks)
-        {
-            if (!active.Contains(chunk))
-                _unloadChunksBuffer.Add(chunk);
-        }
-
-        if (_unloadChunksBuffer.Count == 0)
-            return;
-
-        // DS14-Start: unload after enumeration so LoadedChunks is not modified during foreach.
-        foreach (var chunk in _unloadChunksBuffer)
-        {
-            component.LoadedChunks.Remove(chunk);
-            UnloadChunk(component, gridUid, grid, chunk, seed, _unloadTilesBuffer);
-        }
-        // DS14-End
-    }
-
-    /// <summary>
     /// Unloads a specific biome chunk.
     /// </summary>
     private void UnloadChunk(BiomeComponent component, EntityUid gridUid, MapGridComponent grid, Vector2i chunk, int seed, List<(Vector2i, Tile)> tiles)
@@ -1029,8 +1939,23 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
         // This is because if we want to save the map (e.g. persistent server) it makes the file much smaller
         // and also if the map is enormous will make stuff like physics broadphase much faster
 
+        // DS-14 start
+        _suppressReveal = true;
+        if (GetHiddenWalls(gridUid) is { } hiddenWalls)
+        {
+            for (var x = 0; x < ChunkSize; x++)
+            {
+                for (var y = 0; y < ChunkSize; y++)
+                {
+                    hiddenWalls.Remove(new Vector2i(chunk.X + x, chunk.Y + y));
+                }
+            }
+        }
+        // DS-14 end
+
         foreach (var (ent, tile) in component.LoadedEntities[chunk])
         {
+            var untouched = IsUntouched(ent); //DS-14
             if (Deleted(ent) || !_xformQuery.TryGetComponent(ent, out var xform)) // DS14 Edit: reuse cached transform query.
             {
                 modified.Add(tile);
@@ -1046,7 +1971,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
                 continue;
             }
 
-            if (!EntityManager.IsDefault(ent))
+            if (!untouched) //DS-14
             {
                 modified.Add(tile);
                 continue;
@@ -1055,7 +1980,13 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
             Del(ent);
         }
 
+        _suppressReveal = false; //DS-14
         component.LoadedEntities.Remove(chunk);
+
+        // DS-14 start
+        CollectMobTiles(gridUid, grid, chunk);
+        modified.UnionWith(_mobTiles);
+        // DS-14 end
 
         // Unset tiles (if the data is custom)
 
@@ -1198,5 +2129,19 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
         }
 
         _mapSystem.SetTiles(mapUid, mapGrid, tiles);
+        OpenHiddenArea(mapUid, TilesIn(bounds)); //DS-14
     }
+
+    // DS-14 start
+    private static IEnumerable<Vector2i> TilesIn(Box2 bounds)
+    {
+        for (var x = (int) Math.Floor(bounds.Left); x < (int) Math.Ceiling(bounds.Right); x++)
+        {
+            for (var y = (int) Math.Floor(bounds.Bottom); y < (int) Math.Ceiling(bounds.Top); y++)
+            {
+                yield return new Vector2i(x, y);
+            }
+        }
+    }
+    // DS-14 end
 }

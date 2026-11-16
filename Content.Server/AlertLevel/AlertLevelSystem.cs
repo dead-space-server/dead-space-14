@@ -225,6 +225,14 @@ public sealed class AlertLevelSystem : EntitySystem
 
         return filter;
     }
+
+    public bool IsCallEvacBlocked(EntityUid station, AlertLevelComponent? alert = null)
+    {
+        if (!Resolve(station, ref alert) || alert.AlertLevels == null)
+            return false;
+
+        return alert.AlertLevels.Levels[alert.CurrentLevel].CallEvacBlocker;
+    }
     // DS14-end
 }
 

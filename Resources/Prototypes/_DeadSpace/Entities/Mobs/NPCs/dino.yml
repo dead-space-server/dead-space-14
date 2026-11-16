@@ -4,6 +4,8 @@
   id: MobDino
   description: "У нас тут юрский период? Выглядит... Почти дружелюбно."
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterDino
   - type: MovementSpeedModifier
     baseWalkSpeed: 2
     baseSprintSpeed: 3

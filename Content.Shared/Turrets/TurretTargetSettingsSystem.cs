@@ -1,5 +1,7 @@
 using Content.Shared.Access;
 using Content.Shared.Access.Systems;
+using Content.Shared.DeadSpace.Ninja.Components;
+using Content.Shared.Ninja.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.Weapons.Ranged.Components;
@@ -128,6 +130,11 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     public bool EntityIsTargetForTurret(Entity<TurretTargetSettingsComponent> ent, EntityUid target)
     {
         // DS14-start
+        if (TryComp<SpaceNinjaComponent>(target, out var ninja) && ninja.Suit is { } suit && TryComp<NinjaCloakComponent>(suit, out var cloak) && cloak.Enabled)
+        {
+            return false;
+        }
+
         if (HasComp<GunComponent>(target) &&
             TryComp<TurretTargetSettingsComponent>(target, out var targetSettings) &&
             TurretsAreFriendly(ent, (target, targetSettings)))

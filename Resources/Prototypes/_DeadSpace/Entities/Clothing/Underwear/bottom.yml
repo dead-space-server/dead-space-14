@@ -263,8 +263,8 @@
 - type: entity
   parent: ClothingUnderwearBottomBase
   id: ClothingUnderwearBottomBoxersCentcomm
-  name: боксеры центрального командования
-  description: Cтандартное нижнее бельё центрального командования.
+  name: боксеры ЦК
+  description: Cтандартное нижнее бельё сотрудников ЦК.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Underwear/Command/centcomm/man.rsi

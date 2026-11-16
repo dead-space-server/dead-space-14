@@ -31,10 +31,10 @@
 - type: startingGear
   id: CentcomOfficerGear
   equipment:
-    # jumpsuit: ADTClothingUniformTurleneckGreenBlack
+    # jumpsuit: ClothingUniformJumpsuitCentcomOfficer
     # back: ClothingBackpackMilitarySatchel
     mask: ClothingMaskGasCentcomSecurity
-    # shoes: ClothingShoesBootsJack
+    # shoes: ClothingShoesBootsCombat
     outerClothing: ClothingOuterCoatCentcomOfficer
     # eyes: ClothingEyesGlassesSecurity
     head: ClothingHeadHatBeretCentcomNaval
@@ -48,7 +48,7 @@
   job: CentralCommandOfficer
   equipment:
     mask: ClothingMaskGasCentcomSecurity
-    shoes: ClothingShoesBootsJack
+    shoes: ClothingShoesBootsCombat
     outerClothing: ClothingOuterVestWeb
     eyes: ClothingEyesGlassesSecurity
     head: ClothingHeadHatBeretCentcomNaval

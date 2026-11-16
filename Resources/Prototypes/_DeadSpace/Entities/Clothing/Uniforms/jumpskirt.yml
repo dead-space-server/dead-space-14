@@ -152,6 +152,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/cargo_jumpskirt.rsi
 
 # Captain
+
 - type: entity
   parent: [ClothingUniformSkirtBase, BaseCommandContraband]
   id: ClothingUniformJumpskirtCaptainWhite
@@ -173,3 +174,257 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/captain_black.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/captain_black.rsi
+
+# Cargo
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtCargoSalvage
+  name: юбка-комбинезон утилизатора
+  description: Отлично сочитается с киркой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/salvage.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/salvage.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtCargoSalvageFormal
+  name: официальная юбка-комбинезон утилизатора
+  description: Отлично сочитается с киркой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/salvageformal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/salvageformal.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtCargoFormal
+  name: официальная юбка-комбинезон грузчика
+  description: Для сильных и независимых.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/cargoformal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/cargoformal.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtSeniorCourier
+  name: юбка-комбинезон ведущего логиста
+  description: Эффектный рабочий комбинезон с юбкой ведущего логиста с аккуратной голубой рубашкой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/senior_courier.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/senior_courier.rsi
+
+# Coroner
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtCoroner
+  name: юбка-комбинезон коронера
+  description: Она изготовлена из специального волокна, обеспечивающего слабую защиту от биологических опасностей. Кто сказал, что стиль должен умирать вместе с пациентами?
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/coroner.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/coroner.rsi
+
+# Reporter
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtReporter
+  name: юбка-комбинезон репортёра
+  description: Хороший репортёр остаётся скептиком всю свою жизнь.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/reporter.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/reporter.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtJournalist
+  name: юбка-комбинезон журналиста
+  description: Если журналистская работа хороша, она противоречива по своей природе.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/journalist.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/journalist.rsi
+
+# RND
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtResearchDirectorShirt
+  name: юбка-костюм научного руководителя
+  description: Простая рабочая рубашка фиолетового цвета с бежевой юбкой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/rnd_shirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/rnd_shirt.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtResearchDirectorSuit
+  name: официальная юбка-костюм научного руководителя
+  description: Официально-выглядящий фиолетовый костюм с чёрным галстуком и бежевой юбкой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/rnd_director.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/rnd_director.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtScientistFormal
+  name: торжественная юбка-комбинезон учёного
+  description: Униформа для взыскательных учёных, которую лучше всего носить с подходящим к ней галстуком.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/scientist_formal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/scientist_formal.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtScientistTurtle
+  name: юбка-водолазка учёного
+  description: Белая водолазка со специальными знаками, указывающими на принадлежность к научному отделу.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/scientist_turtle.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/scientist_turtle.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtRoboticistOveralls
+  name: повседневная юбка-комбинезон робототехника
+  description: Красная рубашка с чёрными подтяжками, вытканная из особой ткани, специально для робототехников.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/roboticist_overalls.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/roboticist_overalls.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtRoboticistWhite
+  name: белая юбка-комбинезон робототехника
+  description: Белый комбинезон, сотканный из специальной ткани. На нём есть отметки, указывающие, что носящий его - робототехник.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/roboticist_white.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/roboticist_white.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtSeniorResearcherTurtle
+  name: юбка-водолазка ведущего учёного
+  description: Белая водолазка со специальными разлищающимися знаками, указывающими на принадлежность к научному отделу и отличительный профессионализм.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/senior_researcher_turtle.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/senior_researcher_turtle.rsi
+
+# kakieto platia? chuiomoio
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtGothic
+  name: готическое платье
+  description: Готическое платье - элегантное и загадочное облачение, которое выделяется своим темным и интригующим стилем. Насыщенные темные оттенки, такие как чёрный, бордовый или темно-синий, придают платью таинственность и аристократическую привлекательность. Тонкие кружевные вставки, роскошные драпировки и воланы создают атмосферу древней романтики. Вырезы в виде капельки или платочной горловины придают готическому платью неповторимость и роскошь. Это платье идеально подходит для тех, кто желает выделиться из толпы и подчеркнуть свою уникальность и загадочность. В нем каждая женщина ощущает себя утонченной и притягательной, готовой влюбить в себя окружающих с первого взгляда.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_gothic.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_gothic.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtMaid
+  name: вечернее платье горничной
+  description: Это утонченное вечернее платье, вдохновленное элегантным стилем горничных, сочетает в себе изысканность и нотки игривой женственности. Созданное из качественного чёрного атласа, оно призвано подчеркнуть изысканный вкус и стиль своей обладательницы.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_maid.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_maid.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtDressRed
+  name: вечернее красное платье
+  description: Это великолепное вечернее платье олицетворяет страсть и смелость, смешанные с элегантностью и изысканностью. Созданное из глубокого красного шелка, оно приковывает взгляды и воплощает в себе дух роскоши и чувственности.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_red.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_red.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtTango
+  name: платье танго
+  description: Это платье предназначено для танго и воплощает в себе страсть и изысканность. Силуэт облегающий, с вырезом на спине и декоративными драпировками, подчеркивает женственные линии, обеспечивая свободу движения и красоту танца.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_tango.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_tango.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtVictorianBlack
+  name: викторианское чёрное платье
+  description: Это чёрное викторианское платье воплощает в себе дух эпохи. Вырезы, кружева и манжеты придают ему загадочность, а корсет создает изысканный силуэт. Это платье подходит для вечерних мероприятий, где нужно проявить таинственность и элегантность.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_victorian_black.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_victorian_black.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtVictorianrRed
+  name: викторианское красное платье
+  description: Вдохновленное стилем викторианской эпохи, это красное платье олицетворяет страсть и роскошь. Сложные детали, такие как кружева, объемные рукава и объемная юбка, делают его идеальным выбором для особых событий, где нужно выделиться и произвести впечатление.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_victorian_red.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/dress_victorian_red.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtSuitNurse
+  name: костюм медицинской сестры
+  description: Этот костюм для медицинской сестры сочетает в себе функциональность и стиль. Прочные и удобные брюки в сочетании с блузой и узнаваемой фирменной шапочкой создают профессиональный и аккуратный образ. Идеальный выбор для медицинского персонала.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/suit_nurse.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/suit_nurse.rsi
+
+# xmas
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtXmas
+  name: юбка-комбинезон рождественского эльфа
+  description: Мечтали почувствовать себя эльфом на службе у Санты? Ваш час настал!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/xmas.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/xmas.rsi
