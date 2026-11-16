@@ -641,3 +641,17 @@
     interfaces:
       enum.AgentIDCardUiKey.Key:
         type: AgentIDCardBoundUserInterface
+
+- type: entity
+  parent: IAAIDCard
+  id: IAAOfficerIDCard
+  name: ID карта офицера ВД
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Objects/Misc/id_cards.rsi
+      state: default
+    - sprite: Objects/Misc/id_cards.rsi
+      state: idiaaofficer
+  - type: PresetIdCard
+    job: IAAOfficer

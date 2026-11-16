@@ -246,7 +246,7 @@
       sprite: _DeadSpace/Clothing/Head/Hats/sechat.rsi
 
 - type: entity
-  name: Пивная шляпа
+  name: пивная шляпа
   parent: BaseItem
   id: ClothingBeerHat
   description: Можно пить сразу из двух банок!
@@ -285,3 +285,110 @@
   - type: Tag
     tags:
     - ClothMade
+
+# Bluespace baldness
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBluespaceBald
+  name: bluespace baldness
+  description: You are irresistible, but you reflect light harder.
+  components:
+  - type: SurgeryBald
+  - type: Clothing
+    slots:
+    - HEAD
+    sprite: Clothing/Head/Hats/beanie.rsi
+  - type: Sprite
+    sprite: Clothing/Head/Hats/beanie.rsi
+    layers:
+    - state: body-icon
+      color: "#7a5cff"
+    - state: cuffcrown-icon
+      color: "#c8b6ff"
+    - state: pompom-icon
+      color: "#efe6ff"
+  - type: HideLayerClothing
+    bodyLayers:
+    - Hair
+    - FacialHair
+    - HeadTop
+    - HeadSide
+
+# Coroner
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatCoroner
+  name: шапочка коронера
+  description: Чёрная шапочка, которая не дает вашим волосам щекотать внутренности трупов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/coroner.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/coroner.rsi
+  - type: Tag
+    tags:
+    - ClothMade
+    - HamsterWearable
+    - WhitelistChameleon
+
+# Deer
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatDeer
+  name: рога оленя
+  description: Именно с такими рогами ходит ГСБ.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/deer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/deer.rsi
+
+# Magistrat
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatJwig
+  name: судейский парик
+  description: Белоснежный парик, который носят вершители правосудия. Выглядит нелепо, но спорить с ним никто не решается.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Misc/jwig.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Misc/jwig.rsi
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+
+# Xmas
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatXmas
+  name: шапочка рождественского эльфа
+  description: Этот год был тяжёлый... Но следующий будет лучше, не так ли?
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/xmas.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/xmas.rsi
+  - type: Tag
+    tags:
+    - ClothMade
+    - HamsterWearable
+    - WhitelistChameleon
+
+# Iaa officer
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretIAAOfficer
+  name: берет офицера ВД
+  description: Берет офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_iaa_officer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_iaa_officer.rsi

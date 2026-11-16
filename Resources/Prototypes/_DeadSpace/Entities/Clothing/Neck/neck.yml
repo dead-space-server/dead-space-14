@@ -167,3 +167,173 @@
     sprite: _DeadSpace/Clothing/Neck/spaceninja.rsi
   - type: NinjaAppearanceItem
     itemType: Scarf
+
+# Centcom
+
+- type: entity
+  parent: [ClothingNeckBase, AccessoryTieBase]
+  id: ClothingNeckMantileCentcomBlack
+  name: наплечная мантия Полевого Офицера
+  description: Прости, она слишком крута для такого человека вроде тебя.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/mantie_centcom_officer_black.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/mantie_centcom_officer_black.rsi
+
+- type: entity
+  parent: [ClothingNeckBase, BaseCommandContraband]
+  id: ClothingNeckMantleCentCommAdministrator
+  name: наплечная мантия ЦК
+  description: Дорогая мантия, обшитая мехом и настоящим золотом. Выглядит очень парадно. Явно для высокопоставленных сотрудников ЦК.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/centcom_mantle_administrator.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/centcom_mantle_administrator.rsi
+
+# Mime
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckMimeSexy
+  name: шарф застенчивого мима
+  description: ...
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/mimeSkarf.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/mimeSkarf.rsi
+
+# Sec
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckMantleSeniorOfficer
+  name: мантия инструктора СБ с подсумками
+  description: Мантия инструктора службы безопасности, украшенная символами власти и мастерства службы безопасности станции, оснащённая подсумками для хранения снаряжение службы безопасности и магазинов. На внутренней части мантии можно заметить 3 буквы производителя, SWC.
+  categories: [ DoNotMap ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/seniormantle_shoulder.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/seniormantle_shoulder.rsi
+  - type: Storage
+    maxItemSize: Normal
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,3,1
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: Item
+    size: Normal
+
+# wtf
+
+- type: entity
+  parent: [ClothingNeckBase, AccessoryTieBase] # DS14 accessory
+  id: ClothingNeckTieWhite
+  name: белый галстук
+  description: Кому могут нравиться белые галстуки?
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Ties/whitetie.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/Ties/whitetie.rsi
+
+# Coroner
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckApronCoroner
+  name: фартук коронера
+  description: Фартук делает "тик-так" - время вскрывать трупы!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/coroner.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/coroner.rsi
+
+# Wings
+
+- type: entity # Halloween
+  parent: ClothingNeckBase
+  id: ClothingNeckWingsAngel
+  name: белые ангельские крылья
+  description: Эти декоративные крылья придают вашему облику невероятную нежность и гармонию. Ощутите легкость и свободу с этими ангельскими крыльями!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Wings/Angel.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckWingsBlackVampire
+  name: крылья вампира
+  description: Эти загадочные крылья дополнят ваш облик непередаваемой таинственностью и стилем. Ощутите магию ночи с этими вампирическими крыльями.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Wings/BlackVampire.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckWingsPegas
+  name: крылья пегаса
+  description: Волшебный аксессуар, который преображает ваш облик и наполняет его магией. Их нежный дизайн и компактные размеры позволят вам прикоснуться к миру фантазии и мечты.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Wings/Pegas.rsi
+
+- type: entity # Halloween
+  parent: ClothingNeckBase
+  id: ClothingNeckWingsSkeleton
+  name: скелетные крылья
+  description: Аксессуар, который придает вашей внешности загадочный и впечатляющий вид. Будьте смелыми и украсьте себя скелетными крыльями, БУУУУ!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Wings/Skeleton.rsi
+
+- type: entity # Halloween
+  parent: ClothingNeckBase
+  id: ClothingNeckWingsSkeletonBlack
+  name: чёрные скелетные крылья
+  description: Зловеще стильный аксессуар, который подчеркивает вашу индивидуальность.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Wings/SkeletonBlack.rsi
+
+- type: entity # Halloween
+  parent: ClothingNeckBase
+  id: ClothingNeckWingsSkeletonRed
+  name: красные скелетные крылья
+  description: Откройте новые горизонты стиля с этими скелетными крыльями с красной кожей.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Wings/SkeletonRed.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckWingsViolet
+  name: фиолетовые ангельские крылья
+  description: Белоснежные перья, украшенные фиолетовыми акцентами, создают впечатление магии и возвышенности, позволяя вам ощутить себя настоящим ангелом.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Wings/Violet.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckWingsMagic
+  name: крылья мага
+  description: Отлично подойдут для тех случаев, когда обычные аксессуары просто недостаточно магические!
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Wings/Magic.rsi
