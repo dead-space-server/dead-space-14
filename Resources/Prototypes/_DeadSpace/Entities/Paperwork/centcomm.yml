@@ -223,3 +223,10 @@
   name: paperwork-form-title-centcomm-35
   text: "/Paperwork/Centcomm/35.xml"
   paperPrototype: PaperPrintedCommand
+
+- type: paperworkForm
+  id: Centcomm36
+  category: NTCentcomm
+  name: paperwork-form-title-centcomm-36
+  text: "/Paperwork/Centcomm/36.xml"
+  paperPrototype: PaperPrintedCommand
