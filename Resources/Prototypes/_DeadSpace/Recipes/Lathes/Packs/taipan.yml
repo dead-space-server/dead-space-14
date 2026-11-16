@@ -350,6 +350,16 @@
   - Drill
   - SawAdvanced
   - Hemostat
+  - SurgeryMarker
+  - SurgerySaw
+  - SurgeryHatchet
+  - SurgeryFieldStapler
+  - SurgeryFieldClamp
+  - SurgeryBoneGel
+  - SurgerySlimeGel
+  - SurgeryDionaSap
+  - SurgerySkinRoll
+  - SurgeryOrganCooler
 
 ## Hyposprays
 - type: latheRecipePack
