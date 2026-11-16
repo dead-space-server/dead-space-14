@@ -74,7 +74,8 @@ public sealed class PointingBubbleOverlay : Overlay
     {
         _system.Cull();
 
-        if (_system.Bubbles.Count == 0
+        if (!_system.ShowBubbles
+            || _system.Bubbles.Count == 0
             || args.ViewportControl == null
             || _player.LocalEntity is not { } local
             || !_ent.TryGetComponent(local, out EyeComponent? eyeComp)
