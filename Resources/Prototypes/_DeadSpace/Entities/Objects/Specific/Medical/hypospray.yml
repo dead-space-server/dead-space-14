@@ -125,10 +125,10 @@
   - type: SolutionContainerManager
     solutions:
       pen:
-        maxVol: 10
+        maxVol: 4
         reagents:
         - ReagentId: Hemostatin
-          Quantity: 10
+          Quantity: 4
 
 - type: entity
   parent: ADTCombatHypo
