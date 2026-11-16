@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Content.Server.Administration.Logs;
+using Content.Server.DeadSpace.Materials; // DS-14
 using Content.Shared.Materials;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
@@ -115,6 +116,10 @@ public sealed class MaterialStorageSystem : SharedMaterialStorageSystem
             return false;
         if (!base.TryInsertMaterialEntity(user, toInsert, receiver, storage, material, composition))
             return false;
+        // DS-14-start
+        var insertedEv = new MaterialStorageEntityInsertedEvent(user, toInsert);
+        RaiseLocalEvent(receiver, ref insertedEv);
+        // DS-14-end
         _audio.PlayPvs(storage.InsertingSound, receiver);
         if (showPopup)
         {

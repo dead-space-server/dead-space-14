@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.DeadSpace.Materials;
 using Content.Server.Materials;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Store.Systems;
@@ -65,6 +66,11 @@ public sealed class LavalandMiningSystem : EntitySystem
         SubscribeLocalEvent<LavalandOreRedeemerComponent, LatheMaterialsQueuedEvent>(OnRedeemerLatheMaterialsQueued);
         SubscribeLocalEvent<LavalandOreRedeemerComponent, LatheMaterialsRefundedEvent>(OnRedeemerLatheMaterialsRefunded);
         SubscribeLocalEvent<LavalandOreRedeemerComponent, LatheRecipeFinishedEvent>(OnRedeemerLatheRecipeFinished);
+        SubscribeLocalEvent<MaterialStorageComponent, MaterialStorageEntityInsertedEvent>(OnStorageEntityInserted);
+        SubscribeLocalEvent<LavalandOreTrackerComponent, MaterialEntitiesEjectedEvent>(OnTrackerMaterialsEjected);
+        SubscribeLocalEvent<LavalandOreTrackerComponent, LatheMaterialsQueuedEvent>(OnTrackerLatheMaterialsQueued);
+        SubscribeLocalEvent<LavalandOreTrackerComponent, LatheMaterialsRefundedEvent>(OnTrackerLatheMaterialsRefunded);
+        SubscribeLocalEvent<LavalandOreTrackerComponent, LatheRecipeFinishedEvent>(OnTrackerLatheRecipeFinished);
         SubscribeLocalEvent<LavalandRedeemedOreComponent, StackSplitEvent>(OnRedeemedOreStackSplit);
         SubscribeLocalEvent<LavalandRedeemedOreComponent, StackMergedEvent>(OnRedeemedOreStackMerged);
 
@@ -210,22 +216,108 @@ public sealed class LavalandMiningSystem : EntitySystem
 
     private void OnRedeemerLatheRecipeFinished(Entity<LavalandOreRedeemerComponent> ent, ref LatheRecipeFinishedEvent args)
     {
-        foreach (var (material, amount) in args.Materials)
-        {
-            if (amount <= 0)
-                continue;
-
-            RemoveCreditedMaterial(ent.Comp.PendingProcessedMaterials, material, amount);
-            RemoveCreditedMaterial(ent.Comp.PendingCreditedMaterials, material, amount);
-        }
+        FinishPendingMaterials(ent.Comp.PendingProcessedMaterials, ent.Comp.PendingCreditedMaterials, args.Materials);
     }
 
     private void OnRedeemerMaterialsEjected(Entity<LavalandOreRedeemerComponent> ent, ref MaterialEntitiesEjectedEvent args)
     {
         ent.Comp.ProcessedMaterials.TryGetValue(args.Material, out var trackedProcessed);
         // Every ejected unit entered this redeemer, so it must never become fresh ore again.
-        var processed = Math.Max(trackedProcessed, args.Amount);
-        ent.Comp.CreditedMaterials.TryGetValue(args.Material, out var credited);
+        MarkEjectedMaterials(
+            ent.Comp.ProcessedMaterials,
+            ent.Comp.CreditedMaterials,
+            Math.Max(trackedProcessed, args.Amount),
+            args);
+    }
+
+    private void OnRedeemerLatheMaterialsQueued(Entity<LavalandOreRedeemerComponent> ent, ref LatheMaterialsQueuedEvent args)
+    {
+        MoveTrackedMaterials(ent.Comp.ProcessedMaterials, ent.Comp.PendingProcessedMaterials, args.Materials);
+        MoveTrackedMaterials(ent.Comp.CreditedMaterials, ent.Comp.PendingCreditedMaterials, args.Materials);
+    }
+
+    private void OnRedeemerLatheMaterialsRefunded(Entity<LavalandOreRedeemerComponent> ent, ref LatheMaterialsRefundedEvent args)
+    {
+        MoveTrackedMaterials(ent.Comp.PendingProcessedMaterials, ent.Comp.ProcessedMaterials, args.Materials);
+        MoveTrackedMaterials(ent.Comp.PendingCreditedMaterials, ent.Comp.CreditedMaterials, args.Materials);
+    }
+
+    private void OnStorageEntityInserted(Entity<MaterialStorageComponent> ent, ref MaterialStorageEntityInsertedEvent args)
+    {
+        if (HasComp<LavalandOreRedeemerComponent>(ent.Owner) ||
+            !TryComp<LavalandRedeemedOreComponent>(args.Inserted, out var redeemed) ||
+            !TryComp<StackComponent>(args.Inserted, out var stack) ||
+            !TryComp<PhysicalCompositionComponent>(args.Inserted, out var composition))
+        {
+            return;
+        }
+
+        var processed = Math.Clamp(redeemed.ProcessedUnits, 0, stack.Count);
+        if (processed <= 0)
+            return;
+
+        var credited = Math.Clamp(redeemed.CreditedUnits, 0, processed);
+        var tracker = EnsureComp<LavalandOreTrackerComponent>(ent.Owner);
+        AddMaterials(tracker.ProcessedMaterials, composition, processed);
+        AddMaterials(tracker.CreditedMaterials, composition, credited);
+    }
+
+    private void OnTrackerLatheRecipeFinished(Entity<LavalandOreTrackerComponent> ent, ref LatheRecipeFinishedEvent args)
+    {
+        FinishPendingMaterials(ent.Comp.PendingProcessedMaterials, ent.Comp.PendingCreditedMaterials, args.Materials);
+    }
+
+    private void OnTrackerMaterialsEjected(Entity<LavalandOreTrackerComponent> ent, ref MaterialEntitiesEjectedEvent args)
+    {
+        ent.Comp.ProcessedMaterials.TryGetValue(args.Material, out var trackedProcessed);
+        MarkEjectedMaterials(ent.Comp.ProcessedMaterials, ent.Comp.CreditedMaterials, trackedProcessed, args);
+    }
+
+    private void OnTrackerLatheMaterialsQueued(Entity<LavalandOreTrackerComponent> ent, ref LatheMaterialsQueuedEvent args)
+    {
+        MoveTrackedMaterials(ent.Comp.ProcessedMaterials, ent.Comp.PendingProcessedMaterials, args.Materials);
+        MoveTrackedMaterials(ent.Comp.CreditedMaterials, ent.Comp.PendingCreditedMaterials, args.Materials);
+    }
+
+    private void OnTrackerLatheMaterialsRefunded(Entity<LavalandOreTrackerComponent> ent, ref LatheMaterialsRefundedEvent args)
+    {
+        MoveTrackedMaterials(ent.Comp.PendingProcessedMaterials, ent.Comp.ProcessedMaterials, args.Materials);
+        MoveTrackedMaterials(ent.Comp.PendingCreditedMaterials, ent.Comp.CreditedMaterials, args.Materials);
+    }
+
+    private static void FinishPendingMaterials(
+        Dictionary<ProtoId<MaterialPrototype>, int> pendingProcessed,
+        Dictionary<ProtoId<MaterialPrototype>, int> pendingCredited,
+        Dictionary<ProtoId<MaterialPrototype>, int> materials)
+    {
+        foreach (var (material, amount) in materials)
+        {
+            if (amount <= 0)
+                continue;
+
+            RemoveCreditedMaterial(pendingProcessed, material, amount);
+            RemoveCreditedMaterial(pendingCredited, material, amount);
+        }
+    }
+
+    private static void MoveTrackedMaterials(
+        Dictionary<ProtoId<MaterialPrototype>, int> from,
+        Dictionary<ProtoId<MaterialPrototype>, int> to,
+        Dictionary<ProtoId<MaterialPrototype>, int> materials)
+    {
+        foreach (var (material, amount) in materials)
+        {
+            MoveCreditedMaterial(from, to, material, amount);
+        }
+    }
+
+    private void MarkEjectedMaterials(
+        Dictionary<ProtoId<MaterialPrototype>, int> processedMaterials,
+        Dictionary<ProtoId<MaterialPrototype>, int> creditedMaterials,
+        int processed,
+        MaterialEntitiesEjectedEvent args)
+    {
+        creditedMaterials.TryGetValue(args.Material, out var credited);
         if (processed <= 0 && credited <= 0)
             return;
 
@@ -240,45 +332,11 @@ public sealed class LavalandMiningSystem : EntitySystem
 
             processed -= moved.Processed;
             credited -= moved.Credited;
-            RemoveCreditedMaterial(ent.Comp.ProcessedMaterials, args.Material, moved.Processed);
-            RemoveCreditedMaterial(ent.Comp.CreditedMaterials, args.Material, moved.Credited);
+            RemoveCreditedMaterial(processedMaterials, args.Material, moved.Processed);
+            RemoveCreditedMaterial(creditedMaterials, args.Material, moved.Credited);
 
             if (processed <= 0 && credited <= 0)
                 break;
-        }
-    }
-
-    private void OnRedeemerLatheMaterialsQueued(Entity<LavalandOreRedeemerComponent> ent, ref LatheMaterialsQueuedEvent args)
-    {
-        foreach (var (material, amount) in args.Materials)
-        {
-            MoveCreditedMaterial(
-                ent.Comp.ProcessedMaterials,
-                ent.Comp.PendingProcessedMaterials,
-                material,
-                amount);
-            MoveCreditedMaterial(
-                ent.Comp.CreditedMaterials,
-                ent.Comp.PendingCreditedMaterials,
-                material,
-                amount);
-        }
-    }
-
-    private void OnRedeemerLatheMaterialsRefunded(Entity<LavalandOreRedeemerComponent> ent, ref LatheMaterialsRefundedEvent args)
-    {
-        foreach (var (material, amount) in args.Materials)
-        {
-            MoveCreditedMaterial(
-                ent.Comp.PendingProcessedMaterials,
-                ent.Comp.ProcessedMaterials,
-                material,
-                amount);
-            MoveCreditedMaterial(
-                ent.Comp.PendingCreditedMaterials,
-                ent.Comp.CreditedMaterials,
-                material,
-                amount);
         }
     }
 
