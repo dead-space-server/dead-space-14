@@ -146,7 +146,7 @@
     <Project Path="RobustToolbox/Robust.Client/Robust.Client.csproj" />
     <Project Path="RobustToolbox/Robust.Packaging.Tests/Robust.Packaging.Tests.csproj" />
     <Project Path="RobustToolbox/Robust.Packaging/Robust.Packaging.csproj" />
-    <!-- DS14: removed Robust.Server.IntegrationTests, PvsSystemTests in engine v295 does not compile (missing using); bring back after the engine fix -->
+    <Project Path="RobustToolbox/Robust.Server.IntegrationTests/Robust.Server.IntegrationTests.csproj" />
     <Project Path="RobustToolbox/Robust.Server.Testing/Robust.Server.Testing.csproj" />
     <Project Path="RobustToolbox/Robust.Server/Robust.Server.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.IntegrationTests/Robust.Shared.IntegrationTests.csproj" />
