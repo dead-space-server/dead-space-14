@@ -109,6 +109,7 @@
   liquidSever: 1.5
   soft: true
   ears: false
+  jaw: false
   headVital: false
   organs:
   - Core

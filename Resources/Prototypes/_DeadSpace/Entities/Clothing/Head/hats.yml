@@ -246,7 +246,7 @@
       sprite: _DeadSpace/Clothing/Head/Hats/sechat.rsi
 
 - type: entity
-  name: Пивная шляпа
+  name: пивная шляпа
   parent: BaseItem
   id: ClothingBeerHat
   description: Можно пить сразу из двух банок!

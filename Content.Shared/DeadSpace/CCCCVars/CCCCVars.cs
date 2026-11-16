@@ -144,6 +144,9 @@ public sealed class CCCCVars
     public static readonly CVarDef<bool> GunAmmoModeAction =
         CVarDef.Create("interface.gun_ammo_mode_action", true, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
 
+    public static readonly CVarDef<bool> PointingBubbles =
+        CVarDef.Create("hud.pointing_bubbles", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> AshWalkersEnabled =
         CVarDef.Create("lavaland.ash_walkers_enabled", true, CVar.SERVER | CVar.REPLICATED);
 

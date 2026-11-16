@@ -3,6 +3,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
 using Content.Shared.DeadSpace.Player;
+using Content.Shared.Mobs.Components; // DS14
 using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Hitscan.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -47,11 +48,20 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
         //  1.) Hit the first entity that you targeted.
         //  2.) Hit the first entity that doesn't require you to aim at it specifically to be hit.
         var ignored = args.IgnoredEntities;
-        var result = _container.IsEntityOrParentInContainer(shooter)
-            ? rayCastResults.FirstOrNull(hit => ignored?.Contains(hit.HitEntity) != true)
-            : rayCastResults.FirstOrNull(hit =>
+        // DS14-start
+        var executionTarget = args.ExecutionTarget;
+        var result = executionTarget != null
+            ? rayCastResults.FirstOrNull(hit =>
                 ignored?.Contains(hit.HitEntity) != true &&
-                (hit.HitEntity == target || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true));
+                (hit.HitEntity == executionTarget ||
+                 !HasComp<MobStateComponent>(hit.HitEntity) &&
+                  CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true))
+            : _container.IsEntityOrParentInContainer(shooter)
+                ? rayCastResults.FirstOrNull(hit => ignored?.Contains(hit.HitEntity) != true)
+                : rayCastResults.FirstOrNull(hit =>
+                    ignored?.Contains(hit.HitEntity) != true &&
+                    (hit.HitEntity == target || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true));
+        // DS14-end
 
         var distanceTried = result?.Distance ?? ent.Comp.MaxDistance;
 
@@ -90,6 +100,7 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
             OutputTrace = args.OutputTrace,
             IgnoredEntities = ignored,
             HitPosition = result is { } hit ? new MapCoordinates(hit.HitPos, mapCords.MapId) : null,
+            ExecutionTarget = executionTarget, // DS14
         };
 
         var attemptEvent = new AttemptHitscanRaycastFiredEvent { Data = data };

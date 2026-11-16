@@ -1,0 +1,234 @@
+# Animal ambient emotes
+- type: localizedDataset
+  id: AnimalChatterCow
+  values:
+    prefix: animal-chatter-cow-
+    count: 5
+
+- type: localizedDataset
+  id: AnimalChatterChicken
+  values:
+    prefix: animal-chatter-chicken-
+    count: 5
+
+- type: localizedDataset
+  id: AnimalChatterDog
+  values:
+    prefix: animal-chatter-dog-
+    count: 6
+
+- type: localizedDataset
+  id: AnimalChatterCat
+  values:
+    prefix: animal-chatter-cat-
+    count: 6
+
+- type: localizedDataset
+  id: AnimalChatterFox
+  values:
+    prefix: animal-chatter-fox-
+    count: 5
+
+- type: localizedDataset
+  id: AnimalChatterMouse
+  values:
+    prefix: animal-chatter-mouse-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterGoat
+  values:
+    prefix: animal-chatter-goat-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterPig
+  values:
+    prefix: animal-chatter-pig-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterDuck
+  values:
+    prefix: animal-chatter-duck-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterGoose
+  values:
+    prefix: animal-chatter-goose-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterSheep
+  values:
+    prefix: animal-chatter-sheep-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterCrab
+  values:
+    prefix: animal-chatter-crab-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterSnake
+  values:
+    prefix: animal-chatter-snake-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterLizard
+  values:
+    prefix: animal-chatter-lizard-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterFrog
+  values:
+    prefix: animal-chatter-frog-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterParrot
+  values:
+    prefix: animal-chatter-parrot-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterPenguin
+  values:
+    prefix: animal-chatter-penguin-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterSloth
+  values:
+    prefix: animal-chatter-sloth-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterFerret
+  values:
+    prefix: animal-chatter-ferret-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterHamster
+  values:
+    prefix: animal-chatter-hamster-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterPossum
+  values:
+    prefix: animal-chatter-possum-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterRaccoon
+  values:
+    prefix: animal-chatter-raccoon-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterBat
+  values:
+    prefix: animal-chatter-bat-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterBee
+  values:
+    prefix: animal-chatter-bee-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterRoach
+  values:
+    prefix: animal-chatter-roach-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterMothroach
+  values:
+    prefix: animal-chatter-mothroach-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterGorilla
+  values:
+    prefix: animal-chatter-gorilla-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterKangaroo
+  values:
+    prefix: animal-chatter-kangaroo-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterMonkey
+  values:
+    prefix: animal-chatter-monkey-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterSpider
+  values:
+    prefix: animal-chatter-spider-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterSlug
+  values:
+    prefix: animal-chatter-slug-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterCarp
+  values:
+    prefix: animal-chatter-carp-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterBear
+  values:
+    prefix: animal-chatter-bear-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterSnail
+  values:
+    prefix: animal-chatter-snail-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterReindeer
+  values:
+    prefix: animal-chatter-reindeer-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterButterfly
+  values:
+    prefix: animal-chatter-butterfly-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterFennec
+  values:
+    prefix: animal-chatter-fennec-
+    count: 4
+
+- type: localizedDataset
+  id: AnimalChatterDino
+  values:
+    prefix: animal-chatter-dino-
+    count: 3
+
+- type: localizedDataset
+  id: AnimalChatterRak
+  values:
+    prefix: animal-chatter-rak-
+    count: 3

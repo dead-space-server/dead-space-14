@@ -563,12 +563,12 @@ public sealed class HolopadSystem : SharedHolopadSystem
             _telephoneSystem.SetSpeakerForTelephone((entity, entityTelephone), (hologramUid, hologramSpeech));
         }
 
-        _powerState.SetWorkingState(entity.Owner, true);
+        _powerState.TrySetWorkingState(entity.Owner, true); //DS-14
     }
 
     public void DeleteHologram(EntityUid hologram, Entity<HolopadComponent> attachedHolopad) // DS14
     {
-        _powerState.SetWorkingState(attachedHolopad.Owner, false);
+        _powerState.TrySetWorkingState(attachedHolopad.Owner, false); //DS-14
 
         attachedHolopad.Comp.Hologram = null;
 

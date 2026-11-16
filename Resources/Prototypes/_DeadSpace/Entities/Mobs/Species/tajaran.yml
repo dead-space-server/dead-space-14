@@ -38,6 +38,7 @@
     minSlideSpeed: 4.7
   - type: Sanity # DS14
   - type: Inventory
+    speciesId: tajaran
   - type: Vocal
     wilhelm: "/Audio/_DeadSpace/Voice/Felinid/cat_wilhelm.ogg"
     sounds:

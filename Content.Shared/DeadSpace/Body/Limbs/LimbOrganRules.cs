@@ -5,8 +5,9 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 public static class LimbOrganRules
 {
     public const int Count = 8;
-    public const float RuptureShare = 0.9f;
+    public const float RuptureHpShare = 0.9f;
     public const float Rupture = 40f;
+    public const float RuptureChance = 0.2f;
     public const float HeartBleed = 0.5f;
     public const float LungAir = 1f;
     public const float BrainAir = 0.2f;
@@ -84,6 +85,11 @@ public static class LimbOrganRules
         return plan;
     }
 
+    public static bool ShouldRupture(float lost)
+    {
+        return lost >= RuptureHpShare;
+    }
+
     public static OrganHit Apply(Span<LimbOrganState> organs, LimbZone zone, LimbMark mark, float amount, float woundMultiplier, LimbOrganMask present = LimbOrganMask.Standard, bool projectile = false)
     {
         if (amount <= 0f)
@@ -116,29 +122,47 @@ public static class LimbOrganRules
         return new OrganHit(true, primary, ruptured, eyes, concussion);
     }
 
-    public static int RuptureHome(Span<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, float lost)
+    public static int RuptureHome(Span<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, float chance, float roll, float pick)
     {
-        if (lost < RuptureShare)
+        if (chance <= 0f || roll >= chance)
             return 0;
 
-        var eyes = 0;
         var count = Math.Min(organs.Length, Count);
+        var eligible = 0;
         for (var i = 0; i < count; i++)
         {
-            var organ = (LimbOrgan) i;
-            if (LimbOrganHomes.Home(organ) != zone || (present & (LimbOrganMask) (1 << i)) == 0)
-                continue;
-
-            ref var state = ref organs[i];
-            if (state.Missing || state.Ruptured)
-                continue;
-
-            state.Ruptured = true;
-            if (organ == LimbOrgan.Eyes)
-                eyes += EyeRuptureDamage;
+            if (MayRupture(organs, present, zone, i))
+                eligible++;
         }
 
-        return eyes;
+        if (eligible == 0)
+            return 0;
+
+        var wanted = Math.Clamp((int) (pick * eligible), 0, eligible - 1);
+        for (var i = 0; i < count; i++)
+        {
+            if (!MayRupture(organs, present, zone, i))
+                continue;
+
+            if (wanted > 0)
+            {
+                wanted--;
+                continue;
+            }
+
+            organs[i].Ruptured = true;
+            return (LimbOrgan) i == LimbOrgan.Eyes ? EyeRuptureDamage : 0;
+        }
+
+        return 0;
+    }
+
+    private static bool MayRupture(ReadOnlySpan<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, int index)
+    {
+        return LimbOrganHomes.Home((LimbOrgan) index) == zone
+               && (present & (LimbOrganMask) (1 << index)) != 0
+               && !organs[index].Missing
+               && !organs[index].Ruptured;
     }
 
     private static bool Hurt(Span<LimbOrganState> organs, OrganShare share, LimbMark mark, float scaled)

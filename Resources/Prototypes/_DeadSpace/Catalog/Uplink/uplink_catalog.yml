@@ -728,6 +728,25 @@
       - NukeOpsUplink
 
 - type: listing
+  id: UplinkChemVendSyndicateNukeOps
+  name: uplink-chemvend-syndicate-name
+  description: uplink-chemvend-syndicate-desc
+  icon: { sprite: _DeadSpace/Objects/Specific/Service/vending_machine_restock.rsi, state: base }
+  productEntity: VendingMachineRestockChemVendSyndicate
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
   id: UplinkClothingEyesHudSyndicateAgent
   name: uplink-clothing-eyes-hud-syndicate-agent-name
   description: uplink-clothing-eyes-hud-syndicate-agent-desc

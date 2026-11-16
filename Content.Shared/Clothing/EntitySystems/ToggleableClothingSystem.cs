@@ -265,6 +265,11 @@ public sealed class ToggleableClothingSystem : EntitySystem
         if (LifeStage(component.AttachedUid) > EntityLifeStage.MapInitialized)
             return;
 
+        // DS14-start
+        if (TerminatingOrDeleted(uid) || TerminatingOrDeleted(toggleComp.ClothingUid))
+            return;
+        // DS14-end
+
         // As unequipped gets called in the middle of container removal, we cannot call a container-insert without causing issues.
         // So we delay it and process it during a system update:
         if (toggleComp.ClothingUid != null && toggleComp.Container != null)
