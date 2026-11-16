@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -36,6 +37,7 @@ public sealed class PointingBubbleOverlay : Overlay
     private readonly PointingBubbleSystem _system;
     private readonly SpriteSystem _sprites;
     private readonly SharedTransformSystem _xform;
+    private readonly ExamineSystemShared _examine;
     private readonly Texture _bubble;
     private readonly IRenderTexture _iconTarget;
 
@@ -47,6 +49,7 @@ public sealed class PointingBubbleOverlay : Overlay
         _system = system;
         _sprites = _ent.System<SpriteSystem>();
         _xform = _ent.System<SharedTransformSystem>();
+        _examine = _ent.System<ExamineSystemShared>();
         _bubble = _sprites.Frame0(BubbleSprite);
         _iconTarget = _clyde.CreateRenderTarget(
             (128, 128),
@@ -110,6 +113,10 @@ public sealed class PointingBubbleOverlay : Overlay
 
             var map = _xform.GetMapCoordinates(pointer);
             if (map.MapId != args.MapId || !args.WorldBounds.Contains(map.Position))
+                continue;
+
+            if (args.Viewport.Eye is { DrawFov: true } eye
+                && !_examine.InRangeUnOccluded(eye.Position, map, 0f, uid => uid == pointer || uid == local))
                 continue;
 
             var age = MathF.Max(0f, (float)(now - bubble.Start).TotalSeconds);
