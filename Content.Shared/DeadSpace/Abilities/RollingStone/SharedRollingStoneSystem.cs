@@ -28,6 +28,7 @@ public sealed class SharedRollingStoneSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedProjectileSystem _projectiles = default!;
 
     public override void Initialize()
     {
@@ -109,8 +110,8 @@ public sealed class SharedRollingStoneSystem : EntitySystem
 
             if (TryComp<ProjectileComponent>(args.OtherEntity, out var projectile))
             {
-                projectile.Shooter = uid;
-                projectile.Weapon = uid;
+                _projectiles.SetShooter(args.OtherEntity, projectile, uid);
+                _projectiles.SetWeapon(args.OtherEntity, projectile, uid);
             }
             return;
         }
