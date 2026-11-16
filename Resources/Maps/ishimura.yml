@@ -20203,6 +20203,9 @@ entities:
     - type: Transform
       pos: 4.5,-28.5
       parent: 2
+    - type: DeviceNetwork
+      configurators:
+      - invalid
   - uid: 622
     components:
     - type: Transform
@@ -84998,6 +85001,9 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 2.5,-26.5
       parent: 2
+    - type: DeviceNetwork
+      configurators:
+      - invalid
   - uid: 11881
     components:
     - type: Transform
@@ -110933,6 +110939,9 @@ entities:
       rot: 3.141592653589793 rad
       pos: 1.5,-28.5
       parent: 2
+    - type: DeviceNetwork
+      configurators:
+      - invalid
     - type: AtmosPipeColor
       color: '#0055CCFF'
   - uid: 15250
@@ -112359,6 +112368,9 @@ entities:
       rot: 3.141592653589793 rad
       pos: 3.5,-28.5
       parent: 2
+    - type: DeviceNetwork
+      configurators:
+      - invalid
     - type: AtmosPipeColor
       color: '#990000FF'
   - uid: 15419
