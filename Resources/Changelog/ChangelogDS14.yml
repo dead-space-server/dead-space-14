@@ -10317,3 +10317,10 @@ Entries:
   changes:
   - type: Fix
     message: Слаймам ТЕПРЕЬ нельзя сломать челюгу
+- id: 990
+  author: IvanKuvalda
+  time: '2026-11-16T02:17:27.997345+00:00'
+  pr: 2750
+  changes:
+  - type: Add
+    message: Без головы вас нельзя опознать
