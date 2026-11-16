@@ -10324,3 +10324,10 @@ Entries:
   changes:
   - type: Add
     message: Без головы вас нельзя опознать
+- id: 991
+  author: IvanKuvalda
+  time: '2026-11-16T02:20:01.456871+00:00'
+  pr: 2746
+  changes:
+  - type: Fix
+    message: Бесконечно отрезать уши больше не получится
