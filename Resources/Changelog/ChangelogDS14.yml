@@ -10403,3 +10403,12 @@ Entries:
   changes:
   - type: Fix
     message: Король крыс, его пезанты и миазмы.
+- id: 999
+  author: BlueDogDoc
+  time: '2026-11-16T02:44:22.631319+00:00'
+  pr: 2778
+  changes:
+  - type: Add
+    message: Полевая и полноценная операция по вправлению челюсти.
+  - type: Tweak
+    message: Аппарат ЭШТ ломает челюсть, а не голову без кляпа.
