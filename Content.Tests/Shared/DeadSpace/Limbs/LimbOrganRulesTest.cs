@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ public sealed class LimbOrganRulesTest
     }
 
     [Test]
-    public void EnoughPointRupturesTheHeartAndAShortfallDoesNot()
+    public void PointStrikesBruiseTheHeartAndAShortfallDoesNot()
     {
         var organs = LimbOrganRules.CreateAll().ToArray();
         var early = LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Point, 39f, 1f);
@@ -43,6 +44,23 @@ public sealed class LimbOrganRulesTest
             Assert.That(burst.Organ, Is.EqualTo(LimbOrgan.Heart));
             Assert.That(organs[(int) LimbOrgan.Heart].Damage, Is.EqualTo(40f));
             Assert.That(organs[(int) LimbOrgan.Lungs].Damage, Is.EqualTo(40f * 0.8f));
+        });
+    }
+
+    [Test]
+    public void PointStrikeRupturesTheHeart()
+    {
+        var organs = LimbOrganRules.CreateAll().ToArray();
+        var eyes = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, LimbOrganRules.RuptureChance, 0f, 0f);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(eyes, Is.EqualTo(0));
+            Assert.That(organs[(int) LimbOrgan.Heart].Ruptured, Is.True);
+            Assert.That(organs[(int) LimbOrgan.Lungs].Ruptured, Is.False);
+            Assert.That(organs[(int) LimbOrgan.Stomach].Ruptured, Is.False);
+            Assert.That(organs[(int) LimbOrgan.Liver].Ruptured, Is.False);
+            Assert.That(organs[(int) LimbOrgan.Kidneys].Ruptured, Is.False);
         });
     }
 
@@ -118,15 +136,45 @@ public sealed class LimbOrganRulesTest
     public void RupturedEyesBlindOnce()
     {
         var organs = LimbOrganRules.CreateAll().ToArray();
-        var burst = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f);
-        var again = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f);
+        var burst = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 1f, 0f, 0f);
+        var again = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 1f, 0f, 0f);
+        var last = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 1f, 0f, 0f);
 
         Assert.Multiple(() =>
         {
-            Assert.That(burst, Is.EqualTo(LimbOrganRules.EyeRuptureDamage));
-            Assert.That(organs[(int) LimbOrgan.Eyes].Ruptured, Is.True);
+            Assert.That(burst + again, Is.EqualTo(LimbOrganRules.EyeRuptureDamage));
             Assert.That(organs[(int) LimbOrgan.Brain].Ruptured, Is.True);
-            Assert.That(again, Is.EqualTo(0));
+            Assert.That(organs[(int) LimbOrgan.Eyes].Ruptured, Is.True);
+            Assert.That(last, Is.EqualTo(0));
+        });
+    }
+
+    [Test]
+    public void ASparedRuptureRollKeepsOrgansIntact()
+    {
+        var organs = LimbOrganRules.CreateAll().ToArray();
+        var eyes = LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, LimbOrganRules.RuptureChance, 1f, 0f);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(eyes, Is.EqualTo(0));
+            Assert.That(organs[(int) LimbOrgan.Heart].Ruptured, Is.False);
+            Assert.That(organs[(int) LimbOrgan.Lungs].Ruptured, Is.False);
+            Assert.That(organs[(int) LimbOrgan.Stomach].Ruptured, Is.False);
+            Assert.That(organs[(int) LimbOrgan.Liver].Ruptured, Is.False);
+        });
+    }
+
+    [Test]
+    public void OrgansOnlyBurstInAWreckedLimb()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(LimbOrganRules.ShouldRupture(0f), Is.False);
+            Assert.That(LimbOrganRules.ShouldRupture(0.1f), Is.False);
+            Assert.That(LimbOrganRules.ShouldRupture(LimbOrganRules.RuptureHpShare - 0.01f), Is.False);
+            Assert.That(LimbOrganRules.ShouldRupture(LimbOrganRules.RuptureHpShare), Is.True);
+            Assert.That(LimbOrganRules.ShouldRupture(1f), Is.True);
         });
     }
 
@@ -137,8 +185,10 @@ public sealed class LimbOrganRulesTest
         LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Point, 40f, 1f);
         LimbOrganRules.Apply(organs, LimbZone.Torso, LimbMark.Edge, 80f, 1f);
         LimbOrganRules.Apply(organs, LimbZone.Head, LimbMark.Point, 40f, 1f);
-        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, 0.9f);
-        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 0.9f);
+        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, 1f, 0f, 0f);
+        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Torso, 1f, 0f, 0f);
+        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 1f, 0f, 0f);
+        LimbOrganRules.RuptureHome(organs, LimbOrganMask.Standard, LimbZone.Head, 1f, 0f, 0f);
         var tick = LimbOrganRules.Tick(organs);
         LimbOrganRules.Cryo(organs);
 
