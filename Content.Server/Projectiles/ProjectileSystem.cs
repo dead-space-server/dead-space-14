@@ -2,7 +2,6 @@ using Content.Server.Administration.Logs;
 using Content.Server.Destructible;
 using Content.Server.Effects;
 using Content.Server.Weapons.Ranged.Systems;
-using Content.Shared.Anomaly.Components; //DS-14
 using Content.Shared.Camera;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -20,7 +19,6 @@ using Robust.Shared.Physics; //DS-14
 using Robust.Shared.Physics.Components; //DS-14
 using Robust.Shared.Physics.Dynamics; //DS-14
 using Robust.Shared.Physics.Systems; //DS-14
-
 namespace Content.Server.Projectiles;
 
 public sealed partial class ProjectileSystem : SharedProjectileSystem
@@ -34,9 +32,9 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     [Dependency] private SharedPhysicsSystem _physics = default!; //DS-14
-
     //DS-14 start
     private const float SweepMinDistance = 0.25f;
+    private const float SweepInset = 0.1f;
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _sweptHits = new();
     private readonly List<EntityUid> _deadSweeps = new();
     //DS-14 end
@@ -60,7 +58,7 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
                 continue;
 
             if (SweepPath.TryGet(xform, body, frameTime, SweepMinDistance, _transform, out var mapId, out var from, out var to))
-                Sweep(uid, projectile, body, fixtures, mapId, from, to);
+                Sweep(uid, body, fixtures, mapId, from, to);
         }
 
         foreach (var uid in _sweptHits.Keys)
@@ -79,7 +77,6 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
 
     private void Sweep(
         EntityUid uid,
-        ProjectileComponent projectile,
         PhysicsComponent body,
         FixturesComponent fixtures,
         MapId mapId,
@@ -91,25 +88,18 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
         if (distance < SweepMinDistance || !fixtures.Fixtures.TryGetValue(ProjectileFixture, out var ourFixture))
             return;
 
-        var ray = new CollisionRay(from, delta / distance, ourFixture.CollisionMask);
+        var direction = delta / distance;
+        var ray = new CollisionRay(from, direction, ourFixture.CollisionMask);
         foreach (var hit in _physics.IntersectRay(mapId, ray, distance, uid, false))
         {
-            //DS-14 start
-            if (HasComp<AnomalousParticleComponent>(uid) && HasComp<AnomalyComponent>(hit.HitEntity))
-                break;
-            //DS-14 end
-
             if (!CanSweepHit(uid, body, ourFixture, hit.HitEntity))
                 continue;
 
             if (_sweptHits.TryGetValue(uid, out var hits) && hits.Contains(hit.HitEntity))
                 continue;
 
-            _transform.SetWorldPosition(uid, hit.HitPos);
-            HitTarget(uid, projectile, hit.HitEntity, body.LinearVelocity);
-
-            if (projectile.ProjectileSpent || TerminatingOrDeleted(uid))
-                break;
+            _transform.SetWorldPosition(uid, hit.HitPos + direction * SweepInset);
+            return;
         }
     }
 

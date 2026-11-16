@@ -587,7 +587,7 @@
       - !type:PopupMessage
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Animal, Vox, Arachnid, Xenomorph ] # DS14: added Xenomorph
+          type: [ Animal, Rat, Vox, Arachnid, Xenomorph ] # DS14: added Xenomorph, Rat
           inverted: true
         type: Local
         visualType: MediumCaution
@@ -597,12 +597,12 @@
         probability: 0.1
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Animal, Vox, Plant, Arachnid, Xenomorph ] # DS14: added Xenomorph
+          type: [ Animal, Rat, Vox, Plant, Arachnid, Xenomorph ] # DS14: added Xenomorph, Rat
           inverted: true
       - !type:HealthChange
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Animal, Vox, Plant, Arachnid, Xenomorph ] # DS14: added Xenomorph
+          type: [ Animal, Rat, Vox, Plant, Arachnid, Xenomorph ] # DS14: added Xenomorph, Rat
           inverted: true
         damage:
           types:
@@ -617,7 +617,7 @@
       - !type:AdjustReagent
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Animal, Arachnid ]
+          type: [ Animal, Rat, Arachnid ]
         reagent: Protein
         amount: 0.5
       - !type:AdjustReagent

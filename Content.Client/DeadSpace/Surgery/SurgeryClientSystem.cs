@@ -2170,7 +2170,8 @@ public sealed partial class SurgeryClientSystem : EntitySystem
         return SurgeryConditions.Has(when, limbs.Zones[index], HasBone(patient, zone), infected, SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs),
             SurgeryRot.Treatable(EntityManager, patient, zone, limbs),
             TryComp<SurgeryCavityComponent>(patient, out var cavity) && cavity.Holds(zone),
-            SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present));
+            SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present),
+            SurgeryConditions.JawBroken(limbs, zone));
     }
 
     private bool HasBone(EntityUid patient, LimbZone zone)

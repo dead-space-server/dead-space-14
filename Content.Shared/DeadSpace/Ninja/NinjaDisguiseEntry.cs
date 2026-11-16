@@ -6,6 +6,7 @@ using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Content.Shared.NPC.Prototypes;
 
 namespace Content.Shared.DeadSpace.Ninja;
 
@@ -57,6 +58,9 @@ public sealed partial class NinjaDisguiseEntry
 
     [DataField]
     public IdentityBlockerCoverage IdentityBlockedCoverage = IdentityBlockerCoverage.NONE;
+
+    [DataField]
+    public List<ProtoId<NpcFactionPrototype>> Factions = new();
 }
 
 [DataDefinition]

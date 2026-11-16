@@ -7,6 +7,7 @@ using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Cuffs.Components;
+using Content.Shared.Damage.Components; // DS14
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
@@ -90,7 +91,15 @@ namespace Content.Shared.Cuffs
             SubscribeLocalEvent<HandcuffComponent, MeleeHitEvent>(OnCuffMeleeHit);
             SubscribeLocalEvent<HandcuffComponent, AddCuffDoAfterEvent>(OnAddCuffDoAfter);
             SubscribeLocalEvent<HandcuffComponent, VirtualItemDeletedEvent>(OnCuffVirtualItemDeleted);
+            SubscribeLocalEvent<StaminaComponent, StaminaCritEnteredEvent>(OnStaminaCrit); // DS14
         }
+
+        // DS14-start
+        private void OnStaminaCrit(Entity<StaminaComponent> ent, ref StaminaCritEnteredEvent args)
+        {
+            _doAfter.CancelDoAfters<UnCuffDoAfterEvent>(ent.Owner);
+        }
+        // DS14-end
 
         private void CheckInteract(Entity<CuffableComponent> ent, ref InteractionAttemptEvent args)
         {
@@ -899,4 +908,7 @@ namespace Content.Shared.Cuffs
     /// <seealso cref="HandcuffComponent.StunBonus"/>
     [ByRefEvent]
     public record struct CheckIncapacitatedCuffEvent(bool Incapacitated);
+
+    [ByRefEvent]
+    public readonly record struct StaminaCritEnteredEvent; // DS14
 }

@@ -90,7 +90,12 @@ public abstract partial class SharedNavMapSystem : EntitySystem
     public void AddOrUpdateNavMapRegion(EntityUid uid, NavMapComponent component, NetEntity regionOwner, NavMapRegionProperties regionProperties)
     {
         // Check if a new region has been added or an existing one has been altered
-        var isDirty = !component.RegionProperties.TryGetValue(regionOwner, out var oldProperties) || oldProperties != regionProperties;
+        // DS14-start: record equality compares Seeds by reference, so a freshly built set always looked changed
+        // and re-sent the whole nav map every update
+        var isDirty = !component.RegionProperties.TryGetValue(regionOwner, out var oldProperties) ||
+                      oldProperties != regionProperties with { Seeds = oldProperties.Seeds } ||
+                      !oldProperties.Seeds.SetEquals(regionProperties.Seeds);
+        // DS14-end
 
         if (isDirty)
         {

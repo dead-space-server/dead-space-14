@@ -1,8 +1,12 @@
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Body.Components; // DS14
+using Content.Shared.Body.Part; // DS14
+using Content.Shared.Body.Systems; // DS14
 using Content.Shared.Clothing;
 using Content.Shared.CriminalRecords.Systems;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.Hands;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement.Components;
@@ -25,6 +29,7 @@ public sealed partial class IdentitySystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedBodySystem _body = default!; // DS14
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedCriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
     [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
@@ -55,7 +60,38 @@ public sealed partial class IdentitySystem : EntitySystem
         SubscribeLocalEvent<IdentityComponent, WearerMaskToggledEvent>((uid, _, _) => QueueIdentityUpdate(uid));
         SubscribeLocalEvent<IdentityComponent, EntityRenamedEvent>((uid, _, _) => QueueIdentityUpdate(uid));
         SubscribeLocalEvent<IdentityComponent, VoiceMaskNameUpdatedEvent>((uid, _, _) => QueueIdentityUpdate(uid));
+
+        //DS14-Start
+        SubscribeLocalEvent<IdentityComponent, BodyPartAddedEvent>(OnBodyHeadPartAdded);
+        SubscribeLocalEvent<IdentityComponent, BodyPartRemovedEvent>(OnBodyHeadPartRemoved);
+        SubscribeLocalEvent<IdentityComponent, LimbSeveredEvent>(OnLimbHeadSevered);
+        SubscribeLocalEvent<IdentityComponent, LimbGraftedEvent>(OnLimbHeadGrafted);
     }
+
+    private void OnBodyHeadPartAdded(Entity<IdentityComponent> ent, ref BodyPartAddedEvent args)
+    {
+        if (args.Part.Comp.PartType == BodyPartType.Head)
+            QueueIdentityUpdate(ent);
+    }
+
+    private void OnBodyHeadPartRemoved(Entity<IdentityComponent> ent, ref BodyPartRemovedEvent args)
+    {
+        if (args.Part.Comp.PartType == BodyPartType.Head)
+            QueueIdentityUpdate(ent);
+    }
+
+    private void OnLimbHeadSevered(Entity<IdentityComponent> ent, ref LimbSeveredEvent args)
+    {
+        if (args.Zone == LimbZone.Head)
+            QueueIdentityUpdate(ent);
+    }
+
+    private void OnLimbHeadGrafted(Entity<IdentityComponent> ent, ref LimbGraftedEvent args)
+    {
+        if (args.Zone == LimbZone.Head)
+            QueueIdentityUpdate(ent);
+    }
+    //DS14-End
 
     /// <summary>
     /// Iterates through all identities that need to be updated.
@@ -144,7 +180,13 @@ public sealed partial class IdentitySystem : EntitySystem
             return;
 
         var representation = GetIdentityRepresentation(ent.Owner);
-        var name = GetIdentityName(ent, representation);
+
+        //DS14-Start
+        var headless = TryComp<BodyComponent>(ent.Owner, out var bodyComp)
+            && !_body.BodyHasPartType(ent.Owner, BodyPartType.Head, bodyComp);
+        //DS14-End
+
+        var name = headless ? representation.ToStringFaceless() : GetIdentityName(ent, representation);
 
         // Clone the old entity's grammar to the identity entity, for loc purposes.
         if (TryComp<GrammarComponent>(ent, out var grammar))
@@ -158,7 +200,7 @@ public sealed partial class IdentitySystem : EntitySystem
             }
 
             // If presumed name is null and we're using that, we set proper noun to be false ("the old woman")
-            if (name != representation.TrueName && representation.PresumedName == null)
+            if (name != representation.TrueName && (representation.PresumedName == null || headless)) // DS14
                 _grammarSystem.SetProperNoun((ident, identityGrammar), false);
 
             Dirty(ident, identityGrammar);

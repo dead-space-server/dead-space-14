@@ -62,6 +62,7 @@ public sealed partial class HitscanPenetrationSystem : EntitySystem
             Target = args.Data.Target,
             OutputTrace = args.Data.OutputTrace,
             IgnoredEntities = ignored,
+            ExecutionTarget = args.Data.ExecutionTarget, // DS14
         };
 
         RaiseLocalEvent(ent.Owner, ref traceEvent);

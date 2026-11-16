@@ -19,6 +19,9 @@ using Content.Shared.StatusIcon;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 using Content.Shared.Ninja.Systems;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Prototypes;
+using Content.Shared.NPC.Systems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
@@ -36,6 +39,7 @@ public sealed partial class NinjaDisguiseSystem : SharedNinjaDisguiseSystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
 
     private const float ScanRange = 1.5f;
 
@@ -156,6 +160,7 @@ public sealed partial class NinjaDisguiseSystem : SharedNinjaDisguiseSystem
         };
 
         CaptureClothing(entry, target);
+        CaptureFactions(entry, target);
         if (TryComp<InventoryComponent>(target, out var targetInventory))
             entry.InventorySpeciesId = targetInventory.SpeciesId;
 
@@ -420,6 +425,7 @@ public sealed partial class NinjaDisguiseSystem : SharedNinjaDisguiseSystem
             entry.Appearance = CaptureAppearance(humanoid);
 
         CaptureClothing(entry, wearer);
+        CaptureFactions(entry, wearer);
 
         if (TryComp<InventoryComponent>(wearer, out var inventory))
             entry.InventorySpeciesId = inventory.SpeciesId;
@@ -454,6 +460,18 @@ public sealed partial class NinjaDisguiseSystem : SharedNinjaDisguiseSystem
             if (TryComp<InventoryComponent>(target, out var inventory))
                 _inventory.SetInventorySpecies(target, entry.InventorySpeciesId ?? appearance.Species.Id, inventory);
         }
+
+        if (entry.Factions.Count > 0 && TryComp<NpcFactionMemberComponent>(target, out var factions))
+        {
+            _faction.ClearFactions((target, factions), dirty: false);
+            _faction.AddFactions((target, factions), new HashSet<ProtoId<NpcFactionPrototype>>(entry.Factions));
+        }
+    }
+
+    private void CaptureFactions(NinjaDisguiseEntry entry, EntityUid target)
+    {
+        if (TryComp<NpcFactionMemberComponent>(target, out var member))
+            entry.Factions = new List<ProtoId<NpcFactionPrototype>>(member.Factions);
     }
 
     private bool TryGetWearer(EntityUid suitUid, [NotNullWhen(true)] out EntityUid wearer)

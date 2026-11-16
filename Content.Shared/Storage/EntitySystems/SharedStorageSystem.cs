@@ -2146,6 +2146,11 @@ public abstract partial class SharedStorageSystem : EntitySystem
         if (!ActionBlocker.CanInteract(playerUid, storageUid))
             return false;
 
+        // DS14-Start
+        if (!_interactionSystem.InRangeUnobstructed(playerUid, storageUid.Value))
+            return false;
+        //DS14-End
+
         player = new(playerUid, hands);
         storage = new(storageUid.Value, storageComp);
         return true;

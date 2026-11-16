@@ -15,6 +15,11 @@ public sealed partial class StepTriggerSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
+    //DS-14
+    private readonly Dictionary<EntityUid, HashSet<EntityUid>> _triggersByTripper = new();
+    private readonly List<EntityUid> _colliding = new();
+    private readonly List<EntityUid> _stale = new();
+
     public override void Initialize()
     {
         UpdatesOutsidePrediction = true;
@@ -22,6 +27,8 @@ public sealed partial class StepTriggerSystem : EntitySystem
 
         SubscribeLocalEvent<StepTriggerComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<StepTriggerComponent, EndCollideEvent>(OnEndCollide);
+        SubscribeLocalEvent<StepTriggerComponent, ComponentShutdown>(OnTriggerShutdown); //DS-14
+        EntityManager.EntityDeleted += OnEntityDeleted; //DS-14
 #if DEBUG
         SubscribeLocalEvent<StepTriggerComponent, ComponentStartup>(OnStartup);
     }
@@ -34,6 +41,14 @@ public sealed partial class StepTriggerSystem : EntitySystem
             Log.Warning($"{ToPrettyString(uid)} has an active step trigger without any fixtures.");
 #endif
     }
+
+    //DS-14 start
+    public override void Shutdown()
+    {
+        EntityManager.EntityDeleted -= OnEntityDeleted;
+        base.Shutdown();
+    }
+    //DS-14 end
 
     public override void Update(float frameTime)
     {
@@ -53,6 +68,10 @@ public sealed partial class StepTriggerSystem : EntitySystem
 
     private bool Update(EntityUid uid, StepTriggerComponent component, TransformComponent transform, EntityQuery<PhysicsComponent> query)
     {
+        //DS-14 start
+        ClearDeleted(uid, component);
+        //DS-14 end
+
         if (!component.Active ||
             component.Colliding.Count == 0)
         {
@@ -64,10 +83,17 @@ public sealed partial class StepTriggerSystem : EntitySystem
             return false;
         //DS-14 end
 
-        foreach (var otherUid in component.Colliding)
+        //DS-14 start
+        _colliding.Clear();
+        _colliding.AddRange(component.Colliding);
+        foreach (var otherUid in _colliding)
         {
+            if (!component.Colliding.Contains(otherUid))
+                continue;
+
             UpdateColliding(uid, component, transform, otherUid, query);
         }
+        //DS-14 end
 
         return false;
     }
@@ -113,6 +139,14 @@ public sealed partial class StepTriggerSystem : EntitySystem
             var evStep = new StepTriggeredOffEvent(uid, otherUid);
             RaiseLocalEvent(uid, ref evStep);
         }
+
+        //DS-14 start
+        if (TerminatingOrDeleted(otherUid))
+        {
+            Forget(uid, component, otherUid);
+            return;
+        }
+        //DS-14 end
 
         component.CurrentlySteppedOn.Add(otherUid);
         Dirty(uid, component);
@@ -177,6 +211,7 @@ public sealed partial class StepTriggerSystem : EntitySystem
 
         if (component.Colliding.Add(otherUid))
         {
+            Link(uid, otherUid); //DS-14
             Dirty(uid, component);
         }
     }
@@ -187,6 +222,8 @@ public sealed partial class StepTriggerSystem : EntitySystem
 
         if (!component.Colliding.Remove(otherUid))
             return;
+
+        Unlink(uid, otherUid); //DS-14
 
         var wasSteppedOn = component.CurrentlySteppedOn.Remove(otherUid);
         Dirty(uid, component);
@@ -252,6 +289,93 @@ public sealed partial class StepTriggerSystem : EntitySystem
             EnsureComp<StepTriggerActiveComponent>(uid);
         Dirty(uid, component);
     }
+
+    //DS-14 start
+    private void OnTriggerShutdown(Entity<StepTriggerComponent> ent, ref ComponentShutdown args)
+    {
+        foreach (var other in ent.Comp.Colliding)
+            Unlink(ent.Owner, other);
+
+        foreach (var other in ent.Comp.CurrentlySteppedOn)
+            Unlink(ent.Owner, other);
+    }
+
+    private void OnEntityDeleted(Entity<MetaDataComponent> ent)
+    {
+        if (!_triggersByTripper.Remove(ent.Owner, out var triggers))
+            return;
+
+        foreach (var trigger in triggers)
+        {
+            if (!TryComp(trigger, out StepTriggerComponent? component))
+                continue;
+
+            var removed = component.Colliding.Remove(ent.Owner);
+            var stepped = component.CurrentlySteppedOn.Remove(ent.Owner);
+            if (!removed && !stepped)
+                continue;
+
+            if (component.Colliding.Count == 0)
+                RemCompDeferred<StepTriggerActiveComponent>(trigger);
+
+            Dirty(trigger, component);
+        }
+    }
+
+    private void ClearDeleted(EntityUid uid, StepTriggerComponent component)
+    {
+        _stale.Clear();
+        foreach (var other in component.Colliding)
+        {
+            if (TerminatingOrDeleted(other))
+                _stale.Add(other);
+        }
+
+        foreach (var other in component.CurrentlySteppedOn)
+        {
+            if (TerminatingOrDeleted(other))
+                _stale.Add(other);
+        }
+
+        foreach (var other in _stale)
+            Forget(uid, component, other);
+    }
+
+    private void Forget(EntityUid uid, StepTriggerComponent component, EntityUid otherUid)
+    {
+        Unlink(uid, otherUid);
+        var removed = component.Colliding.Remove(otherUid);
+        var stepped = component.CurrentlySteppedOn.Remove(otherUid);
+        if (!removed && !stepped)
+            return;
+
+        if (component.Colliding.Count == 0)
+            RemCompDeferred<StepTriggerActiveComponent>(uid);
+
+        Dirty(uid, component);
+    }
+
+    private void Link(EntityUid trigger, EntityUid tripper)
+    {
+        if (!_triggersByTripper.TryGetValue(tripper, out var triggers))
+        {
+            triggers = new HashSet<EntityUid>();
+            _triggersByTripper.Add(tripper, triggers);
+        }
+
+        triggers.Add(trigger);
+    }
+
+    private void Unlink(EntityUid trigger, EntityUid tripper)
+    {
+        if (!_triggersByTripper.TryGetValue(tripper, out var triggers))
+            return;
+
+        triggers.Remove(trigger);
+        if (triggers.Count == 0)
+            _triggersByTripper.Remove(tripper);
+    }
+    //DS-14 end
 }
 
 [ByRefEvent]

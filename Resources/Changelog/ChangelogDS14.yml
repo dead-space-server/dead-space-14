@@ -10224,3 +10224,214 @@ Entries:
   changes:
   - type: Fix
     message: Хитрега аномалий
+- id: 978
+  author: BlueDogDoc
+  time: '2026-11-15T05:02:05.609890+00:00'
+  pr: 2764
+  changes:
+  - type: Tweak
+    message: Субботник
+- id: 979
+  author: BlueDogDoc
+  time: '2026-11-15T05:05:37.175796+00:00'
+  pr: 2759
+  changes:
+  - type: Fix
+    message: Рега прожектайлов (метки лавы, рпг 70, чайна)
+- id: 980
+  author: Atickov
+  time: '2026-11-15T05:07:35.520556+00:00'
+  pr: 2757
+  changes:
+  - type: Fix
+    message: Теперь чтобы получить список геймрулов необходимо быть администратором..
+- id: 981
+  author: BlueDogDoc
+  time: '2026-11-15T05:09:10.037232+00:00'
+  pr: 2760
+  changes:
+  - type: Fix
+    message: проверка дистанции у дефиба
+- id: 982
+  author: pe4enkakris
+  time: '2026-11-15T05:16:26.370491+00:00'
+  pr: 2752
+  changes:
+  - type: Add
+    message: Таран для выбивания структур - 100 структур 15 ушиб, спрайт by pivo_3amopckoe.
+      Доступен 1 шт в СбТех. Спрайт для маяка ниндзи by fyrmor. Медипен гемостатина
+      10u 4шт в сбтех, спрайт by kieru.
+  - type: Tweak
+    message: Деревянный протез в сбтех 2->4шт. Шлем с фонариком 3->5шт.
+  - type: Fix
+    message: В сбтех выдавалось по 1 жгуту вместо четырёх, итого 4->20шт. Фикс статов
+      шлемов.
+- id: 983
+  author: BlueDogDoc
+  time: '2026-11-15T06:33:21.287171+00:00'
+  pr: 2762
+  changes:
+  - type: Add
+    message: Станкрит сбивает снятие наручников.
+- id: 984
+  author: BlueDogDoc
+  time: '2026-11-15T06:35:01.090976+00:00'
+  pr: 2763
+  changes:
+  - type: Add
+    message: У брони отображаются зоны, которые она защищает.
+- id: 985
+  author: Manstari
+  time: '2026-11-15T08:45:53.406172+00:00'
+  pr: 2767
+  changes:
+  - type: Fix
+    message: Теперь в манифестах ну точно отображаются псевдонимы
+  - type: Fix
+    message: В тайпановской ветке изучение дубинки не уходит в никуда
+- id: 986
+  author: BlueDogDoc
+  time: '2026-11-15T11:09:35.928825+00:00'
+  pr: 2765
+  changes:
+  - type: Add
+    message: бабл подсказка при указании
+- id: 987
+  author: BlueDogDoc
+  time: '2026-11-15T11:23:54.274183+00:00'
+  pr: 2766
+  changes:
+  - type: Tweak
+    message: Включили назад архив камер после тестов нагрузки
+- id: 988
+  author: IvanKuvalda
+  time: '2026-11-16T02:12:15.250081+00:00'
+  pr: 2770
+  changes:
+  - type: Fix
+    message: хотфикс ЧЕГО-ТО
+- id: 989
+  author: IvanKuvalda
+  time: '2026-11-16T02:14:00.257233+00:00'
+  pr: 2755
+  changes:
+  - type: Fix
+    message: Слаймам ТЕПРЕЬ нельзя сломать челюгу
+- id: 990
+  author: IvanKuvalda
+  time: '2026-11-16T02:17:27.997345+00:00'
+  pr: 2750
+  changes:
+  - type: Add
+    message: Без головы вас нельзя опознать
+- id: 991
+  author: IvanKuvalda
+  time: '2026-11-16T02:20:01.456871+00:00'
+  pr: 2746
+  changes:
+  - type: Fix
+    message: Бесконечно отрезать уши больше не получится
+- id: 992
+  author: IvanKuvalda
+  time: '2026-11-16T02:23:25.033732+00:00'
+  pr: 2744
+  changes:
+  - type: Add
+    message: Кнопка выкинуть обломок в магнит обломков
+- id: 993
+  author: IvanKuvalda
+  time: '2026-11-16T02:26:44.473654+00:00'
+  pr: 2717
+  changes:
+  - type: Tweak
+    message: если в конечности больше 90% МЕХАНИЧЕСКОГО ИЛИ ФИЗИЧЕСКОГО урона, то
+      просто появляется ШАНС на разрыв органов при получении в дальнейшем подобного
+      типа урона
+- id: 994
+  author: pe4enkakris
+  time: '2026-11-16T02:28:07.149877+00:00'
+  pr: 2777
+  changes:
+  - type: Add
+    message: Набор пополнения СиндиСоки за 15 тк ЯО, но не лоне. В шкафы ГВ ПМ БМ
+      добавлено 1 бутылочка гемостатина. ОПНУ иммунитет к влиянию обелиска и его осколкам,
+      как у АПБТ. Спрайт шлема осщ для плафеимов by Teffy.
+  - type: Tweak
+    message: 'Респрайт пожарных топоров by pivo_3amopckoe. Ёмкость инъекторов гемостатина:
+      10->4u.'
+  - type: Fix
+    message: Статы шлемов/капюшонов лавы, командира ЯО, противоударн. шлема.
+- id: 995
+  author: Atickov
+  time: '2026-11-16T02:30:56.853281+00:00'
+  pr: 2774
+  changes:
+  - type: Fix
+    message: ниндзю теперь могут заметить турели
+- id: 996
+  author: Atickov
+  time: '2026-11-16T02:32:50.398311+00:00'
+  pr: 2747
+  changes:
+  - type: Fix
+    message: У заводного щита появилась текстура
+  - type: Fix
+    message: мостики теперь можно ставить поверх пола
+  - type: Fix
+    message: РСУ теперь не крутит постройку в рандомную сторону
+  - type: Fix
+    message: мертвая фауна больше не сбрасывает спрайт крита или смерти если пошевелится
+  - type: Fix
+    message: мини драконы больше не мерзнут
+  - type: Fix
+    message: с экспы можно улететь даже если на ней фауна
+  - type: Fix
+    message: голосовой сенсор получил локализацию
+- id: 997
+  author: MTF97
+  time: '2026-11-16T02:37:54.364976+00:00'
+  pr: 2751
+  changes:
+  - type: Tweak
+    message: Все прототипы одежды структурированы и приведены в порядок;
+  - type: Fix
+    message: Некорректное название подвидов офицеров ЦК.
+- id: 998
+  author: BlueDogDoc
+  time: '2026-11-16T02:40:41.227590+00:00'
+  pr: 2779
+  changes:
+  - type: Fix
+    message: Король крыс, его пезанты и миазмы.
+- id: 999
+  author: BlueDogDoc
+  time: '2026-11-16T02:44:22.631319+00:00'
+  pr: 2778
+  changes:
+  - type: Add
+    message: Полевая и полноценная операция по вправлению челюсти.
+  - type: Tweak
+    message: Аппарат ЭШТ ломает челюсть, а не голову без кляпа.
+- id: 1000
+  author: BlueDogDoc
+  time: '2026-11-16T02:45:55.072753+00:00'
+  pr: 2776
+  changes:
+  - type: Add
+    message: В меню возможность отключать указание, через облако
+- id: 1001
+  author: BlueDogDoc
+  time: '2026-11-16T02:52:23.285279+00:00'
+  pr: 2761
+  changes:
+  - type: Add
+    message: Групповые анимации
+  - type: Add
+    message: Анимации животных
+- id: 1002
+  author: Manstari
+  time: '2026-11-16T02:54:24.785118+00:00'
+  pr: 2768
+  changes:
+  - type: Fix
+    message: Локализован знак PODS

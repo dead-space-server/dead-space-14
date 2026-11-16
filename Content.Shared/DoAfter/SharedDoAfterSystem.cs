@@ -385,6 +385,33 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         Dirty(entity, comp);
     }
 
+    // DS14-start
+    public void CancelDoAfters<TEvent>(EntityUid entity, DoAfterComponent? comp = null) where TEvent : DoAfterEvent
+    {
+        if (!Resolve(entity, ref comp, false))
+            return;
+
+        List<ushort>? toCancel = null;
+        foreach (var (id, doAfter) in comp.DoAfters)
+        {
+            if (doAfter.Cancelled || doAfter.Completed)
+                continue;
+
+            if (doAfter.Args.Event is not TEvent)
+                continue;
+
+            toCancel ??= new List<ushort>();
+            toCancel.Add(id);
+        }
+
+        if (toCancel == null)
+            return;
+
+        foreach (var id in toCancel)
+            Cancel(entity, id, comp);
+    }
+    // DS14-end
+
     private void InternalCancel(DoAfter doAfter, DoAfterComponent component, bool force = false)
     {
         if (doAfter.Cancelled || (doAfter.Completed && !force))

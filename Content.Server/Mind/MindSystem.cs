@@ -50,6 +50,11 @@ public sealed partial class MindSystem : SharedMindSystem
         if (mind.OwnedEntity != null && !TerminatingOrDeleted(mind.OwnedEntity.Value))
             TransferTo(uid, null, mind: mind, createGhost: false);
 
+        //DS-14 start
+        if (mind.VisitingEntity != null)
+            RemoveVisitingEntity(uid, mind);
+        //DS-14 end
+
         mind.OwnedEntity = null;
     }
 
@@ -147,6 +152,11 @@ public sealed partial class MindSystem : SharedMindSystem
     public override void UnVisit(EntityUid mindId, MindComponent? mind = null)
     {
         base.UnVisit(mindId, mind);
+
+        //DS-14 start
+        if (mind == null && TerminatingOrDeleted(mindId))
+            return;
+        //DS-14 end
 
         if (!Resolve(mindId, ref mind))
             return;

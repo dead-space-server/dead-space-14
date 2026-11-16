@@ -41,6 +41,7 @@
   recipes:
   - ThrowingKnife
   - ClothingHandsKnuckleDustersSyndicate
+  - Truncheon
 
 ## Grenades
 - type: latheRecipePack

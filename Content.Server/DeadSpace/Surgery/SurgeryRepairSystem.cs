@@ -17,6 +17,7 @@ public sealed partial class SurgeryRepairSystem : EntitySystem
     private const string BrainMend = "BrainMend";
     private const string TissueMend = "TissueMend";
     private const string RotMend = "RotMend";
+    private const string JawMend = "JawMend";
     private const string Rules = "Default";
 
     private static readonly Dictionary<string, string[]> ZoneHeals = new()
@@ -67,6 +68,18 @@ public sealed partial class SurgeryRepairSystem : EntitySystem
         {
             args.Handled = true;
             MendMind(ent, args.User);
+            return;
+        }
+
+        if (!args.Handled && args.Effect == JawMend)
+        {
+            args.Handled = true;
+            if (TryComp<LimbBodyComponent>(ent, out var jaw) && jaw.Mouth > 0f)
+            {
+                jaw.Mouth = 0f;
+                Dirty(ent, jaw);
+                _popup.PopupEntity(Loc.GetString("surgery-jaw-set"), ent, args.User);
+            }
             return;
         }
 

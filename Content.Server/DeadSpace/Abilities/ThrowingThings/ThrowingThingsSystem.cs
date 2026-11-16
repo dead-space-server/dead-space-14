@@ -20,6 +20,7 @@ public sealed partial class ThrowingThingsSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private SharedProjectileSystem _projectiles = default!;
 
     public override void Initialize()
     {
@@ -124,8 +125,8 @@ public sealed partial class ThrowingThingsSystem : EntitySystem
 
         if (TryComp<ProjectileComponent>(item, out var projectile))
         {
-            projectile.Shooter = shooter;
-            projectile.Weapon = shooter;
+            _projectiles.SetShooter(item, projectile, shooter);
+            _projectiles.SetWeapon(item, projectile, shooter);
         }
     }
 

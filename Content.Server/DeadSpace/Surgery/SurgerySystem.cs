@@ -850,8 +850,10 @@ public sealed partial class SurgerySystem : EntitySystem
         }
         var stepVerb = SurgeryVerbKind.Inspect;
         string stepOrgan = "";
+        SurgeryOperationPrototype? stepOperation = null;
         if (Operation(patient.Value, site, out var operation) && site.Step < operation.Steps.Count)
         {
+            stepOperation = operation;
             stepVerb = operation.Steps[site.Step].Verb;
             stepOrgan = operation.Steps[site.Step].Organ;
         }
@@ -913,6 +915,20 @@ public sealed partial class SurgerySystem : EntitySystem
             result.Rejected = true;
             result.Key = "surgery-organ-gone";
             advance = false;
+        }
+        else if (result.RemoveOrgan && stepOperation != null && site.Step < stepOperation.Steps.Count
+                 && (stepOperation.Steps[site.Step].Drop != null || stepOperation.Steps[site.Step].DropBySpecies.Count > 0))
+        {
+            var partId = site.Part.Length > 0 ? site.Part : SurgeryPartPrototype.For(_prototype, stepOperation.ID);
+            if (partId.Length > 0
+                && TryComp<SurgeryPartsGoneComponent>(patient.Value, out var lostParts)
+                && lostParts.Parts.Contains(partId))
+            {
+                result.RemoveOrgan = false;
+                result.Rejected = true;
+                result.Key = "surgery-organ-gone";
+                advance = false;
+            }
         }
 
         if (result.RemoveImplant && (implantSlot.Length == 0 || !_implants.Occupied(patient.Value, implantSlot)))
@@ -2357,9 +2373,10 @@ public sealed partial class SurgerySystem : EntitySystem
         var cracked = SurgeryConditions.OrganCracked(limbs.Organs, zone);
         var mind = SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present);
         var foreign = Foreign(patient, zone);
+        var jaw = SurgeryConditions.JawBroken(limbs, zone);
         foreach (var when in SurgeryConditions.Order)
         {
-            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs), foreign: foreign, mind: mind))
+            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs), foreign: foreign, mind: mind, jaw: jaw))
                 continue;
 
             string? fallback = null;
@@ -2429,7 +2446,7 @@ public sealed partial class SurgerySystem : EntitySystem
         if (operation.When.Length > 0 && operation.When != "Severed"
             && !SurgeryConditions.Has(operation.When, limbs.Zones[index], HasLayer(patient, zone, SurgeryLayerKind.Bone), Infected(patient, zone),
                 SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs), SurgeryRot.Treatable(EntityManager, patient, zone, limbs), Foreign(patient, zone),
-                SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present)))
+                SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present), SurgeryConditions.JawBroken(limbs, zone)))
             return false;
 
         if (operation.Implant.Length > 0 && !ImplantMenuFits(patient, operation))

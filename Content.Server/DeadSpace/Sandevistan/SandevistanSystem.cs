@@ -4,6 +4,7 @@ using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Shared.Actions;
 using Content.Shared.Chat;
+using Content.Shared.Cuffs;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -764,6 +765,9 @@ public sealed partial class SandevistanSystem : EntitySystem
 
         EnsureComp<ActiveStaminaComponent>(uid);
         Dirty(uid, stamina);
+
+        var critEntered = new StaminaCritEnteredEvent();
+        RaiseLocalEvent(uid, ref critEntered);
     }
 
     private bool IsStaminaExhausted(EntityUid uid)

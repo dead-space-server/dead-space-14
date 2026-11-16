@@ -72,6 +72,7 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(CCVars.OpaqueStorageWindow, OpaqueStorageWindowCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatEnableFancyBubbles, FancySpeechBubblesCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatFancyNameBackground, FancyNameBackgroundsCheckBox);
+        Control.AddOptionCheckBox(CCCCVars.PointingBubbles, PointingBubblesCheckBox); // DS14
         Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
         Control.AddOptionCheckBox(CCCCVars.MultipleInventoryWindows, MultipleInventoryWindowsCheckBox); // DS14
         Control.AddOptionCheckBox(CCCCVars.ActionsRestoreItemSlots, ActionsRestoreItemSlotsCheckBox); // DS14
