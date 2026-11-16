@@ -77,6 +77,8 @@
   parent: MobSpaceBasic
   description: It looks friendly. Why don't you give it a hug?
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterBear
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Animals/bear.rsi
@@ -127,6 +129,8 @@
   parent: [MobSpaceBasic, StripableInventoryBase]
   description: It looks friendly. Why don't you give it a hug?
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterKangaroo
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Animals/kangaroo.rsi
@@ -594,6 +598,8 @@
   name: snail
   description: Revolting unless you're french.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterSnail
   # DS14-start
   - type: CarrySize
     size: Small

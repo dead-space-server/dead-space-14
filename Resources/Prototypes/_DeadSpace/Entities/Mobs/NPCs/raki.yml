@@ -4,6 +4,8 @@
   id: MobRak
   description: Ракообразный рак. 
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterRak
   - type: CarrySize
     size: Small
   - type: Sprite
