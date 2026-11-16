@@ -199,7 +199,7 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         }
 
         // DS14-start
-        if (!component.DoAfters.ContainsKey(id.Value.Index))
+        if (_tag.HasTag(doAfter.User, InstantDoAftersTag))
             return DoAfterStatus.Finished;
         // DS14-end
 

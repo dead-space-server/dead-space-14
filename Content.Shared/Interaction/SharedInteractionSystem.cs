@@ -932,7 +932,11 @@ namespace Content.Shared.Interaction
             {
                 foreach (var anchored in _map.GetAnchoredEntities((diagonalGridUid, diagonalGrid), targetCoords))
                 {
-                    if (anchored != target && _tagSystem.HasTag(anchored, DiagonalTag))
+                    if (anchored == target || !_tagSystem.HasTag(anchored, DiagonalTag))
+                        continue;
+
+                    var local = System.Numerics.Vector2.Transform(originCoords.Position, _transform.GetInvWorldMatrix(anchored));
+                    if (local.X < local.Y)
                         ignored.Add(anchored);
                 }
             }
