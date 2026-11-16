@@ -97,6 +97,23 @@
     game: Hold
 
 - type: surgeryOperation
+  id: FieldSetJaw
+  side: Front
+  zone: Head
+  name: surgery-op-field-jaw
+  field: true
+  when: Jaw
+  order: 2
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: head_m
+  steps:
+  - verb: SetBone
+    layer: Bone
+    game: Hold
+    effect: JawMend
+
+- type: surgeryOperation
   id: FieldAmputate
   side: Front
   name: surgery-op-amputate

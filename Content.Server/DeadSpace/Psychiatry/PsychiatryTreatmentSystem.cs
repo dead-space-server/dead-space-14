@@ -14,6 +14,7 @@ using Content.Shared.Changeling.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.DeadSpace.Psychiatry;
 using Content.Shared.DoAfter;
@@ -76,6 +77,7 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    private const float BrokenJawTrauma = 30f;
 
     private static readonly Vector2i[] Cardinal = [new(1, 0), new(-1, 0), new(0, 1), new(0, -1)];
 
@@ -312,19 +314,7 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
     private void StrikeLiving(Entity<ShockTherapyComponent> ent, EntityUid target, EntityUid user, float hitDamage, bool first)
     {
         if (first)
-        {
-            var hasGag = _inventory.TryGetSlotEntity(target, "mask", out var mask) &&
-                         HasComp<MedicalGagComponent>(mask.Value);
-            if (!hasGag)
-            {
-                var crush = new DamageSpecifier();
-                crush.DamageDict["Blunt"] = FixedPoint2.New(35);
-                _damageable.TryChangeDamage(target, crush, origin: user);
-                if (TryComp<BloodstreamComponent>(target, out var blood))
-                    _blood.TryModifyBleedAmount((target, blood), 2f);
-                _popup.PopupEntity(Loc.GetString("psychiatry-shock-no-gag"), target, PopupType.LargeCaution);
-            }
-        }
+            BreakJawUngagged(target, user);
 
         var shock = new DamageSpecifier();
         shock.DamageDict["Shock"] = FixedPoint2.New(hitDamage);
@@ -360,20 +350,29 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("psychiatry-shock-done", ("stages", (int) SchizophreniaStage.Acute)), user, user, PopupType.Medium);
     }
 
+    private void BreakJawUngagged(EntityUid target, EntityUid user)
+    {
+        if (_inventory.TryGetSlotEntity(target, "mask", out var mask) && HasComp<MedicalGagComponent>(mask.Value))
+            return;
+
+        var crush = new DamageSpecifier();
+        crush.DamageDict["Blunt"] = FixedPoint2.New(35);
+        _damageable.TryChangeDamage(target, crush, origin: user);
+        if (TryComp<BloodstreamComponent>(target, out var blood))
+            _blood.TryModifyBleedAmount((target, blood), 2f);
+
+        if (TryComp<LimbBodyComponent>(target, out var limbs) && limbs.Mouth < BrokenJawTrauma)
+        {
+            limbs.Mouth = BrokenJawTrauma;
+            Dirty(target, limbs);
+        }
+
+        _popup.PopupEntity(Loc.GetString("psychiatry-shock-no-gag"), target, PopupType.LargeCaution);
+    }
+
     private void ShockBody(Entity<ShockTherapyComponent> ent, EntityUid target, EntityUid user, int damage)
     {
-        var hasGag = _inventory.TryGetSlotEntity(target, "mask", out var mask) &&
-                     HasComp<MedicalGagComponent>(mask.Value);
-
-        if (!hasGag)
-        {
-            var crush = new DamageSpecifier();
-            crush.DamageDict["Blunt"] = FixedPoint2.New(35);
-            _damageable.TryChangeDamage(target, crush, origin: user);
-            if (TryComp<BloodstreamComponent>(target, out var blood))
-                _blood.TryModifyBleedAmount((target, blood), 2f);
-            _popup.PopupEntity(Loc.GetString("psychiatry-shock-no-gag"), target, PopupType.LargeCaution);
-        }
+        BreakJawUngagged(target, user);
 
         _electro.TryDoElectrocution(target, ent.Owner, damage, TimeSpan.FromSeconds(3), refresh: true, ignoreInsulation: true);
         ShockPuddleNeighbors(ent.Owner, target, damage, user);

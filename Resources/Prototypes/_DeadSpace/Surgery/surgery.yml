@@ -1735,6 +1735,30 @@
     undo: Incise
 
 - type: surgeryOperation
+  id: MendJaw
+  side: Front
+  zone: Head
+  name: surgery-op-mend-jaw
+  when: Jaw
+  order: 1
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: head_m
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: MendBone
+    layer: Bone
+    effect: JawMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
   id: SealBleed
   side: Front
   name: surgery-op-seal-bleed
