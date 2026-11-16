@@ -5,6 +5,7 @@ using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.FixedPoint;
+using Content.Shared.Interaction; // DS14
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Storage.EntitySystems;
 using JetBrains.Annotations;
@@ -34,6 +35,7 @@ namespace Content.Server.Chemistry.EntitySystems
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly OpenableSystem _openable = default!;
         [Dependency] private readonly HandsSystem _handsSystem = default!;
+        [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!; // DS14
 
         public override void Initialize()
         {
@@ -117,8 +119,21 @@ namespace Content.Server.Chemistry.EntitySystems
             return inventory;
         }
 
+        // DS14-start
+        private bool ValidateReach(Entity<ReagentDispenserComponent> reagentDispenser, BoundUserInterfaceMessage message)
+        {
+            return message.Actor.Valid
+                && _interactionSystem.InRangeUnobstructed(message.Actor, reagentDispenser.Owner);
+        }
+        // DS14-end
+
         private void OnSetDispenseAmountMessage(Entity<ReagentDispenserComponent> reagentDispenser, ref ReagentDispenserSetDispenseAmountMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(reagentDispenser, message))
+                return;
+            // DS14-end
+
             reagentDispenser.Comp.DispenseAmount = message.ReagentDispenserDispenseAmount;
             UpdateUiState(reagentDispenser);
             ClickSound(reagentDispenser);
@@ -126,6 +141,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnDispenseReagentMessage(Entity<ReagentDispenserComponent> reagentDispenser, ref ReagentDispenserDispenseReagentMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(reagentDispenser, message))
+                return;
+            // DS14-end
+
             if (!TryComp<StorageComponent>(reagentDispenser.Owner, out var storage))
             {
                 return;
@@ -158,6 +178,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnEjectReagentMessage(Entity<ReagentDispenserComponent> reagentDispenser, ref ReagentDispenserEjectContainerMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(reagentDispenser, message))
+                return;
+            // DS14-end
+
             if (!TryComp<StorageComponent>(reagentDispenser.Owner, out var storage))
             {
                 return;
@@ -173,6 +198,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnClearContainerSolutionMessage(Entity<ReagentDispenserComponent> reagentDispenser, ref ReagentDispenserClearContainerSolutionMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(reagentDispenser, message))
+                return;
+            // DS14-end
+
             var outputContainer = _itemSlotsSystem.GetItemOrNull(reagentDispenser, SharedReagentDispenser.OutputSlotName);
             if (outputContainer is not { Valid: true } || !_solutionContainerSystem.TryGetFitsInDispenser(outputContainer.Value, out var solution, out _))
                 return;
