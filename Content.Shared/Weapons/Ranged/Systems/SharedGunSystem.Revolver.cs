@@ -29,7 +29,6 @@ public partial class SharedGunSystem
         SubscribeLocalEvent<RevolverAmmoProviderComponent, InteractUsingEvent>(OnRevolverInteractUsing);
         SubscribeLocalEvent<RevolverAmmoProviderComponent, GetAmmoCountEvent>(OnRevolverGetAmmoCount);
         SubscribeLocalEvent<RevolverAmmoProviderComponent, UseInHandEvent>(OnRevolverUse);
-        SubscribeLocalEvent<RevolverAmmoProviderComponent, EntRemovedFromContainerMessage>(OnRevolverAmmoRemoved); //DS-14
     }
 
     private void OnRevolverUse(Entity<RevolverAmmoProviderComponent> ent, ref UseInHandEvent args)
@@ -98,7 +97,7 @@ public partial class SharedGunSystem
     }
 
     //DS-14 start
-    private void OnRevolverAmmoRemoved(Entity<RevolverAmmoProviderComponent> ent, ref EntRemovedFromContainerMessage args)
+    protected void OnRevolverAmmoRemoved(Entity<RevolverAmmoProviderComponent> ent, ref EntRemovedFromContainerMessage args)
     {
         if (_netManager.IsClient || Timing.ApplyingState || args.Container.ID != RevolverContainer)
             return;
