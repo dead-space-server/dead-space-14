@@ -73,6 +73,8 @@
   strain: 14
   cooldown: 30
   absurdity: 1
+  allows:
+  - RuneModifierDuration
   effects:
   - !type:RuneComponentsEffect
     fromAction: ActionSlippery
@@ -86,7 +88,7 @@
   element: RuneElementWater
   targeting: Self
   strain: 16
-  cooldown: 30
+  cooldown: 120
   effects:
   - !type:RuneExtinguishEffect
     target: Caster
@@ -208,6 +210,8 @@
   strain: 16
   cooldown: 8
   loudness: 1
+  allows:
+  - RuneModifierDuration
   effects:
   - !type:RuneStaminaEffect
     amount: 25
@@ -222,7 +226,7 @@
   element: RuneElementAir
   targeting: Self
   strain: 6
-  cooldown: 3
+  cooldown: 7
   effects:
   - !type:RuneRecallEffect
 

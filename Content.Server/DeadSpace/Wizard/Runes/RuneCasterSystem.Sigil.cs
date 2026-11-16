@@ -14,12 +14,30 @@ public sealed partial class RuneCasterSystem
     private void InitializeSigil()
     {
         SubscribeNetworkEvent<RuneSigilClearMessage>(OnSigilClear);
+        SubscribeNetworkEvent<RuneSigilUndoMessage>(OnSigilUndo);
     }
 
     private void OnSigilClear(RuneSigilClearMessage msg, EntitySessionEventArgs args)
     {
         if (TryGetCaster(args, out var caster))
             EndSigil(caster, RuneSigilState.Fade);
+    }
+
+    private void OnSigilUndo(RuneSigilUndoMessage msg, EntitySessionEventArgs args)
+    {
+        if (!TryGetCaster(args, out var caster) ||
+            !TryComp<RuneSigilComponent>(caster, out var sigil) ||
+            sigil.State != RuneSigilState.Drawing)
+            return;
+
+        if (msg.Chain.Count == 0)
+        {
+            EndSigil(caster, RuneSigilState.Fade);
+            return;
+        }
+
+        if (msg.Chain.Count < sigil.Chain.Count && ValidChain(caster.Comp, msg.Chain))
+            DrawSigil(caster, msg.Chain);
     }
 
     private void DrawSigil(EntityUid caster, List<string> chain)

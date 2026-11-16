@@ -71,7 +71,7 @@
   element: RuneElementLife
   range: 12
   strain: 14
-  cooldown: 4
+  cooldown: 15
   effects:
   - !type:RuneProjectileEffect
     prototype: RuneProjectileMending
@@ -149,7 +149,7 @@
   element: RuneElementIce
   range: 8
   strain: 18
-  cooldown: 10
+  cooldown: 50
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneSlickTile
@@ -171,7 +171,7 @@
   element: RuneElementEarth
   range: 8
   strain: 20
-  cooldown: 14
+  cooldown: 60
   loudness: 1
   effects:
   - !type:RuneSpawnEffect
@@ -349,7 +349,7 @@
   element: RuneElementLife
   targeting: Self
   strain: 26
-  cooldown: 16
+  cooldown: 30
   effects:
   - !type:RuneDamageEffect
     target: AroundCaster
@@ -460,7 +460,9 @@
   targeting: Entity
   range: 2
   strain: 18
-  cooldown: 20
+  cooldown: 30
+  allows:
+  - RuneModifierDuration
   effects:
   - !type:RuneComponentsEffect
     template: RuneStoneSkinTemplate
@@ -475,7 +477,7 @@
   targeting: Entity
   range: 2
   strain: 18
-  cooldown: 8
+  cooldown: 15
   loudness: 1
   effects:
   - !type:RuneStaminaEffect
@@ -494,7 +496,7 @@
   targeting: Entity
   range: 2
   strain: 22
-  cooldown: 10
+  cooldown: 30
   effects:
   - !type:RuneDamageEffect
     ignoreResistances: true
@@ -516,6 +518,8 @@
   cooldown: 180
   loudness: 4
   requiresClothes: true
+  forbids:
+  - RuneModifierRange
   effects:
   - !type:RuneGibEffect
 
@@ -526,10 +530,12 @@
   element: RuneElementChaos
   targeting: Entity
   range: 2
-  strain: 35
+  strain: 54
   cooldown: 150
   absurdity: 2
   requiresClothes: true
+  forbids:
+  - RuneModifierRange
   effects:
   - !type:RuneComponentsEffect
     fromAction: ActionCluwne
@@ -543,7 +549,7 @@
   element: RuneElementFire
   targeting: Self
   strain: 18
-  cooldown: 25
+  cooldown: 37.5
   loudness: 1
   effects:
   - !type:RuneExtinguishEffect
@@ -572,7 +578,7 @@
   element: RuneElementIce
   targeting: Self
   strain: 20
-  cooldown: 30
+  cooldown: 45
   effects:
   - !type:RuneComponentsEffect
     target: Caster
@@ -587,7 +593,7 @@
   element: RuneElementEarth
   targeting: Self
   strain: 22
-  cooldown: 30
+  cooldown: 90
   loudness: 1
   effects:
   - !type:RuneOrbitShieldEffect
@@ -606,7 +612,7 @@
   element: RuneElementLightning
   targeting: Self
   strain: 22
-  cooldown: 25
+  cooldown: 37.5
   loudness: 1
   effects:
   - !type:RuneSlowEffect
@@ -627,7 +633,7 @@
   element: RuneElementLife
   targeting: Self
   strain: 24
-  cooldown: 30
+  cooldown: 45
   effects:
   - !type:RuneDamageEffect
     target: Caster
@@ -640,14 +646,12 @@
     target: Caster
     duration: 20
     alert: RuneAlertRegeneration
-    perSecond:
-      types:
-        Bloodloss: -1
-      groups:
-        Brute: -3
-        Burn: -3
-        Toxin: -1.5
-        Airloss: -2
+    healPerSecond: 15
+    organMendPerSecond: 0.15
+  - !type:RuneStatusEffect
+    target: Caster
+    status: StatusEffectPressureImmunity
+    time: 20
 
 - type: wizardRuneSpell
   id: RuneSpellJaunt
@@ -656,7 +660,7 @@
   element: RuneElementVoid
   targeting: Self
   strain: 22
-  cooldown: 20
+  cooldown: 30
   effects:
   - !type:RunePolymorphEffect
     target: Caster
@@ -670,7 +674,7 @@
   element: RuneElementChaos
   targeting: Self
   strain: 14
-  cooldown: 20
+  cooldown: 30
   absurdity: 2
   effects:
   - !type:RuneRandomEffect

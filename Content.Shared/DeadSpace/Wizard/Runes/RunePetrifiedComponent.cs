@@ -6,9 +6,11 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.DeadSpace.Wizard.Runes;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class RunePetrifiedComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public LocId? Description;
 }
 
 [RegisterComponent, NetworkedComponent]

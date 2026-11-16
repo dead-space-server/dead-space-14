@@ -8,6 +8,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.DeadSpace.Wizard.Runes;
 
@@ -38,11 +39,12 @@ public sealed class RuneSigilOverlay : Overlay
     private readonly List<Vector2> _quad = new(6);
     private readonly List<RunePrototype> _runes = new();
 
-    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities | OverlaySpace.WorldSpace;
+    public override OverlaySpace Space => OverlaySpace.WorldSpaceEntities | OverlaySpace.WorldSpace;
 
     public RuneSigilOverlay(RuneVisualsSystem system)
     {
         IoCManager.InjectDependencies(this);
+        ZIndex = (int) DrawDepth.DeadMobs;
         _system = system;
         _transform = _entity.System<TransformSystem>();
         _sprite = _entity.System<SpriteSystem>();
@@ -54,7 +56,7 @@ public sealed class RuneSigilOverlay : Overlay
     {
         var handle = args.WorldHandle;
         var eye = args.Viewport.Eye?.Rotation ?? Angle.Zero;
-        if (args.Space == OverlaySpace.WorldSpaceBelowEntities)
+        if (args.Space == OverlaySpace.WorldSpaceEntities)
         {
             DrawAuras(handle, args, eye, false);
             if (_system.Tracks.Count > 0)
@@ -459,6 +461,14 @@ public sealed class RuneSigilOverlay : Overlay
             return;
 
         handle.SetTransform(Matrix3x2.Identity);
+        foreach (var (center, rotation, blocked) in aim.Ghost)
+        {
+            var tile = blocked || !good ? Danger : aim.Color;
+            var box = new Box2Rotated(Box2.CenteredAround(center, new Vector2(0.92f, 0.92f)), rotation, center);
+            handle.DrawRect(box, tile.WithAlpha(0.16f + 0.05f * MathF.Sin(now * 4f)));
+            handle.DrawRect(box, tile.WithAlpha(0.55f), false);
+        }
+
         var to = aim.Point.Position;
         var delta = to - from;
         var length = delta.Length();

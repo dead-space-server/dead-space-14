@@ -4,6 +4,7 @@ using Content.Server.DeadSpace.Surgery;
 using Content.Shared.Alert;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.FixedPoint;
@@ -14,10 +15,17 @@ namespace Content.Server.DeadSpace.Wizard.Runes;
 [RegisterComponent]
 public sealed partial class RuneRegenerationComponent : Component
 {
-    public readonly List<(DamageSpecifier PerSecond, TimeSpan End, ProtoId<AlertPrototype>? Alert)> Entries = new();
+    public readonly List<RuneRegenerationEntry> Entries = new();
 
     public TimeSpan NextTick;
 }
+
+public sealed record RuneRegenerationEntry(
+    DamageSpecifier PerSecond,
+    TimeSpan End,
+    ProtoId<AlertPrototype>? Alert,
+    float Heal,
+    float OrganMend);
 
 public sealed partial class RuneCasterSystem
 {
@@ -29,20 +37,71 @@ public sealed partial class RuneCasterSystem
     private const float OrganMendShare = 1.5f;
     private const string BloodlossDamage = "Bloodloss";
 
+    private static readonly LimbOrgan[] OrganDanger =
+    {
+        LimbOrgan.Brain,
+        LimbOrgan.Heart,
+        LimbOrgan.Lungs,
+        LimbOrgan.Liver,
+        LimbOrgan.Kidneys,
+        LimbOrgan.Core,
+        LimbOrgan.Stomach,
+        LimbOrgan.Eyes,
+    };
+
     private void ApplyDamage(RuneCastContext ctx, RuneDamageEffect effect)
     {
         var damage = effect.Damage * ctx.Power;
         var heal = -damage.GetTotal().Float();
         var deep = effect.MendInternal || ctx.Power > 1f;
+        var rest = SplitGroupHeals(damage, out var groupHeals);
 
         foreach (var target in Targets(ctx, effect))
         {
-            _damageable.TryChangeDamage(target, damage, effect.IgnoreResistances, origin: ctx.Caster);
+            if (!rest.Empty)
+                _damageable.TryChangeDamage(target, rest, effect.IgnoreResistances, origin: ctx.Caster);
+            foreach (var (group, amount) in groupHeals)
+                _damageable.HealDistributed(target, amount, group, ctx.Caster);
             if (damage.DamageDict.TryGetValue(BloodlossDamage, out var bloodloss) && bloodloss != FixedPoint2.Zero)
                 _bloodstream.TryModifyBloodLevel(target, -bloodloss);
             if (heal > 0f)
                 MendLimbs(target, heal, deep);
         }
+    }
+
+    private DamageSpecifier SplitGroupHeals(DamageSpecifier damage, out List<(ProtoId<DamageGroupPrototype> Group, FixedPoint2 Amount)> heals)
+    {
+        heals = new List<(ProtoId<DamageGroupPrototype>, FixedPoint2)>();
+        var rest = new DamageSpecifier(damage);
+        foreach (var group in Proto.EnumeratePrototypes<DamageGroupPrototype>())
+        {
+            var common = FixedPoint2.Zero;
+            var whole = group.DamageTypes.Count > 0;
+            foreach (var type in group.DamageTypes)
+            {
+                if (!rest.DamageDict.TryGetValue(type.Id, out var value) || value >= FixedPoint2.Zero)
+                {
+                    whole = false;
+                    break;
+                }
+
+                common = common == FixedPoint2.Zero ? value : FixedPoint2.Max(common, value);
+            }
+
+            if (!whole)
+                continue;
+
+            foreach (var type in group.DamageTypes)
+            {
+                rest.DamageDict[type.Id] -= common;
+                if (rest.DamageDict[type.Id] == FixedPoint2.Zero)
+                    rest.DamageDict.Remove(type.Id);
+            }
+
+            heals.Add((group.ID, common * group.DamageTypes.Count));
+        }
+
+        return rest;
     }
 
     private void MendLimbs(EntityUid target, float heal, bool deep)
@@ -82,23 +141,22 @@ public sealed partial class RuneCasterSystem
         }
     }
 
-    private void StartRegeneration(EntityUid target, DamageSpecifier perSecond, float duration, ProtoId<AlertPrototype>? alert = null)
+    private void StartRegeneration(EntityUid target, RuneRegenerationEntry entry)
     {
         var comp = EnsureComp<RuneRegenerationComponent>(target);
-        var end = Timing.CurTime + TimeSpan.FromSeconds(duration);
-        comp.Entries.Add((perSecond, end, alert));
+        comp.Entries.Add(entry);
         if (comp.NextTick < Timing.CurTime)
             comp.NextTick = Timing.CurTime + TimeSpan.FromSeconds(1);
 
-        if (alert is { } shown)
-            ShowCharm(target, shown, end);
+        if (entry.Alert is { } shown)
+            ShowCharm(target, shown, entry.End);
     }
 
     private void ClearRegenerationAlerts(EntityUid uid, RuneRegenerationComponent comp, bool all)
     {
-        foreach (var (_, end, alert) in comp.Entries)
+        foreach (var entry in comp.Entries)
         {
-            if (alert is not { } shown || !all && end > Timing.CurTime)
+            if (entry.Alert is not { } shown || !all && entry.End > Timing.CurTime)
                 continue;
 
             if (all || !comp.Entries.Exists(e => e.Alert == shown && e.End > Timing.CurTime))
@@ -124,13 +182,44 @@ public sealed partial class RuneCasterSystem
                 continue;
             }
 
-            foreach (var (perSecond, _, _) in comp.Entries)
+            foreach (var entry in comp.Entries)
             {
-                _damageable.TryChangeDamage(uid, perSecond, true, interruptsDoAfters: false);
-                var heal = -perSecond.GetTotal().Float();
+                if (!entry.PerSecond.Empty)
+                    _damageable.TryChangeDamage(uid, entry.PerSecond, true, interruptsDoAfters: false);
+                if (entry.Heal > 0f)
+                    _damageable.HealDistributed(uid, FixedPoint2.New(-entry.Heal));
+                if (entry.OrganMend > 0f)
+                    MendWorstOrgan(uid, entry.OrganMend);
+
+                var heal = entry.Heal - entry.PerSecond.GetTotal().Float();
                 if (heal > 0f)
                     MendLimbs(uid, heal, false);
             }
+        }
+    }
+
+    private void MendWorstOrgan(EntityUid target, float share)
+    {
+        if (!TryComp<LimbBodyComponent>(target, out var body))
+            return;
+
+        foreach (var organ in OrganDanger)
+        {
+            var index = (int) organ;
+            if (index >= body.Organs.Count || (body.Present & (LimbOrganMask) (1 << index)) == 0)
+                continue;
+
+            var state = body.Organs[index];
+            if (state.Missing || state.Damage <= 0f && !state.Ruptured)
+                continue;
+
+            _limbs.ApplyOrganEdit(target, organ, new LimbOrganEdit
+            {
+                Damage = -LimbOrganRules.Rupture * share,
+                Ruptured = false,
+                SetRuptured = true,
+            });
+            return;
         }
     }
 

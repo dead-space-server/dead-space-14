@@ -101,4 +101,7 @@ public sealed partial class RunePrototype : IPrototype
 
     [DataField]
     public RuneSpawnPattern AutoPattern = RuneSpawnPattern.AtPoint;
+
+    [DataField]
+    public List<ProtoId<RunePrototype>> Forbids = new();
 }

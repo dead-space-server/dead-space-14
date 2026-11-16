@@ -2,7 +2,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Server.Body.Systems;
 using Content.Server.Temperature.Systems;
+using Content.Shared.Atmos;
 using Content.Shared.Body.Components;
 using Content.Shared.Chat;
 using Content.Shared.Chemistry.Components;
@@ -88,7 +90,13 @@ public sealed partial class RuneCasterSystem
     private void InitializeHazards()
     {
         SubscribeLocalEvent<RuneVacuumComponent, SpeakAttemptEvent>(OnVacuumSpeak);
+        SubscribeLocalEvent<RuneVacuumComponent, InhaleLocationEvent>(OnVacuumInhale, after: new[] { typeof(InternalsSystem) });
         SubscribeLocalEvent<RuneBlazeComponent, MapInitEvent>(OnBlazeInit);
+    }
+
+    private void OnVacuumInhale(Entity<RuneVacuumComponent> ent, ref InhaleLocationEvent args)
+    {
+        args.Gas = new GasMixture(args.Respirator.BreathVolume);
     }
 
     private void OnBlazeInit(Entity<RuneBlazeComponent> ent, ref MapInitEvent args)
@@ -177,7 +185,16 @@ public sealed partial class RuneCasterSystem
     private void ApplyTemperature(RuneCastContext ctx, RuneTemperatureEffect effect)
     {
         foreach (var target in Targets(ctx, effect))
+        {
+            if (effect.Set is { } set)
+            {
+                if (TryComp<TemperatureComponent>(target, out var temperature))
+                    _temperature.ForceChangeTemperature(target, MathF.Max(0f, set), temperature);
+                continue;
+            }
+
             ShiftTemperature(target, effect.Delta * ctx.Power);
+        }
     }
 
     private void ApplyInject(RuneCastContext ctx, RuneInjectEffect effect)

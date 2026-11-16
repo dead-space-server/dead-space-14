@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
+using Content.Shared.FixedPoint;
+using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -88,17 +90,7 @@ public sealed class RuneComposition
         }
     }
 
-    public string Key
-    {
-        get
-        {
-            var key = Spell?.ID ?? Form.ID + Element.ID;
-            foreach (var modifier in Modifiers)
-                key += "+" + modifier.ID;
-
-            return key;
-        }
-    }
+    public string Key => Spell?.ID ?? Form.ID + Element.ID;
 }
 
 public abstract class SharedRuneCasterSystem : EntitySystem
@@ -118,13 +110,35 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnReloaded);
         SubscribeLocalEvent<RuneScrollComponent, ExaminedEvent>(OnScrollExamined);
         SubscribeLocalEvent<RuneWardComponent, DamageModifyEvent>(OnWardDamage);
+        SubscribeLocalEvent<RuneStoneFistsComponent, GetMeleeDamageEvent>(OnStoneFists);
         CacheSpells();
+    }
+
+    private void OnStoneFists(Entity<RuneStoneFistsComponent> ent, ref GetMeleeDamageEvent args)
+    {
+        if (args.Weapon == ent.Owner)
+            args.Damage = new DamageSpecifier(ent.Comp.Damage);
     }
 
     private void OnWardDamage(Entity<RuneWardComponent> ent, ref DamageModifyEvent args)
     {
-        if (Proto.TryIndex(ent.Comp.Modifier, out var modifier))
+        if (!Proto.TryIndex(ent.Comp.Modifier, out var modifier))
+            return;
+
+        if (MathF.Abs(ent.Comp.Strength - 1f) <= 0.01f)
+        {
             args.Damage = DamageSpecifier.ApplyModifierSet(args.Damage, modifier);
+            return;
+        }
+
+        var damage = new DamageSpecifier(args.Damage);
+        foreach (var (type, value) in args.Damage.DamageDict)
+        {
+            if (value > FixedPoint2.Zero && modifier.Coefficients.TryGetValue(type, out var coefficient))
+                damage.DamageDict[type] = value * MathF.Max(0f, 1f - (1f - coefficient) * ent.Comp.Strength);
+        }
+
+        args.Damage = damage;
     }
 
     private void OnReloaded(PrototypesReloadedEventArgs args)
@@ -138,7 +152,7 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         _spells.Clear();
         _fusions.Clear();
         foreach (var spell in Proto.EnumeratePrototypes<RuneSpellPrototype>())
-            _spells[(spell.Form.Id, spell.Element.Id)] = RuneSpell.From(spell);
+            _spells[(spell.Form.Id, spell.Element.Id)] = RuneSpell.From(spell, Proto.TryIndex(spell.Form, out var form) ? form : null);
 
         foreach (var fusion in Proto.EnumeratePrototypes<RuneFusionPrototype>())
         {
@@ -263,6 +277,9 @@ public abstract class SharedRuneCasterSystem : EntitySystem
             spell = null;
         else
             _spells.TryGetValue((form.ID, element.ID), out spell);
+
+        if (spell != null && modifiers.Exists(m => spell.Forbids.Contains(m.ID)))
+            spell = null;
 
         composition = new RuneComposition(form, element, second, modifiers, spell);
         return true;

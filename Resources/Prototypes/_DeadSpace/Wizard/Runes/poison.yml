@@ -7,7 +7,7 @@
   element: RuneElementPoison
   range: 12
   strain: 12
-  cooldown: 3
+  cooldown: 15
   effects:
   - !type:RuneProjectileEffect
     prototype: RuneProjectileVenom
@@ -77,7 +77,7 @@
   element: RuneElementPoison
   targeting: Self
   strain: 16
-  cooldown: 30
+  cooldown: 45
   effects:
   - !type:RuneComponentsEffect
     target: Caster

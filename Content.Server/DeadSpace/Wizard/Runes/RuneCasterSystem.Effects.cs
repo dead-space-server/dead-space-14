@@ -1,10 +1,12 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Atmos.EntitySystems;
 using Content.Shared.Administration.Systems;
 using Content.Shared.Charges.Components;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Damage.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Charges.Systems;
@@ -17,6 +19,8 @@ using Content.Server.Ghost.Roles.Components;
 using Content.Server.Lightning;
 using Content.Server.Lightning.Components;
 using Content.Server.Magic;
+using Content.Server.NPC.HTN;
+using Content.Shared.NPC.Prototypes;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Actions.Components;
@@ -26,6 +30,7 @@ using Content.Shared.Magic.Events;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.Explosion;
+using Content.Shared.Explosion.Components;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Gibbing;
 using Content.Shared.Item;
@@ -46,6 +51,9 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Serialization.Manager;
+using Robust.Shared.Serialization.Markdown.Mapping;
+using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Spawners;
 
 namespace Content.Server.DeadSpace.Wizard.Runes;
@@ -145,7 +153,9 @@ public sealed partial class RuneCasterSystem
     [Dependency] private readonly SharedGodmodeSystem _godmode = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private readonly ISerializationManager _serialization = default!;
 
+    private const float ProjectileReach = 12f;
     private const float AnimateHealthScale = 0.06f;
     private const float BlastWardTail = 3f;
     private const float AnimateNormalWeight = 4f;
@@ -155,6 +165,9 @@ public sealed partial class RuneCasterSystem
     private EntityUid? _lightningOwner;
 
     private static readonly EntProtoId SlowStatus = "RuneSlowStatusEffect";
+    private static readonly EntProtoId FeralEye = "RuneFeralEye";
+    private static readonly ProtoId<NpcFactionPrototype> FeralFaction = "AllHostile";
+    private const string FeralCompound = "SimpleHostileCompound";
     private static readonly ProtoId<TagPrototype> AnimateBlacklistTag = "AnimateSpellBlacklist";
 
     private static readonly string[] AnimateBlacklist =
@@ -288,7 +301,7 @@ public sealed partial class RuneCasterSystem
                 break;
             case RuneComponentsEffect components:
                 foreach (var target in Targets(ctx, components))
-                    ApplyComponents(target, components, ctx.DurationScale);
+                    ApplyComponents(target, components, ctx.DurationScale, ctx.Power);
                 break;
             case RuneParalyzeEffect paralyze:
                 foreach (var target in Targets(ctx, paralyze))
@@ -299,7 +312,14 @@ public sealed partial class RuneCasterSystem
                 break;
             case RuneRegenerationEffect regeneration:
                 foreach (var target in Targets(ctx, regeneration))
-                    StartRegeneration(target, regeneration.PerSecond * ctx.Power, regeneration.Duration * ctx.DurationScale, regeneration.Alert);
+                {
+                    StartRegeneration(target, new RuneRegenerationEntry(
+                        regeneration.PerSecond * ctx.Power,
+                        Timing.CurTime + TimeSpan.FromSeconds(regeneration.Duration * ctx.DurationScale),
+                        regeneration.Alert,
+                        regeneration.HealPerSecond * ctx.Power,
+                        regeneration.OrganMendPerSecond * ctx.Power));
+                }
                 break;
             case RuneStatusEffect status:
                 foreach (var target in Targets(ctx, status))
@@ -370,7 +390,7 @@ public sealed partial class RuneCasterSystem
                 break;
             case RunePetrifyEffect petrify:
                 foreach (var target in Targets(ctx, petrify))
-                    Petrify(target, petrify.Color);
+                    Petrify(target, petrify.Color, petrify.Description);
                 break;
             case RuneVanishEffect vanish:
                 ApplyVanish(ctx, vanish);
@@ -477,19 +497,34 @@ public sealed partial class RuneCasterSystem
         var velocity = _physics.GetMapLinearVelocity(ctx.Caster);
         var spread = MathHelper.DegreesToRadians(effect.Spread);
         var power = count > 1 && ctx.Extra > 0 ? ctx.Power * 0.6f : ctx.Power;
+        var reach = (ctx.Composition?.Spell?.Range ?? ProjectileReach) * ctx.RangeScale;
 
         for (var i = 0; i < count; i++)
         {
             var angle = count == 1 ? 0f : spread * (i - (count - 1) / 2f);
             var shot = new Angle(angle).RotateVec(direction);
             var ent = Spawn(effect.Prototype, from);
+            EnsureComp<TimedDespawnComponent>(ent).Lifetime = reach / MathF.Max(1f, effect.Speed);
 
             if (TryComp<ProjectileComponent>(ent, out var projectile) && MathF.Abs(power - 1f) > 0.01f)
                 projectile.Damage *= power;
 
+            ScaleProjectilePayload(ent, power);
+
             TagSource(ent, ctx, effect.OnHit, power / MathF.Max(0.01f, ctx.Power) * ctx.PowerScale);
             _gun.ShootProjectile(ent, shot, velocity, ctx.Caster, ctx.Caster, effect.Speed);
         }
+    }
+
+    private void ScaleProjectilePayload(EntityUid ent, float power)
+    {
+        if (MathF.Abs(power - 1f) <= 0.01f || !TryComp<ExplosiveComponent>(ent, out var explosive))
+            return;
+
+        var node = _serialization.WriteValueAs<MappingDataNode>(explosive, alwaysWrite: true);
+        node["totalIntensity"] = new ValueDataNode((explosive.TotalIntensity * power).ToString(CultureInfo.InvariantCulture));
+        node["maxIntensity"] = new ValueDataNode((explosive.MaxIntensity * power).ToString(CultureInfo.InvariantCulture));
+        AddComp(ent, _serialization.Read<ExplosiveComponent>(node, notNullableOverride: true), true);
     }
 
     private void ApplySpawn(RuneCastContext ctx, RuneSpawnEffect effect)
@@ -505,14 +540,32 @@ public sealed partial class RuneCasterSystem
                 continue;
 
             var ent = Spawn(effect.Prototype, coords);
-            if (effect.Lifetime is { } lifetime)
-                EnsureComp<TimedDespawnComponent>(ent).Lifetime = lifetime * ctx.DurationScale;
+            ScaleLifetime(ctx, ent, effect.Lifetime);
+            if (MathF.Abs(ctx.Power - 1f) > 0.01f)
+            {
+                if (TryComp<DamageContactsComponent>(ent, out var contacts))
+                    contacts.Damage *= ctx.Power;
+                if (TryComp<SmokeComponent>(ent, out var smoke))
+                    smoke.SpreadAmount = Math.Max(1, (int) MathF.Round(smoke.SpreadAmount * ctx.Power));
+            }
 
             if (effect.PassableByCaster)
                 EnsureComp<PreventCollideComponent>(ent).Uid = ctx.Caster;
 
             BindSpawned(ctx, ent);
         }
+    }
+
+    private void ScaleLifetime(RuneCastContext ctx, EntityUid ent, float? lifetime)
+    {
+        if (lifetime is { } seconds)
+        {
+            EnsureComp<TimedDespawnComponent>(ent).Lifetime = seconds * ctx.DurationScale;
+            return;
+        }
+
+        if (MathF.Abs(ctx.DurationScale - 1f) > 0.01f && TryComp<TimedDespawnComponent>(ent, out var despawn))
+            despawn.Lifetime *= ctx.DurationScale;
     }
 
     private void ApplySpawnRandom(RuneCastContext ctx, RuneSpawnRandomEffect effect)
@@ -526,8 +579,7 @@ public sealed partial class RuneCasterSystem
         {
             var (coords, _) = _random.Pick(positions);
             var ent = Spawn(_random.Pick(effect.Prototypes), coords);
-            if (effect.Lifetime is { } lifetime)
-                EnsureComp<TimedDespawnComponent>(ent).Lifetime = lifetime * ctx.DurationScale;
+            ScaleLifetime(ctx, ent, effect.Lifetime);
 
             if (effect.NoGhostRole)
             {
@@ -652,7 +704,7 @@ public sealed partial class RuneCasterSystem
             if (direction.LengthSquared() < 0.001f)
                 continue;
 
-            var throwDirection = speed < 0 ? -direction : Vector2.Normalize(direction) * (distance ?? radius - direction.Length());
+            var throwDirection = speed < 0 ? -direction : Vector2.Normalize(direction) * (distance ?? (radius - direction.Length()) * ctx.Power);
             var before = new BeforeRepulseAttractThrownEvent(ctx.Caster, throwDirection, MathF.Abs(speed));
             RaiseLocalEvent(target, ref before);
             _throwing.TryThrow(target, throwDirection, MathF.Abs(speed), ctx.Caster, recoil: false, compensateFriction: true);
@@ -815,7 +867,7 @@ public sealed partial class RuneCasterSystem
         RemComp<RuneCasterComponent>(from);
     }
 
-    private void ApplyComponents(EntityUid target, RuneComponentsEffect effect, float durationScale)
+    private void ApplyComponents(EntityUid target, RuneComponentsEffect effect, float durationScale, float power)
     {
         if (ComponentSource(effect) is not { } source)
             return;
@@ -835,6 +887,11 @@ public sealed partial class RuneCasterSystem
             return;
 
         EntityManager.AddComponents(target, registry, false);
+        if (MathF.Abs(power - 1f) > 0.01f && registry.ContainsKey("RuneWard") && TryComp<RuneWardComponent>(target, out var ward))
+        {
+            ward.Strength = power;
+            Dirty(target, ward);
+        }
 
         if (effect.Duration is not { } duration)
             return;
@@ -987,6 +1044,27 @@ public sealed partial class RuneCasterSystem
 
         if (effect.LeaveContainer)
             _container.TryRemoveFromContainer(morphed, true);
+
+        if (effect.Feral && morphed != ctx.Caster)
+            MakeFeral(morphed);
+    }
+
+    private void MakeFeral(EntityUid morphed)
+    {
+        _faction.ClearFactions(morphed, false);
+        _faction.AddFaction(morphed, FeralFaction.Id);
+
+        var htn = EnsureComp<HTNComponent>(morphed);
+        htn.RootTask = new HTNCompoundTask { Task = FeralCompound };
+
+        if (_mind.TryGetMind(morphed, out var mindId, out var mind))
+        {
+            var eye = Spawn(FeralEye, Transform(morphed).Coordinates);
+            _transform.SetParent(eye, morphed);
+            _mind.Visit(mindId, eye, mind);
+        }
+
+        _npc.WakeNPC(morphed, htn);
     }
 
     private void GrantImmortality(EntityUid target, float seconds)
@@ -1029,7 +1107,8 @@ public sealed partial class RuneCasterSystem
         _lightningOwner = ctx.Caster;
         try
         {
-            _lightning.ShootRandomLightnings(origin, effect.Range * ctx.RangeScale, effect.Bolts + ctx.Extra, effect.Prototype);
+            var bolts = Math.Max(1, (int) MathF.Round((effect.Bolts + ctx.Extra) * ctx.Power));
+            _lightning.ShootRandomLightnings(origin, effect.Range * ctx.RangeScale, bolts, effect.Prototype);
         }
         finally
         {

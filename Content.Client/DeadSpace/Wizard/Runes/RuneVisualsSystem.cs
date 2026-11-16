@@ -34,6 +34,7 @@ public sealed class RuneAim
     public float CasterArea;
     public float PointArea;
     public readonly List<EntityUid> Targets = new();
+    public readonly List<(Vector2 Center, Angle Rotation, bool Blocked)> Ghost = new();
     public bool InRange;
     public bool Valid;
     public string Problem = "rune-cast-no-target";

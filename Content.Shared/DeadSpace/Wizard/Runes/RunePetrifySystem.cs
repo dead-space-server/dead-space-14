@@ -4,6 +4,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Weapons.Parry;
 using Content.Shared.Emoting;
+using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
@@ -38,6 +39,7 @@ public sealed class RunePetrifySystem : EntitySystem
         SubscribeLocalEvent<RunePetrifiedComponent, ConsciousAttemptEvent>(OnConscious);
         SubscribeLocalEvent<RunePetrifiedComponent, IsEquippingAttemptEvent>(OnCancel);
         SubscribeLocalEvent<RunePetrifiedComponent, IsUnequippingAttemptEvent>(OnCancel);
+        SubscribeLocalEvent<RunePetrifiedComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<RuneTimeHeldComponent, BeforeDamageChangedEvent>(OnHeldDamage);
         SubscribeLocalEvent<RuneTimeHeldComponent, BeforeMeleeDamageEvent>(OnHeldMelee);
     }
@@ -46,6 +48,12 @@ public sealed class RunePetrifySystem : EntitySystem
     {
         if (_net.IsClient)
             args.Cancelled = true;
+    }
+
+    private void OnExamined(Entity<RunePetrifiedComponent> ent, ref ExaminedEvent args)
+    {
+        if (ent.Comp.Description is { } description)
+            args.PushMarkup(Loc.GetString(description));
     }
 
     private void OnConscious(Entity<RunePetrifiedComponent> ent, ref ConsciousAttemptEvent args)

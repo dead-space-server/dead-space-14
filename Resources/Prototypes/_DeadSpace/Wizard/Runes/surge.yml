@@ -300,6 +300,7 @@
     - !type:RunePetrifyEffect
       target: Caster
       color: "#9fe3ff"
+      description: rune-statue-ice-examine
 
 - type: wizardRuneSurge
   id: RuneFatalEarth
@@ -309,6 +310,7 @@
     - !type:RunePetrifyEffect
       target: Caster
       color: "#8a8178"
+      description: rune-statue-earth-examine
 
 - type: wizardRuneSurge
   id: RuneFatalLightning

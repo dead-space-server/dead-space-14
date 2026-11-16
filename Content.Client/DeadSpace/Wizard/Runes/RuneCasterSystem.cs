@@ -5,6 +5,8 @@ using System.Numerics;
 using Content.Client.Viewport;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Item;
+using Content.Shared.Maps;
+using Content.Shared.Physics;
 using Content.Shared.Magic.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
@@ -32,6 +34,9 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly RuneVisualsSystem _visuals = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
 
     private const float MinStrokePixels = 16f;
     private const float RangeSlack = 0.5f;
@@ -167,6 +172,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         }
 
         aim.InRange = to.MapId == from.MapId && (to.Position - from.Position).Length() <= aim.Range + RangeSlack;
+        FillWallGhost(caster, from, to, spell, composition, aim);
         if (spell.Effects.Find(e => e is RuneAnimateEffect) is RuneAnimateEffect animate)
         {
             FindAnimated(to, animate, composition, aim.Targets);
@@ -180,6 +186,49 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
 
         aim.Valid = spell.Targeting is not (RuneTargeting.Entity or RuneTargeting.EntityOrSelf) || aim.Targets.Count > 0;
         return aim;
+    }
+
+    private void FillWallGhost(EntityUid caster, MapCoordinates from, MapCoordinates to, RuneSpell spell, RuneComposition composition, RuneAim aim)
+    {
+        if (to.MapId != from.MapId)
+            return;
+
+        RuneSpawnEffect? wall = null;
+        foreach (var effect in spell.Effects)
+        {
+            if (effect is RuneSpawnEffect { Pattern: RuneSpawnPattern.LineAtPoint } line &&
+                (wall == null || line.Size * line.Rows > wall.Size * wall.Rows))
+                wall = line;
+        }
+
+        if (wall == null)
+            return;
+
+        var direction = to.Position - from.Position;
+        if (direction.LengthSquared() < 0.01f)
+            direction = _transform.GetWorldRotation(caster).ToWorldVec();
+
+        var forward = MathF.Abs(direction.X) > MathF.Abs(direction.Y)
+            ? new Vector2(MathF.Sign(direction.X), 0f)
+            : new Vector2(0f, MathF.Sign(direction.Y));
+        var side = new Vector2(-forward.Y, forward.X);
+        var half = Math.Max(0, wall.Size + composition.Extra * 2 - 1) / 2;
+        var depth = Math.Max(0, wall.Rows - 1) / 2;
+
+        for (var row = -depth; row <= depth; row++)
+        for (var i = -half; i <= half; i++)
+        {
+            var map = new MapCoordinates(to.Position + side * i + forward * row, to.MapId);
+            if (!_mapManager.TryFindGridAt(map, out var gridUid, out var grid))
+            {
+                aim.Ghost.Add((map.Position, Angle.Zero, false));
+                continue;
+            }
+
+            var tile = _map.CoordinatesToTile(gridUid, grid, map);
+            var blocked = wall.SkipBlocked && _turf.IsTileBlocked(gridUid, tile, CollisionGroup.Impassable, grid);
+            aim.Ghost.Add((_map.GridTileToWorldPos(gridUid, grid, tile), _transform.GetWorldRotation(gridUid), blocked));
+        }
     }
 
     private static bool WantsTarget(RuneSpell spell)
@@ -450,11 +499,14 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
 
     private void OnStroke(List<Vector2> points)
     {
-        if (_circle == null || _caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp) || points.Count < 2)
+        if (_circle == null || _caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp) || points.Count == 0)
             return;
 
-        if (StrokeSize(points) < MinStrokePixels * _circle.UIScale)
+        if (points.Count < 2 || StrokeSize(points) < MinStrokePixels * _circle.UIScale)
+        {
+            UndoRune();
             return;
+        }
 
         var expected = NextKind(_chain, comp.MaxRunes);
         var threshold = GetStrainFraction(comp) > 0.5f ? comp.ShakenRecognition : comp.Recognition;
@@ -478,6 +530,22 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         _circle.Flash(false);
         _circle.Say(Loc.GetString("rune-circle-unrecognized"));
         RaiseNetworkEvent(new RuneFizzleMessage());
+    }
+
+    private void UndoRune()
+    {
+        if (_circle == null || _chain.Count == 0)
+            return;
+
+        _chain.RemoveAt(_chain.Count - 1);
+        _quickLeft = null;
+        if (_chain.Count == 0)
+            RaiseNetworkEvent(new RuneSigilClearMessage());
+        else
+            RaiseNetworkEvent(new RuneSigilUndoMessage(new List<string>(_chain)));
+
+        _circle.Say(Loc.GetString("rune-circle-undo"));
+        Refresh();
     }
 
     private static float StrokeSize(List<Vector2> points)

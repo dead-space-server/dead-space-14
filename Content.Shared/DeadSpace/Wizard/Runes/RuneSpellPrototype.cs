@@ -54,6 +54,12 @@ public sealed partial class RuneSpellPrototype : IPrototype
     [DataField]
     public bool OncePerRound;
 
+    [DataField]
+    public List<ProtoId<RunePrototype>> Forbids = new();
+
+    [DataField]
+    public List<ProtoId<RunePrototype>> Allows = new();
+
     [DataField(required: true)]
     public List<RuneSpellEffect> Effects = new();
 }
@@ -73,12 +79,26 @@ public sealed class RuneSpell
     public bool RequiresClothes;
     public float RequiresWounded;
     public bool OncePerRound;
+    public HashSet<string> Forbids = new();
     public List<RuneSpellEffect> Effects = new();
 
-    public static RuneSpell From(RuneSpellPrototype proto)
+    public static RuneSpell From(RuneSpellPrototype proto, RunePrototype? form = null)
     {
+        var forbids = new HashSet<string>();
+        if (form != null)
+        {
+            foreach (var id in form.Forbids)
+                forbids.Add(id);
+        }
+
+        foreach (var id in proto.Forbids)
+            forbids.Add(id);
+        foreach (var id in proto.Allows)
+            forbids.Remove(id);
+
         return new RuneSpell
         {
+            Forbids = forbids,
             ID = proto.ID,
             Name = proto.Name,
             Form = proto.Form,

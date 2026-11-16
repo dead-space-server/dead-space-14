@@ -225,6 +225,9 @@ public sealed partial class RuneTemperatureEffect : RuneTargetedEffect
 {
     [DataField]
     public float Delta = -35f;
+
+    [DataField]
+    public float? Set;
 }
 
 public sealed partial class RuneInjectEffect : RuneTargetedEffect
@@ -337,6 +340,9 @@ public sealed partial class RunePolymorphEffect : RuneTargetedEffect
     public bool ScaleDuration;
 
     [DataField]
+    public bool Feral;
+
+    [DataField]
     public bool Petrify;
 
     [DataField]
@@ -394,8 +400,14 @@ public sealed partial class RuneOrbitShieldEffect : RuneSpellEffect
 
 public sealed partial class RuneRegenerationEffect : RuneTargetedEffect
 {
-    [DataField(required: true)]
+    [DataField]
     public DamageSpecifier PerSecond = new();
+
+    [DataField]
+    public float HealPerSecond;
+
+    [DataField]
+    public float OrganMendPerSecond;
 
     [DataField]
     public float Duration = 20f;
@@ -532,6 +544,9 @@ public sealed partial class RunePetrifyEffect : RuneTargetedEffect
 {
     [DataField]
     public Color Color = Color.White;
+
+    [DataField]
+    public LocId? Description;
 }
 
 public sealed partial class RuneVanishEffect : RuneTargetedEffect

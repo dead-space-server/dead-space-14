@@ -395,15 +395,17 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
 
         if (composition.Echo)
         {
-            var echo = new RuneCastContext(caster, target, entity, composition, caster.Comp.EchoPower);
-            var effects = spell.Effects;
+            var power = caster.Comp.EchoPower;
             Robust.Shared.Timing.Timer.Spawn(TimeSpan.FromSeconds(caster.Comp.EchoDelay), () =>
             {
-                if (TerminatingOrDeleted(echo.Caster))
+                if (TerminatingOrDeleted(caster))
                     return;
 
-                foreach (var effect in effects)
+                var point = spell.Targeting == RuneTargeting.Self ? Transform(caster).Coordinates : target;
+                var echo = new RuneCastContext(caster, point, entity, composition, power);
+                foreach (var effect in spell.Effects)
                     Apply(echo, effect);
+                RaiseImpact(caster, composition, spell, point, entity);
             });
         }
 

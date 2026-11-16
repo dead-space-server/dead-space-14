@@ -11,4 +11,7 @@ public sealed partial class RuneWardComponent : Component
 {
     [DataField(required: true), AutoNetworkedField]
     public ProtoId<DamageModifierSetPrototype> Modifier;
+
+    [DataField, AutoNetworkedField]
+    public float Strength = 1f;
 }

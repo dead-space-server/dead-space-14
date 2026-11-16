@@ -477,6 +477,10 @@
   - type: NoSlip
   - type: StaminaResistance
     damageCoefficient: 0.2
+  - type: RuneStoneFists
+    damage:
+      types:
+        Blunt: 45
 
 # Шаблоны оживления
 
@@ -1124,10 +1128,10 @@
 - type: damageModifierSet
   id: RuneStoneSkin
   coefficients:
-    Blunt: 0.3
-    Slash: 0.3
-    Piercing: 0.3
-    Heat: 0.3
+    Blunt: 0.55
+    Slash: 0.55
+    Piercing: 0.55
+    Heat: 0.55
 
 - type: damageModifierSet
   id: RuneIceArmor
@@ -1198,6 +1202,12 @@
     revertOnCrit: true
     revertOnDeath: true
     duration: 15
+
+- type: entity
+  id: RuneFeralEye
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Eye
 
 - type: polymorph
   id: RuneChaosCorgi

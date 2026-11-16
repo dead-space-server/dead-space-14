@@ -266,19 +266,13 @@
   first: RuneElementIce
   second: RuneElementVoid
   strain: 20
+  cooldown: 75
   loudness: 2
   effects:
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
-    delta: -36
-  - !type:RuneDamageEffect
-    target: Auto
-    radius: 2
-    ignoreResistances: true
-    damage:
-      types:
-        Cold: 22
+    set: 0
   - !type:RuneSlowEffect
     target: Auto
     radius: 2
@@ -367,6 +361,7 @@
   first: RuneElementEarth
   second: RuneElementVoid
   strain: 18
+  cooldown: 180
   loudness: 2
   effects:
   - !type:RunePushEffect
@@ -508,6 +503,7 @@
   first: RuneElementLife
   second: RuneElementChaos
   strain: 14
+  cooldown: 90
   absurdity: 2
   effects:
   - !type:RuneRandomEffect
@@ -516,14 +512,17 @@
       target: Auto
       radius: 1.5
       polymorph: RuneChaosChicken
+      feral: true
     - !type:RunePolymorphEffect
       target: Auto
       radius: 1.5
       polymorph: RuneChaosCorgi
+      feral: true
     - !type:RunePolymorphEffect
       target: Auto
       radius: 1.5
       polymorph: RuneChaosMouse
+      feral: true
 
 # Пустота
 
