@@ -10310,3 +10310,10 @@ Entries:
   changes:
   - type: Fix
     message: хотфикс ЧЕГО-ТО
+- id: 989
+  author: IvanKuvalda
+  time: '2026-11-16T02:14:00.257233+00:00'
+  pr: 2755
+  changes:
+  - type: Fix
+    message: Слаймам ТЕПРЕЬ нельзя сломать челюгу
