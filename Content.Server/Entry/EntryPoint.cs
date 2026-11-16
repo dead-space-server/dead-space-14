@@ -1,3 +1,4 @@
+using Content.Server.DeadSpace.NetEntities; //DS-14
 using Content.Server.DeadSpace.Ports.Jukebox;
 using Content.Server.Acz;
 using Content.Server.Administration;
@@ -235,6 +236,7 @@ namespace Content.Server.Entry
                 {
                     _euiManager.SendUpdates();
                     _voteManager.Update();
+                    _entSys.GetEntitySystem<StaleNetUidSystem>().Flush(); //DS-14
                     break;
                 }
 
