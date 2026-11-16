@@ -156,12 +156,16 @@
   description: Перчатки, созданные по особой ранее не известной технологии, явно усиленные для боевых и иных нестандартных ситуаций.
   categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/blueshield_gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/blueshield_gloves.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Magboots
 - type: entity
-  parent: ClothingShoesBootsMagsastr
+  parent: ClothingShoesBootsMagPvrsifvlAlt2
   id: ClothingShoesBootsMagCyberBobeks
   name: магнитные сапоги Syn.V
   description: Высококачественные магнитные сапоги, которыми можно кого-нибудь прибить...
