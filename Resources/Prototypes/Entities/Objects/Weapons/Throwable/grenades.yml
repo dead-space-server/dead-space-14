@@ -352,10 +352,6 @@
       - !type:TriggerBehavior
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
-    #DS14-start
-  - type: DamageOnHighSpeedImpact
-    minimumSpeed: 15
-    #DS14-end
   - type: Appearance
   - type: GenericVisualizer
     visuals:
