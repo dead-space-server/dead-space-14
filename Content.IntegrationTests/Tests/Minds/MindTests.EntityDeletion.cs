@@ -1,6 +1,7 @@
 #nullable enable
 using System.Linq;
 using Content.Server.GameTicking;
+using Content.Server.Ghost; //DS-14
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
 using Content.Shared.Players;
@@ -70,6 +71,51 @@ public sealed partial class MindTests
 
         await pair.CleanReturnAsync();
     }
+
+    //DS-14 start
+    [Test]
+    public async Task TestDeleteMindWhileVisitingReturnableGhost()
+    {
+        await using var pair = await SetupPair(dirty: true);
+        var server = pair.Server;
+
+        var entMan = server.ResolveDependency<IServerEntityManager>();
+        var playerMan = server.ResolveDependency<IPlayerManager>();
+        var mindSystem = entMan.EntitySysManager.GetEntitySystem<SharedMindSystem>();
+        var ghostSystem = server.System<GhostSystem>();
+
+        EntityUid visitEnt = default;
+        EntityUid mindId = default!;
+        await server.WaitAssertion(() =>
+        {
+            var player = playerMan.Sessions.Single();
+            var playerEnt = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+            visitEnt = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, MapCoordinates.Nullspace);
+
+            mindId = mindSystem.CreateMind(player.UserId);
+            var mind = entMan.GetComponent<MindComponent>(mindId);
+            mindSystem.TransferTo(mindId, playerEnt);
+            mindSystem.Visit(mindId, visitEnt);
+            ghostSystem.SetCanReturnToBody((visitEnt, entMan.GetComponent<GhostComponent>(visitEnt)), true);
+
+            Assert.That(mind.VisitingEntity, Is.EqualTo(visitEnt));
+            Assert.That(entMan.GetComponent<GhostComponent>(visitEnt).CanReturnToBody, Is.True);
+        });
+
+        await pair.RunTicksSync(5);
+        await server.WaitPost(() => entMan.DeleteEntity(mindId));
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            if (!entMan.Deleted(visitEnt))
+                entMan.DeleteEntity(visitEnt);
+        });
+        await pair.RunTicksSync(5);
+
+        await pair.CleanReturnAsync();
+    }
+    //DS-14 end
 
     // this is a variant of TestGhostOnDelete that just deletes the whole map.
     [Test]
