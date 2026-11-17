@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Content.Server.Cargo.Systems;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -12,9 +13,12 @@ using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
+using Content.Shared.Cargo.Components;
+using Content.Shared.Cargo.Prototypes;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Maps;
+using Content.Shared.Paper;
 using Content.Shared.Station.Components;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
@@ -41,11 +45,21 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly DeviceNetworkSystem _deviceNet = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly CargoSystem _cargo = default!;
+
+    /// <summary>
+    ///     Имя, которое движок даёт сущности сетки при создании. Для сетки из сохранения оно означает
+    ///     «имя станции не записано», см. <see cref="IsStationName"/>.
+    /// </summary>
+    private const string DefaultGridName = "grid";
 
     /// <summary>
     ///     Результат проверки файла сохранения за текущий раунд.
-    ///     Файл сохранения режимной карты большой, поэтому разбирать YAML второй раз в том же раунде незачем:
-    ///     <see cref="OnLoadingMaps"/> выполняется раньше <see cref="Started"/> и всегда обновляет кэш.
+    ///     Проверка читает только начало файла, но файл режимного сохранения большой и открывается
+    ///     он дважды за раунд не зря: <see cref="OnLoadingMaps"/> выполняется раньше
+    ///     <see cref="Started"/> и всегда обновляет кэш.
     /// </summary>
     private readonly Dictionary<string, bool> _saveValidity = new();
 
@@ -67,12 +81,138 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     /// </summary>
     private readonly HashSet<EntityUid> _gridsSuppressed = new();
 
+    /// <summary>
+    ///     Карта, поднятая из сохранения в этом раунде, и её состояния станций.
+    ///     Нужны, чтобы в начале раунда ещё раз пройтись по станциям: всё, что сделано при загрузке
+    ///     карты, — самое хрупкое место раунда, и потерянное там имя потом не вернуть.
+    /// </summary>
+    private MapId _savedMap = MapId.Nullspace;
+
+    private List<SavedStationState> _savedStates = new();
+
+    /// <summary>
+    ///     Имена, подставленные в документы вместо сохранённого имени станции: выдуманное имя -> сохранённое.
+    ///     См. <see cref="FixStationNamesInDocuments"/>.
+    /// </summary>
+    private readonly Dictionary<string, string> _documentNames = new();
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<LoadingMapsEvent>(OnLoadingMaps, before: [typeof(StationSystem)]);
         SubscribeLocalEvent<StationGridAddedEvent>(OnStationGridAdded);
         SubscribeLocalEvent<RoundEndedEvent>(OnRoundEnded);
+        SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRunLevelChanged);
+    }
+
+    /// <summary>
+    ///     Начало раунда — последний момент, когда имя станции ещё ничего не успело о себе закрепить.
+    /// </summary>
+    /// <remarks>
+    ///     Регистрация станции идёт при загрузке карты, и всё, что там не сложилось (бросок в одном из
+    ///     шагов, станция без состояния), в середине раунда уже не починить: напечатанные документы
+    ///     несут имя в тексте, а не ссылкой на станцию. Здесь имена сверяются заново — бесплатно,
+    ///     станций на карте немного, а документы после этого печатаются только с верным именем.
+    /// </remarks>
+    private void OnRunLevelChanged(GameRunLevelChangedEvent ev)
+    {
+        // Новый раунд — старое состояние прошлого раунда больше не действует.
+        if (ev.New == GameRunLevel.PreRoundLobby)
+        {
+            _savedMap = MapId.Nullspace;
+            _savedStates = new List<SavedStationState>();
+            _documentNames.Clear();
+            return;
+        }
+
+        if (ev.New != GameRunLevel.InRound || _savedMap == MapId.Nullspace)
+            return;
+
+        var byId = StatesById(_savedStates);
+
+        var query = AllEntityQuery<StationDataComponent>();
+        while (query.MoveNext(out var station, out var data))
+        {
+            SavedStationState? state = null;
+            var grids = new List<EntityUid>();
+
+            foreach (var grid in data.Grids)
+            {
+                if (!TryComp(grid, out TransformComponent? xform) || xform.MapID != _savedMap)
+                    continue;
+
+                grids.Add(grid);
+
+                if (state != null)
+                    continue;
+
+                if (TryComp<BecomesStationComponent>(grid, out var becomes) &&
+                    !string.IsNullOrEmpty(becomes.Id) &&
+                    byId.TryGetValue(becomes.Id, out var found))
+                {
+                    state = found;
+                }
+            }
+
+            if (state == null || !IsStationName(state.Name))
+                continue;
+
+            var current = Name(station);
+            if (current == state.Name)
+                continue;
+
+            _station.RenameStation(station, state.Name, false, data);
+            _documentNames[current] = state.Name;
+
+            foreach (var grid in grids)
+            {
+                if (MetaData(grid).EntityName == current)
+                    _metaData.SetEntityName(grid, state.Name);
+            }
+
+            Log.Info($"SaveGamemode: в начале раунда станции {ToPrettyString(station)} возвращено " +
+                     $"имя из сохранения: '{current}' -> '{state.Name}'");
+        }
+
+        FixStationNamesInDocuments();
+    }
+
+    /// <summary>
+    ///     <c>BecomesStationComponent.Id</c> сетки станции -> её состояние из <c>station.yml</c>.
+    /// </summary>
+    private static Dictionary<string, SavedStationState> StatesById(IReadOnlyList<SavedStationState> states)
+    {
+        var byId = new Dictionary<string, SavedStationState>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var state in states)
+        {
+            foreach (var id in state.Ids)
+            {
+                byId.TryAdd(id, state);
+            }
+        }
+
+        return byId;
+    }
+
+    /// <summary>
+    ///     Выполняет шаг восстановления станции так, чтобы его неудача не отменила остальные шаги.
+    /// </summary>
+    /// <remarks>
+    ///     Имя станции, её балансы и её сетки — самостоятельные вещи: упавшие балансы не имеют права
+    ///     оставлять станцию с выдуманным именем. Прежде один бросок после <c>PostGameMapLoad</c>
+    ///     обрывал всё, что шло за ним, и раунд жил со станцией, переименованной заново.
+    /// </remarks>
+    private void TryStep(string what, Action step)
+    {
+        try
+        {
+            step();
+        }
+        catch (Exception e)
+        {
+            Log.Error($"SaveGamemode: не удалось применить {what}:\n{e}");
+        }
     }
 
     /// <summary>
@@ -143,7 +283,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         if (component.LoadOnStart && _save.SlotExists(component.SaveSlot))
         {
             var path = SaveSystem.GetSavePath(component.SaveSlot);
-            // OnLoadingMaps уже разобрал файл в этом раунде; если правила запускались вне стандартного
+            // OnLoadingMaps уже проверил файл в этом раунде; если правила запускались вне стандартного
             // старта раунда, проверяем на месте.
             var valid = _saveValidity.TryGetValue(component.SaveSlot, out var cached)
                 ? cached
@@ -163,8 +303,19 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     }
 
     /// <summary>
-    ///     Проверяет, что файл сохранения существует, не пустой и содержит хотя бы один YAML-документ.
+    ///     Проверяет, что файл сохранения существует и начинается с YAML-документа-маппинга.
     /// </summary>
+    /// <remarks>
+    ///     Проверка обязана быть дешёвой: файл режимного сохранения — сотни мегабайт.
+    ///     Прежний вариант читал файл целиком в строку (<c>ReadToEnd</c>), а потом строил из неё
+    ///     полное дерево <c>YamlStream</c>, чтобы взять из него одно число — сколько документов.
+    ///     Итого два полных разбора большого файла до того, как карту начнёт грузить загрузчик.
+    ///     Здесь поток событий YamlDotNet: разбирается ровно начало файла, остальное не читается
+    ///     и в памяти не держится. Глубокий обрыв или битый YAML в середине файла увидит
+    ///     <see cref="MapLoaderSystem"/> при загрузке — для этого есть путь с починкой файла.
+    ///     Корректный файл карты всегда начинается с маппинга (<c>meta</c>, <c>maps</c>,
+    ///     <c>entities</c>), поэтому скаляр или последовательность на месте корня — явный мусор.
+    /// </remarks>
     private bool IsSaveFileValid(ResPath path)
     {
         var rooted = path.ToRootedPath();
@@ -174,14 +325,21 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         try
         {
             using var reader = _res.UserData.OpenText(rooted);
-            var content = reader.ReadToEnd();
-            if (string.IsNullOrWhiteSpace(content))
-                return false;
+            var parser = new YamlDotNet.Core.Parser(reader);
 
-            using var stringReader = new StringReader(content);
-            var yaml = new YamlDotNet.RepresentationModel.YamlStream();
-            yaml.Load(stringReader);
-            return yaml.Documents.Count > 0;
+            // События выдаются по одному, поэтому читаем ровно столько, сколько разобрали.
+            // Пустой файл и файл из одних комментариев/разделителей до документа не доходит.
+            while (parser.Current is not YamlDotNet.Core.Events.StreamEnd
+                   and not YamlDotNet.Core.Events.DocumentStart)
+            {
+                if (!parser.MoveNext())
+                    return false;
+            }
+
+            // Документ открылся и тут же кончился — файл обрезан или битый.
+            return parser.Current is YamlDotNet.Core.Events.DocumentStart
+                   && parser.MoveNext()
+                   && parser.Current is YamlDotNet.Core.Events.MappingStart;
         }
         catch (Exception e)
         {
@@ -287,7 +445,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         // Сама станция в файл не сериализуется: она живёт в nullspace, и на карте остаётся только
         // пометка BecomesStation у сетки. Без станции раунд обрывается на спавне игроков, поэтому
         // регистрируем её так же, как это делает тикер для обычной карты.
-        if (TryRegisterStations(defaultMap, component.SuppressRoundstartGrids))
+        if (TryRegisterStations(defaultMap, component.SuppressRoundstartGrids, component.SaveSlot))
         {
             ConnectLoadedDevices(defaultMap);
             return;
@@ -307,23 +465,36 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     ///     во время раунда, в файле от неё остаётся только <c>BecomesStationComponent</c> у сетки. Без станции
     ///     <c>SpawnPlayers</c> падает на <c>Assert(stations.Count > 0)</c>. Поднимаем то же событие
     ///     <c>PostGameMapLoad</c>, что и тикер для обычной карты, в то же окно между загрузкой и спавном.
-    ///     Состояние станции (имя, работы, банк) из сохранения не восстанавливается — в файле его нет.
+    ///     Состояние станции (работы, банк) в файле карты не лежит — станция вне карты. Её имя и балансы
+    ///     режим пишет рядом со слотом в <c>station.yml</c> и применяет отсюда:
+    ///     см. <see cref="ApplyStationStates"/>. Файла нет (старое сохранение) — имя хотя бы берётся
+    ///     с сетки, см. <see cref="RestoreStationNames"/>, а балансы остаются заводскими.
     /// </remarks>
     /// <param name="suppressRoundstartGrids">
     ///     Не спавнять обязательные гриды станции на время регистрации: в сохранении они уже есть.
     /// </param>
+    /// <param name="slot">Слот сохранения — из него читается состояние станций.</param>
     /// <returns>
     ///     False, если на карте нет сетки со станцией или для неё не нашлось конфигурации:
     ///     раунд на такой карте существовать не может.
     /// </returns>
-    private bool TryRegisterStations(MapId mapId, bool suppressRoundstartGrids)
+    private bool TryRegisterStations(MapId mapId, bool suppressRoundstartGrids, string slot)
     {
         var grids = new List<EntityUid>();
         var stationIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        // Имена станций, записанные в сохранении: сетка -> имя. Собираются здесь, применяются
+        // после регистрации, см. <see cref="RestoreStationNames"/>.
+        var savedNames = new Dictionary<EntityUid, string>();
         var alreadyRegistered = 0;
 
+        // Главная сетка карты — самая большая: это сама станция, а не капсулы, шаттлы и точки интереса.
+        // Именно её id должен получить конфигурацию, иначе станция соберётся из капсул.
+        EntityUid? primaryGrid = null;
+        var primaryTiles = 0;
+        var primaryId = (string?)null;
+
         var query = AllEntityQuery<MapGridComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out _, out var xform))
+        while (query.MoveNext(out var uid, out var gridComp, out var xform))
         {
             if (xform.MapID != mapId)
                 continue;
@@ -338,7 +509,22 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             grids.Add(uid);
 
             if (TryComp<BecomesStationComponent>(uid, out var becomes) && !string.IsNullOrEmpty(becomes.Id))
+            {
                 stationIds.Add(becomes.Id);
+
+                var tiles = (int)(gridComp.LocalAABB.Width * gridComp.LocalAABB.Height);
+                if (primaryGrid == null || tiles > primaryTiles)
+                {
+                    primaryGrid = uid;
+                    primaryTiles = tiles;
+                    primaryId = becomes.Id;
+                }
+
+                // Имя станции остаётся подписанным на её сетке: MetaData есть у каждой сущности.
+                var gridName = MetaData(uid).EntityName;
+                if (IsStationName(gridName))
+                    savedNames[uid] = gridName;
+            }
         }
 
         if (stationIds.Count == 0)
@@ -350,7 +536,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             return false;
         }
 
-        var proto = FindGameMapPrototype(stationIds);
+        var proto = FindGameMapPrototype(stationIds, primaryId);
         if (proto == null)
         {
             Log.Error($"SaveGamemode: не найден прототип игровой карты со станциями " +
@@ -358,20 +544,524 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             return false;
         }
 
+        // Сетки, для которых в выбранной конфигурации станции нет: движок на такую сетку пишет
+        // "does not have an associated station config" и оставляет её без станции вовсе — у спасательных
+        // капсул и древних кораблей свой BecomesStation. Такие сетки из события забираем и приписываем
+        // к станции сами: на обычной карте раунда их приписывает тикер вместе с заселением.
+        var unconfigured = new List<EntityUid>();
+        for (var i = grids.Count - 1; i >= 0; i--)
+        {
+            var grid = grids[i];
+
+            if (!TryComp<BecomesStationComponent>(grid, out var becomes) ||
+                string.IsNullOrEmpty(becomes.Id) || proto.Stations.ContainsKey(becomes.Id))
+            {
+                continue;
+            }
+
+            unconfigured.Add(grid);
+            grids.RemoveAt(i);
+        }
+
+        // Состояние читается ДО регистрации: имя станции нужно уже в PostGameMapLoad, чтобы станция
+        // родилась с сохранённым именем, а не с выдуманным. Переименование после события слишком позднее:
+        // к этому моменту имя уже стоит на сетках, в PDA и в шапках документов, которые печатаются
+        // подставкой текста, а не ссылкой на станцию.
+        _save.TryReadStationStates(slot, out var states);
+        var byId = StatesById(states);
+
+        var primaryName = (string?)null;
+        if (primaryId != null && byId.TryGetValue(primaryId, out var primaryState) && IsStationName(primaryState.Name))
+            primaryName = primaryState.Name;
+
         _gridsSuppressed.Clear();
         _registeringSavedMap = suppressRoundstartGrids;
         try
         {
-            RaiseLocalEvent(new PostGameMapLoad(proto, mapId, grids, null));
+            RaiseLocalEvent(new PostGameMapLoad(proto, mapId, grids, primaryName));
         }
         finally
         {
             _registeringSavedMap = false;
         }
 
+        _savedMap = mapId;
+        _savedStates = states;
+
+        if (unconfigured.Count > 0)
+        {
+            TryStep("сетки без своей конфигурации станции", () => AttachUnconfiguredGrids(unconfigured, primaryGrid));
+        }
+
+        // Состояние из station.yml точнее, чем имя с сетки: там и балансы, и имя именно станции.
+        // Кому состояния не досталось — тем возвращается имя с сетки.
+        var fromState = new HashSet<EntityUid>();
+        TryStep("состояния станций", () => ApplyStationStates(mapId, states, fromState));
+        TryStep("имён станций с сеток", () => RestoreStationNames(savedNames, fromState));
+        TryStep("имени станции в документах", FixStationNamesInDocuments);
+
         Log.Info($"SaveGamemode: станции {string.Join(", ", stationIds)} по конфигу карты {proto.ID} " +
                  $"зарегистрированы на карте {mapId} (сеток: {grids.Count})");
         return true;
+    }
+
+    /// <summary>
+    ///     Приписывает сетки, для которых в выбранной конфигурации карты станции нет.
+    /// </summary>
+    private void AttachUnconfiguredGrids(List<EntityUid> unconfigured, EntityUid? primaryGrid)
+    {
+        if (primaryGrid != null &&
+            TryComp<StationMemberComponent>(primaryGrid.Value, out var primaryMember))
+        {
+            var attached = 0;
+            foreach (var grid in unconfigured)
+            {
+                if (HasComp<StationMemberComponent>(grid))
+                    continue;
+
+                // Имя передаётся своё: без него AddGridToStation оставил бы сетку безымянной,
+                // а с именем станции переписал бы собственное имя точки интереса.
+                _station.AddGridToStation(primaryMember.Station, grid, null, null, MetaData(grid).EntityName);
+                attached++;
+            }
+
+            Log.Info($"SaveGamemode: {attached} сеток без своей конфигурации станции приписаны к " +
+                     $"{ToPrettyString(primaryMember.Station)}");
+        }
+        else
+        {
+            Log.Error($"SaveGamemode: {unconfigured.Count} сеток остались без станции — главная сетка карты " +
+                      "не стала станцией, конфигурация карты не подошла");
+        }
+    }
+
+    /// <summary>
+    ///     Возвращает станциям имена, которые были у них в сохранении.
+    /// </summary>
+    /// <remarks>
+    ///     Станция — отдельная сущность вне карты, и к моменту сохранения она уже удалена: в файле её нет.
+    ///     Но <c>InitializeNewStation</c> при регистрации раунда подписывает имя станции каждой её сетке
+    ///     (<c>AddGridToStation</c> -> <c>MetaData</c>), поэтому в файле имя остаётся на сетках,
+    ///     а <c>BecomesStationComponent.Id</c> говорит, какой станции какая сетка принадлежит.
+    ///     Имя ставится после <c>PostGameMapLoad</c>, а не через него: событие передаёт одно имя
+    ///     на всю карту, а станций на карте несколько — у спасательных капсул и древних кораблей
+    ///     свои имена, и всем им одно не подходит.
+    ///     Имя берётся самое частое среди сеток станции: у станции сеток несколько, и все они
+    ///     подписаны одним именем, а сетка чужой станции сюда попасть не может — словарь собран
+    ///     только по сеткам этой карты.
+    ///     Станции, получившие состояние из <c>station.yml</c>, пропускаются: там имя точнее, чем то,
+    ///     что осталось на сетке.
+    /// </remarks>
+    /// <param name="savedNames">Имена с сеток карты, собранные при загрузке.</param>
+    /// <param name="skip">Станции, которым уже вернули имя из состояния.</param>
+    private void RestoreStationNames(Dictionary<EntityUid, string> savedNames, HashSet<EntityUid>? skip = null)
+    {
+        if (savedNames.Count == 0)
+        {
+            Log.Info("SaveGamemode: имён станций в сохранении нет — имена будут сгенерированы заново");
+            return;
+        }
+
+        var restored = 0;
+        var query = AllEntityQuery<StationDataComponent>();
+        while (query.MoveNext(out var station, out var data))
+        {
+            if (skip != null && skip.Contains(station))
+                continue;
+
+            string? name = null;
+            var best = 0;
+            Dictionary<string, int>? counts = null;
+
+            foreach (var grid in data.Grids)
+            {
+                if (!savedNames.TryGetValue(grid, out var gridName))
+                    continue;
+
+                counts ??= new Dictionary<string, int>();
+                var count = counts.TryAdd(gridName, 1) ? 1 : ++counts[gridName];
+                if (count <= best)
+                    continue;
+
+                best = count;
+                name = gridName;
+            }
+
+            if (name == null || Name(station) == name)
+                continue;
+
+            _documentNames[Name(station)] = name;
+            _station.RenameStation(station, name, false, data);
+
+            // Сетки при регистрации получили сгенерированное имя станции — приводим и их обратно,
+            // как это делает AddGridToStation.
+            foreach (var grid in data.Grids)
+            {
+                if (savedNames.ContainsKey(grid))
+                    _metaData.SetEntityName(grid, name);
+            }
+
+            restored++;
+            Log.Info($"SaveGamemode: станции {ToPrettyString(station)} возвращено имя из сохранения: {name}");
+        }
+
+        if (restored == 0)
+            Log.Info("SaveGamemode: имена станций из сохранения не применены — уже совпадают или их не нашлось");
+    }
+
+    /// <summary>
+    ///     Собирает состояние станций сохранённой карты: имя и балансы счетов.
+    /// </summary>
+    /// <remarks>
+    ///     Вызывается на <c>RoundEndedEvent</c>, когда станции ещё живы: тикер удаляет их позже,
+    ///     при переходе уровня игры в лобби. Берутся только станции с сетками на сохраняемой карте —
+    ///     станции шаттлов и карт-хабов в слот сохранять нечего.
+    ///     Станция привязана к карте через <c>BecomesStationComponent.Id</c> её сеток: это единственное,
+    ///     что свяжет состояние с новой станцией при загрузке.
+    /// </remarks>
+    private List<SavedStationState> CollectStationStates(MapId mapId)
+    {
+        var states = new List<SavedStationState>();
+
+        var query = AllEntityQuery<StationDataComponent>();
+        while (query.MoveNext(out var station, out var data))
+        {
+            var ids = new List<string>();
+            var gridNames = new List<string>();
+            var gridsOnMap = 0;
+
+            foreach (var grid in data.Grids)
+            {
+                if (!TryComp(grid, out TransformComponent? xform) || xform.MapID != mapId)
+                    continue;
+
+                gridsOnMap++;
+
+                // Имя сетки — то, чем её можно будет найти в загруженной карте:
+                // привязка сетки к станции файлом не сохраняется.
+                var gridName = MetaData(grid).EntityName;
+                if (!string.IsNullOrWhiteSpace(gridName))
+                    gridNames.Add(gridName);
+
+                if (TryComp<BecomesStationComponent>(grid, out var becomes) &&
+                    !string.IsNullOrEmpty(becomes.Id) && !ids.Contains(becomes.Id))
+                {
+                    ids.Add(becomes.Id);
+                }
+            }
+
+            if (gridsOnMap == 0)
+                continue;
+
+            var state = new SavedStationState { Name = Name(station) };
+            state.Ids.AddRange(ids);
+            state.GridNames.AddRange(gridNames);
+
+            if (TryComp<StationBankAccountComponent>(station, out var bank))
+            {
+                foreach (var (account, money) in bank.Accounts)
+                {
+                    state.Accounts[account.Id] = money;
+                }
+            }
+
+            states.Add(state);
+            Log.Info($"SaveGamemode: станция {ToPrettyString(station)} — имя '{state.Name}', " +
+                     $"сеток {state.GridNames.Count}, id [{string.Join(", ", ids)}], счетов {state.Accounts.Count}");
+        }
+
+        return states;
+    }
+
+    /// <summary>
+    ///     Возвращает станциям имя и балансы счетов из <c>station.yml</c>.
+    /// </summary>
+    /// <remarks>
+    ///     Станция при загрузке создаётся заново (<c>InitializeNewStation</c>) с новым выдуманным именем
+    ///     и балансами из прототипа, поэтому состояние пишется рядом со слотом и применяется здесь —
+    ///     сразу после регистрации станции, пока её никто не успел прочитать.
+    ///     Искать станцию приходится по <c>BecomesStationComponent.Id</c> её сеток: сама станция в файле
+    ///     не сериализуется, id — единственная метка, которая переживает сохранение.
+    ///     Имя ставится и на станции, и на её сетках — <c>AddGridToStation</c> подписывает имя станции
+    ///     сеткам, и печатные формы берут его именно со станции (<c>GetOwningStation</c> -> <c>Name</c>).
+    /// </remarks>
+    /// <param name="mapId">Карта, поднятая из сохранения.</param>
+    /// <param name="states">Состояния станций, прочитанные из <c>station.yml</c>.</param>
+    /// <param name="handledStations">Сюда записываются станции, получившие имя из состояния.</param>
+    private void ApplyStationStates(MapId mapId, IReadOnlyList<SavedStationState> states, HashSet<EntityUid> handledStations)
+    {
+        if (states.Count == 0)
+        {
+            Log.Info($"SaveGamemode: состояния станций в слоте нет — имена возьму с сеток, " +
+                     "балансы останутся заводскими");
+            return;
+        }
+
+        var byId = StatesById(states);
+
+        var applied = 0;
+        var accounts = 0;
+        var attached = 0;
+        var used = new HashSet<SavedStationState>();
+
+        // Сетки карты, которые ни к какой станции не привязаны: именно их ищем по имени из сохранения.
+        // Основные сетки станций привязывает StationSystem при загрузке карты, они уже заняты.
+        var free = new Dictionary<string, List<EntityUid>>();
+        var gridEnum = AllEntityQuery<MapGridComponent, MetaDataComponent, TransformComponent>();
+        while (gridEnum.MoveNext(out var uid, out _, out var meta, out var xform))
+        {
+            if (xform.MapID != mapId || HasComp<StationMemberComponent>(uid))
+                continue;
+
+            if (!free.TryAdd(meta.EntityName, new List<EntityUid> { uid }))
+                free[meta.EntityName].Add(uid);
+        }
+
+        var query = AllEntityQuery<StationDataComponent>();
+        while (query.MoveNext(out var station, out var data))
+        {
+            SavedStationState? state = null;
+            var gridIds = new List<string>();
+            var grids = new List<EntityUid>();
+
+            foreach (var grid in data.Grids)
+            {
+                if (!TryComp(grid, out TransformComponent? xform) || xform.MapID != mapId)
+                    continue;
+
+                grids.Add(grid);
+
+                if (!TryComp<BecomesStationComponent>(grid, out var becomes) || string.IsNullOrEmpty(becomes.Id))
+                    continue;
+
+                gridIds.Add(becomes.Id);
+                if (state == null && byId.TryGetValue(becomes.Id, out var found))
+                    state = found;
+            }
+
+            if (grids.Count == 0)
+                continue;
+
+            if (state == null)
+            {
+                Log.Warning($"SaveGamemode: для станции {ToPrettyString(station)} с сетками id " +
+                            $"[{string.Join(", ", gridIds)}] состояния в '{SaveSystem.StationFileName}' нет — " +
+                            $"имя '{Name(station)}' осталось сгенерированным");
+                continue;
+            }
+
+            used.Add(state);
+            applied++;
+            handledStations.Add(station);
+
+            var oldName = Name(station);
+            if (IsStationName(state.Name) && oldName != state.Name)
+            {
+                _station.RenameStation(station, state.Name, false, data);
+                _documentNames[oldName] = state.Name;
+
+                foreach (var grid in grids)
+                {
+                    if (MetaData(grid).EntityName == oldName)
+                        _metaData.SetEntityName(grid, state.Name);
+                }
+
+                Log.Info($"SaveGamemode: станции {ToPrettyString(station)} (id [{string.Join(", ", gridIds)}]) " +
+                         $"возвращено имя из сохранения: '{oldName}' -> '{state.Name}'");
+            }
+            else if (!IsStationName(state.Name))
+            {
+                Log.Warning($"SaveGamemode: в '{SaveSystem.StationFileName}' у станции нет имени — " +
+                            $"остаётся '{oldName}'");
+            }
+
+            attached += AttachStationGrids(station, data, state, free);
+            accounts += ApplyStationAccounts(station, state);
+        }
+
+        foreach (var state in states)
+        {
+            if (used.Contains(state))
+                continue;
+
+            Log.Warning($"SaveGamemode: состояние станции '{state.Name}' (id [{string.Join(", ", state.Ids)}]) " +
+                        $"не применено — станции с такими сетками на карте {mapId} нет");
+        }
+
+        var left = 0;
+        foreach (var candidates in free.Values)
+        {
+            left += candidates.Count;
+        }
+
+        if (left > 0)
+        {
+            Log.Info($"SaveGamemode: сеток без станции на карте {mapId} осталось: {left} — " +
+                     $"в '{SaveSystem.StationFileName}' для них станции нет");
+        }
+
+        Log.Info($"SaveGamemode: из состояния применено станций: {applied}, сеток возвращено: {attached}, " +
+                 $"счетов восстановлено: {accounts}");
+    }
+
+    /// <summary>
+    ///     Возвращает станции её шаттлы, спасательные капсулы и точки интереса.
+    /// </summary>
+    /// <remarks>
+    ///     Привязка сетки к станции (<c>StationMemberComponent</c>) — живая ссылка на станцию, которой в файле
+    ///     нет, поэтому после загрузки шаттл карго или капсула висят «ничейными»: всё, что ищет станцию
+    ///     по сетке (банк карго, терминал заказов, доступы дверей), на них не работает.
+    ///     Сетка берётся из пула по имени один раз: одинаковых капсул у станции несколько, и каждая запись
+    ///     в сохранении — отдельная сетка. Имя передаётся своё, иначе <c>AddGridToStation</c> перепишет его
+    ///     именем станции, а у точек интереса оно собственное.
+    /// </remarks>
+    private int AttachStationGrids(EntityUid station, StationDataComponent data, SavedStationState state,
+        Dictionary<string, List<EntityUid>> free)
+    {
+        var attached = 0;
+
+        foreach (var gridName in state.GridNames)
+        {
+            if (!free.TryGetValue(gridName, out var candidates) || candidates.Count == 0)
+                continue;
+
+            var grid = candidates[^1];
+            candidates.RemoveAt(candidates.Count - 1);
+
+            _station.AddGridToStation(station, grid, null, data, gridName);
+            attached++;
+        }
+
+        return attached;
+    }
+
+    /// <summary>
+    ///     Ставит балансы счетов станции из сохранения.
+    /// </summary>
+    /// <returns>Сколько счетов удалось восстановить.</returns>
+    /// <remarks>
+    ///     Счёт берётся по своему id: прототипы счетов могли измениться между раундами, и незнакомый id
+    ///     движок не примет. Счета создаются вместе со станцией из её прототипа, но если компонента нет —
+    ///     он заводится, иначе сохранённые деньги девать некуда.
+    /// </remarks>
+    private int ApplyStationAccounts(EntityUid station, SavedStationState state)
+    {
+        if (state.Accounts.Count == 0)
+            return 0;
+
+        var bank = EnsureComp<StationBankAccountComponent>(station);
+        var restored = 0;
+
+        foreach (var (account, money) in state.Accounts)
+        {
+            if (!_proto.HasIndex<CargoAccountPrototype>(account))
+            {
+                Log.Warning($"SaveGamemode: счёт '{account}' из сохранения не найден среди прототипов — пропущен");
+                continue;
+            }
+
+            if (_cargo.TrySetBankAccount((station, bank), account, money, createAccount: true))
+                restored++;
+        }
+
+        if (restored > 0)
+        {
+            Log.Info($"SaveGamemode: станции {ToPrettyString(station)} восстановлено счетов: {restored} " +
+                     $"из {state.Accounts.Count}");
+        }
+
+        return restored;
+    }
+
+    /// <summary>
+    ///     Похоже ли имя сетки на имя станции, а не на то, с которым сетку создал движок.
+    /// </summary>
+    /// <remarks>
+    ///     <c>MapManager</c> создаёт сущность сетки с именем <c>grid</c>. Если в файле стоит оно,
+    ///     сетку при раунде не переименовывали: станция была безымянной, и выдумывать из этого имя не стоит.
+    /// </remarks>
+    private static bool IsStationName(string? name) =>
+        !string.IsNullOrWhiteSpace(name) && !name.Equals(DefaultGridName, StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    ///     Правит сохранённое имя станции в документах, которые уже напечатаны.
+    /// </summary>
+    /// <remarks>
+    ///     Шапка печатной формы — не ссылка на станцию, а подставленный в текст шаблон:
+    ///     <c>STATION XX-00</c> в формах <c>Resources/Paperwork</c> заменяется именем станции в момент
+    ///     печати (<c>PaperworkTextSubstitutions.ApplyBase</c>). Документ, напечатанный, пока станция
+    ///     носила выдуманное имя, остаётся с ним навсегда — переименование станции его не касается,
+    ///     и в следующее сохранение уходит уже испорченный текст. Поэтому бумаги проходятся один раз
+    ///     за раунд, и выдуманное имя в них меняется на сохранённое. Подписи документов правятся там же:
+    ///     имя станции встречается и в строке подписи.
+    /// </remarks>
+    private void FixStationNamesInDocuments()
+    {
+        if (_documentNames.Count == 0)
+            return;
+
+        var papers = 0;
+        var signatures = 0;
+
+        var query = AllEntityQuery<PaperComponent>();
+        while (query.MoveNext(out var uid, out var paper))
+        {
+            var changed = false;
+
+            var content = paper.Content;
+            if (!string.IsNullOrEmpty(content))
+            {
+                foreach (var (wrong, right) in _documentNames)
+                {
+                    if (!content.Contains(wrong, StringComparison.Ordinal))
+                        continue;
+
+                    content = content.Replace(wrong, right);
+                    changed = true;
+                }
+
+                if (changed)
+                {
+                    paper.Content = content;
+                    papers++;
+                }
+            }
+
+            for (var i = 0; i < paper.Signatures.Count; i++)
+            {
+                var line = paper.Signatures[i];
+
+                foreach (var (wrong, right) in _documentNames)
+                {
+                    if (!line.Contains(wrong, StringComparison.Ordinal))
+                        continue;
+
+                    line = line.Replace(wrong, right);
+                }
+
+                if (line != paper.Signatures[i])
+                {
+                    paper.Signatures[i] = line;
+                    signatures++;
+                    changed = true;
+                }
+            }
+
+            if (changed)
+                Dirty(uid, paper);
+        }
+
+        if (papers == 0 && signatures == 0)
+            return;
+
+        var pairs = new List<string>();
+        foreach (var (wrong, right) in _documentNames)
+        {
+            pairs.Add($"'{wrong}' -> '{right}'");
+        }
+
+        Log.Info($"SaveGamemode: имя станции поправлено в уже напечатанных документах: бумаг {papers}, " +
+                 $"подписей {signatures} ({string.Join(", ", pairs)})");
     }
 
     /// <summary>
@@ -381,28 +1071,55 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     ///     Имя сохранённой карты для этого не подходит: станции ищутся по <c>BecomesStationComponent.Id</c>
     ///     в словаре <c>stations</c> прототипа, и у одной карты их несколько. Карта, которую режим отменил
     ///     ради сохранения, — эталон, проверяем её первой, чтобы не начать грузить конфигурацию чужой станции.
+    ///     Подходящих прототипов бывает несколько, и брать первый нельзя: на карте Box станции
+    ///     <c>Boxstation</c> и <c>Empty</c> (капсулы), конфигурация <c>Box</c> знает только первую, а
+    ///     отладочная <c>Empty</c> — только капсулы. Взять её значит собрать станцию из капсул, а главную
+    ///     сетку оставить вовсе без станции. Поэтому считается, сколько станций прототип накрывает, и
+    ///     главное — есть ли у него конфигурация для id главной (самой большой) сетки карты.
     /// </remarks>
-    private GameMapPrototype? FindGameMapPrototype(HashSet<string> stationIds)
+    /// <param name="stationIds">Все <c>BecomesStationComponent.Id</c> сеток карты.</param>
+    /// <param name="primaryId">Id главной сетки карты, если она есть.</param>
+    private GameMapPrototype? FindGameMapPrototype(HashSet<string> stationIds, string? primaryId = null)
     {
-        foreach (var proto in _replacedMaps)
+        GameMapPrototype? best = null;
+        var bestScore = 0;
+
+        foreach (var proto in Candidates())
         {
+            var covered = 0;
             foreach (var stationId in stationIds)
             {
                 if (proto.Stations.ContainsKey(stationId))
-                    return proto;
+                    covered++;
             }
+
+            if (covered == 0)
+                continue;
+
+            // Полное покрытие и конфигурация главной сетки важнее, чем число накрытых станций:
+            // станции на карте заведомо чужие (капсулы), а станции без работы и шаттла быть не может.
+            var score = covered + (primaryId != null && proto.Stations.ContainsKey(primaryId) ? stationIds.Count : 0);
+            if (score <= bestScore)
+                continue;
+
+            bestScore = score;
+            best = proto;
+        }
+
+        return best;
+    }
+
+    private IEnumerable<GameMapPrototype> Candidates()
+    {
+        foreach (var proto in _replacedMaps)
+        {
+            yield return proto;
         }
 
         foreach (var proto in _gameMap.AllMaps())
         {
-            foreach (var stationId in stationIds)
-            {
-                if (proto.Stations.ContainsKey(stationId))
-                    return proto;
-            }
+            yield return proto;
         }
-
-        return null;
     }
 
     /// <summary>
@@ -677,12 +1394,29 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
 
         Log.Info($"SaveGamemode: попытка сохранить карту {mapId} в слот '{component.SaveSlot}'");
 
+        // Состояние станций снимается ДО записи карты: запись идёт в память минуту, и за это время
+        // станции никто не трогает, но и тянуть её после долгого сохранения не за чем.
+        var states = CollectStationStates(mapId);
+
         // Сохранение через пост-процессор: он вычищает runtime-состояние и снимает mapInit,
         // чтобы карта загрузилась как неинициализированная.
-        if (_save.TrySaveFilteredSlot(mapId, component.SaveSlot, out var report))
-            Log.Info($"SaveGamemode: карта {mapId} сохранена в слот '{component.SaveSlot}'. {report}");
-        else
+        if (!_save.TrySaveFilteredSlot(mapId, component.SaveSlot, out var report))
+        {
             Log.Error($"SaveGamemode: не удалось сохранить карту {mapId} в слот '{component.SaveSlot}' " +
                       $"(старое сохранение слота не тронуто)");
+            return;
+        }
+
+        Log.Info($"SaveGamemode: карта {mapId} сохранена в слот '{component.SaveSlot}'. {report}");
+
+        // Станция — сущность вне карты, в файл карты она не попадает: её имя и балансы пишутся
+        // рядом в station.yml. Без них станция при загрузке рождается заново — с новым именем
+        // и деньгами из прототипа.
+        if (_save.TryWriteStationStates(component.SaveSlot, states))
+            Log.Info($"SaveGamemode: состояние станций сохранено в слот '{component.SaveSlot}' " +
+                     $"(станций: {states.Count})");
+        else
+            Log.Error($"SaveGamemode: не удалось записать состояние станций в слот '{component.SaveSlot}' — " +
+                      "при загрузке имена будут взяты с сеток, балансы — из прототипа");
     }
 }

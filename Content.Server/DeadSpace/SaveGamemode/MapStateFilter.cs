@@ -45,6 +45,12 @@ public sealed class MapFilterReport
     public int ClearedMapInitFlags;
 
     /// <summary>
+    ///     Сколько повторных ключей убрано из узлов сущностей. С дубликатом читатель файл не разбирает:
+    ///     <c>DataNodeParser.ParseMapping</c> бросает «An item with the same key has already been added».
+    /// </summary>
+    public int DeduplicatedKeys;
+
+    /// <summary>
     ///     Сколько различных компонентов в типизированном режиме не нашлось в регистрации: их поля
     ///     чистка не трогает. Нетипично большое число означает, что проб полей не работает.
     /// </summary>
@@ -154,6 +160,7 @@ public sealed class MapFilterReport
                $"удалено без родителя: {RemovedParentlessEntities}, " +
                $"неизвестных компонентов: {UnresolvedComponents}, " +
                $"списков почищено: {CleanedRootLists}, mapInit проставлен: {MarkedInitFlags}, у карты снят: {ClearedMapInitFlags}, " +
+               $"повторных ключей убрано: {DeduplicatedKeys}, " +
                $"осталось сущностей: {RemainingEntities}";
     }
 }
@@ -273,6 +280,11 @@ public static class MapStateFilter
         if (config.NormalizeMapInitFlags)
             NormalizeInitFlags(data, entities, report);
 
+        // Повторный ключ узла читатель не разбирает: ParseMapping падает на
+        // «An item with the same key has already been added» и файл больше не читается ничем.
+        // Дубликаты прилетают из файлов прежних версий — убираем их перед самой записью.
+        DedupEntityKeys(entities, report);
+
         UpdateMetadata(data, report);
 
         return report;
@@ -318,21 +330,123 @@ public static class MapStateFilter
 
             if (mapUids.Contains(uid))
             {
-                if (TryFindFoldKey(ent, MapInitKey, out var mapFlag) && ent.Remove(mapFlag))
+                if (RemoveFoldKeys(ent, MapInitKey) > 0)
                     report.ClearedMapInitFlags++;
 
                 ClearMapInitFields(ent, report);
                 return;
             }
 
-            if (TryFindFoldKey(ent, MapInitKey, out var existing) &&
-                ent[existing] is ValueDataNode value &&
-                string.Equals(value.Value.Trim(), "true", StringComparison.OrdinalIgnoreCase))
+            // Проверка и запись должны смотреть на один и тот же ключ: _children у MappingDataNode
+            // без компаратора, и ключ <c>MapInit:</c> при проверке «до регистра» не мешал бы
+            // дописать в список второй <c>mapInit</c> — нечитаемый файл.
+            if (ent.TryGetValue(MapInitKey, out var exact) &&
+                exact is ValueDataNode exactValue &&
+                string.Equals(exactValue.Value.Trim(), "true", StringComparison.OrdinalIgnoreCase))
                 return;
 
+            RemoveFoldKeys(ent, MapInitKey);
             ent[MapInitKey] = new ValueDataNode("true");
             report.MarkedInitFlags++;
         });
+    }
+
+    /// <summary>
+    ///     Убирает из узла все ключи, совпадающие с <paramref name="field"/> с точностью до регистра.
+    /// </summary>
+    /// <returns>Число удалённых ключей.</returns>
+    private static int RemoveFoldKeys(MappingDataNode node, string field)
+    {
+        var removed = 0;
+
+        // Keys — копия списка, удалять по ходу обхода можно.
+        foreach (var key in node.Keys)
+        {
+            if (!string.Equals(key, field, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            node.Remove(key);
+            removed++;
+        }
+
+        return removed;
+    }
+
+    /// <summary>
+    ///     Выбрасывает повторные ключи в узлах сущностей: читатель на них падает, а остаётся
+    ///     последнее значение — ровно так, как его видит <c>MappingDataNode._children</c>.
+    /// </summary>
+    /// <remarks>
+    ///     Ключи компонентов не трогаем: там повтор — уже совсем другой узел, и дописывать его
+    ///     нечем, а вычищать состояние поля — портить данные.
+    /// </remarks>
+    private static void DedupEntityKeys(SequenceDataNode entities, MapFilterReport report)
+    {
+        ForEachEntity(entities, (_, ent) => DedupKeys(ent, report));
+    }
+
+    /// <summary>
+    ///     Оставляет в маппинге по одному вхождению каждого ключа (сравнение как у читателя — точное),
+    ///     рекурсивно по вложенным последовательностям и маппингам.
+    /// </summary>
+    private static void DedupKeys(MappingDataNode node, MapFilterReport report)
+    {
+        foreach (var (_, value) in node)
+        {
+            switch (value)
+            {
+                case MappingDataNode mapping:
+                    DedupKeys(mapping, report);
+                    break;
+                case SequenceDataNode sequence:
+                    DedupKeysInSequence(sequence, report);
+                    break;
+            }
+        }
+
+        // Count — число уникальных ключей, о повторах говорит только сам список.
+        var entries = node.ToList();
+        var duplicates = entries.Count - node.Count;
+        if (duplicates <= 0)
+            return;
+
+        var kept = new MappingDataNode(entries.Count);
+        var added = new HashSet<string>(StringComparer.Ordinal);
+
+        // Собираем с конца, но значения берём последние; наружу разворачиваем в прямом порядке.
+        for (var i = entries.Count - 1; i >= 0; i--)
+        {
+            var (key, value) = entries[i];
+            if (!added.Add(key))
+                continue;
+
+            kept.Add(key, value);
+        }
+
+        node.Clear();
+        for (var i = kept.Count - 1; i >= 0; i--)
+        {
+            var (key, value) = kept[i];
+            node.Add(key, value);
+        }
+
+        report.DeduplicatedKeys += duplicates;
+    }
+
+    private static void DedupKeysInSequence(SequenceDataNode sequence, MapFilterReport report)
+    {
+        foreach (var item in sequence)
+        {
+            switch (item)
+            {
+                case MappingDataNode mapping:
+                    DedupKeys(mapping, report);
+                    break;
+                case SequenceDataNode nested:
+                    DedupKeysInSequence(nested, report);
+                    break;
+            }
+        }
     }
 
     /// <summary>

@@ -397,9 +397,23 @@ public sealed partial class SaveSystem : EntitySystem
         report = new MapFilterReport();
         config ??= CreateFilterConfig();
 
-        if (!_mapLoader.TryReadFile(path, out var data))
+        // TryReadFile — метод с названием Try, но парсер YAML бросает наружу (повторный ключ узла — ArgumentException).
+        // Вызывается из старта раунда, и без обёртки исключение уронило бы инициализацию раунда целиком,
+        // лишний раз не дав даже загрузиться на запасной карте.
+        MappingDataNode data;
+        try
         {
-            Log.Error($"SaveSystem: не удалось прочитать '{path}' для фильтрации");
+            if (!_mapLoader.TryReadFile(path, out var parsed))
+            {
+                Log.Error($"SaveSystem: не удалось прочитать '{path}' для фильтрации");
+                return false;
+            }
+
+            data = parsed;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"SaveSystem: '{path}' не разбирается как YAML, пост-обработка невозможна, файл не тронут:\n{e}");
             return false;
         }
 
@@ -502,7 +516,7 @@ public sealed partial class SaveSystem : EntitySystem
         }
 
         // Файл мог быть записан версией, срезавшей mapInit: доставляем флаг сущностям перед загрузкой.
-        PrepareMapInitFlags(path);
+        //PrepareMapInitFlags(path);
 
         // В отличие от DefaultMap, эту карту тикер не инициализирует, поэтому InitializeMap здесь.
         // Сущности уже с флагом mapInit, и инициализация сводится к карте и к тем сущностям,
@@ -558,6 +572,11 @@ public sealed partial class SaveSystem : EntitySystem
     ///     У карты флаг оставлять нельзя: <c>GameTicker.StartRound</c> инициализирует <c>DefaultMap</c> сам.
     ///     Файл — сотни мегабайт, YAML-дерево из него строить дорого, поэтому правим построчно:
     ///     флаг вставляется первым ключом сущности, у карты удаляется он сам и поля <c>Map</c>.
+    ///     Все ключи узла сущности при этом дедуплицируются: повторный ключ читатель не разбирает
+    ///     (<c>ParseMapping</c> падает на «An item with the same key has already been added»), а
+    ///     пост-процессор такому не поможет — <c>TryReadFile</c> падает раньше фильтрации.
+    ///     Из повтора остаётся первое вхождение: именно его мы и пишем, когда доставляем флаг,
+    ///     а вторая строка <c>mapInit</c> у движка идёт в конце узла и может нести значение «false».
     /// </remarks>
     /// <returns>Число исправленных сущностей, либо -1 при ошибке.</returns>
     public int PrepareMapInitFlags(ResPath path)
@@ -583,6 +602,7 @@ public sealed partial class SaveSystem : EntitySystem
 
         var marked = 0;
         var cleared = 0;
+        var deduped = 0;
         var tempLength = 0L;
 
         try
@@ -597,9 +617,26 @@ public sealed partial class SaveSystem : EntitySystem
                         var inEntities = false;
                         var inMapsHeader = false;
                         var isMapEntity = false;
+                        var sawEntityItem = false;
                         var keyIndent = 0;
                         var needInsert = false;
                         var component = string.Empty;
+                        // Ключи текущей сущности: повторный тот же ключ делает файл нечитаемым
+                        // (ParseMapping падает на «An item with the same key has already been added»).
+                        var entityKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                        // Флаг, который некуда было вставить (у узла не нашлось ключа на его отступе),
+                        // дописываем в конце узла: молча терять его нельзя — сущность без флага
+                        // движок инициализирует заново.
+                        void FlushPendingFlag()
+                        {
+                            if (!needInsert || keyIndent < 0 || isMapEntity)
+                                return;
+
+                            writer.WriteLine(new string(' ', keyIndent) + MapInitKey + ": true");
+                            needInsert = false;
+                            marked++;
+                        }
 
                         string? line;
                         while ((line = reader.ReadLine()) is not null)
@@ -634,12 +671,26 @@ public sealed partial class SaveSystem : EntitySystem
                             {
                                 var uid = int.Parse(item.Groups["uid"].Value, CultureInfo.InvariantCulture);
 
+                                FlushPendingFlag();
+
                                 // Ключи сущности на два пробела глубже её пункта в списке группы.
                                 keyIndent = item.Groups["indent"].Length + 2;
                                 isMapEntity = mapUids.Contains(uid);
                                 needInsert = !isMapEntity;
+                                sawEntityItem = true;
                                 component = string.Empty;
+                                entityKeys.Clear();
 
+                                writer.WriteLine(line);
+                                continue;
+                            }
+
+                            // Новый пункт группы ('- proto: …') тоже закрывает предыдущий узел.
+                            if (needInsert && line.StartsWith("- ", StringComparison.Ordinal))
+                            {
+                                FlushPendingFlag();
+                                isMapEntity = false;
+                                component = string.Empty;
                                 writer.WriteLine(line);
                                 continue;
                             }
@@ -669,32 +720,63 @@ public sealed partial class SaveSystem : EntitySystem
                             }
 
                             var colon = line.IndexOf(':', keyIndent);
-                            var isInitFlag = colon > keyIndent &&
-                                             line.AsSpan(keyIndent, colon - keyIndent).Trim()
-                                                 .Equals(MapInitKey, StringComparison.OrdinalIgnoreCase);
-
-                            if (isInitFlag)
+                            if (colon <= keyIndent)
                             {
-                                // Флаг у сущности уже есть — вставлять второй не нужно.
-                                needInsert = false;
-
-                                if (isMapEntity)
-                                {
-                                    cleared++;
-                                    continue;
-                                }
-
-                                if (!line[(colon + 1)..].Trim().Equals("true", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    writer.WriteLine(line[..keyIndent] + MapInitKey + ": true");
-                                    marked++;
-                                    continue;
-                                }
-
                                 writer.WriteLine(line);
                                 continue;
                             }
 
+                            var entityKey = line.AsSpan(keyIndent, colon - keyIndent).Trim();
+
+                            var isMapInitKey = entityKey.Equals(MapInitKey, StringComparison.OrdinalIgnoreCase);
+
+                            // Флаг ищем по всему узлу, а не только до его первого ключа: сериализатор
+                            // пишет mapInit ПОСЛЕДНИМ ключом у сущностей, не прошедших MapInit (у них
+                            // узел начинается с 'paused:'). Вставка «перед первым ключом» без этого
+                            // дописывала второй mapInit в тот же узел — файл переставал читаться.
+                            if (isMapInitKey)
+                            {
+                                if (isMapEntity)
+                                {
+                                    // У карты флаг обязан быть снят: GameTicker.StartRound инициализирует её сам.
+                                    cleared++;
+                                    continue;
+                                }
+
+                                if (needInsert)
+                                {
+                                    entityKeys.Add(entityKey.ToString());
+                                    needInsert = false;
+
+                                    if (line[(colon + 1)..].Trim().Equals("true", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        // Флаг на своём месте и верный — оставляем строку как есть.
+                                        writer.WriteLine(line);
+                                        continue;
+                                    }
+
+                                    // Флаг есть, но значение не true: заменяем его на месте.
+                                    writer.WriteLine(new string(' ', keyIndent) + MapInitKey + ": true");
+                                    marked++;
+                                    continue;
+                                }
+
+                                // Наш флаг уже записан в начало узла — эта строка второй mapInit в нём же.
+                                deduped++;
+                                continue;
+                            }
+
+                            // Повторный ключ узла читатель не разбирает: ParseMapping падает на
+                            // «An item with the same key has already been added». Оставляем первое вхождение.
+                            if (!entityKeys.Add(entityKey.ToString()))
+                            {
+                                deduped++;
+                                continue;
+                            }
+
+                            // Ключ сущности (в том числе пункт списка 'components:') видит только
+                            // PrepareMapInitFlags: у последнего узла группы других ключей не остаётся,
+                            // и флаг уехал бы в конец блока — уже за пределы узла.
                             if (needInsert)
                             {
                                 writer.WriteLine(new string(' ', keyIndent) + MapInitKey + ": true");
@@ -706,6 +788,10 @@ public sealed partial class SaveSystem : EntitySystem
 
                             writer.WriteLine(line);
                         }
+
+                        // Последний узел файла: за ним уже нет строки, которая закрыла бы узел.
+                        if (sawEntityItem && needInsert && keyIndent >= 0 && !isMapEntity)
+                            FlushPendingFlag();
                     }
 
                     tempLength = stream.Length;
@@ -720,7 +806,7 @@ public sealed partial class SaveSystem : EntitySystem
             }
 
             // Файл уже в порядке (его записывал пост-процессор) — не перезаписываем его.
-            if (marked + cleared == 0)
+            if (marked + cleared + deduped == 0)
                 return 0;
 
             // Без списка карт мы не знали, у кого флаг обязан оставаться снятым, и поставили его всем:
@@ -745,8 +831,9 @@ public sealed partial class SaveSystem : EntitySystem
             TryDeleteFile(tempPath);
         }
 
-        Log.Info($"SaveSystem: mapInit проставлен {marked} сущностям, у карты снято {cleared} флагов ('{rooted}')");
-        return marked + cleared;
+        Log.Info($"SaveSystem: mapInit проставлен {marked} сущностям, у карты снято {cleared} флагов, " +
+                 $"убрано повторных ключей {deduped} ('{rooted}')");
+        return marked + cleared + deduped;
     }
 
     /// <summary>
