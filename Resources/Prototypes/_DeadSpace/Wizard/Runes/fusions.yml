@@ -671,6 +671,11 @@
     damage:
       types:
         Asphyxiation: 8
+  - !type:RuneSpawnEffect
+    prototype: RuneWaterPuddle
+    pattern: AreaAtPoint
+    size: 2
+    skipBlocked: false
 
 - type: wizardRuneFusion
   id: RuneFusionFoamParty

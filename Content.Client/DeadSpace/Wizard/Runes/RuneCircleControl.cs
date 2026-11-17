@@ -5,6 +5,7 @@ using System.Numerics;
 using Content.Client.Stylesheets;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Input;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -51,6 +52,7 @@ public sealed class RuneCircleControl : LayoutContainer
     private const float BurstTime = 0.7f;
 
     private readonly IClyde _clyde;
+    private readonly SpriteSystem _sprite;
     private readonly List<Vector2> _stroke = new();
     private List<Vector2> _last = new();
     private Color _lastColor = Good;
@@ -131,6 +133,7 @@ public sealed class RuneCircleControl : LayoutContainer
     {
         MouseFilter = MouseFilterMode.Stop;
         _clyde = IoCManager.Resolve<IClyde>();
+        _sprite = IoCManager.Resolve<IEntityManager>().System<SpriteSystem>();
         var cache = IoCManager.Resolve<IResourceCache>();
         _font = cache.NotoStack(variation: "Bold", size: 12);
         _small = cache.NotoStack(size: 9);
@@ -522,10 +525,40 @@ public sealed class RuneCircleControl : LayoutContainer
 
         var top = c + new Vector2(0f, -r);
         var medal = 17f * scale;
-        handle.DrawCircle(top, medal, Night);
         Texture(handle, RuneCircleArt.Glow(_clyde), top, medal * 4f, 0f, form.Color.WithAlpha(0.35f * dim));
+        if (DrawIcon(handle, form, top, medal * 2.4f, dim))
+            return;
+
+        handle.DrawCircle(top, medal, Night);
         Texture(handle, RuneCircleArt.Ring(_clyde, 2f * scale * RuneCircleArt.RingSize / RuneCircleArt.RingDiameter(medal)), top, RuneCircleArt.RingDiameter(medal), 0f, form.Color.WithAlpha(dim));
         DrawGlyph(handle, form.Stroke, UIBox2.FromDimensions(top - new Vector2(medal * 0.8f), new Vector2(medal * 1.6f)), form.Color.WithAlpha(dim), 1.8f * scale);
+    }
+
+    private void DrawElementMedals(DrawingHandleScreen handle, Vector2 c, float r, RunePrototype first, RunePrototype? second, float scale, float dim)
+    {
+        var medal = 14f * scale;
+        var spread = second != null ? medal * 1.25f : 0f;
+        DrawElementMedal(handle, first, c + new Vector2(-spread, r), medal, dim);
+        if (second != null)
+            DrawElementMedal(handle, second, c + new Vector2(spread, r), medal, dim);
+    }
+
+    private void DrawElementMedal(DrawingHandleScreen handle, RunePrototype element, Vector2 at, float medal, float dim)
+    {
+        if (element.Icon == null)
+            return;
+
+        Texture(handle, RuneCircleArt.Glow(_clyde), at, medal * 3.5f, 0f, element.Color.WithAlpha(0.3f * dim));
+        DrawIcon(handle, element, at, medal * 2.4f, dim);
+    }
+
+    private bool DrawIcon(DrawingHandleScreen handle, RunePrototype rune, Vector2 center, float size, float alpha)
+    {
+        if (rune.Icon is not { } icon)
+            return false;
+
+        handle.DrawTextureRect(_sprite.Frame0(icon), UIBox2.FromDimensions(center - new Vector2(size / 2f), new Vector2(size)), Color.White.WithAlpha(alpha));
+        return true;
     }
 
     private void DrawElementBand(DrawingHandleScreen handle, Vector2 c, float big, float scale, float dim)
@@ -560,6 +593,7 @@ public sealed class RuneCircleControl : LayoutContainer
         Texture(handle, RuneCircleArt.Comet(_clyde, width * 0.9f * texel), c, diameter, _time * speed + MathF.PI, sheen.WithAlpha(sheen.A * 0.6f));
 
         DrawMotes(handle, c, r, width, first, second, scale, dim);
+        DrawElementMedals(handle, c, r, first, second, scale, dim);
     }
 
     private Color ElementTint(RunePrototype element, float offset)
@@ -1095,12 +1129,15 @@ public sealed class RuneCircleControl : LayoutContainer
                 if (hovered)
                     _hover = rune;
                 var alpha = active || hovered ? 1f : 0.35f;
-                var diameter = RuneCircleArt.RingDiameter(box / 2f);
-                handle.DrawCircle(center, box / 2f, Night);
-                Texture(handle, RuneCircleArt.Ring(_clyde, 1.3f * scale * RuneCircleArt.RingSize / diameter), center, diameter, 0f, rune.Color.WithAlpha(0.7f * alpha));
                 if (active)
                     Texture(handle, RuneCircleArt.Glow(_clyde), center, box * 1.8f, 0f, rune.Color.WithAlpha(0.12f));
-                DrawGlyph(handle, rune.Stroke, UIBox2.FromDimensions(center - new Vector2(box * 0.42f), new Vector2(box * 0.84f)), rune.Color.WithAlpha(alpha), 1.4f * scale);
+                if (!DrawIcon(handle, rune, center, box * 1.3f, alpha))
+                {
+                    var diameter = RuneCircleArt.RingDiameter(box / 2f);
+                    handle.DrawCircle(center, box / 2f, Night);
+                    Texture(handle, RuneCircleArt.Ring(_clyde, 1.3f * scale * RuneCircleArt.RingSize / diameter), center, diameter, 0f, rune.Color.WithAlpha(0.7f * alpha));
+                    DrawGlyph(handle, rune.Stroke, UIBox2.FromDimensions(center - new Vector2(box * 0.42f), new Vector2(box * 0.84f)), rune.Color.WithAlpha(alpha), 1.4f * scale);
+                }
                 var name = Loc.GetString(rune.Name);
                 var room = cell - 4f * scale;
                 var nameFont = TextWidth(_small, name) <= room ? _small : _tiny;

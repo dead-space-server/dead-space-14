@@ -7,7 +7,7 @@
   element: RuneElementFire
   range: 9
   strain: 16
-  cooldown: 8
+  cooldown: 11
   loudness: 1
   effects:
   - !type:RuneTelekinesisEffect
@@ -25,7 +25,7 @@
   element: RuneElementIce
   range: 9
   strain: 14
-  cooldown: 7
+  cooldown: 11
   effects:
   - !type:RuneTelekinesisEffect
   - !type:RuneSlowEffect
@@ -47,7 +47,9 @@
   element: RuneElementEarth
   range: 8
   strain: 18
-  cooldown: 10
+  cooldown: 35
+  allows:
+  - RuneModifierDuration
   loudness: 1
   effects:
   - !type:RuneTelekinesisEffect
@@ -67,7 +69,7 @@
   element: RuneElementLightning
   range: 9
   strain: 16
-  cooldown: 8
+  cooldown: 20
   effects:
   - !type:RuneTelekinesisEffect
     pullSpeed: 16
@@ -86,7 +88,7 @@
   element: RuneElementLife
   range: 10
   strain: 14
-  cooldown: 10
+  cooldown: 35
   effects:
   - !type:RuneTelekinesisEffect
     pullSpeed: 8
@@ -144,7 +146,9 @@
   element: RuneElementWater
   range: 9
   strain: 12
-  cooldown: 6
+  cooldown: 35
+  allows:
+  - RuneModifierDuration
   effects:
   - !type:RuneTelekinesisEffect
   - !type:RuneExtinguishEffect
@@ -158,7 +162,9 @@
   element: RuneElementAir
   range: 12
   strain: 12
-  cooldown: 5
+  cooldown: 13
+  allows:
+  - RuneModifierDuration
   effects:
   - !type:RuneTelekinesisEffect
     pullSpeed: 18
@@ -177,7 +183,7 @@
   element: RuneElementBlood
   range: 9
   strain: 14
-  cooldown: 8
+  cooldown: 15
   loudness: 1
   effects:
   - !type:RuneTelekinesisEffect

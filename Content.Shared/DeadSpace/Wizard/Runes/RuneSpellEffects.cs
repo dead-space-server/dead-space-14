@@ -189,6 +189,18 @@ public sealed partial class RuneSpawnRandomEffect : RuneSpellEffect
 
     [DataField]
     public bool NoGhostRole;
+
+    [DataField]
+    public bool PerTile;
+
+    [DataField]
+    public bool SkipBlocked;
+
+    [DataField]
+    public float LifetimeMin;
+
+    [DataField]
+    public float LifetimeMax;
 }
 
 public sealed partial class RuneDamageEffect : RuneTargetedEffect
@@ -286,6 +298,13 @@ public sealed partial class RuneSlowEffect : RuneTargetedEffect
 
     [DataField]
     public float Multiplier = 0.5f;
+
+    [DataField]
+    public EntProtoId? Status;
+}
+
+public sealed partial class RuneCauterizeEffect : RuneTargetedEffect
+{
 }
 
 public sealed partial class RuneIgniteEffect : RuneTargetedEffect
@@ -337,7 +356,7 @@ public sealed partial class RunePolymorphEffect : RuneTargetedEffect
     public ProtoId<PolymorphPrototype>? OnCaster;
 
     [DataField]
-    public bool ScaleDuration;
+    public bool ScaleDuration = true;
 
     [DataField]
     public bool Feral;
@@ -461,7 +480,7 @@ public sealed partial class RuneAnimateEffect : RuneSpellEffect
     public float Radius = 1.5f;
 
     [DataField]
-    public float Lifetime = 120f;
+    public float Lifetime = 90f;
 }
 
 public sealed partial class RuneKnockEffect : RuneSpellEffect

@@ -19,7 +19,7 @@
   id: SpellbookRuneFormWave
   name: rune-form-wave-name
   description: rune-form-wave-desc
-  icon: { sprite: Objects/Magic/magicactions.rsi, state: repulse }
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormWave }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneFormWave
   raiseProductEventOnUser: true
@@ -36,7 +36,7 @@
   id: SpellbookRuneFormAnimate
   name: rune-form-animate-name
   description: rune-form-animate-desc
-  icon: { sprite: Objects/Weapons/Guns/Basic/staves.rsi, state: animation }
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormAnimate }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneFormAnimate
   raiseProductEventOnUser: true
@@ -53,7 +53,7 @@
   id: SpellbookRuneFormSummon
   name: rune-form-summon-name
   description: rune-form-summon-desc
-  icon: { sprite: Objects/Magic/magicactions.rsi, state: spell_default }
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormSummon }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneFormSummon
   raiseProductEventOnUser: true
@@ -70,7 +70,7 @@
   id: SpellbookRuneFormGrasp
   name: rune-form-grasp-name
   description: rune-form-grasp-desc
-  icon: { sprite: Objects/Magic/magicactions.rsi, state: item_recall }
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormGrasp }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneFormGrasp
   raiseProductEventOnUser: true
@@ -89,7 +89,7 @@
   id: SpellbookRuneElementIce
   name: rune-element-ice-name
   description: rune-element-ice-desc
-  icon: { sprite: Objects/Weapons/Guns/Projectiles/magic.rsi, state: ice }
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementIce }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneElementIce
   raiseProductEventOnUser: true
@@ -106,7 +106,7 @@
   id: SpellbookRuneElementLightning
   name: rune-element-lightning-name
   description: rune-element-lightning-desc
-  icon: { sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi, state: tesla_projectile }
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementLightning }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneElementLightning
   raiseProductEventOnUser: true
@@ -123,7 +123,7 @@
   id: SpellbookRuneElementVoid
   name: rune-element-void-name
   description: rune-element-void-desc
-  icon: { sprite: Objects/Magic/magicactions.rsi, state: jaunt }
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementVoid }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneElementVoid
   raiseProductEventOnUser: true
@@ -140,7 +140,7 @@
   id: SpellbookRuneElementChaos
   name: rune-element-chaos-name
   description: rune-element-chaos-desc
-  icon: { sprite: Clothing/Mask/cluwne.rsi, state: icon }
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementChaos }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneElementChaos
   raiseProductEventOnUser: true
@@ -157,7 +157,7 @@
   id: SpellbookRuneElementPoison
   name: rune-element-poison-name
   description: rune-element-poison-desc
-  icon: { sprite: Mobs/Aliens/Xenos/purple_snake.rsi, state: small_purple_snake }
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementPoison }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneElementPoison
   raiseProductEventOnUser: true
@@ -278,7 +278,7 @@
   id: SpellbookRuneFormPolymorph
   name: rune-form-polymorph-name
   description: rune-form-polymorph-desc
-  icon: { sprite: Objects/Weapons/Guns/Basic/wands.rsi, state: poly }
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormPolymorph }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneFormPolymorph
   raiseProductEventOnUser: true

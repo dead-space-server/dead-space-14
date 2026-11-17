@@ -2,6 +2,7 @@
 
 - type: wizardRune
   id: RuneFormProjectile
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormProjectile }
   name: rune-form-projectile-name
   description: rune-form-projectile-desc
   kind: Form
@@ -24,6 +25,7 @@
 
 - type: wizardRune
   id: RuneFormWall
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormWall }
   name: rune-form-wall-name
   description: rune-form-wall-desc
   kind: Form
@@ -34,6 +36,8 @@
   spellCooldown: 12
   autoTarget: AroundPoint
   autoPattern: LineAtPoint
+  holdCooldown: true
+  fusable: false
   color: "#c9b59a"
   strain: 4
   order: 1
@@ -45,6 +49,7 @@
 
 - type: wizardRune
   id: RuneFormWave
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormWave }
   name: rune-form-wave-name
   description: rune-form-wave-desc
   kind: Form
@@ -76,6 +81,7 @@
 
 - type: wizardRune
   id: RuneFormTouch
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormTouch }
   name: rune-form-touch-name
   description: rune-form-touch-desc
   kind: Form
@@ -99,6 +105,7 @@
 
 - type: wizardRune
   id: RuneFormSelf
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormSelf }
   name: rune-form-self-name
   description: rune-form-self-desc
   kind: Form
@@ -108,6 +115,11 @@
   spellCooldown: 18
   autoTarget: Caster
   autoPattern: AtCaster
+  holdCooldown: true
+  maxActive: 2
+  forbids:
+  - RuneModifierSwarm
+  - RuneModifierRange
   color: "#f5f5ff"
   strain: 3
   order: 4
@@ -132,6 +144,7 @@
 
 - type: wizardRune
   id: RuneFormAnimate
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormAnimate }
   name: rune-form-animate-name
   description: rune-form-animate-desc
   kind: Form
@@ -142,6 +155,11 @@
   spellCooldown: 25
   autoTarget: AroundPoint
   autoPattern: AtPoint
+  holdCooldown: true
+  fusable: false
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   color: "#b9ff8a"
   strain: 8
   absurdity: 1
@@ -163,6 +181,7 @@
 
 - type: wizardRune
   id: RuneFormSummon
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormSummon }
   name: rune-form-summon-name
   description: rune-form-summon-desc
   kind: Form
@@ -177,6 +196,11 @@
   spellCooldown: 30
   autoTarget: AroundPoint
   autoPattern: AtPoint
+  holdCooldown: true
+  fusable: false
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   stroke:
   - 0.1,0.9
   - 0.3,0.1
@@ -186,6 +210,7 @@
 
 - type: wizardRune
   id: RuneFormPolymorph
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormPolymorph }
   name: rune-form-polymorph-name
   description: rune-form-polymorph-desc
   kind: Form
@@ -195,11 +220,17 @@
   absurdity: 1
   order: 7
   targeting: EntityOrSelf
-  spellRange: 6
+  spellRange: 4.8
   spellStrain: 22
   spellCooldown: 30
   autoTarget: Target
   autoPattern: AtPoint
+  holdCooldown: true
+  fusable: false
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
+  - RuneModifierSwarm
   stroke:
   - 0.1,0.1
   - 0.9,0.9
@@ -209,6 +240,7 @@
 
 - type: wizardRune
   id: RuneFormGrasp
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormGrasp }
   name: rune-form-grasp-name
   description: rune-form-grasp-desc
   kind: Form
@@ -222,6 +254,11 @@
   spellCooldown: 6
   autoTarget: Target
   autoPattern: AtPoint
+  fusable: false
+  forbids:
+  - RuneModifierSwarm
+  - RuneModifierEcho
+  - RuneModifierDuration
   stroke:
   - 0.7,0.1
   - 0.7,0.65
@@ -232,6 +269,7 @@
 
 - type: wizardRune
   id: RuneFormUltimate
+  icon: { sprite: _DeadSpace/Wizard/rune_forms.rsi, state: RuneFormUltimate }
   name: rune-form-ultimate-name
   description: rune-form-ultimate-desc
   kind: Form
@@ -262,6 +300,7 @@
 
 - type: wizardRune
   id: RuneElementFire
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementFire }
   name: rune-element-fire-name
   description: rune-element-fire-desc
   kind: Element
@@ -280,6 +319,7 @@
 
 - type: wizardRune
   id: RuneElementIce
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementIce }
   name: rune-element-ice-name
   description: rune-element-ice-desc
   kind: Element
@@ -297,6 +337,7 @@
 
 - type: wizardRune
   id: RuneElementEarth
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementEarth }
   name: rune-element-earth-name
   description: rune-element-earth-desc
   kind: Element
@@ -316,6 +357,7 @@
 
 - type: wizardRune
   id: RuneElementLightning
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementLightning }
   name: rune-element-lightning-name
   description: rune-element-lightning-desc
   kind: Element
@@ -334,6 +376,7 @@
 
 - type: wizardRune
   id: RuneElementLife
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementLife }
   name: rune-element-life-name
   description: rune-element-life-desc
   kind: Element
@@ -351,6 +394,7 @@
 
 - type: wizardRune
   id: RuneElementVoid
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementVoid }
   name: rune-element-void-name
   description: rune-element-void-desc
   kind: Element
@@ -369,6 +413,7 @@
 
 - type: wizardRune
   id: RuneElementChaos
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementChaos }
   name: rune-element-chaos-name
   description: rune-element-chaos-desc
   kind: Element
@@ -389,6 +434,7 @@
 
 - type: wizardRune
   id: RuneElementWater
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementWater }
   name: rune-element-water-name
   description: rune-element-water-desc
   kind: Element
@@ -409,6 +455,7 @@
 
 - type: wizardRune
   id: RuneElementAir
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementAir }
   name: rune-element-air-name
   description: rune-element-air-desc
   kind: Element
@@ -429,6 +476,7 @@
 
 - type: wizardRune
   id: RuneElementBlood
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementBlood }
   name: rune-element-blood-name
   description: rune-element-blood-desc
   kind: Element
@@ -452,6 +500,7 @@
 
 - type: wizardRune
   id: RuneElementDeath
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementDeath }
   name: rune-element-death-name
   description: rune-element-death-desc
   kind: Element
@@ -471,6 +520,7 @@
 
 - type: wizardRune
   id: RuneElementPoison
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementPoison }
   name: rune-element-poison-name
   description: rune-element-poison-desc
   kind: Element

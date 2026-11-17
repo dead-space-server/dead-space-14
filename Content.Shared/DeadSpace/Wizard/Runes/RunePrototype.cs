@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.DeadSpace.Wizard.Runes;
 
@@ -104,4 +105,16 @@ public sealed partial class RunePrototype : IPrototype
 
     [DataField]
     public List<ProtoId<RunePrototype>> Forbids = new();
+
+    [DataField]
+    public bool HoldCooldown;
+
+    [DataField]
+    public int MaxActive;
+
+    [DataField]
+    public bool Fusable = true;
+
+    [DataField]
+    public SpriteSpecifier? Icon;
 }

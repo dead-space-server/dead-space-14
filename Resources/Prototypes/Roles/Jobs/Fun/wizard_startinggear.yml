@@ -15,6 +15,7 @@
   storage: #DS14
     back: #DS14
     - WizardRuneQuill #DS14
+    - BookWizardRunes #DS14
     - WizardRuneScroll #DS14
     - WizardRuneScroll #DS14
     - WizardRuneScroll #DS14

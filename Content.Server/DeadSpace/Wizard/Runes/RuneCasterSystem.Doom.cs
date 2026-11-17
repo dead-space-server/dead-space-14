@@ -13,6 +13,7 @@ using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Popups;
 using Content.Shared.Rotation;
 using Content.Shared.SSDIndicator;
+using Content.Shared.Strip.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -265,6 +266,7 @@ public sealed partial class RuneCasterSystem
         Dirty(target, petrified);
         RemComp<SSDIndicatorComponent>(target);
         RemComp<MindExaminableComponent>(target);
+        RemComp<StrippableComponent>(target);
         _godmode.EnableGodmode(target);
         _flammable.Extinguish(target);
         var tint = EnsureComp<RuneTintComponent>(target);

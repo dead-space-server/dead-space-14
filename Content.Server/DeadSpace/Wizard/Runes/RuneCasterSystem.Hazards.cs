@@ -2,6 +2,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Temperature.Systems;
 using Content.Shared.Atmos;
@@ -42,6 +43,10 @@ public sealed partial class RuneVacuumComponent : Component
     public TimeSpan NextPopup;
 
     public float AirlossPerSecond = 1f;
+
+    public float Cap;
+
+    public FixedPoint2 Start;
 }
 
 [RegisterComponent]
@@ -150,8 +155,18 @@ public sealed partial class RuneCasterSystem
                 continue;
 
             comp.NextTick = now + TimeSpan.FromSeconds(1);
+            var dealt = (Asphyxiation(uid) - comp.Start).Float();
+            if (dealt >= comp.Cap)
+            {
+                RemCompDeferred<RuneVacuumComponent>(uid);
+                continue;
+            }
+
+            if (HasComp<RespiratorComponent>(uid))
+                continue;
+
             var choke = new DamageSpecifier();
-            choke.DamageDict[AirlossDamage] = FixedPoint2.New(comp.AirlossPerSecond);
+            choke.DamageDict[AirlossDamage] = FixedPoint2.New(MathF.Min(comp.AirlossPerSecond, comp.Cap - dealt));
             _damageable.TryChangeDamage(uid, choke, true, interruptsDoAfters: false);
         }
 
@@ -321,11 +336,22 @@ public sealed partial class RuneCasterSystem
             if (target == ctx.Caster)
                 continue;
 
+            var fresh = !HasComp<RuneVacuumComponent>(target);
             var vacuum = EnsureComp<RuneVacuumComponent>(target);
             vacuum.End = end;
             vacuum.AirlossPerSecond = effect.AirlossPerSecond * ctx.Power;
+            vacuum.Cap = effect.Time * effect.AirlossPerSecond * ctx.Power;
+            if (fresh)
+                vacuum.Start = Asphyxiation(target);
             _popup.PopupEntity(Loc.GetString("rune-vacuum-start"), target, target, PopupType.MediumCaution);
         }
+    }
+
+    private FixedPoint2 Asphyxiation(EntityUid uid)
+    {
+        return TryComp<DamageableComponent>(uid, out var damageable) && damageable.Damage.DamageDict.TryGetValue(AirlossDamage, out var value)
+            ? value
+            : FixedPoint2.Zero;
     }
 
     private float StaminaAmount(RuneCastContext ctx, EntityUid target, RuneStaminaEffect effect)

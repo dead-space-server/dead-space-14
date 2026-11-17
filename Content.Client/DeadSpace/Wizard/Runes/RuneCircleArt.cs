@@ -8,8 +8,9 @@ namespace Content.Client.DeadSpace.Wizard.Runes;
 
 public static class RuneCircleArt
 {
-    public const int RingSize = 512;
+    public const int RingSize = 640;
     public const float RingRadius = 248f;
+    private const float EdgeFade = 0.08f;
 
     private static readonly Dictionary<string, Texture> Cache = new();
 
@@ -96,7 +97,9 @@ public static class RuneCircleArt
         for (var y = 0; y < size; y++)
         for (var x = 0; x < size; x++)
         {
-            var value = alpha((x + 0.5f - half) / half, (y + 0.5f - half) / half);
+            var u = (x + 0.5f - half) / half;
+            var v = (y + 0.5f - half) / half;
+            var value = alpha(u, v) * Math.Clamp((1f - MathF.Sqrt(u * u + v * v)) / EdgeFade, 0f, 1f);
             image[x, y] = new Rgba32(255, 255, 255, (byte) (Math.Clamp(value, 0f, 1f) * 255f));
         }
 

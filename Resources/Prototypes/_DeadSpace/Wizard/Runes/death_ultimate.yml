@@ -737,7 +737,7 @@
   id: SpellbookRuneElementDeath
   name: rune-element-death-name
   description: rune-element-death-desc
-  icon: { sprite: Objects/Magic/magicactions.rsi, state: gib }
+  icon: { sprite: _DeadSpace/Wizard/rune_elements.rsi, state: RuneElementDeath }
   productEvent: !type:RuneLearnProductEvent
     rune: RuneElementDeath
   raiseProductEventOnUser: true

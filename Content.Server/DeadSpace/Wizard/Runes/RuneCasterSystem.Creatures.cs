@@ -233,6 +233,26 @@ public sealed partial class RuneCasterSystem
     private void InitializeCreatures()
     {
         SubscribeLocalEvent<RuneAnimateStrikeComponent, MeleeHitEvent>(OnAnimateStrike);
+        SubscribeLocalEvent<RuneStoneFistsComponent, MeleeHitEvent>(OnStoneFistsHit);
+    }
+
+    private void OnStoneFistsHit(Entity<RuneStoneFistsComponent> ent, ref MeleeHitEvent args)
+    {
+        if (!args.IsHit || args.Weapon != ent.Owner || ent.Comp.Knockback <= 0f)
+            return;
+
+        var from = _transform.GetWorldPosition(ent);
+        foreach (var target in args.HitEntities)
+        {
+            if (target == ent.Owner || !HasComp<MobStateComponent>(target) || Transform(target).Anchored)
+                continue;
+
+            var direction = _transform.GetWorldPosition(target) - from;
+            if (direction.LengthSquared() < 0.001f)
+                continue;
+
+            _throwing.TryThrow(target, Vector2.Normalize(direction) * ent.Comp.Knockback, ent.Comp.KnockbackSpeed, ent.Owner, recoil: false, compensateFriction: true);
+        }
     }
 
     private void UpdateCreatures(float frameTime)
@@ -489,12 +509,12 @@ public sealed partial class RuneCasterSystem
             : AnimateLargeSize;
     }
 
-    private void ScaleAnimateDamage(EntityUid uid, float size)
+    private void ScaleAnimateDamage(EntityUid uid, float size, float weakness)
     {
         if (!TryComp<MeleeWeaponComponent>(uid, out var melee))
             return;
 
-        melee.Damage *= Math.Clamp(size, AnimateMinDamage, AnimateMaxDamage);
+        melee.Damage *= Math.Clamp(size, AnimateMinDamage, AnimateMaxDamage) * weakness;
         Dirty(uid, melee);
     }
 

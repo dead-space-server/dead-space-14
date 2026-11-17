@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Actions;
+using Content.Shared.Alert;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -10,6 +11,8 @@ namespace Content.Shared.DeadSpace.Wizard.Runes;
 public sealed partial class RuneCircleActionEvent : InstantActionEvent
 {
 }
+
+public sealed partial class RuneDispelAlertEvent : BaseAlertEvent;
 
 [Serializable, NetSerializable]
 public sealed class RuneDrawnMessage : EntityEventArgs

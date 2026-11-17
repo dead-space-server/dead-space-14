@@ -12,8 +12,8 @@
     itemIconStyle: BigAction
     priority: -20
     icon:
-      sprite: Objects/Magic/magicactions.rsi
-      state: magicmissile
+      sprite: _DeadSpace/Wizard/rune_hud.rsi
+      state: circle
   - type: InstantAction
     event: !type:RuneCircleActionEvent
 
@@ -39,6 +39,28 @@
     color: "#b07bff"
     radius: 1
     energy: 0.8
+
+- type: entity
+  parent: BaseGuidebook
+  id: BookWizardRunes
+  name: рунный манускрипт
+  description: Потрёпанный учебник рунной магии. Формы, стихии, модификаторы, сплавы и свитки, всё по порядку.
+  components:
+  - type: Sprite
+    layers:
+    - state: paper
+    - state: cover_old
+      color: "#3f2a7a"
+    - state: decor_wingette_circle
+      color: "#d59941"
+    - state: icon_pentagramm
+      color: "#b07bff"
+    - state: icon_corner
+      color: gold
+  - type: GuideHelp
+    openOnActivation: true
+    guides:
+    - Wizard
 
 - type: entity
   parent: BaseBullet
@@ -93,6 +115,21 @@
   parent: StatusEffectSlowdown
   id: RuneSlowStatusEffect
   name: рунное замедление
+
+- type: entity
+  parent: StatusEffectSlowdown
+  id: RuneHasteStatusEffect
+  name: рунная спешка
+
+- type: entity
+  parent: StatusEffectSlowdown
+  id: RuneIceArmorSlowStatusEffect
+  name: тяжесть ледяной брони
+
+- type: entity
+  parent: StatusEffectSlowdown
+  id: RuneStoneStrideSlowStatusEffect
+  name: тяжесть каменной поступи
 
 # Снаряды
 
@@ -185,15 +222,34 @@
       color: "#6dff8f"
       shader: unshaded
   - type: Projectile
-    ignoreResistances: true
     damage:
-      groups:
-        Brute: -20
-        Burn: -20
+      types:
+        Blunt: 0
   - type: PointLight
     color: "#6dff8f"
     radius: 1.5
     energy: 2
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileGust
+  name: порыв ветра
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: blastwave
+      color: "#6fe8cf"
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 2
+  - type: PointLight
+    color: "#6fe8cf"
+    radius: 1.5
+    energy: 1.5
 
 - type: entity
   parent: BaseBullet
@@ -445,6 +501,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: StunImmune
+  - type: NoSlip
   - type: Reflect
     reflects:
     - Energy
@@ -471,6 +528,16 @@
   - type: Pacified
 
 - type: entity
+  id: RuneSlipperyTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Slippery
+  - type: StepTrigger
+    requiredTriggeredSpeed: -1
+  - type: RuneExamineNote
+    text: rune-slippery-examine
+
+- type: entity
   id: RuneStoneStrideTemplate
   categories: [ HideSpawnMenu ]
   components:
@@ -481,6 +548,8 @@
     damage:
       types:
         Blunt: 45
+  - type: RuneExamineNote
+    text: rune-stone-fists-examine
 
 # Шаблоны оживления
 
@@ -733,7 +802,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      151: Dead
+      113: Dead
 
 - type: entity
   parent: MobWatcherIcewing
@@ -747,7 +816,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      119: Dead
+      89: Dead
 
 - type: entity
   parent: MobLavalandGoliath
@@ -761,7 +830,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      280: Dead
+      140: Dead
 
 - type: entity
   parent: MobWatcherLavaland
@@ -776,7 +845,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      140: Dead
+      105: Dead
   - type: Sprite
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -1225,6 +1294,174 @@
   id: RuneChaosMouse
   configuration:
     entity: MobMouse
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosSpider
+  configuration:
+    entity: MobGiantSpider
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosXeno
+  configuration:
+    entity: MobXenoRunner
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosArgocyte
+  configuration:
+    entity: MobArgocyteSkitter
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosHonkDemon
+  configuration:
+    entity: MobDemonHonker
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosHellspawn
+  configuration:
+    entity: MobHellspawn
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosGoliath
+  configuration:
+    entity: MobLavalandGoliath
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosWatcher
+  configuration:
+    entity: MobWatcherMagmawing
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosBehonker
+  configuration:
+    entity: MobBehonkerPyro
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosWhelp
+  configuration:
+    entity: MobLavalandWildAshWhelp
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosFox
+  configuration:
+    entity: MobFox
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosCrab
+  configuration:
+    entity: MobCrab
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosLizard
+  configuration:
+    entity: MobLizard
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosCockroach
+  configuration:
+    entity: MobCockroach
+    forced: true
+    transferName: false
+    transferDamage: true
+    inventory: None
+    revertOnCrit: true
+    revertOnDeath: true
+    duration: 15
+
+- type: polymorph
+  id: RuneChaosBear
+  configuration:
+    entity: MobBear
     forced: true
     transferName: false
     transferDamage: true

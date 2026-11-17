@@ -969,6 +969,23 @@
         Piercing: 0.5
         Heat: 0.5
         Radiation: 0.4
+  - type: WizardClothes
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,0,1
+    whitelist:
+      components:
+      - RuneScroll
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+  - type: RuneScrollHat
+    interval: 120
   #ds14-end
   - type: Tag
     tags:

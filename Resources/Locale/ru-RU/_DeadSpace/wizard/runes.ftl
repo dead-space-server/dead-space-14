@@ -10,6 +10,11 @@ rune-cast-incapacitated = Вы не в состоянии творить вол�
 rune-cast-cooldown = Эта формула ещё не остыла: { $seconds } с.
 rune-cast-range = Слишком далеко для этой формулы.
 rune-cast-no-target = Формуле нужна живая цель.
+rune-cast-blink-blocked = Путь к этой точке закрыт. Эфир не находит прохода.
+rune-active-replaced = «{ $spell }» гаснет: на себе удержится не больше двух чар.
+rune-active-dispelled = Вы развеиваете «{ $spell }».
+rune-slippery-examine = [color=#4aa8ff]Всё тело покрыто скользкой плёнкой. Рядом с ним легко поскользнуться.[/color]
+rune-stone-fists-examine = [color=#b58a5a]Кулаки покрыты камнем. Удар отбрасывает на несколько шагов.[/color]
 rune-strain-shaking = Руки начинают дрожать от напряжения.
 rune-strain-high = Вас окутывают искры. Ещё немного, и магия сорвётся!
 rune-animate-nothing = Рядом нет ничего, что можно оживить.
@@ -85,7 +90,7 @@ rune-form-projectile-name = Снаряд
 rune-form-projectile-desc = Форма полёта. Заклинание летит туда, куда вы указали.
 rune-form-projectile-syllable = Сагитта
 rune-form-wall-name = Стена
-rune-form-wall-desc = Форма преграды. Три клетки поперёк вашего взгляда в указанной точке.
+rune-form-wall-desc = Форма преграды. Три клетки поперёк вашего взгляда в указанной точке. Перезарядка начинается, когда стена исчезнет.
 rune-form-wall-syllable = Мурус
 rune-form-wave-name = Волна
 rune-form-wave-desc = Форма круга. Бьёт всех вокруг вас, не разбирая своих и чужих.
@@ -94,14 +99,14 @@ rune-form-touch-name = Касание
 rune-form-touch-desc = Форма прикосновения. Сильно, но только вплотную к живой цели.
 rune-form-touch-syllable = Тактус
 rune-form-self-name = Я
-rune-form-self-desc = Форма себя. Заклинание обращается на вас самих.
+rune-form-self-desc = Форма себя. Заклинание обращается на вас самих. Держится не больше двух чар разом, третья гасит самую старую. Чары снимаются кликом по их значку. Перезарядка начинается, когда чары спадут.
 rune-form-self-syllable = Эго
 rune-form-animate-name = Оживление
-rune-form-animate-desc = Форма жизни для неживого. Мебель и вещи в указанной точке встают и идут в бой.
+rune-form-animate-desc = Форма жизни для неживого. Мебель и вещи в указанной точке встают и идут в бой. Перезарядка начинается, когда последняя вещь уснёт.
 rune-form-animate-syllable = Анима
 
 rune-form-summon-name = Призыв
-rune-form-summon-desc = Форма зова. В указанной точке появляется существо стихии и сражается за вас, пока не развеется.
+rune-form-summon-desc = Форма зова. В указанной точке появляется существо стихии и сражается за вас, пока не развеется. Перезарядка начинается, когда призванные исчезнут или падут.
 rune-form-summon-syllable = Вокаре
 
 ## Стихии
@@ -185,7 +190,7 @@ rune-spell-stone-stride = Камни, кружите вокруг меня!
 rune-spell-haste = Я громоотвод!
 rune-spell-regeneration = Раны, затянитесь!
 rune-spell-jaunt = Растворяюсь!
-rune-spell-wild-shape = Кем я стану?!
+rune-spell-wild-shape = Шальная удача!
 rune-spell-animate-fire = Пламя, вселись!
 rune-spell-animate-ice = Лёд, восстань стражем!
 rune-spell-animate-earth = Мебель, к оружию!
@@ -229,7 +234,7 @@ rune-fusion-abyss-joke = Бездна шутит!
 ## Вода, воздух, превращение
 
 rune-form-polymorph-name = Превращение
-rune-form-polymorph-desc = Форма перемены облика. Нацельтесь на существо или на себя, если хватит смелости.
+rune-form-polymorph-desc = Форма перемены облика. Нацельтесь на существо или на себя, если хватит смелости. Перезарядка начинается, когда облик вернётся.
 rune-form-polymorph-syllable = Мутатио
 rune-element-water-name = Вода
 rune-element-water-desc = Смывает, тушит, сбивает с ног и делает всё скользким.
@@ -396,7 +401,7 @@ rune-time-stop-end = Время снова идёт. И всё, что вы пр
 rune-time-stop-speak = МИР - ВРЕМЯ ОСТАНОВИСЬ
 rune-time-stop-resume = ВРЕМЯ ВОЗОБНОВИЛО СВОЙ ХОД
 
-rune-hat-scroll = В шляпе шуршит новый чистый свиток.
+rune-hat-scroll = В головном уборе шуршит новый чистый свиток.
 rune-robe-examine = Рунная вязь гасит [color=lightblue]30%[/color] урона, если её носит маг рун.
 
 rune-dance-point = указывает на { $target }.
@@ -530,20 +535,22 @@ rune-chaos-line-30 = Сейчас я чихну радугой! Отойдите
 ## Чары на маге
 
 alerts-rune-phoenix-name = Перья феникса
-alerts-rune-phoenix-desc = Огонь вам не страшен, кислота жжёт вдвое слабее.
+alerts-rune-phoenix-desc = Огонь вам не страшен, кислота жжёт вдвое слабее. Пламя прижгло открытые раны. Клик по значку снимает чары.
 alerts-rune-ice-armor-name = Ледяная броня
-alerts-rune-ice-armor-desc = Удары, порезы и уколы ослаблены, холод не берёт, взрывы и усталость слабее. Жар бьёт сильнее.
+alerts-rune-ice-armor-desc = Удары, порезы и уколы ослаблены, холод не берёт, взрывы и усталость слабее. Жар бьёт сильнее, тяжёлый лёд немного замедляет. Клик по значку снимает чары.
 alerts-rune-stone-skin-name = Каменная кожа
 alerts-rune-stone-skin-desc = Камень гасит почти половину ударов, порезов, уколов и жара. Усиленный заговор держит крепче.
 alerts-rune-stone-shields-name = Каменные щиты
-alerts-rune-stone-shields-desc = Камни кружат рядом. Каждый примет на себя один сильный удар. Под ногами не скользко, кулаки одеты камнем.
+alerts-rune-stone-shields-desc = Камни кружат рядом. Каждый примет на себя один сильный удар. Клик по значку снимает чары.
 alerts-rune-lightning-rod-name = Громоотвод
-alerts-rune-lightning-rod-desc = Оглушение не берёт, часть выстрелов отражается.
+alerts-rune-lightning-rod-desc = Оглушение не берёт, поскользнуться невозможно, часть выстрелов отражается. Клик по значку снимает чары.
 alerts-rune-water-bubble-name = Водяной пузырь
-alerts-rune-water-bubble-desc = Дышите без воздуха и не боитесь давления.
+alerts-rune-water-bubble-desc = Дышите без воздуха и не боитесь давления. Клик по значку снимает чары.
 alerts-rune-regeneration-name = Регенерация
-alerts-rune-regeneration-desc = Раны и ожоги затягиваются каждую секунду, следом срастаются органы. Пустота космоса не рвёт тело.
+alerts-rune-regeneration-desc = Раны и ожоги затягиваются каждую секунду, следом срастаются органы. Пустота космоса не рвёт тело. Клик по значку снимает чары.
 alerts-rune-viper-blood-name = Кровь гадюки
-alerts-rune-viper-blood-desc = Яд не берёт, радиация вдвое слабее, токсины понемногу уходят.
+alerts-rune-viper-blood-desc = Яд не берёт, радиация вдвое слабее, токсины понемногу уходят. Клик по значку снимает чары.
 alerts-rune-immortal-name = Бессмертие
 alerts-rune-immortal-desc = Смерть только что отпустила вас. Пока это действует, вас не убить.
+alerts-rune-stone-fists-name = Каменные кулаки
+alerts-rune-stone-fists-desc = Кулаки одеты камнем: бьют тяжело и отбрасывают на несколько шагов. Под ногами не скользко, но камень тянет к земле. Клик по значку снимает чары.

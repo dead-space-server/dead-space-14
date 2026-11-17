@@ -22,6 +22,8 @@ public sealed partial class RuneOrbitShieldComponent : Component
     public float MinStamina = 15f;
 
     public ProtoId<AlertPrototype>? Alert;
+
+    public string? Group;
 }
 
 public sealed partial class RuneCasterSystem
@@ -52,6 +54,7 @@ public sealed partial class RuneCasterSystem
         comp.End = Timing.CurTime + TimeSpan.FromSeconds(effect.Duration * ctx.DurationScale);
         comp.MinDamage = effect.MinDamage;
         comp.MinStamina = effect.MinStamina;
+        comp.Group = ctx.Active?.Key;
         comp.Count = Math.Min(effect.MaxShields, comp.Count + effect.Count + ctx.Extra + (ctx.Power > 1f ? 1 : 0));
         SetAuraShields(ctx.Caster, comp.Count);
 
@@ -122,6 +125,7 @@ public sealed partial class RuneCasterSystem
 
     private void ShowCharm(EntityUid target, ProtoId<AlertPrototype> alert, TimeSpan end)
     {
+        NoteCharm(target, alert);
         _alerts.ShowAlert(target, alert, cooldown: (Timing.CurTime, end));
         var aura = EnsureComp<RuneAuraComponent>(target);
         if (aura.Charms.Contains(alert.Id))
@@ -138,8 +142,6 @@ public sealed partial class RuneCasterSystem
             return;
 
         Dirty(target, aura);
-        if (aura.Charms.Count == 0 && aura.Shields == 0)
-            RemCompDeferred<RuneAuraComponent>(target);
     }
 
     private void SetAuraShields(EntityUid target, int count)
@@ -153,7 +155,5 @@ public sealed partial class RuneCasterSystem
 
         aura.Shields = count;
         Dirty(target, aura);
-        if (aura.Charms.Count == 0 && aura.Shields == 0)
-            RemCompDeferred<RuneAuraComponent>(target);
     }
 }

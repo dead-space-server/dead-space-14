@@ -7,7 +7,7 @@
   element: RuneElementPoison
   range: 12
   strain: 12
-  cooldown: 15
+  cooldown: 30
   effects:
   - !type:RuneProjectileEffect
     prototype: RuneProjectileVenom
@@ -24,7 +24,7 @@
   element: RuneElementPoison
   range: 8
   strain: 14
-  cooldown: 10
+  cooldown: 20
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneMiasmaTile
@@ -61,7 +61,7 @@
   targeting: Entity
   range: 2
   strain: 14
-  cooldown: 8
+  cooldown: 20
   effects:
   - !type:RuneInjectEffect
     reagent: Lead
@@ -77,7 +77,7 @@
   element: RuneElementPoison
   targeting: Self
   strain: 16
-  cooldown: 45
+  cooldown: 30
   effects:
   - !type:RuneComponentsEffect
     target: Caster
@@ -104,7 +104,7 @@
   element: RuneElementPoison
   range: 8
   strain: 28
-  cooldown: 25
+  cooldown: 60
   effects:
   - !type:RuneAnimateEffect
     template: RuneAnimatePoisonTemplate
@@ -118,7 +118,7 @@
   element: RuneElementPoison
   range: 6
   strain: 24
-  cooldown: 30
+  cooldown: 60
   loudness: 1
   effects:
   - !type:RuneSpawnRandomEffect
@@ -138,9 +138,9 @@
   form: RuneFormPolymorph
   element: RuneElementPoison
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 20
-  cooldown: 30
+  cooldown: 60
   absurdity: 1
   effects:
   - !type:RunePolymorphEffect
@@ -153,7 +153,7 @@
   element: RuneElementPoison
   range: 9
   strain: 14
-  cooldown: 8
+  cooldown: 25
   effects:
   - !type:RuneTelekinesisEffect
   - !type:RuneInjectEffect

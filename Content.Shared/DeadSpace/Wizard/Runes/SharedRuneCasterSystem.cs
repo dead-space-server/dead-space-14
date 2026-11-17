@@ -111,7 +111,13 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         SubscribeLocalEvent<RuneScrollComponent, ExaminedEvent>(OnScrollExamined);
         SubscribeLocalEvent<RuneWardComponent, DamageModifyEvent>(OnWardDamage);
         SubscribeLocalEvent<RuneStoneFistsComponent, GetMeleeDamageEvent>(OnStoneFists);
+        SubscribeLocalEvent<RuneExamineNoteComponent, ExaminedEvent>(OnNoteExamined);
         CacheSpells();
+    }
+
+    private void OnNoteExamined(Entity<RuneExamineNoteComponent> ent, ref ExaminedEvent args)
+    {
+        args.PushMarkup(Loc.GetString(ent.Comp.Text));
     }
 
     private void OnStoneFists(Entity<RuneStoneFistsComponent> ent, ref GetMeleeDamageEvent args)

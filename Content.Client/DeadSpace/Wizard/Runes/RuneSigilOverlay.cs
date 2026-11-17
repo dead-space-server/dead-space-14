@@ -234,6 +234,23 @@ public sealed class RuneSigilOverlay : Overlay
                 TextureBox(handle, RuneCircleArt.Glow(_clyde), new Vector2(0f, -0.4f), new Vector2(1.1f, 0.45f), Color.FromHex("#6cc23b").WithAlpha(0.35f));
                 break;
 
+            case "RuneAlertStoneFists":
+            {
+                if (!front)
+                    break;
+
+                var rock = _sprite.Frame0(Rock);
+                for (var side = -1; side <= 1; side += 2)
+                {
+                    var at = new Vector2(side * 0.27f, -0.12f + MathF.Sin(now * 3f + side) * 0.02f);
+                    Texture(handle, RuneCircleArt.Glow(_clyde), at, 0.32f, 0f, Color.FromHex("#c9b59a").WithAlpha(0.3f));
+                    handle.UseShader(null);
+                    handle.DrawTextureRect(rock, new Box2Rotated(Box2.CenteredAround(at, new Vector2(0.2f)), new Angle(side * 0.4f), at));
+                    handle.UseShader(_glow);
+                }
+                break;
+            }
+
             case "RuneAlertImmortal":
                 if (!front)
                 {

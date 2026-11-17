@@ -81,6 +81,14 @@ public sealed class RuneSpell
     public bool OncePerRound;
     public HashSet<string> Forbids = new();
     public List<RuneSpellEffect> Effects = new();
+    public bool HoldCooldown;
+    public int MaxActive;
+
+    public const string LifeElement = "RuneElementLife";
+    public const string DeathElement = "RuneElementDeath";
+    public const float FusionCooldown = 30f;
+    public const float LifeFusionCooldown = 60f;
+    public const float DeathFusionCooldown = 40f;
 
     public static RuneSpell From(RuneSpellPrototype proto, RunePrototype? form = null)
     {
@@ -113,12 +121,31 @@ public sealed class RuneSpell
             RequiresWounded = proto.RequiresWounded,
             OncePerRound = proto.OncePerRound,
             Effects = proto.Effects,
+            HoldCooldown = form?.HoldCooldown ?? false,
+            MaxActive = form?.MaxActive ?? 0,
         };
+    }
+
+    public static float FusedCooldown(RunePrototype form, RuneFusionPrototype fusion)
+    {
+        if (form.Ultimate)
+            return fusion.Cooldown ?? form.SpellCooldown;
+
+        var rule = FusionCooldown;
+        if (fusion.First == LifeElement || fusion.Second == LifeElement)
+            rule = LifeFusionCooldown;
+        else if (fusion.First == DeathElement || fusion.Second == DeathElement)
+            rule = DeathFusionCooldown;
+
+        return MathF.Max(rule, fusion.Cooldown ?? 0f);
     }
 
     public static RuneSpell? Fuse(RunePrototype form, RuneFusionPrototype fusion)
     {
         if (form.Ultimate && !fusion.FormEffects.ContainsKey(form.ID))
+            return null;
+
+        if (!form.Ultimate && !form.Fusable)
             return null;
 
         return new RuneSpell
@@ -130,7 +157,7 @@ public sealed class RuneSpell
             Targeting = form.Targeting,
             Range = form.SpellRange,
             Strain = form.SpellStrain + fusion.Strain,
-            Cooldown = fusion.Cooldown ?? form.SpellCooldown,
+            Cooldown = FusedCooldown(form, fusion),
             Loudness = form.SpellLoudness + fusion.Loudness,
             Absurdity = fusion.Absurdity,
             Effects = fusion.FormEffects.TryGetValue(form.ID, out var own) ? own : fusion.Effects,

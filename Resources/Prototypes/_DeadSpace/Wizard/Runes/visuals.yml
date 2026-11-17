@@ -83,6 +83,7 @@
     state: phoenix
   name: alerts-rune-phoenix-name
   description: alerts-rune-phoenix-desc
+  clickEvent: !type:RuneDispelAlertEvent
 
 - type: alert
   id: RuneAlertIceArmor
@@ -91,6 +92,7 @@
     state: ice-armor
   name: alerts-rune-ice-armor-name
   description: alerts-rune-ice-armor-desc
+  clickEvent: !type:RuneDispelAlertEvent
 
 - type: alert
   id: RuneAlertStoneSkin
@@ -107,6 +109,7 @@
     state: stone-shields
   name: alerts-rune-stone-shields-name
   description: alerts-rune-stone-shields-desc
+  clickEvent: !type:RuneDispelAlertEvent
 
 - type: alert
   id: RuneAlertLightningRod
@@ -115,6 +118,7 @@
     state: lightning-rod
   name: alerts-rune-lightning-rod-name
   description: alerts-rune-lightning-rod-desc
+  clickEvent: !type:RuneDispelAlertEvent
 
 - type: alert
   id: RuneAlertWaterBubble
@@ -123,6 +127,7 @@
     state: water-bubble
   name: alerts-rune-water-bubble-name
   description: alerts-rune-water-bubble-desc
+  clickEvent: !type:RuneDispelAlertEvent
 
 - type: alert
   id: RuneAlertRegeneration
@@ -131,6 +136,7 @@
     state: regeneration
   name: alerts-rune-regeneration-name
   description: alerts-rune-regeneration-desc
+  clickEvent: !type:RuneDispelAlertEvent
 
 - type: alert
   id: RuneAlertViperBlood
@@ -139,6 +145,7 @@
     state: viper-blood
   name: alerts-rune-viper-blood-name
   description: alerts-rune-viper-blood-desc
+  clickEvent: !type:RuneDispelAlertEvent
 
 - type: alert
   id: RuneAlertImmortal
@@ -147,3 +154,12 @@
     state: immortal
   name: alerts-rune-immortal-name
   description: alerts-rune-immortal-desc
+
+- type: alert
+  id: RuneAlertStoneFists
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: stone-fists
+  name: alerts-rune-stone-fists-name
+  description: alerts-rune-stone-fists-desc
+  clickEvent: !type:RuneDispelAlertEvent

@@ -7,7 +7,7 @@
   element: RuneElementFire
   range: 14
   strain: 37.5
-  cooldown: 6
+  cooldown: 20
   loudness: 2
   effects:
   - !type:RuneProjectileEffect
@@ -76,6 +76,13 @@
   - !type:RuneProjectileEffect
     prototype: RuneProjectileMending
     speed: 16
+    onHit:
+    - !type:RuneDamageEffect
+      ignoreResistances: true
+      damage:
+        groups:
+          Brute: -35
+          Burn: -35
 
 - type: wizardRuneSpell
   id: RuneSpellBlink
@@ -85,6 +92,9 @@
   range: 16
   strain: 18
   cooldown: 8
+  forbids:
+  - RuneModifierPower
+  - RuneModifierSwarm
   effects:
   - !type:RuneTeleportEffect
     mode: CasterToPoint
@@ -134,7 +144,7 @@
   element: RuneElementFire
   range: 8
   strain: 24
-  cooldown: 12
+  cooldown: 20
   loudness: 2
   effects:
   - !type:RuneSpawnEffect
@@ -149,7 +159,7 @@
   element: RuneElementIce
   range: 8
   strain: 18
-  cooldown: 50
+  cooldown: 20
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneSlickTile
@@ -171,7 +181,7 @@
   element: RuneElementEarth
   range: 8
   strain: 20
-  cooldown: 60
+  cooldown: 20
   loudness: 1
   effects:
   - !type:RuneSpawnEffect
@@ -187,7 +197,7 @@
   element: RuneElementLightning
   range: 8
   strain: 22
-  cooldown: 12
+  cooldown: 20
   loudness: 1
   effects:
   - !type:RuneSpawnEffect
@@ -203,7 +213,7 @@
   element: RuneElementLife
   range: 8
   strain: 16
-  cooldown: 10
+  cooldown: 20
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneHedge
@@ -219,7 +229,7 @@
   element: RuneElementVoid
   range: 6
   strain: 20
-  cooldown: 15
+  cooldown: 30
   loudness: 1
   effects:
   - !type:RuneSpawnEffect
@@ -236,22 +246,27 @@
   element: RuneElementChaos
   range: 8
   strain: 12
-  cooldown: 10
+  cooldown: 20
   absurdity: 1
   effects:
   - !type:RuneSpawnRandomEffect
     prototypes:
-    - TrashBananaPeel
-    - ToyRubberDuck
-    - PlushieCarp
-    - PlushieLizard
-    - BikeHorn
-    - FoodPieBananaCream
-    - ClothingHeadHatCone
+    - RuneFireTile
+    - RuneWallIce
+    - RuneWallMud
+    - RuneArcFence
+    - RuneHedge
+    - WallForce
+    - RuneWaterCurtain
+    - RuneWindWall
+    - RuneBloodSpikes
+    - RuneMiasmaTile
     pattern: LineAtPoint
     size: 3
-    count: 6
-    lifetime: 20
+    perTile: true
+    skipBlocked: true
+    lifetimeMin: 15
+    lifetimeMax: 60
 
 # Волна
 
@@ -262,7 +277,7 @@
   element: RuneElementFire
   targeting: Self
   strain: 28
-  cooldown: 14
+  cooldown: 30
   loudness: 2
   effects:
   - !type:RuneSpawnEffect
@@ -273,6 +288,12 @@
     target: AroundCaster
     radius: 2.5
     fireStacks: 1
+  - !type:RuneDamageEffect
+    target: AroundCaster
+    radius: 2.5
+    damage:
+      types:
+        Heat: 6
 
 - type: wizardRuneSpell
   id: RuneSpellFrostNova
@@ -307,7 +328,7 @@
   element: RuneElementEarth
   targeting: Self
   strain: 26
-  cooldown: 15
+  cooldown: 20
   loudness: 2
   effects:
   - !type:RuneKnockdownEffect
@@ -333,7 +354,7 @@
   element: RuneElementLightning
   targeting: Self
   strain: 30
-  cooldown: 16
+  cooldown: 20
   loudness: 2
   effects:
   - !type:RuneLightningEffect
@@ -388,7 +409,7 @@
   element: RuneElementChaos
   targeting: Self
   strain: 16
-  cooldown: 14
+  cooldown: 20
   absurdity: 2
   effects:
   - !type:RuneSpeakEffect
@@ -502,10 +523,10 @@
     ignoreResistances: true
     damage:
       groups:
-        Brute: -30
-        Burn: -30
-        Toxin: -15
-        Airloss: -20
+        Brute: -20
+        Burn: -20
+        Toxin: -5
+        Airloss: -5
 
 - type: wizardRuneSpell
   id: RuneSpellSmite
@@ -514,12 +535,14 @@
   element: RuneElementVoid
   targeting: Entity
   range: 2
-  strain: 70
+  strain: 80
   cooldown: 180
   loudness: 4
   requiresClothes: true
   forbids:
   - RuneModifierRange
+  - RuneModifierPower
+  - RuneModifierEcho
   effects:
   - !type:RuneGibEffect
 
@@ -530,12 +553,14 @@
   element: RuneElementChaos
   targeting: Entity
   range: 2
-  strain: 54
+  strain: 84
   cooldown: 150
   absurdity: 2
   requiresClothes: true
   forbids:
   - RuneModifierRange
+  - RuneModifierPower
+  - RuneModifierEcho
   effects:
   - !type:RuneComponentsEffect
     fromAction: ActionCluwne
@@ -549,10 +574,10 @@
   element: RuneElementFire
   targeting: Self
   strain: 18
-  cooldown: 37.5
+  cooldown: 30
   loudness: 1
   effects:
-  - !type:RuneExtinguishEffect
+  - !type:RuneCauterizeEffect
     target: Caster
   - !type:RuneDamageEffect
     target: Caster
@@ -578,13 +603,18 @@
   element: RuneElementIce
   targeting: Self
   strain: 20
-  cooldown: 45
+  cooldown: 30
   effects:
   - !type:RuneComponentsEffect
     target: Caster
     template: RuneIceArmorTemplate
     duration: 30
     alert: RuneAlertIceArmor
+  - !type:RuneSlowEffect
+    target: Caster
+    time: 30
+    multiplier: 0.9
+    status: RuneIceArmorSlowStatusEffect
 
 - type: wizardRuneSpell
   id: RuneSpellStoneStride
@@ -593,17 +623,23 @@
   element: RuneElementEarth
   targeting: Self
   strain: 22
-  cooldown: 90
+  cooldown: 30
   loudness: 1
   effects:
   - !type:RuneOrbitShieldEffect
     count: 4
-    duration: 60
+    duration: 30
     alert: RuneAlertStoneShields
   - !type:RuneComponentsEffect
     target: Caster
     template: RuneStoneStrideTemplate
-    duration: 60
+    duration: 30
+    alert: RuneAlertStoneFists
+  - !type:RuneSlowEffect
+    target: Caster
+    time: 30
+    multiplier: 0.85
+    status: RuneStoneStrideSlowStatusEffect
 
 - type: wizardRuneSpell
   id: RuneSpellHaste
@@ -612,13 +648,14 @@
   element: RuneElementLightning
   targeting: Self
   strain: 22
-  cooldown: 37.5
+  cooldown: 30
   loudness: 1
   effects:
   - !type:RuneSlowEffect
     target: Caster
     time: 6
     multiplier: 1.6
+    status: RuneHasteStatusEffect
   - !type:RuneChargeEffect
   - !type:RuneComponentsEffect
     target: Caster
@@ -633,20 +670,13 @@
   element: RuneElementLife
   targeting: Self
   strain: 24
-  cooldown: 45
+  cooldown: 30
   effects:
-  - !type:RuneDamageEffect
-    target: Caster
-    ignoreResistances: true
-    damage:
-      groups:
-        Brute: -10
-        Burn: -10
   - !type:RuneRegenerationEffect
     target: Caster
     duration: 20
     alert: RuneAlertRegeneration
-    healPerSecond: 15
+    healPerSecond: 5
     organMendPerSecond: 0.15
   - !type:RuneStatusEffect
     target: Caster
@@ -679,15 +709,43 @@
   effects:
   - !type:RuneRandomEffect
     options:
-    - !type:RunePolymorphEffect
+    - !type:RuneComponentsEffect
       target: Caster
-      polymorph: RuneChaosChicken
-    - !type:RunePolymorphEffect
+      template: RunePhoenixTemplate
+      duration: 20
+      alert: RuneAlertPhoenix
+    - !type:RuneComponentsEffect
       target: Caster
-      polymorph: RuneChaosCorgi
-    - !type:RunePolymorphEffect
+      template: RuneIceArmorTemplate
+      duration: 20
+      alert: RuneAlertIceArmor
+    - !type:RuneOrbitShieldEffect
+      count: 3
+      duration: 20
+      alert: RuneAlertStoneShields
+    - !type:RuneComponentsEffect
       target: Caster
-      polymorph: RuneChaosMouse
+      template: RuneLightningRodTemplate
+      duration: 15
+      alert: RuneAlertLightningRod
+    - !type:RuneRegenerationEffect
+      target: Caster
+      duration: 15
+      alert: RuneAlertRegeneration
+      healPerSecond: 3
+    - !type:RuneComponentsEffect
+      target: Caster
+      template: RuneWaterBubbleTemplate
+      duration: 30
+      alert: RuneAlertWaterBubble
+    - !type:RuneComponentsEffect
+      target: Caster
+      template: RuneViperBloodTemplate
+      duration: 30
+      alert: RuneAlertViperBlood
+    - !type:RuneTeleportEffect
+      mode: ScatterCaster
+      radius: 6
 
 # Призыв
 
@@ -698,7 +756,7 @@
   element: RuneElementFire
   range: 6
   strain: 30
-  cooldown: 35
+  cooldown: 60
   loudness: 2
   effects:
   - !type:RuneSpawnEffect
@@ -712,7 +770,7 @@
   element: RuneElementIce
   range: 6
   strain: 30
-  cooldown: 35
+  cooldown: 60
   loudness: 1
   effects:
   - !type:RuneSpawnEffect
@@ -740,7 +798,7 @@
   element: RuneElementLightning
   range: 6
   strain: 30
-  cooldown: 35
+  cooldown: 60
   loudness: 2
   effects:
   - !type:RuneSpawnEffect
@@ -754,7 +812,7 @@
   element: RuneElementLife
   range: 6
   strain: 22
-  cooldown: 30
+  cooldown: 60
   absurdity: 1
   effects:
   - !type:RuneSpawnEffect
@@ -777,7 +835,7 @@
   element: RuneElementVoid
   range: 6
   strain: 34
-  cooldown: 40
+  cooldown: 60
   loudness: 2
   effects:
   - !type:RuneSpawnEffect
@@ -791,7 +849,7 @@
   element: RuneElementChaos
   range: 6
   strain: 18
-  cooldown: 25
+  cooldown: 60
   absurdity: 2
   effects:
   - !type:RuneSpawnRandomEffect
@@ -816,7 +874,7 @@
   element: RuneElementFire
   range: 8
   strain: 30
-  cooldown: 25
+  cooldown: 60
   loudness: 1
   effects:
   - !type:RuneAnimateEffect
@@ -829,7 +887,7 @@
   element: RuneElementIce
   range: 8
   strain: 30
-  cooldown: 25
+  cooldown: 60
   effects:
   - !type:RuneAnimateEffect
     template: RuneAnimateIceTemplate
@@ -841,7 +899,7 @@
   element: RuneElementEarth
   range: 8
   strain: 34
-  cooldown: 30
+  cooldown: 60
   loudness: 1
   effects:
   - !type:RuneAnimateEffect
@@ -856,7 +914,7 @@
   element: RuneElementLightning
   range: 8
   strain: 32
-  cooldown: 30
+  cooldown: 60
   loudness: 1
   absurdity: 1
   effects:
@@ -872,7 +930,7 @@
   element: RuneElementLife
   range: 8
   strain: 30
-  cooldown: 30
+  cooldown: 60
   effects:
   - !type:RuneAnimateEffect
     template: RuneAnimateLifeTemplate
@@ -884,7 +942,7 @@
   element: RuneElementVoid
   range: 8
   strain: 32
-  cooldown: 30
+  cooldown: 60
   loudness: 1
   effects:
   - !type:RuneAnimateEffect
@@ -897,7 +955,7 @@
   element: RuneElementChaos
   range: 8
   strain: 20
-  cooldown: 20
+  cooldown: 60
   absurdity: 1
   effects:
   - !type:RuneAnimateEffect

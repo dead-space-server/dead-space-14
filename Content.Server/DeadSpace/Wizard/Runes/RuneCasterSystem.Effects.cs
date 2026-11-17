@@ -8,7 +8,10 @@ using Content.Shared.Administration.Systems;
 using Content.Shared.Charges.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Damage.Components;
+using Content.Shared.FixedPoint;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.Charges.Systems;
 using Content.Shared.Mind;
 using Content.Shared.Weapons.Ranged.Components;
@@ -75,6 +78,7 @@ public sealed class RuneCastContext
     public readonly float PowerScale;
     public readonly Dictionary<EntityUid, float> Touched = new();
     public readonly HashSet<EntityUid> FreshlyDisplaced = new();
+    public RuneActiveSpell? Active;
 
     public RuneCastContext(EntityUid caster, EntityCoordinates point, EntityUid? target, RuneComposition? composition, float powerScale = 1f)
     {
@@ -104,12 +108,14 @@ public sealed class RuneTimedEntry
     public readonly List<string> Added;
     public readonly TimeSpan End;
     public readonly ProtoId<AlertPrototype>? Alert;
+    public readonly string? Group;
 
-    public RuneTimedEntry(List<string> added, TimeSpan end, ProtoId<AlertPrototype>? alert)
+    public RuneTimedEntry(List<string> added, TimeSpan end, ProtoId<AlertPrototype>? alert, string? group)
     {
         Added = added;
         End = end;
         Alert = alert;
+        Group = group;
     }
 }
 
@@ -161,6 +167,7 @@ public sealed partial class RuneCasterSystem
     private const float AnimateNormalWeight = 4f;
     private const float AnimateMinSize = 0.35f;
     private const float AnimateLargeSize = 2.5f;
+    private const float SwarmWeakness = 0.6f;
     private static readonly ProtoId<AlertPrototype> ImmortalAlert = "RuneAlertImmortal";
     private EntityUid? _lightningOwner;
 
@@ -279,7 +286,16 @@ public sealed partial class RuneCasterSystem
                 break;
             case RuneSlowEffect slow:
                 foreach (var target in Targets(ctx, slow))
-                    _movementMod.TryUpdateMovementSpeedModDuration(target, SlowStatus, TimeSpan.FromSeconds(slow.Time * ctx.DurationScale), slow.Multiplier);
+                {
+                    var status = slow.Status ?? SlowStatus;
+                    _movementMod.TryUpdateMovementSpeedModDuration(target, status, TimeSpan.FromSeconds(slow.Time * ctx.DurationScale), slow.Multiplier);
+                    if (slow.Status != null)
+                        TrackStatus(ctx, target, status);
+                }
+                break;
+            case RuneCauterizeEffect cauterize:
+                foreach (var target in Targets(ctx, cauterize))
+                    Cauterize(target);
                 break;
             case RuneIgniteEffect ignite:
                 foreach (var target in Targets(ctx, ignite))
@@ -301,7 +317,7 @@ public sealed partial class RuneCasterSystem
                 break;
             case RuneComponentsEffect components:
                 foreach (var target in Targets(ctx, components))
-                    ApplyComponents(target, components, ctx.DurationScale, ctx.Power);
+                    ApplyComponents(target, components, ctx.DurationScale, ctx.Power, GroupOf(ctx, target));
                 break;
             case RuneParalyzeEffect paralyze:
                 foreach (var target in Targets(ctx, paralyze))
@@ -318,12 +334,16 @@ public sealed partial class RuneCasterSystem
                         Timing.CurTime + TimeSpan.FromSeconds(regeneration.Duration * ctx.DurationScale),
                         regeneration.Alert,
                         regeneration.HealPerSecond * ctx.Power,
-                        regeneration.OrganMendPerSecond * ctx.Power));
+                        regeneration.OrganMendPerSecond * ctx.Power,
+                        GroupOf(ctx, target)));
                 }
                 break;
             case RuneStatusEffect status:
                 foreach (var target in Targets(ctx, status))
+                {
                     _status.TryAddStatusEffectDuration(target, status.Status, TimeSpan.FromSeconds(status.Time * ctx.DurationScale));
+                    TrackStatus(ctx, target, status.Status);
+                }
                 break;
             case RuneTelekinesisEffect telekinesis:
                 ApplyTelekinesis(ctx, telekinesis);
@@ -374,7 +394,7 @@ public sealed partial class RuneCasterSystem
                 break;
             case RuneEmpEffect emp:
                 var at = AtPoint(ctx, emp.AtPoint, emp.Auto) ? _transform.ToMapCoordinates(ctx.Point) : _transform.GetMapCoordinates(ctx.Caster);
-                _emp.EmpPulse(at, emp.Range * ctx.RangeScale, emp.Energy, TimeSpan.FromSeconds(emp.Duration * ctx.DurationScale), ctx.Caster);
+                _emp.EmpPulse(at, emp.Range * ctx.RangeScale * MathF.Sqrt(ctx.Power), emp.Energy * ctx.Power, TimeSpan.FromSeconds(emp.Duration * ctx.DurationScale), ctx.Caster);
                 break;
             case RuneSpeakEffect speak:
                 ApplySpeak(ctx, speak);
@@ -530,29 +550,76 @@ public sealed partial class RuneCasterSystem
     private void ApplySpawn(RuneCastContext ctx, RuneSpawnEffect effect)
     {
         var pattern = effect.Pattern == RuneSpawnPattern.Auto ? ctx.AutoPattern : effect.Pattern;
-        var size = pattern is RuneSpawnPattern.LineInFront or RuneSpawnPattern.LineAtPoint
-            ? effect.Size + ctx.Extra * 2
-            : effect.Size + ctx.Extra;
+        var size = pattern switch
+        {
+            RuneSpawnPattern.LineInFront or RuneSpawnPattern.LineAtPoint => effect.Size + ctx.Extra * 2,
+            RuneSpawnPattern.RingAroundCaster or RuneSpawnPattern.RingAtPoint => effect.Size + ctx.Extra + (ctx.Power > 1.01f ? 1 : 0),
+            _ => effect.Size + ctx.Extra,
+        };
 
-        foreach (var (coords, blocked) in Positions(ctx, pattern, size, effect.Rows))
+        var positions = Positions(ctx, pattern, size, effect.Rows);
+        if (pattern is RuneSpawnPattern.AtPoint or RuneSpawnPattern.AtCaster && ctx.Extra > 0)
+            positions.AddRange(SwarmPositions(ctx, pattern, ctx.Extra));
+
+        foreach (var (coords, blocked) in positions)
         {
             if (blocked && effect.SkipBlocked)
                 continue;
 
             var ent = Spawn(effect.Prototype, coords);
             ScaleLifetime(ctx, ent, effect.Lifetime);
-            if (MathF.Abs(ctx.Power - 1f) > 0.01f)
-            {
-                if (TryComp<DamageContactsComponent>(ent, out var contacts))
-                    contacts.Damage *= ctx.Power;
-                if (TryComp<SmokeComponent>(ent, out var smoke))
-                    smoke.SpreadAmount = Math.Max(1, (int) MathF.Round(smoke.SpreadAmount * ctx.Power));
-            }
+            ScaleSpawned(ctx, ent);
 
             if (effect.PassableByCaster)
                 EnsureComp<PreventCollideComponent>(ent).Uid = ctx.Caster;
 
             BindSpawned(ctx, ent);
+        }
+    }
+
+    private List<(EntityCoordinates Coords, bool Blocked)> SwarmPositions(RuneCastContext ctx, RuneSpawnPattern pattern, int extra)
+    {
+        var around = Positions(ctx, pattern == RuneSpawnPattern.AtCaster ? RuneSpawnPattern.RingAroundCaster : RuneSpawnPattern.RingAtPoint, 1);
+        around.RemoveAll(p => p.Blocked);
+        _random.Shuffle(around);
+        var result = new List<(EntityCoordinates, bool)>();
+        for (var i = 0; i < extra && around.Count > 0; i++)
+            result.Add(around[i % around.Count]);
+
+        return result;
+    }
+
+    private void ScaleSpawned(RuneCastContext ctx, EntityUid ent)
+    {
+        if (MathF.Abs(ctx.Power - 1f) > 0.01f)
+        {
+            if (TryComp<DamageContactsComponent>(ent, out var contacts))
+                contacts.Damage *= ctx.Power;
+            if (TryComp<SmokeComponent>(ent, out var smoke))
+                smoke.SpreadAmount = Math.Max(1, (int) MathF.Round(smoke.SpreadAmount * (1f + (ctx.Power - 1f) * 2f)));
+        }
+
+        if (ctx.Extra > 0 && HasComp<MobStateComponent>(ent))
+            WeakenSwarm(ent);
+
+        Track(ctx, ent, HasComp<MobStateComponent>(ent) ? RuneTrack.Living : RuneTrack.Exists);
+    }
+
+    private void WeakenSwarm(EntityUid uid)
+    {
+        if (TryComp<MobThresholdsComponent>(uid, out var thresholds))
+        {
+            var scaled = new SortedDictionary<FixedPoint2, MobState>();
+            foreach (var (damage, state) in thresholds.Thresholds)
+                scaled[damage * SwarmWeakness] = state;
+
+            _thresholds.SetMobStateThresholds(uid, scaled, thresholds);
+        }
+
+        if (TryComp<MeleeWeaponComponent>(uid, out var melee))
+        {
+            melee.Damage *= SwarmWeakness;
+            Dirty(uid, melee);
         }
     }
 
@@ -570,16 +637,27 @@ public sealed partial class RuneCasterSystem
 
     private void ApplySpawnRandom(RuneCastContext ctx, RuneSpawnRandomEffect effect)
     {
-        var positions = Positions(ctx, effect.Pattern, effect.Size + ctx.Extra);
+        var pattern = effect.Pattern == RuneSpawnPattern.Auto ? ctx.AutoPattern : effect.Pattern;
+        var size = effect.PerTile && pattern is RuneSpawnPattern.LineInFront or RuneSpawnPattern.LineAtPoint
+            ? effect.Size + ctx.Extra * 2
+            : effect.Size + ctx.Extra;
+        var positions = Positions(ctx, pattern, size);
+        if (effect.SkipBlocked)
+            positions.RemoveAll(p => p.Blocked);
+
         if (positions.Count == 0 || effect.Prototypes.Count == 0)
             return;
 
-        var count = effect.Count + ctx.Extra;
+        var count = effect.PerTile ? positions.Count : effect.Count + ctx.Extra;
         for (var i = 0; i < count; i++)
         {
-            var (coords, _) = _random.Pick(positions);
+            var (coords, _) = effect.PerTile ? positions[i] : _random.Pick(positions);
             var ent = Spawn(_random.Pick(effect.Prototypes), coords);
-            ScaleLifetime(ctx, ent, effect.Lifetime);
+            float? lifetime = effect.LifetimeMax > effect.LifetimeMin
+                ? _random.NextFloat(effect.LifetimeMin, effect.LifetimeMax)
+                : effect.Lifetime;
+            ScaleLifetime(ctx, ent, lifetime);
+            ScaleSpawned(ctx, ent);
 
             if (effect.NoGhostRole)
             {
@@ -702,7 +780,13 @@ public sealed partial class RuneCasterSystem
 
             var direction = _transform.GetWorldPosition(target) - center.Position;
             if (direction.LengthSquared() < 0.001f)
-                continue;
+            {
+                direction = _transform.GetWorldPosition(target) - _transform.GetWorldPosition(ctx.Caster);
+                if (direction.LengthSquared() < 0.001f)
+                    continue;
+
+                direction = Vector2.Normalize(direction) * 0.001f;
+            }
 
             var throwDirection = speed < 0 ? -direction : Vector2.Normalize(direction) * (distance ?? (radius - direction.Length()) * ctx.Power);
             var before = new BeforeRepulseAttractThrownEvent(ctx.Caster, throwDirection, MathF.Abs(speed));
@@ -726,7 +810,7 @@ public sealed partial class RuneCasterSystem
             case RuneTeleportMode.CasterToPoint:
             {
                 var xform = Transform(ctx.Caster);
-                if (xform.MapID != _transform.GetMapId(ctx.Point) || !_interaction.InRangeUnobstructed(ctx.Caster, ctx.Point, 1000f, CollisionGroup.Opaque, popup: true))
+                if (!CanBlink(ctx.Caster, ctx.Point))
                     return;
 
                 _transform.SetCoordinates(ctx.Caster, ctx.Point);
@@ -867,7 +951,7 @@ public sealed partial class RuneCasterSystem
         RemComp<RuneCasterComponent>(from);
     }
 
-    private void ApplyComponents(EntityUid target, RuneComponentsEffect effect, float durationScale, float power)
+    private void ApplyComponents(EntityUid target, RuneComponentsEffect effect, float durationScale, float power, string? group = null)
     {
         if (ComponentSource(effect) is not { } source)
             return;
@@ -898,7 +982,7 @@ public sealed partial class RuneCasterSystem
 
         var end = Timing.CurTime + TimeSpan.FromSeconds(duration * durationScale);
         var timed = EnsureComp<RuneTimedComponentsComponent>(target);
-        timed.Entries.Add(new RuneTimedEntry(added, end, effect.Alert));
+        timed.Entries.Add(new RuneTimedEntry(added, end, effect.Alert, group));
         if (effect.Alert is { } alert)
             ShowCharm(target, alert, end);
     }
@@ -910,24 +994,27 @@ public sealed partial class RuneCasterSystem
         {
             for (var i = timed.Entries.Count - 1; i >= 0; i--)
             {
-                var entry = timed.Entries[i];
-                if (Timing.CurTime < entry.End)
-                    continue;
-
-                foreach (var name in entry.Added)
-                {
-                    if (Factory.TryGetRegistration(name, out var registration))
-                        RemComp(uid, registration.Type);
-                }
-
-                timed.Entries.RemoveAt(i);
-                if (entry.Alert is { } alert && !timed.Entries.Exists(e => e.Alert == alert))
-                    ClearCharm(uid, alert);
+                if (Timing.CurTime >= timed.Entries[i].End)
+                    EndTimedEntry(uid, timed, i);
             }
 
             if (timed.Entries.Count == 0)
                 RemCompDeferred<RuneTimedComponentsComponent>(uid);
         }
+    }
+
+    private void EndTimedEntry(EntityUid uid, RuneTimedComponentsComponent timed, int index)
+    {
+        var entry = timed.Entries[index];
+        foreach (var name in entry.Added)
+        {
+            if (Factory.TryGetRegistration(name, out var registration))
+                RemComp(uid, registration.Type);
+        }
+
+        timed.Entries.RemoveAt(index);
+        if (entry.Alert is { } alert && !timed.Entries.Exists(e => e.Alert == alert))
+            ClearCharm(uid, alert);
     }
 
     private void ApplyAnimate(RuneCastContext ctx, RuneAnimateEffect effect)
@@ -965,10 +1052,12 @@ public sealed partial class RuneCasterSystem
             }
 
             EntityManager.AddComponents(uid, template.Components, true);
-            ScaleAnimateHealth(uid, size);
-            ScaleAnimateDamage(uid, size);
+            var weakness = ctx.Extra > 0 ? SwarmWeakness : 1f;
+            ScaleAnimateHealth(uid, size * weakness);
+            ScaleAnimateDamage(uid, size, weakness);
             animated.End = Timing.CurTime + TimeSpan.FromSeconds(effect.Lifetime * ctx.DurationScale);
             AddComp(uid, animated, true);
+            Track(ctx, uid, RuneTrack.Animated);
             if (TryComp<RuneAnimateStrikeComponent>(uid, out var strike))
                 strike.Caster = ctx.Caster;
 
@@ -998,7 +1087,8 @@ public sealed partial class RuneCasterSystem
 
     private bool CanAnimate(EntityUid uid)
     {
-        if (HasComp<MindContainerComponent>(uid) || HasComp<AnimateComponent>(uid) || _tag.HasTag(uid, AnimateBlacklistTag))
+        if (HasComp<MindContainerComponent>(uid) || HasComp<AnimateComponent>(uid) || _tag.HasTag(uid, AnimateBlacklistTag) ||
+            _container.IsEntityInContainer(uid))
             return false;
 
         foreach (var name in AnimateBlacklist)
@@ -1038,6 +1128,10 @@ public sealed partial class RuneCasterSystem
 
         if (result is not { } morphed)
             return;
+
+        RemComp<GhostRoleComponent>(morphed);
+        RemComp<GhostTakeoverAvailableComponent>(morphed);
+        Track(ctx, morphed, RuneTrack.Exists);
 
         if (effect.Petrify)
             EnsureComp<RunePetrifiedComponent>(morphed);
@@ -1102,13 +1196,33 @@ public sealed partial class RuneCasterSystem
 
     private void ApplyLightning(RuneCastContext ctx, RuneLightningEffect effect)
     {
-        var origin = Spawn(null, _transform.ToMapCoordinates(ctx.Point));
+        var center = _transform.ToMapCoordinates(ctx.Point);
+        var origin = Spawn(null, center);
         EnsureComp<TimedDespawnComponent>(origin).Lifetime = 2f;
+
+        var mobs = new List<EntityUid>();
+        var others = new List<EntityUid>();
+        foreach (var target in _lookup.GetEntitiesInRange<LightningTargetComponent>(center, effect.Range * ctx.RangeScale))
+        {
+            if (target.Owner == ctx.Caster || _container.IsEntityInContainer(target))
+                continue;
+
+            if (HasComp<MobStateComponent>(target) && !_mobState.IsDead(target))
+                mobs.Add(target);
+            else
+                others.Add(target);
+        }
+
+        _random.Shuffle(mobs);
+        _random.Shuffle(others);
+        mobs.AddRange(others);
+
+        var bolts = Math.Max(1, (int) MathF.Ceiling((effect.Bolts + ctx.Extra) * ctx.Power));
         _lightningOwner = ctx.Caster;
         try
         {
-            var bolts = Math.Max(1, (int) MathF.Round((effect.Bolts + ctx.Extra) * ctx.Power));
-            _lightning.ShootRandomLightnings(origin, effect.Range * ctx.RangeScale, bolts, effect.Prototype);
+            for (var i = 0; i < bolts && mobs.Count > 0; i++)
+                _lightning.ShootLightning(origin, mobs[i % mobs.Count], effect.Prototype);
         }
         finally
         {

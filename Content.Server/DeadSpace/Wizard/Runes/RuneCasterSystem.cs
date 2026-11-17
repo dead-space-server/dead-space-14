@@ -16,6 +16,8 @@ using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
+using Content.Shared.Item;
+using Content.Shared.Physics;
 using Content.Shared.Magic.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
@@ -74,6 +76,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         InitializeScrolls();
         InitializeCreatures();
         InitializeDoom();
+        InitializeActive();
     }
 
     public override void Update(float frameTime)
@@ -93,6 +96,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         UpdateCreatures(frameTime);
         UpdateDoom();
         UpdateScrollHats();
+        UpdateActive();
     }
 
     private void OnMapInit(Entity<RuneCasterComponent> ent, ref MapInitEvent args)
@@ -322,6 +326,11 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
             return Fail(caster, Loc.GetString("rune-cast-no-target"));
         }
 
+        if (spell.Effects.Exists(e => e is RuneTeleportEffect { Mode: RuneTeleportMode.CasterToPoint }) && !CanBlink(caster, target))
+        {
+            return Fail(caster, Loc.GetString("rune-cast-blink-blocked"));
+        }
+
         var strain = ComputeStrain(caster.Comp, composition) * (scroll ? caster.Comp.ScrollStrainScale : 1f);
         var blood = composition.BloodPrice;
         if (blood > 0f)
@@ -345,7 +354,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         caster.Comp.LastElement = composition.Element.ID;
         caster.Comp.LastSecond = composition.Second?.ID;
 
-        StartCooldown(caster, composition.Key, spell.Cooldown, spell.Name);
+        SetCooldown(caster, composition.Key, spell.Cooldown, spell.Cooldown, spell.Name);
         if (!scroll)
             SpendBlood(caster, caster.Comp, composition);
 
@@ -380,12 +389,16 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         SetStrain(caster, caster.Comp, after);
         WarnStrain(caster, before / caster.Comp.MaxStrain, after / caster.Comp.MaxStrain);
 
-        var context = new RuneCastContext(caster, target, entity, composition);
+        var active = spell.HoldCooldown ? BeginActive(caster, composition, spell) : null;
+        var casterAt = _transform.GetMapCoordinates(caster);
+        var context = new RuneCastContext(caster, target, entity, composition) { Active = active };
         foreach (var effect in spell.Effects)
             Apply(context, effect);
 
         FinishSigil(caster, composition, RuneSigilState.Cast);
         RaiseImpact(caster, composition, spell, target, entity);
+        if (active != null)
+            SettleActive(caster, active);
 
         if (ultimate && !context.KeepUltimateReady)
             StartUltimateCooldown(caster);
@@ -402,7 +415,10 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
                     return;
 
                 var point = spell.Targeting == RuneTargeting.Self ? Transform(caster).Coordinates : target;
-                var echo = new RuneCastContext(caster, point, entity, composition, power);
+                if (composition.Form.AutoPattern == RuneSpawnPattern.LineAtPoint)
+                    point = EchoWallPoint(caster, casterAt, target);
+
+                var echo = new RuneCastContext(caster, point, entity, composition, power) { Active = active };
                 foreach (var effect in spell.Effects)
                     Apply(echo, effect);
                 RaiseImpact(caster, composition, spell, point, entity);
@@ -412,17 +428,33 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         return true;
     }
 
-    private void StartCooldown(Entity<RuneCasterComponent> caster, string key, float seconds, string name)
+    private EntityCoordinates EchoWallPoint(EntityUid caster, MapCoordinates casterAt, EntityCoordinates target)
     {
-        var now = Timing.CurTime;
-        foreach (var (old, cooldown) in caster.Comp.Cooldowns.ToArray())
+        var first = _transform.ToMapCoordinates(target);
+        var now = _transform.GetMapCoordinates(caster);
+        if (first.MapId != now.MapId)
+            return target;
+
+        var offset = first.Position - casterAt.Position;
+        var point = now.Position + offset;
+        if ((point - first.Position).LengthSquared() < 0.5f)
         {
-            if (cooldown.Ready <= now)
-                caster.Comp.Cooldowns.Remove(old);
+            var forward = MathF.Abs(offset.X) > MathF.Abs(offset.Y)
+                ? new System.Numerics.Vector2(MathF.Sign(offset.X), 0f)
+                : new System.Numerics.Vector2(0f, offset.Y == 0f ? 1f : MathF.Sign(offset.Y));
+            point = first.Position + forward;
         }
 
-        caster.Comp.Cooldowns[key] = new RuneCooldown(now + TimeSpan.FromSeconds(seconds), seconds, name);
-        Dirty(caster);
+        return _transform.ToCoordinates(new MapCoordinates(point, now.MapId));
+    }
+
+    private bool CanBlink(EntityUid caster, EntityCoordinates point)
+    {
+        if (Transform(caster).MapID != _transform.GetMapId(point))
+            return false;
+
+        return _interaction.InRangeUnobstructed(caster, point, 1000f, CollisionGroup.Opaque,
+            e => e == caster || HasComp<MobStateComponent>(e) || HasComp<ItemComponent>(e));
     }
 
     private void StartUltimateCooldown(Entity<RuneCasterComponent> caster)

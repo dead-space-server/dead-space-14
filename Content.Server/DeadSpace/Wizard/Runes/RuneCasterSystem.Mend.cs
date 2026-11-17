@@ -25,7 +25,8 @@ public sealed record RuneRegenerationEntry(
     TimeSpan End,
     ProtoId<AlertPrototype>? Alert,
     float Heal,
-    float OrganMend);
+    float OrganMend,
+    string? Group = null);
 
 public sealed partial class RuneCasterSystem
 {
@@ -36,6 +37,7 @@ public sealed partial class RuneCasterSystem
     private const float LimbMendShare = 0.6f;
     private const float OrganMendShare = 1.5f;
     private const string BloodlossDamage = "Bloodloss";
+    private const float CauterizeBleed = 1000f;
 
     private static readonly LimbOrgan[] OrganDanger =
     {
@@ -220,6 +222,19 @@ public sealed partial class RuneCasterSystem
                 SetRuptured = true,
             });
             return;
+        }
+    }
+
+    private void Cauterize(EntityUid target)
+    {
+        _bloodstream.TryModifyBleedAmount(target, -CauterizeBleed);
+        if (!TryComp<LimbBodyComponent>(target, out var limbs))
+            return;
+
+        for (var i = 0; i < limbs.Zones.Count && i < LimbWoundRules.BodyZoneCount; i++)
+        {
+            if (!limbs.Zones[i].Severed)
+                _limbs.ApplyEdit(target, (LimbZone) i, new LimbEdit { Bleed = 0f, SetBleed = true });
         }
     }
 

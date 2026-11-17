@@ -26,7 +26,7 @@
   element: RuneElementWater
   range: 8
   strain: 14
-  cooldown: 10
+  cooldown: 20
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneWaterCurtain
@@ -75,9 +75,12 @@
   absurdity: 1
   allows:
   - RuneModifierDuration
+  forbids:
+  - RuneModifierPower
   effects:
   - !type:RuneComponentsEffect
-    fromAction: ActionSlippery
+    template: RuneSlipperyTemplate
+    duration: 20
   - !type:RuneSoakEffect
     time: 8
 
@@ -88,7 +91,7 @@
   element: RuneElementWater
   targeting: Self
   strain: 16
-  cooldown: 120
+  cooldown: 30
   effects:
   - !type:RuneExtinguishEffect
     target: Caster
@@ -121,7 +124,7 @@
   element: RuneElementWater
   range: 8
   strain: 28
-  cooldown: 25
+  cooldown: 60
   effects:
   - !type:RuneAnimateEffect
     template: RuneAnimateWaterTemplate
@@ -135,7 +138,7 @@
   element: RuneElementWater
   range: 6
   strain: 26
-  cooldown: 35
+  cooldown: 60
   loudness: 1
   effects:
   - !type:RuneSpawnRandomEffect
@@ -157,19 +160,23 @@
   strain: 12
   cooldown: 4
   effects:
-  - !type:RunePushEffect
-    atPoint: true
-    speed: 35
-    radius: 2
-    distance: 5
-  - !type:RuneKnockdownEffect
-    target: AroundPoint
-    radius: 2.5
-    time: 2
-  - !type:RuneStaminaEffect
-    target: AroundPoint
-    radius: 2
-    amount: 15
+  - !type:RuneProjectileEffect
+    prototype: RuneProjectileGust
+    speed: 24
+    onHit:
+    - !type:RunePushEffect
+      atPoint: true
+      speed: 35
+      radius: 2
+      distance: 5
+    - !type:RuneKnockdownEffect
+      target: AroundPoint
+      radius: 2.5
+      time: 2
+    - !type:RuneStaminaEffect
+      target: AroundPoint
+      radius: 2
+      amount: 15
 
 - type: wizardRuneSpell
   id: RuneSpellWindWall
@@ -178,7 +185,7 @@
   element: RuneElementAir
   range: 8
   strain: 14
-  cooldown: 10
+  cooldown: 20
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneWindWall
@@ -193,7 +200,7 @@
   element: RuneElementAir
   targeting: Self
   strain: 10
-  cooldown: 10
+  cooldown: 20
   effects:
   - !type:RuneSpawnEffect
     prototype: WizardSmoke
@@ -237,7 +244,7 @@
   element: RuneElementAir
   range: 8
   strain: 28
-  cooldown: 25
+  cooldown: 60
   absurdity: 1
   effects:
   - !type:RuneAnimateEffect
@@ -252,7 +259,7 @@
   element: RuneElementAir
   range: 6
   strain: 22
-  cooldown: 30
+  cooldown: 60
   effects:
   - !type:RuneSpawnRandomEffect
     prototypes:
@@ -270,9 +277,9 @@
   form: RuneFormPolymorph
   element: RuneElementFire
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 22
-  cooldown: 30
+  cooldown: 60
   absurdity: 1
   effects:
   - !type:RunePolymorphEffect
@@ -284,9 +291,9 @@
   form: RuneFormPolymorph
   element: RuneElementIce
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 22
-  cooldown: 30
+  cooldown: 60
   absurdity: 1
   effects:
   - !type:RunePolymorphEffect
@@ -298,9 +305,9 @@
   form: RuneFormPolymorph
   element: RuneElementEarth
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 26
-  cooldown: 35
+  cooldown: 60
   loudness: 1
   effects:
   - !type:RunePolymorphEffect
@@ -312,9 +319,9 @@
   form: RuneFormPolymorph
   element: RuneElementLightning
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 20
-  cooldown: 30
+  cooldown: 60
   effects:
   - !type:RunePolymorphEffect
     polymorph: RuneChaosMouse
@@ -325,9 +332,9 @@
   form: RuneFormPolymorph
   element: RuneElementLife
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 22
-  cooldown: 30
+  cooldown: 60
   absurdity: 1
   effects:
   - !type:RunePolymorphEffect
@@ -339,9 +346,9 @@
   form: RuneFormPolymorph
   element: RuneElementVoid
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 30
-  cooldown: 45
+  cooldown: 60
   loudness: 2
   effects:
   - !type:RunePolymorphEffect
@@ -354,9 +361,9 @@
   form: RuneFormPolymorph
   element: RuneElementChaos
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 18
-  cooldown: 25
+  cooldown: 60
   absurdity: 2
   effects:
   - !type:RuneRandomEffect
@@ -371,6 +378,34 @@
       polymorph: RuneMorphFrog
     - !type:RunePolymorphEffect
       polymorph: RuneMorphPenguin
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosSpider
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosXeno
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosArgocyte
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosHonkDemon
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosHellspawn
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosGoliath
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosWatcher
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosBehonker
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosWhelp
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosFox
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosCrab
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosLizard
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosCockroach
+    - !type:RunePolymorphEffect
+      polymorph: RuneChaosBear
 
 - type: wizardRuneSpell
   id: RuneSpellMorphWater
@@ -378,9 +413,9 @@
   form: RuneFormPolymorph
   element: RuneElementWater
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 20
-  cooldown: 30
+  cooldown: 60
   absurdity: 1
   effects:
   - !type:RunePolymorphEffect
@@ -392,9 +427,9 @@
   form: RuneFormPolymorph
   element: RuneElementAir
   targeting: EntityOrSelf
-  range: 6
+  range: 4.8
   strain: 20
-  cooldown: 30
+  cooldown: 60
   effects:
   - !type:RunePolymorphEffect
     polymorph: RuneMorphBat
