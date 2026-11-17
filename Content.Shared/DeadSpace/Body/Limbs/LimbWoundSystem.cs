@@ -2916,14 +2916,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
     private EntityUid? Holder(EntityUid item)
     {
         var parent = Transform(item).ParentUid;
-        while (parent.IsValid())
-        {
-            if (HasComp<LimbAimComponent>(parent))
-                return parent;
+        if (!parent.IsValid() || !HasComp<LimbAimComponent>(parent))
+            return null;
 
-            parent = Transform(parent).ParentUid;
-        }
-
+        if (_hands.IsHolding(parent, item))
+            return parent;
         return null;
     }
 
