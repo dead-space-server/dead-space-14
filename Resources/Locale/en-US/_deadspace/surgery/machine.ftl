@@ -9,6 +9,7 @@ surgery-hint-machine-wire = Lay the wiring (hold LMB)
 surgery-hint-machine-pulse = Probe the sockets (trace the dots)
 surgery-hint-machine-weld = Weld the seam
 surgery-op-machine-open = Open the chassis
+surgery-op-mend-jaw-machine = Jaw setting
 surgery-op-machine-repair = Repair
 surgery-op-machine-shard = Remove shrapnel
 surgery-op-machine-amputate = Detach limb

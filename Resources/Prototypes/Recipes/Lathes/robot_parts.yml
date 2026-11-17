@@ -192,6 +192,14 @@
   materials:
     Steel: 50
     Glass: 200
+
+- type: latheRecipe
+  parent: BaseRoboticsRecipe
+  id: OrganIPCEars
+  result: OrganIPCEars
+  materials:
+    Steel: 50
+    Glass: 100
 # DS14-end
 
 # Brains

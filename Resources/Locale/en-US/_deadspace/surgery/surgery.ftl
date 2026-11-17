@@ -5,6 +5,7 @@ surgery-hint-retract = Pull the cut edges apart.
 surgery-hint-extract = Draw the organ up along the cut, slowly.
 surgery-timeout = The hand slipped away.
 surgery-wrong-hand = Wrong tool in hand.
+surgery-wrong-step-tool = This step needs a different tool.
 surgery-wrong-side = The wound is on the other side. Turn the patient over.
 surgery-self = On your own head you can only drill a tooth.
 surgery-clothes = The target must be undressed.

@@ -9,6 +9,7 @@ surgery-hint-machine-wire = Проложить провода (держать Л
 surgery-hint-machine-pulse = Прозвонить разъёмы (провести по точкам)
 surgery-hint-machine-weld = Заварить шов
 surgery-op-machine-open = Вскрытие корпуса
+surgery-op-mend-jaw-machine = Вправление челюсти
 surgery-op-machine-repair = Восстановление
 surgery-op-machine-shard = Извлечение осколка
 surgery-op-machine-amputate = Снятие конечности
