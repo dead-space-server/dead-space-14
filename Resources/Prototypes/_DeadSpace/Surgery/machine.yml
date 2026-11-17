@@ -102,40 +102,6 @@
     undo: Incise
 
 - type: surgeryOperation
-  id: MendJawMachine
-  name: surgery-op-mend-jaw-machine
-  machine: true
-  sterile: false
-  side: Front
-  zone: Head
-  when: Jaw
-  order: 1
-  icon:
-    sprite: /Textures/Mobs/Species/Human/parts.rsi
-    state: head_m
-  steps:
-  - verb: Incise
-    layer: Skin
-    hint: MachineUnscrew
-    game: Dots
-    undo: Cauterize
-  - verb: Retract
-    layer: Skin
-    hint: MachinePry
-    game: Hold
-  - verb: Stanch
-    layer: Skin
-    hint: MachineWire
-    game: Hold
-    effect: JawMend
-  close:
-  - verb: Cauterize
-    layer: Skin
-    hint: MachineWeld
-    game: Steady
-    undo: Incise
-
-- type: surgeryOperation
   id: MendMindMachine
   name: surgery-op-mend-brain
   machine: true
