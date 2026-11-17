@@ -5,6 +5,7 @@ surgery-hint-retract = Разведи края разреза в стороны.
 surgery-hint-extract = Тяни орган вверх по разрезу, медленно.
 surgery-timeout = Рука сорвалась.
 surgery-wrong-hand = В руке не тот инструмент.
+surgery-wrong-step-tool = Для этого шага нужен другой инструмент.
 surgery-wrong-side = Рана с другой стороны. Переверните пациента.
 surgery-self = Себе на голове можно только сверлить зуб.
 surgery-clothes = Цель должна быть без одежды.

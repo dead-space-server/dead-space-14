@@ -361,7 +361,7 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
         if (TryComp<BloodstreamComponent>(target, out var blood))
             _blood.TryModifyBleedAmount((target, blood), 2f);
 
-        if (TryComp<LimbBodyComponent>(target, out var limbs) && limbs.Mouth < BrokenJawTrauma)
+        if (TryComp<LimbBodyComponent>(target, out var limbs) && limbs.HasJaw && limbs.Mouth < BrokenJawTrauma)
         {
             limbs.Mouth = BrokenJawTrauma;
             Dirty(target, limbs);

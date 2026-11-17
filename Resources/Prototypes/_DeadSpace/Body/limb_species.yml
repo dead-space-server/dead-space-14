@@ -89,6 +89,7 @@
 - type: limbSpecies
   id: IPC
   headVital: false
+  jaw: false
   organs:
   - Brain
   - Eyes
