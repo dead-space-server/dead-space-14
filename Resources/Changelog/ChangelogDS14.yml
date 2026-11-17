@@ -10481,3 +10481,10 @@ Entries:
   changes:
   - type: Fix
     message: Теперь ну точно, прям точно абуз печки пофикшен
+- id: 1009
+  author: Manstari
+  time: '2026-11-17T19:50:38.241630+00:00'
+  pr: 2787
+  changes:
+  - type: Add
+    message: Хирургические принадлежности в медфаб Тайпана
