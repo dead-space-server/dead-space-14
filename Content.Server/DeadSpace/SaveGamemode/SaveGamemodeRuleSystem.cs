@@ -128,6 +128,14 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         if (ev.New != GameRunLevel.InRound || _savedMap == MapId.Nullspace)
             return;
 
+        TryStep("списков сеток станций", PruneDeadStationGrids);
+
+        // Генератор имён снимается здесь, а не при загрузке: MapInit карты идёт ПОСЛЕ регистрации станции
+        // (GameTicker.StartRound: StartGamePresetRules -> InitializeMap(DefaultMap) -> SpawnPlayers),
+        // и на этом MapInit станция переименовывается заново. Снятый раньше MapInit компонент движок
+        // вернуть не может, а в момент загрузки его ComponentInit уже прошёл — снимать было нечего.
+        TryStep("генератора имён", SilenceStationNameGeneration);
+
         var byId = StatesById(_savedStates);
 
         var query = AllEntityQuery<StationDataComponent>();
@@ -196,7 +204,141 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     }
 
     /// <summary>
-    ///     Выполняет шаг восстановления станции так, чтобы его неудача не отменила остальные шаги.
+    ///     Выключает генератор имён станций на загруженной карте.
+    /// </summary>
+    /// <remarks>
+    ///     Порядок старта раунда в <c>GameTicker.StartRound</c>: загрузка карты, затем
+    ///     <c>_map.InitializeMap(DefaultMap)</c>, и только потом спавн игроков и <c>RoundStartedEvent</c>.
+    ///     Станция при загрузке создаётся заново, поэтому в её прототипе остаётся
+    ///     <c>StationNameSetupComponent</c>, который на этом MapInit вызывает <c>RenameStation</c> с новым
+    ///     выдуманным именем — то есть портит имя из сохранения ровно в ту секунду, когда его уже прочитали
+    ///     сетки, PDA и рассылка работ, но до того, как по нему начнут печатать документы.
+    ///     Сам компонент выключается, а не переименование отменяется: станция при загрузке создаётся
+    ///     тикером, и в момент регистрации станции её <c>ComponentInit</c> уже прошёл — ловить там было нечего.
+    ///     Снимается компонент со станции целиком, без него станция живёт: имя генерируется только им.
+    ///     Место вызова — <c>InRound</c>, а не загрузка карты: между ними и есть тот самый MapInit,
+    ///     который переименовывает станцию. Снятый до него компонент движок вернуть не сможет.
+    /// </remarks>
+    private void SilenceStationNameGeneration()
+    {
+        if (_savedMap == MapId.Nullspace)
+            return;
+
+        var removed = 0;
+        var query = AllEntityQuery<StationDataComponent>();
+        while (query.MoveNext(out var station, out var data))
+        {
+            var onSavedMap = false;
+            foreach (var grid in data.Grids)
+            {
+                if (TryComp(grid, out TransformComponent? xform) && xform.MapID == _savedMap)
+                {
+                    onSavedMap = true;
+                    break;
+                }
+            }
+
+            if (!onSavedMap || !RemComp<StationNameSetupComponent>(station))
+                continue;
+
+            removed++;
+        }
+
+        if (removed > 0)
+        {
+            Log.Info($"SaveGamemode: у станций загруженной карты выключен генератор имён " +
+                     $"(станций: {removed}) — иначе MapInit переименует их после загрузки");
+        }
+    }
+
+    /// <summary>
+    ///     Убирает из списка сеток станции те, которых больше нет.
+    /// </summary>
+    /// <remarks>
+    ///     <c>StationDataComponent.Grids</c> — <c>[AutoNetworkedField]</c>: каждое состояние станции уезжает
+    ///     на клиент списком идентификаторов сеток. Живая сетка уходит из списка сама, когда у неё снимается
+    ///     <c>StationMemberComponent</c> (<c>StationSystem.OnStationGridDeleted</c>). Удалённая — нет: её
+    ///     компонент уже снят и снимать нечего, а ссылка на сетку в списке осталась.
+    ///     Сохранение это только усиливает: карта целиком пересоздаётся, старые сетки удаляются пачкой —
+    ///     из них и набираются мёртвые ссылки. У такой сетки <c>MetaData</c> ещё живёт до конца тика,
+    ///     поэтому её net id спокойно попадает в состояние станции и уходит клиентам.
+    ///     На клиенте такой сетки нет: состояние приходит на отсутствующую сущность, и в лог идут
+    ///     «Encountered deleted entity while merging implicit data» и «Can't resolve MetaDataComponent
+    ///     on entity ...».
+    ///     Время — начало раунда: раньше нельзя, пока регистрация станции не закончена, позже поздно —
+    ///     состояние с мёртвой ссылкой уже ушло клиентам.
+    ///     Живая сетка вычеркивается через <c>RemoveGridFromStation</c>: доступ к списку сеток у чужой
+    ///     системы только на чтение (RA0002), а этот метод ещё и поднимает <c>StationGridRemovedEvent</c> —
+    ///     как при обычном выходе сетки из станции. Удалённая вычеркивается снятием связи, потому что
+    ///     <c>RemoveGridFromStation</c> на ней не работает: у удалённой сущности нет <c>MapGridComponent</c>.
+    /// </remarks>
+    private void PruneDeadStationGrids()
+    {
+        if (_savedMap == MapId.Nullspace)
+            return;
+
+        var removed = 0;
+        var query = AllEntityQuery<StationDataComponent>();
+        while (query.MoveNext(out var station, out var data))
+        {
+            // HashSet менять во время итерации нельзя, поэтому сначала только смотрим: есть ли мёртвые
+            // сетки и принадлежит ли станция загруженной карте.
+            var dead = 0;
+            var onSavedMap = false;
+
+            foreach (var grid in data.Grids)
+            {
+                if (!Exists(grid))
+                {
+                    dead++;
+                    continue;
+                }
+
+                if (!onSavedMap && TryComp(grid, out TransformComponent? xform) && xform.MapID == _savedMap)
+                    onSavedMap = true;
+            }
+
+            // Чужие станции (шаттл-карты, хаб) не трогаем: у них свои сетки и своя жизнь.
+            if (dead == 0 || !onSavedMap)
+                continue;
+
+            var doomed = new List<EntityUid>();
+            foreach (var grid in data.Grids)
+            {
+                if (!Exists(grid))
+                    doomed.Add(grid);
+            }
+
+            // Удалённая сетка вычёркивается снятием связи со станции: у неё уже нет MapGridComponent,
+            // поэтому RemoveGridFromStation её не возьмёт (требует его через Resolve), а обычный путь —
+            // ComponentShutdown у StationMemberComponent — прошёл ещё при удалении сетки и второй раз
+            // не случится. Снятие того же компонента сейчас вычеркнет ссылку сам, через
+            // OnStationGridDeleted. Доступ к самому списку сеток у чужой системы только на чтение,
+            // поэтому для живой сетки берётся RemoveGridFromStation.
+            foreach (var grid in doomed)
+            {
+                if (!Exists(grid))
+                {
+                    RemComp<StationMemberComponent>(grid);
+                }
+                else
+                {
+                    _station.RemoveGridFromStation(station, grid, stationData: data);
+                }
+
+                removed++;
+            }
+        }
+
+        if (removed > 0)
+        {
+            Log.Info($"SaveGamemode: из списков сеток станций убрано удалённых сеток: {removed} — " +
+                     "иначе их net id уходит клиентам и ломает применение состояния");
+        }
+    }
+
+    /// <summary>
+    ///     Шаг восстановления станции, который не должен отменять остальные.
     /// </summary>
     /// <remarks>
     ///     Имя станции, её балансы и её сетки — самостоятельные вещи: упавшие балансы не имеют права
