@@ -10511,3 +10511,10 @@ Entries:
     message: все остатки челюсти у кпб
   - type: Fix
     message: Вставка ушей в кпб
+- id: 1013
+  author: Manstari
+  time: '2026-11-17T20:08:47.007687+00:00'
+  pr: 2783
+  changes:
+  - type: Fix
+    message: Под диагональной стеной теперь можно уничтожить кудзу
