@@ -10459,3 +10459,10 @@ Entries:
       by Teffy
   - type: Fix
     message: Теперь можно делать кастом версии спрайтов для вещей надетых на таяр
+- id: 1006
+  author: BlueDogDoc
+  time: '2026-11-17T07:54:18.499644+00:00'
+  pr: 2804
+  changes:
+  - type: Tweak
+    message: Архив камер временно выключен
