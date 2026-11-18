@@ -10549,3 +10549,10 @@ Entries:
     message: Хирургичка на аванпосте нюки
   - type: Fix
     message: Баги на картах
+- id: 1018
+  author: BlueDogDoc
+  time: '2026-11-18T09:25:03.580599+00:00'
+  pr: 2806
+  changes:
+  - type: Add
+    message: Анимированный манифест с MVP и тд
