@@ -548,6 +548,7 @@
         - NamesWizardFirst
         - NamesWizardLast
         nameFormat: name-format-wizard
+      - type: RuneCaster # DS14
       mindRoles:
       - MindRoleWizard
       sponsorsPriority: true

@@ -1,0 +1,80 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created by Blue Dog Doc for Space Station 14 server Мёртвый Космос",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "scroll"
+        },
+        {
+            "name": "form-RuneFormProjectile"
+        },
+        {
+            "name": "form-RuneFormWall"
+        },
+        {
+            "name": "form-RuneFormWave"
+        },
+        {
+            "name": "form-RuneFormTouch"
+        },
+        {
+            "name": "form-RuneFormSelf"
+        },
+        {
+            "name": "form-RuneFormAnimate"
+        },
+        {
+            "name": "form-RuneFormSummon"
+        },
+        {
+            "name": "form-RuneFormPolymorph"
+        },
+        {
+            "name": "form-RuneFormGrasp"
+        },
+        {
+            "name": "form-RuneFormUltimate"
+        },
+        {
+            "name": "element-RuneElementFire"
+        },
+        {
+            "name": "element-RuneElementIce"
+        },
+        {
+            "name": "element-RuneElementEarth"
+        },
+        {
+            "name": "element-RuneElementLightning"
+        },
+        {
+            "name": "element-RuneElementLife"
+        },
+        {
+            "name": "element-RuneElementVoid"
+        },
+        {
+            "name": "element-RuneElementChaos"
+        },
+        {
+            "name": "element-RuneElementWater"
+        },
+        {
+            "name": "element-RuneElementAir"
+        },
+        {
+            "name": "element-RuneElementBlood"
+        },
+        {
+            "name": "element-RuneElementDeath"
+        },
+        {
+            "name": "element-RuneElementPoison"
+        }
+    ]
+}

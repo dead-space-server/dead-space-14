@@ -451,6 +451,20 @@
     sprite: Clothing/OuterClothing/Armor/magusblue.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Armor/magusblue.rsi
+  # DS14-start
+  - type: WizardClothes
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.55
+        Slash: 0.55
+        Piercing: 0.55
+        Heat: 0.55
+        Caustic: 0.75
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  # DS14-end
 
 - type: entity
   parent: ClothingOuterArmorHeavy
@@ -462,6 +476,20 @@
     sprite: Clothing/OuterClothing/Armor/magusred.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Armor/magusred.rsi
+  # DS14-start
+  - type: WizardClothes
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.55
+        Slash: 0.55
+        Piercing: 0.55
+        Heat: 0.55
+        Caustic: 0.75
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  # DS14-end
 
 - type: entity
   parent: [ ClothingOuterBaseLarge, BaseMajorContraband, AllowSuitStorageClothing ]

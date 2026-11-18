@@ -10,6 +10,7 @@ public struct HitscanTrace
 {
     public Angle Angle;
     public float Distance;
+    public float HoldSeconds;
 
     public NetCoordinates? MuzzleCoordinates;
     public NetCoordinates? TravelCoordinates;

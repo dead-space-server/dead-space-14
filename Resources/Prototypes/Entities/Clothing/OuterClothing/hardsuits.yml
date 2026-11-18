@@ -937,6 +937,7 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitWizard
+  - type: WizardClothes # DS14
   - type: Tag
     tags:
     - CorgiWearable

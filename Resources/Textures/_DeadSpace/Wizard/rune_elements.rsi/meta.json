@@ -1,0 +1,47 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Made by ripentropy (discord) for Space Station 14 server Мёртвый Космос",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "RuneElementFire"
+        },
+        {
+            "name": "RuneElementIce"
+        },
+        {
+            "name": "RuneElementEarth"
+        },
+        {
+            "name": "RuneElementLightning"
+        },
+        {
+            "name": "RuneElementLife"
+        },
+        {
+            "name": "RuneElementVoid"
+        },
+        {
+            "name": "RuneElementChaos"
+        },
+        {
+            "name": "RuneElementWater"
+        },
+        {
+            "name": "RuneElementAir"
+        },
+        {
+            "name": "RuneElementBlood"
+        },
+        {
+            "name": "RuneElementDeath"
+        },
+        {
+            "name": "RuneElementPoison"
+        }
+    ]
+}
