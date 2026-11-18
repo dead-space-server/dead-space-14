@@ -256,36 +256,37 @@ public sealed partial class PathfindingSystem
 
     private void OnCollisionChange(ref CollisionChangeEvent ev)
     {
-        var xform = Transform(ev.BodyUid);
-
-        if (xform.GridUid == null)
-            return;
-
         // This will also rebuild on door open / closes which I think is good?
-        var aabb = _lookup.GetAABBNoContainer(ev.BodyUid, xform.Coordinates.Position, xform.LocalRotation);
-        DirtyChunkArea(xform.GridUid.Value, aabb);
+        if (Transform(ev.BodyUid) is { } xform)
+            DirtyIfRelevant(ev.BodyUid, xform);
     }
 
     private void OnCollisionLayerChange(ref CollisionLayerChangeEvent ev)
     {
-        var xform = Transform(ev.Body);
-
-        if (xform.GridUid == null)
-            return;
-
-        var aabb = _lookup.GetAABBNoContainer(ev.Body, xform.Coordinates.Position, xform.LocalRotation);
-        DirtyChunkArea(xform.GridUid.Value, aabb);
+        if (Transform(ev.Body) is { } xform)
+            DirtyIfRelevant(ev.Body, xform);
     }
 
     private void OnBodyTypeChange(ref PhysicsBodyTypeChangedEvent ev)
     {
-        if (TryComp(ev.Entity, out TransformComponent? xform) &&
-            xform.GridUid != null)
-        {
-            var aabb = _lookup.GetAABBNoContainer(ev.Entity, xform.Coordinates.Position, xform.LocalRotation);
-            DirtyChunkArea(xform.GridUid.Value, aabb);
-        }
+        if (TryComp(ev.Entity, out TransformComponent? xform))
+            DirtyIfRelevant(ev.Entity, xform);
     }
+
+    //DS-14 start
+    private void DirtyIfRelevant(EntityUid uid, TransformComponent xform)
+    {
+        if (xform.GridUid == null ||
+            !_fixturesQuery.TryGetComponent(uid, out var fixtures) ||
+            !IsBodyRelevant(fixtures))
+        {
+            return;
+        }
+
+        var aabb = _lookup.GetAABBNoContainer(uid, xform.Coordinates.Position, xform.LocalRotation);
+        DirtyChunkArea(xform.GridUid.Value, aabb);
+    }
+    //DS-14 end
 
     private void OnMoveEvent(ref MoveEvent ev)
     {
