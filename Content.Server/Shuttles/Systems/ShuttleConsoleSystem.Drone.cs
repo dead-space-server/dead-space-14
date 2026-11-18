@@ -1,5 +1,6 @@
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
+using Content.Shared.Shuttles.BUIStates; //DS-14
 using Content.Shared.Station.Components;
 using Content.Shared.UserInterface;
 
@@ -46,6 +47,8 @@ public sealed partial class ShuttleConsoleSystem
     private void OnDronePilotConsoleOpen(EntityUid uid, DroneConsoleComponent component, AfterActivatableUIOpenEvent args)
     {
         component.Entity = GetShuttleConsole(uid);
+        DockingInterfaceState? dockState = null; //DS-14
+        UpdateState(uid, ref dockState); //DS-14
     }
 
     private void OnDronePilotConsoleClose(EntityUid uid, DroneConsoleComponent component, BoundUIClosedEvent args)

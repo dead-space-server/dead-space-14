@@ -140,7 +140,7 @@
     tags: []
   - type: Storage
     grid:
-    - 0,0,7,4
+    - 0,0,7,5
 
 - type: entity
   parent: ClothingHandsGlovesCombat

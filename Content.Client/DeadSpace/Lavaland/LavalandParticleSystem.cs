@@ -27,6 +27,7 @@ namespace Content.Client.DeadSpace.Lavaland;
 public sealed class LavalandParticleSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
@@ -80,6 +81,7 @@ public sealed class LavalandParticleSystem : EntitySystem
     };
 
     private readonly List<(EntityUid Uid, LavalandParticleEmitterComponent Comp, Vector2 Position)> _emitters = new();
+    private readonly HashSet<Entity<LavalandParticleEmitterComponent>> _scanned = new();
     private readonly Dictionary<EntityUid, (float Main, float Alt)> _accumulators = new();
     private float _scanTimer;
     private float _ambientStars;
@@ -164,15 +166,12 @@ public sealed class LavalandParticleSystem : EntitySystem
     private void ScanEmitters(MapId map, Box2 view)
     {
         _emitters.Clear();
-        var query = EntityQueryEnumerator<LavalandParticleEmitterComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var xform))
+        _scanned.Clear();
+        _lookup.GetEntitiesIntersecting(map, view, _scanned);
+        foreach (var (uid, comp) in _scanned)
         {
-            if (xform.MapID != map)
-                continue;
-
-            var position = _transform.GetWorldPosition(xform);
-            // Lava behind a wall does not sparkle through it.
-            if (view.Contains(position) && IsVisible(map, position))
+            var position = _transform.GetWorldPosition(uid);
+            if (IsVisible(map, position))
                 _emitters.Add((uid, comp, position));
         }
 

@@ -492,9 +492,6 @@ public sealed class LavalandSystem : EntitySystem
     {
         _map.SetTiles(mapUid, grid, tiles);
 
-        foreach (var tile in lavaTiles)
-            SpawnAnchored(planet.BoundaryLavaEntity, mapUid, grid, tile);
-
         foreach (var tile in wallTiles)
             SpawnAnchored(planet.BoundaryWallEntity, mapUid, grid, tile);
 
