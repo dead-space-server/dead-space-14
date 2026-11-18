@@ -1,0 +1,22 @@
+- type: entity
+  parent: BaseItem
+  id: HiveFrame
+  name: hive frame
+  description: A frame for a hive, the bees build honeycomb in it.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Beekeeping/hiveframe.rsi
+    layers:
+    - state: empty
+      map: ["enum.HiveFrameVisualLayers.Base"]
+  - type: Item
+    size: Normal
+  - type: HiveFrame
+    maxCapacity: 50
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.HiveFrameVisuals.HasHoneycomb:
+        enum.HiveFrameVisualLayers.Base:
+          True: { state: full }
+          False: { state: empty }

@@ -2,6 +2,9 @@ using Content.Server.Actions;
 using Content.Server.Animals.Components;
 using Content.Server.Popups;
 using Content.Shared.Actions.Events;
+using Content.Shared.DeadSpace.Husbandry.Needs;
+using Content.Shared.DeadSpace.Husbandry.Core;
+using Content.Shared.DeadSpace.Husbandry.Sex;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
@@ -25,6 +28,9 @@ public sealed class EggLayerSystem : EntitySystem
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly SatiationSystem _satiation = default!;
+    // DS14-start: animals of the husbandry module pay with their AnimalNeeds
+    [Dependency] private readonly SharedAnimalNeedsSystem _animalNeeds = default!;
+    // DS14-end
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -88,9 +94,27 @@ public sealed class EggLayerSystem : EntitySystem
         if (!Resolve(uid, ref egglayer))
             return false;
 
+        // DS14-start: a male animal of the husbandry module (a rooster) does not lay eggs
+        if (TryComp<AnimalSexComponent>(uid, out var sex) && sex.Sex == AnimalSexKind.Male)
+        {
+            _popup.PopupEntity(Loc.GetString("action-popup-lay-egg-male"), uid, uid);
+            return false;
+        }
+        // DS14-end
+
         if (_mobState.IsDead(uid))
             return false;
 
+        // DS14-start
+        if (TryComp<AnimalNeedsComponent>(uid, out var animalNeeds))
+        {
+            if (!_animalNeeds.TryConsumeSatiety((uid, animalNeeds), egglayer.HungerUsage, animalNeeds.Satiety.SeekBelow))
+            {
+                _popup.PopupEntity(Loc.GetString("action-popup-lay-egg-too-hungry"), uid, uid);
+                return false;
+            }
+        }
+        else // DS14-end
         // Allow infinitely laying eggs if they can't get hungry.
         if (TryComp<SatiationComponent>(uid, out var satiation))
         {

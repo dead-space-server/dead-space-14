@@ -1,10 +1,12 @@
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.DeadSpace.Husbandry.Needs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Prototypes;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -17,6 +19,10 @@ namespace Content.Shared.Animals;
 public sealed class WoolySystem : EntitySystem
 {
     [Dependency] private readonly SatiationSystem _satiation = default!;
+    // DS14-start: animals of the husbandry module pay with their AnimalNeeds
+    [Dependency] private readonly SharedAnimalNeedsSystem _animalNeeds = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    // DS14-end
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
@@ -64,6 +70,17 @@ public sealed class WoolySystem : EntitySystem
 
             if (solution.AvailableVolume == 0)
                 continue;
+
+            // DS14-start
+            if (TryComp<AnimalNeedsComponent>(uid, out var animalNeeds))
+            {
+                if (_net.IsClient || !_animalNeeds.TryConsumeSatiety((uid, animalNeeds), wooly.HungerUsage, animalNeeds.Satiety.SeekBelow))
+                    continue;
+
+                _solutionContainer.TryAddReagent(wooly.Solution.Value, wooly.ReagentId, wooly.Quantity, out _);
+                continue;
+            }
+            // DS14-end
 
             // Actually there is food digestion so no problem with instant reagent generation "OnFeed"
             if (TryComp<SatiationComponent>(uid, out var satiation))

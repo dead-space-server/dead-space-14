@@ -1,5 +1,8 @@
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.DeadSpace.Husbandry.Needs;
+using Content.Shared.DeadSpace.Husbandry.Core;
+using Content.Shared.DeadSpace.Husbandry.Sex;
 using Content.Shared.DoAfter;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -11,6 +14,7 @@ using Content.Shared.Popups;
 using Content.Shared.Udder;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -22,6 +26,10 @@ namespace Content.Shared.Animals;
 public sealed class UdderSystem : EntitySystem
 {
     [Dependency] private readonly SatiationSystem _satiation = default!;
+    // DS14-start: animals of the husbandry module pay with their AnimalNeeds
+    [Dependency] private readonly SharedAnimalNeedsSystem _animalNeeds = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    // DS14-end
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
@@ -66,6 +74,10 @@ public sealed class UdderSystem : EntitySystem
 
             udder.NextGrowth += udder.GrowthDelay;
 
+            // DS14: a male does not make milk
+            if (IsMale(uid))
+                continue;
+
             if (_mobState.IsDead(uid))
                 continue;
 
@@ -74,6 +86,18 @@ public sealed class UdderSystem : EntitySystem
 
             if (solution.AvailableVolume == 0)
                 continue;
+
+            // DS14-start
+            if (TryComp<AnimalNeedsComponent>(uid, out var animalNeeds))
+            {
+                // The server alone pays and produces, the solution reaches clients by itself.
+                if (_net.IsClient || !_animalNeeds.TryConsumeSatiety((uid, animalNeeds), udder.HungerUsage, animalNeeds.Satiety.SeekBelow))
+                    continue;
+
+                _solutionContainerSystem.TryAddReagent(udder.Solution.Value, udder.ReagentId, udder.QuantityPerUpdate, out _);
+                continue;
+            }
+            // DS14-end
 
             // Actually there is food digestion so no problem with instant reagent generation "OnFeed"
             if (TryComp<SatiationComponent>(uid, out var satiation))
@@ -92,10 +116,18 @@ public sealed class UdderSystem : EntitySystem
         }
     }
 
+    // DS14-start: a male animal of the husbandry module has no udder to milk
+    private bool IsMale(EntityUid uid)
+    {
+        return TryComp<AnimalSexComponent>(uid, out var sex) && sex.Sex == AnimalSexKind.Male;
+    }
+    // DS14-end
+
     private void OnInteractUsing(Entity<UdderComponent> ent, ref InteractUsingEvent args)
     {
         if (args.Handled || !ent.Comp.MilkOnInteract || !HasComp<RefillableSolutionComponent>(args.Used) ||
-            !HasComp<DrainableSolutionComponent>(args.Used))
+            !HasComp<DrainableSolutionComponent>(args.Used) ||
+            IsMale(ent)) // DS14
             return;
 
         args.Handled = true;
@@ -105,6 +137,7 @@ public sealed class UdderSystem : EntitySystem
     private bool CanMilk(EntityUid udder, EntityUid user, EntityUid container)
     {
         return _mobState.IsAlive(udder) &&
+               !IsMale(udder) && // DS14
                (!TryComp<OpenableComponent>(container, out var openable) || openable.Opened) &&
                _interaction.InRangeAndAccessible(user, udder) &&
                _interaction.InRangeAndAccessible(user, container);
@@ -114,6 +147,13 @@ public sealed class UdderSystem : EntitySystem
     {
         if (!Resolve(udder, ref udder.Comp))
             return;
+        // DS14-start
+        if (IsMale(udder.Owner))
+        {
+            _popupSystem.PopupClient(Loc.GetString("udder-system-male"), udder, userUid);
+            return;
+        }
+        // DS14-end
         if (!_mobState.IsAlive(udder.Owner))
         {
             _popupSystem.PopupClient(Loc.GetString("udder-system-dead"), udder, userUid);
@@ -178,7 +218,8 @@ public sealed class UdderSystem : EntitySystem
     {
         if (args.Using == null ||
              !args.CanInteract ||
-             !HasComp<RefillableSolutionComponent>(args.Using.Value))
+             !HasComp<RefillableSolutionComponent>(args.Using.Value) ||
+             IsMale(entity)) // DS14
             return;
         var uid = entity.Owner;
         var user = args.User;

@@ -1,0 +1,70 @@
+- type: entity
+  id: BeeHive
+  name: beehive
+  description: A wooden hive. The bees live in it and make honeycomb for your strange needs.
+  components:
+  - type: Clickable
+  - type: Sprite
+    sprite: _DeadSpace/Beekeeping/beehive.rsi
+    state: idle
+  - type: BeeHive
+    pollenPerHoney: 10
+    productionInterval: 15
+    maxBees: 3
+    spawnInterval: 15
+  # The slot of the queen. The hive works only with a queen in it.
+  - type: ItemSlots
+    slots:
+      queen_slot:
+        name: queen
+        whitelist:
+          components:
+          - QueenBee
+        insertSound: /Audio/Effects/Fluids/splat.ogg
+  - type: Transform
+    anchored: true
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+      queen_slot: !type:ContainerSlot
+  - type: Storage
+    grid:
+    - 0,0,3,1
+    - 0,2,3,3
+    - 0,4,3,5
+    maxItemSize: Normal
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: UseDelay
+    delay: 0.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.35,0.25,0.35"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Physics
+    bodyType: Static
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Appearance
+  - type: InteractionOutline
+  - type: Damageable
+    damageModifierSet: Wood
+    damageContainer: StructuralInorganic
+  - type: Construction
+    graph: BeeHiveGraph
+    node: beehive

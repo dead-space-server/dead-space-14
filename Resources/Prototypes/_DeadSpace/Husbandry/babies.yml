@@ -1,0 +1,48 @@
+# Hatchlings: the same animals, but they start in the baby growth stage (see Growth in animals.yml).
+- type: entity
+  parent: MobChicken
+  id: MobChickenChick
+  suffix: Baby
+  components:
+  - type: Growth
+    initialStage: baby
+
+- type: entity
+  parent: MobChicken1
+  id: MobChickenChick1
+  suffix: Baby
+  components:
+  - type: Growth
+    initialStage: baby
+
+- type: entity
+  parent: MobChicken2
+  id: MobChickenChick2
+  suffix: Baby
+  components:
+  - type: Growth
+    initialStage: baby
+
+- type: entity
+  parent: MobDuckMallard
+  id: MobDuckMallardChick
+  suffix: Baby
+  components:
+  - type: Growth
+    initialStage: baby
+
+- type: entity
+  parent: MobDuckWhite
+  id: MobDuckWhiteChick
+  suffix: Baby
+  components:
+  - type: Growth
+    initialStage: baby
+
+- type: entity
+  parent: MobDuckBrown
+  id: MobDuckBrownChick
+  suffix: Baby
+  components:
+  - type: Growth
+    initialStage: baby
