@@ -97,6 +97,7 @@ namespace Content.Shared.Interaction
         public const string RateLimitKey = "Interaction";
 
         private static readonly ProtoId<TagPrototype> BypassInteractionRangeChecksTag = "BypassInteractionRangeChecks";
+        private static readonly ProtoId<TagPrototype> DiagonalTag = "Diagonal"; // DS14
 
         public delegate bool Ignored(EntityUid entity);
 
@@ -923,6 +924,22 @@ namespace Content.Shared.Interaction
                 if (ignoreAnchored && _map.TryFindGridAt(targetCoords, out var gridUid, out var grid))
                     ignored.UnionWith(_map.GetAnchoredEntities((gridUid, grid), targetCoords));
             }
+
+            // DS14-Start
+            if (!_tagSystem.HasTag(target, DiagonalTag) &&
+                _mapManager.TryFindGridAt(targetCoords, out var diagonalGridUid, out var diagonalGrid))
+            {
+                foreach (var anchored in _map.GetAnchoredEntities((diagonalGridUid, diagonalGrid), targetCoords))
+                {
+                    if (anchored == target || !_tagSystem.HasTag(anchored, DiagonalTag))
+                        continue;
+
+                    var local = System.Numerics.Vector2.Transform(originCoords.Position, _transform.GetInvWorldMatrix(anchored));
+                    if (local.X < local.Y)
+                        ignored.Add(anchored);
+                }
+            }
+            // DS14-End
 
             Ignored combinedPredicate = e => e == target || (predicate?.Invoke(e) ?? false) || ignored.Contains(e);
             return combinedPredicate;

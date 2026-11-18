@@ -11,6 +11,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Medical.SuitSensor;
+using Content.Shared.Mind; //DS-14
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -38,6 +39,7 @@ public abstract partial class SharedSuitSensorSystem : EntitySystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedIdCardSystem _idCardSystem = default!;
+    [Dependency] private SharedMindSystem _mind = default!; //DS-14
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -349,6 +351,9 @@ public abstract partial class SharedSuitSensorSystem : EntitySystem
 
         // check if sensor is enabled and worn by user
         if (sensor.Mode == SuitSensorMode.SensorOff || sensor.User == null || !HasComp<MobStateComponent>(sensor.User) || transform.GridUid == null)
+            return null;
+
+        if (!_mind.TryGetMind(sensor.User.Value, out _, out _)) //DS-14
             return null;
 
         // try to get mobs id from ID slot

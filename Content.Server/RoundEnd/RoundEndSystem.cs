@@ -32,6 +32,7 @@ namespace Content.Server.RoundEnd
     public sealed partial class RoundEndSystem : EntitySystem // DS14
     {
         [Dependency] private Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
+        [Dependency] private Content.Server.DeadSpace.RoundEnd.Credits.RoundEndCreditsSystem _credits = default!; // DS14
         [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IChatManager _chatManager = default!;
@@ -327,7 +328,9 @@ namespace Content.Server.RoundEnd
             _countdownTokenSource?.Cancel();
             _countdownTokenSource = null; // DS14
 
+            countdownTime ??= _credits.GetPlannedRestartDelay(); // DS14
             countdownTime ??= TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.RoundRestartTime));
+            _credits.SetRestartDelay(countdownTime.Value); // DS14
             int time;
             string unitsLocString;
             if (countdownTime.Value.TotalSeconds < 60)

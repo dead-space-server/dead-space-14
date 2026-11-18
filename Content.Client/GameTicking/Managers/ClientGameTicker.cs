@@ -2,6 +2,7 @@ using Content.Client.Administration.Managers;
 using Content.Client.Gameplay;
 using Content.Client.Lobby;
 using Content.Client.RoundEnd;
+using Content.Client.DeadSpace.RoundEnd.Credits; // DS14
 using Content.Shared.GameTicking;
 using Content.Shared.GameWindow;
 using Content.Shared.Roles;
@@ -22,6 +23,7 @@ namespace Content.Client.GameTicking.Managers
         [Dependency] private IClientAdminManager _admin = default!;
         [Dependency] private IClyde _clyde = default!;
         [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
+        [Dependency] private Robust.Shared.Configuration.IConfigurationManager _cfg = default!; // DS14
 
         private Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>>  _jobsAvailable = new();
         private Dictionary<NetEntity, string> _stationNames = new();
@@ -161,6 +163,15 @@ namespace Content.Client.GameTicking.Managers
         {
             // Force an update in the event of this song being the same as the last.
             RestartSound = message.RestartSound;
+
+            // DS14-start
+            if (!_cfg.GetCVar(Content.Shared.DeadSpace.CCCCVars.CCCCVars.RoundEndLegacySummary))
+            {
+                _userInterfaceManager.GetUIController<RoundEndSummaryUIController>().PrepareRoundEndSummaryWindow(message);
+                _userInterfaceManager.GetUIController<RoundEndCreditsUIController>().OnRoundEnd(message);
+                return;
+            }
+            // DS14-end
 
             _userInterfaceManager.GetUIController<RoundEndSummaryUIController>().OpenRoundEndSummaryWindow(message);
         }

@@ -5,6 +5,8 @@
   - type: RuleGrids
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/freelancers_Outpost.yml
+  - type: PauseMapWhenEmpty
+  - type: DeleteAbandonedAntagMap
   - type: AntagSelection
     definitions:
     - spawnerPrototype: PirateCaptainSpawner

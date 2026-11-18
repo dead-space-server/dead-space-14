@@ -196,7 +196,7 @@
 - type: preloadedGrid
   id: DeathSquadShuttle
   path: /Maps/Shuttles/ShuttleEvent/deathsquad.yml
-  copies: 1
+  copies: 0
 
 - type: entity
   parent: BaseGameRule
@@ -210,3 +210,5 @@
   - type: RuleGrids
   - type: LoadMapRule
     preloadedGrid: DeathSquadShuttle
+  - type: PauseMapWhenEmpty
+  - type: DeleteAbandonedAntagMap

@@ -56,6 +56,7 @@ public sealed partial class FaxSystem : EntitySystem
     [Dependency] private EmagSystem _emag = default!;
     [Dependency] private IGameTiming _gameTiming = default!; // DS14
     [Dependency] private GameTicker _gameTicker = default!; // DS14
+    [Dependency] private Content.Server.DeadSpace.CentCommFax.CentCommFaxSystem _centCommFax = default!; // DS14
 
     private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
 
@@ -413,6 +414,7 @@ public sealed partial class FaxSystem : EntitySystem
 
         component.DestinationFaxAddress = null;
         component.KnownFaxes.Clear();
+        _centCommFax.AddUplink(component); // DS14
 
         var payload = new NetworkPayload()
         {
@@ -553,7 +555,23 @@ public sealed partial class FaxSystem : EntitySystem
             payload[FaxConstants.FaxPaperStampedByData] = paper.StampedBy;
         }
 
-        _deviceNetworkSystem.QueuePacket(uid, component.DestinationFaxAddress, payload);
+        // DS14-start
+        if (component.DestinationFaxAddress == Content.Server.DeadSpace.CentCommFax.CentCommFaxSystem.UplinkAddress)
+        {
+            _centCommFax.Record(uid, component.FaxName, new FaxPrintout(paper.Content,
+                nameMod?.BaseName ?? metadata.EntityName,
+                labelComponent?.CurrentLabel,
+                metadata.EntityPrototype?.ID ?? component.PrintPaperId,
+                paper.StampState,
+                paper.StampedBy,
+                paper.EditingDisabled,
+                new List<string>(paper.Signatures)), notify: true);
+        }
+        else
+        {
+            _deviceNetworkSystem.QueuePacket(uid, component.DestinationFaxAddress, payload);
+        }
+        // DS14-end
 
         _adminLogger.Add(LogType.Action,
             LogImpact.Low,
@@ -597,6 +615,8 @@ public sealed partial class FaxSystem : EntitySystem
 
         if (component.NotifyAdmins)
             NotifyAdmins(faxName);
+        if (component.NotifyAdmins) // DS14
+            _centCommFax.Record(_centCommFax.FindFax(fromAddress), faxName, printout, notify: false); // DS14
         // DS14-start FaxHistory
         if (component.FaxHistory.Count >= 20)
         {

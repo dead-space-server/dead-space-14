@@ -4,6 +4,7 @@ using System.Linq;
 using Content.Server.AlertLevel;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
+using Content.Server.DeadSpace.AntagMaps;
 using Content.Server.DeadSpace.ERT.Components;
 using Content.Server.DeadSpace.ERTCall;
 using Content.Server.DeadSpace.Languages;
@@ -90,6 +91,7 @@ public sealed partial class ErtResponseSystem : SharedErtResponseSystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MapSystem _mapSystem = default!;
     [Dependency] private MapLoaderSystem _mapLoaderSystem = default!;
+    [Dependency] private RoundMapPreloadSystem _preparedMaps = default!;
     [Dependency] private AlertLevelSystem _alertLevelSystem = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -861,20 +863,27 @@ public sealed partial class ErtResponseSystem : SharedErtResponseSystem
             return null;
         }
 
-        var opts = DeserializationOptions.Default with { InitializeMaps = true };
-        var mapEntity = _mapSystem.CreateMap(out var mapId);
-        if (!_mapLoaderSystem.TryLoadGrid(mapId, shuttle.Path, out var grid, opts))
+        MapId mapId;
+        EntityUid grid;
+        if (!_preparedMaps.TryClaimShuttle(shuttle.ID, out mapId, out grid))
         {
-            Log.Error($"Failed to load grid from {shuttle.Path}!");
-            QueueDel(mapEntity);
-            QueueDel(ruleEntity);
-            return null;
+            var opts = DeserializationOptions.Default with { InitializeMaps = true };
+            var mapEntity = _mapSystem.CreateMap(out mapId);
+            if (!_mapLoaderSystem.TryLoadGrid(mapId, shuttle.Path, out var loaded, opts))
+            {
+                Log.Error($"Failed to load grid from {shuttle.Path}!");
+                QueueDel(mapEntity);
+                QueueDel(ruleEntity);
+                return null;
+            }
+
+            grid = loaded.Value.Owner;
         }
 
-        var grids = new List<EntityUid> { grid.Value };
+        var grids = new List<EntityUid> { grid };
 
         ruleComp.Team = team;
-        ruleComp.ShuttleEntity = grid.Value;
+        ruleComp.ShuttleEntity = grid;
         ruleComp.CallReason = callReason;
         ruleComp.PinpointerTarget = pinpointerTarget;
         ruleComp.SuppressAnnouncements = !announce;

@@ -15,6 +15,8 @@ using Content.Shared.DeadSpace.UniformAccessories.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Clothing;
 using Content.Shared.Chat;
+using Content.Shared.Construction.Components;
+using Content.Shared.Light.Components;
 using Content.Shared.Emag.Systems;
 using Content.Shared.Emp;
 using Content.Shared.Examine;
@@ -35,6 +37,8 @@ using Content.Shared.Tools.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.SSDIndicator;
 using Content.Shared.Silicons.Borgs.Components;
+using Content.Shared.Storage;
+using Content.Shared.Storage.Components;
 using Content.Shared.SurveillanceCamera.Components;
 using Content.Shared.Xenoborgs.Components;
 using Content.Shared.TextScreen;
@@ -90,6 +94,12 @@ public sealed partial class CameraArchiveSystem : EntitySystem
         | SlotFlags.LEGS | SlotFlags.FEET | SlotFlags.UNDERWEART | SlotFlags.UNDERWEARB | SlotFlags.SOCKS;
 
     private readonly HashSet<EntityUid> _seen = new();
+    private readonly HashSet<EntityUid> _range = new();
+    private readonly HashSet<EntityUid> _kept = new();
+    private readonly List<(EntityUid Uid, TransformComponent Xform, string Prototype)> _found = new();
+    private readonly Stopwatch _work = new();
+    private bool _foundReady;
+    private EntityUid _foundCamera;
     private readonly List<EntityUid> _order = new();
     private readonly Dictionary<EntityUid, Queue<CameraFrame>> _history = new();
     private readonly Dictionary<EntityUid, (int Stamp, CameraArchive Head, CameraFrameParts Parts)> _reuse = new();
@@ -117,7 +127,10 @@ public sealed partial class CameraArchiveSystem : EntitySystem
     private const int ChatLineCap = 40;
     private const int SavedMinutes = 5;
     private const float MaintainSeconds = 5f;
+    private const float WorkSliceSeconds = 0.004f;
+    private const int HiddenScanCap = 8;
     private const int PatchRebase = 16;
+    private const LookupFlags ViewFlags = LookupFlags.Approximate | LookupFlags.Uncontained;
     private static readonly Comparison<(EntityUid Uid, TransformComponent Xform, string Prototype)> ByUid =
         (a, b) => b.Uid.Id.CompareTo(a.Uid.Id);
     private readonly Dictionary<EntityUid, (GameTick Tick, byte[] Bytes)> _appearanceCache = new();
@@ -183,6 +196,10 @@ public sealed partial class CameraArchiveSystem : EntitySystem
         _appearanceCache.Clear();
         _humanoidCache.Clear();
         _order.Clear();
+        _found.Clear();
+        _kept.Clear();
+        _range.Clear();
+        _foundReady = false;
         _cursor = 0;
         if (_resources.UserData.Exists(StoreDir))
             _resources.UserData.Delete(StoreDir);
@@ -197,24 +214,36 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
         var now = _ticker.RoundDuration();
         PromoteTurns(now);
+        var budget = TimeSpan.FromSeconds(Math.Max(0.01f, _cfg.GetCVar(CCVars.CameraArchiveTickBudgetSeconds)));
+        var heavy = TickIsHeavy(budget);
+        _work.Restart();
         var shot = FlushSoon(now);
         _spriteTimer += frameTime;
-        if (_spriteTimer >= 1f)
+        _maintainTimer += frameTime;
+        if (heavy)
+            return;
+
+        if (_spriteTimer >= 1f && !OverSlice())
         {
             _spriteTimer = 0f;
             PollSprites(now);
         }
 
-        FlushSprites(now);
-        _maintainTimer += frameTime;
-        if (_maintainTimer >= MaintainSeconds)
+        if (!OverSlice())
+            FlushSprites(now);
+        if (_maintainTimer >= MaintainSeconds && !OverSlice())
         {
             _maintainTimer = 0f;
             Maintain(now);
         }
 
-        if (!shot)
+        if (!shot && !OverSlice())
             BaselineOne(now);
+    }
+
+    private bool OverSlice()
+    {
+        return _work.Elapsed.TotalSeconds >= WorkSliceSeconds;
     }
 
     public bool IsOnline(EntityUid camera)
@@ -583,6 +612,9 @@ public sealed partial class CameraArchiveSystem : EntitySystem
         _spriteGone.Clear();
         foreach (var (uid, spots) in _spriteOf)
         {
+            if (OverSlice())
+                break;
+
             if (!Exists(uid))
             {
                 _spriteGone.Add(uid);
@@ -638,6 +670,9 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
         foreach (var camera in _spriteReady)
         {
+            if (OverSlice())
+                break;
+
             if (Waits(camera, now, out var ready))
             {
                 _spriteDue[camera] = ready;
@@ -809,6 +844,9 @@ public sealed partial class CameraArchiveSystem : EntitySystem
         var uids = new HashSet<EntityUid>();
         foreach (var (uid, index) in placed)
         {
+            if (!TryComp<AppearanceComponent>(uid, out var appearance))
+                continue;
+
             if (!_spriteOf.TryGetValue(uid, out var spots))
             {
                 spots = new List<(EntityUid Camera, int Index)>();
@@ -817,7 +855,7 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
             spots.Add((camera, index));
             uids.Add(uid);
-            if (!_spriteTick.ContainsKey(uid) && TryComp<AppearanceComponent>(uid, out var appearance))
+            if (!_spriteTick.ContainsKey(uid))
                 _spriteTick[uid] = appearance.LastModifiedTick;
         }
 
@@ -979,11 +1017,9 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
         var budget = TimeSpan.FromSeconds(Math.Max(0.01f, _cfg.GetCVar(CCVars.CameraArchiveTickBudgetSeconds)));
         var heavy = TickIsHeavy(budget);
-        var watch = new Stopwatch();
-        watch.Restart();
         var shot = false;
         var guard = _soon.Count;
-        while (guard-- > 0 && _soon.Count > 0 && watch.Elapsed.TotalSeconds < 0.004)
+        while (guard-- > 0 && _soon.Count > 0 && !OverSlice())
         {
             var camera = _soon.Dequeue();
             _soonSet.Remove(camera);
@@ -1036,6 +1072,7 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
     private bool Shoot(EntityUid camera, TimeSpan now, bool allowRebuild)
     {
+        _foundReady = false;
         if (TryLoose(camera, now, allowRebuild))
             return true;
 
@@ -1051,7 +1088,7 @@ public sealed partial class CameraArchiveSystem : EntitySystem
     private bool TickIsHeavy(TimeSpan budget)
     {
         var elapsed = _timing.RealTime - _timing.LastTick;
-        if (elapsed < TimeSpan.Zero || elapsed > TimeSpan.FromSeconds(1))
+        if (elapsed < TimeSpan.Zero)
             return false;
 
         return elapsed >= budget;
@@ -1522,6 +1559,7 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
     public CameraArchive? Capture(EntityUid camera)
     {
+        _foundReady = false;
         return Build(camera) is { } cache
             ? Materialize(new CameraFrame(TimeSpan.Zero, NewHead(cache), Parts: Parts(cache)))
             : null;
@@ -1576,42 +1614,20 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
         head.Tiles = previous != null && SameItems(previous.Head.Tiles, tiles) ? previous.Head.Tiles : tiles;
 
+        EnsureCollected(camera);
         _seen.Clear();
 
-        var range = radius * MathF.Sqrt(2f) + 1f;
-        var found = new List<(EntityUid Uid, TransformComponent Xform, string Prototype)>();
+        var found = new List<(EntityUid Uid, TransformComponent Xform, string Prototype)>(_found.Count + 1);
         if (TryComp(camera, out MetaDataComponent? cameraMeta) && cameraMeta.EntityPrototype is { } cameraProto)
         {
             _seen.Add(camera);
             found.Add((camera, cameraXform, cameraProto.ID));
         }
 
-        foreach (var uid in _lookup.GetEntitiesInRange(camera, range))
+        foreach (var item in _found)
         {
-            if (!TryComp(uid, out TransformComponent? xform) || xform.GridUid != grid)
-                continue;
-
-            if (HasComp<MapGridComponent>(uid) || HasComp<MapComponent>(uid))
-                continue;
-
-            if (!TryComp(uid, out MetaDataComponent? meta) || meta.EntityPrototype is not { } proto)
-                continue;
-
-            if (proto.ID == AudioEntity || HiddenFromArchive(uid))
-                continue;
-
-            if (!IsStructural(uid, xform) && HiddenInside(uid, xform))
-                continue;
-
-            var local = ToGridLocal(uid, xform, grid, gridComp);
-            var delta = local.Position - center;
-            if (MathF.Abs(delta.X) > radius || MathF.Abs(delta.Y) > radius)
-                continue;
-
-            if (!_seen.Add(uid))
-                continue;
-
-            found.Add((uid, xform, proto.ID));
+            if (_seen.Add(item.Uid))
+                found.Add(item);
         }
 
         found.Sort(ByUid);
@@ -1714,34 +1730,14 @@ public sealed partial class CameraArchiveSystem : EntitySystem
             };
         }
 
-        var radius = CameraArchive.ViewRadius;
-        var range = radius * MathF.Sqrt(2f) + 1f;
+        EnsureCollected(camera);
         var found = new List<(EntityUid Uid, TransformComponent Xform, string Prototype)>();
-        foreach (var uid in _lookup.GetEntitiesInRange(camera, range))
+        foreach (var item in _found)
         {
-            if (cache.Index.ContainsKey(uid))
+            if (cache.Index.ContainsKey(item.Uid) || IsStructural(item.Uid, item.Xform))
                 continue;
 
-            if (!TryComp(uid, out TransformComponent? xform) || xform.GridUid != grid)
-                continue;
-
-            if (IsStructural(uid, xform))
-                continue;
-
-            if (HasComp<MapGridComponent>(uid) || HasComp<MapComponent>(uid))
-                continue;
-
-            if (!TryComp(uid, out MetaDataComponent? meta) || meta.EntityPrototype is not { } proto)
-                continue;
-
-            if (proto.ID == AudioEntity || HiddenFromArchive(uid) || HiddenInside(uid, xform))
-                continue;
-
-            var local = ToGridLocal(uid, xform, grid, gridComp);
-            if (MathF.Abs(local.Position.X - center.X) > radius || MathF.Abs(local.Position.Y - center.Y) > radius)
-                continue;
-
-            found.Add((uid, xform, proto.ID));
+            found.Add(item);
         }
 
         found.Sort(ByUid);
@@ -1809,7 +1805,7 @@ public sealed partial class CameraArchiveSystem : EntitySystem
                     handSide = (byte) hand.Value.Location;
                 }
 
-                var conceal = WearsCloak(item.Uid);
+                var conceal = HasComp<InventoryComponent>(item.Uid) && WearsCloak(item.Uid);
                 var record = new CameraArchiveEntity
                 {
                     Prototype = item.Prototype,
@@ -1872,6 +1868,17 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
     private bool IsStructural(EntityUid uid, TransformComponent xform)
     {
+        if (!AnchoredChain(xform))
+            return false;
+
+        if (!HiddenInside(uid, xform))
+            return true;
+
+        return IsFixturePart(uid, xform);
+    }
+
+    private bool AnchoredChain(TransformComponent xform)
+    {
         var current = xform;
         for (var i = 0; i < 8; i++)
         {
@@ -1887,6 +1894,17 @@ public sealed partial class CameraArchiveSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private bool IsFixturePart(EntityUid uid, TransformComponent xform)
+    {
+        var parent = xform.ParentUid;
+        if (parent.IsValid() && (HasComp<StorageComponent>(parent) || HasComp<EntityStorageComponent>(parent)))
+            return false;
+
+        return HasComp<MachineBoardComponent>(uid)
+            || HasComp<ComputerBoardComponent>(uid)
+            || HasComp<LightBulbComponent>(uid);
     }
 
     private static Angle Steady(Angle angle)
@@ -1909,35 +1927,130 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
     private int Stamp(EntityUid camera, bool anchored)
     {
-        if (!TryComp(camera, out TransformComponent? cameraXform) || cameraXform.GridUid is not { } grid)
-            return 0;
-
+        EnsureCollected(camera);
         var hash = new HashCode();
-        var range = CameraArchive.ViewRadius * MathF.Sqrt(2f) + 1f;
-        foreach (var uid in _lookup.GetEntitiesInRange(camera, range))
+        foreach (var item in _found)
         {
-            if (!TryComp(uid, out TransformComponent? xform) || xform.GridUid != grid)
+            if (IgnoredMover(item.Uid))
                 continue;
 
-            if (IgnoredMover(uid) || HiddenFromArchive(uid))
-                continue;
-
-            if (IsStructural(uid, xform) != anchored)
-                continue;
-
-            if (!TryComp(uid, out MetaDataComponent? meta))
+            if (IsStructural(item.Uid, item.Xform) != anchored)
                 continue;
 
             if (!anchored)
-                hash.Add(xform.ParentUid);
+                hash.Add(item.Xform.ParentUid);
 
-            hash.Add(meta.EntityPrototype?.ID);
-            hash.Add((int) MathF.Round(xform.LocalPosition.X * 4f));
-            hash.Add((int) MathF.Round(xform.LocalPosition.Y * 4f));
-            hash.Add((int) Math.Round(Steady(xform.LocalRotation).Degrees));
+            hash.Add(item.Prototype);
+            hash.Add((int) MathF.Round(item.Xform.LocalPosition.X * 4f));
+            hash.Add((int) MathF.Round(item.Xform.LocalPosition.Y * 4f));
+            hash.Add((int) Math.Round(Steady(item.Xform.LocalRotation).Degrees));
         }
 
         return hash.ToHashCode();
+    }
+
+    private void EnsureCollected(EntityUid camera)
+    {
+        if (_foundReady && _foundCamera == camera)
+            return;
+
+        Collect(camera);
+    }
+
+    private void Collect(EntityUid camera)
+    {
+        _found.Clear();
+        _kept.Clear();
+        _foundReady = true;
+        _foundCamera = camera;
+        if (!TryComp(camera, out TransformComponent? cameraXform) || cameraXform.GridUid is not { } grid)
+            return;
+
+        if (!TryComp<MapGridComponent>(grid, out var gridComp))
+            return;
+
+        var radius = CameraArchive.ViewRadius;
+        var center = ToGridLocal(camera, cameraXform, grid, gridComp).Position;
+        var range = radius * MathF.Sqrt(2f) + 1f;
+        _range.Clear();
+        _lookup.GetEntitiesInRange(camera, range, _range, ViewFlags);
+        foreach (var uid in _range)
+            TryAddFound(uid, grid, gridComp, center, radius);
+
+        var roots = _found.Count;
+        for (var i = 0; i < roots; i++)
+            ExpandContents(_found[i].Uid, grid, gridComp, center, radius);
+    }
+
+    private bool TryAddFound(EntityUid uid, EntityUid grid, MapGridComponent gridComp, Vector2 center, float radius)
+    {
+        if (!_kept.Add(uid))
+            return false;
+
+        if (!TryComp(uid, out TransformComponent? xform) || xform.GridUid != grid)
+            return false;
+
+        if (HasComp<MapGridComponent>(uid) || HasComp<MapComponent>(uid))
+            return false;
+
+        if (!TryComp(uid, out MetaDataComponent? meta) || meta.EntityPrototype is not { } proto)
+            return false;
+
+        if (proto.ID == AudioEntity || HiddenFromArchive(uid))
+            return false;
+
+        if (HiddenInside(uid, xform) && !IsFixturePart(uid, xform) && !ShownOrAccessory(uid, xform))
+            return false;
+
+        var local = ToGridLocal(uid, xform, grid, gridComp);
+        if (MathF.Abs(local.Position.X - center.X) > radius || MathF.Abs(local.Position.Y - center.Y) > radius)
+            return false;
+
+        _found.Add((uid, xform, proto.ID));
+        return true;
+    }
+
+    private void ExpandContents(EntityUid root, EntityUid grid, MapGridComponent gridComp, Vector2 center, float radius)
+    {
+        if (!TryComp<ContainerManagerComponent>(root, out var manager))
+            return;
+
+        foreach (var container in _containers.GetAllContainers(root, manager))
+        {
+            var open = TakesContents(root, container);
+            if (!open && container.ContainedEntities.Count > HiddenScanCap)
+                continue;
+
+            foreach (var uid in container.ContainedEntities)
+            {
+                if (!open && (!TryComp(uid, out TransformComponent? contained) || !IsFixturePart(uid, contained)))
+                    continue;
+
+                if (!TryAddFound(uid, grid, gridComp, center, radius) || !container.ShowContents)
+                    continue;
+
+                ExpandContents(uid, grid, gridComp, center, radius);
+            }
+        }
+    }
+
+    private bool TakesContents(EntityUid owner, BaseContainer container)
+    {
+        if (container.ShowContents || container.ID == UniformAccessoryHolderComponent.ContainerId)
+            return true;
+
+        if (_inventory.HasSlot(owner, container.ID))
+            return true;
+
+        return _hands.TryGetHand(owner, container.ID, out _);
+    }
+
+    private bool ShownOrAccessory(EntityUid uid, TransformComponent xform)
+    {
+        if (!_containers.TryGetContainingContainer((uid, xform, (MetaDataComponent?) null), out var container))
+            return false;
+
+        return container.ShowContents || container.ID == UniformAccessoryHolderComponent.ContainerId;
     }
 
     private sealed partial class BuiltView
@@ -1957,6 +2070,7 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
     public bool TryReuse(EntityUid camera, TimeSpan now)
     {
+        _foundReady = false;
         if (!_reuse.TryGetValue(camera, out var cached))
             return false;
 
@@ -1969,24 +2083,15 @@ public sealed partial class CameraArchiveSystem : EntitySystem
 
     private int WorldStamp(EntityUid camera)
     {
-        if (!TryComp(camera, out TransformComponent? cameraXform) || cameraXform.GridUid is not { } grid)
-            return 0;
-
+        EnsureCollected(camera);
         var hash = new HashCode();
         hash.Add(GetNetEntity(camera));
-        var range = CameraArchive.ViewRadius * MathF.Sqrt(2f) + 1f;
-        foreach (var uid in _lookup.GetEntitiesInRange(camera, range))
+        foreach (var item in _found)
         {
-            if (!TryComp(uid, out TransformComponent? xform) || xform.GridUid != grid)
-                continue;
-
-            if (!TryComp(uid, out MetaDataComponent? meta))
-                continue;
-
-            hash.Add(meta.EntityPrototype?.ID);
-            hash.Add((int) MathF.Round(xform.LocalPosition.X * 4f));
-            hash.Add((int) MathF.Round(xform.LocalPosition.Y * 4f));
-            hash.Add(xform.Anchored);
+            hash.Add(item.Prototype);
+            hash.Add((int) MathF.Round(item.Xform.LocalPosition.X * 4f));
+            hash.Add((int) MathF.Round(item.Xform.LocalPosition.Y * 4f));
+            hash.Add(item.Xform.Anchored);
         }
 
         return hash.ToHashCode();

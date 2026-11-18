@@ -123,6 +123,7 @@
         - type: LegionPredatorPerk
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/ds_thecircle_outpost_docked.yml
+  - type: DeleteAbandonedAntagMap
   - type: AntagSelection
     selectionTime: PrePlayerSpawn
     definitions:

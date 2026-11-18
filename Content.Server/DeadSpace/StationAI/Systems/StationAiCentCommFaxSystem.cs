@@ -2,6 +2,7 @@
 
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
+using Content.Server.DeadSpace.CentCommFax;
 using Content.Server.Fax;
 using Content.Server.GameTicking;
 using Content.Server.Popups;
@@ -31,6 +32,7 @@ public sealed partial class StationAiCentCommFaxSystem : EntitySystem
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private FaxSystem _fax = default!;
+    [Dependency] private CentCommFaxSystem _centCommFax = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private StationAiSystem _stationAi = default!;
@@ -79,7 +81,8 @@ public sealed partial class StationAiCentCommFaxSystem : EntitySystem
             return;
         }
 
-        if (!TryGetCentCommFax(out var fax))
+        var hasFax = TryGetCentCommFax(out var fax);
+        if (!hasFax && !_centCommFax.UplinkActive)
         {
             var status = Loc.GetString("station-ai-centcomm-fax-status-unavailable");
             UpdateUi(ent, status);
@@ -107,7 +110,7 @@ public sealed partial class StationAiCentCommFaxSystem : EntitySystem
             },
         };
 
-        fax.Comp.KnownFaxes[SourceAddress] = Loc.GetString("station-ai-centcomm-fax-source-name", ("name", sender));
+        var sourceName = Loc.GetString("station-ai-centcomm-fax-source-name", ("name", sender));
 
         var printout = new FaxPrintout(
             document,
@@ -118,7 +121,15 @@ public sealed partial class StationAiCentCommFaxSystem : EntitySystem
             stamps,
             locked: true);
 
-        _fax.Receive(fax.Owner, printout, SourceAddress, fax.Comp);
+        if (hasFax)
+        {
+            fax.Comp.KnownFaxes[SourceAddress] = sourceName;
+            _fax.Receive(fax.Owner, printout, SourceAddress, fax.Comp);
+        }
+        else
+        {
+            _centCommFax.Record(null, sourceName, printout, notify: true);
+        }
 
         ent.Comp.NextTransmissionTime = _timing.CurTime + ent.Comp.Cooldown;
 

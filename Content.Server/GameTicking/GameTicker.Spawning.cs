@@ -411,6 +411,22 @@ namespace Content.Server.GameTicking
                 SpawnPlayer(player, EntityUid.Invalid);
         }
 
+        // DS14-start
+        public void ReturnToLobbyAfterRound(ICommonSession player)
+        {
+            if (RunLevel != GameRunLevel.PostRound ||
+                !LobbyEnabled ||
+                !_playerGameStatuses.TryGetValue(player.UserId, out var status) ||
+                status != PlayerGameStatus.JoinedGame)
+            {
+                return;
+            }
+
+            _mind.WipeMind(player);
+            PlayerJoinLobby(player);
+        }
+        // DS14-end
+
         /// <summary>
         /// Makes a player join into the game and spawn on a station.
         /// </summary>

@@ -66,6 +66,7 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
     [Dependency] private IPrototypeManager _prototypes = default!; // DS14
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private RoundEndSystem _roundEnd = default!;
+    [Dependency] private Content.Server.DeadSpace.RoundEnd.Credits.RoundEndCreditsSystem _roundEndCredits = default!; // DS14
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedRoleSystem _roleSystem = default!; // DS14
     [Dependency] private ShuttleSystem _shuttle = default!;
@@ -546,6 +547,15 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
         }
 
         // DS14-start
+        if (!ConfigManager.GetCVar(Content.Shared.DeadSpace.CCCCVars.CCCCVars.CentCommEnabled))
+        {
+            var parking = _mapSystem.CreateMap(out var parkingId, runMapInit: false);
+            component.MapEntity = parking;
+            _mapSystem.InitializeMap(parking);
+            _mapSystem.SetPaused(parking, false);
+            return;
+        }
+
         var grids = _ticker.LoadGameMap(_prototypes.Index(component.Map), out var mapId);
         var map = _mapSystem.GetMapOrInvalid(mapId);
         var grid = grids.FirstOrNull(uid => HasComp<BecomesStationComponent>(uid));

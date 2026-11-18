@@ -227,6 +227,8 @@ public sealed partial class SurgerySystem : EntitySystem
         {
             if (tool.Passive && InOperation(ent.Owner, tool))
                 args.Handled = true;
+            else if (!tool.Passive && Machine(ent.Owner) && InOperation(ent.Owner, tool))
+                _popup.PopupEntity(Loc.GetString("surgery-wrong-step-tool"), ent.Owner, args.User);
             return;
         }
 

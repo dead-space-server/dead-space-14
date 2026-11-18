@@ -811,6 +811,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     {
         UpdateBattery(frameTime);
         UpdateBallistic(frameTime);
+        UpdateRevolver(); //DS-14
     }
 }
 

@@ -201,7 +201,7 @@ public sealed partial class CrewMonitoringConsoleSystem : EntitySystem
         if (!payload.TryGetValue(SuitSensorConstants.NET_STATUS_COLLECTION, out Dictionary<string, SuitSensorStatus>? sensorStatus))
             return;
 
-        component.ConnectedSensors = sensorStatus;
+        component.ConnectedSensors = new Dictionary<string, SuitSensorStatus>(sensorStatus); //DS-14
         UpdateUserInterface(uid, component);
     }
 

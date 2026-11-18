@@ -10435,3 +10435,142 @@ Entries:
   changes:
   - type: Fix
     message: Локализован знак PODS
+- id: 1003
+  author: BlueDogDoc
+  time: '2026-11-16T15:11:02.427980+00:00'
+  pr: 2793
+  changes:
+  - type: Fix
+    message: Ручной голопад пытался повысить энергопотребление станции
+- id: 1004
+  author: BlueDogDoc
+  time: '2026-11-16T15:12:28.441345+00:00'
+  pr: 2794
+  changes:
+  - type: Fix
+    message: Облака через стены
+- id: 1005
+  author: pe4enkakris
+  time: '2026-11-16T15:16:19.071653+00:00'
+  pr: 2792
+  changes:
+  - type: Add
+    message: Спрайт шлема скафандра ОСЩ для таяр и шлема ОСЩ для таяр и вульпканинов
+      by Teffy
+  - type: Fix
+    message: Теперь можно делать кастом версии спрайтов для вещей надетых на таяр
+- id: 1006
+  author: BlueDogDoc
+  time: '2026-11-17T07:54:18.499644+00:00'
+  pr: 2804
+  changes:
+  - type: Tweak
+    message: Архив камер временно выключен
+- id: 1007
+  author: Atickov
+  time: '2026-11-17T19:43:55.866670+00:00'
+  pr: 2803
+  changes:
+  - type: Fix
+    message: Если включить точечную стрельбу и убрать что-либо на пояс, то скорострельность
+      больше не остается уменьшенной
+- id: 1008
+  author: Manstari
+  time: '2026-11-17T19:48:39.773441+00:00'
+  pr: 2791
+  changes:
+  - type: Fix
+    message: Теперь ну точно, прям точно абуз печки пофикшен
+- id: 1009
+  author: Manstari
+  time: '2026-11-17T19:50:38.241630+00:00'
+  pr: 2787
+  changes:
+  - type: Add
+    message: Хирургические принадлежности в медфаб Тайпана
+- id: 1010
+  author: Manstari
+  time: '2026-11-17T19:59:35.711796+00:00'
+  pr: 2786
+  changes:
+  - type: Fix
+    message: Изучение в ветке вооружения тайпана не уходит в никуда
+- id: 1011
+  author: Manstari
+  time: '2026-11-17T20:01:45.055934+00:00'
+  pr: 2784
+  changes:
+  - type: Fix
+    message: Ресурсы от постройки в агосте не уходят в никуда
+- id: 1012
+  author: IvanKuvalda
+  time: '2026-11-17T20:06:31.320981+00:00'
+  pr: 2805
+  changes:
+  - type: Remove
+    message: все остатки челюсти у кпб
+  - type: Fix
+    message: Вставка ушей в кпб
+- id: 1013
+  author: Manstari
+  time: '2026-11-17T20:08:47.007687+00:00'
+  pr: 2783
+  changes:
+  - type: Fix
+    message: Под диагональной стеной теперь можно уничтожить кудзу
+- id: 1014
+  author: Manstari
+  time: '2026-11-17T20:10:49.711710+00:00'
+  pr: 2782
+  changes:
+  - type: Fix
+    message: Исправлена проблема, что диагональные стены не ставятся под тем углом,
+      под которым его строят
+- id: 1015
+  author: IvanKuvalda
+  time: '2026-11-17T20:14:40.035418+00:00'
+  pr: 2756
+  changes:
+  - type: Fix
+    message: небоьшой фикс ксеноборгов. мать шаттл улетает а игрок заходит он вылетает.
+- id: 1016
+  author: Manstari
+  time: '2026-11-18T08:33:41.922919+00:00'
+  pr: 2808
+  changes:
+  - type: Tweak
+    message: Из аплинка агента удалён имплант
+- id: 1017
+  author: HiAmaliz
+  time: '2026-11-18T08:38:22.336460+00:00'
+  pr: 2795
+  changes:
+  - type: Add
+    message: Хирургичка на аванпосте нюки
+  - type: Fix
+    message: Баги на картах
+- id: 1018
+  author: BlueDogDoc
+  time: '2026-11-18T09:25:03.580599+00:00'
+  pr: 2806
+  changes:
+  - type: Add
+    message: Анимированный манифест с MVP и тд
+- id: 1019
+  author: BlueDogDoc
+  time: '2026-11-18T15:39:03.173337+00:00'
+  pr: 2810
+  changes:
+  - type: Fix
+    message: Атмос на аванпосте ЯО
+- id: 1020
+  author: BlueDogDoc
+  time: '2026-11-18T15:44:48.070227+00:00'
+  pr: 2809
+  changes:
+  - type: Add
+    message: Кнопка пропуска титров
+  - type: Tweak
+    message: Убраны гост роли из титров
+  - type: Fix
+    message: Старый манифест на F9

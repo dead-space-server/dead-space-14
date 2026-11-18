@@ -40,11 +40,11 @@
 - type: listing
   id: UplinkEswordDouble
   name: uplink-esword-double-name
-  description: uplink-esword-double-desc
+  description: uplink-esword-double-agent-desc
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: BriefcaseWeaponESwordDoubleFilled
+  productEntity: EnergySwordDouble
   cost:
-    Telecrystal: 36
+    Telecrystal: 21
   categories:
   - UplinkWeaponry
   conditions:

@@ -240,6 +240,8 @@
       - GeistMidroundSpawnPoint
   - type: LoadMapRule
     gridPath: /Maps/Shuttles/ds_geist_shuttle.yml
+  - type: PauseMapWhenEmpty
+  - type: DeleteAbandonedAntagMap
   - type: AntagLoadProfileRule
     speciesOverride: Human
     speciesOverrideBlacklist:
@@ -316,6 +318,8 @@
       - GeistMidroundSpawnPoint
   - type: LoadMapRule
     gridPath: /Maps/Shuttles/ds_geist_shuttle.yml
+  - type: PauseMapWhenEmpty
+  - type: DeleteAbandonedAntagMap
   - type: AntagLoadProfileRule
     speciesOverride: Human
     speciesOverrideBlacklist:

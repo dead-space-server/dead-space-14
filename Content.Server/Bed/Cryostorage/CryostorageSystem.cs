@@ -198,13 +198,6 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
 
         _audio.PlayPvs(cryostorageComponent.RemoveSound, ent);
 
-        EnsurePausedMap();
-        if (PausedMap == null)
-        {
-            Log.Error("CryoSleep map was unexpectedly null");
-            return;
-        }
-
         if (!CryoSleepRejoiningEnabled || !comp.AllowReEnteringBody)
         {
             if (userId != null && Mind.TryGetMind(userId.Value, out var mind) &&
@@ -215,9 +208,26 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
         }
 
         comp.AllowReEnteringBody = false;
-        _transform.SetParent(ent, PausedMap.Value);
-        cryostorageComponent.StoredPlayers.Add(ent);
-        Dirty(ent, comp);
+        //DS-14 start
+        comp.GracePeriodEndTime = null;
+        var pod = Transform(cryostorageEnt.Value).Coordinates;
+        var hands = new List<string>();
+        foreach (var hand in _hands.EnumerateHands(ent.Owner))
+            hands.Add(hand);
+        foreach (var hand in hands)
+            _hands.TryDrop((ent.Owner, null), hand, pod, checkActionBlocker: false, doDropInteraction: false);
+
+        var worn = new List<string>();
+        var slots = _inventory.GetSlotEnumerator(ent.Owner);
+        while (slots.NextItem(out _, out var slotDef))
+            worn.Add(slotDef.Name);
+
+        foreach (var slot in worn)
+            _inventory.TryUnequip(ent.Owner, slot, silent: true, force: true);
+
+        _container.TryRemoveFromContainer(ent.Owner);
+        QueueDel(ent.Owner);
+        //DS-14 end
         UpdateCryostorageUIState((cryostorageEnt.Value, cryostorageComponent));
         AdminLog.Add(LogType.Action, LogImpact.High, $"{ToPrettyString(ent):player} was entered into cryostorage inside of {ToPrettyString(cryostorageEnt.Value)}");
 

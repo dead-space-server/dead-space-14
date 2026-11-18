@@ -78,11 +78,18 @@ public sealed partial class LavalandAshDrakeSystem : EntitySystem
             return;
 
         ent.Comp.PendingChaseLava.Clear();
-        var lava = EntityQueryEnumerator<LavaComponent, TransformComponent>();
-        while (lava.MoveNext(out var lavaUid, out _, out var lavaXform))
+        if (!TryComp(grid, out MapGridComponent? gridComp))
+            return;
+
+        var tiles = _map.GetAllTilesEnumerator(grid, gridComp);
+        while (tiles.MoveNext(out var tile))
         {
-            if (lavaXform.GridUid == grid)
-                QueueDel(lavaUid);
+            var anchored = _map.GetAnchoredEntitiesEnumerator(grid, gridComp, tile.Value.GridIndices);
+            while (anchored.MoveNext(out var lavaUid))
+            {
+                if (lavaUid is { } uid && HasComp<LavaComponent>(uid))
+                    QueueDel(uid);
+            }
         }
     }
 

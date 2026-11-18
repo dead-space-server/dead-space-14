@@ -90,6 +90,7 @@ namespace Content.Server.GameTicking
         private string? _replayRoundText;
 
         private RoundEndMessageEvent? _roundEndSnapshot; // DS14
+        private EntityUid[] _roundEndSnapshotMinds = Array.Empty<EntityUid>(); // DS14
 
         [ViewVariables]
         public GameRunLevel RunLevel
@@ -535,6 +536,7 @@ namespace Content.Server.GameTicking
             catch (Exception e)
             {
                 Log.Error($"Error while building round end scoreboard: {e}");
+                _roundEndSnapshotMinds = Array.Empty<EntityUid>();
                 roundEndSnapshot = new RoundEndMessageEvent(
                     string.Empty,
                     text,
@@ -576,6 +578,10 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(_roundEndSnapshot);
             return true;
         }
+
+        public RoundEndMessageEvent? RoundEndSnapshot => RunLevel == GameRunLevel.PostRound ? _roundEndSnapshot : null; // DS14
+
+        public IReadOnlyList<EntityUid> RoundEndSnapshotMinds => _roundEndSnapshotMinds; // DS14
 
         private void TryRoundEndSideEffect(Action action, string description)
         {
@@ -622,6 +628,7 @@ namespace Content.Server.GameTicking
             //Generate a list of basic player info to display in the end round summary.
             var listOfPlayerInfo = new List<RoundEndMessageEvent.RoundEndPlayerInfo>();
             var manifestAntagMinds = GetRoundEndManifestAntagMinds(); // DS14
+            var manifestMinds = new List<EntityUid>(); // DS14
             // Grab the great big book of all the Minds, we'll need them for this.
             var allMinds = EntityQueryEnumerator<MindComponent>();
             while (allMinds.MoveNext(out var mindId, out var mind))
@@ -714,15 +721,23 @@ namespace Content.Server.GameTicking
                     InCustody = inCustody,
                     IsDead = isDead,
                     ShowInAntagManifest = showInAntagManifest,
+                    GhostRole = _role.MindHasRole<GhostRoleMarkerRoleComponent>(mindId),
                     // DS14-end
                     Observer = observer,
                     Connected = connected
                 };
                 listOfPlayerInfo.Add(playerEndRoundInfo);
+                manifestMinds.Add(mindId); // DS14
             }
 
             // This ordering mechanism isn't great (no ordering of minds) but functions
-            var listOfPlayerInfoFinal = listOfPlayerInfo.OrderBy(pi => pi.PlayerOOCName).ToArray();
+            // DS14-start
+            var playerInfoOrder = Enumerable.Range(0, listOfPlayerInfo.Count)
+                .OrderBy(i => listOfPlayerInfo[i].PlayerOOCName)
+                .ToArray();
+            var listOfPlayerInfoFinal = playerInfoOrder.Select(i => listOfPlayerInfo[i]).ToArray();
+            _roundEndSnapshotMinds = playerInfoOrder.Select(i => manifestMinds[i]).ToArray();
+            // DS14-end
             var sound = RoundEndSoundCollection == null ? null : _audio.ResolveSound(new SoundCollectionSpecifier(RoundEndSoundCollection));
 
             var roundEndMessageEvent = new RoundEndMessageEvent(
@@ -1057,6 +1072,7 @@ namespace Content.Server.GameTicking
                 return;
 
             _roundEndSnapshot = null; // DS14
+            _roundEndSnapshotMinds = Array.Empty<EntityUid>(); // DS14
 
             // Check if the GamePreset needs to be reset
             TryResetPreset();

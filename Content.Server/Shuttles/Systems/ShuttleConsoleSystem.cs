@@ -199,6 +199,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         AfterActivatableUIOpenEvent args)
     {
         TryPilot(args.User, uid);
+        DockingInterfaceState? dockState = null; //DS-14
+        UpdateState(uid, ref dockState); //DS-14
     }
 
     private void OnConsoleAnchorChange(EntityUid uid, ShuttleConsoleComponent component,
@@ -293,6 +295,9 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
     private void UpdateState(EntityUid consoleUid, ref DockingInterfaceState? dockState)
     {
+        if (!_ui.IsUiOpen(consoleUid, ShuttleConsoleUiKey.Key)) //DS-14
+            return;
+
         EntityUid? entity = consoleUid;
 
         var getShuttleEv = new ConsoleShuttleEvent

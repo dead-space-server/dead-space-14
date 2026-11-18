@@ -240,7 +240,8 @@ public sealed partial class TTSSystem : EntitySystem
         // DS14-start: carry recipient-specific remote hearing attenuation and source.
         foreach (var (session, data) in recipientData)
         {
-            var audioSource = GetNetEntity(data.AudioSourceOverride ?? uid);
+            if (!TryNetEntity(data.AudioSourceOverride ?? uid, out var audioSource))
+                continue; //DS-14
 
             if (!understanding.Contains(session))
             {
@@ -265,17 +266,18 @@ public sealed partial class TTSSystem : EntitySystem
         if (_language.NeedGenerateDirectTTS(uid, languageId))
             soundLexiconData = await GenerateTTS(lexiconMessage, speaker);
 
-        if (soundData is null) return;
+        if (soundData is null || !TryNetEntity(uid, out var netUid))
+            return; //DS-14
 
         if (!_language.KnowsLanguage(uid, languageId))
         {
             if (soundLexiconData is null)
-                RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isSoundLexicon: true, languageId: languageId), uid);
+                RaiseNetworkEvent(new PlayTTSEvent(new byte[0], netUid, isSoundLexicon: true, languageId: languageId), uid);
             else
-                RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid)), uid);
+                RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, netUid), uid);
         }
         else
-            RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid)), uid);
+            RaiseNetworkEvent(new PlayTTSEvent(soundData, netUid), uid);
     }
 
     private async void HandleRadio(EntityUid source, EntityUid[] uids, string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, string speaker) // DS14
@@ -297,15 +299,21 @@ public sealed partial class TTSSystem : EntitySystem
 
         foreach (var uid in understandings)
         {
-            RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), isRadio: true, radioCueOnly: uid == source), Filter.Entities(uid)); // DS14
+            if (!TryNetEntity(uid, out var netUid))
+                continue; //DS-14
+
+            RaiseNetworkEvent(new PlayTTSEvent(soundData, netUid, isRadio: true, radioCueOnly: uid == source), Filter.Entities(uid)); // DS14
         }
 
         foreach (var uid in notUnderstandings)
         {
+            if (!TryNetEntity(uid, out var netUid))
+                continue; //DS-14
+
             if (soundLexiconData is null)
-                RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isRadio: true, isSoundLexicon: true, languageId: languageId, radioCueOnly: uid == source), Filter.Entities(uid)); // DS14
+                RaiseNetworkEvent(new PlayTTSEvent(new byte[0], netUid, isRadio: true, isSoundLexicon: true, languageId: languageId, radioCueOnly: uid == source), Filter.Entities(uid)); // DS14
             else
-                RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid), isRadio: true, radioCueOnly: uid == source), Filter.Entities(uid)); // DS14
+                RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, netUid, isRadio: true, radioCueOnly: uid == source), Filter.Entities(uid)); // DS14
         }
 
     }
@@ -372,7 +380,8 @@ public sealed partial class TTSSystem : EntitySystem
         // DS14-start: carry recipient-specific remote hearing attenuation and source.
         foreach (var (session, data) in recipientData)
         {
-            var audioSource = GetNetEntity(data.AudioSourceOverride ?? uid);
+            if (!TryNetEntity(data.AudioSourceOverride ?? uid, out var audioSource))
+                continue; //DS-14
 
             if ((data.AudioRangeOverride ?? data.Range) > SharedChatSystem.WhisperClearRange && understanding.Contains(session))
             {
@@ -443,6 +452,19 @@ public sealed partial class TTSSystem : EntitySystem
         }
 
         return false;
+    }
+
+    //DS-14
+    private bool TryNetEntity(EntityUid uid, out NetEntity netEntity)
+    {
+        if (TerminatingOrDeleted(uid))
+        {
+            netEntity = default;
+            return false;
+        }
+
+        netEntity = GetNetEntity(uid);
+        return true;
     }
 
     // ReSharper disable once InconsistentNaming

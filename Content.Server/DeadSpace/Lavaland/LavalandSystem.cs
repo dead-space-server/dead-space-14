@@ -227,7 +227,6 @@ public sealed partial class LavalandSystem : EntitySystem
         CreateLandingWarp(mapUid, planet);
         CreateFtlBeacon(mapUid, planet, terminalGrid);
         SetupFtl(mapUid, planet);
-        _map.SetPaused(mapUid, false);
         return mapUid;
     }
 
@@ -490,9 +489,6 @@ public sealed partial class LavalandSystem : EntitySystem
         List<Vector2i> wallTiles)
     {
         _map.SetTiles(mapUid, grid, tiles);
-
-        foreach (var tile in lavaTiles)
-            SpawnAnchored(planet.BoundaryLavaEntity, mapUid, grid, tile);
 
         foreach (var tile in wallTiles)
             SpawnAnchored(planet.BoundaryWallEntity, mapUid, grid, tile);

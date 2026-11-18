@@ -32,7 +32,7 @@ namespace Content.Client.RoundEnd
         public int RoundId;
 
         public RoundEndSummaryWindow(string gm, string roundEnd, TimeSpan roundTimeSpan, int roundId,
-            RoundEndMessageEvent.RoundEndPlayerInfo[] info, IEntityManager entityManager)
+            RoundEndMessageEvent.RoundEndPlayerInfo[] info, IEntityManager entityManager, bool open = true) // DS14
         {
             _entityManager = entityManager;
             // DS14-start
@@ -60,6 +60,9 @@ namespace Content.Client.RoundEnd
             _roundEndTabs.AddChild(MakePlayerManifestTab(info));
 
             ContentsContainer.AddChild(_roundEndTabs);
+
+            if (!open) // DS14
+                return; // DS14
 
             OpenCenteredRight();
             ResumeManifestDollSnapshots(); // DS14
