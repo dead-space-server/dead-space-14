@@ -548,7 +548,13 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
 
         // DS14-start
         if (!ConfigManager.GetCVar(Content.Shared.DeadSpace.CCCCVars.CCCCVars.CentCommEnabled))
+        {
+            var parking = _mapSystem.CreateMap(out var parkingId, runMapInit: false);
+            component.MapEntity = parking;
+            _mapSystem.InitializeMap(parking);
+            _mapSystem.SetPaused(parking, false);
             return;
+        }
 
         var grids = _ticker.LoadGameMap(_prototypes.Index(component.Map), out var mapId);
         var map = _mapSystem.GetMapOrInvalid(mapId);

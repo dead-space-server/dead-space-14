@@ -247,16 +247,30 @@ public sealed partial class EmergencyShuttleSystem
             var stationUid = _station.GetOwningStation(uid);
 
             if (!TryComp<StationCentcommComponent>(stationUid, out var centcomm) ||
-                Deleted(centcomm.Entity) ||
                 pod.LaunchTime == null ||
                 pod.LaunchTime > _timing.CurTime)
             {
                 continue;
             }
 
-            // Don't dock them. If you do end up doing this then stagger launch.
-            _shuttle.FTLToDock(uid, shuttle, centcomm.Entity.Value, hyperspaceTime: TransitTime);
+            if (!Deleted(centcomm.Entity))
+            {
+                // Don't dock them. If you do end up doing this then stagger launch.
+                _shuttle.FTLToDock(uid, shuttle, centcomm.Entity.Value, hyperspaceTime: TransitTime);
+                RemCompDeferred<EscapePodComponent>(uid);
+                continue;
+            }
+
+            //DS-14 start
+            if (Deleted(centcomm.MapEntity))
+                continue;
+
+            _shuttle.FTLToCoordinates(uid, shuttle,
+                new EntityCoordinates(centcomm.MapEntity.Value, _random.NextVector2(1000f)),
+                _consoleAccumulator,
+                TransitTime);
             RemCompDeferred<EscapePodComponent>(uid);
+            //DS-14 end
         }
 
         // Departed
