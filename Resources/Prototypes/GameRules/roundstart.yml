@@ -162,6 +162,7 @@
     minPlayers: 35 # DS14
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/nukieplanet.yml
+  - type: DeleteAbandonedAntagMap # DS14
   - type: AntagSelection
     selectionTime: PrePlayerSpawn
     definitions:
@@ -509,6 +510,7 @@
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/wizardsden.yml
   - type: PauseMapWhenEmpty # DS14
+  - type: DeleteAbandonedAntagMap # DS14
   - type: RuleGrids
   - type: AntagSelection
   - type: AntagLoadProfileRule
@@ -596,6 +598,7 @@
   - type: LoadMapRule
     gridPath: /Maps/Shuttles/mothership.yml
   - type: PauseMapWhenEmpty # DS14
+  - type: DeleteAbandonedAntagMap # DS14
 
 - type: entity
   parent: BaseXenoborgsRule

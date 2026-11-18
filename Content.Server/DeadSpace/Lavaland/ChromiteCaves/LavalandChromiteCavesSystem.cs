@@ -222,7 +222,6 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
 
         LoadCustomGrids(mapUid, mapId, grid, biome, config, random, half, cancellation);
         SpawnElite(mapUid, grid, biome, config, random, half);
-        _map.SetPaused(mapUid, false);
 
         if (!TryPlacePit(lavalandMap, lavalandGrid, config, random, link))
             Log.Warning("Chromite caves: no room for the pit near the outpost, the caves are unreachable.");
