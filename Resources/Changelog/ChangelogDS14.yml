@@ -10540,3 +10540,12 @@ Entries:
   changes:
   - type: Tweak
     message: Из аплинка агента удалён имплант
+- id: 1017
+  author: HiAmaliz
+  time: '2026-11-18T08:38:22.336460+00:00'
+  pr: 2795
+  changes:
+  - type: Add
+    message: Хирургичка на аванпосте нюки
+  - type: Fix
+    message: Баги на картах
