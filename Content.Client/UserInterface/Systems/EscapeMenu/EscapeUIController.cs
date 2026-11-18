@@ -17,7 +17,10 @@ using static Robust.Client.UserInterface.Controls.BaseButton;
 namespace Content.Client.UserInterface.Systems.EscapeMenu;
 
 [UsedImplicitly]
-public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
+public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>,
+    // DeadSpace14 BetterMappingEditor start
+    IOnStateEntered<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>, IOnStateExited<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>
+    // DeadSpace14 BetterMappingEditor end
 {
     [Dependency] private readonly IClientConsoleHost _console = default!;
     [Dependency] private readonly IUriOpener _uri = default!;
@@ -60,6 +63,12 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
     private void DeactivateButton() => EscapeButton!.SetClickPressed(false);
 
     public void OnStateEntered(GameplayState state)
+    {
+        OpenEscapeWindow();
+    }
+
+    // DeadSpace14 BetterMappingEditor start
+    private void OpenEscapeWindow()
     {
         DebugTools.Assert(_escapeWindow == null);
 
@@ -140,8 +149,27 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
                 InputCmdHandler.FromDelegate(_ => ToggleWindow()))
             .Register<EscapeUIController>();
     }
+    // DeadSpace14 BetterMappingEditor end
+
+    // DeadSpace14 BetterMappingEditor start
+    public void OnStateEntered(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
+    {
+        OpenEscapeWindow();
+    }
+
+    public void OnStateExited(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
+    {
+        TeardownEscapeWindow();
+    }
+    // DeadSpace14 BetterMappingEditor end
 
     public void OnStateExited(GameplayState state)
+    {
+        TeardownEscapeWindow();
+    }
+
+    // DeadSpace14 BetterMappingEditor start
+    private void TeardownEscapeWindow()
     {
         _cfg.UnsubValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged);
 
@@ -153,6 +181,7 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
 
         CommandBinds.Unregister<EscapeUIController>();
     }
+    // DeadSpace14 BetterMappingEditor end
 
     private void OnSeeOwnNotesChanged(bool seeOwnNotes)
     {

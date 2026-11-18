@@ -1,5 +1,7 @@
-﻿- type: decal
+﻿# DeadSpace14 BetterMappingEditor start
+- type: decal
   id: BrickTileWhiteBox
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -7,6 +9,7 @@
 
 - type: decal
   id: BrickTileWhiteCornerNe
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -14,6 +17,7 @@
 
 - type: decal
   id: BrickTileWhiteCornerSe
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -21,6 +25,7 @@
 
 - type: decal
   id: BrickTileWhiteCornerNw
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -28,6 +33,7 @@
 
 - type: decal
   id: BrickTileWhiteCornerSw
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -35,6 +41,7 @@
 
 - type: decal
   id: BrickTileWhiteInnerNe
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -42,6 +49,7 @@
 
 - type: decal
   id: BrickTileWhiteInnerSe
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -49,6 +57,7 @@
 
 - type: decal
   id: BrickTileWhiteInnerNw
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -56,6 +65,7 @@
 
 - type: decal
   id: BrickTileWhiteInnerSw
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -63,6 +73,7 @@
 
 - type: decal
   id: BrickTileWhiteEndN
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -70,6 +81,7 @@
 
 - type: decal
   id: BrickTileWhiteEndE
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -77,6 +89,7 @@
 
 - type: decal
   id: BrickTileWhiteEndS
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -84,6 +97,7 @@
 
 - type: decal
   id: BrickTileWhiteEndW
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -91,6 +105,7 @@
 
 - type: decal
   id: BrickTileWhiteLineN
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -98,6 +113,7 @@
 
 - type: decal
   id: BrickTileWhiteLineE
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -105,6 +121,7 @@
 
 - type: decal
   id: BrickTileWhiteLineS
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
@@ -112,7 +129,9 @@
 
 - type: decal
   id: BrickTileWhiteLineW
+  parent: BrickTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/bricktile.rsi
     state: white_line_w
+# DeadSpace14 BetterMappingEditor end

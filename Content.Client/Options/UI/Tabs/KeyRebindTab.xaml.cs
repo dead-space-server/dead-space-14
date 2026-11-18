@@ -281,6 +281,9 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.EditorRotateObject);
             AddButton(ContentKeyFunctions.EditorFlipObject);
             AddButton(ContentKeyFunctions.EditorCopyObject);
+            // DeadSpace14 BetterMappingEditor start
+            AddButton(ContentKeyFunctions.MappingEnablePick);
+            // DeadSpace14 BetterMappingEditor end
 
             AddHeader("ui-options-header-dev");
             AddButton(EngineKeyFunctions.ShowDebugConsole);
