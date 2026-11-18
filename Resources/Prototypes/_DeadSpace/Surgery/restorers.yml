@@ -238,6 +238,15 @@
     recharge: 210
 
 - type: entity
+  id: LimbRestorerImplantRenegadeRefill
+  parent: LimbRestorerImplantSyndicateRefill
+  name: renegade rechargeable autosurgeon implant
+  description: A Renegade's subdermal autosurgeon. One charge that refills every 90 seconds, fires by itself when the wearer goes critical.
+  components:
+  - type: LimbRestorer
+    recharge: 90
+
+- type: entity
   id: LimbRestorerImplantNecro
   name: Marker's heart
   description: A sliver of the Marker sewn under the skin. Two charges, wakes by itself when the wearer goes critical, and even pushes out lost limbs.

@@ -327,7 +327,7 @@
   id: TraitorUltra
   components:
   - type: TraitorRule
-    startingBalance: 30
+    startingBalance: 35
     giveUplink: false
   - type: TraitorUltraRule
   - type: AntagSelection
