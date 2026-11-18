@@ -265,7 +265,7 @@ public sealed partial class EmergencyShuttleSystem
             ShuttlesLeft = true;
             _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("emergency-shuttle-left", ("transitTime", $"{TransitTime:0}")));
 
-            _roundEnd.StartRoundEndTimer(TimeSpan.FromMilliseconds((int)(TransitTime * 1000) + _bufferTime.Milliseconds)); // DS14
+            _roundEnd.StartRoundEndTimer(_roundEndCredits.GetShuttleRoundEndDelay(TimeSpan.FromMilliseconds((int)(TransitTime * 1000) + _bufferTime.Milliseconds))); // DS14
         }
 
         // All the others.
