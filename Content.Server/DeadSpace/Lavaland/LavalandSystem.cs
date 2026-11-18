@@ -228,7 +228,6 @@ public sealed class LavalandSystem : EntitySystem
         CreateLandingWarp(mapUid, planet);
         CreateFtlBeacon(mapUid, planet, terminalGrid);
         SetupFtl(mapUid, planet);
-        _map.SetPaused(mapUid, false);
         return mapUid;
     }
 

@@ -65,6 +65,13 @@ public abstract class SharedDisposalUnitSystem : EntitySystem
 
     protected static TimeSpan ExitAttemptDelay = TimeSpan.FromSeconds(0.5);
 
+    // DS14-start
+    private int _updateCursor;
+    private const double UpdateBudgetSeconds = 0.001;
+    public int PassEpoch { get; private set; }
+    public int CompletedPassEpoch { get; private set; }
+    // DS14-end
+
     // Percentage
     public const float PressurePerSecond = 0.05f;
 
@@ -195,11 +202,31 @@ public abstract class SharedDisposalUnitSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        // DS14-start
+        if (_updateCursor == 0)
+            PassEpoch++;
+
+        var start = System.Diagnostics.Stopwatch.GetTimestamp();
+        var budget = (long) (System.Diagnostics.Stopwatch.Frequency * UpdateBudgetSeconds);
+        var index = 0;
         var query = EntityQueryEnumerator<DisposalUnitComponent, MetaDataComponent>();
         while (query.MoveNext(out var uid, out var unit, out var metadata))
         {
+            var current = index++;
+            if (current < _updateCursor)
+                continue;
+
             Update(uid, unit, metadata);
+            if (System.Diagnostics.Stopwatch.GetTimestamp() - start < budget)
+                continue;
+
+            _updateCursor = current + 1;
+            return;
         }
+
+        _updateCursor = 0;
+        CompletedPassEpoch = PassEpoch;
+        // DS14-end
     }
 
     // TODO: This should just use the same thing as entity storage?

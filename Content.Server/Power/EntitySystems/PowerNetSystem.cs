@@ -40,6 +40,8 @@ namespace Content.Server.Power.EntitySystems
         private readonly List<EntityUid> _changedBatteryStorage = new();
         private readonly HashSet<EntityUid> _changedBatteryStorageSet = new();
         private readonly HashSet<PowerState.Load> _possiblyDisconnectedLoads = new();
+
+        public bool IsIdle => _apcNetReconnectQueue.Count == 0 && _powerNetReconnectQueue.Count == 0;
         // DS14-end
 
         private EntityQuery<ApcPowerReceiverBatteryComponent> _apcBatteryQuery;

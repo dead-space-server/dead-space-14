@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Shuttles.Components;
 using Content.Shared.DeadSpace.Administration;
+using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Shared.Ghost;
 using Content.Shared.Station.Components;
 using Robust.Shared.Map;
@@ -54,6 +56,9 @@ public sealed class PauseMapWhenEmptySystem : EntitySystem
             if (!TryComp<MapComponent>(map, out var mapComp) || !mapComp.MapInitialized)
                 continue;
 
+            if (TryComp<PreparedRoundMapComponent>(map, out var prepared) && !prepared.Warmed)
+                continue;
+
             if (IsEvacStationMap(map))
             {
                 comp.Map = null;
@@ -65,6 +70,23 @@ public sealed class PauseMapWhenEmptySystem : EntitySystem
                 continue;
 
             _map.SetPaused(map, pause);
+        }
+
+        PauseWhenEmpty<LavalandMapComponent>();
+        PauseWhenEmpty<LavalandChromiteCavesComponent>();
+    }
+
+    private void PauseWhenEmpty<T>() where T : IComponent
+    {
+        var maps = AllEntityQuery<T, MapComponent>();
+        while (maps.MoveNext(out var uid, out _, out var mapComp))
+        {
+            if (!mapComp.MapInitialized || Terminating(uid))
+                continue;
+
+            var pause = !_occupied.Contains(mapComp.MapId);
+            if (mapComp.MapPaused != pause)
+                _map.SetPaused(uid, pause);
         }
     }
 
