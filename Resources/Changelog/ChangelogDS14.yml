@@ -10563,3 +10563,14 @@ Entries:
   changes:
   - type: Fix
     message: Атмос на аванпосте ЯО
+- id: 1020
+  author: BlueDogDoc
+  time: '2026-11-18T15:44:48.070227+00:00'
+  pr: 2809
+  changes:
+  - type: Add
+    message: Кнопка пропуска титров
+  - type: Tweak
+    message: Убраны гост роли из титров
+  - type: Fix
+    message: Старый манифест на F9
