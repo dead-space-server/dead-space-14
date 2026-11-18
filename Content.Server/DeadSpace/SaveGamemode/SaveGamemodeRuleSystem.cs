@@ -584,9 +584,9 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
 
         WakeLoadedNpcs(defaultMap);
 
-        // Сама станция в файл не сериализуется: она живёт в nullspace, и на карте остаётся только
-        // пометка BecomesStation у сетки. Без станции раунд обрывается на спавне игроков, поэтому
-        // регистрируем её так же, как это делает тикер для обычной карты.
+        // Станция не часть карты, но живая на момент сохранения затаскивается в файл ссылками сеток:
+        // такие сущности убираем перед регистрацией, см. PurgeSavedStations. Без станции раунд
+        // обрывается на спавне игроков, поэтому регистрируем её так же, как это делает тикер для обычной карты.
         if (TryRegisterStations(defaultMap, component.SuppressRoundstartGrids, component.SaveSlot))
         {
             ConnectLoadedDevices(defaultMap);
@@ -622,6 +622,8 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     /// </returns>
     private bool TryRegisterStations(MapId mapId, bool suppressRoundstartGrids, string slot)
     {
+        PurgeSavedStations(mapId);
+
         var grids = new List<EntityUid>();
         var stationIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         // Имена станций, записанные в сохранении: сетка -> имя. Собираются здесь, применяются
@@ -745,6 +747,67 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         Log.Info($"SaveGamemode: станции {string.Join(", ", stationIds)} по конфигу карты {proto.ID} " +
                  $"зарегистрированы на карте {mapId} (сеток: {grids.Count})");
         return true;
+    }
+
+    /// <summary>
+    ///     Убирает сущности станций, которые пришли в файле карты вместе с её сетками.
+    /// </summary>
+    /// <remarks>
+    ///     Станция — сущность вне карты в nullspace, но карту пишем на конце раунда, когда станция
+    ///     ещё жива: сетки пишутся в файл со связкой <c>StationMember</c>, а сериализатор сам
+    ///     затаскивает ссылку на станцию в файл (в список <c>nullspace</c>). При загрузке станция
+    ///     рождается вместе с картой и уже держит свои сетки, а регистрация из конфигурации карты
+    ///     создаёт вторую станцию для оставшихся сеток. Эвакошаттл и ЦентКом при этом цепляются
+    ///     к новой станции, а главная сетка с игроками остаётся за старой, у которой поле шаттла
+    ///     пустое: на конце раунда <c>DockSingleEmergencyShuttle</c> пишет «uninitialized station»,
+    ///     и шаттл не может состыковаться со станцией. Пользы от станции из файла нет: её имя и
+    ///     счета лежат рядом в <c>station.yml</c>, а компоненты соберутся из конфигурации заново.
+    /// </remarks>
+    /// <param name="mapId">Карта, поднятая из сохранения.</param>
+    private void PurgeSavedStations(MapId mapId)
+    {
+        var stations = new List<EntityUid>();
+
+        var query = AllEntityQuery<StationDataComponent>();
+        while (query.MoveNext(out var uid, out var data))
+        {
+            foreach (var grid in data.Grids)
+            {
+                if (TryComp(grid, out TransformComponent? xform) && xform.MapID == mapId)
+                {
+                    stations.Add(uid);
+                    break;
+                }
+            }
+        }
+
+        if (stations.Count == 0)
+            return;
+
+        foreach (var station in stations)
+        {
+            // При выключении StationData StationSystem сам снимет StationMember со всех сеток станции.
+            Del(station);
+        }
+
+        // Страховка: ссылки, не попавшие в data.Grids, иначе остались бы смотреть в несуществующую
+        // станцию, и TryRegisterStations пропустил бы такие сетки как уже зарегистрированные.
+        var orphaned = 0;
+        var memberQuery = AllEntityQuery<StationMemberComponent, TransformComponent>();
+        while (memberQuery.MoveNext(out var uid, out var member, out var xform))
+        {
+            if (xform.MapID != mapId)
+                continue;
+
+            if (Exists(member.Station) && HasComp<StationDataComponent>(member.Station))
+                continue;
+
+            RemComp<StationMemberComponent>(uid);
+            orphaned++;
+        }
+
+        Log.Info($"SaveGamemode: с файлом карты пришли сущности станций ({stations.Count}) — убраны до " +
+                 $"регистрации, снято осиротевших связей сеток: {orphaned}; станцию соберём из конфигурации карты");
     }
 
     /// <summary>
