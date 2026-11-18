@@ -1,6 +1,7 @@
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.Slippery; //DS-14
 using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -151,6 +152,9 @@ public sealed class SlipperySystem : EntitySystem
             _stamina.TakeStaminaDamage(other, component.StaminaDamage); // Note that this can StamCrit
 
             _audio.PlayPredicted(component.SlipSound, other, other);
+
+            var slippedEv = new SlippedEvent(uid); //DS-14
+            RaiseLocalEvent(other, ref slippedEv); //DS-14
         }
 
         // Slippery is so tied to knockdown that we really just need to force it here.

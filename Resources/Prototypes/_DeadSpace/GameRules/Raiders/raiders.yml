@@ -5,6 +5,7 @@
   - type: RuleGrids
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/Raider_outpost.yml
+  - type: PauseMapWhenEmpty
   - type: AntagSelection
     definitions:
     - spawnerPrototype: SyndicateSoldierTeamLeaderSpawner
