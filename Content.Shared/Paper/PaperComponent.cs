@@ -41,13 +41,15 @@ public sealed partial class PaperComponent : Component
         public readonly List<StampDisplayInfo> StampedBy;
         public readonly List<string> Signatures; // DS14-signatures
         public readonly PaperAction Mode;
+        public readonly bool EditingDisabled; // DS14
 
-        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, List<string> signatures, PaperAction mode = PaperAction.Read) // DS14-signatures
+        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, List<string> signatures, PaperAction mode = PaperAction.Read, bool editingDisabled = false) // DS14-signatures
         {
             Text = text;
             StampedBy = stampedBy;
             Signatures = signatures; // DS14-signatures
             Mode = mode;
+            EditingDisabled = editingDisabled; // DS14
         }
     }
 
@@ -61,6 +63,29 @@ public sealed partial class PaperComponent : Component
             Text = text;
         }
     }
+
+    // DS14-start
+    [Serializable, NetSerializable]
+    public sealed class PaperCheckMessage : BoundUserInterfaceMessage
+    {
+        public readonly int Index;
+        public readonly PaperCheckState State;
+
+        public PaperCheckMessage(int index, PaperCheckState state)
+        {
+            Index = index;
+            State = state;
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public enum PaperCheckState : byte
+    {
+        Blank,
+        Check,
+        Cross
+    }
+    // DS14-end
 
     [Serializable, NetSerializable]
     public enum PaperUiKey

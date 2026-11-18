@@ -74,6 +74,7 @@
             <OptionButton Name="FontDropdown" MinWidth="110" ToolTip="{Loc 'paper-ui-toolbar-font'}"/>
             <!-- DS14-end -->
             <Button Name="BulletButton" Text="&#8226;" MinSize="32 30" StyleClasses="OpenBoth" ToolTip="{Loc 'paper-ui-toolbar-bullet'}"/>
+            <Button Name="CheckTagButton" Text="&#9744;" MinSize="32 30" StyleClasses="OpenBoth" ToolTip="{Loc 'paper-ui-toolbar-checkbox'}"/> <!-- DS14 -->
             <Button Name="PreviewToggleButton" Text="{Loc 'paper-ui-toolbar-preview'}" MinSize="90 30" ToggleMode="True" StyleClasses="OpenBoth" ToolTip="{Loc 'paper-ui-toolbar-preview'}"/>
         </WrapContainer>
         <!-- DS14-end -->

@@ -66,3 +66,4 @@ paper-ui-insert-requires-pda = Нужен КПК с программой ман�
 paper-ui-insert-unavailable = Манифест сейчас недоступен.
 paper-ui-insert-empty = В манифесте пока нет записей.
 paper-ui-insert-no-results = Никого не найдено. Измените запрос.
+paper-ui-toolbar-checkbox = Чекбокс
