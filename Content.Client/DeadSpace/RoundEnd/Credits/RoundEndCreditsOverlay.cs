@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Linq;
 using System.Numerics;
 using Content.Client.Resources;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
@@ -10,6 +11,7 @@ using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -71,8 +73,12 @@ public sealed partial class RoundEndCreditsOverlay : LayoutContainer
     private readonly CreditsScrollHost _scrollHost;
     private BoxContainer? _content;
 
+    private readonly Button _skipButton;
+    private bool _skipped;
+
     public event Action? Closed;
     public event Action<int, int>? VoteCast;
+    public event Action? Skipped;
 
     public RoundEndCreditsOverlay(
         RoundEndMessageEvent round,
@@ -124,6 +130,7 @@ public sealed partial class RoundEndCreditsOverlay : LayoutContainer
         };
         _chat = chat;
         _chat.Orphan();
+        _chat.MinSize = Vector2.Zero;
         _chatPanel.AddChild(_chat);
         AddChild(_chatPanel);
         SetAnchorPreset(_chatPanel, LayoutPreset.BottomLeft);
@@ -140,6 +147,27 @@ public sealed partial class RoundEndCreditsOverlay : LayoutContainer
 
         _chat.Main = true;
 
+        _skipButton = new Button
+        {
+            Text = Loc.GetString("round-end-credits-skip"),
+            Visible = false,
+        };
+        _skipButton.OnPressed += _ => Skip();
+        AddChild(_skipButton);
+        SetAnchorPreset(_skipButton, LayoutPreset.TopRight);
+        SetMarginRight(_skipButton, -ScreenPadding);
+        SetMarginTop(_skipButton, ScreenPadding);
+        SetGrowHorizontal(_skipButton, GrowDirection.Begin);
+    }
+
+    private void Skip()
+    {
+        if (_skipped)
+            return;
+
+        _skipped = true;
+        _skipButton.Visible = false;
+        UserInterfaceManager.DeferAction(() => Skipped?.Invoke());
     }
 
     private float ScreenWidth => Size.X > 0f ? Size.X : UserInterfaceManager.RootControl.Size.X;
@@ -178,6 +206,23 @@ public sealed partial class RoundEndCreditsOverlay : LayoutContainer
         _closeStart ??= _timing.CurTime;
     }
 
+    private void AddLayer(Control layer)
+    {
+        AddChild(layer);
+        layer.SetPositionInParent(_scrollHost.GetPositionInParent() + 1);
+    }
+
+    public void HostWindow(BaseWindow window)
+    {
+        if (window.Parent != this)
+        {
+            window.Orphan();
+            AddChild(window);
+        }
+
+        window.MoveToFront();
+    }
+
     public void Shutdown()
     {
         foreach (var doll in _dolls)
@@ -191,6 +236,12 @@ public sealed partial class RoundEndCreditsOverlay : LayoutContainer
         _chat.Main = false;
         if (_demotedChat is { Disposed: false } demoted)
             demoted.Main = true;
+
+        foreach (var window in Children.OfType<BaseWindow>().ToArray())
+        {
+            window.Orphan();
+            UserInterfaceManager.WindowRoot.AddChild(window);
+        }
 
         _chat.Orphan();
         Orphan();
@@ -238,6 +289,10 @@ public sealed partial class RoundEndCreditsOverlay : LayoutContainer
             return;
 
         var time = (float) (now - _creditsStart).TotalSeconds;
+        var skippable = !_skipped && _closeStart == null && time >= 0f;
+        if (_skipButton.Visible != skippable)
+            _skipButton.Visible = skippable;
+
         if (time < 0f)
             return;
 

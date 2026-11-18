@@ -93,6 +93,7 @@ public sealed class RoundEndCreditsSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => Reset());
         SubscribeLocalEvent<NukeopsRuleComponent, RoundEndCreditsTeamResultEvent>(OnNukeopsTeamResult);
         SubscribeNetworkEvent<RoundEndCreditsVoteCastEvent>(OnVoteCast);
+        SubscribeNetworkEvent<RoundEndCreditsSkipEvent>(OnSkip);
 
         _players.PlayerStatusChanged += OnPlayerStatusChanged;
     }
@@ -299,7 +300,7 @@ public sealed class RoundEndCreditsSystem : EntitySystem
             if (_credits?.Statuses.Length > i && _credits.Statuses[i] == RoundEndCreditsPlayerStatus.Observer)
                 continue;
 
-            if (players[i].PlayerGuid == null)
+            if (players[i].PlayerGuid == null || RoundEndCreditsCast.IsHiddenGhostRole(players[i]))
                 continue;
 
             _candidates.Add(i);
@@ -362,6 +363,11 @@ public sealed class RoundEndCreditsSystem : EntitySystem
         }
 
         votes[msg.Nomination] = msg.Candidate;
+    }
+
+    private void OnSkip(RoundEndCreditsSkipEvent msg, EntitySessionEventArgs args)
+    {
+        _ticker.ReturnToLobbyAfterRound(args.SenderSession);
     }
 
     private List<RoundEndCreditsVoteResult> TallyVotes()
@@ -749,6 +755,9 @@ public sealed class RoundEndCreditsSystem : EntitySystem
         for (var i = 0; i < players.Length; i++)
         {
             if (credits.Statuses.Length > i && credits.Statuses[i] == RoundEndCreditsPlayerStatus.Observer)
+                continue;
+
+            if (RoundEndCreditsCast.IsHiddenGhostRole(players[i]))
                 continue;
 
             cast++;

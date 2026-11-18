@@ -66,6 +66,7 @@ round-end-credits-arena-row = { $place }. { $name }: { $kills } / { $deaths }
 
 round-end-credits-outro-title = Конец смены
 round-end-credits-outro-thanks = Спасибо, что играли на Мёртвом Космосе
+round-end-credits-skip = Пропустить
 round-end-credits-wall-title = Стена почёта
 round-end-credits-wall-subtitle = Экипаж раунда #{ $roundId } · Новая смена вот-вот начнётся
 

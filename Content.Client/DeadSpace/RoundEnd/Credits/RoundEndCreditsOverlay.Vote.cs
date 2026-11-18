@@ -97,7 +97,7 @@ public sealed partial class RoundEndCreditsOverlay
         _activeNomination = Math.Max(0, Array.IndexOf(_picks, -1));
         RefreshVoteViews();
 
-        AddChild(_votePanel);
+        AddLayer(_votePanel);
         SetAnchorPreset(_votePanel, LayoutPreset.Center);
         SetGrowHorizontal(_votePanel, GrowDirection.Both);
         SetGrowVertical(_votePanel, GrowDirection.Both);
