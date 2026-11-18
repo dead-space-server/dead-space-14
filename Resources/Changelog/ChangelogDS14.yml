@@ -10556,3 +10556,10 @@ Entries:
   changes:
   - type: Add
     message: Анимированный манифест с MVP и тд
+- id: 1019
+  author: BlueDogDoc
+  time: '2026-11-18T15:39:03.173337+00:00'
+  pr: 2810
+  changes:
+  - type: Fix
+    message: Атмос на аванпосте ЯО
