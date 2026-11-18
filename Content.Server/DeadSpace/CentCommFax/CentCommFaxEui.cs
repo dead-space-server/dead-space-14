@@ -16,7 +16,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.CentCommFax;
 
-public sealed class CentCommFaxEui : BaseEui
+public sealed partial class CentCommFaxEui : BaseEui
 {
     private const int MaxTitleLength = 100;
     private const int MaxContentLength = 10000;

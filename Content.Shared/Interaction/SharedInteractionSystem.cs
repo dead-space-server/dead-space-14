@@ -927,7 +927,7 @@ namespace Content.Shared.Interaction
 
             // DS14-Start
             if (!_tagSystem.HasTag(target, DiagonalTag) &&
-                _mapManager.TryFindGridAt(targetCoords, out var diagonalGridUid, out var diagonalGrid))
+                _map.TryFindGridAt(targetCoords, out var diagonalGridUid, out var diagonalGrid))
             {
                 foreach (var anchored in _map.GetAnchoredEntities((diagonalGridUid, diagonalGrid), targetCoords))
                 {

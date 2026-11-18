@@ -12,7 +12,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.AntagMaps;
 
-public sealed class PauseMapWhenEmptySystem : EntitySystem
+public sealed partial class PauseMapWhenEmptySystem : EntitySystem
 {
     [Dependency] private SharedMapSystem _map = default!;
 

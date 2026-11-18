@@ -5,7 +5,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.AntagMaps;
 
-public sealed class AntagBaseGodmodeSystem : EntitySystem
+public sealed partial class AntagBaseGodmodeSystem : EntitySystem
 {
     [Dependency] private GodmodeSystem _god = default!;
 

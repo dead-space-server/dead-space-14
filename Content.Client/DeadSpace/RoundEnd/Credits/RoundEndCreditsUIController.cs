@@ -20,7 +20,7 @@ using Robust.Shared.Timing;
 namespace Content.Client.DeadSpace.RoundEnd.Credits;
 
 [UsedImplicitly]
-public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<MainScreen>, IOnStateEntered<LobbyState>
+public sealed partial class RoundEndCreditsUIController : UIController, IOnStateEntered<MainScreen>, IOnStateEntered<LobbyState>
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IResourceCache _cache = default!;

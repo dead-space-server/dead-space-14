@@ -20,7 +20,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.CentCommFax;
 
-public sealed class CentCommFaxSystem : EntitySystem
+public sealed partial class CentCommFaxSystem : EntitySystem
 {
     public const string UplinkAddress = "centcomm-uplink";
 

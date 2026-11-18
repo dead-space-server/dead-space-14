@@ -18,7 +18,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.RoundEnd.Credits;
 
-public sealed class RoundEndCreditsStatsSystem : EntitySystem
+public sealed partial class RoundEndCreditsStatsSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private RoundEndManifestStatsSystem _manifest = default!;

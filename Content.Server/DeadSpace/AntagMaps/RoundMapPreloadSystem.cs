@@ -20,7 +20,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.AntagMaps;
 
-public sealed class RoundMapPreloadSystem : EntitySystem
+public sealed partial class RoundMapPreloadSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IGameTiming _timing = default!;

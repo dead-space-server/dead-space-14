@@ -12,7 +12,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.AntagMaps;
 
-public sealed class DeleteAbandonedAntagMapSystem : EntitySystem
+public sealed partial class DeleteAbandonedAntagMapSystem : EntitySystem
 {
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private SharedMapSystem _map = default!;

@@ -12,7 +12,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Banner;
 
-public sealed class BannerSystem : SharedBannerSystem
+public sealed partial class BannerSystem : SharedBannerSystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;

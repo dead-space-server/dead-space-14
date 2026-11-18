@@ -4,7 +4,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Banner;
 
-public abstract class SharedBannerSystem : EntitySystem
+public abstract partial class SharedBannerSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
 
