@@ -477,4 +477,11 @@ public sealed class CCCCVars
 
     public static readonly CVarDef<bool> RoundEndCreditsPauseMaps =
         CVarDef.Create("deadspace.round_end_credits.pause_maps", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Load the antag and ERT maps ahead of time at round start / in the lobby, so a rule or a call only claims them.
+    /// Off: they are loaded when needed, as before.
+    /// </summary>
+    public static readonly CVarDef<bool> RoundMapPreloadEnabled =
+        CVarDef.Create("deadspace.round_map_preload.enabled", true, CVar.SERVERONLY);
 }

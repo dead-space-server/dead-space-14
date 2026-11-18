@@ -6,8 +6,10 @@ using Content.Server.GameTicking;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.DeadSpace.Administration;
+using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
+using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization;
@@ -22,6 +24,7 @@ namespace Content.Server.DeadSpace.AntagMaps;
 
 public sealed partial class RoundMapPreloadSystem : EntitySystem
 {
+    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private GameTicker _ticker = default!;
@@ -64,6 +67,7 @@ public sealed partial class RoundMapPreloadSystem : EntitySystem
         (new("/Maps/Shuttles/ShuttleEvent/deathsquad.yml"), true, 1),
     };
 
+    private bool _enabled;
     private bool _queueReady;
     private TimeSpan _nextLoadAt;
     private string _slowest = "";
@@ -78,6 +82,7 @@ public sealed partial class RoundMapPreloadSystem : EntitySystem
         UpdatesAfter.Add(typeof(PhysicsSystem));
         SubscribeLocalEvent<PostGameMapLoad>(OnMapLoad);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        Subs.CVar(_cfg, CCCCVars.RoundMapPreloadEnabled, value => _enabled = value, true);
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
@@ -91,6 +96,9 @@ public sealed partial class RoundMapPreloadSystem : EntitySystem
 
     private void OnMapLoad(PostGameMapLoad ev)
     {
+        if (!_enabled)
+            return;
+
         EnsureQueue();
         if (_pending.Count == 0)
             return;
@@ -218,7 +226,7 @@ public sealed partial class RoundMapPreloadSystem : EntitySystem
                 _map.SetPaused(uid, pause);
         }
 
-        if (_ticker.RunLevel != GameRunLevel.PreRoundLobby)
+        if (!_enabled || _ticker.RunLevel != GameRunLevel.PreRoundLobby)
             return;
 
         EnsureQueue();
