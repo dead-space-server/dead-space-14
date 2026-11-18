@@ -162,7 +162,6 @@
     minPlayers: 35 # DS14
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/nukieplanet.yml
-  - type: PauseMapWhenEmpty # DS14
   - type: AntagSelection
     selectionTime: PrePlayerSpawn
     definitions:
