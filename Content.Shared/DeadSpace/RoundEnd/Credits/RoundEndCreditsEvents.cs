@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.GameTicking;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.RoundEnd.Credits;
@@ -33,6 +34,9 @@ public sealed class RoundEndCreditsVoteCastEvent : EntityEventArgs
         Candidate = candidate;
     }
 }
+
+[Serializable, NetSerializable]
+public sealed class RoundEndCreditsSkipEvent : EntityEventArgs;
 
 [Serializable, NetSerializable]
 public sealed class RoundEndCreditsStartEvent : EntityEventArgs
@@ -79,3 +83,11 @@ public record struct RoundEndCreditsAward(string Prototype, int Player, float Va
 
 [Serializable, NetSerializable]
 public record struct RoundEndCreditsVoteResult(string Prototype, int Player, int Votes);
+
+public static class RoundEndCreditsCast
+{
+    public static bool IsHiddenGhostRole(RoundEndMessageEvent.RoundEndPlayerInfo info)
+    {
+        return info.GhostRole && !(info.Antag && info.ShowInAntagManifest);
+    }
+}

@@ -218,6 +218,8 @@ namespace Content.Shared.GameTicking
             public bool IsDead;
 
             public bool ShowInAntagManifest;
+
+            public bool GhostRole;
             // DS14-end
 
             public RoundEndDollData? DollData; // DS14

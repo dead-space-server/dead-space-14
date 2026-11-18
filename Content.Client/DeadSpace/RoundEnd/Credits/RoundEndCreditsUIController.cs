@@ -1,7 +1,9 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
+using Content.Client.Lobby;
 using Content.Client.MainMenu;
+using Content.Client.RoundEnd;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
 using Content.Shared.DeadSpace.Arena;
 using Content.Shared.DeadSpace.RoundEnd.Credits;
@@ -18,7 +20,7 @@ using Robust.Shared.Timing;
 namespace Content.Client.DeadSpace.RoundEnd.Credits;
 
 [UsedImplicitly]
-public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<MainScreen>
+public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<MainScreen>, IOnStateEntered<LobbyState>
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IResourceCache _cache = default!;
@@ -40,16 +42,6 @@ public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<
 
     public bool ShowingCredits => _overlay is { HasCredits: true };
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeNetworkEvent<RoundEndCreditsVoteEvent>(OnVote);
-        SubscribeNetworkEvent<RoundEndCreditsStartEvent>(OnCredits);
-        SubscribeNetworkEvent<ArenaManifestEvent>(OnArena);
-        SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestart);
-    }
-
     public void OnStateEntered(MainScreen state)
     {
         CloseOverlay();
@@ -58,6 +50,21 @@ public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<
         _credits = null;
         _arena = null;
         _roundOver = false;
+    }
+
+    public void OnStateEntered(LobbyState state)
+    {
+        if (_overlay != null)
+            OnRoundRestart();
+    }
+
+    public bool TryHostWindow(BaseWindow window)
+    {
+        if (_overlay == null)
+            return false;
+
+        _overlay.HostWindow(window);
+        return true;
     }
 
     public void OnRoundEnd(RoundEndMessageEvent message)
@@ -108,7 +115,7 @@ public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<
         overlay.SetCredits(_credits, _timing.CurTime);
     }
 
-    private void OnVote(RoundEndCreditsVoteEvent ev, EntitySessionEventArgs args)
+    public void OnVote(RoundEndCreditsVoteEvent ev)
     {
         _vote = ev;
         if (_overlay is { } overlay && overlay.RoundId == ev.RoundId)
@@ -120,20 +127,20 @@ public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<
         _overlay?.SetVote(ev, _prototypes);
     }
 
-    private void OnCredits(RoundEndCreditsStartEvent ev, EntitySessionEventArgs args)
+    public void OnCredits(RoundEndCreditsStartEvent ev)
     {
         _credits = ev;
         if (_overlay is { } overlay && overlay.RoundId == ev.RoundId)
             overlay.SetCredits(ev, ev.StartTime);
     }
 
-    private void OnArena(ArenaManifestEvent ev, EntitySessionEventArgs args)
+    public void OnArena(ArenaManifestEvent ev)
     {
         _arena = ev;
         _overlay?.SetArena(ev);
     }
 
-    private void OnRoundRestart(RoundRestartCleanupEvent ev, EntitySessionEventArgs args)
+    public void OnRoundRestart()
     {
         _vote = null;
         _roundOver = true;
@@ -160,6 +167,17 @@ public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<
                 CloseOverlay();
             else
                 overlay.Shutdown();
+        };
+
+        overlay.Skipped += () =>
+        {
+            if (_overlay == overlay)
+                CloseOverlay();
+
+            _vote = null;
+            _roundOver = true;
+            EntityManager.EntityNetManager?.SendSystemNetworkMessage(new RoundEndCreditsSkipEvent());
+            UIManager.GetUIController<RoundEndSummaryUIController>().OpenScoreboardWindow();
         };
 
         overlay.VoteCast += (nomination, candidate) =>
@@ -201,7 +219,7 @@ public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<
     {
         var players = round.AllPlayersEndInfo;
         var antags = players.Count(p => p.Antag && p.ShowInAntagManifest);
-        var rows = MathF.Ceiling(players.Length / 3f);
+        var rows = MathF.Ceiling(players.Count(p => !RoundEndCreditsCast.IsHiddenGhostRole(p)) / 3f);
 
         return new RoundEndCreditsStartEvent
         {

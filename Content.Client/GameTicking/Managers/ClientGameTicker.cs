@@ -167,6 +167,7 @@ namespace Content.Client.GameTicking.Managers
             // DS14-start
             if (!_cfg.GetCVar(Content.Shared.DeadSpace.CCCCVars.CCCCVars.RoundEndLegacySummary))
             {
+                _userInterfaceManager.GetUIController<RoundEndSummaryUIController>().PrepareRoundEndSummaryWindow(message);
                 _userInterfaceManager.GetUIController<RoundEndCreditsUIController>().OnRoundEnd(message);
                 return;
             }

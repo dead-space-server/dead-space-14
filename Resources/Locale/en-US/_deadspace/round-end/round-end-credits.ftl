@@ -66,6 +66,7 @@ round-end-credits-arena-row = { $place }. { $name }: { $kills } / { $deaths }
 
 round-end-credits-outro-title = End of shift
 round-end-credits-outro-thanks = Thanks for playing on Dead Space
+round-end-credits-skip = Skip
 round-end-credits-wall-title = Wall of honor
 round-end-credits-wall-subtitle = Crew of round #{ $roundId } · A new shift is about to begin
 

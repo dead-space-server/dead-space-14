@@ -720,6 +720,7 @@ namespace Content.Server.GameTicking
                     InCustody = inCustody,
                     IsDead = isDead,
                     ShowInAntagManifest = showInAntagManifest,
+                    GhostRole = _role.MindHasRole<GhostRoleMarkerRoleComponent>(mindId),
                     // DS14-end
                     Observer = observer,
                     Connected = connected

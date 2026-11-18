@@ -73,7 +73,7 @@ public sealed partial class RoundEndCreditsOverlay
         _intro.AddChild(MakeLabel(Loc.GetString("round-end-credits-duration",
             ("time", $"{(int) duration.TotalHours}:{duration.Minutes:00}:{duration.Seconds:00}")), 14, DimColor));
 
-        AddChild(_intro);
+        AddLayer(_intro);
         SetAnchorPreset(_intro, LayoutPreset.Center);
         SetGrowHorizontal(_intro, GrowDirection.Both);
         SetGrowVertical(_intro, GrowDirection.Both);
@@ -472,7 +472,9 @@ public sealed partial class RoundEndCreditsOverlay
     private void AddCast(BoxContainer content)
     {
         var cast = Enumerable.Range(0, _round.AllPlayersEndInfo.Length)
-            .Where(i => GetStatus(i) != RoundEndCreditsPlayerStatus.Observer && !IsPureObserver(_round.AllPlayersEndInfo[i]))
+            .Where(i => GetStatus(i) != RoundEndCreditsPlayerStatus.Observer &&
+                        !IsPureObserver(_round.AllPlayersEndInfo[i]) &&
+                        !RoundEndCreditsCast.IsHiddenGhostRole(_round.AllPlayersEndInfo[i]))
             .OrderBy(i => GetJobText(_round.AllPlayersEndInfo[i]), StringComparer.CurrentCultureIgnoreCase)
             .ThenBy(i => GetDisplayName(_round.AllPlayersEndInfo[i]), StringComparer.CurrentCultureIgnoreCase)
             .ToList();

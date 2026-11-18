@@ -93,7 +93,7 @@ public sealed partial class RoundEndCreditsOverlay
             ? 0f
             : Math.Clamp(WallRevealSeconds / _wallTiles.Count, 0.03f, 0.18f);
 
-        AddChild(_wall);
+        AddLayer(_wall);
         SetAnchorPreset(_wall, LayoutPreset.Wide);
         var side = (ScreenWidth - width) / 2f;
         SetMarginLeft(_wall, side);
