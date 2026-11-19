@@ -1,3 +1,4 @@
+using System.Diagnostics; //DS-14
 using System.Linq;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.Power.Components;
@@ -40,6 +41,13 @@ namespace Content.Server.Power.EntitySystems
         private readonly List<EntityUid> _changedBatteryStorage = new();
         private readonly HashSet<EntityUid> _changedBatteryStorageSet = new();
         private readonly HashSet<PowerState.Load> _possiblyDisconnectedLoads = new();
+
+        internal double StallReconnectMs; //DS-14
+        internal double StallSyncMs; //DS-14
+        internal double StallSolverMs; //DS-14
+        internal double StallReceiverMs; //DS-14
+        internal int StallApcReconnects; //DS-14
+        internal int StallNetReconnects; //DS-14
 
         public bool IsIdle => _apcNetReconnectQueue.Count == 0 && _powerNetReconnectQueue.Count == 0;
         // DS14-end
@@ -345,14 +353,20 @@ namespace Content.Server.Power.EntitySystems
         {
             base.Update(frameTime);
 
+            var apcReconnects = _apcNetReconnectQueue.Count; //DS-14
+            var netReconnects = _powerNetReconnectQueue.Count; //DS-14
+            var reconnectStart = Stopwatch.GetTimestamp(); //DS-14
             if (_apcNetReconnectQueue.Count != 0 || _powerNetReconnectQueue.Count != 0)
                 ReconnectNetworks();
+            var solverStart = Stopwatch.GetTimestamp(); //DS-14
 
             // Synchronize batteries
             RaiseLocalEvent(new NetworkBatteryPreSync());
+            var tickStart = Stopwatch.GetTimestamp(); //DS-14
 
             // Run power solver.
             _solver.Tick(frameTime, _powerState, _parMan);
+            var receiverStart = Stopwatch.GetTimestamp(); //DS-14
 
             // DS14-start
             FinalizeDisconnectedLoads();
@@ -362,6 +376,12 @@ namespace Content.Server.Power.EntitySystems
 
             UpdateApcPowerReceiver(frameTime);
             UpdateNetworkBattery();
+            StallReconnectMs = (solverStart - reconnectStart) * 1000d / Stopwatch.Frequency; //DS-14
+            StallSyncMs = (tickStart - solverStart) * 1000d / Stopwatch.Frequency; //DS-14
+            StallSolverMs = (receiverStart - tickStart) * 1000d / Stopwatch.Frequency; //DS-14
+            StallReceiverMs = (Stopwatch.GetTimestamp() - receiverStart) * 1000d / Stopwatch.Frequency; //DS-14
+            StallApcReconnects = apcReconnects; //DS-14
+            StallNetReconnects = netReconnects; //DS-14
         }
 
         private void ReconnectNetworks()

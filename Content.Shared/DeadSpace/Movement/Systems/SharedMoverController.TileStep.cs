@@ -22,6 +22,12 @@ public abstract partial class SharedMoverController
 
     protected EntityQuery<TileStepMovementComponent> TileStepQuery;
     protected EntityQuery<FixturesComponent> TileStepFixturesQuery;
+    protected long DiagTileStepTicks;
+    protected long DiagColliderTicks;
+    protected long DiagTileLookupTicks;
+    protected long DiagVelocityTicks;
+    protected long DiagTurnTicks;
+    protected long DiagFootTicks;
 
     /// <summary>Close enough to a tile center to count as standing on it.</summary>
     private const float TileStepArriveDistance = 0.02f;

@@ -271,10 +271,13 @@ public abstract partial class SharedMoverController : VirtualController
         ContentTileDefinition? tileDef = null;
 
         // DS14-Start: tile-by-tile movement (blessing of the Hierophant)
-        if (TileStepQuery.TryComp(uid, out var tileStep) &&
-            HandleTileStepMovement((uid, tileStep), mover, physicsComponent, xform, weightless || inAirHelpless, frameTime))
+        if (TileStepQuery.TryComp(uid, out var tileStep))
         {
-            return;
+            var tileStepStart = System.Diagnostics.Stopwatch.GetTimestamp();
+            var tileStepHandled = HandleTileStepMovement((uid, tileStep), mover, physicsComponent, xform, weightless || inAirHelpless, frameTime);
+            DiagTileStepTicks += System.Diagnostics.Stopwatch.GetTimestamp() - tileStepStart;
+            if (tileStepHandled)
+                return;
         }
         // DS14-End
 
@@ -295,7 +298,13 @@ public abstract partial class SharedMoverController : VirtualController
 
             // If we're not on a grid, and not able to move in space check if we're close enough to a grid to touch.
             if (!touching && MobMoverQuery.TryComp(uid, out var mobMover))
+            {
+                //DS-14 start
+                var colliderStart = System.Diagnostics.Stopwatch.GetTimestamp();
                 touching |= IsAroundCollider(_lookup, (uid, physicsComponent, mobMover, xform));
+                DiagColliderTicks += System.Diagnostics.Stopwatch.GetTimestamp() - colliderStart;
+                //DS-14 end
+            }
 
             // If we're touching then use the weightless values
             if (touching)
@@ -316,10 +325,16 @@ public abstract partial class SharedMoverController : VirtualController
         }
         else
         {
+            //DS-14 start
+            var tileLookupStart = System.Diagnostics.Stopwatch.GetTimestamp();
+            //DS-14 end
             if (MapGridQuery.TryComp(xform.GridUid, out var gridComp)
                 && _mapSystem.TryGetTileRef(xform.GridUid.Value, gridComp, xform.Coordinates, out var tile)
                 && physicsComponent.BodyStatus == BodyStatus.OnGround)
                 tileDef = (ContentTileDefinition)_tileDefinitionManager[tile.Tile.TypeId];
+            //DS-14 start
+            DiagTileLookupTicks += System.Diagnostics.Stopwatch.GetTimestamp() - tileLookupStart;
+            //DS-14 end
 
             var walkSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             var sprintSpeed = moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
@@ -369,10 +384,16 @@ public abstract partial class SharedMoverController : VirtualController
          * environment you take into account the fact they can snake! Also be sure to lower acceleration as well to
          * prevent jerky movement!
          */
+        //DS-14 start
+        var velocityStart = System.Diagnostics.Stopwatch.GetTimestamp();
+        //DS-14 end
         PhysicsSystem.SetLinearVelocity(uid, velocity, body: physicsComponent);
 
         // Ensures that players do not spiiiiiiin
         PhysicsSystem.SetAngularVelocity(uid, 0, body: physicsComponent);
+        //DS-14 start
+        DiagVelocityTicks += System.Diagnostics.Stopwatch.GetTimestamp() - velocityStart;
+        //DS-14 end
 
         // Handle footsteps at the end
         if (wishDir != Vector2.Zero)
@@ -383,9 +404,18 @@ public abstract partial class SharedMoverController : VirtualController
                 // island solver"??. So maybe SetRotation needs an argument to avoid raising an event?
                 var worldRot = _transform.GetWorldRotation(xform);
 
+                //DS-14 start
+                var turnStart = System.Diagnostics.Stopwatch.GetTimestamp();
+                //DS-14 end
                 _transform.SetLocalRotation(uid, xform.LocalRotation + wishDir.ToWorldAngle() - worldRot, xform);
+                //DS-14 start
+                DiagTurnTicks += System.Diagnostics.Stopwatch.GetTimestamp() - turnStart;
+                //DS-14 end
             }
 
+            //DS-14 start
+            var footStart = System.Diagnostics.Stopwatch.GetTimestamp();
+            //DS-14 end
             if (!weightless && MobMoverQuery.TryGetComponent(uid, out var mobMover) &&
                 TryGetSound(weightless, uid, mover, mobMover, xform, out var sound, tileDef: tileDef))
             {
@@ -405,6 +435,9 @@ public abstract partial class SharedMoverController : VirtualController
                     _audio.PlayPredicted(sound, uid, uid, audioParams);
                 }
             }
+            //DS-14 start
+            DiagFootTicks += System.Diagnostics.Stopwatch.GetTimestamp() - footStart;
+            //DS-14 end
         }
     }
 
