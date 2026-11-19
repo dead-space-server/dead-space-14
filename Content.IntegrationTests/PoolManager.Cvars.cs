@@ -38,6 +38,8 @@ public static partial class PoolManager
         (CCVars.MovementMobPushing.Name, "false"),
         (CCCCVars.LavalandAutoGenerate.Name, "false"), // DS14
         (CCCCVars.RoundEndCreditsEnabled.Name, "false"), // DS14
+        (CCCCVars.RoundMapPreloadEnabled.Name, "false"), // DS14: 27 maps on every round restart made tests time out
+        (CCCCVars.PauseEmptyMaps.Name, "false"), // DS14: tests have no player on lavaland, a paused map runs nothing
         (CCCCVars.CentCommEnabled.Name, "true"), // DS14
         (CCVars.CameraArchiveActive.Name, "true"), //DS-14
         (CCVars.CameraArchiveIdleEnabled.Name, "true"), //DS-14

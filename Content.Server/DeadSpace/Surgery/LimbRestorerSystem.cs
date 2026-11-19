@@ -16,7 +16,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class LimbRestorerSystem : EntitySystem
+public sealed partial class LimbRestorerSystem : EntitySystem
 {
     private static readonly LimbZone[] RegrowOrder =
     {
@@ -30,14 +30,14 @@ public sealed class LimbRestorerSystem : EntitySystem
         LimbZone.FootRight,
     };
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SurgeryLimbPort _port = default!;
-    [Dependency] private readonly Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SurgeryLimbPort _port = default!;
+    [Dependency] private Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
 
     public override void Initialize()
     {

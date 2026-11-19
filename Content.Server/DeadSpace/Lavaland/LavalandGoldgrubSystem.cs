@@ -27,7 +27,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandGoldgrubSystem : EntitySystem
+public sealed partial class LavalandGoldgrubSystem : EntitySystem
 {
     private static readonly Vector2i[] CardinalOffsets =
     [
@@ -37,20 +37,20 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
         new(0, -1),
     ];
 
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly IComponentFactory _factory = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private NPCSteeringSystem _steering = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private IComponentFactory _factory = default!;
 
     private readonly List<(MapCoordinates Coordinates, EntityUid Victim, EntProtoId Prototype, TimeSpan At)> _pendingAmbushes = new();
     private readonly Dictionary<EntityUid, TimeSpan> _ambushCooldown = new();

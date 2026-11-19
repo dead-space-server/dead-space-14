@@ -15,17 +15,17 @@ using Robust.Shared.Network;
 using System.Linq;
 
 namespace Content.Client.DeadSpace.Ports.Jukebox;
-public sealed class JukeboxSystem : EntitySystem
+public sealed partial class JukeboxSystem : EntitySystem
 {
-    [Dependency] private readonly IResourceCache _resource = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IAudioManager _audioManager = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly SpriteSystem _sprites = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ClientJukeboxSongsSyncManager _songs = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private IResourceCache _resource = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IAudioManager _audioManager = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ClientJukeboxSongsSyncManager _songs = default!;
+    [Dependency] private INetManager _net = default!;
 
     private readonly Dictionary<EntityUid, JukeboxAudio> _playing = new();
     private readonly HashSet<ResPath> _failedSongs = new();
@@ -181,7 +181,7 @@ public sealed class JukeboxSystem : EntitySystem
         }
     }
 
-    private sealed class JukeboxAudio(IAudioSource source, ResPath path, TimeSpan startedAt, bool positional)
+    private sealed partial class JukeboxAudio(IAudioSource source, ResPath path, TimeSpan startedAt, bool positional)
     {
         public readonly IAudioSource Source = source;
         public readonly ResPath Path = path;

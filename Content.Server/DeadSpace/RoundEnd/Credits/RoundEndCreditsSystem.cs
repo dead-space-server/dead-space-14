@@ -27,18 +27,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.RoundEnd.Credits;
 
-public sealed class RoundEndCreditsSystem : EntitySystem
+public sealed partial class RoundEndCreditsSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly EmergencyShuttleSystem _emergency = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly RoundEndCreditsStatsSystem _stats = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private EmergencyShuttleSystem _emergency = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private RoundEndCreditsStatsSystem _stats = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     private const float ObjectiveDoneProgress = 0.99f;
     private const float MassacreDeadRatio = 0.5f;

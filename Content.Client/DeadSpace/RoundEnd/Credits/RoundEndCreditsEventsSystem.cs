@@ -8,9 +8,9 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.DeadSpace.RoundEnd.Credits;
 
-public sealed class RoundEndCreditsEventsSystem : EntitySystem
+public sealed partial class RoundEndCreditsEventsSystem : EntitySystem
 {
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     public override void Initialize()
     {

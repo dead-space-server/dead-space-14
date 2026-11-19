@@ -19,7 +19,7 @@
     backgroundPatchMargin: 37.0, 0.0, 37.0, 0.0
     contentImagePath: "/Textures/Interface/Paper/paper_content_dotmatrix_gray.svg.96dpi.png"
     contentImageNumLines: 2
-    contentMargin: 16.0, 16.0, 16.0, 0.0
+    contentMargin: 16.0, 0.0, 16.0, 16.0
     # Make this a wide dot-matrix printer
     maxWritableArea: 400.0, 0.0
   - type: Paper

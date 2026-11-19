@@ -15,10 +15,10 @@ namespace Content.Client.Info;
 [GenerateTypedNameReferences]
 public sealed partial class RulesControl : BoxContainer, ILinkClickHandler
 {
-    [Dependency] private readonly DocumentParsingManager _parsingMan = default!;
+    [Dependency] private DocumentParsingManager _parsingMan = default!;
     // DS14-start
-    [Dependency] private readonly IUriOpener _uri = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IUriOpener _uri = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
     // DS14-end
 
     private string? _currentEntry;

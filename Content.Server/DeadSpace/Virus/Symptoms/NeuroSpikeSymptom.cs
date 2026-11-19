@@ -10,9 +10,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class NeuroSpikeSymptom : VirusSymptomBase
+public sealed partial class NeuroSpikeSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     public override VirusSymptom Type => VirusSymptom.NeuroSpike;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "NeuroSpikeSymptom";
     private TimedWindow _duration = default!;

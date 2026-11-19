@@ -7,12 +7,12 @@ using Robust.Shared.Map;
 
 namespace Content.Shared.Containers;
 
-public sealed class ContainerFillSystem : EntitySystem
+public sealed partial class ContainerFillSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly EntityTableSystem _entityTable = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedItemSystem _itemSystem = default!; // DS14
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private EntityTableSystem _entityTable = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedItemSystem _itemSystem = default!; // DS14
 
     public override void Initialize()
     {

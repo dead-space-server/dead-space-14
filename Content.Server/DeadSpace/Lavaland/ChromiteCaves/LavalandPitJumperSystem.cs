@@ -39,24 +39,23 @@ namespace Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 /// <item>The player gone far or dead: it crawls back out of its own chasm and waits again.</item>
 /// </list>
 /// </summary>
-public sealed class LavalandPitJumperSystem : EntitySystem
+public sealed partial class LavalandPitJumperSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private LavalandPitLandingSystem _landing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(0.3);
 
@@ -463,7 +462,7 @@ public sealed class LavalandPitJumperSystem : EntitySystem
     {
         spot = default;
         pit = default;
-        if (!_mapManager.TryFindGridAt(target, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(target, out var gridUid, out var grid))
         {
             Log.Warning($"Argocyte: no grid under the player at {target}, back out of its own chasm.");
             return false;
@@ -636,7 +635,7 @@ public sealed class LavalandPitJumperSystem : EntitySystem
     private bool TryGetChasmAt(MapCoordinates coords, out Vector2 chasm)
     {
         chasm = default;
-        if (!_mapManager.TryFindGridAt(coords, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coords, out var gridUid, out var grid))
             return false;
 
         var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, _map.TileIndicesFor(gridUid, grid, coords));

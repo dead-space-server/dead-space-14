@@ -28,21 +28,21 @@ namespace Content.Server.DeadSpace.PersonnelRecords.Systems;
 /// already exists, the paper is just its physical copy, so there's no self/protected-department
 /// restriction here unlike issuing/annulling an order.
 /// </summary>
-public sealed class PersonnelPrintingSystem : EntitySystem
+public sealed partial class PersonnelPrintingSystem : EntitySystem
 {
     private const string DismissedJobId = "Dismissed";
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly PersonnelRecordsConsoleSystem _console = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly SharedJobSystem _jobSystem = default!;
-    [Dependency] private readonly PaperSystem _paperSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly StationRecordsSystem _records = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private PersonnelRecordsConsoleSystem _console = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private SharedJobSystem _jobSystem = default!;
+    [Dependency] private PaperSystem _paperSystem = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

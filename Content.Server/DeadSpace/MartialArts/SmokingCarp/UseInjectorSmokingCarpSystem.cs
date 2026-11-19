@@ -11,10 +11,10 @@ using Robust.Server.GameObjects;
 using Content.Shared.DeadSpace.MartialArts.SmokingCarp.Components;
 
 namespace Content.Server.DeadSpace.MartialArts.SmokingCarp;
-public sealed class UseArkalyseBookSystem : EntitySystem
+public sealed partial class UseArkalyseBookSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private SharedActionsSystem _action = default!;
+    [Dependency] private TransformSystem _transform = default!;
     public override void Initialize()
     {
         base.Initialize();

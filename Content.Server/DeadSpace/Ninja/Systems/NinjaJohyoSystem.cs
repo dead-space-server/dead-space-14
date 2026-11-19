@@ -9,10 +9,10 @@ using System.Linq;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class ChainGunSystem : SharedChainGunSystem
+public sealed partial class ChainGunSystem : SharedChainGunSystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     protected override void SayPhrase(EntityUid user, NinjaJohyoComponent comp)
     {

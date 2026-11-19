@@ -20,9 +20,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.RoundEnd;
 
-public sealed class RoundEndManifestStatsSystem : EntitySystem
+public sealed partial class RoundEndManifestStatsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
 
     private const int MinQuoteLength = 8;
     private const int MaxQuoteLength = 160;

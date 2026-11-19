@@ -7,10 +7,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Virus.Symptoms;
 
-public abstract class VirusSymptomBase : IVirusSymptom
+public abstract partial class VirusSymptomBase : IVirusSymptom
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
     public TimedWindow EffectTimedWindow { get; }
     protected abstract ProtoId<VirusSymptomPrototype> PrototypeId { get; }
 

@@ -9,7 +9,7 @@ namespace Content.Shared.DeadSpace.Necromorphs.InfectionDead;
 
 public sealed partial class IgnoreAlliesOnMelleeHitSystem : EntitySystem
 {
-    [Dependency] private readonly NpcFactionSystem _npcFactionSystem = default!;
+    [Dependency] private NpcFactionSystem _npcFactionSystem = default!;
 
     public override void Initialize()
     {

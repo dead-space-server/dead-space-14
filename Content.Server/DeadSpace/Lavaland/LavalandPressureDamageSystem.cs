@@ -19,12 +19,12 @@ using Robust.Shared.Timing;
 namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>Weakens kinetic weapons outside of lavaland-like pressure. See <see cref="LavalandPressureDamageComponent"/>.</summary>
-public sealed class LavalandPressureDamageSystem : SharedLavalandPressureDamageSystem
+public sealed partial class LavalandPressureDamageSystem : SharedLavalandPressureDamageSystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly MobThresholdSystem _threshold = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private MobThresholdSystem _threshold = default!;
 
     public override void Initialize()
     {

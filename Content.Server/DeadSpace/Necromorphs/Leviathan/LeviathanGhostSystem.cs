@@ -12,14 +12,14 @@ using Content.Shared.DeadSpace.Necromorphs.Leviathan;
 
 namespace Content.Server.DeadSpace.Necromorphs.Leviathan;
 
-public sealed class LeviathanGhostSystem : EntitySystem
+public sealed partial class LeviathanGhostSystem : EntitySystem
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     private const string Territory = "NecroKudzu";
 
     public override void Initialize()

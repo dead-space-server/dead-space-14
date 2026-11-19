@@ -18,10 +18,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.RoundEnd.Credits;
 
-public sealed class RoundEndCreditsStatsSystem : EntitySystem
+public sealed partial class RoundEndCreditsStatsSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly RoundEndManifestStatsSystem _manifest = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private RoundEndManifestStatsSystem _manifest = default!;
 
     private const string ScreamEmote = "Scream";
     private static readonly TimeSpan KillCreditWindow = TimeSpan.FromSeconds(30);

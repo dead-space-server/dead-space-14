@@ -7,12 +7,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Movement.Systems;
 
-public sealed class FloorOcclusionSystem : SharedFloorOcclusionSystem
+public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
 {
     private static readonly ProtoId<ShaderPrototype> HorizontalCut = "HorizontalCut";
 
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly StepTriggerSystem _stepTrigger = default!; //DS-14
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private StepTriggerSystem _stepTrigger = default!; //DS-14
 
     private EntityQuery<SpriteComponent> _spriteQuery;
 

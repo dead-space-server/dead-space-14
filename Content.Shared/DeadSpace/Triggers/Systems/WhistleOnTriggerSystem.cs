@@ -4,9 +4,9 @@ using Content.Shared.Whistle;
 
 namespace Content.Shared.DeadSpace.Triggers.Systems;
 
-public sealed class WhistleOnTriggerSystem : TriggerOnXSystem
+public sealed partial class WhistleOnTriggerSystem : TriggerOnXSystem
 {
-    [Dependency] private readonly WhistleSystem _whistle = default!;
+    [Dependency] private WhistleSystem _whistle = default!;
     public override void Initialize()
     {
         base.Initialize();

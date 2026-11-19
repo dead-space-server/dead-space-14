@@ -16,16 +16,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Body.Limbs;
 
-public sealed class CombatAdrenalineSystem : EntitySystem
+public sealed partial class CombatAdrenalineSystem : EntitySystem
 {
     private static readonly EntProtoId SurgeEffect = "StatusEffectCombatAdrenaline";
 
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
 
     public override void Initialize()
     {

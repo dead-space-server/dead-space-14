@@ -15,6 +15,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
+using TableContainer = Content.Client.UserInterface.Controls.TableContainer;
 
 namespace Content.Client.RoundEnd
 {

@@ -4,7 +4,6 @@ using Content.Shared.Radio;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Anomaly.Components;
 
@@ -37,7 +36,7 @@ public sealed partial class AnomalyGeneratorComponent : Component
     /// <summary>
     /// The material needed to generate an anomaly
     /// </summary>
-    [DataField("requiredMaterial", customTypeSerializer: typeof(PrototypeIdSerializer<MaterialPrototype>)), ViewVariables(VVAccess.ReadWrite)]
+    [DataField("requiredMaterial"), ViewVariables(VVAccess.ReadWrite)]
     public string RequiredMaterial = "Plasma";
 
     /// <summary>
@@ -49,13 +48,13 @@ public sealed partial class AnomalyGeneratorComponent : Component
     /// <summary>
     /// The random anomaly spawner entity
     /// </summary>
-    [DataField("spawnerPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>)), ViewVariables(VVAccess.ReadWrite)]
+    [DataField("spawnerPrototype"), ViewVariables(VVAccess.ReadWrite)]
     public string SpawnerPrototype = "RandomAnomalySpawner";
 
     /// <summary>
     /// The radio channel for science
     /// </summary>
-    [DataField("scienceChannel", customTypeSerializer: typeof(PrototypeIdSerializer<RadioChannelPrototype>))]
+    [DataField("scienceChannel")]
     public string ScienceChannel = "Science";
     public string CommonChannel = "Common";
 

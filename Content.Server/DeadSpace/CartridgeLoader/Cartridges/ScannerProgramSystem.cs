@@ -5,9 +5,9 @@ using Content.Shared.Paper;
 
 namespace Content.Server.DeadSpace.CartridgeLoader.Cartridges;
 
-public sealed class ScannerProgramSystem : EntitySystem
+public sealed partial class ScannerProgramSystem : EntitySystem
 {
-    [Dependency] private readonly CartridgeLoaderSystem? _cartridgeLoaderSystem = default!;
+    [Dependency] private CartridgeLoaderSystem _cartridgeLoaderSystem = default!;
 
     public override void Initialize()
     {

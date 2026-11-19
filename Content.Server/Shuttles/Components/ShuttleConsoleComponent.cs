@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.DeviceLinking;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Shuttles.Components
 {
@@ -24,7 +23,7 @@ namespace Content.Server.Shuttles.Components
         public List<EntityUid> FTLWhitelist = new List<EntityUid>();
 
         // DS14-start
-        [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<SourcePortPrototype>))]
+        [DataField]
         public string LinkingPort = "ShuttleConsoleSender";
         // DS14-end
     }

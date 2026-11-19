@@ -16,10 +16,10 @@ namespace Content.Client.Communications.UI
     /// send messages, set the alert level, and set the text on screens.
     /// </summary>
     /// <seealso cref="CommunicationsConsoleComponent"/>
-    public sealed class CommunicationsConsoleBoundUserInterface : BoundUserInterface
+    public sealed partial class CommunicationsConsoleBoundUserInterface : BoundUserInterface
     {
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IUserInterfaceManager _uiManager = default!; // DS14
+        [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IUserInterfaceManager _uiManager = default!; // DS14
 
         [ViewVariables]
         private CommunicationsConsoleMenu? _menu;

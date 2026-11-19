@@ -15,16 +15,16 @@ using Content.Shared.DeviceNetwork.Components;
 
 namespace Content.Server.SurveillanceCamera;
 
-public sealed class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
+public sealed partial class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly ViewSubscriberSystem _viewSubscriberSystem = default!;
-    [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
-    [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SurveillanceCameraMapSystem _cameraMapSystem = default!;
-    [Dependency] private readonly StationSystem _station = default!; //DS-14
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private ViewSubscriberSystem _viewSubscriberSystem = default!;
+    [Dependency] private DeviceNetworkSystem _deviceNetworkSystem = default!;
+    [Dependency] private UserInterfaceSystem _userInterface = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private SurveillanceCameraMapSystem _cameraMapSystem = default!;
+    [Dependency] private StationSystem _station = default!; //DS-14
 
     // Pings a surveillance camera subnet. All cameras will always respond
     // with a data message if they are on the same subnet.
@@ -425,18 +425,18 @@ public sealed class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
     //DS-14 end
 }
 
-public sealed class OnSurveillanceCameraViewerAddEvent : EntityEventArgs
+public sealed partial class OnSurveillanceCameraViewerAddEvent : EntityEventArgs
 {
 
 }
 
-public sealed class OnSurveillanceCameraViewerRemoveEvent : EntityEventArgs
+public sealed partial class OnSurveillanceCameraViewerRemoveEvent : EntityEventArgs
 {
 
 }
 
 // What happens when a camera deactivates.
-public sealed class SurveillanceCameraDeactivateEvent : EntityEventArgs
+public sealed partial class SurveillanceCameraDeactivateEvent : EntityEventArgs
 {
     public EntityUid Camera { get; }
 

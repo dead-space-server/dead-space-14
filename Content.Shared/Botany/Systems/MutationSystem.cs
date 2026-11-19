@@ -24,15 +24,15 @@ public sealed partial class PlantMutationSystem : EntitySystem
     private RandomPlantMutationListPrototype _randomMutations = default!;
 
     // DS14-start
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
     private EntityQuery<PlantChemicalsComponent> _chemicalsQuery;
     private EntityQuery<PlantComponent> _plantQuery;

@@ -10,11 +10,11 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.Eui
 {
-    public sealed class EuiManager
+    public sealed partial class EuiManager
     {
-        [Dependency] private readonly IClientNetManager _net = default!;
-        [Dependency] private readonly IReflectionManager _refl = default!;
-        [Dependency] private readonly IDynamicTypeFactory _dtf = default!;
+        [Dependency] private IClientNetManager _net = default!;
+        [Dependency] private IReflectionManager _refl = default!;
+        [Dependency] private IDynamicTypeFactory _dtf = default!;
 
         private readonly Dictionary<uint, EuiData> _openUis = new();
 
@@ -67,7 +67,7 @@ namespace Content.Client.Eui
             _openUis.Add(message.Id, new EuiData(instance));
         }
 
-        private sealed class EuiData
+        private sealed partial class EuiData
         {
             public readonly BaseEui Eui;
 

@@ -14,12 +14,12 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.DeviceLinkVis;
 
-public sealed class DeviceLinkVisSystem : EntitySystem
+public sealed partial class DeviceLinkVisSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedDeviceLinkSystem _deviceLinks = default!;
-    [Dependency] private readonly SharedDeviceListSystem _deviceLists = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedDeviceLinkSystem _deviceLinks = default!;
+    [Dependency] private SharedDeviceListSystem _deviceLists = default!;
 
     private readonly HashSet<ICommonSession> _watchers = new();
     private readonly List<ICommonSession> _remove = new();

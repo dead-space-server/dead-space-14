@@ -16,15 +16,15 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.CameraArchives;
 
-public sealed class CameraArchiveSheetSystem : EntitySystem
+public sealed partial class CameraArchiveSheetSystem : EntitySystem
 {
     private const string Marker = "{СЮДА КАРТИНКУ}";
     private static readonly Color Ink = new(25, 25, 25);
 
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IRobustSerializer _serializer = default!;
-    [Dependency] private readonly CameraArchivePlaybackSystem _playback = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IRobustSerializer _serializer = default!;
+    [Dependency] private CameraArchivePlaybackSystem _playback = default!;
 
     private readonly List<(EntityUid Paper, CameraArchivePrintComponent Shot, string Content)> _prints = new();
     private EntityUid _played;

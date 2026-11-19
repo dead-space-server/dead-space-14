@@ -16,18 +16,18 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.CentCommFax;
 
-public sealed class CentCommFaxEui : BaseEui
+public sealed partial class CentCommFaxEui : BaseEui
 {
     private const int MaxTitleLength = 100;
     private const int MaxContentLength = 10000;
     private const int MaxFromLength = 100;
     private const string DefaultPaper = "PaperPrintedCentcomm";
 
-    [Dependency] private readonly IAdminManager _admins = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IComponentFactory _factory = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
+    [Dependency] private IAdminManager _admins = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IComponentFactory _factory = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IResourceManager _resources = default!;
 
     private readonly CentCommFaxSystem _centComm;
     private readonly FollowerSystem _follower;

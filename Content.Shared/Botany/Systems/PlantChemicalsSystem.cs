@@ -24,9 +24,9 @@ public sealed partial class PlantChemicalsSystem : EntitySystem
     // DS14-end
 
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly PlantMutationSystem _mutation = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private PlantMutationSystem _mutation = default!;
+    [Dependency] private IGameTiming _timing = default!;
     // DS14-end
 
     private void OnCrossPollinate(Entity<PlantChemicalsComponent> ent, ref PlantCrossPollinateEvent args)

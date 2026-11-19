@@ -6,8 +6,10 @@ using Content.Server.GameTicking;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.DeadSpace.Administration;
+using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
+using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization;
@@ -20,17 +22,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.AntagMaps;
 
-public sealed class RoundMapPreloadSystem : EntitySystem
+public sealed partial class RoundMapPreloadSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly MapLoaderSystem _loader = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly NodeGroupSystem _nodes = default!;
-    [Dependency] private readonly PowerNetSystem _power = default!;
-    [Dependency] private readonly DisposalUnitSystem _disposal = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private MapLoaderSystem _loader = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private NodeGroupSystem _nodes = default!;
+    [Dependency] private PowerNetSystem _power = default!;
+    [Dependency] private DisposalUnitSystem _disposal = default!;
 
     private readonly Queue<(ResPath Path, bool Grid, string? ShuttleId)> _pending = new();
 
@@ -64,6 +67,8 @@ public sealed class RoundMapPreloadSystem : EntitySystem
         (new("/Maps/Shuttles/ShuttleEvent/deathsquad.yml"), true, 1),
     };
 
+    private bool _enabled;
+    private bool _pauseEmpty;
     private bool _queueReady;
     private TimeSpan _nextLoadAt;
     private string _slowest = "";
@@ -78,6 +83,8 @@ public sealed class RoundMapPreloadSystem : EntitySystem
         UpdatesAfter.Add(typeof(PhysicsSystem));
         SubscribeLocalEvent<PostGameMapLoad>(OnMapLoad);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        Subs.CVar(_cfg, CCCCVars.RoundMapPreloadEnabled, value => _enabled = value, true);
+        Subs.CVar(_cfg, CCCCVars.PauseEmptyMaps, value => _pauseEmpty = value, true);
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
@@ -91,6 +98,9 @@ public sealed class RoundMapPreloadSystem : EntitySystem
 
     private void OnMapLoad(PostGameMapLoad ev)
     {
+        if (!_enabled)
+            return;
+
         EnsureQueue();
         if (_pending.Count == 0)
             return;
@@ -202,7 +212,7 @@ public sealed class RoundMapPreloadSystem : EntitySystem
         var maps = AllEntityQuery<PreparedRoundMapComponent, MapComponent>();
         while (maps.MoveNext(out var uid, out var prepared, out var map))
         {
-            if (!prepared.SleepWhenEmpty || !map.MapInitialized || Terminating(uid))
+            if (!_pauseEmpty || !prepared.SleepWhenEmpty || !map.MapInitialized || Terminating(uid))
                 continue;
 
             if (!prepared.Warmed)
@@ -218,7 +228,7 @@ public sealed class RoundMapPreloadSystem : EntitySystem
                 _map.SetPaused(uid, pause);
         }
 
-        if (_ticker.RunLevel != GameRunLevel.PreRoundLobby)
+        if (!_enabled || _ticker.RunLevel != GameRunLevel.PreRoundLobby)
             return;
 
         EnsureQueue();

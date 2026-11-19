@@ -27,24 +27,24 @@ namespace Content.Shared.Ninja.Systems;
 /// Handles dashing logic including charge consumption and checking attempt events.
 /// </summary>
 //DS14-start
-public abstract class SharedDashAbilitySystem : EntitySystem
+public abstract partial class SharedDashAbilitySystem : EntitySystem
 //DS14-end
 {
-    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!; // DS14
-    [Dependency] private readonly SharedActionsSystem _actions = default!; // DS14
-    [Dependency] private readonly AlertsSystem _alerts = default!; // DS14
-    [Dependency] private readonly SharedChargesSystem _sharedCharges = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly PullingSystem _pullingSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14
+    [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!; // DS14
+    [Dependency] private SharedActionsSystem _actions = default!; // DS14
+    [Dependency] private AlertsSystem _alerts = default!; // DS14
+    [Dependency] private SharedChargesSystem _sharedCharges = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PullingSystem _pullingSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!; // DS14
     //DS14-start
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly TagSystem _tagSystem = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     private static readonly ProtoId<TagPrototype> CorruptTeleportTag = "CorruptTeleportItem";
     //DS14-end

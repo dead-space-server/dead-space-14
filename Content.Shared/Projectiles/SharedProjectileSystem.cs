@@ -28,14 +28,14 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 {
     public const string ProjectileFixture = "projectile";
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!; // DS14 - pre-v288 IoC
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!; // DS14 - pre-v288 IoC
-    [Dependency] private readonly INetManager _net = default!; //DS-14
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!; // DS14 - pre-v288 IoC
+    [Dependency] private EntityWhitelistSystem _whitelist = default!; // DS14 - pre-v288 IoC
+    [Dependency] private INetManager _net = default!; //DS-14
 
     //DS-14
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _projectilesByActor = new();
@@ -388,7 +388,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 }
 
 [Serializable, NetSerializable]
-public sealed class ImpactEffectEvent : EntityEventArgs
+public sealed partial class ImpactEffectEvent : EntityEventArgs
 {
     public string Prototype;
     public NetCoordinates Coordinates;

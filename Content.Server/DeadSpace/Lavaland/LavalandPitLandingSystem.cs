@@ -12,10 +12,10 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// Landing after a fall (Celestial maze, chromite caves) and climbing out of a pit: the client plays the doll
 /// animation, the server keeps the player still and unhurt until it ends.
 /// </summary>
-public sealed class LavalandPitLandingSystem : EntitySystem
+public sealed partial class LavalandPitLandingSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private readonly List<EntityUid> _ended = new();
 

@@ -42,11 +42,11 @@ public sealed partial class LavalandTrophyDropComponent : Component
     public bool Dropped;
 }
 
-public sealed class LavalandTrophyDropSystem : EntitySystem
+public sealed partial class LavalandTrophyDropSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

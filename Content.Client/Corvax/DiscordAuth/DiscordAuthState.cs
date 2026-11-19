@@ -7,11 +7,11 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Client.Corvax.DiscordAuth;
 
-public sealed class DiscordAuthState : State
+public sealed partial class DiscordAuthState : State
 {
-    [Dependency] private readonly IClipboardManager _clipboard = default!;
-    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
-    [Dependency] private readonly IClientNetManager _netManager = default!;
+    [Dependency] private IClipboardManager _clipboard = default!;
+    [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
+    [Dependency] private IClientNetManager _netManager = default!;
 
     private DiscordAuthGui? _gui;
     private readonly CancellationTokenSource _checkTimerCancel = new();

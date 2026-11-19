@@ -9,11 +9,11 @@ using Content.Shared.Chat;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling;
 
-public sealed class ShadowlingBlinkSystem : EntitySystem
+public sealed partial class ShadowlingBlinkSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private ChatSystem _chat = default!;
 
     public override void Initialize()
     {

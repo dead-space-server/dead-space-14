@@ -20,12 +20,12 @@ using Robust.Shared.Timing;
 namespace Content.Client.DeadSpace.RoundEnd.Credits;
 
 [UsedImplicitly]
-public sealed class RoundEndCreditsUIController : UIController, IOnStateEntered<MainScreen>, IOnStateEntered<LobbyState>
+public sealed partial class RoundEndCreditsUIController : UIController, IOnStateEntered<MainScreen>, IOnStateEntered<LobbyState>
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private static readonly TimeSpan FallbackDelay = TimeSpan.FromSeconds(5);
     private static readonly TimeSpan FallbackFade = TimeSpan.FromSeconds(2);

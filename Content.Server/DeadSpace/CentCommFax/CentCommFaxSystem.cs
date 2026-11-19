@@ -20,21 +20,21 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.CentCommFax;
 
-public sealed class CentCommFaxSystem : EntitySystem
+public sealed partial class CentCommFaxSystem : EntitySystem
 {
     public const string UplinkAddress = "centcomm-uplink";
 
     private const int MaxInbox = 200;
     private static readonly SoundSpecifier NotifySound = new SoundPathSpecifier("/Audio/Machines/high_tech_confirm.ogg");
 
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IAdminManager _admins = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly FaxSystem _fax = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IAdminManager _admins = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private FaxSystem _fax = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private StationSystem _station = default!;
 
     private readonly List<CentCommFaxEntry> _inbox = new();
     private int _nextId;

@@ -11,7 +11,7 @@ namespace Content.Client.DeadSpace.Ports.Jukebox;
 [GenerateTypedNameReferences]
 public sealed partial class WhiteJukeboxMenu : DefaultWindow
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
     private readonly JukeboxSystem _jukeboxSystem;
 
     private readonly EntityUid _jukeboxEntity;

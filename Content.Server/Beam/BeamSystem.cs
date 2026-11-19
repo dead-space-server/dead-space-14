@@ -14,14 +14,14 @@ using Robust.Shared.Player; // DS14
 
 namespace Content.Server.Beam;
 
-public sealed class BeamSystem : SharedBeamSystem
+public sealed partial class BeamSystem : SharedBeamSystem
 {
-    [Dependency] private readonly FixtureSystem _fixture = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBroadphaseSystem _broadphase = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly VisibilitySystem _visibility = default!; // DS14
+    [Dependency] private FixtureSystem _fixture = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBroadphaseSystem _broadphase = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private VisibilitySystem _visibility = default!; // DS14
 
     public override void Initialize()
     {

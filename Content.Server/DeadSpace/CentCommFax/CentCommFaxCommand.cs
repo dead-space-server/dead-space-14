@@ -8,9 +8,9 @@ using Robust.Shared.Console;
 namespace Content.Server.DeadSpace.CentCommFax;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class CentCommFaxCommand : LocalizedEntityCommands
+public sealed partial class CentCommFaxCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly EuiManager _eui = default!;
+    [Dependency] private EuiManager _eui = default!;
 
     public override string Command => "centcommfax";
 

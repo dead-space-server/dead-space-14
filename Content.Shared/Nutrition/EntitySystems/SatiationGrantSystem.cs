@@ -7,7 +7,7 @@ namespace Content.Shared.Nutrition.EntitySystems;
 /// </summary>
 public sealed partial class SatiationGrantSystem : EntitySystem
 {
-    [Dependency] private readonly SatiationSystem _satiation = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
 
     public override void Initialize()
     {

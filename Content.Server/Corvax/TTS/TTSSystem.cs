@@ -26,18 +26,18 @@ namespace Content.Server.Corvax.TTS;
 // ReSharper disable once InconsistentNaming
 public sealed partial class TTSSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly TTSManager _ttsManager = default!;
-    [Dependency] private readonly IRobustRandom _rng = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!; // DS14
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private TTSManager _ttsManager = default!;
+    [Dependency] private IRobustRandom _rng = default!;
+    [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private SharedTransformSystem _transform = default!; // DS14
 
     // DS14-start
     private static readonly string[] SuitSlots = ["head", "outerClothing"];
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly BarotraumaSystem _barotrauma = default!;
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private BarotraumaSystem _barotrauma = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
     // DS14-end
 
     private readonly List<string> _sampleText =

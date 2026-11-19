@@ -17,8 +17,8 @@ public sealed partial class PlantTraitUnviableSystem : EntitySystem
     // DS14-end
 
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantHarvestSystem _plantHarvest = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantHarvestSystem _plantHarvest = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
     // DS14-end
 
     private void OnPlantGrow(Entity<PlantTraitUnviableComponent> ent, ref PlantGrowEvent args)

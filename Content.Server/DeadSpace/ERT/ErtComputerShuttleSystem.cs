@@ -17,14 +17,14 @@ using Content.Shared.Station.Components;
 
 namespace Content.Server.DeadSpace.ERT;
 
-public sealed class ErtComputerShuttleSystem : EntitySystem
+public sealed partial class ErtComputerShuttleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly PowerReceiverSystem _powerReceiverSystem = default!;
-    [Dependency] private readonly TimedWindowSystem _timedWindowSystem = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private PowerReceiverSystem _powerReceiverSystem = default!;
+    [Dependency] private TimedWindowSystem _timedWindowSystem = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ShuttleSystem _shuttleSystem = default!;
     public override void Initialize()
     {
         base.Initialize();

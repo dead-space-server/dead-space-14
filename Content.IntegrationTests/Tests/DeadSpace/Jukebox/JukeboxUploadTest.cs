@@ -24,6 +24,9 @@ namespace Content.IntegrationTests.Tests.DeadSpace.Jukebox;
 [TestFixture]
 public sealed class JukeboxUploadTest : InteractionTest
 {
+    // A prototype upload stays loaded in the pair; reusing it afterwards leaves the client without the test prototypes.
+    protected override PoolSettings Settings => new() { Connected = true, Dirty = true, Destructive = true };
+
     [Test]
     public async Task RecordingRequiresOpenUiAndDownloadsTheSong()
     {

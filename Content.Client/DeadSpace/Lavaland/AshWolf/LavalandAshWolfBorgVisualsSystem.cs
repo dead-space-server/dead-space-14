@@ -11,10 +11,10 @@ namespace Content.Client.DeadSpace.Lavaland.AshWolf;
 /// The borg system sets the light layer (the eyes) to one state on every appearance change; this puts the rolled-up
 /// eyes there while the Ash Wolf borg is rolled up for an attack.
 /// </summary>
-public sealed class LavalandAshWolfBorgVisualsSystem : EntitySystem
+public sealed partial class LavalandAshWolfBorgVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

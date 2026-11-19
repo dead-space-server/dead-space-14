@@ -10,9 +10,9 @@ namespace Content.Server.DeadSpace.Music;
 /// Cycles through the loudspeaker's playlist, advancing to the next song
 /// whenever the current one finishes playing.
 /// </summary>
-public sealed class MusicalLoudspeakerSystem : EntitySystem
+public sealed partial class MusicalLoudspeakerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {

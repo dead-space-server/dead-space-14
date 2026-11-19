@@ -7,11 +7,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.DeadSpace.Body.Limbs;
 
-public sealed class LimbGrindSystem : EntitySystem
+public sealed partial class LimbGrindSystem : EntitySystem
 {
     private const string Solution = "part";
 
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
 
     private readonly HashSet<EntityUid> _pending = new();
 

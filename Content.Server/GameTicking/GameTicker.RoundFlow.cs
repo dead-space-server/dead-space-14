@@ -29,6 +29,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -43,15 +44,15 @@ namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly DiscordWebhook _discord = default!;
-        [Dependency] private readonly RoleSystem _role = default!;
+        [Dependency] private DiscordWebhook _discord = default!;
+        [Dependency] private RoleSystem _role = default!;
         // DS14-start
-        [Dependency] private readonly RoundEndManifestStatsSystem _roundEndManifestStats = default!;
-        [Dependency] private readonly RoundEndDollStateSystem _roundEndDollState = default!;
-        [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
-        [Dependency] private readonly ObjectivesSystem _objectivesSystem = default!;
+        [Dependency] private RoundEndManifestStatsSystem _roundEndManifestStats = default!;
+        [Dependency] private RoundEndDollStateSystem _roundEndDollState = default!;
+        [Dependency] private SharedObjectivesSystem _objectives = default!;
+        [Dependency] private ObjectivesSystem _objectivesSystem = default!;
         // DS14-end
-        [Dependency] private readonly ITaskManager _taskManager = default!;
+        [Dependency] private ITaskManager _taskManager = default!;
 
         private static readonly Counter RoundNumberMetric = Metrics.CreateCounter(
             "ss14_round_number",
@@ -1148,7 +1149,18 @@ namespace Content.Server.GameTicking
 
             EntityManager.FlushEntities();
 
-            _mapManager.Restart();
+            // The engine no longer has a map manager restart: delete whatever maps survived the flush.
+            var maps = new List<EntityUid>();
+            var mapQuery = EntityQueryEnumerator<MapComponent>();
+            while (mapQuery.MoveNext(out var mapUid, out _))
+            {
+                maps.Add(mapUid);
+            }
+
+            foreach (var mapUid in maps)
+            {
+                Del(mapUid);
+            }
 
             _banManager.Restart();
 
@@ -1271,7 +1283,7 @@ namespace Content.Server.GameTicking
         PostRound = 2
     }
 
-    public sealed class GameRunLevelChangedEvent
+    public sealed partial class GameRunLevelChangedEvent
     {
         public GameRunLevel Old { get; }
         public GameRunLevel New { get; }
@@ -1289,7 +1301,7 @@ namespace Content.Server.GameTicking
     ///     for example as part of a game rule.
     /// </summary>
     [PublicAPI]
-    public sealed class LoadingMapsEvent : EntityEventArgs
+    public sealed partial class LoadingMapsEvent : EntityEventArgs
     {
         public List<GameMapPrototype> Maps;
 
@@ -1307,7 +1319,7 @@ namespace Content.Server.GameTicking
     ///     You likely want to subscribe to this after StationSystem.
     /// </remarks>
     [PublicAPI]
-    public sealed class PreGameMapLoad(GameMapPrototype gameMap, DeserializationOptions options, Vector2 offset, Angle rotation) : EntityEventArgs
+    public sealed partial class PreGameMapLoad(GameMapPrototype gameMap, DeserializationOptions options, Vector2 offset, Angle rotation) : EntityEventArgs
     {
         public readonly GameMapPrototype GameMap = gameMap;
         public DeserializationOptions Options = options;
@@ -1322,7 +1334,7 @@ namespace Content.Server.GameTicking
     ///     You likely want to subscribe to this after StationSystem.
     /// </remarks>
     [PublicAPI]
-    public sealed class PostGameMapLoad : EntityEventArgs
+    public sealed partial class PostGameMapLoad : EntityEventArgs
     {
         public readonly GameMapPrototype GameMap;
         public readonly MapId Map;
@@ -1342,7 +1354,7 @@ namespace Content.Server.GameTicking
     ///     Event raised to refresh the late join status.
     ///     If you want to disallow late joins, listen to this and call Disallow.
     /// </summary>
-    public sealed class RefreshLateJoinAllowedEvent
+    public sealed partial class RefreshLateJoinAllowedEvent
     {
         public bool DisallowLateJoin { get; private set; } = false;
 
@@ -1356,7 +1368,7 @@ namespace Content.Server.GameTicking
     ///     Attempt event raised on round start.
     ///     This can be listened to by GameRule systems to cancel round start if some condition is not met, like player count.
     /// </summary>
-    public sealed class RoundStartAttemptEvent : CancellableEntityEventArgs
+    public sealed partial class RoundStartAttemptEvent : CancellableEntityEventArgs
     {
         public ICommonSession[] Players { get; }
         public bool Forced { get; }
@@ -1373,7 +1385,7 @@ namespace Content.Server.GameTicking
     ///     You can use this to spawn people off-station, like in the case of nuke ops or wizard.
     ///     Remove the players you spawned from the PlayerPool and call <see cref="GameTicker.PlayerJoinGame"/> on them.
     /// </summary>
-    public sealed class RulePlayerSpawningEvent
+    public sealed partial class RulePlayerSpawningEvent
     {
         /// <summary>
         ///     Pool of players to be spawned.
@@ -1396,7 +1408,7 @@ namespace Content.Server.GameTicking
     ///     Event raised after players were assigned jobs by the GameTicker and have been spawned in.
     ///     You can give on-station people special roles by listening to this event.
     /// </summary>
-    public sealed class RulePlayerJobsAssignedEvent
+    public sealed partial class RulePlayerJobsAssignedEvent
     {
         public ICommonSession[] Players { get; }
         public IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> Profiles { get; }
@@ -1413,7 +1425,7 @@ namespace Content.Server.GameTicking
     /// <summary>
     ///     Event raised to allow subscribers to add text to the round end summary screen.
     /// </summary>
-    public sealed class RoundEndTextAppendEvent
+    public sealed partial class RoundEndTextAppendEvent
     {
         private readonly List<string> _lines = new(); // DS14
 
@@ -1437,7 +1449,7 @@ namespace Content.Server.GameTicking
     ///     Event raised to add text only to the Discord round-end log.
     ///     Keep player-facing round-end UI text on <see cref="RoundEndTextAppendEvent"/>.
     /// </summary>
-    public sealed class RoundEndDiscordTextAppendEvent
+    public sealed partial class RoundEndDiscordTextAppendEvent
     {
         private readonly List<string> _lines = new();
 

@@ -8,10 +8,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.TheCircle.Shuttles;
 
-public sealed class CircleSecondaryShuttleSystem : EntitySystem
+public sealed partial class CircleSecondaryShuttleSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Update(float frameTime)
     {

@@ -21,8 +21,8 @@ public sealed partial class AdminToySelectionMenu : DefaultWindow
 {
     private const string RandomTtsVoice = "";
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private EntityPrototype? _selectedToy;
 

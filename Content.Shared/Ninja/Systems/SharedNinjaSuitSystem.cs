@@ -13,15 +13,15 @@ namespace Content.Shared.Ninja.Systems;
 /// <summary>
 /// Handles (un)equipping and provides some API functions.
 /// </summary>
-public abstract class SharedNinjaSuitSystem : EntitySystem
+public abstract partial class SharedNinjaSuitSystem : EntitySystem
 {
-    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] private readonly SharedSpaceNinjaSystem _ninja = default!;
+    [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] private SharedSpaceNinjaSystem _ninja = default!;
     //DS14-start
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private INetManager _net = default!;
     //DS14-end
 
     public override void Initialize()

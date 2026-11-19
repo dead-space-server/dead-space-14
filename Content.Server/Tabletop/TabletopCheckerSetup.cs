@@ -1,7 +1,6 @@
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Tabletop
 {
@@ -9,16 +8,16 @@ namespace Content.Server.Tabletop
     public sealed partial class TabletopCheckerSetup : TabletopSetup
     {
 
-        [DataField("prototypePieceWhite", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        [DataField("prototypePieceWhite")]
         public string PrototypePieceWhite = default!;
 
-        [DataField("prototypeCrownWhite", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        [DataField("prototypeCrownWhite")]
         public string PrototypeCrownWhite = default!;
 
-        [DataField("prototypePieceBlack", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        [DataField("prototypePieceBlack")]
         public string PrototypePieceBlack = default!;
 
-        [DataField("prototypeCrownBlack", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        [DataField("prototypeCrownBlack")]
         public string PrototypeCrownBlack = default!;
 
         public override void SetupTabletop(TabletopSession session, IEntityManager entityManager)
