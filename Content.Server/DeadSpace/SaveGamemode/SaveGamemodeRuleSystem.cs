@@ -11,15 +11,26 @@ using Content.Server.NPC.Systems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared.Cabinet;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Item;
+using Content.Shared.Lock;
 using Content.Shared.Maps;
+using Content.Shared.Nutrition.Components;
+using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Paper;
 using Content.Shared.Station.Components;
+using Content.Shared.Timing;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Wieldable;
+using Content.Shared.Wieldable.Components;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
@@ -48,6 +59,13 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly CargoSystem _cargo = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private readonly SharedWieldableSystem _wieldable = default!;
+    [Dependency] private readonly ItemCabinetSystem _cabinet = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private readonly OpenableSystem _openable = default!;
+    [Dependency] private readonly UseDelaySystem _useDelay = default!;
 
     /// <summary>
     ///     Имя, которое движок даёт сущности сетки при создании. Для сетки из сохранения оно означает
@@ -583,6 +601,13 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         Log.Info($"SaveGamemode: сохранение '{component.SaveSlot}' загружено на карту {defaultMap}");
 
         WakeLoadedNpcs(defaultMap);
+
+        // Состояние, которое навёл бы MapInit, а в файле его нет: задержки использования, *Modified у
+        // GunComponent, замки слотов. Проходят по всему серверу — часть сеток станция забирает к себе позже.
+        FixLoadedUseDelays();
+        FixLoadedGuns();
+        FixLoadedItemCabinets();
+        FixLoadedItemSlotLocks();
 
         // Станция не часть карты, но живая на момент сохранения затаскивается в файл ссылками сеток:
         // такие сущности убираем перед регистрацией, см. PurgeSavedStations. Без станции раунд
@@ -1354,15 +1379,200 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     }
 
     /// <summary>
+    ///     Возвращает на загруженной карте задержки использования, которых в файле нет.
+    /// </summary>
+    /// <remarks>
+    ///     Записи задержек создаёт только <c>MapInit</c>, а поле ещё и срезается фильтром сохранения
+    ///     (<c>MapFilterConfig</c>). Пустой словарь — и <c>TryResetDelay</c> всегда отказывает:
+    ///     <c>TryWield</c> молча не берёт в две руки (у PhotonShotgun ещё и <c>GunRequiresWield</c>,
+    ///     отсюда «не стреляет»). В старых файлах запись есть, но с <c>EndTime</c> того сервера.
+    /// </remarks>
+    private void FixLoadedUseDelays()
+    {
+        var restored = 0;
+        var cleared = 0;
+        var query = AllEntityQuery<UseDelayComponent, MetaDataComponent>();
+        while (query.MoveNext(out var uid, out var useDelay, out var meta))
+        {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
+            if (_useDelay.TryGetDelayInfo((uid, useDelay), out _))
+            {
+                // Запись на месте: остался только перенос времени из прошлой серверной сессии.
+                if (_useDelay.IsDelayed((uid, useDelay)))
+                {
+                    _useDelay.CancelDelay((uid, useDelay));
+                    cleared++;
+                }
+
+                continue;
+            }
+
+            var length = GetPrototypeUseDelay(meta.EntityPrototype);
+            if (length == null)
+                continue;
+
+            _useDelay.SetLength((uid, useDelay), length.Value);
+            restored++;
+        }
+
+        Log.Info($"SaveGamemode: задержки использования на загруженной карте: заведено {restored}, погашено {cleared}");
+    }
+
+    /// <summary>
+    ///     Заводская длительность задержки из прототипа — то, что берёт <c>UseDelaySystem</c> на MapInit.
+    /// </summary>
+    private TimeSpan? GetPrototypeUseDelay(EntityPrototype? proto)
+    {
+        if (proto == null ||
+            !proto.Components.TryGetValue("UseDelay", out var entry) ||
+            entry.Component is not UseDelayComponent delay)
+        {
+            return null;
+        }
+
+        return delay.Delay;
+    }
+
+    /// <summary>
+    ///     Возвращает в строй оружие на карте, поднятой из сохранения.
+    /// </summary>
+    /// <remarks>
+    ///     Стрельба идёт по <c>*Modified</c> полям <c>GunComponent</c>, а пересчитывает их только
+    ///     <c>RefreshModifiers</c> из <c>OnMapInit</c>. Их нет в файле, MapInit не приходил →
+    ///     <c>FireRateModified == 0</c>, и <c>AttemptShoot</c> падает на <c>TimeSpan.FromSeconds(1f / 0f)</c>.
+    ///     Заодно снимаем залипшее <c>Wielded</c>: вторая рука — виртуальная, в файле её нет, а с
+    ///     <c>unwieldOnUse: false</c> клик по «уже взятому» оружию <c>TryWield</c> не зовёт никогда.
+    /// </remarks>
+    private void FixLoadedGuns()
+    {
+        var unwielded = 0;
+        var wieldQuery = AllEntityQuery<WieldableComponent, MetaDataComponent>();
+        while (wieldQuery.MoveNext(out var uid, out var wield, out var meta))
+        {
+            // На загрузке карты никто ничего не держит: «взятое с двух рук» оружие взято быть не может.
+            if (!wield.Wielded || TerminatingOrDeleted(uid))
+                continue;
+
+            // TryUnwield(force) снимает префикс спрайта через OldInhandPrefix — он не сериализуется,
+            // берём заводской из прототипа (у энергетического оружия это «energy», не null).
+            _wieldable.TryUnwield(uid, wield, EntityUid.Invalid, force: true);
+            _item.SetHeldPrefix(uid, GetPrototypeHeldPrefix(meta.EntityPrototype), force: true);
+            unwielded++;
+        }
+
+        var refreshed = 0;
+        var silent = 0;
+        var silentNames = new List<string>();
+        var gunQuery = AllEntityQuery<GunComponent, MetaDataComponent>();
+        while (gunQuery.MoveNext(out var uid, out var gun, out var meta))
+        {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
+            _gun.RefreshModifiers(uid);
+            refreshed++;
+
+            // Скорострельность осталась нулевой — ствол молчит. В лог, чтобы за что зацепиться.
+            if (gun.FireRate > 0f && gun.FireRateModified <= 0f)
+            {
+                silent++;
+                if (silentNames.Count < 3)
+                    silentNames.Add(meta.EntityPrototype?.ID ?? ToPrettyString(uid));
+            }
+        }
+
+        Log.Info($"SaveGamemode: оружие на загруженной карте: обновлено {refreshed}" +
+                 (unwielded > 0 ? $", снято залипших «взято с двух рук»: {unwielded}" : string.Empty));
+
+        if (silent > 0)
+            Log.Warning($"SaveGamemode: у {silent} стволов скорострельность осталась нулевой, они молчат: " +
+                        string.Join(", ", silentNames));
+    }
+
+    /// <summary>
+    ///     Возвращает замки слотам предметов в шкафах и витринах, поднятых из сохранения.
+    /// </summary>
+    /// <remarks>
+    ///     <c>ItemSlot.Locked</c> — рантайм: наводит его <c>ItemCabinetSystem.OnMapInit</c> из состояния
+    ///     дверцы. В файле поля нет (<c>[DataField(readOnly: true)]</c> движок не пишет), поэтому закрытая
+    ///     витрина после загрузки отдаёт предмет, не открываясь.
+    /// </remarks>
+    private void FixLoadedItemCabinets()
+    {
+        var fixedCount = 0;
+        var query = AllEntityQuery<ItemCabinetComponent, OpenableComponent>();
+        while (query.MoveNext(out var uid, out var cabinet, out var openable))
+        {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
+            var closed = _openable.IsClosed(uid, null, openable);
+            if (!_cabinet.TryGetSlot((uid, cabinet), out var slot) || slot.Locked == closed)
+                continue;
+
+            _cabinet.SetSlotLock((uid, cabinet), closed);
+            fixedCount++;
+        }
+
+        if (fixedCount > 0)
+            Log.Info($"SaveGamemode: шкафам и витринам из сохранения вернули замки слотов: {fixedCount}");
+    }
+
+    /// <summary>
+    ///     То же для слотов, запертых замком (<c>Lock</c>), а не дверцей.
+    /// </summary>
+    /// <remarks>
+    ///     Сам замок в файле есть (<c>locked</c> — DataField), а слот открыт по тем же причинам, что и в
+    ///     <see cref="FixLoadedItemCabinets"/>. Касается <c>ItemSlotsLock</c> в computers.yml и cane.yml.
+    /// </remarks>
+    private void FixLoadedItemSlotLocks()
+    {
+        var fixedCount = 0;
+        var query = AllEntityQuery<ItemSlotsLockComponent, LockComponent>();
+        while (query.MoveNext(out var uid, out var slotsLock, out var compLock))
+        {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
+            foreach (var slotId in slotsLock.Slots)
+            {
+                // Слот берём через публичный API: обращение к itemSlots.Slots из чужой системы ловит RA0002.
+                if (!_itemSlots.TryGetSlot(uid, slotId, out var slot) || slot.Locked == compLock.Locked)
+                    continue;
+
+                _itemSlots.SetLock(uid, slot, compLock.Locked);
+                fixedCount++;
+            }
+        }
+
+        if (fixedCount > 0)
+            Log.Info($"SaveGamemode: слотам под замком из сохранения вернули замки: {fixedCount}");
+    }
+
+    /// <summary>
+    ///     Заводской <c>HeldPrefix</c> предмета из прототипа — тот, что был у него до взятия с двух рук.
+    /// </summary>
+    private string? GetPrototypeHeldPrefix(EntityPrototype? entity)
+    {
+        if (entity == null ||
+            !entity.Components.TryGetValue("Item", out var entry) ||
+            entry.Component is not ItemComponent item)
+        {
+            return null;
+        }
+
+        return item.HeldPrefix;
+    }
+
+    /// <summary>
     ///     Возвращает в сети устройств приборы, поднятые из сохранения.
     /// </summary>
     /// <remarks>
-    ///     Прибор вступает в сеть устройств только в <c>MapInit</c>: <c>DeviceNetworkSystem.OnMapInit</c>
-    ///     подставляет частоты из прототипа и зовёт <c>ConnectDevice</c>. Сохранённые сущности приходят
-    ///     с флагом <c>mapInit</c> и повторного MapInit не видят, поэтому остаются вне сети: адрес и частоты
-    ///     в файле есть, списки связей мультитул показывает, но получателя в сети нет и пакет никуда не идёт.
-    ///     Молчат и сохранённые кнопки, и сохранённые двери, и свежие связки «новая кнопка — старая дверь».
-    ///     Отключённые вручную приборы не трогаем: <c>DisconnectDevice</c> выставляет <c>AutoConnect = false</c>.
+    ///     В сеть устройств прибор вступает только в <c>MapInit</c>, которого сохранённым сущностям не
+    ///     приходит: адрес и частоты в файле есть, а получателя в сети нет. Отключённые вручную не трогаем
+    ///     (<c>AutoConnect == false</c>).
     /// </remarks>
     private void ConnectLoadedDevices(MapId mapId)
     {
