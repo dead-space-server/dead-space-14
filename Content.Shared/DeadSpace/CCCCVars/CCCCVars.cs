@@ -484,4 +484,11 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<bool> RoundMapPreloadEnabled =
         CVarDef.Create("deadspace.round_map_preload.enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Pause lavaland, chromite caves and antag maps while no player is on them.
+    /// Off: lavaland and the caves are woken once when generated and their pause is left alone after.
+    /// </summary>
+    public static readonly CVarDef<bool> PauseEmptyMaps =
+        CVarDef.Create("deadspace.pause_empty_maps", true, CVar.SERVERONLY);
 }

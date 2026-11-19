@@ -68,6 +68,7 @@ public sealed partial class RoundMapPreloadSystem : EntitySystem
     };
 
     private bool _enabled;
+    private bool _pauseEmpty;
     private bool _queueReady;
     private TimeSpan _nextLoadAt;
     private string _slowest = "";
@@ -83,6 +84,7 @@ public sealed partial class RoundMapPreloadSystem : EntitySystem
         SubscribeLocalEvent<PostGameMapLoad>(OnMapLoad);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         Subs.CVar(_cfg, CCCCVars.RoundMapPreloadEnabled, value => _enabled = value, true);
+        Subs.CVar(_cfg, CCCCVars.PauseEmptyMaps, value => _pauseEmpty = value, true);
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
@@ -210,7 +212,7 @@ public sealed partial class RoundMapPreloadSystem : EntitySystem
         var maps = AllEntityQuery<PreparedRoundMapComponent, MapComponent>();
         while (maps.MoveNext(out var uid, out var prepared, out var map))
         {
-            if (!prepared.SleepWhenEmpty || !map.MapInitialized || Terminating(uid))
+            if (!_pauseEmpty || !prepared.SleepWhenEmpty || !map.MapInitialized || Terminating(uid))
                 continue;
 
             if (!prepared.Warmed)
