@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackQretrojem
   name: просторная сумка
   description: Достаточно удобная и компактная, позволяет удобно перетаскивать в себе большинство вещей, которые можно добыть на просторах космоса.
@@ -13,10 +13,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Qretrojem/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingOuterHardsuitQretrojem
@@ -44,7 +40,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitQretrojem
   name: cкафандр последователя Церкви Юнитологии
   description: Элегантный и хорошо защищенный скафандр, созданный по заказу крайне религиозного человека.
@@ -56,8 +52,6 @@
     sprite: _DeadSpace/Sponsor/Qretrojem/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitQretrojem
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -74,9 +68,6 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -237,7 +228,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltQretrojem
   name: красно-сиреневый пояс
   description: Облегченный пояс, служащий удобным вместилищем для всевозможных инструментов.
@@ -247,11 +238,6 @@
     sprite: _DeadSpace/Sponsor/Qretrojem/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Qretrojem/belt.rsi
-  - type: Item
-    size: Huge
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: StorageFill
     contents:
     - id: PowerDrillQretrojem

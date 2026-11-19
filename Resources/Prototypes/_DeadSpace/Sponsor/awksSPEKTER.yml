@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackawksSPEKTER
   name: сумка ордена
   description: Специализорованная сумка истинных последователей Ордена.
@@ -39,7 +39,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitawksSPEKTER
   name: скафандр отступника
   description: Мощный скафандр, созданный по единому стандарту всех орденов, способный выдерживать экстремальные условия. Скафандр символизирует силу и стойкость членов Ордена Эраван. Придание Темной стороны.
@@ -51,8 +51,6 @@
     sprite: _DeadSpace/Sponsor/awksSPEKTER/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitawksSPEKTER
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: HideLayerClothing
@@ -67,14 +65,11 @@
         Heat: 0.50
         Radiation: 0.50
         Caustic: 0.50
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitawksSPEKTER
   categories: [ HideSpawnMenu ]
   name: шлем отступника
@@ -86,9 +81,6 @@
     sprite: _DeadSpace/Sponsor/awksSPEKTER/helmet.rsi
   - type: PointLight
     color: "#840f1a"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: EyeProtection
   - type: Armor
     modifiers:

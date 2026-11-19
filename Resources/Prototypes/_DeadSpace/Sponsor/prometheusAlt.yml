@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackPrometheusAlt
   name: рюкзак ветерана
   description:  Вместительный рюкзак с множеством карманов. Добыт в бою.
@@ -13,10 +13,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/PrometheusAlt/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingOuterHardsuitPrometheusAlt
@@ -125,7 +121,7 @@
 
 # Пояс
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltStoragePrometheusAlt
   name: плечевая кобура горничной
   description: Глубокая плечевая кобура, способная вместить что угодно.
@@ -138,8 +134,6 @@
     slots:
     - neck
     - belt
-  - type: Item
-    size: Huge
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -335,7 +329,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitPrometheusAlt
   name: красный скафандр ветерана
   description: Элегантный скафандр времен цивилизованной эпохи.
@@ -347,8 +341,6 @@
     sprite: _DeadSpace/Sponsor/PrometheusAlt/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitPrometheusAlt
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -363,9 +355,6 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags:
     - MonkeyWearable

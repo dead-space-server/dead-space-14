@@ -29,7 +29,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackpvrsifvlAlt
   name: маленький призрак ETL//07
   description: К тебе, спустя две тысячи лет. Неизвестного происхождения компаньон с непонятыми намерениями, но явным желанием к жизни. Слишком много личного, я не говорю, I'm speechless.
@@ -69,21 +69,16 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltpvrsifvlAlt
   name: блюспейс хранилище ETL//07
   description: Нет, мне это не нужно. Нет, мне это не нужно. Разработано и спроектировано компанией Nakamura Engineering по индивидуальному заказу.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillpvrsifvlAlt
@@ -247,7 +242,7 @@
 
 #Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitpvrsifvlAlt
   name: разведывательный скафандр ETL//07
   description: Легковесный скафандр разведывательного назначения в боевой комплектации. Передовые бронепластины скрыты за стильной накидкой. Разработан и спроектирован компанией Nakamura Engineering по индивидуальному заказу.
@@ -259,8 +254,6 @@
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitpvrsifvlAlt
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -273,14 +266,11 @@
         Stun: 0.65
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitpvrsifvlAlt
   name: шлем разведывательного скафандра ETL//07
   description: Взгляд на строгую форму и кроваво-красного цвета визор бросает в легкий дрожь, вызывает обоснованное недоверие.
@@ -294,9 +284,6 @@
     color: "#960018"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
