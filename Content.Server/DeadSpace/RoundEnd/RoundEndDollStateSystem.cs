@@ -220,8 +220,6 @@ public sealed partial class RoundEndDollStateSystem : EntitySystem
                 SkinColor = humanoid.SkinColor,
                 Sex = humanoid.Sex,
                 EyeColor = humanoid.EyeColor,
-                HairGradientEnabled = humanoid.HairGradientEnabled,
-                HairGradientColor = humanoid.HairGradientColor,
             };
         }
 
@@ -254,8 +252,6 @@ public sealed partial class RoundEndDollStateSystem : EntitySystem
             SkinColor = appearance.SkinColor,
             Sex = appearance.Sex,
             EyeColor = appearance.EyeColor,
-            HairGradientEnabled = appearance.HairGradientEnabled,
-            HairGradientColor = appearance.HairGradientColor,
         };
     }
 

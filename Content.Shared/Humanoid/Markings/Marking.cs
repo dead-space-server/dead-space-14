@@ -1,4 +1,5 @@
-using System.Linq;
+﻿using System.Linq;
+using Content.Shared.DeadSpace.Humanoid.Markings; // DS14
 using Content.Shared.Humanoid.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -44,6 +45,7 @@ namespace Content.Shared.Humanoid.Markings
             _markingColors = new(other.MarkingColors);
             Visible = other.Visible;
             Forced = other.Forced;
+            Dye = other.Dye; // DS14
         }
 
         /// <summary>
@@ -69,6 +71,11 @@ namespace Content.Shared.Humanoid.Markings
         /// </summary>
         [ViewVariables]
         public bool Forced;
+
+        // DS14-start
+        [DataField]
+        public MarkingDye? Dye;
+        // DS14-end
 
         public void SetColor(int colorIndex, Color color) =>
             _markingColors[colorIndex] = color;
@@ -108,7 +115,8 @@ namespace Content.Shared.Humanoid.Markings
             return MarkingId.Equals(other.MarkingId)
                 && _markingColors.SequenceEqual(other._markingColors)
                 && Visible.Equals(other.Visible)
-                && Forced.Equals(other.Forced);
+                && Forced.Equals(other.Forced)
+                && Nullable.Equals(Dye, other.Dye); // DS14
         }
 
         // VERY BIG TODO: TURN THIS INTO JSONSERIALIZER IMPLEMENTATION
@@ -130,19 +138,21 @@ namespace Content.Shared.Humanoid.Markings
             foreach (Color color in _markingColors)
                 colorStringList.Add(color.ToHex());
 
-            return $"{sanitizedName}@{String.Join(',', colorStringList)}";
+            // DS14
+            return MarkingDye.EncodeDb($"{sanitizedName}@{String.Join(',', colorStringList)}", Dye);
         }
 
         public static Marking? ParseFromDbString(string input)
         {
             if (input.Length == 0) return null;
-            var split = input.Split('@');
+            // DS14
+            var split = MarkingDye.DecodeDb(input, out var dye).Split('@');
             if (split.Length != 2) return null;
             List<Color> colorList = new();
             foreach (string color in split[1].Split(','))
                 colorList.Add(Color.FromHex(color));
 
-            return new Marking(split[0], colorList);
+            return new Marking(split[0], colorList) { Dye = dye }; // DS14
         }
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -15,6 +15,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.DeadSpace.Administration.GamePreset; //DS14
+using Content.Shared.DeadSpace.Humanoid.Markings; // DS14
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Preferences;
@@ -1467,9 +1468,15 @@ namespace Content.Server.Database
             }
 
             // DS14-start
-            var hairGradientEnabled = profile.HairGradientEnabled;
-            var hairGradientColor = Color.FromHex(
-                string.IsNullOrEmpty(profile.HairGradientColor) ? "#000000" : profile.HairGradientColor);
+            var hairColors = MarkingDye.DecodeDb(profile.HairColor, out var hairDye);
+            var facialHairColors = MarkingDye.DecodeDb(profile.FacialHairColor, out var facialHairDye);
+            if (hairDye == null && profile.HairGradientEnabled)
+            {
+                hairDye = new MarkingDye
+                {
+                    Color = Color.FromHex(string.IsNullOrEmpty(profile.HairGradientColor) ? "#000000" : profile.HairGradientColor),
+                };
+            }
             // DS14-end
 
             return new HumanoidCharacterProfile(
@@ -1483,15 +1490,17 @@ namespace Content.Server.Database
                 new HumanoidCharacterAppearance
                 (
                     profile.HairName,
-                    Color.FromHex(profile.HairColor),
+                    Color.FromHex(hairColors), // DS14
                     profile.FacialHairName,
-                    Color.FromHex(profile.FacialHairColor),
+                    Color.FromHex(facialHairColors), // DS14
                     Color.FromHex(profile.EyeColor),
                     Color.FromHex(profile.SkinColor),
-                    markings,
-                    hairGradientEnabled, // DS14
-                    hairGradientColor // DS14
-                ),
+                    markings
+                )
+                {
+                    HairDye = hairDye, // DS14
+                    FacialHairDye = facialHairDye, // DS14
+                },
                 spawnPriority,
                 jobs,
                 (PreferenceUnavailableMode) profile.PreferenceUnavailable,
@@ -1527,8 +1536,10 @@ namespace Content.Server.Database
             profile.EyeColor = appearance.EyeColor.ToHex();
             profile.SkinColor = appearance.SkinColor.ToHex();
             // DS14-start
-            profile.HairGradientEnabled = appearance.HairGradientEnabled;
-            profile.HairGradientColor = appearance.HairGradientColor.ToHex();
+            profile.HairColor = MarkingDye.EncodeDb(appearance.HairColor.ToHex(), appearance.HairDye);
+            profile.FacialHairColor = MarkingDye.EncodeDb(appearance.FacialHairColor.ToHex(), appearance.FacialHairDye);
+            profile.HairGradientEnabled = appearance.HairDye is not null;
+            profile.HairGradientColor = appearance.HairDye?.Color.ToHex() ?? "#000000";
             // DS14-end
             profile.SpawnPriority = (int) humanoid.SpawnPriority;
             profile.Markings = markings;

@@ -106,8 +106,6 @@ public abstract partial class SharedNinjaDisguiseSystem : EntitySystem
             PermanentlyHidden = new HashSet<HumanoidVisualLayers>(humanoid.PermanentlyHidden),
             HiddenLayers = new Dictionary<HumanoidVisualLayers, SlotFlags>(humanoid.HiddenLayers),
             CustomBaseLayers = new Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo>(humanoid.CustomBaseLayers),
-            HairGradientEnabled = humanoid.HairGradientEnabled,
-            HairGradientColor = humanoid.HairGradientColor,
         };
     }
 
@@ -129,8 +127,5 @@ public abstract partial class SharedNinjaDisguiseSystem : EntitySystem
         humanoid.Comp.CustomBaseLayers = new Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo>(saved.CustomBaseLayers);
 
         humanoid.Comp.HiddenLayers = new Dictionary<HumanoidVisualLayers, SlotFlags>(saved.HiddenLayers);
-
-        humanoid.Comp.HairGradientEnabled = saved.HairGradientEnabled;
-        humanoid.Comp.HairGradientColor = saved.HairGradientColor;
     }
 }

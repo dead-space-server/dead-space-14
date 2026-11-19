@@ -1,4 +1,5 @@
-using Content.Client.DisplacementMap;
+﻿using Content.Client.DisplacementMap;
+using Content.Client.DeadSpace.Humanoid; // DS14
 using Content.Shared.DeadSpace.RoundEnd;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
@@ -17,6 +18,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
     [Dependency] private MarkingManager _markingManager = default!;
     [Dependency] private DisplacementMapSystem _displacement = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private MarkingDyeSystem _markingDye = default!; // DS14
 
     public override void Initialize()
     {
@@ -167,36 +169,20 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
             : profile.Appearance.HairColor;
         // DS14-start
         var hairStyleId = profile.Appearance.HairStyleId;
-        Color[] hairColors;
-        if (profile.Appearance.HairGradientEnabled)
+        var hair = new Marking(hairStyleId, new[] { hairColor })
         {
-            var gradientId = hairStyleId.EndsWith("Gradient") ? hairStyleId : hairStyleId + "Gradient";
-            if (_markingManager.Markings.ContainsKey(gradientId))
-                hairStyleId = gradientId;
-
-            var gradientColor = _markingManager.MustMatchSkin(profile.Species, HumanoidVisualLayers.Hair, out _, _prototypeManager)
-                ? profile.Appearance.SkinColor.WithAlpha(hairAlpha)
-                : profile.Appearance.HairGradientColor;
-            hairColors = new[] { hairColor, gradientColor };
-        }
-        else
-        {
-            if (hairStyleId.EndsWith("Gradient"))
-            {
-                var baseId = hairStyleId[..^"Gradient".Length];
-                if (_markingManager.Markings.ContainsKey(baseId))
-                    hairStyleId = baseId;
-            }
-            hairColors = new[] { hairColor };
-        }
-        var hair = new Marking(hairStyleId, hairColors);
+            Dye = profile.Appearance.HairDye,
+        };
         // DS14-end
 
         var facialHairColor = _markingManager.MustMatchSkin(profile.Species, HumanoidVisualLayers.FacialHair, out var facialHairAlpha, _prototypeManager)
             ? profile.Appearance.SkinColor.WithAlpha(facialHairAlpha)
             : profile.Appearance.FacialHairColor;
         var facialHair = new Marking(profile.Appearance.FacialHairStyleId,
-            new[] { facialHairColor });
+            new[] { facialHairColor })
+        {
+            Dye = profile.Appearance.FacialHairDye, // DS14
+        };
 
         if (_markingManager.CanBeApplied(profile.Species, profile.Sex, hair, _prototypeManager))
         {
@@ -238,10 +224,6 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         humanoid.Species = profile.Species;
         humanoid.SkinColor = profile.Appearance.SkinColor;
         humanoid.EyeColor = profile.Appearance.EyeColor;
-        // DS14-start
-        humanoid.HairGradientEnabled = profile.Appearance.HairGradientEnabled;
-        humanoid.HairGradientColor = profile.Appearance.HairGradientColor;
-        // DS14-end
 
         UpdateSprite((uid, humanoid, Comp<SpriteComponent>(uid)));
     }
@@ -267,8 +249,6 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         humanoid.SkinColor = appearance.SkinColor;
         humanoid.Sex = appearance.Sex;
         humanoid.EyeColor = appearance.EyeColor;
-        humanoid.HairGradientEnabled = appearance.HairGradientEnabled;
-        humanoid.HairGradientColor = appearance.HairGradientColor;
 
         UpdateSprite((uid, humanoid, sprite));
     }
@@ -288,7 +268,10 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
             {
                 if (_markingManager.TryGetMarking(marking, out var markingPrototype))
                 {
+                    // DS14-start
                     ApplyMarking(markingPrototype, marking.MarkingColors, marking.Visible, entity);
+                    _markingDye.Apply((entity.Owner, entity.Comp2), markingPrototype, marking);
+                    // DS14-end
                 }
             }
         }
@@ -334,6 +317,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
             if (!_sprite.LayerMapTryGet(spriteEnt.AsNullable(), layerId, out var index, false))
                 continue;
 
+            _markingDye.Remove(spriteEnt, index); // DS14
             _sprite.LayerMapRemove(spriteEnt.AsNullable(), layerId);
             _sprite.RemoveLayer(spriteEnt.AsNullable(), index);
 
@@ -484,7 +468,12 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
             foreach (var marking in markingList)
             {
                 if (_markingManager.TryGetMarking(marking, out var markingPrototype) && markingPrototype.BodyPart == layer)
+                {
+                    // DS14-start
                     ApplyMarking(markingPrototype, marking.MarkingColors, marking.Visible, (ent, ent.Comp, sprite));
+                    _markingDye.Apply((ent.Owner, sprite), markingPrototype, marking);
+                    // DS14-end
+                }
             }
         }
     }

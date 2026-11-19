@@ -1,4 +1,4 @@
-using Content.Shared.DeadSpace.TTS;
+﻿using Content.Shared.DeadSpace.TTS;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -287,17 +287,8 @@ namespace Content.Client.Lobby.UI
             {
                 if (Profile is null || _readOnly) // DS14
                     return;
-                // DS14-start
-                var selectedId = newStyle.id;
-                if (Profile.Appearance.HairGradientEnabled)
-                {
-                    var gradientId = selectedId + "Gradient";
-                    if (_markingManager.Markings.ContainsKey(gradientId))
-                        selectedId = gradientId;
-                }
-                // DS14-End
                 Profile = Profile.WithCharacterAppearance(
-                    Profile.Appearance.WithHairStyleName(selectedId)); // DS14
+                    Profile.Appearance.WithHairStyleName(newStyle.id));
                 ReloadPreview();
             };
 
@@ -307,55 +298,18 @@ namespace Content.Client.Lobby.UI
                     return;
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithHairColor(newColor.marking.MarkingColors[0]));
-                // DS14-start
-                if (Profile.Appearance.HairGradientEnabled && newColor.marking.MarkingColors.Count > 1)
-                {
-                    Profile = Profile.WithCharacterAppearance(
-                        Profile.Appearance.WithHairGradientColor(newColor.marking.MarkingColors[1]));
-                }
-                // DS14-end
                 UpdateCMarkingsHair();
                 ReloadPreview();
             };
 
             // DS14-start
-            HairStylePicker.OnGradientChanged += gradient =>
+            HairStylePicker.OnDyeChanged += args =>
             {
-                if (Profile is null || _readOnly)
+                if (Profile is null || _readOnly || args.marking.MarkingColors.Count == 0)
                     return;
-
-                var currentHairId = Profile.Appearance.HairStyleId;
-
-                if (gradient.enabled)
-                {
-                    var baseId = currentHairId;
-                    if (baseId.EndsWith("Gradient"))
-                        baseId = baseId[..^"Gradient".Length];
-
-                    var gradientId = baseId + "Gradient";
-                    if (_markingManager.Markings.ContainsKey(gradientId))
-                    {
-                        Profile = Profile.WithCharacterAppearance(
-                            Profile.Appearance.WithHairStyleName(gradientId)
-                                .WithHairGradientEnabled(true)
-                                .WithHairGradientColor(gradient.color));
-                    }
-                }
-                else
-                {
-                    var baseId = currentHairId;
-                    if (baseId.EndsWith("Gradient"))
-                        baseId = baseId[..^"Gradient".Length];
-
-                    if (baseId.Length > 0 && _markingManager.Markings.ContainsKey(baseId))
-                    {
-                        Profile = Profile.WithCharacterAppearance(
-                            Profile.Appearance.WithHairStyleName(baseId)
-                                .WithHairGradientEnabled(false));
-                    }
-                }
-
-                UpdateHairPickers();
+                Profile = Profile.WithCharacterAppearance(Profile.Appearance
+                    .WithHairColor(args.marking.MarkingColors[0])
+                    .WithHairDye(args.marking.Dye));
                 UpdateCMarkingsHair();
                 ReloadPreview();
             };
@@ -380,13 +334,26 @@ namespace Content.Client.Lobby.UI
                 ReloadPreview();
             };
 
+            // DS14-start
+            FacialHairPicker.OnDyeChanged += args =>
+            {
+                if (Profile is null || _readOnly || args.marking.MarkingColors.Count == 0)
+                    return;
+                Profile = Profile.WithCharacterAppearance(Profile.Appearance
+                    .WithFacialHairColor(args.marking.MarkingColors[0])
+                    .WithFacialHairDye(args.marking.Dye));
+                UpdateCMarkingsFacialHair();
+                ReloadPreview();
+            };
+            // DS14-end
+
             HairStylePicker.OnSlotRemove += _ =>
             {
                 if (Profile is null || _readOnly) // DS14
                     return;
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithHairStyleName(HairStyles.DefaultHairStyle)
-                        .WithHairGradientEnabled(false) // DS14
+                        .WithHairDye(null) // DS14
                 );
                 UpdateHairPickers();
                 UpdateCMarkingsHair();
@@ -399,6 +366,7 @@ namespace Content.Client.Lobby.UI
                     return;
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithFacialHairStyleName(HairStyles.DefaultFacialHairStyle)
+                        .WithFacialHairDye(null) // DS14
                 );
                 UpdateHairPickers();
                 UpdateCMarkingsFacialHair();
@@ -415,15 +383,6 @@ namespace Content.Client.Lobby.UI
 
                 if (string.IsNullOrEmpty(hair))
                     return;
-
-                // DS14-start
-                if (Profile.Appearance.HairGradientEnabled)
-                {
-                    var gradientHair = hair + "Gradient";
-                    if (_markingManager.Markings.ContainsKey(gradientHair))
-                        hair = gradientHair;
-                }
-                // DS14-end
 
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithHairStyleName(hair)
@@ -2109,37 +2068,15 @@ namespace Content.Client.Lobby.UI
 
             // DS14-start
             var hairId = Profile.Appearance.HairStyleId;
-            var gradientEnabled = Profile.Appearance.HairGradientEnabled;
-
-            var hairColors = new List<Color> { Profile.Appearance.HairColor };
-            if (gradientEnabled)
-            {
-                hairColors.Add(Profile.Appearance.HairGradientColor);
-            }
-
-            // If gradient enabled, the ID should be the Gradient version (it's set in OnGradientChanged)
-            // But make sure the marking actually exists; if not, fall back
-            if (gradientEnabled && !_markingManager.Markings.ContainsKey(hairId))
-            {
-                var gradientId = hairId + "Gradient";
-                if (_markingManager.Markings.ContainsKey(gradientId))
-                    hairId = gradientId;
-            }
-            // DS14-end
-
             var hairMarking = hairId == HairStyles.DefaultHairStyle
                 ? new List<Marking>()
-                : new() { new(hairId, hairColors) };
+                : new() { new(hairId, new List<Color> { Profile.Appearance.HairColor }) { Dye = Profile.Appearance.HairDye } };
+            // DS14-end
 
             var facialHairMarking = Profile.Appearance.FacialHairStyleId == HairStyles.DefaultFacialHairStyle
                 ? new List<Marking>()
-                : new() { new(Profile.Appearance.FacialHairStyleId, new List<Color>() { Profile.Appearance.FacialHairColor }) };
+                : new() { new(Profile.Appearance.FacialHairStyleId, new List<Color>() { Profile.Appearance.FacialHairColor }) { Dye = Profile.Appearance.FacialHairDye } }; // DS14
 
-            // DS14-start
-            HairStylePicker.SetGradientData(
-                gradientEnabled,
-                Profile.Appearance.HairGradientColor);
-            // DS14-end
             HairStylePicker.UpdateData(
                 hairMarking,
                 Profile.Species,
@@ -2177,7 +2114,7 @@ namespace Content.Client.Lobby.UI
             }
             if (hairColor != null)
             {
-                Markings.HairMarking = new (Profile.Appearance.HairStyleId, new List<Color>() { hairColor.Value });
+                Markings.HairMarking = new (Profile.Appearance.HairStyleId, new List<Color>() { hairColor.Value }) { Dye = Profile.Appearance.HairDye }; // DS14
             }
             else
             {
@@ -2211,7 +2148,7 @@ namespace Content.Client.Lobby.UI
             }
             if (facialHairColor != null)
             {
-                Markings.FacialHairMarking = new (Profile.Appearance.FacialHairStyleId, new List<Color>() { facialHairColor.Value });
+                Markings.FacialHairMarking = new (Profile.Appearance.FacialHairStyleId, new List<Color>() { facialHairColor.Value }) { Dye = Profile.Appearance.FacialHairDye }; // DS14
             }
             else
             {
