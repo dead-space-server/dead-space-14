@@ -425,6 +425,26 @@
     - BasicRoundstartVariation
 
 - type: gamePreset
+  id: SaveGamemodePerMap
+  alias:
+    - savegamemode-map
+    - sgm-map
+  name: save-gamemode-permap-title
+  description: save-gamemode-permap-description
+  showInVote: false
+  showInAdminVote: true
+  voteType: calm
+  rules:
+    - SaveGamemodePerMap
+    - BrokenTechEvent #DS14
+    - WageScheduler # backmen: currency
+    - BasicStationEventScheduler
+    - MeteorSwarmScheduler
+    - SpaceTrafficControlEventScheduler
+    - BasicRoundstartVariation
+    - SubGamemodesRuleNoWizardNoXenoborg # DS14
+
+- type: gamePreset
   id: SaveGamemodeExtended
   alias:
     - savegamemode-ext

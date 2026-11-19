@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Content.Server.Cargo.Systems;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.GameTicking;
@@ -89,6 +90,14 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     private readonly List<GameMapPrototype> _replacedMaps = new();
 
     /// <summary>
+    ///     Id прототипа карты, выбранной на этот раунд. Запоминается на <see cref="OnLoadingMaps"/> —
+    ///     единственном месте, где карта уже выбрана и ещё не отменена ради сохранения.
+    ///     Нужно для слота «папка на каждую карту» (<see cref="SaveGamemodeRuleComponent.PerMapSlot"/>):
+    ///     к концу раунда менеджер карт уже выбирает следующую, и по текущему выбору слот не восстановить.
+    /// </summary>
+    private string? _roundMapId;
+
+    /// <summary>
     ///     Идёт регистрация станции для карты, поднятой из сохранения.
     ///     В это окно обязательные гриды раунда станции не спавнятся, см. <see cref="OnStationGridAdded"/>.
     /// </summary>
@@ -140,6 +149,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             _savedMap = MapId.Nullspace;
             _savedStates = new List<SavedStationState>();
             _documentNames.Clear();
+            _roundMapId = null;
             return;
         }
 
@@ -403,30 +413,103 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
     }
 
     /// <summary>
+    ///     Папка сохранения этого раунда: своя карта — свой слот (<see cref="SaveGamemodeRuleComponent.PerMapSlot"/>),
+    ///     иначе — общий слот <see cref="SaveGamemodeRuleComponent.SaveSlot"/>.
+    /// </summary>
+    /// <remarks>
+    ///     Имя слота — id прототипа карты, и берётся он из <see cref="_roundMapId"/>, а не из текущего
+    ///     выбора менеджера карт: к <c>RoundEndedEvent</c> раунд уже отыгран, и менеджер к этому моменту
+    ///     или позже выбирает следующую карту — по текущему выбору конец раунда писал бы станцию
+    ///     в папку чужой карты, а следующий раунд искал бы её не там.
+    ///     Выбранная карта недоступна только при запуске правил вне стандартного старта раунда —
+    ///     тогда уходим на общий слот, но не на пустое имя: пустое имя дало бы папку
+    ///     <c>/Saves/GameMode/</c> вместо <c>…/&lt;карта&gt;/</c>, и все карты писали бы в один файл.
+    ///     Id прототипа — не имя файла: в нём могут встречаться символы, которые путь не принимают,
+    ///     поэтому имя приводится к безопасному виду.
+    /// </remarks>
+    private string ResolveSlot(SaveGamemodeRuleComponent component)
+    {
+        if (!component.PerMapSlot)
+            return component.SaveSlot;
+
+        var mapId = _roundMapId ?? _gameMap.GetSelectedMap()?.ID;
+        if (string.IsNullOrWhiteSpace(mapId))
+        {
+            Log.Warning($"SaveGamemode: карта раунда не определена — сохранение идёт в общий слот " +
+                        $"'{component.SaveSlot}' вместо папки карты");
+            return component.SaveSlot;
+        }
+
+        return SanitizeSlot(mapId, component.SaveSlot);
+    }
+
+    /// <summary>
+    ///     Приводит id карты к имени папки сохранения: только буквы, цифры, «.», «-» и «_».
+    /// </summary>
+    /// <remarks>
+    ///     Разделители пути здесь опаснее прочего: «..» или «../..» увели бы сохранение за пределы
+    ///     <c>/Saves/GameMode</c>, а удаление слота потом искало бы файлы не там.
+    ///     Точка в начале и в конце тоже снимается — Windows такие имена папок не создаёт.
+    /// </remarks>
+    /// <param name="name">Имя карты, которое нужно использовать как слот.</param>
+    /// <param name="fallback">Куда уйти, если после очистки от имени ничего не осталось.</param>
+    private static string SanitizeSlot(string name, string fallback)
+    {
+        var builder = new StringBuilder(name.Length);
+        foreach (var c in name)
+        {
+            builder.Append(char.IsLetterOrDigit(c) || c == '.' || c == '-' || c == '_' ? c : '_');
+        }
+
+        var slot = builder.ToString().Trim('.', ' ');
+
+        // Пустое имя — это путь к общей папке режима, а не к слоту.
+        return slot.Length == 0 ? fallback : slot;
+    }
+
+    /// <summary>
     ///     Перехватывает загрузку стандартных карт: если режим грузится из сохранения, очищаем список карт —
     ///     движок создаст пустую DefaultMap, а в Started мы подменим её сохранением.
     ///     Пустой или битый файл карту не отменяет, иначе раунд стартовал бы без станции.
     /// </summary>
     private void OnLoadingMaps(LoadingMapsEvent ev)
     {
+        // Карта этого раунда: первая в списке — та, что станет DefaultMap. Запоминаем ДО того, как
+        // список будет очищен ради сохранения, и независимо от того, сработает ли подмена:
+        // по этому id конец раунда найдёт папку сохранения своей карты.
+        if (ev.Maps.Count > 0)
+            _roundMapId = ev.Maps[0].ID;
+
         var query = QueryAllRules();
         while (query.MoveNext(out var uid, out var comp, out _))
         {
             if (!comp.LoadOnStart)
                 continue;
 
-            var path = SaveSystem.GetSavePath(comp.SaveSlot);
-            var valid = _save.SlotExists(comp.SaveSlot) && IsSaveFileValid(path);
-            _saveValidity[comp.SaveSlot] = valid;
+            var slot = ResolveSlot(comp);
+            var path = SaveSystem.GetSavePath(slot);
+            var valid = _save.SlotExists(slot) && IsSaveFileValid(path);
+            _saveValidity[slot] = valid;
 
             if (!valid)
             {
-                Log.Error($"SaveGamemode: сохранение '{comp.SaveSlot}' пусто или повреждено ({path}), " +
-                          "берётся стандартная карта");
+                if (_save.SlotExists(slot))
+                {
+                    // Папка карты есть, но файл в ней пустой или битый — раунд обязан уйти на обычную карту.
+                    Log.Error($"SaveGamemode: сохранение '{slot}' пусто или повреждено ({path}), " +
+                              "берётся стандартная карта");
+                }
+                else
+                {
+                    // Папки этой карты ещё нет: это первый раунд на ней, грузить нечего.
+                    Log.Info($"SaveGamemode: сохранения '{slot}' нет ({path}) — раунд идёт на стандартной карте, " +
+                             "в конце сохранится в свою папку");
+                }
+
                 continue;
             }
 
-            Log.Info($"SaveGamemode: подмена стандартной карты сохранением '{comp.SaveSlot}'");
+            Log.Info($"SaveGamemode: подмена стандартной карты сохранением '{slot}'");
             // Запоминаем отменённые карты: если сохранение не загрузится, раунду нужна обычная станция.
             _replacedMaps.Clear();
             _replacedMaps.AddRange(ev.Maps);
@@ -440,22 +523,24 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         base.Started(uid, component, gameRule, args);
         Log.Info($"SaveGamemode rule started: {uid}");
 
-        if (component.LoadOnStart && _save.SlotExists(component.SaveSlot))
+        var slot = ResolveSlot(component);
+
+        if (component.LoadOnStart && _save.SlotExists(slot))
         {
-            var path = SaveSystem.GetSavePath(component.SaveSlot);
+            var path = SaveSystem.GetSavePath(slot);
             // OnLoadingMaps уже проверил файл в этом раунде; если правила запускались вне стандартного
             // старта раунда, проверяем на месте.
-            var valid = _saveValidity.TryGetValue(component.SaveSlot, out var cached)
+            var valid = _saveValidity.TryGetValue(slot, out var cached)
                 ? cached
                 : IsSaveFileValid(path);
 
             if (valid)
             {
-                TryLoadSaveAsDefaultMap(component);
+                TryLoadSaveAsDefaultMap(component, slot);
             }
             else
             {
-                Log.Error($"SaveGamemode: сохранение '{component.SaveSlot}' повреждено или пустое ({path}), загрузка отменена. Будет использована стандартная карта.");
+                Log.Error($"SaveGamemode: сохранение '{slot}' повреждено или пустое ({path}), загрузка отменена. Будет использована стандартная карта.");
             }
         }
 
@@ -529,11 +614,15 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         var query = QueryAllRules();
         while (query.MoveNext(out var uid, out var comp, out _))
         {
+            // Слот вычисляется один раз на раунд: после конца раунда менеджер карт уже выбирает
+            // следующую карту, и «своя папка» без запомненного id разъехалась бы.
+            var slot = ResolveSlot(comp);
+
             if (comp.SaveOnRoundEnd)
-                TrySaveCurrentMap(comp);
+                TrySaveCurrentMap(slot);
 
             if (comp.DeleteSaveOnRoundEnd)
-                _save.TryDeleteSlot(comp.SaveSlot);
+                _save.TryDeleteSlot(slot);
 
             if (!string.IsNullOrWhiteSpace(comp.NextPreset))
             {
@@ -543,9 +632,15 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
 
             break;
         }
+
+        _roundMapId = null;
     }
 
-    private void TryLoadSaveAsDefaultMap(SaveGamemodeRuleComponent component)
+    /// <summary>
+    ///     Поднимает сохранение слота <paramref name="slot"/> вместо карты, созданной движком.
+    /// </summary>
+    /// <param name="slot">Слот сохранения, вычисленный для этого раунда, см. <see cref="ResolveSlot"/>.</param>
+    private void TryLoadSaveAsDefaultMap(SaveGamemodeRuleComponent component, string slot)
     {
         var defaultMap = GameTicker.DefaultMap;
         if (defaultMap == MapId.Nullspace)
@@ -554,7 +649,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             return;
         }
 
-        var path = SaveSystem.GetSavePath(component.SaveSlot);
+        var path = SaveSystem.GetSavePath(slot);
 
         // Файл мог быть записан версией, срезавшей mapInit: без флага движок заново прогоняет
         // MapInit, и наполнение контейнеров из прототипа высыпается вторым комплектом.
@@ -567,7 +662,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             // Файл может быть синтаксически целым, но нечитаемым по составу: компонент без обязательного
             // поля, которое нечем заполнить. Пост-процессор умеет такое вычищать, а заодно сохраняет
             // предыдущую версию файла в .bak — пробуем загрузиться после него.
-            Log.Warning($"SaveGamemode: сохранение '{component.SaveSlot}' не загрузилось, " +
+            Log.Warning($"SaveGamemode: сохранение '{slot}' не загрузилось, " +
                         $"пробую починить файл и загрузить снова");
 
             if (!CanReuseMapSlot(defaultMap))
@@ -579,14 +674,14 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             }
             else if (_save.TryFilterSaveFile(path, out var repair))
             {
-                Log.Info($"SaveGamemode: файл '{component.SaveSlot}' пропущен через пост-обработку. {repair}");
+                Log.Info($"SaveGamemode: файл '{slot}' пропущен через пост-обработку. {repair}");
                 loaded = TryLoadOnce(defaultMap, path, out map);
             }
         }
 
         if (!loaded || map == null)
         {
-            Log.Error($"SaveGamemode: не удалось загрузить сохранение '{component.SaveSlot}' из {path}");
+            Log.Error($"SaveGamemode: не удалось загрузить сохранение '{slot}' из {path}");
 
             // Пустую DefaultMap мы уже удалили, а без карты раунд существовать не может:
             // возвращаем карту с тем же MapId, иначе спавн игроков упадёт на несуществующей карте.
@@ -598,7 +693,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             return;
         }
 
-        Log.Info($"SaveGamemode: сохранение '{component.SaveSlot}' загружено на карту {defaultMap}");
+        Log.Info($"SaveGamemode: сохранение '{slot}' загружено на карту {defaultMap}");
 
         WakeLoadedNpcs(defaultMap);
 
@@ -612,7 +707,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         // Станция не часть карты, но живая на момент сохранения затаскивается в файл ссылками сеток:
         // такие сущности убираем перед регистрацией, см. PurgeSavedStations. Без станции раунд
         // обрывается на спавне игроков, поэтому регистрируем её так же, как это делает тикер для обычной карты.
-        if (TryRegisterStations(defaultMap, component.SuppressRoundstartGrids, component.SaveSlot))
+        if (TryRegisterStations(defaultMap, component.SuppressRoundstartGrids, slot))
         {
             ConnectLoadedDevices(defaultMap);
             return;
@@ -1798,7 +1893,11 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
         }
     }
 
-    private void TrySaveCurrentMap(SaveGamemodeRuleComponent component)
+    /// <summary>
+    ///     Пишет карту раунда в слот <paramref name="slot"/> вместе с состоянием станций.
+    /// </summary>
+    /// <param name="slot">Слот раунда, см. <see cref="ResolveSlot"/>.</param>
+    private void TrySaveCurrentMap(string slot)
     {
         var mapId = GameTicker.DefaultMap;
         if (mapId == MapId.Nullspace)
@@ -1807,7 +1906,7 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
             return;
         }
 
-        Log.Info($"SaveGamemode: попытка сохранить карту {mapId} в слот '{component.SaveSlot}'");
+        Log.Info($"SaveGamemode: попытка сохранить карту {mapId} в слот '{slot}'");
 
         // Состояние станций снимается ДО записи карты: запись идёт в память минуту, и за это время
         // станции никто не трогает, но и тянуть её после долгого сохранения не за чем.
@@ -1815,23 +1914,23 @@ public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComp
 
         // Сохранение через пост-процессор: он вычищает runtime-состояние и снимает mapInit,
         // чтобы карта загрузилась как неинициализированная.
-        if (!_save.TrySaveFilteredSlot(mapId, component.SaveSlot, out var report))
+        if (!_save.TrySaveFilteredSlot(mapId, slot, out var report))
         {
-            Log.Error($"SaveGamemode: не удалось сохранить карту {mapId} в слот '{component.SaveSlot}' " +
+            Log.Error($"SaveGamemode: не удалось сохранить карту {mapId} в слот '{slot}' " +
                       $"(старое сохранение слота не тронуто)");
             return;
         }
 
-        Log.Info($"SaveGamemode: карта {mapId} сохранена в слот '{component.SaveSlot}'. {report}");
+        Log.Info($"SaveGamemode: карта {mapId} сохранена в слот '{slot}'. {report}");
 
         // Станция — сущность вне карты, в файл карты она не попадает: её имя и балансы пишутся
         // рядом в station.yml. Без них станция при загрузке рождается заново — с новым именем
         // и деньгами из прототипа.
-        if (_save.TryWriteStationStates(component.SaveSlot, states))
-            Log.Info($"SaveGamemode: состояние станций сохранено в слот '{component.SaveSlot}' " +
+        if (_save.TryWriteStationStates(slot, states))
+            Log.Info($"SaveGamemode: состояние станций сохранено в слот '{slot}' " +
                      $"(станций: {states.Count})");
         else
-            Log.Error($"SaveGamemode: не удалось записать состояние станций в слот '{component.SaveSlot}' — " +
+            Log.Error($"SaveGamemode: не удалось записать состояние станций в слот '{slot}' — " +
                       "при загрузке имена будут взяты с сеток, балансы — из прототипа");
     }
 }

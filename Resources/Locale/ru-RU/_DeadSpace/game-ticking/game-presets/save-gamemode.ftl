@@ -3,3 +3,6 @@ save-gamemode-deathmatch-description = Разрушайте станцию. По
 
 save-gamemode-extended-title = Сохранение: Расширенный
 save-gamemode-extended-description = Спокойный раунд на карте, сохранённой после дезматча. По окончании раунда сохранение будет удалено.
+
+save-gamemode-permap-title = Сохранение: Наследование раундов
+save-gamemode-permap-description = У каждой карты своя папка сохранения. Первой раунд на карте идёт по-новому и в конце сохраняется, дальше поднимается из своей папки.
