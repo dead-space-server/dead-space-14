@@ -367,6 +367,11 @@ public sealed partial class RoundEndCreditsSystem : EntitySystem
 
     private void OnSkip(RoundEndCreditsSkipEvent msg, EntitySessionEventArgs args)
     {
+        // Skipping only closes the credits: a player still in their character stays in it, only a ghost or someone
+        // without a body goes back to the lobby.
+        if (args.SenderSession.AttachedEntity is { } attached && !HasComp<GhostComponent>(attached))
+            return;
+
         _ticker.ReturnToLobbyAfterRound(args.SenderSession);
     }
 

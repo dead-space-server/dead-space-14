@@ -117,20 +117,28 @@ namespace Content.Server.Decals
                 return;
 
             // Transfer decals over to the new grid.
-            var enumerator = _mapSystem.GetAllTilesEnumerator(ev.Grid, Comp<MapGridComponent>(ev.Grid));
+            var newGrid = Comp<MapGridComponent>(ev.Grid);
+            var enumerator = _mapSystem.GetAllTilesEnumerator(ev.Grid, newGrid);
 
             var oldChunkCollection = oldComp.ChunkCollection.ChunkCollection;
             var chunkCollection = newComp.ChunkCollection.ChunkCollection;
+
+            // DS14-start: since engine v295 the split grid's origin is moved next to its tiles, so its tile indices are
+            // shifted from the old grid's. Look the decals up at the old indices and move them by the same shift.
+            var originOnOld = Vector2.Transform(_transform.GetWorldPosition(ev.Grid), _transform.GetInvWorldMatrix(ev.OldGrid));
+            var tileShift = new Vector2(MathF.Round(originOnOld.X / newGrid.TileSize), MathF.Round(originOnOld.Y / newGrid.TileSize));
 
             while (enumerator.MoveNext(out var tile))
             {
                 var tilePos = (Vector2) tile.Value.GridIndices;
                 var chunkIndices = GetChunkIndices(tilePos);
+                var oldTilePos = tilePos + tileShift;
+                var oldChunkIndices = GetChunkIndices(oldTilePos);
 
-                if (!oldChunkCollection.TryGetValue(chunkIndices, out var oldChunk))
+                if (!oldChunkCollection.TryGetValue(oldChunkIndices, out var oldChunk))
                     continue;
 
-                var bounds = new Box2(tilePos - _boundsMinExpansion, tilePos + _boundsMaxExpansion);
+                var bounds = new Box2(oldTilePos - _boundsMinExpansion, oldTilePos + _boundsMaxExpansion);
                 var toRemove = new RemQueue<uint>();
 
                 foreach (var (oldDecalId, decal) in oldChunk.Decals)
@@ -140,7 +148,7 @@ namespace Content.Server.Decals
 
                     var newDecalId = newComp.ChunkCollection.NextDecalId++;
                     var newChunk = chunkCollection.GetOrNew(chunkIndices);
-                    newChunk.Decals[newDecalId] = decal;
+                    newChunk.Decals[newDecalId] = decal.WithCoordinates(decal.Coordinates - tileShift);
                     newComp.DecalIndex[newDecalId] = chunkIndices;
                     toRemove.Add(oldDecalId);
                 }
@@ -154,11 +162,12 @@ namespace Content.Server.Decals
                 DirtyChunk(ev.Grid, chunkIndices, chunkCollection.GetOrNew(chunkIndices));
 
                 if (oldChunk.Decals.Count == 0)
-                    oldChunkCollection.Remove(chunkIndices);
+                    oldChunkCollection.Remove(oldChunkIndices);
 
                 if (toRemove.List?.Count > 0)
-                    DirtyChunk(ev.OldGrid, chunkIndices, oldChunk);
+                    DirtyChunk(ev.OldGrid, oldChunkIndices, oldChunk);
             }
+            // DS14-end
         }
 
         public override void Shutdown()

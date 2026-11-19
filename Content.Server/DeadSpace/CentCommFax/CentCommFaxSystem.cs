@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Diagnostics.CodeAnalysis;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -79,6 +80,9 @@ public sealed partial class CentCommFaxSystem : EntitySystem
             Content = printout.Content,
             Stamps = new List<StampDisplayInfo>(printout.StampedBy),
             Signatures = new List<string>(printout.Signatures ?? new List<string>()),
+            PaperPrototype = printout.PrototypeId,
+            Label = printout.Label,
+            StampState = printout.StampState,
         };
 
         _inbox.Add(entry);
@@ -97,6 +101,12 @@ public sealed partial class CentCommFaxSystem : EntitySystem
         }
 
         InboxChanged?.Invoke();
+    }
+
+    public bool TryGetEntry(int id, [NotNullWhen(true)] out CentCommFaxEntry? entry)
+    {
+        entry = _inbox.Find(e => e.Id == id);
+        return entry != null;
     }
 
     public EntityUid? FindFax(string? address)

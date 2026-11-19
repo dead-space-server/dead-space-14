@@ -21,6 +21,7 @@ public sealed partial class CentCommFaxEui : BaseEui
     private const int MaxTitleLength = 100;
     private const int MaxContentLength = 10000;
     private const int MaxFromLength = 100;
+    private const int MaxStamps = 10;
     private const string DefaultPaper = "PaperPrintedCentcomm";
 
     [Dependency] private IAdminManager _admins = default!;
@@ -97,27 +98,35 @@ public sealed partial class CentCommFaxEui : BaseEui
     private void HandleReply(CentCommFaxEuiMsg.Reply reply)
     {
         if (!_entities.TryGetEntity(reply.Target, out var target) ||
-            string.IsNullOrWhiteSpace(reply.Title) ||
-            string.IsNullOrWhiteSpace(reply.Content))
+            !_entities.HasComponent<FaxMachineComponent>(target) ||
+            reply.Stamps.Count > MaxStamps)
         {
             return;
         }
 
-        var paper = reply.PaperPrototype != null && _prototypes.HasIndex<EntityPrototype>(reply.PaperPrototype)
-            ? reply.PaperPrototype
-            : DefaultPaper;
+        // The received paper itself goes back: its text, paper, stamps and signatures come from the inbox, not the client.
+        CentCommFaxEntry? original = null;
+        if (reply.ReturnOriginal && !_centComm.TryGetEntry(reply.ReplyTo, out original))
+            return;
 
-        var stamps = new List<StampDisplayInfo>();
-        string? stampState = null;
-        if (reply.StampPrototype != null &&
-            _prototypes.TryIndex<EntityPrototype>(reply.StampPrototype, out var stampProto) &&
-            stampProto.TryGetComponent<StampComponent>(out var stamp, _factory))
+        if (original == null && (string.IsNullOrWhiteSpace(reply.Title) || string.IsNullOrWhiteSpace(reply.Content)))
+            return;
+
+        var stamps = original != null ? new List<StampDisplayInfo>(original.Stamps) : new List<StampDisplayInfo>();
+        var stampState = original?.StampState;
+        foreach (var choice in reply.Stamps)
         {
+            if (!_prototypes.TryIndex<EntityPrototype>(choice.Prototype, out var stampProto) ||
+                !stampProto.TryGetComponent<StampComponent>(out var stamp, _factory))
+            {
+                return;
+            }
+
             stampState = stamp.StampState;
             stamps.Add(new StampDisplayInfo
             {
                 StampedName = string.IsNullOrWhiteSpace(reply.From) ? stamp.StampedName : Truncate(reply.From, MaxFromLength),
-                StampedColor = reply.StampColor ?? stamp.StampedColor,
+                StampedColor = choice.Color ?? stamp.StampedColor,
                 StampTexture = stamp.StampTexture,
                 StampPatternTexture = stamp.StampPatternTexture,
                 StampHeaderText = stamp.StampHeaderText,
@@ -128,14 +137,38 @@ public sealed partial class CentCommFaxEui : BaseEui
             });
         }
 
-        var printout = new FaxPrintout(
-            Truncate(reply.Content, MaxContentLength),
-            Truncate(reply.Title, MaxTitleLength),
-            null,
-            paper,
-            stampState,
-            stamps,
-            reply.Locked);
+        FaxPrintout printout;
+        if (original != null)
+        {
+            var originalPaper = _prototypes.HasIndex<EntityPrototype>(original.PaperPrototype)
+                ? original.PaperPrototype
+                : DefaultPaper;
+
+            printout = new FaxPrintout(
+                original.Content,
+                original.Title,
+                original.Label,
+                originalPaper,
+                stampState,
+                stamps,
+                reply.Locked,
+                new List<string>(original.Signatures));
+        }
+        else
+        {
+            var paper = reply.PaperPrototype != null && _prototypes.HasIndex<EntityPrototype>(reply.PaperPrototype)
+                ? reply.PaperPrototype
+                : DefaultPaper;
+
+            printout = new FaxPrintout(
+                Truncate(reply.Content, MaxContentLength),
+                Truncate(reply.Title, MaxTitleLength),
+                null,
+                paper,
+                stampState,
+                stamps,
+                reply.Locked);
+        }
 
         _centComm.Reply(target.Value, printout, reply.ReplyTo, Player);
     }

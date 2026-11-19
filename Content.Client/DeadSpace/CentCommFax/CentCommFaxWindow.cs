@@ -55,13 +55,17 @@ public sealed class CentCommFaxWindow : DefaultWindow
     private readonly OptionButton _stampSelector;
     private readonly OptionButton _colorSelector;
     private readonly CheckBox _lockBox;
+    private readonly CheckBox _returnBox;
+    private readonly Label _stampListLabel;
     private readonly Button _sendButton;
     private readonly Label _status;
+    private readonly List<CentCommFaxStamp> _pendingStamps = new();
 
     private readonly ILocalizationManager _loc = IoCManager.Resolve<ILocalizationManager>();
     private readonly List<CentCommFaxTarget> _targets = new();
     private readonly List<string> _templates = new();
     private readonly List<string> _stamps = new();
+    private readonly List<string> _stampNames = new();
     private List<CentCommFaxEntry> _inbox = new();
     private int _selected = -1;
     private int _targetIndex = -1;
@@ -146,6 +150,10 @@ public sealed class CentCommFaxWindow : DefaultWindow
 
         right.AddChild(new Label { Text = Loc.GetString("centcomm-fax-reply-header"), StyleClasses = { "LabelHeading" } });
 
+        _returnBox = new CheckBox { Text = Loc.GetString("centcomm-fax-return-original"), Disabled = true };
+        _returnBox.OnToggled += args => SetReturnOriginal(args.Pressed);
+        right.AddChild(_returnBox);
+
         _targetSelector = new OptionButton { HorizontalExpand = true };
         _targetSelector.OnItemSelected += args =>
         {
@@ -180,6 +188,22 @@ public sealed class CentCommFaxWindow : DefaultWindow
         stampRow.AddChild(_lockBox);
         right.AddChild(stampRow);
 
+        var stampListRow = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 8 };
+        var addStamp = new Button { Text = Loc.GetString("centcomm-fax-stamp-add") };
+        addStamp.OnPressed += _ => AddPendingStamp();
+        var clearStamps = new Button { Text = Loc.GetString("centcomm-fax-stamp-clear") };
+        clearStamps.OnPressed += _ =>
+        {
+            _pendingStamps.Clear();
+            UpdateStampList();
+        };
+        _stampListLabel = new Label { HorizontalExpand = true, StyleClasses = { "LabelSubText" }, ClipText = true };
+        stampListRow.AddChild(new Label { MinWidth = 110 });
+        stampListRow.AddChild(addStamp);
+        stampListRow.AddChild(clearStamps);
+        stampListRow.AddChild(_stampListLabel);
+        right.AddChild(stampListRow);
+
         var sendRow = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 8 };
         _status = new Label { HorizontalExpand = true, StyleClasses = { "LabelSubText" } };
         _sendButton = new Button { Text = Loc.GetString("centcomm-fax-send"), MinWidth = 180 };
@@ -199,6 +223,7 @@ public sealed class CentCommFaxWindow : DefaultWindow
         }
 
         ShowEntry(null);
+        UpdateStampList();
     }
 
     public void UpdateState(CentCommFaxEuiState state)
@@ -292,8 +317,15 @@ public sealed class CentCommFaxWindow : DefaultWindow
             _viewContent.SetMessage(string.Empty);
             _viewStamps.Text = string.Empty;
             _followSender.Disabled = true;
+            _returnBox.Pressed = false;
+            _returnBox.Disabled = true;
+            SetReturnOriginal(false);
             return;
         }
+
+        _returnBox.Disabled = false;
+        if (_returnBox.Pressed && entry.SenderFax is { } senderFax)
+            SelectTarget(senderFax);
 
         _viewTitle.Text = entry.Title;
         _viewMeta.Text = Loc.GetString("centcomm-fax-meta",
@@ -358,6 +390,7 @@ public sealed class CentCommFaxWindow : DefaultWindow
     {
         _stampSelector.AddItem(Loc.GetString("centcomm-fax-stamp-none"), 0);
         _stamps.Add(string.Empty);
+        _stampNames.Add(string.Empty);
 
         var stamps = new List<(string Id, string Name, string State)>();
         var seen = new HashSet<string>();
@@ -380,6 +413,7 @@ public sealed class CentCommFaxWindow : DefaultWindow
             var index = _stamps.Count;
             _stampSelector.AddItem(name, index);
             _stamps.Add(id);
+            _stampNames.Add(name);
 
             if (defaultId == 0 && state == DefaultStampState)
                 defaultId = index;
@@ -393,6 +427,44 @@ public sealed class CentCommFaxWindow : DefaultWindow
         return _loc.TryGetString(value, out var localized) ? localized : value;
     }
 
+    /// <summary>The stamp and ink picked in the selectors, if a stamp is picked.</summary>
+    private CentCommFaxStamp? SelectedStamp()
+    {
+        if (_stampSelector.SelectedId <= 0 || _stampSelector.SelectedId >= _stamps.Count)
+            return null;
+
+        return new CentCommFaxStamp(_stamps[_stampSelector.SelectedId],
+            StampColors[Math.Clamp(_colorSelector.SelectedId, 0, StampColors.Length - 1)].Color);
+    }
+
+    private void AddPendingStamp()
+    {
+        if (SelectedStamp() is { } stamp)
+        {
+            _pendingStamps.Add(stamp);
+            UpdateStampList();
+        }
+    }
+
+    private void UpdateStampList()
+    {
+        var names = _pendingStamps.Select(s => _stampNames[Math.Max(0, _stamps.IndexOf(s.Prototype))]);
+        _stampListLabel.Text = _pendingStamps.Count == 0
+            ? Loc.GetString("centcomm-fax-stamp-list-empty")
+            : Loc.GetString("centcomm-fax-stamp-list", ("stamps", string.Join(", ", names)));
+    }
+
+    /// <summary>Returning the received paper itself: its text is kept, only stamps and the receiver are picked.</summary>
+    private void SetReturnOriginal(bool value)
+    {
+        _titleEdit.Editable = !value;
+        _contentEdit.Editable = !value;
+        _templateSelector.Disabled = value;
+
+        if (value && _selected >= 0 && _selected < _inbox.Count && _inbox[_selected].SenderFax is { } senderFax)
+            SelectTarget(senderFax);
+    }
+
     private void Send()
     {
         if (GetTarget() is not { } target)
@@ -401,12 +473,18 @@ public sealed class CentCommFaxWindow : DefaultWindow
             return;
         }
 
+        var returnOriginal = _returnBox.Pressed && _selected >= 0 && _selected < _inbox.Count;
         var content = Rope.Collapse(_contentEdit.TextRope);
-        if (string.IsNullOrWhiteSpace(_titleEdit.Text) || string.IsNullOrWhiteSpace(content))
+        if (!returnOriginal && (string.IsNullOrWhiteSpace(_titleEdit.Text) || string.IsNullOrWhiteSpace(content)))
         {
             _status.Text = Loc.GetString("centcomm-fax-status-empty");
             return;
         }
+
+        // The list of added stamps, or just the one picked in the selector if none were added.
+        var stamps = new List<CentCommFaxStamp>(_pendingStamps);
+        if (stamps.Count == 0 && SelectedStamp() is { } single)
+            stamps.Add(single);
 
         OnReply?.Invoke(new CentCommFaxEuiMsg.Reply
         {
@@ -415,15 +493,18 @@ public sealed class CentCommFaxWindow : DefaultWindow
             Title = _titleEdit.Text,
             From = _fromEdit.Text,
             Content = content,
-            StampPrototype = _stampSelector.SelectedId > 0 && _stampSelector.SelectedId < _stamps.Count
-                ? _stamps[_stampSelector.SelectedId]
-                : null,
-            StampColor = StampColors[Math.Clamp(_colorSelector.SelectedId, 0, StampColors.Length - 1)].Color,
+            Stamps = stamps,
             Locked = _lockBox.Pressed,
             PaperPrototype = _paperPrototype,
+            ReturnOriginal = returnOriginal,
         });
 
         _status.Text = Loc.GetString("centcomm-fax-status-sent", ("target", target.Name));
+        _pendingStamps.Clear();
+        UpdateStampList();
+        if (returnOriginal)
+            return;
+
         _contentEdit.TextRope = new Rope.Leaf(string.Empty);
         _titleEdit.Text = string.Empty;
         _paperPrototype = null;
