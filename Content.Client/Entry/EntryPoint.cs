@@ -165,6 +165,10 @@ namespace Content.Client.Entry
             _configManager.SetCVar("interface.resolutionAutoScaleLowerCutoffX", 520);
             _configManager.SetCVar("interface.resolutionAutoScaleLowerCutoffY", 240);
             _configManager.SetCVar("interface.resolutionAutoScaleMinimum", 0.5f);
+
+            // DS14: engine v295 turns HRTF on by default and it muffles all audio. The engine reads it only when the
+            // audio context is created, before content loads, so the saved value takes effect from the next launch.
+            _configManager.SetCVar(CVars.AudioHrtf, false);
         }
 
         public override void PostInit()
