@@ -25,7 +25,7 @@ public sealed class MagicMirrorBoundUserInterface : BoundUserInterface
         _window.OnHairSlotAdded += delegate () { AddSlot(MagicMirrorCategory.Hair); };
         _window.OnHairSlotRemoved += args => RemoveSlot(MagicMirrorCategory.Hair, args);
         // DS14-start
-        _window.OnAppearanceChanged += args => ChangeDye(args.category, args.marking, args.slot);
+        _window.OnDyeSubmitted += args => ChangeDye(args.category, args.marking, args.slot);
         // DS14-end
 
         _window.OnFacialHairSelected += tuple => SelectHair(MagicMirrorCategory.FacialHair, tuple.id, tuple.slot);

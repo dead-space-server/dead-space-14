@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Content.Client.DeadSpace.Humanoid; // DS14
 using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Loadouts;
@@ -38,6 +39,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing; // DS14
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
 
@@ -119,6 +121,8 @@ namespace Content.Client.Lobby.UI
         private Direction _previewRotation = Direction.North;
 
         private ColorSelectorSliders _rgbSkinColorSelector;
+        private MarkingDyeEditor? _bodyDyeEditor; // DS14
+        private bool _profilePreviewQueued; // DS14
 
         private bool _isDirty;
         private bool _readOnly; // DS14
@@ -272,6 +276,18 @@ namespace Content.Client.Lobby.UI
                 OnSkinColorOnValueChanged();
             };
 
+            // DS14-start
+            _bodyDyeEditor = new MarkingDyeEditor();
+            BodyDyeContainer.AddChild(_bodyDyeEditor);
+            _bodyDyeEditor.OnDyeChanged += dye =>
+            {
+                if (Profile is null || _readOnly)
+                    return;
+                Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithBodyDye(dye));
+                QueueProfilePreview(); // DS14
+            };
+            // DS14-end
+
             RgbSkinColorContainer.AddChild(_rgbSkinColorSelector = new ColorSelectorSliders());
             _rgbSkinColorSelector.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv; // defaults color selector to HSV
             _rgbSkinColorSelector.OnColorChanged += _ =>
@@ -299,7 +315,7 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithHairColor(newColor.marking.MarkingColors[0]));
                 UpdateCMarkingsHair();
-                ReloadPreview();
+                QueueProfilePreview(); // DS14
             };
 
             // DS14-start
@@ -311,7 +327,7 @@ namespace Content.Client.Lobby.UI
                     .WithHairColor(args.marking.MarkingColors[0])
                     .WithHairDye(args.marking.Dye));
                 UpdateCMarkingsHair();
-                ReloadPreview();
+                QueueProfilePreview(); // DS14
             };
             // DS14-end
 
@@ -331,7 +347,7 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithFacialHairColor(newColor.marking.MarkingColors[0]));
                 UpdateCMarkingsFacialHair();
-                ReloadPreview();
+                QueueProfilePreview(); // DS14
             };
 
             // DS14-start
@@ -343,7 +359,7 @@ namespace Content.Client.Lobby.UI
                     .WithFacialHairColor(args.marking.MarkingColors[0])
                     .WithFacialHairDye(args.marking.Dye));
                 UpdateCMarkingsFacialHair();
-                ReloadPreview();
+                QueueProfilePreview(); // DS14
             };
             // DS14-end
 
@@ -439,7 +455,7 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithEyeColor(newColor));
                 Markings.CurrentEyeColor = Profile.Appearance.EyeColor;
-                ReloadProfilePreview();
+                QueueProfilePreview(); // DS14
             };
 
             #endregion Eyes
@@ -1372,6 +1388,22 @@ namespace Content.Client.Lobby.UI
             SetDirty();
         }
 
+        // DS14-start
+        private void QueueProfilePreview()
+        {
+            _profilePreviewQueued = true;
+        }
+
+        protected override void FrameUpdate(FrameEventArgs args)
+        {
+            base.FrameUpdate(args);
+            if (!_profilePreviewQueued)
+                return;
+            _profilePreviewQueued = false;
+            ReloadProfilePreview();
+        }
+        // DS14-end
+
         private void OnSpeciesInfoButtonPressed(BaseButton.ButtonEventArgs args)
         {
             // TODO GUIDEBOOK
@@ -1727,7 +1759,7 @@ namespace Content.Client.Lobby.UI
                 return;
 
             Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(markings.GetForwardEnumerator().ToList()));
-            ReloadProfilePreview();
+            QueueProfilePreview(); // DS14
         }
 
         private void OnSkinColorOnValueChanged()
@@ -1771,7 +1803,8 @@ namespace Content.Client.Lobby.UI
                 }
             }
 
-            ReloadProfilePreview();
+            UpdateBodyDyeControls(); // DS14
+            QueueProfilePreview(); // DS14
         }
 
         protected override void Dispose(bool disposing)
@@ -2006,7 +2039,21 @@ namespace Content.Client.Lobby.UI
                     break;
                 }
             }
+
+            UpdateBodyDyeControls(); // DS14
         }
+
+        // DS14-start
+        private void UpdateBodyDyeControls()
+        {
+            if (Profile == null)
+                return;
+
+            var isSlime = Profile.Species == "SlimePerson";
+            BodyDyeContainer.Visible = isSlime;
+            _bodyDyeEditor?.SetData(isSlime ? Profile.Appearance.BodyDye : null, Profile.Appearance.SkinColor);
+        }
+        // DS14-end
 
         public void UpdateSpeciesGuidebookIcon()
         {

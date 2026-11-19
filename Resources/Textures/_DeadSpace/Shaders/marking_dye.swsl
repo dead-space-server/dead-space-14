@@ -1,6 +1,7 @@
-// DS14
+﻿// DS14
 uniform highp vec3 baseLab;
-uniform highp vec3 dyeLab;
+uniform highp float[30] dyeLab;
+uniform lowp int dyeCount;
 uniform lowp int dyeStyle;
 uniform highp float amount;
 uniform highp vec2 region;
@@ -26,47 +27,75 @@ bool inFrame(highp vec4 frame) {
     return UV.x >= frame.x && UV.y >= frame.y && UV.x <= frame.z && UV.y <= frame.w;
 }
 
-highp float fadeMask(highp float depth, highp float col) {
+highp vec3 bandLab(highp float pos) {
+    int idx = int(clamp(pos, 0.0, 0.999) * float(dyeCount));
+    idx = clamp(idx, 0, dyeCount - 1);
+    return vec3(dyeLab[idx * 3], dyeLab[idx * 3 + 1], dyeLab[idx * 3 + 2]);
+}
+
+highp float share(highp float value, highp float edge) {
+    return clamp((value - edge) / max(1.0 - edge, 0.001), 0.0, 1.0);
+}
+
+highp float upShare(highp float value, highp float edge) {
+    return clamp((1.0 - value) / max(1.0 - edge, 0.001), 0.0, 1.0);
+}
+
+highp float fadeMask(highp float depth, highp float col, out highp float accent) {
+    highp float shifted = depth + (col - 0.5) * 0.1;
     highp float edge = mix(0.85, 0.15, amount);
-    return smoothstep(edge - 0.3, edge + 0.3, depth + (col - 0.5) * 0.1);
+    accent = smoothstep(edge - 0.3, edge + 0.3, shifted);
+    return upShare(shifted, edge);
 }
 
-highp float tipsMask(highp float depth, highp float col) {
+highp float tipsMask(highp float depth, highp float col, out highp float accent) {
+    highp float shifted = depth + (col - 0.5) * 0.06;
     highp float edge = mix(0.9, 0.3, amount);
-    return smoothstep(edge - 0.02, edge + 0.02, depth + (col - 0.5) * 0.06);
+    accent = smoothstep(edge - 0.02, edge + 0.02, shifted);
+    return upShare(shifted, edge);
 }
 
-highp float halfMask(highp float pixel) {
-    if (inFrame(frameEast))
+highp float halfMask(highp float pixel, out highp float accent) {
+    if (inFrame(frameEast)) {
+        accent = 0.0;
         return 0.0;
-    if (inFrame(frameWest))
-        return 1.0;
+    }
+    if (inFrame(frameWest)) {
+        accent = 1.0;
+        return 0.999;
+    }
     highp float across = inFrame(frameBack) ? 1.0 - UV2.x : UV2.x;
     highp float edge = mix(0.35, 0.65, amount);
-    return smoothstep(edge - pixel, edge + pixel, across);
+    accent = smoothstep(edge - pixel, edge + pixel, across);
+    return share(across, edge);
 }
 
-highp float innerMask(highp float depth, highp float shade, highp float col) {
+highp float innerMask(highp float depth, highp float shade, highp float col, out highp float accent) {
     highp float score = depth * 0.5 + (1.0 - shade) * 0.5 + (col - 0.5) * 0.2;
     highp float edge = mix(0.75, 0.25, amount);
-    return smoothstep(edge - 0.03, edge + 0.03, score);
+    accent = smoothstep(edge - 0.03, edge + 0.03, score);
+    return upShare(score, edge);
 }
 
-highp float streakMask(highp float depth, highp float col) {
+highp float streakMask(highp float depth, highp float col, out highp float accent) {
     highp float painted = step(1.0 - mix(0.15, 0.6, amount), col);
-    return painted * smoothstep(0.0, 0.3, depth + (col - 0.5) * 0.3);
+    accent = painted * smoothstep(0.0, 0.3, depth + (col - 0.5) * 0.3);
+    return 1.0 - depth;
 }
 
-highp float bangsMask(highp float pixel) {
-    if (inFrame(frameBack))
+highp float bangsMask(highp float pixel, highp float depth, out highp float accent) {
+    if (inFrame(frameBack)) {
+        accent = 0.0;
         return 0.0;
+    }
     highp float away = abs(abs(UV2.x - 0.5) - 0.16);
     if (inFrame(frameEast))
         away = abs(UV2.x - 0.66);
     else if (inFrame(frameWest))
         away = abs(UV2.x - 0.34);
     highp float width = mix(0.02, 0.08, amount);
-    return 1.0 - smoothstep(width, width + pixel, away);
+    accent = 1.0 - smoothstep(width, width + pixel, away);
+    return 1.0 - depth;
 }
 
 void fragment() {
@@ -80,27 +109,29 @@ void fragment() {
     highp float pixel = 1.0 / frameSize.x;
 
     highp float accent = 0.0;
+    highp float pos = 0.0;
     bool lifted = false;
     if (dyeStyle == 1) {
-        accent = halfMask(pixel);
+        pos = halfMask(pixel, accent);
     } else if (dyeStyle == 2) {
-        accent = innerMask(depth, shade, col);
+        pos = innerMask(depth, shade, col, accent);
         lifted = true;
     } else if (dyeStyle == 3) {
-        accent = streakMask(depth, col);
+        pos = streakMask(depth, col, accent);
         lifted = true;
     } else if (dyeStyle == 4) {
-        accent = tipsMask(depth, col);
+        pos = tipsMask(depth, col, accent);
     } else if (dyeStyle == 5) {
-        accent = bangsMask(pixel);
+        pos = bangsMask(pixel, depth, accent);
         lifted = true;
     } else {
-        accent = fadeMask(depth, col);
+        pos = fadeMask(depth, col, accent);
     }
 
     if (lifted)
         shade = mix(shade, 0.55 + 0.45 * shade, accent);
 
-    highp vec3 color = clamp(oklabToLinear(mix(baseLab, dyeLab, accent)), 0.0, 1.0);
+    highp vec3 dye = dyeCount > 0 ? bandLab(pos) : vec3(0.0);
+    highp vec3 color = clamp(oklabToLinear(mix(baseLab, dye, accent)), 0.0, 1.0);
     COLOR = vec4(color * shade, sprite.a);
 }

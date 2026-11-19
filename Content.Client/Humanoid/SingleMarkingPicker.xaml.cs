@@ -45,9 +45,6 @@ public sealed partial class SingleMarkingPicker : BoxContainer
     public Action<(int slot, Marking marking)>? OnColorChanged;
 
     // DS14-start
-    /// <summary>
-    ///     Градиент или цвет слота меняется: слот и маркировка с цветами и градиентом.
-    /// </summary>
     public Action<(int slot, Marking marking)>? OnDyeChanged;
     // DS14-end
 

@@ -134,7 +134,7 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
                 return;
         }
 
-        // DS14-start: смену причёски делаем с сохранением градиента старой маркировки.
+        // DS14-start
         if (TryComp<HumanoidAppearanceComponent>(component.Target.Value, out var humanoid)
             && humanoid.MarkingSet.TryGetCategory(category, out var currentMarkings)
             && args.Slot >= 0 && args.Slot < currentMarkings.Count)

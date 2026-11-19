@@ -23,19 +23,11 @@ public sealed partial class MagicMirrorWindow : DefaultWindow
     public Action? OnFacialHairSlotAdded;
 
     // DS14-start
-    /// <summary>
-    ///     Сколько цвета и градиент должны остаться без изменений, прежде чем их отправят.
-    /// </summary>
-    private const float AppearanceSendDelay = 0.3f;
+    private const float DyeSendDelay = 0.3f;
+    public Action<(MagicMirrorCategory category, int slot, Marking marking)>? OnDyeSubmitted;
 
-    /// <summary>
-    ///     Срабатывает с цветами и градиентом слота, когда пользователь закончил их менять.
-    ///     Одно сообщение несёт и то и другое, поэтому поздняя правка не отменяет do-after сервера под другую.
-    /// </summary>
-    public Action<(MagicMirrorCategory category, int slot, Marking marking)>? OnAppearanceChanged;
-
-    private (MagicMirrorCategory Category, int Slot, Marking Marking)? _pendingAppearance;
-    private float _pendingAppearanceTime;
+    private (MagicMirrorCategory Category, int Slot, Marking Marking)? _pendingDye;
+    private float _pendingDyeTime;
     // DS14-end
 
     public MagicMirrorWindow()
@@ -53,17 +45,17 @@ public sealed partial class MagicMirrorWindow : DefaultWindow
         FacialHairPicker.OnSlotAdd += delegate { OnFacialHairSlotAdded!(); };
 
         // DS14-start
-        HairPicker.OnDyeChanged += args => QueueAppearance(MagicMirrorCategory.Hair, args);
-        FacialHairPicker.OnDyeChanged += args => QueueAppearance(MagicMirrorCategory.FacialHair, args);
-        HairPicker.OnColorChanged += args => QueueAppearance(MagicMirrorCategory.Hair, args);
-        FacialHairPicker.OnColorChanged += args => QueueAppearance(MagicMirrorCategory.FacialHair, args);
-        HairPicker.OnMarkingSelect += _ => FlushAppearance();
-        HairPicker.OnSlotRemove += _ => FlushAppearance();
-        HairPicker.OnSlotAdd += FlushAppearance;
-        FacialHairPicker.OnMarkingSelect += _ => FlushAppearance();
-        FacialHairPicker.OnSlotRemove += _ => FlushAppearance();
-        FacialHairPicker.OnSlotAdd += FlushAppearance;
-        OnClose += FlushAppearance;
+        HairPicker.OnDyeChanged += args => QueueDyeChange(MagicMirrorCategory.Hair, args);
+        FacialHairPicker.OnDyeChanged += args => QueueDyeChange(MagicMirrorCategory.FacialHair, args);
+        HairPicker.OnColorChanged += args => QueueDyeChange(MagicMirrorCategory.Hair, args);
+        FacialHairPicker.OnColorChanged += args => QueueDyeChange(MagicMirrorCategory.FacialHair, args);
+        HairPicker.OnMarkingSelect += _ => FlushDyeChange();
+        HairPicker.OnSlotRemove += _ => FlushDyeChange();
+        HairPicker.OnSlotAdd += FlushDyeChange;
+        FacialHairPicker.OnMarkingSelect += _ => FlushDyeChange();
+        FacialHairPicker.OnSlotRemove += _ => FlushDyeChange();
+        FacialHairPicker.OnSlotAdd += FlushDyeChange;
+        OnClose += FlushDyeChange;
         // DS14-end
     }
 
@@ -79,37 +71,34 @@ public sealed partial class MagicMirrorWindow : DefaultWindow
     }
 
     // DS14-start
-    /// <summary>
-    ///     Слайдеры срабатывают на каждое движение мыши, а каждое сообщение перезапускает do-after и показывает попап.
-    /// </summary>
-    private void QueueAppearance(MagicMirrorCategory category, (int slot, Marking marking) args)
+    private void QueueDyeChange(MagicMirrorCategory category, (int slot, Marking marking) args)
     {
-        if (_pendingAppearance is { } pending && (pending.Category != category || pending.Slot != args.slot))
-            FlushAppearance();
+        if (_pendingDye is { } pending && (pending.Category != category || pending.Slot != args.slot))
+            FlushDyeChange();
 
-        _pendingAppearance = (category, args.slot, new Marking(args.marking));
-        _pendingAppearanceTime = 0f;
+        _pendingDye = (category, args.slot, new Marking(args.marking));
+        _pendingDyeTime = 0f;
     }
 
-    private void FlushAppearance()
+    private void FlushDyeChange()
     {
-        if (_pendingAppearance is not { } pending)
+        if (_pendingDye is not { } pending)
             return;
 
-        _pendingAppearance = null;
-        OnAppearanceChanged?.Invoke((pending.Category, pending.Slot, pending.Marking));
+        _pendingDye = null;
+        OnDyeSubmitted?.Invoke((pending.Category, pending.Slot, pending.Marking));
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
 
-        if (_pendingAppearance == null)
+        if (_pendingDye == null)
             return;
 
-        _pendingAppearanceTime += args.DeltaSeconds;
-        if (_pendingAppearanceTime >= AppearanceSendDelay)
-            FlushAppearance();
+        _pendingDyeTime += args.DeltaSeconds;
+        if (_pendingDyeTime >= DyeSendDelay)
+            FlushDyeChange();
     }
     // DS14-end
 }

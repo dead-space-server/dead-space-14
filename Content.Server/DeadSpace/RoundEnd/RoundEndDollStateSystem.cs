@@ -1,8 +1,9 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+﻿// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
 using Content.Server.GameTicking.Events;
 using Content.Shared.Body.Components;
+using Content.Shared.DeadSpace.Humanoid.Markings; // DS14
 using Content.Shared.DeadSpace.RoundEnd;
 using Content.Shared.GameTicking;
 using Content.Shared.Gibbing;
@@ -220,6 +221,7 @@ public sealed partial class RoundEndDollStateSystem : EntitySystem
                 SkinColor = humanoid.SkinColor,
                 Sex = humanoid.Sex,
                 EyeColor = humanoid.EyeColor,
+                BodyDye = humanoid.BodyDye,
             };
         }
 
@@ -252,6 +254,7 @@ public sealed partial class RoundEndDollStateSystem : EntitySystem
             SkinColor = appearance.SkinColor,
             Sex = appearance.Sex,
             EyeColor = appearance.EyeColor,
+            BodyDye = appearance.BodyDye,
         };
     }
 

@@ -2,6 +2,7 @@
 
 using Content.Shared.Humanoid;
 using Content.Shared.DeadSpace.TTS;
+using Content.Shared.DeadSpace.Humanoid.Markings;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Inventory;
@@ -58,4 +59,6 @@ public sealed partial class NinjaDisguiseAppearance
     [DataField]
     public Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo> CustomBaseLayers = new();
 
+    [DataField]
+    public MarkingDye? BodyDye;
 }

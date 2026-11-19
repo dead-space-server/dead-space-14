@@ -22,6 +22,9 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
     // DS14-start
     [DataField]
     public MarkingDye? HairDye { get; set; }
+
+    [DataField]
+    public MarkingDye? BodyDye { get; set; }
     // DS14-end
 
     [DataField("facialHair")]
@@ -67,29 +70,28 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
         // DS14-start
         HairDye = other.HairDye;
         FacialHairDye = other.FacialHairDye;
+        BodyDye = other.BodyDye;
         // DS14-end
     }
 
     // DS14-start
-    /// <summary>
-    ///     Копирует градиенты на внешний вид, собранный конструктором, который их не принимает.
-    /// </summary>
-    private HumanoidCharacterAppearance KeepGradients(HumanoidCharacterAppearance appearance)
+    private HumanoidCharacterAppearance KeepDyes(HumanoidCharacterAppearance appearance)
     {
         appearance.HairDye = HairDye;
         appearance.FacialHairDye = FacialHairDye;
+        appearance.BodyDye = BodyDye;
         return appearance;
     }
     // DS14-end
 
     public HumanoidCharacterAppearance WithHairStyleName(string newName)
     {
-        return KeepGradients(new(newName, HairColor, FacialHairStyleId, FacialHairColor, EyeColor, SkinColor, Markings)); // DS14
+        return KeepDyes(new(newName, HairColor, FacialHairStyleId, FacialHairColor, EyeColor, SkinColor, Markings)); // DS14
     }
 
     public HumanoidCharacterAppearance WithHairColor(Color newColor)
     {
-        return KeepGradients(new(HairStyleId, newColor, FacialHairStyleId, FacialHairColor, EyeColor, SkinColor, Markings)); // DS14
+        return KeepDyes(new(HairStyleId, newColor, FacialHairStyleId, FacialHairColor, EyeColor, SkinColor, Markings)); // DS14
     }
 
     // DS14-start
@@ -102,31 +104,36 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
     {
         return new(this) { FacialHairDye = dye };
     }
+
+    public HumanoidCharacterAppearance WithBodyDye(MarkingDye? dye)
+    {
+        return new(this) { BodyDye = dye };
+    }
     // DS14-end
 
     public HumanoidCharacterAppearance WithFacialHairStyleName(string newName)
     {
-        return KeepGradients(new(HairStyleId, HairColor, newName, FacialHairColor, EyeColor, SkinColor, Markings)); // DS14
+        return KeepDyes(new(HairStyleId, HairColor, newName, FacialHairColor, EyeColor, SkinColor, Markings)); // DS14
     }
 
     public HumanoidCharacterAppearance WithFacialHairColor(Color newColor)
     {
-        return KeepGradients(new(HairStyleId, HairColor, FacialHairStyleId, newColor, EyeColor, SkinColor, Markings)); // DS14
+        return KeepDyes(new(HairStyleId, HairColor, FacialHairStyleId, newColor, EyeColor, SkinColor, Markings)); // DS14
     }
 
     public HumanoidCharacterAppearance WithEyeColor(Color newColor)
     {
-        return KeepGradients(new(HairStyleId, HairColor, FacialHairStyleId, FacialHairColor, newColor, SkinColor, Markings)); // DS14
+        return KeepDyes(new(HairStyleId, HairColor, FacialHairStyleId, FacialHairColor, newColor, SkinColor, Markings)); // DS14
     }
 
     public HumanoidCharacterAppearance WithSkinColor(Color newColor)
     {
-        return KeepGradients(new(HairStyleId, HairColor, FacialHairStyleId, FacialHairColor, EyeColor, newColor, Markings)); // DS14
+        return KeepDyes(new(HairStyleId, HairColor, FacialHairStyleId, FacialHairColor, EyeColor, newColor, Markings)); // DS14
     }
 
     public HumanoidCharacterAppearance WithMarkings(List<Marking> newMarkings)
     {
-        return KeepGradients(new(HairStyleId, HairColor, FacialHairStyleId, FacialHairColor, EyeColor, SkinColor, newMarkings)); // DS14
+        return KeepDyes(new(HairStyleId, HairColor, FacialHairStyleId, FacialHairColor, EyeColor, SkinColor, newMarkings)); // DS14
     }
 
     public static HumanoidCharacterAppearance DefaultWithSpecies(string species)
@@ -279,6 +286,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
         {
             // DS14-start
             HairDye = appearance.HairDye?.Sanitized(),
+            BodyDye = appearance.BodyDye?.Sanitized(),
             FacialHairDye = appearance.FacialHairDye?.Sanitized(),
             // DS14-end
         };
@@ -293,6 +301,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
         // DS14-start
         if (!Nullable.Equals(HairDye, other.HairDye)) return false;
         if (!Nullable.Equals(FacialHairDye, other.FacialHairDye)) return false;
+        if (!Nullable.Equals(BodyDye, other.BodyDye)) return false;
         // DS14-end
         if (FacialHairStyleId != other.FacialHairStyleId) return false;
         if (!FacialHairColor.Equals(other.FacialHairColor)) return false;
@@ -311,6 +320,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
                // DS14-start
                Nullable.Equals(HairDye, other.HairDye) &&
                Nullable.Equals(FacialHairDye, other.FacialHairDye) &&
+               Nullable.Equals(BodyDye, other.BodyDye) &&
                // DS14-end
                FacialHairStyleId == other.FacialHairStyleId &&
                FacialHairColor.Equals(other.FacialHairColor) &&
@@ -332,6 +342,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
         hash.Add(HairColor);
         hash.Add(HairDye);
         hash.Add(FacialHairDye);
+        hash.Add(BodyDye);
         hash.Add(FacialHairStyleId);
         hash.Add(FacialHairColor);
         hash.Add(EyeColor);

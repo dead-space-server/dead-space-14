@@ -1,4 +1,4 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+﻿// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.DeadSpace.Humanoid.Markings;
 using Content.Shared.Humanoid.Markings;
@@ -9,12 +9,15 @@ namespace Content.Client.DeadSpace.Humanoid;
 public sealed class MarkingDyeEditor : BoxContainer
 {
     private MarkingDye _dye = new();
+    private int _colorIndex;
     private bool _updating;
 
     private readonly CheckBox _enabledCheck;
     private readonly BoxContainer _settings;
     private readonly OptionButton _styleOption;
-    private readonly Label _colorLabel;
+    private readonly OptionButton _colorOption;
+    private readonly Button _addColorButton;
+    private readonly Button _removeColorButton;
     private readonly ColorSelectorSliders _colorSelector;
     private readonly Label _amountLabel;
     private readonly Button _resetButton;
@@ -46,7 +49,23 @@ public sealed class MarkingDyeEditor : BoxContainer
             _styleOption.AddItem(Loc.GetString(StyleKey("style", style)), (int) style);
         }
 
-        _colorLabel = new Label();
+        _colorOption = new OptionButton { HorizontalExpand = true };
+        _addColorButton = new Button
+        {
+            Text = Loc.GetString("marking-dye-color-add"),
+            ToolTip = Loc.GetString("marking-dye-color-add-tooltip"),
+        };
+        _removeColorButton = new Button
+        {
+            Text = Loc.GetString("marking-dye-color-remove"),
+            ToolTip = Loc.GetString("marking-dye-color-remove-tooltip"),
+        };
+
+        var colorRow = new BoxContainer { Orientation = LayoutOrientation.Horizontal, SeparationOverride = 4 };
+        colorRow.AddChild(_colorOption);
+        colorRow.AddChild(_addColorButton);
+        colorRow.AddChild(_removeColorButton);
+
         _colorSelector = new ColorSelectorSliders { HorizontalExpand = true };
         _colorSelector.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv;
 
@@ -65,7 +84,7 @@ public sealed class MarkingDyeEditor : BoxContainer
         };
 
         _settings.AddChild(_styleOption);
-        _settings.AddChild(_colorLabel);
+        _settings.AddChild(colorRow);
         _settings.AddChild(_colorSelector);
         _settings.AddChild(amountRow);
         _settings.AddChild(_amountSlider);
@@ -85,11 +104,36 @@ public sealed class MarkingDyeEditor : BoxContainer
             _dye.Style = (MarkingDyeStyle) args.Id;
             Raise();
         };
+        _colorOption.OnItemSelected += args =>
+        {
+            _colorOption.SelectId(args.Id);
+            _colorIndex = args.Id;
+            UpdateControls();
+        };
+        _addColorButton.OnPressed += _ =>
+        {
+            if (_dye.Colors.Count >= MarkingDye.MaxColors)
+                return;
+
+            _dye.Colors.Add(_dye.Colors[^1]);
+            _colorIndex = _dye.Colors.Count - 1;
+            Raise();
+        };
+        _removeColorButton.OnPressed += _ =>
+        {
+            if (_dye.Colors.Count <= 1)
+                return;
+
+            _dye.Colors.RemoveAt(_colorIndex);
+            _colorIndex = Math.Clamp(_colorIndex, 0, _dye.Colors.Count - 1);
+            Raise();
+        };
         _colorSelector.OnColorChanged += color =>
         {
             if (_updating)
                 return;
-            _dye.Color = color;
+            if (_colorIndex < _dye.Colors.Count)
+                _dye.Colors[_colorIndex] = color;
             Raise();
         };
         _amountSlider.OnValueChanged += range =>
@@ -108,7 +152,8 @@ public sealed class MarkingDyeEditor : BoxContainer
         _updating = true;
         _enabledCheck.Pressed = dye is not null;
         if (dye is { } value)
-            _dye = value;
+            _dye = value with { Colors = new List<Color>(value.Colors) };
+        _colorIndex = Math.Clamp(_colorIndex, 0, _dye.Colors.Count - 1);
         UpdateControls();
         _updating = false;
     }
@@ -116,17 +161,34 @@ public sealed class MarkingDyeEditor : BoxContainer
     private void Raise()
     {
         UpdateControls();
-        OnDyeChanged?.Invoke(_enabledCheck.Pressed ? _dye : null);
+        MarkingDye? dye = null;
+        if (_enabledCheck.Pressed)
+            dye = _dye with { Colors = new List<Color>(_dye.Colors) };
+        OnDyeChanged?.Invoke(dye);
     }
 
     private void UpdateControls()
     {
         _settings.Visible = _enabledCheck.Pressed;
         _styleOption.SelectId((int) _dye.Style);
-        if (_colorSelector.Color != _dye.Color)
-            _colorSelector.Color = _dye.Color;
+
+        _colorOption.Clear();
+        for (var i = 0; i < _dye.Colors.Count; i++)
+        {
+            _colorOption.AddItem(Loc.GetString("marking-dye-color-entry", ("value", i + 1)), i);
+        }
+        _colorOption.SelectId(Math.Clamp(_colorIndex, 0, _dye.Colors.Count - 1));
+        _removeColorButton.Disabled = _dye.Colors.Count <= 1;
+        _addColorButton.Disabled = _dye.Colors.Count >= MarkingDye.MaxColors;
+
+        if (_colorIndex >= 0 && _colorIndex < _dye.Colors.Count)
+        {
+            var color = _dye.Colors[_colorIndex];
+            if (_colorSelector.Color != color)
+                _colorSelector.Color = color;
+        }
+
         _amountSlider.SetValueWithoutEvent(_dye.Offset);
-        _colorLabel.Text = Loc.GetString(StyleKey("color", _dye.Style));
         _amountLabel.Text = Loc.GetString(StyleKey("amount", _dye.Style), ("value", (int) MathF.Round(_dye.Offset * 100f)));
     }
 

@@ -36,6 +36,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
     {
         UpdateLayers(entity);
         ApplyMarkingSet(entity);
+        _markingDye.ApplyBodyDye(entity); // DS14
 
         var humanoidAppearance = entity.Comp1;
         var sprite = entity.Comp2;
@@ -224,6 +225,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         humanoid.Species = profile.Species;
         humanoid.SkinColor = profile.Appearance.SkinColor;
         humanoid.EyeColor = profile.Appearance.EyeColor;
+        humanoid.BodyDye = profile.Appearance.BodyDye?.Sanitized(); // DS14
 
         UpdateSprite((uid, humanoid, Comp<SpriteComponent>(uid)));
     }
@@ -249,6 +251,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         humanoid.SkinColor = appearance.SkinColor;
         humanoid.Sex = appearance.Sex;
         humanoid.EyeColor = appearance.EyeColor;
+        humanoid.BodyDye = appearance.BodyDye; // DS14
 
         UpdateSprite((uid, humanoid, sprite));
     }
@@ -270,7 +273,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
                 {
                     // DS14-start
                     ApplyMarking(markingPrototype, marking.MarkingColors, marking.Visible, entity);
-                    _markingDye.Apply((entity.Owner, entity.Comp2), markingPrototype, marking);
+                    _markingDye.ApplyMarkingDye(entity, markingPrototype, marking);
                     // DS14-end
                 }
             }
@@ -471,7 +474,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
                 {
                     // DS14-start
                     ApplyMarking(markingPrototype, marking.MarkingColors, marking.Visible, (ent, ent.Comp, sprite));
-                    _markingDye.Apply((ent.Owner, sprite), markingPrototype, marking);
+                    _markingDye.ApplyMarkingDye((ent, ent.Comp, sprite), markingPrototype, marking);
                     // DS14-end
                 }
             }

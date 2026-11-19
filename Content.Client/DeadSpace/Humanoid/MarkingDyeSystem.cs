@@ -1,4 +1,4 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+﻿// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
 using Content.Client.Stylesheets.Colorspace;
@@ -16,6 +16,7 @@ namespace Content.Client.DeadSpace.Humanoid;
 public sealed class MarkingDyeSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private MarkingManager _markingManager = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
     public static readonly ProtoId<ShaderPrototype> ShaderId = "DSMarkingDye";
@@ -35,23 +36,70 @@ public sealed class MarkingDyeSystem : EntitySystem
         HumanoidVisualLayers.Eyes,
     ];
 
-    public void Apply(Entity<SpriteComponent> sprite, MarkingPrototype proto, Marking marking)
+    private static readonly HashSet<HumanoidVisualLayers> BodyLayers =
+    [
+        HumanoidVisualLayers.Chest,
+        HumanoidVisualLayers.Head,
+        HumanoidVisualLayers.RArm,
+        HumanoidVisualLayers.LArm,
+        HumanoidVisualLayers.RHand,
+        HumanoidVisualLayers.LHand,
+        HumanoidVisualLayers.RLeg,
+        HumanoidVisualLayers.LLeg,
+        HumanoidVisualLayers.RFoot,
+        HumanoidVisualLayers.LFoot,
+    ];
+
+    public void ApplyMarkingDye(Entity<HumanoidAppearanceComponent, SpriteComponent> ent, MarkingPrototype proto, Marking marking)
     {
+        var bodyDye = ent.Comp1.BodyDye?.Sanitized();
+
         foreach (var spriteSpecifier in proto.Sprites)
         {
             if (spriteSpecifier is not SpriteSpecifier.Rsi rsi
-                || !_sprite.LayerMapTryGet(sprite.AsNullable(), $"{proto.ID}-{rsi.RsiState}", out var index, false)
-                || sprite.Comp[index] is not SpriteComponent.Layer layer)
+                || !_sprite.LayerMapTryGet((ent.Owner, ent.Comp2), $"{proto.ID}-{rsi.RsiState}", out var index, false)
+                || ent.Comp2[index] is not SpriteComponent.Layer layer)
                 continue;
 
-            if (marking.Dye is not { } dye || proto.ForcedColoring)
+            if (marking.Dye is { } dye && !proto.ForcedColoring)
             {
-                Remove(sprite, index);
+                if (layer.Visible)
+                    ApplyToLayer(ent, index, layer, proto, dye.Sanitized(), bodyMapped: false);
                 continue;
             }
 
-            if (layer.Visible)
-                ApplyToLayer(sprite, index, layer, proto, rsi, dye.Sanitized());
+            if (bodyDye is { } skinDye
+                && !proto.ForcedColoring
+                && _markingManager.MustMatchSkin(ent.Comp1.Species, proto.BodyPart, out _, _proto))
+            {
+                if (layer.Visible)
+                    ApplyToLayer(ent, index, layer, proto, skinDye, bodyMapped: true);
+                continue;
+            }
+
+            Remove((ent.Owner, ent.Comp2), index);
+        }
+    }
+
+    public void ApplyBodyDye(Entity<HumanoidAppearanceComponent, SpriteComponent> ent)
+    {
+        var dye = ent.Comp1.BodyDye?.Sanitized();
+
+        foreach (var part in BodyLayers)
+        {
+            if (!_sprite.LayerMapTryGet((ent.Owner, ent.Comp2), part, out var index, false))
+                continue;
+
+            if (ent.Comp2[index] is not SpriteComponent.Layer layer)
+                continue;
+
+            if (dye is not { } value || !layer.Visible)
+            {
+                Remove((ent.Owner, ent.Comp2), index);
+                continue;
+            }
+
+            ApplyToLayer(ent, index, layer, null, value, bodyMapped: true);
         }
     }
 
@@ -71,36 +119,64 @@ public sealed class MarkingDyeSystem : EntitySystem
     }
 
     private void ApplyToLayer(
-        Entity<SpriteComponent> sprite,
+        Entity<HumanoidAppearanceComponent, SpriteComponent> ent,
         int index,
         SpriteComponent.Layer layer,
-        MarkingPrototype proto,
-        SpriteSpecifier.Rsi rsi,
-        MarkingDye dye)
+        MarkingPrototype? proto,
+        MarkingDye dye,
+        bool bodyMapped)
     {
         var baseColor = layer.Color;
-        var state = _sprite.GetState(rsi);
+        var region = bodyMapped || proto == null || !HeadLayers.Contains(proto.BodyPart)
+            ? FullRegion
+            : HeadRegion;
+        var state = layer.ActualState;
 
         var shader = IsDyeLayer(layer) && layer.Shader is { } existing
             ? existing
             : _proto.Index(ShaderId).InstanceUnique();
 
         shader.SetParameter("baseLab", ToOklab(baseColor));
-        shader.SetParameter("dyeLab", ToOklab(dye.Color));
+        shader.SetParameter("dyeLab", DyeLabArray(dye));
+        shader.SetParameter("dyeCount", dye.Colors.Count);
         shader.SetParameter("dyeStyle", (int) dye.Style);
         shader.SetParameter("amount", dye.Offset);
-        shader.SetParameter("region", HeadLayers.Contains(proto.BodyPart) ? HeadRegion : FullRegion);
-        shader.SetParameter("frameSize", (Vector2) state.Size);
+        shader.SetParameter("region", region);
 
-        var directional = state.RsiDirections != RsiDirectionType.Dir1 && !state.IsAnimated;
-        shader.SetParameter("frameBack", directional ? FrameUv(state, RsiDirection.North) : Vector4.Zero);
-        shader.SetParameter("frameEast", directional ? FrameUv(state, RsiDirection.East) : Vector4.Zero);
-        shader.SetParameter("frameWest", directional ? FrameUv(state, RsiDirection.West) : Vector4.Zero);
+        if (state is { } rsiState)
+        {
+            shader.SetParameter("frameSize", (Vector2) rsiState.Size);
+            var directional = rsiState.RsiDirections != RsiDirectionType.Dir1 && !rsiState.IsAnimated;
+            shader.SetParameter("frameBack", directional ? FrameUv(rsiState, RsiDirection.North) : Vector4.Zero);
+            shader.SetParameter("frameEast", directional ? FrameUv(rsiState, RsiDirection.East) : Vector4.Zero);
+            shader.SetParameter("frameWest", directional ? FrameUv(rsiState, RsiDirection.West) : Vector4.Zero);
+        }
+        else
+        {
+            shader.SetParameter("frameSize", Vector2.One);
+            shader.SetParameter("frameBack", Vector4.Zero);
+            shader.SetParameter("frameEast", Vector4.Zero);
+            shader.SetParameter("frameWest", Vector4.Zero);
+        }
 
-        _sprite.LayerSetColor(sprite.AsNullable(), index, Color.White.WithAlpha(baseColor.A));
+        _sprite.LayerSetColor((ent.Owner, ent.Comp2), index, Color.White.WithAlpha(baseColor.A));
 
         if (layer.Shader != shader)
-            sprite.Comp.LayerSetShader(index, shader, ShaderId.Id);
+            ent.Comp2.LayerSetShader(index, shader, ShaderId.Id);
+    }
+
+    private static float[] DyeLabArray(MarkingDye dye)
+    {
+        var lab = new float[MarkingDye.MaxColors * 3];
+        for (var i = 0; i < dye.Colors.Count && i < MarkingDye.MaxColors; i++)
+        {
+            var oklab = dye.Colors[i].LabFromSrgb();
+            lab[i * 3] = oklab.X;
+            lab[i * 3 + 1] = oklab.Y;
+            lab[i * 3 + 2] = oklab.Z;
+        }
+
+        return lab;
     }
 
     private static Vector3 ToOklab(Color color)
