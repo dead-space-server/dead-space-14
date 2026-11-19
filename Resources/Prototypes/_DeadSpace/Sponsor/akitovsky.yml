@@ -23,7 +23,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackAkitovsky
   name: кошечка Аки
   description: На новый год я хочу страшный суд и розовый рюкзак с Хэллоу Китти. Аки смотрит за сектором Титан.
@@ -62,15 +62,12 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltAkitovsky
   name: кошечка Даджи
   description: Если есть вопрос – оставь его при себе. Даджи смотрит за менторами.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Akitovsky/belt.rsi
   - type: Clothing
@@ -79,8 +76,6 @@
       belt:
       - state: equipped-BELT
         scale: 0.5, 0.5
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillAkitovsky
@@ -138,7 +133,7 @@
 
 #Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitAkitovsky
   name: скафандр Ми-ми-милитари
   description: Герметичная защита от суровой реальности, позволяющая дышать только розовым воздухом. Подойдёт для выполнения сверхсекретной миссии по покорению сердец в самых враждебных условиях.
@@ -150,8 +145,6 @@
     sprite: _DeadSpace/Sponsor/Akitovsky/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitAkitovsky
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -164,14 +157,11 @@
         Stun: 0.65
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitAkitovsky
   name: шлем скафандра Ми-ми-милитари
   description: Купол спокойствия. Гарантирует стерильную среду для ваших прекрасных мыслей.
@@ -185,9 +175,6 @@
     color: "#ffa9f4"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:

@@ -17,7 +17,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitSil
   name: скафандр "СЕВА"
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -29,8 +29,6 @@
     sprite: _DeadSpace/Sponsor/Sil/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSil
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -65,9 +63,6 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -98,11 +93,15 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
-        Radiation: 0.5
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+        Shock: 0.65
+        Cold: 0.65
+        Caustic: 0.65
+        Radiation: 0.65
+
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -231,7 +230,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltSilFilled
   name: белый разгрузочный пояс
   description: Пояс, который принадлежит члену экипажа под покровительством спонсорской организации.
@@ -241,8 +240,6 @@
     sprite: _DeadSpace/Sponsor/Sil/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Sil/belt.rsi
-  - type: Item
-    size: Huge
   - type: Storage
     grid:
     - 0,0,9,1
@@ -314,7 +311,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackSil
   name: белый армейский вещмешок
   description: Вместительный вещмешок с множеством карманов. Имеет окрас городского камуфляжа. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.

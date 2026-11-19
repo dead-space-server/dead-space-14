@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpack0black_cat0
   name: рюкзак темного воителя
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -50,7 +50,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBelt0black_cat0Filled
   name: пояс инструментов темного воителя
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -60,8 +60,6 @@
     sprite: _DeadSpace/Sponsor/0black_cat0/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/0black_cat0/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -84,7 +82,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuit0black_cat0
   name: скафандр тёмного воителя
   description: Изысканные доспехи. Имеют хорошую прочность, а так же сделаны более удобными для передвижения. Характеристики идентичны скафандру атмос-техника.
@@ -96,11 +94,9 @@
     sprite: _DeadSpace/Sponsor/0black_cat0/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuit0black_cat0
-  - type: Item
-    size: Huge
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuit0black_cat0
   categories: [ HideSpawnMenu ]
   name: шлем скафандра тёмного воителя
@@ -112,11 +108,7 @@
     sprite: _DeadSpace/Sponsor/0black_cat0/helmet.rsi
   - type: PointLight
     color: red
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Jumpsuit
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuit0black_cat0

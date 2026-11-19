@@ -4,7 +4,7 @@
   sponsorOnly: true
 
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackrtwo45
   name: сумка улья Белодис
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -50,7 +50,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitrtwo45
   name: скафандр улья Белодис
   description: Скафандр защитника улья Белодис. Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -62,8 +62,6 @@
     sprite: _DeadSpace/Sponsor/rtwo45/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitrtwo45
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -77,14 +75,11 @@
         Piercing: 0.6
         Heat: 0.5
         Stun: 0.65
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltrtwo45Filled
   name: пояс улья Белодис
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -94,8 +89,6 @@
     sprite: _DeadSpace/Sponsor/rtwo45/assault.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/rtwo45/assault.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -104,7 +97,7 @@
       - id: Multitool
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitrtwo45
   categories: [ HideSpawnMenu ]
   name: шлем скафандра улья Белодис
@@ -116,9 +109,6 @@
     sprite: _DeadSpace/Sponsor/rtwo45/helmet.rsi
   - type: PointLight
     color: red
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
 - type: entity
   parent: ClothingShoesBootsMag

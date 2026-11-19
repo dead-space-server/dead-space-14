@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackhent
   name: рюкзак Мед-Техника
   description: Этот рюкзак предназначен для хранения медицинских принадлежностей и инструментов, необходимых для быстрого реагирования в экстренных ситуациях.
@@ -32,7 +32,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBelthent
   name: РПС Мед-Техника
   description: Разгрузочный жилет с медикаментами, необходимыми для оказания помощи и спасения жизней в экстремальных условиях.
@@ -42,8 +42,6 @@
     sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillhent
@@ -54,7 +52,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuithent
   name: скафандр Мед-Техника
   description: Скафандр с биокодированием, обеспечивающий защиту в критических ситуациях.
@@ -66,8 +64,6 @@
     sprite: _DeadSpace/Sponsor/Wisdom/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuithent
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -79,14 +75,11 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons]
+  parent: [ClothingHeadHelmetHardsuitDominator, ShowMedicalIcons]
   id: ClothingHeadHelmetHardsuithent
   categories: [ HideSpawnMenu ]
   name: шлем скафандра Мед-Техника
@@ -106,9 +99,6 @@
     sprite: _DeadSpace/Sponsor/hent/helmet.rsi
   - type: PointLight
     color: "#ebebeb"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: ShowHealthBars
     damageContainers:
     - Biological

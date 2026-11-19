@@ -11,7 +11,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackdrippenwagen
   name: блюспейс рюкзак Банши
   description: Рюкзак использующий технологию блюспейса для увелечения своего максимального объёма. Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -40,7 +40,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltdrippenwagenFilled
   name: пояс Банши
   description: Пояс который принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -50,8 +50,6 @@
     sprite: _DeadSpace/Sponsor/drippenwagen/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/drippenwagen/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -88,7 +86,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitdrippenwagen
   name: скафандр Банши
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -100,8 +98,6 @@
     sprite: _DeadSpace/Sponsor/drippenwagen/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitdrippenwagen
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -121,7 +117,7 @@
     sprintModifier: 0.85
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitdrippenwagen
   name: шлем скафандра Банши
   description: Шлем изолирующий владельца от страшного вакуума снаружи.
@@ -141,11 +137,7 @@
     sprite: _DeadSpace/Sponsor/drippenwagen/helmet.rsi
   - type: PointLight
     color: "#daffad"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Magboots
 - type: entity
   parent: ClothingShoesBootsMag
   id: ClothingShoesBootsMagdrippenwagen

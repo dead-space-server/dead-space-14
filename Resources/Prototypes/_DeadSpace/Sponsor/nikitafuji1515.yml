@@ -11,7 +11,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpacknikitafuji1515
   name: специализированная медицинская сумка
   description: Рюкзак использующий технологию блюспейса для увелечения своего максимального объёма. Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -255,21 +255,16 @@
 # Belt
 
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltnikitafuji1515
   name: медико-Армейская РПС
   description: Ременно-поясная система тактических ремней, которую носят военные фельдшера.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/nikitafuji1515/rps.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/nikitafuji1515/rps.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: WelderExperimentalnikitafuji1515
@@ -294,7 +289,7 @@
 # HardSuit
 
 - type: entity
-  parent: ClothingOuterHardsuitBase
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitnikitafuji1515
   name: скафандр медицинской службы
   description: Этот скафандр используется полевыми медиками, на пластинах также нанесена эмблема Красного Креста, а наплечные пластины и задняя часть шлема имеют маркировку ODE 27 и литеру А в круге, нанесенную через трафарет.
@@ -328,11 +323,9 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitnikitafuji1515
-  - type: Item
-    size: Huge
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitnikitafuji1515
   name: шлем скафандра медецинской службы
   description: Гораздо легче чем шлема других скафандров, с боку также нанесена эмблема Красного Креста.
@@ -372,9 +365,6 @@
           shader: unshaded
     - type: PointLight
       color: "#adffe6"
-    - type: PressureProtection
-      highPressureMultiplier: 0.08
-      lowPressureMultiplier: 1000
     - type: TemperatureProtection
       heatingCoefficient: 0.005
       coolingCoefficient: 0.005

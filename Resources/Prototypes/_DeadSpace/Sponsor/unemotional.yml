@@ -72,7 +72,7 @@
 
 # Belt
 - type: entity
-  parent: [ ClothingBeltStorageBase, ContentsExplosionResistanceBase ]
+  parent: [ClothingBeltDominatorFilled, ContentsExplosionResistanceBase]
   id: ClothingBeltdeFOA
   name: РПС "deFo"
   description: Изготовлено на заказ компанией "deFo".
@@ -82,11 +82,6 @@
     sprite: _DeadSpace/Sponsor/unemotional/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/unemotional/belt.rsi
-  - type: Storage
-    grid:
-      - 0,0,7,1
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: MultitoolIrisReda
@@ -330,7 +325,7 @@
     hideOnToggle: true
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitdeFOA
   categories: [ HideSpawnMenu ]
   name: шлем "deFo"
@@ -351,9 +346,6 @@
   - type: PointLight
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -376,7 +368,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackdeFoA
   name: рюкзак "deFo"
   description: Изготовлено на заказ компанией "deFo".

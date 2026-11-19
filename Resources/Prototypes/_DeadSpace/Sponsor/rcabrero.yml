@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackrcabrero
   name: портфель чекиста
   description: Портфель чекиста хранящий много тайн.
@@ -42,21 +42,16 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltrcabrero
   name: пояс чекиста
   description: Пояс чекиста.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/rcabrero/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/rcabrero/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillrcabrero
@@ -98,7 +93,7 @@
 
 #Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitrcabrero
   name: экспериментальный скафандр
   description: Специальный костюм, защищающий от опасной среды с низким давлением.
@@ -110,8 +105,6 @@
     sprite: _DeadSpace/Sponsor/rcabrero/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitrcabrero
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -124,14 +117,11 @@
         Stun: 0.65
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitrcabrero
   name: экспериментальный шлем скафандра
   description: Лёгкий шлем скафандра, не стесняющий движений головы.
@@ -145,9 +135,6 @@
     color: "#73caec"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:

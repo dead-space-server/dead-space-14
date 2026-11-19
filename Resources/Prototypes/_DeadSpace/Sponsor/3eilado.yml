@@ -9,7 +9,7 @@
 
 # Backpack
 - type: entity
-  parent: [ ClothingBackpack, BaseFoldable]
+  parent: [ClothingBackpackDominator, BaseFoldable]
   id: ClothingBackpack3eilado
   name: карманный демон Ainnetel
   description: Провористый карманный демон, выглядит не особо дружелюбно. На его рожках виднеется гравировка Ван'Астрея.
@@ -86,21 +86,16 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBelt3eiladoFilled
   name: астель рождённый бездной
   description: Внутри Астеля переливается таинственный кристалл, в котором виднеются странные артефакты.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/3eilado/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/3eilado/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill3eilado
@@ -142,7 +137,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitBase
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuit3eilado
   name: скафардр Виндемиатрикс
   description: Скафандр модификации Виндемиатрикс собранный на станции 1’А.
@@ -163,18 +158,13 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuit3eilado
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuit3eilado
   name: шлем скафардра Виндемиатрикс
   description: Скафандр модификации Виндемиатрикс собранный на станции 1’А.
@@ -194,11 +184,7 @@
     sprite: _DeadSpace/Sponsor/3eilado/hardsuit/helmet.rsi
   - type: PointLight
     color: "#f5c9ff"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Magboots
 - type: entity
   parent: [ ClothingShoesBootsMag,  PowerCellSlotSmallItem ]
   id: ClothingShoesBootsMag3eilado

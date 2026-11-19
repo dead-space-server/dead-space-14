@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitEllisTinker
   name: бронескафандр UF-16
   description: Это броню прославила серия детективных романов 'блюститель правды; правдивые блюстители', где её носил главный герой, настоящий образец патриотизма, защищавший нас от предательской лжи.
@@ -13,8 +13,6 @@
     sprite: _DeadSpace/Sponsor/EllisTinker/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitEllisTinker
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -29,14 +27,11 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitEllisTinker
   categories: [ HideSpawnMenu ]
   name: шлем бронескафандра UF-16
@@ -50,9 +45,6 @@
     color: "#4eb1ae"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -129,7 +121,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltEllisTinkerFilled
   name: защитный бот
   description: Защитный бот. Верный помощник своего владельца.
@@ -143,11 +135,6 @@
       belt:
       - state: equipped-BELT
         scale: 0.5, 0.5
-  - type: Item
-    size: Huge
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: StorageFill
     contents:
     - id: PowerDrillEllisTinker
@@ -161,7 +148,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackEllisTinker
   name: рюкзак Гвардейца
   description: Вместительный рюкзак с множеством карманов. Имеет окрас городского камуфляжа. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -169,10 +156,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/EllisTinker/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingBeltEllisTinkerFilled

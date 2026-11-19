@@ -24,7 +24,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackVelmet
   name: единица тактической поддержки C-70
   description: Несмотря на новейшую модель, этот дрон так и не смог достигнуть эффективности своей более ранней версии и потерял все боевые функции. Его динамик вырван, а на боковой стороне изображена фигура, напоминающая русалку.
@@ -87,15 +87,12 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltVelmet
   name: единица тактической поддержки 12S
   description: Примитивный искусственный интеллект сделал этого дрона бесполезным для разведывательных операций и анализа окружающей обстановки. Впрочем, он крайне дружелюбен и... всё. На его корпусе нанеса гравировка из четырёх букв - AWKS.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/velmet/belt.rsi
     layers:
@@ -106,8 +103,6 @@
       visible: false
   - type: Clothing
     sprite: _DeadSpace/Sponsor/velmet/belt.rsi
-  - type: Item
-    size: Huge
   - type: Appearance
   - type: Foldable
     canFoldInsideContainer: true
@@ -165,7 +160,7 @@
 
 #Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitVelmet
   name: тактический разведывательный скафандр DMQ//66
   description: Вторая модификация лимитированной серии разведывательно-боевой линейки EVA-IVA скафандров. Отличается ещё менее броской расцветкой в угоду эффективности вверенного лазутчика.
@@ -177,14 +172,12 @@
     sprite: _DeadSpace/Sponsor/velmet/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitVelmet
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
         Blunt: 0.5
         Slash: 0.5
-        Piercing: 0.6
+        Piercing: 0.5
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
@@ -192,15 +185,15 @@
   - type: ExplosionResistance
     damageCoefficient: 0.5
   - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
+    walkModifier: 1
+    sprintModifier: 1
   - type: HardsuitIdentification
     nonlethal: true
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitVelmet
   name: шлем тактического разведывательного скафандра DMQ//66
   description: Его форма подчёркнута более строгими углами и дополнительными лицевыми пластинами, которые помимо защиты обладают встроенной системой охлаждения от недоразвитого склада ума откровенно глупых людей. Форма визора, напоминающая надменный взгляд, делает продолжительный зрительный контакт некомфортным.
@@ -214,9 +207,6 @@
     color: "#c9ffff"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:

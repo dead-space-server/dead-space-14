@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackMysticalRay
   name: рюкзак CriticalForce
   description: Этот рюкзак предназначен для хранения медицинских принадлежностей и инструментов, необходимых для быстрого реагирования в экстренных ситуациях.
@@ -50,7 +50,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltMysticalRay
   name: РПС CriticalForce
   description: Разгрузочный жилет с медикаментами, необходимыми для оказания помощи и спасения жизней в экстремальных условиях.
@@ -60,8 +60,6 @@
     sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillMysticalRay
@@ -75,7 +73,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitMysticalRay
   name: скафандр CriticalForce
   description: Скафандр с биокодированием, обеспечивающий защиту в критических ситуациях.
@@ -87,8 +85,6 @@
     sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitMysticalRay
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -100,9 +96,6 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 

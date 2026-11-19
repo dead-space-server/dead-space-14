@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackPERed
   name: боевая сумка
   description: Сумка для выдающихся граждан СССП
@@ -8,10 +8,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/PERed/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingWebbingPERed
@@ -45,7 +41,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitPERed
   name: боевой скафандр
   description: Скафандр с биокодированием, обеспечивающий защиту в критических ситуациях.
@@ -57,8 +53,6 @@
     sprite: _DeadSpace/Sponsor/PERed/hardsuit/hard.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitPERed
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -70,14 +64,11 @@
         Heat: 0.50
         Radiation: 0.50
         Caustic: 0.50
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons]
+  parent: [ClothingHeadHelmetHardsuitDominator, ShowMedicalIcons]
   id: ClothingHeadHelmetHardsuitPERed
   categories: [ HideSpawnMenu ]
   name: шлем боевого скафандра
@@ -89,9 +80,6 @@
     sprite: _DeadSpace/Sponsor/PERed/hardsuit/helmet.rsi
   - type: PointLight
     color: "#ebebeb"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: ShowHealthBars
     damageContainers:
     - Biological

@@ -17,7 +17,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackpvrsifvl
   name: надёжный компаньон Фелспринг
   description: В каждом взаимодействии между ними читается взаимное недоверие, но желание выжить превыше личных убеждений. Послана генеральным директором спонсорской организации Warmind.
@@ -55,21 +55,16 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltpvrsifvl
   name: блюспейс хранилище Warmind
   description: Всегда хранит в себе что-то, что может спасти жизнь. Разработано по чертежам спонсорской организации Warmind.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvl/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/pvrsifvl/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillpvrsifvl
@@ -191,7 +186,7 @@
 
 #Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitpvrsifvl
   name: скафандр железного лорда
   description: Необычайно красивой наружности, напоминающий рыцарские латы. Глядя на него Вы ощущаете, что доспех пропитан ненавистью и ложью. Разработан по чертежам спонсорской организации Warmind.
@@ -203,8 +198,6 @@
     sprite: _DeadSpace/Sponsor/pvrsifvl/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitpvrsifvl
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -217,14 +210,11 @@
         Stun: 0.65
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitpvrsifvl
   name: шлем скафандра железного лорда
   description: Дивной формы шлем Вас подозрительно отпугивает. Прикрытый защитными элементами визор шлема полностью затемнён со стороны, совершенно пуст на вид, словно в доспех никто не облачён. Разработан по чертежам спонсорской организации Warmind.
@@ -238,9 +228,6 @@
     color: "#73caec"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:

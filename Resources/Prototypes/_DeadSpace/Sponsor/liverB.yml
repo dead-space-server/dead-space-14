@@ -11,7 +11,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitLiverB
   name: скафандр "Aurelion"
   description: Исследовательский защитный скафандр, созданный для работы в агрессивных средах и лабораториях повышенной опасности. Гладкая композитная оболочка с отражающими сегментами поглощает свет и создаёт ощущение невесомой защиты.
@@ -23,8 +23,6 @@
     sprite: _DeadSpace/Sponsor/LiverB/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitLiverB
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -39,9 +37,6 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -128,7 +123,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltLiverBFilled
   name: пояс "Aurelion"
   description: Пояс с интегрированными отсеками для инструментов. Цветовая гамма подчеркивает исследовательскую эстетику экипировки.
@@ -138,8 +133,6 @@
     sprite: _DeadSpace/Sponsor/LiverB/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/LiverB/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
     - id: PowerDrillLiverB
@@ -166,7 +159,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackLiverB
   name: исследовательская сумка "Aurelion"
   description: Вместительная сумка с множеством карманов и отделений. Цветовая гамма подчёркивает научно-исследовательский стиль.
@@ -174,10 +167,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/LiverB/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingBeltLiverBFilled

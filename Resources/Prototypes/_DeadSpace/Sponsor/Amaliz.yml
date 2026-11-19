@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackAmaliz
   name: сумка Fashion Dynamics
   description: Тёмная сумка с бирюзовой застёжкой, на лямке имеется красный значок изображающий пульсар. На боковых карманах имеется аккуратная гравировка "by Fashion Dynamics".
@@ -20,10 +20,6 @@
     netsync: false
   - type: Appearance
     netsync: false
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingHandsGlovesAmaliz
@@ -64,7 +60,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitAmaliz
   name: скафандр "Вихрь туманности"
   description: Скафандр с малиново-красновыми вставками. Пластины скафандра сделаны из Титана и прошиты углеродным волокном. Судя по внешнему виду, скафандр был создан индивидуально для владельца. Ручная работа.
@@ -76,8 +72,6 @@
     sprite: _DeadSpace/Sponsor/Amaliz/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitAmaliz
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -89,9 +83,6 @@
         Heat: 0.50
         Radiation: 0.50
         Caustic: 0.50
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: HideLayerClothing
     clothingSlots: 
     - belt
@@ -100,7 +91,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitAmaliz
   categories: [ HideSpawnMenu ]
   name: шлем "Вихрь туманности"
@@ -118,9 +109,6 @@
       head:
       - state: on-unshaded
         shader: unshaded
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: EyeProtection
   - type: Armor
     modifiers:

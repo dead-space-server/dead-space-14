@@ -10,7 +10,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackYosif
   name: cозвездие Ориона
   description: Вы видите перед собой созвездие из нескольких звёзд, вглядываясь в него вы чувствуете желание погрузить руку в самый центр него.
@@ -49,7 +49,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltYosifFilled
   name: инструментальный пояс Властителя звёзд
   description: Пояс подготовленный специально под заказ для хранения инструментов высшего качества.
@@ -59,8 +59,6 @@
     sprite: _DeadSpace/Sponsor/Yosif/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Yosif/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillYosif
@@ -178,7 +176,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitYosif
   name: скафандр модификации "Орион"
   description: Идеально подходящий скафандр для путешествий по неизведанным просторам космоса.
@@ -190,11 +188,9 @@
     sprite: _DeadSpace/Sponsor/Yosif/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitYosif
-  - type: Item
-    size: Huge
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitYosif
   categories: [ HideSpawnMenu ]
   name: шлем скафандра "Орион"
@@ -206,11 +202,7 @@
     sprite: _DeadSpace/Sponsor/Yosif/helmet.rsi
   - type: PointLight
     color: "#ffffff"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Magboots
 - type: entity
   parent: ClothingShoesBootsMag
   id: ClothingShoesBootsMagYosif
