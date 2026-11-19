@@ -105,12 +105,10 @@ public sealed partial class TriggerSystem
         var query = EntityQueryEnumerator<TriggerOnProximityComponent>();
         while (query.MoveNext(out var uid, out var trigger))
         {
-            // DS14-start: MaxValue overflows when a slept map wakes and pause time is added back.
-            if (trigger.NextVisualUpdate > TimeSpan.Zero && curTime >= trigger.NextVisualUpdate)
-            // DS14-end
+            if (curTime >= trigger.NextVisualUpdate)
             {
                 // Update the visual state once the animation is done.
-                trigger.NextVisualUpdate = TimeSpan.Zero; // DS14
+                trigger.NextVisualUpdate = TimeSpan.MaxValue;
                 Dirty(uid, trigger);
                 SetProximityAppearance((uid, trigger));
             }

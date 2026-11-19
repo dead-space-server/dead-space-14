@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Server.DeadSpace.AntagMaps; // DS14
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.GridPreloader;
 using Content.Server.Shuttles.Systems;
@@ -22,7 +21,6 @@ public sealed partial class LoadMapRuleSystem : StationEventSystem<LoadMapRuleCo
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private GridPreloaderSystem _gridPreloader = default!;
     [Dependency] private ShuttleSystem _shuttles = default!; // DS14
-    [Dependency] private RoundMapPreloadSystem _preparedMaps = default!; // DS14
 
     protected override void Added(EntityUid uid, LoadMapRuleComponent comp, GameRuleComponent rule, GameRuleAddedEvent args)
     {
@@ -52,87 +50,47 @@ public sealed partial class LoadMapRuleSystem : StationEventSystem<LoadMapRuleCo
             DebugTools.AssertNull(comp.GridPath);
             DebugTools.AssertNull(comp.PreloadedGrid);
 
-            // DS14-start
-            if (_preparedMaps.TryClaim(path, out mapId, out var claimed))
+            var opts = DeserializationOptions.Default with {InitializeMaps = true};
+            if (!_mapLoader.TryLoadMap(path, out var map, out var gridSet, opts))
             {
-                grids = claimed;
-            }
-            else
-            {
-            // DS14-end
-                var opts = DeserializationOptions.Default with {InitializeMaps = true};
-                if (!_mapLoader.TryLoadMap(path, out var map, out var gridSet, opts))
-                {
-                    Log.Error($"Failed to load map from {path}!");
-                    ForceEndSelf(uid, rule);
-                    return;
-                }
-
-                grids = gridSet.Select( x => x.Owner).ToList();
-                mapId = map.Value.Comp.MapId;
-            // DS14-start
+                Log.Error($"Failed to load map from {path}!");
+                ForceEndSelf(uid, rule);
+                return;
             }
 
-            _preparedMaps.EnsureAntag(_map.GetMapOrInvalid(mapId), path);
-            // DS14-end
+            grids = gridSet.Select( x => x.Owner).ToList();
+            mapId = map.Value.Comp.MapId;
         }
         else if (comp.GridPath is { } gPath)
         {
             DebugTools.AssertNull(comp.PreloadedGrid);
 
             // I fucking love it when "map paths" choses to ar
-            // DS14-start
-            if (_preparedMaps.TryClaim(gPath, out mapId, out var claimedGrid))
+            _map.CreateMap(out mapId);
+            var opts = DeserializationOptions.Default with {InitializeMaps = true};
+            if (!_mapLoader.TryLoadGrid(mapId, gPath, out var grid, opts))
             {
-                grids = claimedGrid;
-            }
-            else
-            {
-            // DS14-end
-                _map.CreateMap(out mapId);
-                var opts = DeserializationOptions.Default with {InitializeMaps = true};
-                if (!_mapLoader.TryLoadGrid(mapId, gPath, out var grid, opts))
-                {
-                    Log.Error($"Failed to load grid from {gPath}!");
-                    ForceEndSelf(uid, rule);
-                    return;
-                }
-
-                grids = new List<EntityUid> {grid.Value.Owner};
-            // DS14-start
+                Log.Error($"Failed to load grid from {gPath}!");
+                ForceEndSelf(uid, rule);
+                return;
             }
 
-            _preparedMaps.EnsureAntag(_map.GetMapOrInvalid(mapId), gPath);
-            // DS14-end
+            grids = new List<EntityUid> {grid.Value.Owner};
         }
         else if (comp.PreloadedGrid is {} preloaded)
         {
-            var preloadedPath = _prototypeManager.Index(preloaded).Path;
-            // DS14-start
-            if (_preparedMaps.TryClaim(preloadedPath, out mapId, out var claimedPreloaded))
+            // TODO: If there are no preloaded grids left, any rule announcements will still go off!
+            if (!_gridPreloader.TryGetPreloadedGrid(preloaded, out var loadedShuttle))
             {
-                grids = claimedPreloaded;
-            }
-            else
-            {
-            // DS14-end
-                // TODO: If there are no preloaded grids left, any rule announcements will still go off!
-                if (!_gridPreloader.TryGetPreloadedGrid(preloaded, out var loadedShuttle))
-                {
-                    Log.Error($"Failed to get a preloaded grid with {preloaded}!");
-                    ForceEndSelf(uid, rule);
-                    return;
-                }
-
-                var mapUid = _map.CreateMap(out mapId, runMapInit: false);
-                _transform.SetParent(loadedShuttle.Value, mapUid);
-                grids = new List<EntityUid>() { loadedShuttle.Value };
-                _map.InitializeMap(mapUid);
-            // DS14-start
+                Log.Error($"Failed to get a preloaded grid with {preloaded}!");
+                ForceEndSelf(uid, rule);
+                return;
             }
 
-            _preparedMaps.EnsureAntag(_map.GetMapOrInvalid(mapId), preloadedPath);
-            // DS14-end
+            var mapUid = _map.CreateMap(out mapId, runMapInit: false);
+            _transform.SetParent(loadedShuttle.Value, mapUid);
+            grids = new List<EntityUid>() { loadedShuttle.Value };
+            _map.InitializeMap(mapUid);
         }
         else
         {

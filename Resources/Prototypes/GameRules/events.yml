@@ -680,7 +680,6 @@
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/ds_lone_ops_outpost.yml #DS14
   - type: PauseMapWhenEmpty # DS14
-  - type: DeleteAbandonedAntagMap # DS14
   - type: NukeopsRule
     roundEndBehavior: Nothing
   - type: AntagSelection
