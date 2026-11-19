@@ -29,6 +29,11 @@ centcomm-fax-content-placeholder = Текст ответа. Поддержива
 centcomm-fax-stamp = Печать
 centcomm-fax-stamp-none = Без печати
 centcomm-fax-lock = Запретить правку
+centcomm-fax-return-original = Отправить эту же бумагу обратно (текст, печати и подписи сохранятся)
+centcomm-fax-stamp-add = Добавить печать
+centcomm-fax-stamp-clear = Очистить
+centcomm-fax-stamp-list-empty = Печати не добавлены, будет поставлена выбранная
+centcomm-fax-stamp-list = Добавлены: { $stamps }
 centcomm-fax-send = Отправить ответ
 
 centcomm-fax-color-stamp = Цвет как у печати

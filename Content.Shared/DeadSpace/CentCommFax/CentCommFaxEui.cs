@@ -26,7 +26,16 @@ public sealed class CentCommFaxEntry
     public List<StampDisplayInfo> Stamps = new();
     public List<string> Signatures = new();
     public int Replies;
+
+    // What it takes to send this very paper back.
+    public string PaperPrototype = string.Empty;
+    public string? Label;
+    public string? StampState;
 }
+
+/// <summary>One stamp put on a reply: the stamp prototype and the ink colour (null - the stamp's own).</summary>
+[Serializable, NetSerializable]
+public record struct CentCommFaxStamp(string Prototype, Color? Color);
 
 [Serializable, NetSerializable]
 public record struct CentCommFaxTarget(NetEntity Fax, string Name, string Station);
@@ -41,10 +50,15 @@ public static class CentCommFaxEuiMsg
         public string Title = string.Empty;
         public string From = string.Empty;
         public string Content = string.Empty;
-        public string? StampPrototype;
-        public Color? StampColor;
+        public List<CentCommFaxStamp> Stamps = new();
         public bool Locked;
         public string? PaperPrototype;
+
+        /// <summary>
+        /// Send back the received paper <see cref="ReplyTo"/> itself, with its text, stamps and signatures, plus the new
+        /// stamps; Title and Content are ignored.
+        /// </summary>
+        public bool ReturnOriginal;
     }
 
     [Serializable, NetSerializable]

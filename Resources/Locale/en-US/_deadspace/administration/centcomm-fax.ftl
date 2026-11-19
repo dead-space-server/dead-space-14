@@ -29,6 +29,11 @@ centcomm-fax-content-placeholder = Reply text. Paper markup works: [bold], [colo
 centcomm-fax-stamp = Stamp
 centcomm-fax-stamp-none = No stamp
 centcomm-fax-lock = Lock editing
+centcomm-fax-return-original = Send this paper back (its text, stamps and signatures are kept)
+centcomm-fax-stamp-add = Add stamp
+centcomm-fax-stamp-clear = Clear
+centcomm-fax-stamp-list-empty = No stamps added, the selected one is used
+centcomm-fax-stamp-list = Added: { $stamps }
 centcomm-fax-send = Send reply
 
 centcomm-fax-color-stamp = Stamp's own color
