@@ -4,7 +4,7 @@ using Content.Shared.DeadSpace.Sandevistan;
 
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
-public sealed class LimbTargetBonusSystem : EntitySystem
+public sealed partial class LimbTargetBonusSystem : EntitySystem
 {
     [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
 

@@ -4,7 +4,7 @@ using Content.Shared.Stunnable;
 
 namespace Content.Shared.DeadSpace.Abilities.StandUp;
 
-public sealed class InstantStandUpSystem : EntitySystem
+public sealed partial class InstantStandUpSystem : EntitySystem
 {
     public override void Initialize()
     {

@@ -10,7 +10,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Reactions;
 
-public sealed class NearbyCriticalShoutSystem : EntitySystem
+public sealed partial class NearbyCriticalShoutSystem : EntitySystem
 {
     [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
     [Dependency] private readonly IRobustRandom _random = default!;

@@ -9,7 +9,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 
 namespace Content.Shared.DeadSpace.Weapons;
 
-public sealed class SemiAutoFireRateSystem : EntitySystem
+public sealed partial class SemiAutoFireRateSystem : EntitySystem
 {
     [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
     [Dependency] private readonly SharedGunSystem _guns = default!;

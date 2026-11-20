@@ -10,7 +10,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.DeadSpace.Dodge;
 
-public sealed class SharedDodgeSystem : EntitySystem
+public sealed partial class SharedDodgeSystem : EntitySystem
 {
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;

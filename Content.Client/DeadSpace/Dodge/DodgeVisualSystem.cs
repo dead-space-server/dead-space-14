@@ -6,7 +6,7 @@ using Content.Shared.DeadSpace.Dodge;
 
 namespace Content.Client.DeadSpace.Dodge;
 
-public sealed class DodgeVisualSystem : EntitySystem
+public sealed partial class DodgeVisualSystem : EntitySystem
 {
     [Dependency] private readonly DeadSpaceAfterimageSystem _afterimages = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;

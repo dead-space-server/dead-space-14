@@ -1,6 +1,6 @@
 diff --git a/Content.Client/DeadSpace/Dodge/DodgeVisualSystem.cs b/Content.Client/DeadSpace/Dodge/DodgeVisualSystem.cs
 new file mode 100644
-index 0000000000..527188f469
+index 0000000000..6ac2eecb24
 --- /dev/null
 +++ b/Content.Client/DeadSpace/Dodge/DodgeVisualSystem.cs
 @@ -0,0 +1,45 @@
@@ -12,7 +12,7 @@ index 0000000000..527188f469
 +
 +namespace Content.Client.DeadSpace.Dodge;
 +
-+public sealed class DodgeVisualSystem : EntitySystem
++public sealed partial class DodgeVisualSystem : EntitySystem
 +{
 +    [Dependency] private readonly DeadSpaceAfterimageSystem _afterimages = default!;
 +    [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -437,7 +437,7 @@ index 91f9023c2b..93092ce5ac 100644
      public async Task WeaponEffectPvsIncludesRemoteViewSubscribersTest()
 diff --git a/Content.Server/DeadSpace/Dodge/DodgeSystem.cs b/Content.Server/DeadSpace/Dodge/DodgeSystem.cs
 new file mode 100644
-index 0000000000..99e33861c2
+index 0000000000..4998b62b57
 --- /dev/null
 +++ b/Content.Server/DeadSpace/Dodge/DodgeSystem.cs
 @@ -0,0 +1,110 @@
@@ -456,7 +456,7 @@ index 0000000000..99e33861c2
 +
 +namespace Content.Server.DeadSpace.Dodge;
 +
-+public sealed class DodgeSystem : EntitySystem
++public sealed partial class DodgeSystem : EntitySystem
 +{
 +    [Dependency] private readonly SharedDodgeSystem _dodge = default!;
 +    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
@@ -553,7 +553,7 @@ index 0000000000..99e33861c2
 +}
 diff --git a/Content.Server/DeadSpace/Reactions/NearbyCriticalShoutSystem.cs b/Content.Server/DeadSpace/Reactions/NearbyCriticalShoutSystem.cs
 new file mode 100644
-index 0000000000..c17d0b0821
+index 0000000000..988853f9c7
 --- /dev/null
 +++ b/Content.Server/DeadSpace/Reactions/NearbyCriticalShoutSystem.cs
 @@ -0,0 +1,58 @@
@@ -569,7 +569,7 @@ index 0000000000..c17d0b0821
 +
 +namespace Content.Server.DeadSpace.Reactions;
 +
-+public sealed class NearbyCriticalShoutSystem : EntitySystem
++public sealed partial class NearbyCriticalShoutSystem : EntitySystem
 +{
 +    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
 +    [Dependency] private readonly IRobustRandom _random = default!;
@@ -646,7 +646,7 @@ index 0000000000..2bfe69ea97
 +}
 diff --git a/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpSystem.cs b/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpSystem.cs
 new file mode 100644
-index 0000000000..90d68ff54c
+index 0000000000..c99ea5a04c
 --- /dev/null
 +++ b/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpSystem.cs
 @@ -0,0 +1,19 @@
@@ -656,7 +656,7 @@ index 0000000000..90d68ff54c
 +
 +namespace Content.Shared.DeadSpace.Abilities.StandUp;
 +
-+public sealed class InstantStandUpSystem : EntitySystem
++public sealed partial class InstantStandUpSystem : EntitySystem
 +{
 +    public override void Initialize()
 +    {
@@ -692,7 +692,7 @@ index 0000000000..9d80fd56a4
 +}
 diff --git a/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusSystem.cs b/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusSystem.cs
 new file mode 100644
-index 0000000000..b8566d6fe3
+index 0000000000..711a12bb57
 --- /dev/null
 +++ b/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusSystem.cs
 @@ -0,0 +1,19 @@
@@ -702,7 +702,7 @@ index 0000000000..b8566d6fe3
 +
 +namespace Content.Shared.DeadSpace.Body.Limbs;
 +
-+public sealed class LimbTargetBonusSystem : EntitySystem
++public sealed partial class LimbTargetBonusSystem : EntitySystem
 +{
 +    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
 +
@@ -912,7 +912,7 @@ index 0000000000..6b027a28ed
 +}
 diff --git a/Content.Shared/DeadSpace/Dodge/SharedDodgeSystem.cs b/Content.Shared/DeadSpace/Dodge/SharedDodgeSystem.cs
 new file mode 100644
-index 0000000000..ae6314b51a
+index 0000000000..1c6aa84adf
 --- /dev/null
 +++ b/Content.Shared/DeadSpace/Dodge/SharedDodgeSystem.cs
 @@ -0,0 +1,100 @@
@@ -928,7 +928,7 @@ index 0000000000..ae6314b51a
 +
 +namespace Content.Shared.DeadSpace.Dodge;
 +
-+public sealed class SharedDodgeSystem : EntitySystem
++public sealed partial class SharedDodgeSystem : EntitySystem
 +{
 +    [Dependency] private readonly SharedActionsSystem _actions = default!;
 +    [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -1170,7 +1170,7 @@ index 0000000000..e8a555dba5
 +}
 diff --git a/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateSystem.cs b/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateSystem.cs
 new file mode 100644
-index 0000000000..efb5d68458
+index 0000000000..9ac5a719d1
 --- /dev/null
 +++ b/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateSystem.cs
 @@ -0,0 +1,87 @@
@@ -1185,7 +1185,7 @@ index 0000000000..efb5d68458
 +
 +namespace Content.Shared.DeadSpace.Weapons;
 +
-+public sealed class SemiAutoFireRateSystem : EntitySystem
++public sealed partial class SemiAutoFireRateSystem : EntitySystem
 +{
 +    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
 +    [Dependency] private readonly SharedGunSystem _guns = default!;

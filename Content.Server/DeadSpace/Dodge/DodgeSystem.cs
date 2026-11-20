@@ -13,7 +13,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Dodge;
 
-public sealed class DodgeSystem : EntitySystem
+public sealed partial class DodgeSystem : EntitySystem
 {
     [Dependency] private readonly SharedDodgeSystem _dodge = default!;
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
