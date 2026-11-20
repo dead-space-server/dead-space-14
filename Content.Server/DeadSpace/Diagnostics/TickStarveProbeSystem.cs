@@ -12,6 +12,7 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
 {
     private const double SlowTickMs = 100d;
     private const double PausedTickMs = 30000d;
+    private const double SampleEveryMs = 1000d;
 
     private const string SchedStatPath = "/proc/thread-self/schedstat";
     private const string ThreadStatusPath = "/proc/thread-self/status";
@@ -75,6 +76,7 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
     private string? _cgroupCpuStatPath;
     private TimeSpan _nextLog;
     private Sample _last;
+    private double _sinceSampleMs;
 
     public override void Initialize()
     {
@@ -96,6 +98,14 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
 
         var wallMs = _wall.Elapsed.TotalMilliseconds;
         _wall.Restart();
+        _sinceSampleMs += wallMs;
+
+        var slow = wallMs >= SlowTickMs && wallMs <= PausedTickMs;
+        if (_primed && !slow && _sinceSampleMs < SampleEveryMs)
+            return;
+
+        var windowMs = _sinceSampleMs;
+        _sinceSampleMs = 0d;
 
         var now = TakeSample();
         Export(now);
@@ -111,7 +121,7 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
             return;
         }
 
-        if (wallMs < SlowTickMs || wallMs > PausedTickMs || _timing.CurTime < _nextLog)
+        if (!slow || _timing.CurTime < _nextLog)
             return;
 
         _nextLog = _timing.CurTime + TimeSpan.FromSeconds(5);
@@ -119,7 +129,7 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
         var runMs = (now.RunNs - last.RunNs) / 1e6;
         var waitMs = (now.WaitNs - last.WaitNs) / 1e6;
         Log.Warning(
-            $"Tick starve: wall {wallMs:0.0} ms, main run {runMs:0.0} ms, runqueue wait {waitMs:0.0} ms, other {wallMs - runMs - waitMs:0.0} ms, " +
+            $"Tick starve: wall {wallMs:0.0} ms, counted over {windowMs:0.0} ms: main run {runMs:0.0} ms, runqueue wait {waitMs:0.0} ms, other {windowMs - runMs - waitMs:0.0} ms, " +
             $"switches voluntary {now.Voluntary - last.Voluntary} involuntary {now.Involuntary - last.Involuntary}, major faults {now.MajorFaults - last.MajorFaults} | " +
             $"host stall cpu some {UsToMs(now.CpuSome - last.CpuSome):0.0} ms, memory some {UsToMs(now.MemorySome - last.MemorySome):0.0} full {UsToMs(now.MemoryFull - last.MemoryFull):0.0} ms, " +
             $"io some {UsToMs(now.IoSome - last.IoSome):0.0} full {UsToMs(now.IoFull - last.IoFull):0.0} ms | " +
