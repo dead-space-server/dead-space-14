@@ -201,7 +201,7 @@ public sealed class CelestialSystem : EntitySystem
             Announce(
                 new SoundPathSpecifier(
                     "/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_screams_really_loudly.ogg"),
-                new AudioParams { Volume = 2f },
+                new AudioParams { Volume = -4f },
                 localized,
                 bossMap);
             RaiseToBossMapOrAll(new CelestialCutsceneEndEvent(), localized, bossMap);
@@ -235,7 +235,7 @@ public sealed class CelestialSystem : EntitySystem
                     new SoundPathSpecifier(
                         "/Audio/_DeadSpace/Lavaland/Celestial/sounds/Roar_Phase2.ogg"),
                     uid,
-                    2f);
+                    -4f);
 
                 // крик "ВЫХОДА НЕТ" + атакует чаще и по большему числу людей
                 SpeakFor((uid, comp), "ВЫХОДА НЕТ.", 4f);
@@ -1270,7 +1270,7 @@ public sealed class CelestialSystem : EntitySystem
                     return;
 
                 // Cutter только на нескольких игроков
-                var cutterTargets = GetTargets(ent, comp.CutterTargets);
+                var cutterTargets = GetSpacedTargets(ent, comp.CutterTargets);
                 for (var r = 0; r < comp.CutterRepeats; r++)
                 {
                     var delay = r * comp.CutterRepeatDelay;
@@ -1457,7 +1457,7 @@ public sealed class CelestialSystem : EntitySystem
 
         SpeakFor(ent, comp.BloomLine, 4f);
 
-        Sound(comp.BloomChargeSound, ent, -2f);
+        Sound(comp.BloomChargeSound, ent, -6f);
 
         // крест из 4 очень длинных лучей вокруг тела Селестиала
         var center = _transform.GetMapCoordinates(ent).Position;
@@ -1466,21 +1466,22 @@ public sealed class CelestialSystem : EntitySystem
 
         RaiseCelestial(ent, new CelestialBloomEvent(
             center, (int) mapId, baseAngle, comp.BloomLength,
-            comp.BloomRotateSpeed, comp.BloomSweepTime, comp.BloomFireTime));
+            comp.BloomRotateSpeed, comp.BloomSweepTime + comp.BloomStageGap,
+            comp.BloomFireTime, comp.BloomStageGap));
 
         // звук активной стадии - отдельным таймером, чтобы не потерять
-        Timer.Spawn(TimeSpan.FromSeconds(comp.BloomSweepTime), () =>
+        Timer.Spawn(TimeSpan.FromSeconds(comp.BloomSweepTime + comp.BloomStageGap), () =>
         {
             if (TerminatingOrDeleted(ent))
                 return;
-            Sound(comp.BloomFireSound, ent, 0f);
+            Sound(comp.BloomFireSound, ent, -4f);
         });
 
         // стадия 2: чёрные лучи наносят урон, продолжая вращаться
         var damageTicks = (int) (comp.BloomFireTime / comp.BloomDamageInterval);
         for (var tick = 1; tick <= damageTicks; tick++)
         {
-            var delay = comp.BloomSweepTime + (tick - 1) * comp.BloomDamageInterval;
+            var delay = comp.BloomSweepTime + comp.BloomStageGap + (tick - 1) * comp.BloomDamageInterval;
 
             // угол считаем ДО таймера: переменная цикла захватывается лямбдой
             // по ссылке, и внутри таймера tick всегда равен damageTicks + 1 —
@@ -1523,7 +1524,7 @@ public sealed class CelestialSystem : EntitySystem
         }
 
         // атака заканчивается после обеих стадий
-        Timer.Spawn(TimeSpan.FromSeconds(comp.BloomSweepTime + comp.BloomFireTime + 0.5f), () =>
+        Timer.Spawn(TimeSpan.FromSeconds(comp.BloomSweepTime + comp.BloomStageGap + comp.BloomFireTime + 0.5f), () =>
         {
             if (TerminatingOrDeleted(ent))
                 return;
@@ -1635,8 +1636,8 @@ public sealed class CelestialSystem : EntitySystem
                     if (TerminatingOrDeleted(ent))
                         return;
 
-                    // cutter только на нескольких игроков
-                    var cutterTargets = GetTargets(ent, comp.CutterTargets);
+                    // cutter по группе игроков рядом (центр группы)
+                    var cutterTargets = groupMembers;
                     foreach (var target in cutterTargets)
                     {
                         if (TerminatingOrDeleted(target))

@@ -113,7 +113,7 @@ public sealed class CelestialClientSystem : EntitySystem
     private void OnBloom(CelestialBloomEvent ev)
     {
         _beamOverlay?.AddBloom(ev.Center, new MapId(ev.MapId), ev.BaseAngle, ev.Length,
-            ev.RotateSpeed, ev.SweepTime, ev.FireTime);
+            ev.RotateSpeed, ev.SweepTime, ev.FireTime, ev.GapTime);
     }
 
     private void OnCutsceneStart(CelestialCutsceneStartEvent ev)

@@ -15,7 +15,8 @@ public sealed class CelestialBloomEvent(
     float length,
     float rotateSpeed,
     float sweepTime,
-    float fireTime) : EntityEventArgs
+    float fireTime,
+    float gapTime) : EntityEventArgs
 {
     public Vector2 Center = center;
     public int MapId = mapId;
@@ -24,4 +25,5 @@ public sealed class CelestialBloomEvent(
     public float RotateSpeed = rotateSpeed;
     public float SweepTime = sweepTime;
     public float FireTime = fireTime;
+    public float GapTime = gapTime;
 }

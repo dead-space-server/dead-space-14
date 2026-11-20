@@ -210,7 +210,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Радиус попадания лучей Cutter, метры.</summary>
     [DataField]
-    public float CutterDamageRadius = 0.6f;
+    public float CutterDamageRadius = 1.2f;
 
     /// <summary>Радиус попадания замерших лучей атаки "ЗАМРИ", метры.</summary>
     [DataField]
@@ -277,6 +277,10 @@ public sealed partial class CelestialComponent : Component
     /// <summary>Время чёрной стадии (урон), сек.</summary>
     [DataField]
     public float BloomFireTime = 12f;
+
+    /// <summary>Задержка между розовой и чёрной стадией, сек.</summary>
+    [DataField]
+    public float BloomStageGap = 0.5f;
 
     /// <summary>Время розовой стадии (вращение без урона), сек.</summary>
     [DataField]

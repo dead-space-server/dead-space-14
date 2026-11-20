@@ -60,6 +60,7 @@ public sealed class CelestialBeamOverlay : Overlay
         public float RotateSpeed;
         public float SweepTime;
         public float FireTime;
+        public float GapTime;
         public float Elapsed;
     }
 
@@ -99,12 +100,12 @@ public sealed class CelestialBeamOverlay : Overlay
     private readonly Random _cutterRand = new();
 
     public void AddBloom(Vector2 center, MapId map, float baseAngle, float length,
-        float rotateSpeed, float sweepTime, float fireTime)
+        float rotateSpeed, float sweepTime, float fireTime, float gapTime)
     {
         _blooms.Add(new Bloom
         {
             Center = center, Map = map, BaseAngle = baseAngle, Length = length,
-            RotateSpeed = rotateSpeed, SweepTime = sweepTime, FireTime = fireTime
+            RotateSpeed = rotateSpeed, SweepTime = sweepTime, FireTime = fireTime, GapTime = gapTime
         });
     }
 
@@ -259,7 +260,7 @@ public sealed class CelestialBeamOverlay : Overlay
                 continue;
 
             var angle = bloom.BaseAngle + bloom.RotateSpeed * bloom.Elapsed;
-            var sweeping = bloom.Elapsed < bloom.SweepTime;
+            var sweeping = bloom.Elapsed < bloom.SweepTime + bloom.GapTime;
             var total = bloom.SweepTime + bloom.FireTime;
 
             var fadeIn = Math.Clamp(bloom.Elapsed / 0.8f, 0f, 1f);

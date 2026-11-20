@@ -133,7 +133,8 @@ public sealed class CelestialDeathOverlay : Overlay
 
         handle.DrawRect(new UIBox2(0f, 0f, width, height), new Color(bgColor.R, bgColor.G, bgColor.B, fade));
 
-        // глаз: дрейфует и вращается; в инверсии - возвращается в центр и выворачивается
+        // глаз: дрейфует и вращается; в инверсии - плавно возвращается
+        // в центр и кроссфейдится в инвертированную текстуру
         if (_eyeRsi.TryGetState("icon", out var eyeState))
         {
             var eyeSize = new Vector2(280f, 280f);
@@ -162,10 +163,26 @@ public sealed class CelestialDeathOverlay : Overlay
             var jump = !_inverted && (_elapsed % 1f) < 0.12f ? 25f : 0f;
             var eyeCenter = center + new Vector2(driftX - jump, driftY);
 
-            // на чёрном фоне глаз слегка подсвечивается белым, чтобы читался
-            var tint = _inverted ? new Color(1f, 1f, 1f, fade) : new Color(1f, 1f, 1f, fade);
+            // плавная инверсия: кроссфейд обычной и инвертированной текстур за 3 с
+            var invMix = 0f;
+            if (_inverted)
+            {
+                var t = Math.Clamp(_invertElapsed / 3f, 0f, 1f);
+                invMix = t * t * (3f - 2f * t);
+            }
+
+            // обычный глаз гаснет
             handle.SetTransform(eyeCenter, Angle.FromDegrees(rotation), new Vector2(fade, fade));
-            handle.DrawTextureRect(eyeState.Frame0, new UIBox2(-eyeSize / 2f, eyeSize / 2f), tint);
+            handle.DrawTextureRect(eyeState.Frame0, new UIBox2(-eyeSize / 2f, eyeSize / 2f),
+                new Color(1f, 1f, 1f, fade * (1f - invMix)));
+
+            // инвертированный глаз проявляется
+            if (invMix > 0f && _eyeRsi.TryGetState("icon_inverted", out var invState))
+            {
+                handle.DrawTextureRect(invState.Frame0, new UIBox2(-eyeSize / 2f, eyeSize / 2f),
+                    new Color(1f, 1f, 1f, fade * invMix));
+            }
+
             handle.SetTransform(Vector2.Zero, Angle.Zero, Vector2.One);
         }
     }
