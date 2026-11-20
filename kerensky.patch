@@ -1,0 +1,1818 @@
+diff --git a/Content.Client/DeadSpace/Dodge/DodgeVisualSystem.cs b/Content.Client/DeadSpace/Dodge/DodgeVisualSystem.cs
+new file mode 100644
+index 0000000000..527188f469
+--- /dev/null
++++ b/Content.Client/DeadSpace/Dodge/DodgeVisualSystem.cs
+@@ -0,0 +1,45 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using System.Numerics;
++using Content.Client.DeadSpace.Afterimages;
++using Content.Shared.DeadSpace.Dodge;
++
++namespace Content.Client.DeadSpace.Dodge;
++
++public sealed class DodgeVisualSystem : EntitySystem
++{
++    [Dependency] private readonly DeadSpaceAfterimageSystem _afterimages = default!;
++    [Dependency] private readonly SharedTransformSystem _transform = default!;
++
++    public override void Initialize()
++    {
++        base.Initialize();
++        SubscribeNetworkEvent<DodgeEvent>(OnDodge);
++    }
++
++    private void OnDodge(DodgeEvent args)
++    {
++        var uid = GetEntity(args.Entity);
++        if (!TryComp<DodgeVisualComponent>(uid, out var visual))
++            return;
++
++        var coordinates = Transform(uid).Coordinates;
++        var rotation = _transform.GetWorldRotation(uid);
++        var forward = rotation.ToWorldVec();
++        var sideways = new Vector2(-forward.Y, forward.X);
++
++        for (var i = -1; i <= 1; i++)
++        {
++            var offset = sideways * (i * visual.SidewaysOffset) -
++                         forward * (visual.BackwardOffset + MathF.Abs(i) * visual.OuterBackwardOffset);
++            _afterimages.TrySpawnAfterimage(
++                uid,
++                coordinates.Offset(offset),
++                rotation,
++                visual.StartColor,
++                visual.Lifetime,
++                visual.FallbackEffect,
++                visual.EndColor);
++        }
++    }
++}
+diff --git a/Content.Client/DeadSpace/Sandevistan/SandevistanAfterimageSystem.cs b/Content.Client/DeadSpace/Sandevistan/SandevistanAfterimageSystem.cs
+index ce33a8345d..d3203bbea4 100644
+--- a/Content.Client/DeadSpace/Sandevistan/SandevistanAfterimageSystem.cs
++++ b/Content.Client/DeadSpace/Sandevistan/SandevistanAfterimageSystem.cs
+@@ -41,7 +41,7 @@ public override void FrameUpdate(float frameTime)
+         var query = EntityQueryEnumerator<ActiveSandevistanComponent, TransformComponent>();
+         while (query.MoveNext(out var uid, out var active, out var xform))
+         {
+-            if (Deleted(uid))
++            if (Deleted(uid) || !active.AfterimageTrail)
+                 continue;
+ 
+             _activeThisFrame.Add(uid);
+diff --git a/Content.Client/DeadSpace/Sandevistan/SandevistanBodyVisualSystem.cs b/Content.Client/DeadSpace/Sandevistan/SandevistanBodyVisualSystem.cs
+index 4d347a9cf2..05e401f941 100644
+--- a/Content.Client/DeadSpace/Sandevistan/SandevistanBodyVisualSystem.cs
++++ b/Content.Client/DeadSpace/Sandevistan/SandevistanBodyVisualSystem.cs
+@@ -8,10 +8,6 @@ namespace Content.Client.DeadSpace.Sandevistan;
+ 
+ public sealed partial class SandevistanBodyVisualSystem : EntitySystem
+ {
+-    private static readonly ResPath SpritePath =
+-        new("/Textures/_DeadSpace/Mobs/Effects/sandevistan.rsi");
+-
+-    private const string SpriteState = "body";
+     private const string OuterClothingSlot = "outerClothing";
+ 
+     [Dependency] private SpriteSystem _sprite = default!;
+@@ -35,7 +31,7 @@ private void OnStartup(Entity<SandevistanBodyVisualComponent> ent, ref Component
+ 
+         var layer = _sprite.AddLayer(
+             (ent.Owner, sprite),
+-            new SpriteSpecifier.Rsi(SpritePath, SpriteState),
++            new SpriteSpecifier.Rsi(ent.Comp.Sprite, ent.Comp.State),
+             outerClothingLayer);
+ 
+         _sprite.LayerMapSet((ent.Owner, sprite), SandevistanBodyVisualLayers.Body, layer);
+diff --git a/Content.IntegrationTests/Tests/DeadSpace/Kerensky/KerenskyHitscanTest.cs b/Content.IntegrationTests/Tests/DeadSpace/Kerensky/KerenskyHitscanTest.cs
+new file mode 100644
+index 0000000000..1fb062645f
+--- /dev/null
++++ b/Content.IntegrationTests/Tests/DeadSpace/Kerensky/KerenskyHitscanTest.cs
+@@ -0,0 +1,98 @@
++using System.Linq;
++using System.Numerics;
++using Content.IntegrationTests.Tests.Helpers;
++using Content.Shared.DeadSpace.Dodge;
++using Content.Shared.Physics;
++using Content.Shared.Weapons.Hitscan.Components;
++using Content.Shared.Weapons.Hitscan.Events;
++using Robust.Shared.GameObjects;
++using Robust.Shared.Map;
++using Robust.Shared.Physics.Collision.Shapes;
++using Robust.Shared.Physics.Components;
++using Robust.Shared.Physics.Systems;
++
++namespace Content.IntegrationTests.Tests.DeadSpace.Kerensky;
++
++[TestFixture]
++public sealed class KerenskyHitscanTest
++{
++    public sealed class HitscanListenerSystem : TestListenerSystem<HitscanRaycastFiredEvent>;
++
++    [Test]
++    public async Task DodgedHitscanContinuesToTheNextTarget()
++    {
++        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
++        var server = pair.Server;
++        var map = await pair.CreateTestMap();
++        var ent = server.EntMan;
++        EntityUid dodger = default;
++        EntityUid secondTarget = default;
++        EntityUid scan = default;
++
++        await server.WaitPost(() =>
++        {
++            dodger = SpawnTarget(new Vector2(1.5f, 0.5f));
++            secondTarget = SpawnTarget(new Vector2(2.5f, 0.5f));
++            scan = ent.SpawnEntity(null, new MapCoordinates(new Vector2(0.5f, 0.5f), map.MapId));
++            ent.AddComponent<HitscanBasicRaycastComponent>(scan).CollisionMask = CollisionGroup.MobMask;
++            ent.EnsureComponent<TestListenerComponent>(scan);
++            ent.EnsureComponent<DodgeComponent>(dodger).PassiveChance = 1f;
++        });
++        await pair.RunTicksSync(5);
++
++        await server.WaitPost(() =>
++        {
++            var ev = new HitscanTraceEvent
++            {
++                FromCoordinates = ent.GetComponent<TransformComponent>(scan).Coordinates,
++                ShotDirection = Vector2.UnitX,
++                Gun = scan,
++                Target = secondTarget,
++            };
++            ent.EventBus.RaiseLocalEvent(scan, ref ev);
++        });
++
++        await server.WaitAssertion(() =>
++        {
++            var hit = server.System<HitscanListenerSystem>().GetEvents(scan).Single();
++            Assert.That(hit.Data.HitEntity, Is.EqualTo(secondTarget));
++            Assert.That(hit.Data.HitEntity, Is.Not.EqualTo(dodger));
++            Assert.That(hit.Data.IgnoredEntities, Does.Contain(dodger));
++        });
++
++        await server.WaitPost(() =>
++        {
++            ent.RemoveComponent<DodgeComponent>(dodger);
++            var ev = new HitscanTraceEvent
++            {
++                FromCoordinates = ent.GetComponent<TransformComponent>(scan).Coordinates,
++                ShotDirection = Vector2.UnitX,
++                Gun = scan,
++                Target = secondTarget,
++            };
++            ent.EventBus.RaiseLocalEvent(scan, ref ev);
++        });
++
++        await server.WaitAssertion(() =>
++        {
++            var hits = server.System<HitscanListenerSystem>().GetEvents(scan);
++            Assert.That(hits.Count, Is.EqualTo(2));
++            Assert.That(hits.Last().Data.HitEntity, Is.EqualTo(dodger));
++        });
++        await pair.CleanReturnAsync();
++
++        EntityUid SpawnTarget(Vector2 position)
++        {
++            var uid = ent.SpawnEntity(null, new MapCoordinates(position, map.MapId));
++            var body = ent.AddComponent<PhysicsComponent>(uid);
++            ent.System<FixtureSystem>().TryCreateFixture(
++                uid,
++                new PhysShapeCircle(0.35f),
++                "hit",
++                collisionLayer: (int) CollisionGroup.MobMask,
++                body: body);
++            ent.System<SharedPhysicsSystem>().SetCanCollide(uid, true, body: body);
++            return uid;
++        }
++    }
++}
+diff --git a/Content.IntegrationTests/Tests/DeadSpace/Kerensky/KerenskyShoutTest.cs b/Content.IntegrationTests/Tests/DeadSpace/Kerensky/KerenskyShoutTest.cs
+new file mode 100644
+index 0000000000..b9609cf106
+--- /dev/null
++++ b/Content.IntegrationTests/Tests/DeadSpace/Kerensky/KerenskyShoutTest.cs
+@@ -0,0 +1,90 @@
++using System.Linq;
++using System.Numerics;
++using Content.IntegrationTests.Tests.Helpers;
++using Content.Shared.Chat;
++using Content.Shared.DeadSpace.Body.Limbs;
++using Content.Shared.DeadSpace.Reactions;
++using Content.Shared.DeadSpace.Sandevistan;
++using Content.Shared.Mobs;
++using Content.Shared.Mobs.Systems;
++using Robust.Shared.GameObjects;
++using Robust.Shared.Localization;
++using Robust.Shared.Map;
++
++namespace Content.IntegrationTests.Tests.DeadSpace.Kerensky;
++
++[TestFixture]
++public sealed class KerenskyShoutTest
++{
++    public sealed class SpeakListenerSystem : TestListenerSystem<EntitySpokeEvent>;
++
++    [Test]
++    public async Task NearbyCriticalTargetTriggersPhraseOnlyWhenActive()
++    {
++        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
++        var server = pair.Server;
++        var map = await pair.CreateTestMap();
++        var ent = server.EntMan;
++        EntityUid host = default;
++        EntityUid victim = default;
++        EntityUid secondVictim = default;
++
++        await server.WaitPost(() =>
++        {
++            host = ent.SpawnEntity("MobHuman", new MapCoordinates(new Vector2(0.5f, 0.5f), map.MapId));
++            victim = ent.SpawnEntity("MobHuman", new MapCoordinates(new Vector2(1.5f, 0.5f), map.MapId));
++            secondVictim = ent.SpawnEntity("MobHuman", new MapCoordinates(new Vector2(2.5f, 0.5f), map.MapId));
++            var reaction = ent.EnsureComponent<NearbyCriticalShoutComponent>(host);
++            reaction.Messages = Enumerable.Range(1, 5)
++                .Select(index => (LocId) $"kerensky-nearby-critical-{index}")
++                .ToList();
++            ent.EnsureComponent<TestListenerComponent>(host);
++        });
++        await pair.RunTicksSync(5);
++
++        await server.WaitPost(() => server.System<MobStateSystem>().ChangeMobState(victim, MobState.Critical));
++
++        await server.WaitAssertion(() =>
++            Assert.That(server.System<SpeakListenerSystem>().GetEvents(host), Is.Empty));
++
++        await server.WaitPost(() =>
++        {
++            server.System<MobStateSystem>().ChangeMobState(victim, MobState.Alive);
++            var implant = ent.SpawnEntity("KerenskyImplant", new MapCoordinates(new Vector2(0.5f, 0.5f), map.MapId));
++            ent.GetComponent<LimbImplantComponent>(implant).Host = host;
++            var active = ent.EnsureComponent<ActiveSandevistanComponent>(host);
++            active.SourceImplant = implant;
++            var endTime = server.Timing.CurTime + TimeSpan.FromSeconds(30);
++            active.EndTime = endTime;
++            active.SoftcapTime = endTime;
++            active.NextOverloadTime = endTime;
++            active.NextEndWarningTime = endTime;
++        });
++        await pair.RunTicksSync(5);
++
++        await server.WaitAssertion(() =>
++            Assert.That(server.System<SharedSandevistanSystem>().IsActive(host), Is.True));
++
++        await server.WaitPost(() => server.System<MobStateSystem>().ChangeMobState(victim, MobState.Critical));
++        await pair.RunTicksSync(2);
++
++        await server.WaitAssertion(() =>
++        {
++            var spoken = server.System<SpeakListenerSystem>().GetEvents(host).Single();
++            var phrases = Enumerable.Range(1, 5)
++                .Select(index => Loc.GetString($"kerensky-nearby-critical-{index}"))
++                .ToArray();
++            Assert.That(phrases, Does.Contain(spoken.Message));
++        });
++
++        await server.WaitPost(() =>
++        {
++            server.System<MobStateSystem>().ChangeMobState(victim, MobState.Alive);
++            server.System<MobStateSystem>().ChangeMobState(secondVictim, MobState.Critical);
++        });
++
++        await server.WaitAssertion(() =>
++            Assert.That(server.System<SpeakListenerSystem>().GetEvents(host).Count(), Is.EqualTo(1)));
++        await pair.CleanReturnAsync();
++    }
++}
+diff --git a/Content.IntegrationTests/Tests/DeadSpace/Surgery/LimbImplantSyringeTest.cs b/Content.IntegrationTests/Tests/DeadSpace/Surgery/LimbImplantSyringeTest.cs
+index 875c807f3b..b5b1667837 100644
+--- a/Content.IntegrationTests/Tests/DeadSpace/Surgery/LimbImplantSyringeTest.cs
++++ b/Content.IntegrationTests/Tests/DeadSpace/Surgery/LimbImplantSyringeTest.cs
+@@ -1,9 +1,17 @@
+ using System.Numerics;
++using Content.Shared.DeadSpace.Abilities.Slide;
++using Content.Shared.DeadSpace.Abilities.StandUp;
+ using Content.Shared.DeadSpace.Body.Limbs;
++using Content.Shared.DeadSpace.Dodge;
++using Content.Shared.DeadSpace.Reactions;
++using Content.Shared.DeadSpace.Sandevistan;
++using Content.Shared.DeadSpace.Weapons;
++using Content.Shared.DeadSpace.Weapons.Akimbo;
+ using Content.Shared.Implants;
+ using Content.Shared.Implants.Components;
+ using Robust.Shared.GameObjects;
+ using Robust.Shared.Map;
++using Robust.Shared.Prototypes;
+ 
+ namespace Content.IntegrationTests.Tests.DeadSpace.Surgery;
+ 
+@@ -13,6 +21,7 @@ public sealed class LimbImplantSyringeTest
+     [TestCase("SandevistanLoneImplanter", "Back")]
+     [TestCase("MantisBladesLoneImplanter", "ArmLeft")]
+     [TestCase("MonowireLoneImplanter", "ArmLeft")]
++    [TestCase("KerenskyImplanter", "Back")]
+     public async Task ALoneSyringeSeatsItsImplant(string syringe, string slot)
+     {
+         await using var pair = await PoolManager.GetServerClient();
+@@ -33,6 +42,33 @@ public async Task ALoneSyringeSeatsItsImplant(string syringe, string slot)
+ 
+             implanters.Implant(human, human, implanter, comp);
+             Assert.That(implants.Occupied(human, slot), Is.True);
++
++            if (syringe is "SandevistanLoneImplanter" or "KerenskyImplanter")
++            {
++                var visual = entMan.GetComponent<SandevistanBodyVisualComponent>(human);
++                var expected = syringe == "KerenskyImplanter" ? "kerensky" : "sandevistan";
++                Assert.That(visual.Sprite.ToString(), Does.EndWith($"_DeadSpace/Mobs/Effects/{expected}.rsi"));
++            }
++
++            if (syringe == "KerenskyImplanter")
++            {
++                Assert.Multiple(() =>
++                {
++                    Assert.That(entMan.HasComponent<DodgeComponent>(human), Is.True);
++                    Assert.That(entMan.HasComponent<DodgeVisualComponent>(human), Is.True);
++                    Assert.That(entMan.HasComponent<LimbTargetBonusComponent>(human), Is.True);
++                    Assert.That(entMan.HasComponent<SemiAutoFireRateComponent>(human), Is.True);
++                    Assert.That(entMan.HasComponent<AkimboAccuracyComponent>(human), Is.True);
++                    Assert.That(entMan.HasComponent<SpeedSlidingComponent>(human), Is.True);
++                    Assert.That(entMan.HasComponent<InstantStandUpComponent>(human), Is.True);
++                    Assert.That(entMan.HasComponent<NearbyCriticalShoutComponent>(human), Is.True);
++                    Assert.That(entMan.GetComponent<DodgeComponent>(human).GuaranteedStaminaCost, Is.EqualTo(6f));
++                    Assert.That(entMan.GetComponent<SemiAutoFireRateComponent>(human).OnlyWhileActive, Is.True);
++                    Assert.That(entMan.GetComponent<NearbyCriticalShoutComponent>(human).Cooldown, Is.EqualTo(5f));
++                    Assert.That(server.ResolveDependency<IPrototypeManager>().Index<EntityPrototype>("KerenskyImplant").HideSpawnMenu, Is.False);
++                    Assert.That(server.ResolveDependency<IPrototypeManager>().Index<EntityPrototype>("KerenskyImplanter").HideSpawnMenu, Is.False);
++                });
++            }
+         });
+ 
+         await pair.CleanReturnAsync();
+diff --git a/Content.IntegrationTests/Tests/StoreTests.cs b/Content.IntegrationTests/Tests/StoreTests.cs
+index a747c7681a..c1c640a105 100644
+--- a/Content.IntegrationTests/Tests/StoreTests.cs
++++ b/Content.IntegrationTests/Tests/StoreTests.cs
+@@ -174,4 +174,37 @@ public async Task StoreDiscountAndRefund()
+ 
+         await pair.CleanReturnAsync();
+     }
++
++    [Test]
++    public async Task KerenskyUplinkListingIsDisabled()
++    {
++        await using var pair = await PoolManager.GetServerClient();
++        var server = pair.Server;
++        var testMap = await pair.CreateTestMap();
++
++        await server.WaitAssertion(() =>
++        {
++            var entMan = server.EntMan;
++            var inventory = entMan.System<InventorySystem>();
++            var minds = entMan.System<SharedMindSystem>();
++            var uplinks = entMan.System<UplinkSystem>();
++
++            var human = entMan.SpawnEntity("HumanUniformDummy", testMap.GridCoords);
++            var uniform = entMan.SpawnEntity("UniformDummy", testMap.GridCoords);
++            var pda = entMan.SpawnEntity("InventoryPdaDummy", testMap.GridCoords);
++
++            Assert.That(inventory.TryEquip(human, uniform, "jumpsuit"), Is.True);
++            Assert.That(inventory.TryEquip(human, pda, "id"), Is.True);
++
++            var mind = minds.CreateMind(null);
++            minds.TransferTo(mind, human, mind: mind);
++            uplinks.AddUplink(human, FixedPoint2.Zero, null, true);
++
++            var store = entMan.GetComponent<StoreComponent>(pda);
++            var listing = store.FullListingsCatalog.FirstOrDefault(x => x.ID == "UplinkKerenskyImplanter");
++            Assert.That(listing, Is.Null);
++        });
++
++        await pair.CleanReturnAsync();
++    }
+ }
+diff --git a/Content.IntegrationTests/Tests/Weapons/WeaponTests.cs b/Content.IntegrationTests/Tests/Weapons/WeaponTests.cs
+index 91f9023c2b..93092ce5ac 100644
+--- a/Content.IntegrationTests/Tests/Weapons/WeaponTests.cs
++++ b/Content.IntegrationTests/Tests/Weapons/WeaponTests.cs
+@@ -1,6 +1,7 @@
+-﻿using Content.IntegrationTests.Tests.Interaction;
++using Content.IntegrationTests.Tests.Interaction;
+ using Content.Shared.Damage.Components;
+ using Content.Shared.DeadSpace.Player;
++using Content.Shared.DeadSpace.Weapons;
+ using Content.Shared.Weapons.Ranged.Components;
+ using Content.Shared.Weapons.Ranged.Systems;
+ using Content.Shared.Wieldable.Components;
+@@ -68,6 +69,29 @@ public async Task GunRequiresWieldTest()
+             "Mosin was fired but urist sustained no damage!");
+     }
+ 
++    [Test]
++    public async Task SemiAutoFireRateCanBeActiveOnlyOrPassive()
++    {
++        var gunSystem = SEntMan.System<SharedGunSystem>();
++        var gunNet = await PlaceInHands("WeaponPistolMk58");
++        var gun = ToServer(gunNet);
++
++        await Server.WaitPost(() =>
++        {
++            var gunComp = Comp<GunComponent>(gunNet);
++            var fireRate = SEntMan.EnsureComponent<SemiAutoFireRateComponent>(SPlayer);
++            fireRate.ActiveMultiplier = 1.2f;
++            fireRate.OnlyWhileActive = true;
++
++            gunSystem.RefreshModifiers(gun);
++            Assert.That(gunComp.FireRateModified, Is.EqualTo(gunComp.FireRate));
++
++            fireRate.OnlyWhileActive = false;
++            gunSystem.RefreshModifiers(gun);
++            Assert.That(gunComp.FireRateModified, Is.EqualTo(gunComp.FireRate * fireRate.ActiveMultiplier));
++        });
++    }
++
+     // DS14-start
+     [Test]
+     public async Task WeaponEffectPvsIncludesRemoteViewSubscribersTest()
+diff --git a/Content.Server/DeadSpace/Dodge/DodgeSystem.cs b/Content.Server/DeadSpace/Dodge/DodgeSystem.cs
+new file mode 100644
+index 0000000000..99e33861c2
+--- /dev/null
++++ b/Content.Server/DeadSpace/Dodge/DodgeSystem.cs
+@@ -0,0 +1,110 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Content.Shared.Damage.Components;
++using Content.Shared.Damage.Systems;
++using Content.Shared.DeadSpace.Dodge;
++using Content.Shared.Jittering;
++using Content.Shared.Popups;
++using Content.Shared.Projectiles;
++using Content.Shared.Weapons.Hitscan.Events;
++using Robust.Shared.Physics.Events;
++using Robust.Shared.Random;
++using Robust.Shared.Timing;
++
++namespace Content.Server.DeadSpace.Dodge;
++
++public sealed class DodgeSystem : EntitySystem
++{
++    [Dependency] private readonly SharedDodgeSystem _dodge = default!;
++    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
++    [Dependency] private readonly SharedJitteringSystem _jittering = default!;
++    [Dependency] private readonly SharedPopupSystem _popup = default!;
++    [Dependency] private readonly IRobustRandom _random = default!;
++    [Dependency] private readonly IGameTiming _timing = default!;
++
++    public override void Initialize()
++    {
++        base.Initialize();
++
++        SubscribeLocalEvent<DodgeComponent, PreventCollideEvent>(OnProjectileCollision);
++        SubscribeLocalEvent<DodgeComponent, HitscanDodgeAttemptEvent>(OnHitscanDodge);
++    }
++
++    private void OnProjectileCollision(Entity<DodgeComponent> ent, ref PreventCollideEvent args)
++    {
++        if (args.Cancelled ||
++            !TryComp<ProjectileComponent>(args.OtherEntity, out var projectile) ||
++            projectile.ProjectileSpent ||
++            !TryDodge(ent, projectile.Shooter))
++        {
++            return;
++        }
++
++        args.Cancelled = true;
++    }
++
++    private void OnHitscanDodge(Entity<DodgeComponent> ent, ref HitscanDodgeAttemptEvent args)
++    {
++        if (!args.Cancelled && TryDodge(ent, args.Data.Shooter ?? args.Data.Gun))
++            args.Cancelled = true;
++    }
++
++    public bool TryDodge(Entity<DodgeComponent> ent, EntityUid? shooter)
++    {
++        if (shooter == ent.Owner)
++            return false;
++
++        if (_dodge.IsActive(ent.Owner) && ent.Comp.StaminaDodgeMode)
++        {
++            if (!TryComp<StaminaComponent>(ent.Owner, out var stamina) ||
++                !_stamina.TryTakeStamina(
++                    ent.Owner,
++                    ent.Comp.GuaranteedStaminaCost,
++                    stamina,
++                    source: ent.Owner,
++                    visual: false,
++                    ignoreResist: true))
++            {
++                ShowNoStamina(ent);
++                return false;
++            }
++
++            PlayDodgeVisuals(ent.Owner);
++            return true;
++        }
++
++        if (_random.NextFloat() >= _dodge.GetChance(ent))
++            return false;
++
++        PlayDodgeVisuals(ent.Owner);
++        return true;
++    }
++
++    private void ShowNoStamina(Entity<DodgeComponent> ent)
++    {
++        if (ent.Comp.NoStaminaPopup is not { } popup)
++            return;
++
++        var curTime = _timing.CurTime;
++        if (curTime < ent.Comp.NextStaminaPopup)
++            return;
++
++        _popup.PopupEntity(Loc.GetString(popup), ent.Owner, ent.Owner, PopupType.SmallCaution);
++        ent.Comp.NextStaminaPopup = curTime + TimeSpan.FromSeconds(MathF.Max(0f, ent.Comp.NoStaminaPopupCooldown));
++    }
++
++    private void PlayDodgeVisuals(EntityUid uid)
++    {
++        if (!TryComp<DodgeVisualComponent>(uid, out var visual))
++            return;
++
++        _jittering.DoJitter(
++            uid,
++            TimeSpan.FromSeconds(visual.JitterDuration),
++            true,
++            visual.JitterAmplitude,
++            visual.JitterFrequency,
++            true);
++        RaiseNetworkEvent(new DodgeEvent(GetNetEntity(uid)));
++    }
++}
+diff --git a/Content.Server/DeadSpace/Reactions/NearbyCriticalShoutSystem.cs b/Content.Server/DeadSpace/Reactions/NearbyCriticalShoutSystem.cs
+new file mode 100644
+index 0000000000..c17d0b0821
+--- /dev/null
++++ b/Content.Server/DeadSpace/Reactions/NearbyCriticalShoutSystem.cs
+@@ -0,0 +1,58 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Content.Server.Chat.Systems;
++using Content.Shared.Chat;
++using Content.Shared.DeadSpace.Reactions;
++using Content.Shared.DeadSpace.Sandevistan;
++using Content.Shared.Mobs;
++using Robust.Shared.Random;
++using Robust.Shared.Timing;
++
++namespace Content.Server.DeadSpace.Reactions;
++
++public sealed class NearbyCriticalShoutSystem : EntitySystem
++{
++    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
++    [Dependency] private readonly IRobustRandom _random = default!;
++    [Dependency] private readonly IGameTiming _timing = default!;
++    [Dependency] private readonly ChatSystem _chat = default!;
++
++    public override void Initialize()
++    {
++        base.Initialize();
++        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
++    }
++
++    private void OnMobStateChanged(MobStateChangedEvent args)
++    {
++        if (args.NewMobState != MobState.Critical || args.OldMobState == MobState.Critical)
++            return;
++
++        var curTime = _timing.CurTime;
++        var targetPosition = Transform(args.Target).WorldPosition;
++        var query = EntityQueryEnumerator<NearbyCriticalShoutComponent>();
++        while (query.MoveNext(out var host, out var reaction))
++        {
++            if (host == args.Target ||
++                reaction.Messages.Count == 0 ||
++                reaction.OnlyWhileActive && !_sandevistan.IsActive(host) ||
++                curTime < reaction.NextShout)
++            {
++                continue;
++            }
++
++            var distance = (Transform(host).WorldPosition - targetPosition).Length();
++            if (distance > reaction.Range)
++                continue;
++
++            _chat.TrySendInGameICMessage(
++                host,
++                Loc.GetString(_random.Pick(reaction.Messages)),
++                InGameICChatType.Speak,
++                ChatTransmitRange.Normal,
++                checkRadioPrefix: false,
++                ignoreActionBlocker: true);
++            reaction.NextShout = curTime + TimeSpan.FromSeconds(MathF.Max(0f, reaction.Cooldown));
++        }
++    }
++}
+diff --git a/Content.Server/DeadSpace/Sandevistan/SandevistanSystem.cs b/Content.Server/DeadSpace/Sandevistan/SandevistanSystem.cs
+index 13ee302f8b..3e46718601 100644
+--- a/Content.Server/DeadSpace/Sandevistan/SandevistanSystem.cs
++++ b/Content.Server/DeadSpace/Sandevistan/SandevistanSystem.cs
+@@ -398,6 +398,8 @@ private void OnActivated(EntityUid uid, SandevistanImplantComponent component, A
+         active.MaxJitterFrequency = component.MaxJitterFrequency;
+         active.JitterLerpRate = component.JitterLerpRate;
+         active.JitterRefreshTime = component.JitterRefreshTime;
++        active.AfterimageTrail = component.AfterimageTrail;
++        active.EnsnareRemovalDurationMultiplier = component.EnsnareRemovalDurationMultiplier;
+         active.AfterimageInterval = component.AfterimageInterval;
+         active.AfterimageMinDistance = component.AfterimageMinDistance;
+         active.AfterimageLifetime = component.AfterimageLifetime;
+diff --git a/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpComponent.cs b/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpComponent.cs
+new file mode 100644
+index 0000000000..2bfe69ea97
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpComponent.cs
+@@ -0,0 +1,10 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Robust.Shared.GameStates;
++
++namespace Content.Shared.DeadSpace.Abilities.StandUp;
++
++[RegisterComponent, NetworkedComponent]
++public sealed partial class InstantStandUpComponent : Component
++{
++}
+diff --git a/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpSystem.cs b/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpSystem.cs
+new file mode 100644
+index 0000000000..90d68ff54c
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Abilities/StandUp/InstantStandUpSystem.cs
+@@ -0,0 +1,19 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Content.Shared.Stunnable;
++
++namespace Content.Shared.DeadSpace.Abilities.StandUp;
++
++public sealed class InstantStandUpSystem : EntitySystem
++{
++    public override void Initialize()
++    {
++        base.Initialize();
++        SubscribeLocalEvent<InstantStandUpComponent, GetStandUpTimeEvent>(OnGetStandUpTime);
++    }
++
++    private void OnGetStandUpTime(Entity<InstantStandUpComponent> ent, ref GetStandUpTimeEvent args)
++    {
++        args.DoAfterTime = TimeSpan.Zero;
++    }
++}
+diff --git a/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusComponent.cs b/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusComponent.cs
+new file mode 100644
+index 0000000000..9d80fd56a4
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusComponent.cs
+@@ -0,0 +1,15 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Robust.Shared.GameStates;
++
++namespace Content.Shared.DeadSpace.Body.Limbs;
++
++[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
++public sealed partial class LimbTargetBonusComponent : Component
++{
++    [DataField, AutoNetworkedField]
++    public float PassiveChance = 0.5f;
++
++    [DataField, AutoNetworkedField]
++    public float ActiveChance = 1f;
++}
+diff --git a/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusSystem.cs b/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusSystem.cs
+new file mode 100644
+index 0000000000..b8566d6fe3
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Body/Limbs/LimbTargetBonusSystem.cs
+@@ -0,0 +1,19 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Content.Shared.DeadSpace.Sandevistan;
++
++namespace Content.Shared.DeadSpace.Body.Limbs;
++
++public sealed class LimbTargetBonusSystem : EntitySystem
++{
++    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
++
++    public float GetChance(EntityUid uid)
++    {
++        if (!TryComp<LimbTargetBonusComponent>(uid, out var bonus))
++            return 0f;
++
++        var chance = _sandevistan.IsActive(uid) ? bonus.ActiveChance : bonus.PassiveChance;
++        return Math.Clamp(chance, 0f, 1f);
++    }
++}
+diff --git a/Content.Shared/DeadSpace/Body/Limbs/LimbWoundSystem.cs b/Content.Shared/DeadSpace/Body/Limbs/LimbWoundSystem.cs
+index 48d62b0a00..8b8f7ae3d0 100644
+--- a/Content.Shared/DeadSpace/Body/Limbs/LimbWoundSystem.cs
++++ b/Content.Shared/DeadSpace/Body/Limbs/LimbWoundSystem.cs
+@@ -10,6 +10,7 @@
+ using Content.Shared.DeadSpace.Surgery;
+ using Content.Shared.DeadSpace.Cloning;
+ using Content.Shared.DeadSpace.Items;
++using Content.Shared.DeadSpace.Weapons;
+ using Content.Shared.Forensics.Components;
+ using Content.Shared.Body.Part;
+ using Content.Shared.Body.Prototypes;
+@@ -115,6 +116,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
+     [Dependency] private StatusEffectsSystem _status = default!;
+     [Dependency] private ThrowingSystem _throwing = default!;
+     [Dependency] private LimbImplantSystem _implants = default!;
++    [Dependency] private LimbTargetBonusSystem _limbTargetBonus = default!;
++    [Dependency] private SemiAutoFireRateSystem _semiAutoFireRate = default!;
+     [Dependency] private Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
+     [Dependency] private ISharedAdminLogManager _adminLog = default!;
+ 
+@@ -1124,6 +1127,8 @@ private string DonorSpecies(EntityUid part)
+ 
+     private void OnGunModifiers(Entity<GunComponent> ent, ref GunRefreshModifiersEvent args)
+     {
++        _semiAutoFireRate.ApplyGunModifiers(ent, ref args);
++
+         if (!LimbTuning.Enabled || Holder(ent.Owner) is not { } user || !TryComp<LimbAimComponent>(user, out var aim) || !aim.Aiming)
+             return;
+ 
+@@ -1153,7 +1158,7 @@ private void OnProjectile(Entity<ProjectileComponent> ent, ref ProjectileHitEven
+         var aimPoint = ent.Comp.LimbAimPoint ?? hit;
+         var aimed = ZoneForShot(aiming, aim, args.Target, from, hit, aimPoint);
+         var slip = shooter != null ? Cover(args.Target, shooter.Value, aimed).Slip : 0f;
+-        var zone = Present(limbs, Place(aimed, distance, ready, slip));
++        var zone = Present(limbs, PlaceShot(shooter, aimed, distance, ready, slip));
+         limbs.LedgerZone = zone;
+         limbs.ArmorZone = zone;
+         limbs.FireOrigin = zone;
+@@ -1219,7 +1224,7 @@ private void OnArmorZone(Entity<LimbBodyComponent> ent, ref LimbArmorZoneEvent a
+         if (TryComp<GunComponent>(args.Data.Gun, out var gun) && gun.ShootCoordinates is { } coords)
+             aimPoint = _transform.ToMapCoordinates(coords).Position;
+         var aimed = ZoneForShot(aiming, aim, ent, from, hit, aimPoint);
+-        ent.Comp.ArmorZone = Present(ent.Comp, Place(aimed, distance, ready, Cover(ent, shooter, aimed).Slip));
++        ent.Comp.ArmorZone = Present(ent.Comp, PlaceShot(shooter, aimed, distance, ready, Cover(ent, shooter, aimed).Slip));
+         ent.Comp.FireOrigin = ent.Comp.ArmorZone;
+         ent.Comp.FireOriginTime = _timing.CurTime;
+         ent.Comp.StrikeOpen = true;
+@@ -1241,7 +1246,7 @@ private void OnHitscan(Entity<HitscanBasicDamageComponent> ent, ref HitscanDamag
+         var aimed = ZoneForShot(aiming, aim, args.Target, from, hit, aimPoint);
+         var zone = limbs.FireOriginTime == _timing.CurTime && limbs.FireOrigin is { } rolled
+             ? rolled
+-            : Present(limbs, Place(aimed, distance, ready, Cover(args.Target, shooter, aimed).Slip));
++            : Present(limbs, PlaceShot(shooter, aimed, distance, ready, Cover(args.Target, shooter, aimed).Slip));
+         limbs.ArmorZone = zone;
+         var incoming = ent.Comp.IgnoreResistances ? new DamageSpecifier(ent.Comp.Damage) : Resist(args.Target, ent.Comp.Damage, shooter);
+         limbs.ArmorZone = null;
+@@ -2471,6 +2476,25 @@ private LimbZone Place(LimbZone zone, float distance, bool ready, float extra =
+         return zone;
+     }
+ 
++    private LimbZone PlaceShot(
++        EntityUid? shooter,
++        LimbZone aimed,
++        float distance,
++        bool ready,
++        float extra = 0f)
++    {
++        if (shooter is { } uid &&
++            HasComp<LimbTargetBonusComponent>(uid) &&
++            TryComp<LimbTargetComponent>(uid, out var selected) &&
++            selected.Selected is { } zone &&
++            _random.NextFloat() < _limbTargetBonus.GetChance(uid))
++        {
++            return zone;
++        }
++
++        return Place(aimed, distance, ready, extra);
++    }
++
+     private void ApplyResult(EntityUid uid, LimbZone zone, LimbStrikeResult result)
+     {
+         if (result.EyeDamage > 0 && TryComp<BlindableComponent>(uid, out var blind))
+diff --git a/Content.Shared/DeadSpace/Dodge/DodgeComponent.cs b/Content.Shared/DeadSpace/Dodge/DodgeComponent.cs
+new file mode 100644
+index 0000000000..6b027a28ed
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Dodge/DodgeComponent.cs
+@@ -0,0 +1,106 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Content.Shared.Actions;
++using Robust.Shared.GameStates;
++using Robust.Shared.Maths;
++using Robust.Shared.Prototypes;
++using Robust.Shared.Serialization;
++using Robust.Shared.Utility;
++
++namespace Content.Shared.DeadSpace.Dodge;
++
++[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
++public sealed partial class DodgeComponent : Component
++{
++    [DataField, AutoNetworkedField]
++    public float PassiveChance = 0.15f;
++
++    [DataField, AutoNetworkedField]
++    public float ActiveChance = 0.35f;
++
++    [DataField, AutoNetworkedField]
++    public float GuaranteedStaminaCost = 6f;
++
++    [DataField, AutoNetworkedField]
++    public bool StaminaDodgeMode;
++
++    [DataField]
++    public LocId? NoStaminaPopup;
++
++    [DataField]
++    public float NoStaminaPopupCooldown = 1f;
++
++    public TimeSpan NextStaminaPopup;
++}
++
++[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
++public sealed partial class DodgeVisualComponent : Component
++{
++    [DataField, AutoNetworkedField]
++    public Color StartColor = Color.White;
++
++    [DataField, AutoNetworkedField]
++    public Color EndColor = Color.Transparent;
++
++    [DataField, AutoNetworkedField]
++    public float Lifetime = 0.32f;
++
++    [DataField, AutoNetworkedField]
++    public string FallbackEffect = "MantisDodgeEffect";
++
++    [DataField, AutoNetworkedField]
++    public float SidewaysOffset = 0.16f;
++
++    [DataField, AutoNetworkedField]
++    public float BackwardOffset = 0.12f;
++
++    [DataField, AutoNetworkedField]
++    public float OuterBackwardOffset = 0.08f;
++
++    [DataField]
++    public float JitterDuration = 0.18f;
++
++    [DataField]
++    public float JitterAmplitude = 4f;
++
++    [DataField]
++    public float JitterFrequency = 24f;
++}
++
++[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
++public sealed partial class DodgeModeImplantComponent : Component
++{
++    [DataField]
++    public EntProtoId ModeAction = "";
++
++    [DataField, AutoNetworkedField]
++    public EntityUid? ModeActionEntity;
++
++    [DataField]
++    public ResPath ActionRsi = new();
++
++    [DataField]
++    public string ChanceIcon = "";
++
++    [DataField]
++    public string StaminaIcon = "";
++
++    [DataField]
++    public LocId ChancePopup = "";
++
++    [DataField]
++    public LocId StaminaPopup = "";
++}
++
++public sealed partial class CycleDodgeModeEvent : InstantActionEvent;
++
++[Serializable, NetSerializable]
++public sealed class DodgeEvent : EntityEventArgs
++{
++    public NetEntity Entity;
++
++    public DodgeEvent(NetEntity entity)
++    {
++        Entity = entity;
++    }
++}
+diff --git a/Content.Shared/DeadSpace/Dodge/SharedDodgeSystem.cs b/Content.Shared/DeadSpace/Dodge/SharedDodgeSystem.cs
+new file mode 100644
+index 0000000000..ae6314b51a
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Dodge/SharedDodgeSystem.cs
+@@ -0,0 +1,100 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Content.Shared.Actions;
++using Content.Shared.DeadSpace.Body.Limbs;
++using Content.Shared.DeadSpace.Sandevistan;
++using Content.Shared.Implants;
++using Content.Shared.Implants.Components;
++using Content.Shared.Popups;
++using Robust.Shared.Utility;
++
++namespace Content.Shared.DeadSpace.Dodge;
++
++public sealed class SharedDodgeSystem : EntitySystem
++{
++    [Dependency] private readonly SharedActionsSystem _actions = default!;
++    [Dependency] private readonly SharedPopupSystem _popup = default!;
++    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
++
++    public override void Initialize()
++    {
++        base.Initialize();
++
++        SubscribeLocalEvent<DodgeModeImplantComponent, ImplantImplantedEvent>(OnImplanted);
++        SubscribeLocalEvent<DodgeModeImplantComponent, ImplantRemovedEvent>(OnRemoved);
++        SubscribeLocalEvent<DodgeModeImplantComponent, ComponentShutdown>(OnImplantShutdown);
++        SubscribeLocalEvent<DodgeModeImplantComponent, CycleDodgeModeEvent>(OnCycleDodgeMode);
++    }
++
++    public bool IsActive(EntityUid uid)
++    {
++        return _sandevistan.IsActive(uid);
++    }
++
++    public float GetChance(Entity<DodgeComponent> ent)
++    {
++        var chance = IsActive(ent.Owner) ? ent.Comp.ActiveChance : ent.Comp.PassiveChance;
++        return Math.Clamp(chance, 0f, 1f);
++    }
++
++    private void OnImplanted(Entity<DodgeModeImplantComponent> ent, ref ImplantImplantedEvent args)
++    {
++        if (!HasComp<DodgeComponent>(args.Implanted))
++            return;
++
++        _actions.AddAction(args.Implanted, ref ent.Comp.ModeActionEntity, ent.Comp.ModeAction, ent.Owner);
++        Dirty(ent);
++        UpdateModeAction(ent, args.Implanted);
++    }
++
++    private void OnRemoved(Entity<DodgeModeImplantComponent> ent, ref ImplantRemovedEvent args)
++    {
++        _actions.RemoveAction(args.Implanted, ent.Comp.ModeActionEntity);
++        ent.Comp.ModeActionEntity = null;
++        Dirty(ent);
++    }
++
++    private void OnImplantShutdown(Entity<DodgeModeImplantComponent> ent, ref ComponentShutdown args)
++    {
++        if (HostOf(ent.Owner) is { } host)
++            _actions.RemoveAction(host, ent.Comp.ModeActionEntity);
++    }
++
++    private void OnCycleDodgeMode(Entity<DodgeModeImplantComponent> ent, ref CycleDodgeModeEvent args)
++    {
++        if (args.Handled || HostOf(ent.Owner) is not { } host || !TryComp<DodgeComponent>(host, out var dodge))
++            return;
++
++        dodge.StaminaDodgeMode = !dodge.StaminaDodgeMode;
++        Dirty(host, dodge);
++        UpdateModeAction(ent, host);
++
++        var popup = dodge.StaminaDodgeMode ? ent.Comp.StaminaPopup : ent.Comp.ChancePopup;
++        _popup.PopupPredicted(Loc.GetString(popup), host, host, PopupType.Medium);
++        args.Handled = true;
++    }
++
++    private void UpdateModeAction(Entity<DodgeModeImplantComponent> ent, EntityUid host)
++    {
++        if (ent.Comp.ModeActionEntity is not { } action || !TryComp<DodgeComponent>(host, out var dodge))
++            return;
++
++        var state = dodge.StaminaDodgeMode ? ent.Comp.StaminaIcon : ent.Comp.ChanceIcon;
++        _actions.SetIcon(action, new SpriteSpecifier.Rsi(ent.Comp.ActionRsi, state));
++    }
++
++    private EntityUid? HostOf(EntityUid implant)
++    {
++        if (TryComp<LimbImplantComponent>(implant, out var limb) && limb.Host is { } host && !TerminatingOrDeleted(host))
++            return host;
++
++        if (TryComp<SubdermalImplantComponent>(implant, out var subdermal) &&
++            subdermal.ImplantedEntity is { } old &&
++            !TerminatingOrDeleted(old))
++        {
++            return old;
++        }
++
++        return null;
++    }
++}
+diff --git a/Content.Shared/DeadSpace/Reactions/NearbyCriticalShoutComponent.cs b/Content.Shared/DeadSpace/Reactions/NearbyCriticalShoutComponent.cs
+new file mode 100644
+index 0000000000..ddba96fd9d
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Reactions/NearbyCriticalShoutComponent.cs
+@@ -0,0 +1,23 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Robust.Shared.GameStates;
++
++namespace Content.Shared.DeadSpace.Reactions;
++
++[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
++public sealed partial class NearbyCriticalShoutComponent : Component
++{
++    [DataField, AutoNetworkedField]
++    public float Range = 10f;
++
++    [DataField, AutoNetworkedField]
++    public float Cooldown = 5f;
++
++    [DataField, AutoNetworkedField]
++    public bool OnlyWhileActive = true;
++
++    [DataField, AutoNetworkedField]
++    public List<LocId> Messages = new();
++
++    public TimeSpan NextShout;
++}
+diff --git a/Content.Shared/DeadSpace/Sandevistan/SandevistanBodyVisualComponent.cs b/Content.Shared/DeadSpace/Sandevistan/SandevistanBodyVisualComponent.cs
+index 845388e6d3..4b2ef957f4 100644
+--- a/Content.Shared/DeadSpace/Sandevistan/SandevistanBodyVisualComponent.cs
++++ b/Content.Shared/DeadSpace/Sandevistan/SandevistanBodyVisualComponent.cs
+@@ -1,10 +1,16 @@
+ // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+ 
+ using Robust.Shared.GameStates;
++using Robust.Shared.Utility;
+ 
+ namespace Content.Shared.DeadSpace.Sandevistan;
+ 
+-[RegisterComponent, NetworkedComponent]
++[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+ public sealed partial class SandevistanBodyVisualComponent : Component
+ {
++    [DataField, AutoNetworkedField]
++    public ResPath Sprite = new("/Textures/_DeadSpace/Mobs/Effects/sandevistan.rsi");
++
++    [DataField, AutoNetworkedField]
++    public string State = "body";
+ }
+diff --git a/Content.Shared/DeadSpace/Sandevistan/SandevistanComponent.cs b/Content.Shared/DeadSpace/Sandevistan/SandevistanComponent.cs
+index f1228b7f2b..901be3e7c6 100644
+--- a/Content.Shared/DeadSpace/Sandevistan/SandevistanComponent.cs
++++ b/Content.Shared/DeadSpace/Sandevistan/SandevistanComponent.cs
+@@ -39,6 +39,12 @@ public sealed partial class SandevistanImplantComponent : Component
+     [DataField]
+     public float AttackRateModifier = 1.75f;
+ 
++    [DataField]
++    public bool AfterimageTrail = true;
++
++    [DataField]
++    public float EnsnareRemovalDurationMultiplier = 0.25f;
++
+     [DataField]
+     public float OverloadInterval = 1f;
+ 
+@@ -336,6 +342,12 @@ public sealed partial class ActiveSandevistanComponent : Component
+     [DataField, AutoNetworkedField]
+     public float AttackRateModifier = 1.75f;
+ 
++    [DataField, AutoNetworkedField]
++    public bool AfterimageTrail = true;
++
++    [DataField]
++    public float EnsnareRemovalDurationMultiplier = 0.25f;
++
+     [DataField]
+     public float OverloadInterval = 1f;
+ 
+diff --git a/Content.Shared/DeadSpace/Sandevistan/SharedSandevistanSystem.cs b/Content.Shared/DeadSpace/Sandevistan/SharedSandevistanSystem.cs
+index 1ff4de9c90..d3204aa2e5 100644
+--- a/Content.Shared/DeadSpace/Sandevistan/SharedSandevistanSystem.cs
++++ b/Content.Shared/DeadSpace/Sandevistan/SharedSandevistanSystem.cs
+@@ -22,6 +22,13 @@ public override void Initialize()
+         SubscribeLocalEvent<ActiveSandevistanComponent, GetMeleeAttackRateEvent>(OnGetMeleeAttackRate);
+     }
+ 
++    public bool IsActive(EntityUid uid)
++    {
++        return TryComp<ActiveSandevistanComponent>(uid, out var active) &&
++               active.LifeStage <= ComponentLifeStage.Running &&
++               _timing.CurTime < active.EndTime;
++    }
++
+     private void OnActiveStartup(Entity<ActiveSandevistanComponent> ent, ref ComponentStartup args)
+     {
+         _movement.RefreshMovementSpeedModifiers(ent.Owner);
+diff --git a/Content.Shared/DeadSpace/Weapons/Akimbo/AkimboAccuracyComponent.cs b/Content.Shared/DeadSpace/Weapons/Akimbo/AkimboAccuracyComponent.cs
+new file mode 100644
+index 0000000000..5c97840be3
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Weapons/Akimbo/AkimboAccuracyComponent.cs
+@@ -0,0 +1,12 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Robust.Shared.GameStates;
++
++namespace Content.Shared.DeadSpace.Weapons.Akimbo;
++
++[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
++public sealed partial class AkimboAccuracyComponent : Component
++{
++    [DataField, AutoNetworkedField]
++    public float Accuracy = 1f;
++}
+diff --git a/Content.Shared/DeadSpace/Weapons/Akimbo/AkimboSystem.cs b/Content.Shared/DeadSpace/Weapons/Akimbo/AkimboSystem.cs
+index d51f8f9886..25b2c31ed8 100644
+--- a/Content.Shared/DeadSpace/Weapons/Akimbo/AkimboSystem.cs
++++ b/Content.Shared/DeadSpace/Weapons/Akimbo/AkimboSystem.cs
+@@ -106,6 +106,9 @@ private void SetPairState(EntityUid uid, AkimboComponent component, TimeSpan nex
+ 
+     public float GetShotAccuracy(EntityUid user, EntityUid gun)
+     {
++        if (TryComp<AkimboAccuracyComponent>(user, out var accuracy))
++            return Math.Clamp(accuracy.Accuracy, 0.01f, 1f);
++
+         if (!TryComp<AkimboComponent>(gun, out var akimbo) ||
+             !TryGetPair(user, gun, out _, out _))
+         {
+diff --git a/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateComponent.cs b/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateComponent.cs
+new file mode 100644
+index 0000000000..e8a555dba5
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateComponent.cs
+@@ -0,0 +1,15 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Robust.Shared.GameStates;
++
++namespace Content.Shared.DeadSpace.Weapons;
++
++[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
++public sealed partial class SemiAutoFireRateComponent : Component
++{
++    [DataField, AutoNetworkedField]
++    public float ActiveMultiplier = 1.2f;
++
++    [DataField, AutoNetworkedField]
++    public bool OnlyWhileActive = true;
++}
+diff --git a/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateSystem.cs b/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateSystem.cs
+new file mode 100644
+index 0000000000..efb5d68458
+--- /dev/null
++++ b/Content.Shared/DeadSpace/Weapons/SemiAutoFireRateSystem.cs
+@@ -0,0 +1,87 @@
++// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
++
++using Content.Shared.DeadSpace.Sandevistan;
++using Content.Shared.Hands.Components;
++using Content.Shared.Hands.EntitySystems;
++using Content.Shared.Weapons.Ranged.Components;
++using Content.Shared.Weapons.Ranged.Events;
++using Content.Shared.Weapons.Ranged.Systems;
++
++namespace Content.Shared.DeadSpace.Weapons;
++
++public sealed class SemiAutoFireRateSystem : EntitySystem
++{
++    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
++    [Dependency] private readonly SharedGunSystem _guns = default!;
++    [Dependency] private readonly SharedHandsSystem _hands = default!;
++
++    private readonly Dictionary<EntityUid, bool> _activeStates = new();
++
++    public override void Initialize()
++    {
++        base.Initialize();
++        SubscribeLocalEvent<SemiAutoFireRateComponent, ComponentShutdown>(OnShutdown);
++    }
++
++    public override void Update(float frameTime)
++    {
++        base.Update(frameTime);
++
++        var query = EntityQueryEnumerator<SemiAutoFireRateComponent>();
++        while (query.MoveNext(out var uid, out _))
++        {
++            var active = _sandevistan.IsActive(uid);
++            if (_activeStates.TryGetValue(uid, out var previous) && previous == active)
++                continue;
++
++            _activeStates[uid] = active;
++            RefreshHeldGuns(uid);
++        }
++    }
++
++    public void ApplyGunModifiers(Entity<GunComponent> ent, ref GunRefreshModifiersEvent args)
++    {
++        if (ent.Comp.SelectedMode != SelectiveFire.SemiAuto ||
++            ent.Comp.BurstActivated ||
++            Holder(ent.Owner) is not { } user ||
++            !TryComp<SemiAutoFireRateComponent>(user, out var fireRate) ||
++            fireRate.OnlyWhileActive && !_sandevistan.IsActive(user))
++        {
++            return;
++        }
++
++        args.FireRate *= MathF.Max(0f, fireRate.ActiveMultiplier);
++    }
++
++    private void OnShutdown(Entity<SemiAutoFireRateComponent> ent, ref ComponentShutdown args)
++    {
++        _activeStates.Remove(ent.Owner);
++        RefreshHeldGuns(ent.Owner);
++    }
++
++    private EntityUid? Holder(EntityUid item)
++    {
++        var parent = Transform(item).ParentUid;
++        while (parent.IsValid())
++        {
++            if (HasComp<SemiAutoFireRateComponent>(parent))
++                return parent;
++
++            parent = Transform(parent).ParentUid;
++        }
++
++        return null;
++    }
++
++    private void RefreshHeldGuns(EntityUid user)
++    {
++        if (!TryComp<HandsComponent>(user, out var hands))
++            return;
++
++        foreach (var held in _hands.EnumerateHeld((user, hands)))
++        {
++            if (HasComp<GunComponent>(held))
++                _guns.RefreshModifiers(held);
++        }
++    }
++}
+diff --git a/Content.Shared/Ensnaring/SharedEnsnareableSystem.cs b/Content.Shared/Ensnaring/SharedEnsnareableSystem.cs
+index 056039b1ed..e49a9d1ba9 100644
+--- a/Content.Shared/Ensnaring/SharedEnsnareableSystem.cs
++++ b/Content.Shared/Ensnaring/SharedEnsnareableSystem.cs
+@@ -27,8 +27,6 @@ public sealed partial class EnsnareableDoAfterEvent : SimpleDoAfterEvent
+ 
+ public abstract partial class SharedEnsnareableSystem : EntitySystem
+ {
+-    private const float SandevistanRemovalDurationMultiplier = 0.25f; // DS14
+-
+     [Dependency] private   AlertsSystem _alerts = default!;
+     [Dependency] private   MovementSpeedModifierSystem _speedModifier = default!;
+     [Dependency] protected SharedAppearanceSystem Appearance = default!;
+@@ -168,7 +166,7 @@ public void TryFree(EntityUid target, EntityUid user, EntityUid ensnare, Ensnari
+             sandevistan.LifeStage <= ComponentLifeStage.Running &&
+             _timing.CurTime < sandevistan.EndTime)
+         {
+-            freeTime *= SandevistanRemovalDurationMultiplier;
++            freeTime *= Math.Clamp(sandevistan.EnsnareRemovalDurationMultiplier, 0f, 1f);
+         }
+         // DS14-end
+ 
+diff --git a/Content.Shared/Weapons/Hitscan/Events/HitscanEvents.cs b/Content.Shared/Weapons/Hitscan/Events/HitscanEvents.cs
+index 48149e8849..679249fab9 100644
+--- a/Content.Shared/Weapons/Hitscan/Events/HitscanEvents.cs
++++ b/Content.Shared/Weapons/Hitscan/Events/HitscanEvents.cs
+@@ -110,6 +110,13 @@ public struct AttemptHitscanRaycastFiredEvent
+     public bool Cancelled;
+ }
+ 
++[ByRefEvent]
++public struct HitscanDodgeAttemptEvent
++{
++    public HitscanRaycastFiredData Data;
++    public bool Cancelled;
++}
++
+ /// <summary>
+ /// Raised on the targeted entity of the hitscan to allow it to respond to being struck.
+ /// </summary>
+diff --git a/Content.Shared/Weapons/Hitscan/Systems/HitscanBasicRaycastSystem.cs b/Content.Shared/Weapons/Hitscan/Systems/HitscanBasicRaycastSystem.cs
+index b9a273b9e8..b16cd79765 100644
+--- a/Content.Shared/Weapons/Hitscan/Systems/HitscanBasicRaycastSystem.cs
++++ b/Content.Shared/Weapons/Hitscan/Systems/HitscanBasicRaycastSystem.cs
+@@ -50,20 +50,23 @@ private void OnHitscanFired(Entity<HitscanBasicRaycastComponent> ent, ref Hitsca
+         var ignored = args.IgnoredEntities;
+         // DS14-start
+         var executionTarget = args.ExecutionTarget;
+-        var result = executionTarget != null
+-            ? rayCastResults.FirstOrNull(hit =>
+-                ignored?.Contains(hit.HitEntity) != true &&
+-                (hit.HitEntity == executionTarget ||
+-                 !HasComp<MobStateComponent>(hit.HitEntity) &&
+-                  CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true))
+-            : _container.IsEntityOrParentInContainer(shooter)
+-                ? rayCastResults.FirstOrNull(hit => ignored?.Contains(hit.HitEntity) != true)
+-                : rayCastResults.FirstOrNull(hit =>
++        RayCastResults? SelectResult()
++        {
++            return executionTarget != null
++                ? rayCastResults.FirstOrNull(hit =>
+                     ignored?.Contains(hit.HitEntity) != true &&
+-                    (hit.HitEntity == target || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true));
+-        // DS14-end
++                    (hit.HitEntity == executionTarget ||
++                     !HasComp<MobStateComponent>(hit.HitEntity) &&
++                      CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true))
++                : _container.IsEntityOrParentInContainer(shooter)
++                    ? rayCastResults.FirstOrNull(hit => ignored?.Contains(hit.HitEntity) != true)
++                    : rayCastResults.FirstOrNull(hit =>
++                        ignored?.Contains(hit.HitEntity) != true &&
++                        (hit.HitEntity == target || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true));
++        }
+ 
+-        var distanceTried = result?.Distance ?? ent.Comp.MaxDistance;
++        var result = SelectResult();
++        // DS14-end
+ 
+         // DS14-start: aggregate the visual trace and render it after reflection handling.
+         var isRoot = false;
+@@ -72,23 +75,8 @@ private void OnHitscanFired(Entity<HitscanBasicRaycastComponent> ent, ref Hitsca
+             args.OutputTrace = [];
+             isRoot = true;
+         }
+-
+-        if (GenerateTraceStep(args.FromCoordinates, distanceTried, args.ShotDirection.ToAngle(), result?.HitEntity) is { } trace)
+-            args.OutputTrace.Add(trace);
+         // DS14-end
+ 
+-        // Do visuals without an event. They should always happen and putting it on the attempt event is weird!
+-        // If more stuff gets added here, it should probably be turned into an event.
+-        // DS14: visuals are fired after the hit attempt so reflected traces can be rendered together.
+-
+-        // Admin logging
+-        if (result?.HitEntity != null && !HasComp<HitscanBasicDamageComponent>(ent.Owner)) // DS14
+-        {
+-            _log.Add(LogType.HitScanHit,
+-                $"{ToPrettyString(shooter):user} hit {ToPrettyString(result.Value.HitEntity):target}"
+-                + $" using {ToPrettyString(args.Gun):entity}.");
+-        }
+-
+         var data = new HitscanRaycastFiredData
+         {
+             ShotDirection = args.ShotDirection,
+@@ -103,6 +91,40 @@ private void OnHitscanFired(Entity<HitscanBasicRaycastComponent> ent, ref Hitsca
+             ExecutionTarget = executionTarget, // DS14
+         };
+ 
++        // DS14-start
++        while (data.HitEntity is { } dodgeTarget)
++        {
++            var dodgeEvent = new HitscanDodgeAttemptEvent { Data = data };
++            RaiseLocalEvent(dodgeTarget, ref dodgeEvent);
++            if (!dodgeEvent.Cancelled)
++                break;
++
++            ignored = ignored == null
++                ? new List<EntityUid> { dodgeTarget }
++                : new List<EntityUid>(ignored) { dodgeTarget };
++            result = SelectResult();
++            data.HitEntity = result?.HitEntity;
++            data.HitPosition = result is { } dodgeHit ? new MapCoordinates(dodgeHit.HitPos, mapCords.MapId) : null;
++            data.IgnoredEntities = ignored;
++        }
++        // DS14-end
++
++        var distanceTried = result?.Distance ?? ent.Comp.MaxDistance;
++        if (GenerateTraceStep(args.FromCoordinates, distanceTried, args.ShotDirection.ToAngle(), result?.HitEntity) is { } trace)
++            args.OutputTrace.Add(trace);
++
++        // Do visuals without an event. They should always happen and putting it on the attempt event is weird!
++        // If more stuff gets added here, it should probably be turned into an event.
++        // DS14: visuals are fired after the hit attempt so reflected traces can be rendered together.
++
++        // Admin logging
++        if (result?.HitEntity != null && !HasComp<HitscanBasicDamageComponent>(ent.Owner)) // DS14
++        {
++            _log.Add(LogType.HitScanHit,
++                $"{ToPrettyString(shooter):user} hit {ToPrettyString(result.Value.HitEntity):target}"
++                + $" using {ToPrettyString(args.Gun):entity}.");
++        }
++
+         var attemptEvent = new AttemptHitscanRaycastFiredEvent { Data = data };
+         RaiseLocalEvent(ent, ref attemptEvent);
+ 
+diff --git a/Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Interactions.cs b/Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Interactions.cs
+index ff91587775..c0d7a3079d 100644
+--- a/Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Interactions.cs
++++ b/Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Interactions.cs
+@@ -68,6 +68,7 @@ private void SelectFire(EntityUid uid, GunComponent component, SelectiveFire fir
+ 
+         DebugTools.Assert((component.AvailableModes & fire) != 0x0);
+         component.SelectedMode = fire;
++        RefreshModifiers((uid, component)); // DS14
+ 
+         if (!Paused(uid))
+         {
+diff --git a/Resources/Locale/ru-RU/_DeadSpace/implants/kerensky.ftl b/Resources/Locale/ru-RU/_DeadSpace/implants/kerensky.ftl
+new file mode 100644
+index 0000000000..026fe00b9c
+--- /dev/null
++++ b/Resources/Locale/ru-RU/_DeadSpace/implants/kerensky.ftl
+@@ -0,0 +1,10 @@
++kerensky-implant-activated = Нейроускоритель «Керенский» синхронизируется с вашими рефлексами. Мир вспыхивает оранжевыми контурами.
++kerensky-dodge-mode-chance = Режим работы: 35% шанс без затрат стамины.
++kerensky-dodge-mode-stamina = Режим работы: 100% шанс за 6 стамины.
++kerensky-dodge-no-stamina = Недостаточно стамины для гарантированного уклонения.
++
++kerensky-nearby-critical-1 = АХАХАХА, КАК СОННЫЕ МУХИ!
++kerensky-nearby-critical-2 = Я тебе бошку пробью нахер!
++kerensky-nearby-critical-3 = Быстрее надо быть! Жизнь - скорость!
++kerensky-nearby-critical-4 = В яблочко!!!
++kerensky-nearby-critical-5 = Стой на месте, я целюсь!!!
+diff --git a/Resources/Locale/ru-RU/_deadspace/store/uplink-catalog.ftl b/Resources/Locale/ru-RU/_deadspace/store/uplink-catalog.ftl
+index b55b3ba7d8..9c640b38b2 100644
+--- a/Resources/Locale/ru-RU/_deadspace/store/uplink-catalog.ftl
++++ b/Resources/Locale/ru-RU/_deadspace/store/uplink-catalog.ftl
+@@ -39,6 +39,8 @@ uplink-smoking-carp-desc = Свиток, содержижащий знания 
+ uplink-smoking-carp-expensive-desc = Свиток, содержижащий знания о древнем боевом искусстве "Курящий карп", после прочтения вы не сможете использовать дальнобойное оружие. Возможно, в будущем его можно будет купить дешевле... Несовместим с голопаразитом.
+ uplink-arkalyse-bundle-name = Набор "Аркалис"
+ uplink-arkalyse-bundle-desc = Набор, который содержит в себе: одноразовый мануал, который обучает истинному искусству "Аркалиса", бандану, повязку на глаз, сигару и зажигалку синдиката.
++uplink-kerensky-implanter-name = Автоимплантер «Керенский»
++uplink-kerensky-implanter-desc = Нейроускоритель Керенский, разработанный небольшой конторой «Beruren Inc.». Для настоящих ценителей стрелковых дуэлей.
+ uplink-adrenaline-implanter-name = Адреналиновый имплантер
+ uplink-adrenaline-implanter-desc = Трёхразовый имплант, который введёт в вас дозу стимуляторов и поможет выйти из неприятных ситуаций.//иадренал
+ uplink-revive-implanter-name = Восстанавливающий автоимлантер
+diff --git a/Resources/Prototypes/_DeadSpace/Entities/Specific/Implants/kerensky.yml b/Resources/Prototypes/_DeadSpace/Entities/Specific/Implants/kerensky.yml
+new file mode 100644
+index 0000000000..130d3c9dc3
+--- /dev/null
++++ b/Resources/Prototypes/_DeadSpace/Entities/Specific/Implants/kerensky.yml
+@@ -0,0 +1,157 @@
++- type: entity
++  parent: BaseItem
++  id: KerenskyImplant
++  name: имплант «Керенский»
++  description: Нейроускоритель рефлексов. Устанавливается хирургически в слот спины. Разработан небольшой контор «Beruren Inc.».
++  components:
++  - type: Sprite
++    sprite: _DeadSpace/Objects/Specific/Medical/kerensky.rsi
++    state: icon
++  - type: Item
++    sprite: _DeadSpace/Objects/Specific/Medical/kerensky.rsi
++    size: Small
++  - type: LimbImplant
++    slots:
++    - Back
++    implantAction: ActionActivateKerenskyImplant
++    implantComponents:
++    - type: Dodge
++      passiveChance: 0.15
++      activeChance: 0.35
++      guaranteedStaminaCost: 6
++      noStaminaPopup: kerensky-dodge-no-stamina
++      noStaminaPopupCooldown: 1
++    - type: DodgeVisual
++      startColor: "#ffb000dd"
++      endColor: "#ff5a0000"
++      lifetime: 0.32
++      fallbackEffect: MantisDodgeEffect
++      sidewaysOffset: 0.16
++      backwardOffset: 0.12
++      outerBackwardOffset: 0.08
++      jitterDuration: 0.18
++      jitterAmplitude: 4
++      jitterFrequency: 24
++    - type: LimbTargetBonus
++      passiveChance: 0.5
++      activeChance: 1
++    - type: SemiAutoFireRate
++      activeMultiplier: 1.2
++      onlyWhileActive: true
++    - type: AkimboAccuracy
++      accuracy: 1
++    - type: SpeedSliding
++    - type: InstantStandUp
++    - type: NearbyCriticalShout
++      range: 10
++      cooldown: 5
++      onlyWhileActive: true
++      messages:
++      - kerensky-nearby-critical-1
++      - kerensky-nearby-critical-2
++      - kerensky-nearby-critical-3
++      - kerensky-nearby-critical-4
++      - kerensky-nearby-critical-5
++    - type: SandevistanBodyVisual
++      sprite: _DeadSpace/Mobs/Effects/kerensky.rsi
++      state: body
++  - type: DodgeModeImplant
++    modeAction: ActionCycleKerenskyDodgeMode
++    actionRsi: /Textures/_DeadSpace/Actions/kerensky_actions.rsi
++    chanceIcon: kerensky-dodge-chance
++    staminaIcon: kerensky-dodge-stamina
++    chancePopup: kerensky-dodge-mode-chance
++    staminaPopup: kerensky-dodge-mode-stamina
++  - type: SandevistanImplant
++    duration: 20
++    softcapTime: 12
++    cooldownMultiplier: 1.5
++    movementSpeedModifier: 1
++    attackRateModifier: 1
++    afterimageTrail: false
++    ensnareRemovalDurationMultiplier: 1
++    overloadInterval: 1
++    exhaustionStaminaDamage: 100
++    softcapPopups: []
++    softcapShouts: []
++    endWarningLeadTime: 4
++    endWarningPopups: []
++    recoveryPopups: []
++    afterimageInterval: 0.01
++    afterimageMinDistance: 0.15
++    afterimageLifetime: 0.7
++    deactivationVisualDuration: 1.5
++    afterimageColor: "#ff9900dd"
++    afterimageFallbackEffect: MantisDodgeEffect
++    popup: kerensky-implant-activated
++
++- type: entity
++  parent: BaseImplantOnlyImplanter
++  id: KerenskyImplanter
++  name: автоимплантер
++  suffix: Керенский
++  components:
++  - type: Implanter
++    implant: KerenskyImplant
++  - type: Item
++    sprite: _DeadSpace/Objects/Specific/Medical/monowire_implanter.rsi
++    heldPrefix: implanter
++  - type: Sprite
++    sprite: _DeadSpace/Objects/Specific/Medical/monowire_implanter.rsi
++    state: implanter1
++    layers:
++    - state: implanter0
++      map: [ "implantFull" ]
++      visible: true
++    - state: implanter1
++      map: [ "implantOnly" ]
++
++- type: entity
++  id: ActionActivateKerenskyImplant
++  name: "[color=orange]Активировать «Керенский»[/color]"
++  description: Поехали?
++  categories: [ HideSpawnMenu ]
++  components:
++  - type: Action
++    itemIconStyle: BigAction
++    priority: -20
++    icon:
++      sprite: _DeadSpace/Actions/kerensky_actions.rsi
++      state: kerensky
++    useDelay: 2
++    checkCanInteract: false
++  - type: InstantAction
++    event: !type:ActivateSandevistanImplantEvent
++
++- type: entity
++  id: ActionCycleKerenskyDodgeMode
++  name: "[color=orange]«Керенский»: режим работы[/color]"
++  description: Переключичение между нормальный и экстремальным режимом работы.
++  categories: [ HideSpawnMenu ]
++  components:
++  - type: Action
++    itemIconStyle: BigAction
++    priority: -19
++    icon:
++      sprite: _DeadSpace/Actions/kerensky_actions.rsi
++      state: kerensky-dodge-chance
++    useDelay: 0.25
++    checkCanInteract: false
++  - type: InstantAction
++    event: !type:CycleDodgeModeEvent
++
++# - type: listing
++#   id: UplinkKerenskyImplanter
++#   name: uplink-kerensky-implanter-name
++#   description: uplink-kerensky-implanter-desc
++#   icon: { sprite: _DeadSpace/Actions/kerensky_actions.rsi, state: kerensky }
++#   productEntity: KerenskyImplanter
++#   cost:
++#     Telecrystal: 30
++#   categories:
++#   - UplinkImplants
++#   conditions:
++#   - !type:PopulationLimitedStockCondition
++#     stock: 2
++#     highPopulationStock: 2
++#     highPopulationThreshold: 110
+diff --git a/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/kerensky-dodge-chance.png b/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/kerensky-dodge-chance.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..92cebae4de76570f150bd5731a8f6314a8f4fd35
+GIT binary patch
+literal 555
+zcmV+`0@VG9P)<h;3K|Lk000e1NJLTq001BW001Be1^@s6b9#F80005<Nkl<Zc$~$T
+zO-ma=7=WK$qQNgvSwEU;L2N<Dtsvf{HxK@TLOt{n^jdqVw9s2A_RvDnc<@|MP!KFc
+z!IKy9lv9NoER}{vP--_eiP`RYuxmH##!Sr4=7nXMVVUQdcXnQ8l)hfgqK*-AcO1qe
+zQi1)G>5{f$XFxW%oXE8dxDEXd_e51^r%d=^JTm5F*i2O#(F1P3ogrPo3GJUuCju3y
+z1eYox0+%Kr3YQ{K4cvEuYT>>L+y?HOz-{5+QHni3QsH3kvT_xQ76(TLvuipV$-E6;
+z0b2gau)SB{@%v-{1Pt?k2_3rI!1@b~w@=zxoKml5zPNS9>!nj6s57cs0!0CZ%SUTd
+zzu5hH&TN?&Z6@{c4x6vKcoYo_k13P^fX-Hx<hx$GnFl^W>6#Drgjk-|Scr8pGLzxg
+znOSjM;S8K)P3}#l0iFUn@G|=BXUPwj${6f?EzlfR80Z$8TUAT&eLgY<m;lCKtI;$|
+zPjiDkAx0jA$>uFm8AE7HA<glJO~hjz00|(M{8nuG@L4CDw-~<P$jWmKfZVyo-j5=0
+zR&{>=shoacfq1N=>^|S!Kd<Q^Q*jAuDKa$+$cEo25CpueKu~Z`fgs`61cHWN2{^V<
+tLN?re2l1){i6F0Oiu-n4x65h0;sV@`&k`S!TY&%o002ovPDHLkV1kHV`ELLK
+
+literal 0
+HcmV?d00001
+
+diff --git a/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/kerensky-dodge-stamina.png b/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/kerensky-dodge-stamina.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..a976459e7e084bf7bc1111ef964ecb870bada26a
+GIT binary patch
+literal 419
+zcmV;U0bKrxP)<h;3K|Lk000e1NJLTq001BW001Be1^@s6b9#F800001b5ch_0Itp)
+z=>Px#1ZP1_K>z@;j|==^1poj532;bRa{vGi!vFvd!vV){sAK>D0XRuSK~z{r?UXT2
+z12GUqEu}zdfJ77&v=kt!&?Tu;(9xn)=_nAlfHS1Y0dglqO>RJgqi<y_^X=U@tIW_)
+zJjwp{&VO31)?Hm*_`k$);9s38+!qD-qBe~JY<O(ACkSw;!Ox4E$vW*b5kR?sy{Q0~
+z12chAIWQ4uDhKKUZRJ2!U|%^<6R0T%odwp<C*Chz;9+zg^QXxfvhUs5W^y~oo=rKb
+zz<hd|mVb?J+RH&F0h~vH-Tg=*<L7zSK>~9Aco$xET!+2ng^cI$ylMft!veq7N$J0U
+znZW0J&qhGb1BEYM1UTb4Jg;70>1G%xKqB2YWjv>o0Lq2Zj|kjf5B<kmFP^Oy{cKJr
+zf!crjp;QTIm4m$kn&qHXK)W0?3RskbOdt&{%Rwe!MJ8Y+!hM;5HCq&7h)S-xn)3hv
+N002ovPDHLkV1j%ps`&r_
+
+literal 0
+HcmV?d00001
+
+diff --git a/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/kerensky.png b/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/kerensky.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..3738236c59ca164bde2dbf6c26ad1101c83d845b
+GIT binary patch
+literal 499
+zcmV<P0Sx|$P)<h;3K|Lk000e1NJLTq001BW001Be1^@s6b9#F80005HNkl<Zc$~$T
+zyH3JT9EX3@`{1Pn6%(1%xRN*s(I_z*Z<7OyQ3vG(@C6Vb0MO0J7^4mj&W+DtVtfEK
+zLbxa@mk3f!bb#uy6gX`;<+rpw>FM|N<XrMM4O=bWXkuFB4Pk$hDbVJ#{ChS@BfuJ5
+zO{8K3<c5uo{6{&mktICrPcD)SiODe|D!`>H8Rh~c)aJ7Yh6>b!GZmnLGZUbNGZ9b&
+zZ@7S3IH0f*)k<J33%9)h09ZZh!(Fu0eP*PHv#qoUKmhPEeZcqAep8izQe2}VPB$|m
+zfOY`SQz3rf>Ai)zzb=8fF%c&lnPM59a0dCoNQxe=OJIIngx8h(0?-B^?hKl(k(Bx=
+zrCGr1%1QlWlL7NkG_7qu>s|%tH=UZ{dIj<Tus-n#-_nOM0&aWZTDtdK^mIMGl_s3W
+znaAF;HVJA0`B56naBv^@LXy~VXp^84P&&r}AYPVuc>R;`tCXlKK*BF?I~J-*+?OS`
+z9eM1p&`Z=@hDv+;?p1fidx<QE*+ZThN~Y=vXgOFKCSVj?QNT!eg@DoUUjd>X5Lm<I
+pHHgwG5R5F-O!DfuX~k)?@&mfpv!5*%v^xL*002ovPDHLkV1oF<+vNZN
+
+literal 0
+HcmV?d00001
+
+diff --git a/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/meta.json b/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/meta.json
+new file mode 100644
+index 0000000000..d2480653e0
+--- /dev/null
++++ b/Resources/Textures/_DeadSpace/Actions/kerensky_actions.rsi/meta.json
+@@ -0,0 +1,20 @@
++{
++  "version": 1,
++  "license": "CC-BY-SA-3.0",
++  "copyright": "Placeholder action icons created for Space Station 14 server Мёртвый Космос",
++  "size": {
++    "x": 32,
++    "y": 32
++  },
++  "states": [
++    {
++      "name": "kerensky"
++    },
++    {
++      "name": "kerensky-dodge-chance"
++    },
++    {
++      "name": "kerensky-dodge-stamina"
++    }
++  ]
++}
+diff --git a/Resources/Textures/_DeadSpace/Mobs/Effects/kerensky.rsi/body.png b/Resources/Textures/_DeadSpace/Mobs/Effects/kerensky.rsi/body.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..afde13aa53618126b95577e2f022da7571467ea1
+GIT binary patch
+literal 864
+zcmeAS@N?(olHy`uVBq!ia0y~yU<5K58aUX1<dd!2K@yC`LGDfr>(0r%1aer?9eo`c
+z7&i8E|4C#8@;M7UB8wRq_zr_G<MI3zDGUruUp-wMLn`9l-ZjjUc9ducEL~O0E`O+$
+zZxOdd(JYglZhX_j62)?+X<o|Q*I2vWaF%Gz?KkIj*v`HM*-8}nbN~49<Hd2&p7Hf@
+z(JwdsJ^uJ(O?`d+z4zZAzyD!V|9t9~uU{Ac>*ziC`P;W|e||nL`y)F){O%FIzt7)i
+zfB*k)SK0sb&%ge<f6m+>KKh{z!?SGdHy8d(F?`-CTK1xzx8dh4F6%FwpXd9`&f#9P
+ze*OKg?rZKey}7bJ-tkr4U#_6<ufr!S`v10u8L0jobHcuDhxq>f5?%7{`g(;@`|5wk
+zww&Ci@axyF%>O_BKdxlzJ^#5pE_3?7pQ0)M&S}5BWWT@Z%>BxxvA>>&PxxuQKIA+9
+zbLkoD*A~b@tOpsgzm9d~@28*3t@9m$PJ8kCb@^ZCO<yf8UY~zGY*&>$mLQ7A_#^P}
+zQ!|Gj$m4Z?jgJ8BkNqDe*J5zx?-zwO-d|50HJtD2^E*jis*}3^;Nkk;Uk}HBf8D<S
+z-SzYF`~F_Ie*OKgpDe3>f8|^7?z(luuK4#1ul^M>f4=3F%y1@K`|4jqhG$!+zWOJ@
+z02Bhc?_Zzpi9OpU?fbW9+oh|&(RJ3<F@I%P@f(gmPtSM!^7Z-Fsq5~YKd*Ehw>NHF
+zvDm!l&qJr$+P~}SCECTO*~hN|g@69z4~IT6w95W^%E)K^<ur3h*^BAyE3W)?t`)ZC
+zY1|dh55;!%Kh0d?<M+RQE}YR`x0e~{28f3?)vw53Aj1F*0`>y|-%m3FgXP!H)BHwP
+zAa1dr?@+q`9^;k2RqO%ZU&}h&J)gfoj-hlv4A=epq}u`WY~-_Fzks0-{+<~T5&GZx
+Xt=GD8E{$6w0uuCe^>bP0l+XkKE>xoI
+
+literal 0
+HcmV?d00001
+
+diff --git a/Resources/Textures/_DeadSpace/Mobs/Effects/kerensky.rsi/meta.json b/Resources/Textures/_DeadSpace/Mobs/Effects/kerensky.rsi/meta.json
+new file mode 100644
+index 0000000000..97754ee053
+--- /dev/null
++++ b/Resources/Textures/_DeadSpace/Mobs/Effects/kerensky.rsi/meta.json
+@@ -0,0 +1,57 @@
++{
++  "version": 1,
++  "license": "CC-BY-SA-3.0",
++  "copyright": "Created by pvrsifvl (ex1stenz, Discord) for Dead Space server in Space Station 14; orange recolor",
++  "size": {
++    "x": 32,
++    "y": 32
++  },
++  "states": [
++    {
++      "name": "body",
++      "directions": 4,
++      "delays": [
++        [
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14
++        ],
++        [
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14
++        ],
++        [
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14
++        ],
++        [
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14,
++          0.14
++        ]
++      ]
++    }
++  ]
++}
+diff --git a/Resources/Textures/_DeadSpace/Objects/Specific/Medical/kerensky.rsi/icon.png b/Resources/Textures/_DeadSpace/Objects/Specific/Medical/kerensky.rsi/icon.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..bbf2c4ec5026f78dc9959ca4d3d6fc5640416dfd
+GIT binary patch
+literal 337
+zcmeAS@N?(olHy`uVBq!ia0vp^3LwnE1|*BCs=fdz#^NA%Cx&(BWL^R}Ea{HEjtmSN
+z`?>!lvI6;>1s;*b3=DjSL74G){)!Z!;4@Db$B+p3w^I!H4jJ&c?snCg+GXJ+rpBgn
+z;(+6+LxMAR2$m=C{_<G2M!tR9ir5MBQ<na-_*o`$(WLLO#X0*4L8sQNZA&eym*vhC
+zOzJs$(BQG!yq|#?bN;iO*}*x(@iN<q$jwr+OJDCg<ddCLVijLhzgLtoHp}A6PBjBA
+zMV{6lZEBNG?y_I9C%1h5ROgZ_iR<IsXFD`XeA<34QNS$M^uz9T*H`nbOwL$P#w-(@
+z*YN$r&Cq}q#dXY=zHT=^AS^cd9HahB^V5xC$x(;n<TA{1_<n?CNj>jQ{QElcR#wF1
+f$XP&VhTN;$`eL;Q%keuvA2WEm`njxgN@xNA1}uj)
+
+literal 0
+HcmV?d00001
+
+diff --git a/Resources/Textures/_DeadSpace/Objects/Specific/Medical/kerensky.rsi/meta.json b/Resources/Textures/_DeadSpace/Objects/Specific/Medical/kerensky.rsi/meta.json
+new file mode 100644
+index 0000000000..518561a227
+--- /dev/null
++++ b/Resources/Textures/_DeadSpace/Objects/Specific/Medical/kerensky.rsi/meta.json
+@@ -0,0 +1,14 @@
++{
++  "version": 1,
++  "license": "CC-BY-SA-3.0",
++  "copyright": "Sandevistan sprite made by sastr. (discord) and pvrsifvl (discord); orange recolor for Space Station 14 server Мёртвый Космос",
++  "size": {
++    "x": 32,
++    "y": 32
++  },
++  "states": [
++    {
++      "name": "icon"
++    }
++  ]
++}

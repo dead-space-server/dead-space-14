@@ -40,6 +40,12 @@ public sealed partial class SandevistanImplantComponent : Component
     public float AttackRateModifier = 1.75f;
 
     [DataField]
+    public bool AfterimageTrail = true;
+
+    [DataField]
+    public float EnsnareRemovalDurationMultiplier = 0.25f;
+
+    [DataField]
     public float OverloadInterval = 1f;
 
     [DataField]
@@ -335,6 +341,12 @@ public sealed partial class ActiveSandevistanComponent : Component
 
     [DataField, AutoNetworkedField]
     public float AttackRateModifier = 1.75f;
+
+    [DataField, AutoNetworkedField]
+    public bool AfterimageTrail = true;
+
+    [DataField]
+    public float EnsnareRemovalDurationMultiplier = 0.25f;
 
     [DataField]
     public float OverloadInterval = 1f;

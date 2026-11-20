@@ -41,7 +41,7 @@ public sealed partial class SandevistanAfterimageSystem : EntitySystem
         var query = EntityQueryEnumerator<ActiveSandevistanComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var active, out var xform))
         {
-            if (Deleted(uid))
+            if (Deleted(uid) || !active.AfterimageTrail)
                 continue;
 
             _activeThisFrame.Add(uid);
