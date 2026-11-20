@@ -139,14 +139,14 @@ namespace Content.Shared.Humanoid.Markings
                 colorStringList.Add(color.ToHex());
 
             // DS14
-            return MarkingDye.EncodeDb($"{sanitizedName}@{String.Join(',', colorStringList)}", Dye);
+            return MarkingDyeStore.Pack($"{sanitizedName}@{String.Join(',', colorStringList)}", Dye);
         }
 
         public static Marking? ParseFromDbString(string input)
         {
             if (input.Length == 0) return null;
             // DS14
-            var split = MarkingDye.DecodeDb(input, out var dye).Split('@');
+            var split = MarkingDyeStore.Unpack(input, out var dye).Split('@');
             if (split.Length != 2) return null;
             List<Color> colorList = new();
             foreach (string color in split[1].Split(','))

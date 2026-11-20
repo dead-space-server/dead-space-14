@@ -285,9 +285,9 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
             markingSet.GetForwardEnumerator().ToList())
         {
             // DS14-start
-            HairDye = appearance.HairDye?.Sanitized(),
-            BodyDye = appearance.BodyDye?.Sanitized(),
-            FacialHairDye = appearance.FacialHairDye?.Sanitized(),
+            HairDye = appearance.HairDye?.Cleaned(),
+            BodyDye = appearance.BodyDye?.Cleaned(),
+            FacialHairDye = appearance.FacialHairDye?.Cleaned(),
             // DS14-end
         };
     }

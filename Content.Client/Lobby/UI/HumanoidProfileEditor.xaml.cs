@@ -1,4 +1,4 @@
-﻿using Content.Shared.DeadSpace.TTS;
+using Content.Shared.DeadSpace.TTS;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -122,7 +122,7 @@ namespace Content.Client.Lobby.UI
 
         private ColorSelectorSliders _rgbSkinColorSelector;
         private MarkingDyeEditor? _bodyDyeEditor; // DS14
-        private bool _profilePreviewQueued; // DS14
+        private bool _previewDue; // DS14
 
         private bool _isDirty;
         private bool _readOnly; // DS14
@@ -284,7 +284,7 @@ namespace Content.Client.Lobby.UI
                 if (Profile is null || _readOnly)
                     return;
                 Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithBodyDye(dye));
-                QueueProfilePreview(); // DS14
+                RequestPreview(); // DS14
             };
             // DS14-end
 
@@ -315,7 +315,7 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithHairColor(newColor.marking.MarkingColors[0]));
                 UpdateCMarkingsHair();
-                QueueProfilePreview(); // DS14
+                RequestPreview(); // DS14
             };
 
             // DS14-start
@@ -323,11 +323,13 @@ namespace Content.Client.Lobby.UI
             {
                 if (Profile is null || _readOnly || args.marking.MarkingColors.Count == 0)
                     return;
-                Profile = Profile.WithCharacterAppearance(Profile.Appearance
-                    .WithHairColor(args.marking.MarkingColors[0])
-                    .WithHairDye(args.marking.Dye));
+                var hair = args.marking.MarkingColors[0];
+                Profile = Profile.WithCharacterAppearance(
+                    Profile.Appearance
+                        .WithHairColor(hair)
+                        .WithHairDye(args.marking.Dye));
                 UpdateCMarkingsHair();
-                QueueProfilePreview(); // DS14
+                RequestPreview(); // DS14
             };
             // DS14-end
 
@@ -347,7 +349,7 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithFacialHairColor(newColor.marking.MarkingColors[0]));
                 UpdateCMarkingsFacialHair();
-                QueueProfilePreview(); // DS14
+                RequestPreview(); // DS14
             };
 
             // DS14-start
@@ -355,11 +357,13 @@ namespace Content.Client.Lobby.UI
             {
                 if (Profile is null || _readOnly || args.marking.MarkingColors.Count == 0)
                     return;
-                Profile = Profile.WithCharacterAppearance(Profile.Appearance
-                    .WithFacialHairColor(args.marking.MarkingColors[0])
-                    .WithFacialHairDye(args.marking.Dye));
+                var facialHair = args.marking.MarkingColors[0];
+                Profile = Profile.WithCharacterAppearance(
+                    Profile.Appearance
+                        .WithFacialHairColor(facialHair)
+                        .WithFacialHairDye(args.marking.Dye));
                 UpdateCMarkingsFacialHair();
-                QueueProfilePreview(); // DS14
+                RequestPreview(); // DS14
             };
             // DS14-end
 
@@ -455,7 +459,7 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithEyeColor(newColor));
                 Markings.CurrentEyeColor = Profile.Appearance.EyeColor;
-                QueueProfilePreview(); // DS14
+                RequestPreview(); // DS14
             };
 
             #endregion Eyes
@@ -1389,18 +1393,24 @@ namespace Content.Client.Lobby.UI
         }
 
         // DS14-start
-        private void QueueProfilePreview()
+        private void RequestPreview()
         {
-            _profilePreviewQueued = true;
+            _previewDue = true;
+        }
+
+        private void FlushPreview()
+        {
+            if (!_previewDue)
+                return;
+
+            _previewDue = false;
+            ReloadProfilePreview();
         }
 
         protected override void FrameUpdate(FrameEventArgs args)
         {
             base.FrameUpdate(args);
-            if (!_profilePreviewQueued)
-                return;
-            _profilePreviewQueued = false;
-            ReloadProfilePreview();
+            FlushPreview();
         }
         // DS14-end
 
@@ -1759,7 +1769,7 @@ namespace Content.Client.Lobby.UI
                 return;
 
             Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(markings.GetForwardEnumerator().ToList()));
-            QueueProfilePreview(); // DS14
+            RequestPreview(); // DS14
         }
 
         private void OnSkinColorOnValueChanged()
@@ -1804,7 +1814,7 @@ namespace Content.Client.Lobby.UI
             }
 
             UpdateBodyDyeControls(); // DS14
-            QueueProfilePreview(); // DS14
+            RequestPreview(); // DS14
         }
 
         protected override void Dispose(bool disposing)

@@ -225,7 +225,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         humanoid.Species = profile.Species;
         humanoid.SkinColor = profile.Appearance.SkinColor;
         humanoid.EyeColor = profile.Appearance.EyeColor;
-        humanoid.BodyDye = profile.Appearance.BodyDye?.Sanitized(); // DS14
+        humanoid.BodyDye = profile.Appearance.BodyDye?.Cleaned(); // DS14
 
         UpdateSprite((uid, humanoid, Comp<SpriteComponent>(uid)));
     }

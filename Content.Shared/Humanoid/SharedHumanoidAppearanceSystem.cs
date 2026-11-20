@@ -474,7 +474,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
 
         EnsureDefaultMarkings(uid, humanoid);
         SetTTSVoice(uid, profile.Voice, humanoid, profile.TtsVoices); // DS14
-        humanoid.BodyDye = profile.Appearance.BodyDye?.Sanitized(); // DS14
+        humanoid.BodyDye = profile.Appearance.BodyDye?.Cleaned(); // DS14
 
         humanoid.Gender = profile.Gender;
         if (TryComp<GrammarComponent>(uid, out var grammar))
