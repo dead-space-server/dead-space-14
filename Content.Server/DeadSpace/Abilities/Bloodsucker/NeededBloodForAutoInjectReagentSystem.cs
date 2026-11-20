@@ -7,7 +7,7 @@ namespace Content.Server.DeadSpace.Abilities.Bloodsucker;
 
 public sealed partial class NeededBloodForAutoInjectSystem : SharedBloodsuckerSystem
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     public override void Initialize()
     {

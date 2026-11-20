@@ -5,6 +5,10 @@
   id: BaseMobMoth
   abstract: true
   components:
+  - type: PackCall
+    emote: Chitter
+    minJoinDelay: 0.8
+    maxJoinDelay: 2
   - type: HumanoidAppearance
     species: Moth
     hideLayersOnEquip:

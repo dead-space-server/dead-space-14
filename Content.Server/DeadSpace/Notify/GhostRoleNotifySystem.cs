@@ -12,8 +12,8 @@ namespace Content.Server.DeadSpace.Notify;
 
 public sealed partial class GhostRoleNotifySystem : EntitySystem
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
 
     public override void Initialize()

@@ -26,9 +26,9 @@ namespace Content.Server.Construction
 {
     public sealed partial class ConstructionSystem
     {
-        [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+        [Dependency] private IAdminLogManager _adminLogger = default!;
 #if EXCEPTION_TOLERANCE
-        [Dependency] private readonly IRuntimeLog _runtimeLog = default!;
+        [Dependency] private IRuntimeLog _runtimeLog = default!;
 #endif
 
         private readonly Queue<EntityUid> _constructionUpdateQueue = new();
@@ -98,8 +98,14 @@ namespace Content.Server.Construction
 
             // When we handle a node, we're essentially testing the current event interaction against all of this node's
             // edges' first steps. If any of them accepts the interaction, we stop iterating and enter that edge.
-            for (var i = 0; i < node.Edges.Count; i++)
+            for (var j = 0; j < node.Edges.Count; j++) // DS14
             {
+                // DS14-start
+                var i = j;
+                if (construction.TargetEdgeIndex is { } targetEdge && targetEdge < node.Edges.Count)
+                    i = j == 0 ? targetEdge : j <= targetEdge ? j - 1 : j;
+                // DS14-end
+
                 var edge = node.Edges[i];
                 if (HandleEdge(uid, ev, edge, validation, construction) is var result and not HandleResult.False)
                 {
@@ -636,7 +642,7 @@ namespace Content.Server.Construction
 
     #endregion
 
-    public sealed class OnConstructionTemperatureEvent : HandledEntityEventArgs
+    public sealed partial class OnConstructionTemperatureEvent : HandledEntityEventArgs
     {
         public HandleResult? Result;
     }

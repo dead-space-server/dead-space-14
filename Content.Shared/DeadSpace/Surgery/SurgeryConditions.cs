@@ -23,6 +23,7 @@ public static class SurgeryConditions
         "ClosedPelvis",
         "Fracture",
         "Crack",
+        "Jaw",
         "MindRupture",
         "OrganCrack",
         "Bruised",
@@ -34,7 +35,7 @@ public static class SurgeryConditions
         "Damaged",
     };
 
-    public static bool Has(string when, in LimbZoneState state, bool hasBone, bool infected, bool organCrack = false, float pool = 0f, bool rot = false, bool foreign = false, bool mind = false)
+    public static bool Has(string when, in LimbZoneState state, bool hasBone, bool infected, bool organCrack = false, float pool = 0f, bool rot = false, bool foreign = false, bool mind = false, bool jaw = false)
     {
         return when switch
         {
@@ -53,6 +54,7 @@ public static class SurgeryConditions
             "Crack" => hasBone && !state.Severed && state.Bone >= LimbWoundRules.StrainBone && state.Bone < LimbWoundRules.BreakBone,
             "OrganCrack" => organCrack && !state.Severed,
             "MindRupture" => mind && !state.Severed,
+            "Jaw" => jaw && !state.Severed,
             "Bruised" => !state.Severed && state.HitBlunt > TraumaMin,
             "Lacerated" => !state.Severed && (state.HitSlash > TraumaMin || OpenWound(state) && state.HitSlash >= state.HitPierce),
             "Punctured" => !state.Severed && (state.HitPierce > TraumaMin || OpenWound(state) && state.HitPierce > state.HitSlash),
@@ -83,6 +85,11 @@ public static class SurgeryConditions
 
         var state = organs[index];
         return !state.Missing && state.Ruptured && LimbOrganHomes.Home(organ.Value) == zone;
+    }
+
+    public static bool JawBroken(LimbBodyComponent limbs, LimbZone zone)
+    {
+        return zone == LimbZone.Head && limbs.Mouth > 0f;
     }
 
     public static bool OrganCracked(IReadOnlyList<LimbOrganState> organs, LimbZone zone)

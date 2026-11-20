@@ -28,27 +28,27 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobCoreActionSystem : EntitySystem
+public sealed partial class BlobCoreActionSystem : EntitySystem
 {
-    //[Dependency] private readonly GridFixtureSystem _gridFixture = default!;
+    //[Dependency] private GridFixtureSystem _gridFixture = default!;
 
     private const double ActionJobTime = 0.005;
     private readonly JobQueue _actionJobQueue = new(ActionJobTime);
-    [Dependency] private readonly AudioSystem _audioSystem = default!;
-    [Dependency] private readonly BlobCoreSystem _blobCoreSystem = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly EmpSystem _empSystem = default!;
+    [Dependency] private AudioSystem _audioSystem = default!;
+    [Dependency] private BlobCoreSystem _blobCoreSystem = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private EmpSystem _empSystem = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _entitiesTrackTiles = new();
-    [Dependency] private readonly ExplosionSystem _explosionSystem = default!;
-    [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinitionManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private ExplosionSystem _explosionSystem = default!;
+    [Dependency] private FlammableSystem _flammable = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     private EntityQuery<BlobTileComponent> _tileQuery;
 
     public override void Initialize()
@@ -286,7 +286,7 @@ public sealed class BlobCoreActionSystem : EntitySystem
         args.Handled = ev.Handled;
     }
 
-    public sealed class BlobMouseActionProcess : Job<object>
+    public sealed partial class BlobMouseActionProcess : Job<object>
     {
         private readonly AfterInteractEvent _args;
         private readonly Entity<BlobCoreComponent> _core;

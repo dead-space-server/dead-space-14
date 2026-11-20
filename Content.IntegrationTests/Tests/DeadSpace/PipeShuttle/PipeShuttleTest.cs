@@ -47,7 +47,7 @@ public sealed class PipeShuttleTest
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         var entMan = server.EntMan;
-        var mapManager = server.ResolveDependency<IMapManager>();
+        var mapManager = server.System<SharedMapSystem>();
         var shuttleSystem = server.System<PipeShuttleSystem>();
         var xformSystem = server.System<SharedTransformSystem>();
 

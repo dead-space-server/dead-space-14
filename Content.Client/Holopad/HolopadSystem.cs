@@ -1,5 +1,6 @@
 using Content.Shared.Chat.TypingIndicator;
 using Content.Shared.Holopad;
+using Content.Client.DeadSpace.PostShaders; // DS14
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
@@ -10,11 +11,11 @@ using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.Holopad;
 
-public sealed class HolopadSystem : SharedHolopadSystem
+public sealed partial class HolopadSystem : SharedHolopadSystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
@@ -128,7 +129,6 @@ public sealed class HolopadSystem : SharedHolopadSystem
         instance.SetParameter("texHeight", texHeight);
         instance.SetParameter("t", (float)_timing.CurTime.TotalSeconds * holopadHologram.ScrollRate);
 
-        sprite.PostShader = instance;
-        sprite.RaiseShaderEvent = true;
+        _sprite.SetSinglePostShader(sprite, instance, raiseShaderEvent: true); // DS14: v295 reads the flags per post-shader entry
     }
 }

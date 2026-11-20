@@ -13,8 +13,8 @@ namespace Content.Client.Corvax.DiscordAuth;
 [GenerateTypedNameReferences]
 public sealed partial class DiscordAuthGui : Control
 {
-    [Dependency] private readonly DiscordAuthManager _discordAuthManager = default!;
-    [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
+    [Dependency] private DiscordAuthManager _discordAuthManager = default!;
+    [Dependency] private IClientConsoleHost _consoleHost = default!;
 
     private readonly IClipboardManager _clipboard;
     public DiscordAuthGui(IClipboardManager clipboard)

@@ -27,9 +27,9 @@ public sealed partial class LavalandStormShelterComponent : Component
     public bool Built;
 }
 
-public sealed class LavalandStormShelterSystem : EntitySystem
+public sealed partial class LavalandStormShelterSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     public override void Initialize()
     {

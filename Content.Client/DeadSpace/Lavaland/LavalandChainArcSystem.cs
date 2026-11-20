@@ -10,9 +10,9 @@ using Robust.Shared.Enums;
 namespace Content.Client.DeadSpace.Lavaland;
 
 /// <summary>Draws the chain of a <see cref="LavalandChainArcComponent"/> swing from the wielder to the flung blade.</summary>
-public sealed class LavalandChainArcSystem : EntitySystem
+public sealed partial class LavalandChainArcSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
 
     public override void Initialize()
     {
@@ -27,7 +27,7 @@ public sealed class LavalandChainArcSystem : EntitySystem
     }
 }
 
-public sealed class LavalandChainArcOverlay : Overlay
+public sealed partial class LavalandChainArcOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 

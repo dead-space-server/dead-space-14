@@ -10,13 +10,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryRepairSystem : EntitySystem
+public sealed partial class SurgeryRepairSystem : EntitySystem
 {
     private const string Effect = "MachineRepair";
     private const string OrganMend = "OrganMend";
     private const string BrainMend = "BrainMend";
     private const string TissueMend = "TissueMend";
     private const string RotMend = "RotMend";
+    private const string JawMend = "JawMend";
     private const string Rules = "Default";
 
     private static readonly Dictionary<string, string[]> ZoneHeals = new()
@@ -33,12 +34,12 @@ public sealed class SurgeryRepairSystem : EntitySystem
 
     private static readonly HashSet<string> ClosesWound = new() { "CutMend", "PunctureMend", "FractureOpenMend" };
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedRottingSystem _rotting = default!;
-    [Dependency] private readonly Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedRottingSystem _rotting = default!;
+    [Dependency] private Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
 
     public override void Initialize()
     {
@@ -67,6 +68,18 @@ public sealed class SurgeryRepairSystem : EntitySystem
         {
             args.Handled = true;
             MendMind(ent, args.User);
+            return;
+        }
+
+        if (!args.Handled && args.Effect == JawMend)
+        {
+            args.Handled = true;
+            if (TryComp<LimbBodyComponent>(ent, out var jaw) && jaw.Mouth > 0f)
+            {
+                jaw.Mouth = 0f;
+                Dirty(ent, jaw);
+                _popup.PopupEntity(Loc.GetString("surgery-jaw-set"), ent, args.User);
+            }
             return;
         }
 

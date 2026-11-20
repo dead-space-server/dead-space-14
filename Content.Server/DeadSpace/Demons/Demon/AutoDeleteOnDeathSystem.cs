@@ -7,10 +7,10 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.Demons.Demon;
 
-public sealed class AutoDeleteOnDeathSystem : EntitySystem
+public sealed partial class AutoDeleteOnDeathSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {

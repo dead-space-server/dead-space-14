@@ -10,11 +10,11 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class PlayMapSoundCommand : IConsoleCommand
+public sealed partial class PlayMapSoundCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly IResourceManager _res = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private IResourceManager _res = default!;
 
     public string Command => "playmapsound";
     public string Description => Loc.GetString("play-map-sound-command-description");

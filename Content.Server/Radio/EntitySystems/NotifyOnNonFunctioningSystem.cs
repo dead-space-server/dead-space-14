@@ -16,13 +16,13 @@ namespace Content.Server.Radio.EntitySystems;
 /// non-functioning - unpowered / deconstructed / destroyed.
 /// </summary>
 // DS14 - pre-v288 engine
-public sealed class NotifyOnNonFunctioningSystem : EntitySystem
+public sealed partial class NotifyOnNonFunctioningSystem : EntitySystem
 {
     // DS14-start: readonly dependencies and explicit subscriptions for the pre-v288 engine.
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly NavMapSystem _navMap = default!;
-    [Dependency] private readonly PowerStateSystem _powerState = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private NavMapSystem _navMap = default!;
+    [Dependency] private PowerStateSystem _powerState = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     public override void Initialize()
     {

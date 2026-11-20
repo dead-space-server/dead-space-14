@@ -8,12 +8,12 @@ using Content.Shared.Hands.EntitySystems;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling;
 
-public sealed class ShadowlingAscendedPhaseSystem : EntitySystem
+public sealed partial class ShadowlingAscendedPhaseSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private PolymorphSystem _polymorph = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     private const string ActionPhaseId = "ActionShadowlingAscendedPhase";
 
     public override void Initialize()

@@ -178,7 +178,7 @@ public sealed class XenoborgIntegrationTest
 
         var server = pair.Server;
         var entMan = server.EntMan;
-        var mapManager = server.ResolveDependency<IMapManager>();
+        var mapManager = server.System<SharedMapSystem>();
         var map = server.System<SharedMapSystem>();
         var actionBlocker = server.System<ActionBlockerSystem>();
         var interaction = server.System<SharedInteractionSystem>();
@@ -244,7 +244,7 @@ public sealed class XenoborgIntegrationTest
     private static async Task<(MapId MapId, EntityUid GridUid)> CreateTestGrid(
         RobustIntegrationTest.ServerIntegrationInstance server)
     {
-        var mapManager = server.ResolveDependency<IMapManager>();
+        var mapManager = server.System<SharedMapSystem>();
         var mapSystem = server.System<SharedMapSystem>();
         EntityUid gridUid = default;
         MapId mapId = default;

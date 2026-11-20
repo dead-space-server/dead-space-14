@@ -11,12 +11,12 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaInfoConsoleSystem : EntitySystem
+public sealed partial class NinjaInfoConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly NinjaInfoScannerSystem _scannerSystem = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private NinjaInfoScannerSystem _scannerSystem = default!;
 
     public override void Initialize()
     {

@@ -12,10 +12,10 @@ namespace Content.Client.DeadSpace.Weapons.Parry;
 /// <summary>
 /// The parry alert shows the weapon that parries (the one the player would hit with now), not a generic icon.
 /// </summary>
-public sealed class ParryAlertIconSystem : EntitySystem
+public sealed partial class ParryAlertIconSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

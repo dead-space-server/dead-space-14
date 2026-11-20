@@ -5,9 +5,9 @@ using Content.Shared.Weapons.Ranged.Events;
 
 namespace Content.Shared.DeadSpace.Demons.Shadowling;
 
-public abstract class SharedShadowlingSystem : EntitySystem
+public abstract partial class SharedShadowlingSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
 
     public override void Initialize()
     {

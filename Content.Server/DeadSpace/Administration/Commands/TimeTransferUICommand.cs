@@ -7,9 +7,9 @@ using Content.Server.EUI;
 namespace Content.Server.DeadSpace.Administration.Commands;
 
 [AdminCommand(AdminFlags.PlayTime)]
-public sealed class TimeTransferCommand : LocalizedEntityCommands
+public sealed partial class TimeTransferCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly EuiManager _eui = default!;
+    [Dependency] private EuiManager _eui = default!;
 
     public override string Command => "timetransferui";
 

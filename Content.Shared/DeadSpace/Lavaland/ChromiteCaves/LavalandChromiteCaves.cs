@@ -331,32 +331,32 @@ public sealed partial class LavalandParticleEmitterComponent : Component
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandCavePitEuiState : EuiStateBase
+public sealed partial class LavalandCavePitEuiState : EuiStateBase
 {
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandCavePitResponseMessage(bool accepted) : EuiMessageBase
+public sealed partial class LavalandCavePitResponseMessage(bool accepted) : EuiMessageBase
 {
     public readonly bool Accepted = accepted;
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandCaveExitEuiState : EuiStateBase
+public sealed partial class LavalandCaveExitEuiState : EuiStateBase
 {
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandCaveExitResponseMessage(bool accepted) : EuiMessageBase
+public sealed partial class LavalandCaveExitResponseMessage(bool accepted) : EuiMessageBase
 {
     public readonly bool Accepted = accepted;
 }
 
 /// <summary>Movement blocking of the landing, hopping and climbing dolls; helpers for other systems.</summary>
-public sealed class LavalandChromiteCavesSharedSystem : EntitySystem
+public sealed partial class LavalandChromiteCavesSharedSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

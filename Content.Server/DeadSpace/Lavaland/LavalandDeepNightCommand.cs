@@ -11,9 +11,9 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// lavalanddeepnight [phase] - starts the phase (night by default) on every lavaland, turning it into a deep night.
 /// </summary>
 [AdminCommand(AdminFlags.Admin)]
-public sealed class LavalandDeepNightCommand : IConsoleCommand
+public sealed partial class LavalandDeepNightCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "lavalanddeepnight";
     public string Description => "Запустить глубокую ночь на Лаваленде (через минуту предупреждения).";

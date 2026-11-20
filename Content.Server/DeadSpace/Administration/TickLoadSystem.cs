@@ -10,7 +10,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Administration;
 
-public sealed class TickLoadSystem : EntitySystem
+public sealed partial class TickLoadSystem : EntitySystem
 {
     private const double MinAvgMs = 0.05;
     private const double MinSpikeMs = 1d;
@@ -35,8 +35,8 @@ public sealed class TickLoadSystem : EntitySystem
         "FinalStep",
     };
 
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private ISawmill _log = default!;
     private PropertyInfo? _sum;

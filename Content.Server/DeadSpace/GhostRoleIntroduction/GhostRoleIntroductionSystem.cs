@@ -14,12 +14,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.GhostRoleIntroduction;
 
-public sealed class GhostRoleIntroductionSystem : EntitySystem
+public sealed partial class GhostRoleIntroductionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

@@ -10303,3 +10303,281 @@ Entries:
   changes:
   - type: Tweak
     message: Включили назад архив камер после тестов нагрузки
+- id: 988
+  author: IvanKuvalda
+  time: '2026-11-16T02:12:15.250081+00:00'
+  pr: 2770
+  changes:
+  - type: Fix
+    message: хотфикс ЧЕГО-ТО
+- id: 989
+  author: IvanKuvalda
+  time: '2026-11-16T02:14:00.257233+00:00'
+  pr: 2755
+  changes:
+  - type: Fix
+    message: Слаймам ТЕПРЕЬ нельзя сломать челюгу
+- id: 990
+  author: IvanKuvalda
+  time: '2026-11-16T02:17:27.997345+00:00'
+  pr: 2750
+  changes:
+  - type: Add
+    message: Без головы вас нельзя опознать
+- id: 991
+  author: IvanKuvalda
+  time: '2026-11-16T02:20:01.456871+00:00'
+  pr: 2746
+  changes:
+  - type: Fix
+    message: Бесконечно отрезать уши больше не получится
+- id: 992
+  author: IvanKuvalda
+  time: '2026-11-16T02:23:25.033732+00:00'
+  pr: 2744
+  changes:
+  - type: Add
+    message: Кнопка выкинуть обломок в магнит обломков
+- id: 993
+  author: IvanKuvalda
+  time: '2026-11-16T02:26:44.473654+00:00'
+  pr: 2717
+  changes:
+  - type: Tweak
+    message: если в конечности больше 90% МЕХАНИЧЕСКОГО ИЛИ ФИЗИЧЕСКОГО урона, то
+      просто появляется ШАНС на разрыв органов при получении в дальнейшем подобного
+      типа урона
+- id: 994
+  author: pe4enkakris
+  time: '2026-11-16T02:28:07.149877+00:00'
+  pr: 2777
+  changes:
+  - type: Add
+    message: Набор пополнения СиндиСоки за 15 тк ЯО, но не лоне. В шкафы ГВ ПМ БМ
+      добавлено 1 бутылочка гемостатина. ОПНУ иммунитет к влиянию обелиска и его осколкам,
+      как у АПБТ. Спрайт шлема осщ для плафеимов by Teffy.
+  - type: Tweak
+    message: 'Респрайт пожарных топоров by pivo_3amopckoe. Ёмкость инъекторов гемостатина:
+      10->4u.'
+  - type: Fix
+    message: Статы шлемов/капюшонов лавы, командира ЯО, противоударн. шлема.
+- id: 995
+  author: Atickov
+  time: '2026-11-16T02:30:56.853281+00:00'
+  pr: 2774
+  changes:
+  - type: Fix
+    message: ниндзю теперь могут заметить турели
+- id: 996
+  author: Atickov
+  time: '2026-11-16T02:32:50.398311+00:00'
+  pr: 2747
+  changes:
+  - type: Fix
+    message: У заводного щита появилась текстура
+  - type: Fix
+    message: мостики теперь можно ставить поверх пола
+  - type: Fix
+    message: РСУ теперь не крутит постройку в рандомную сторону
+  - type: Fix
+    message: мертвая фауна больше не сбрасывает спрайт крита или смерти если пошевелится
+  - type: Fix
+    message: мини драконы больше не мерзнут
+  - type: Fix
+    message: с экспы можно улететь даже если на ней фауна
+  - type: Fix
+    message: голосовой сенсор получил локализацию
+- id: 997
+  author: MTF97
+  time: '2026-11-16T02:37:54.364976+00:00'
+  pr: 2751
+  changes:
+  - type: Tweak
+    message: Все прототипы одежды структурированы и приведены в порядок;
+  - type: Fix
+    message: Некорректное название подвидов офицеров ЦК.
+- id: 998
+  author: BlueDogDoc
+  time: '2026-11-16T02:40:41.227590+00:00'
+  pr: 2779
+  changes:
+  - type: Fix
+    message: Король крыс, его пезанты и миазмы.
+- id: 999
+  author: BlueDogDoc
+  time: '2026-11-16T02:44:22.631319+00:00'
+  pr: 2778
+  changes:
+  - type: Add
+    message: Полевая и полноценная операция по вправлению челюсти.
+  - type: Tweak
+    message: Аппарат ЭШТ ломает челюсть, а не голову без кляпа.
+- id: 1000
+  author: BlueDogDoc
+  time: '2026-11-16T02:45:55.072753+00:00'
+  pr: 2776
+  changes:
+  - type: Add
+    message: В меню возможность отключать указание, через облако
+- id: 1001
+  author: BlueDogDoc
+  time: '2026-11-16T02:52:23.285279+00:00'
+  pr: 2761
+  changes:
+  - type: Add
+    message: Групповые анимации
+  - type: Add
+    message: Анимации животных
+- id: 1002
+  author: Manstari
+  time: '2026-11-16T02:54:24.785118+00:00'
+  pr: 2768
+  changes:
+  - type: Fix
+    message: Локализован знак PODS
+- id: 1003
+  author: BlueDogDoc
+  time: '2026-11-16T15:11:02.427980+00:00'
+  pr: 2793
+  changes:
+  - type: Fix
+    message: Ручной голопад пытался повысить энергопотребление станции
+- id: 1004
+  author: BlueDogDoc
+  time: '2026-11-16T15:12:28.441345+00:00'
+  pr: 2794
+  changes:
+  - type: Fix
+    message: Облака через стены
+- id: 1005
+  author: pe4enkakris
+  time: '2026-11-16T15:16:19.071653+00:00'
+  pr: 2792
+  changes:
+  - type: Add
+    message: Спрайт шлема скафандра ОСЩ для таяр и шлема ОСЩ для таяр и вульпканинов
+      by Teffy
+  - type: Fix
+    message: Теперь можно делать кастом версии спрайтов для вещей надетых на таяр
+- id: 1006
+  author: BlueDogDoc
+  time: '2026-11-17T07:54:18.499644+00:00'
+  pr: 2804
+  changes:
+  - type: Tweak
+    message: Архив камер временно выключен
+- id: 1007
+  author: Atickov
+  time: '2026-11-17T19:43:55.866670+00:00'
+  pr: 2803
+  changes:
+  - type: Fix
+    message: Если включить точечную стрельбу и убрать что-либо на пояс, то скорострельность
+      больше не остается уменьшенной
+- id: 1008
+  author: Manstari
+  time: '2026-11-17T19:48:39.773441+00:00'
+  pr: 2791
+  changes:
+  - type: Fix
+    message: Теперь ну точно, прям точно абуз печки пофикшен
+- id: 1009
+  author: Manstari
+  time: '2026-11-17T19:50:38.241630+00:00'
+  pr: 2787
+  changes:
+  - type: Add
+    message: Хирургические принадлежности в медфаб Тайпана
+- id: 1010
+  author: Manstari
+  time: '2026-11-17T19:59:35.711796+00:00'
+  pr: 2786
+  changes:
+  - type: Fix
+    message: Изучение в ветке вооружения тайпана не уходит в никуда
+- id: 1011
+  author: Manstari
+  time: '2026-11-17T20:01:45.055934+00:00'
+  pr: 2784
+  changes:
+  - type: Fix
+    message: Ресурсы от постройки в агосте не уходят в никуда
+- id: 1012
+  author: IvanKuvalda
+  time: '2026-11-17T20:06:31.320981+00:00'
+  pr: 2805
+  changes:
+  - type: Remove
+    message: все остатки челюсти у кпб
+  - type: Fix
+    message: Вставка ушей в кпб
+- id: 1013
+  author: Manstari
+  time: '2026-11-17T20:08:47.007687+00:00'
+  pr: 2783
+  changes:
+  - type: Fix
+    message: Под диагональной стеной теперь можно уничтожить кудзу
+- id: 1014
+  author: Manstari
+  time: '2026-11-17T20:10:49.711710+00:00'
+  pr: 2782
+  changes:
+  - type: Fix
+    message: Исправлена проблема, что диагональные стены не ставятся под тем углом,
+      под которым его строят
+- id: 1015
+  author: IvanKuvalda
+  time: '2026-11-17T20:14:40.035418+00:00'
+  pr: 2756
+  changes:
+  - type: Fix
+    message: небоьшой фикс ксеноборгов. мать шаттл улетает а игрок заходит он вылетает.
+- id: 1016
+  author: Manstari
+  time: '2026-11-18T08:33:41.922919+00:00'
+  pr: 2808
+  changes:
+  - type: Tweak
+    message: Из аплинка агента удалён имплант
+- id: 1017
+  author: HiAmaliz
+  time: '2026-11-18T08:38:22.336460+00:00'
+  pr: 2795
+  changes:
+  - type: Add
+    message: Хирургичка на аванпосте нюки
+  - type: Fix
+    message: Баги на картах
+- id: 1018
+  author: BlueDogDoc
+  time: '2026-11-18T09:25:03.580599+00:00'
+  pr: 2806
+  changes:
+  - type: Add
+    message: Анимированный манифест с MVP и тд
+- id: 1019
+  author: BlueDogDoc
+  time: '2026-11-18T15:39:03.173337+00:00'
+  pr: 2810
+  changes:
+  - type: Fix
+    message: Атмос на аванпосте ЯО
+- id: 1020
+  author: BlueDogDoc
+  time: '2026-11-18T15:44:48.070227+00:00'
+  pr: 2809
+  changes:
+  - type: Add
+    message: Кнопка пропуска титров
+  - type: Tweak
+    message: Убраны гост роли из титров
+  - type: Fix
+    message: Старый манифест на F9
+- id: 1021
+  author: TheZuTi
+  time: '2026-11-19T01:00:21.759947+00:00'
+  pr: 2745
+  changes:
+  - type: Tweak
+    message: Обновление движка до актуальной версии, должно помочь с лагами

@@ -14,13 +14,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Traits.Assorted;
 
-public sealed class PainNumbnessSystem : EntitySystem
+public sealed partial class PainNumbnessSystem : EntitySystem
 {
-    [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!; // DS14
+    [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!; // DS14
 
     // DS14-start
-    [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
     private static readonly ProtoId<AlertCategoryPrototype> HealthAlertCategory = "Health";
     // DS14-end
 

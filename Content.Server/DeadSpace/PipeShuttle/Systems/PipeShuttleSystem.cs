@@ -19,15 +19,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.PipeShuttle.Systems;
 
-public sealed class PipeShuttleSystem : EntitySystem
+public sealed partial class PipeShuttleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoorSystem _door = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ShuttleSystem _shuttle = default!;
+    [Dependency] private SharedDoorSystem _door = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ShuttleSystem _shuttle = default!;
 
     private EntityQuery<PhysicsComponent> _physicsQuery;
 

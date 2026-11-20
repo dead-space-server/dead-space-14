@@ -1,5 +1,4 @@
 using Content.Shared.Explosion.EntitySystems;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.Explosion.Components;
@@ -42,6 +41,6 @@ public sealed partial class ExplosionResistanceComponent : Component
     ///     Modifiers specific to each explosion type for more customizability.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("modifiers", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<float, ExplosionPrototype>))]
+    [DataField("modifiers")]
     public Dictionary<string, float> Modifiers = new();
 }

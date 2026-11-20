@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitKloopRe
   name: ударопрочный шлем
   description: Устойчивый к давлению и ударостойкий шлем ОПНУ. Создано NanoTrasen.
@@ -18,12 +18,9 @@
         shader: unshaded
   - type: PointLight
     color: blue
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitKloopRee
   name: ударопрочный скафандр
   description: Легкий, но прочный экзокостюм. Создано NanoTrasen.
@@ -34,5 +31,3 @@
     sprite: _DeadSpace/Sponsor/kloopre/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitKloopRe
-  - type: Item
-    size: Huge

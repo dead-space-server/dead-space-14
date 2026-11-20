@@ -29,9 +29,9 @@ public sealed partial class SurgeryMuteComponent : Component
     public LocId Popup = "surgery-voice-missing";
 }
 
-public sealed class SurgeryTraitsSystem : EntitySystem
+public sealed partial class SurgeryTraitsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

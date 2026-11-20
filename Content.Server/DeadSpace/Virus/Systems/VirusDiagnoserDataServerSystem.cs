@@ -17,15 +17,15 @@ using Content.Shared.DeadSpace.TimeWindow;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class VirusDiagnoserDataServerSystem : EntitySystem
+public sealed partial class VirusDiagnoserDataServerSystem : EntitySystem
 {
-    [Dependency] private readonly VirusDiagnoserConsoleSystem _console = default!;
-    [Dependency] private readonly PowerReceiverSystem _powerReceiverSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly VirusEvolutionConsoleSystem _evolutionConsoleSystem = default!;
-    [Dependency] private readonly TimedWindowSystem _timedWindowSystem = default!;
-    [Dependency] private readonly VirusSystem _virus = default!;
-    [Dependency] private readonly DeviceLinkSystem _deviceLink = default!;
+    [Dependency] private VirusDiagnoserConsoleSystem _console = default!;
+    [Dependency] private PowerReceiverSystem _powerReceiverSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private VirusEvolutionConsoleSystem _evolutionConsoleSystem = default!;
+    [Dependency] private TimedWindowSystem _timedWindowSystem = default!;
+    [Dependency] private VirusSystem _virus = default!;
+    [Dependency] private DeviceLinkSystem _deviceLink = default!;
 
     public override void Initialize()
     {

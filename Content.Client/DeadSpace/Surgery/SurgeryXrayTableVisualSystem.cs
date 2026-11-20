@@ -6,9 +6,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.Surgery;
 
-public sealed class SurgeryXrayTableVisualSystem : EntitySystem
+public sealed partial class SurgeryXrayTableVisualSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprites = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
 
     public override void Initialize()
     {

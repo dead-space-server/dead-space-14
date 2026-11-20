@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackPrometheus
   name: рюкзак агента
   description: Вместительный рюкзак с множеством карманов, предназначенный для агентов NanoTrasen.
@@ -13,10 +13,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Prometheus/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingOuterHardsuitPrometheus
@@ -40,7 +36,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitPrometheus
   name: тёмно-синий скафандр агента
   description: Тяжелобронированный скафандр, предназначенный для специальных операций. Прототип инверсивной инженерии NanoTrasen.
@@ -52,8 +48,6 @@
     sprite: _DeadSpace/Sponsor/Prometheus/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitPrometheus
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -68,9 +62,6 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -202,7 +193,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltPrometheus
   name: плечевая кобура агента
   description: Глубокая плечевая кобура, способная вместить множество различных предметов.
@@ -212,11 +203,6 @@
     sprite: _DeadSpace/Sponsor/Prometheus/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Prometheus/belt.rsi
-  - type: Item
-    size: Huge
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: StorageFill
     contents:
     - id: PowerDrill

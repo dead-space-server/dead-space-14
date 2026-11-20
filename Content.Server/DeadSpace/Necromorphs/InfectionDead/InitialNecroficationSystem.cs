@@ -10,8 +10,8 @@ namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
 public sealed partial class InitialNecroficationSystem : SharedInfectionDeadSystem
 {
-    [Dependency] private readonly NecromorfSystem _necromorfSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private NecromorfSystem _necromorfSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

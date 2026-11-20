@@ -7,11 +7,11 @@ namespace Content.Shared.Random;
 /// <summary>
 ///     System containing various content-related random helpers.
 /// </summary>
-public sealed class RandomHelperSystem : EntitySystem
+public sealed partial class RandomHelperSystem : EntitySystem
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     // DS14-end
 
     // DS14-start - predicted random uses System.Random on the current engine.

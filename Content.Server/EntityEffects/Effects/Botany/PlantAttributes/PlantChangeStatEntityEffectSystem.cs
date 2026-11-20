@@ -13,10 +13,10 @@ namespace Content.Server.EntityEffects.Effects.Botany.PlantAttributes;
 public sealed partial class PlantChangeStatEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantChangeStat>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantChangeStat> args)
@@ -33,7 +33,7 @@ public sealed partial class PlantChangeStatEntityEffectSystem : EntityEffectSyst
             return;
         }
 
-        if (!EntityManager.TryGetComponent(entity.Owner, registration.Type, out var plantComp)) // DS14 - current engine exposes non-generic lookups through EntityManager.
+        if (!TryComp(entity.Owner, registration.Type, out var plantComp)) // DS14 - current engine exposes non-generic lookups through EntityManager.
             return;
 
         var field = registration.Type.GetField(targetDataField);

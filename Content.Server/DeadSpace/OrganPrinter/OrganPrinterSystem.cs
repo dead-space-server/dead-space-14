@@ -14,20 +14,20 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.OrganPrinter;
 
-public sealed class OrganPrinterSystem : EntitySystem
+public sealed partial class OrganPrinterSystem : EntitySystem
 {
     private const int MaxProductIdLength = 64;
 
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SurgeryGraftSystem _graft = default!;
-    [Dependency] private readonly SurgeryOrganFreshSystem _fresh = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly MaterialStorageSystem _material = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SurgeryGraftSystem _graft = default!;
+    [Dependency] private SurgeryOrganFreshSystem _fresh = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private MaterialStorageSystem _material = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     public override void Initialize()
     {

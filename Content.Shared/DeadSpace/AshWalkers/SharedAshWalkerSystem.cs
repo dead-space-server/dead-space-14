@@ -15,12 +15,12 @@ using Content.Shared.Whitelist;
 
 namespace Content.Shared.DeadSpace.AshWalkers;
 
-public sealed class SharedAshWalkerSystem : EntitySystem
+public sealed partial class SharedAshWalkerSystem : EntitySystem
 {
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
@@ -45,7 +45,7 @@ public sealed class SharedAshWalkerSystem : EntitySystem
             _popup.PopupClient(Loc.GetString("ash-walker-cannot-pilot"), args.Target, ent);
     }
 
-    private void OnUiMessageAttempt(BoundUserInterfaceMessageAttempt args)
+    private void OnUiMessageAttempt(ref BoundUserInterfaceMessageAttempt args)
     {
         if (args.Cancelled || args.UiKey is not ShuttleConsoleUiKey.Key || !HasComp<AshWalkerComponent>(args.Actor))
             return;

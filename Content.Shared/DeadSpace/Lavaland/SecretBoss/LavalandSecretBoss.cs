@@ -70,7 +70,7 @@ public sealed partial class LavalandPitFrozenComponent : Component
 
 /// <summary>Hides the arena behind darkness and purple fire while the Celestial intro plays.</summary>
 [Serializable, NetSerializable]
-public sealed class LavalandCelestialBackdropEvent(float duration) : EntityEventArgs
+public sealed partial class LavalandCelestialBackdropEvent(float duration) : EntityEventArgs
 {
     public float Duration = duration;
 }
@@ -91,7 +91,7 @@ public sealed partial class LavalandBlessingArmorComponent : Component
 
 /// <summary>Fade the screen to black and back (falling asleep before the Celestial).</summary>
 [Serializable, NetSerializable]
-public sealed class LavalandSecretBossFadeEvent(float fadeIn, float hold, float fadeOut) : EntityEventArgs
+public sealed partial class LavalandSecretBossFadeEvent(float fadeIn, float hold, float fadeOut) : EntityEventArgs
 {
     public float FadeIn = fadeIn;
     public float Hold = hold;
@@ -99,19 +99,19 @@ public sealed class LavalandSecretBossFadeEvent(float fadeIn, float hold, float 
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandCelestialPitEuiState : EuiStateBase
+public sealed partial class LavalandCelestialPitEuiState : EuiStateBase
 {
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandCelestialPitResponseMessage(bool accepted) : EuiMessageBase
+public sealed partial class LavalandCelestialPitResponseMessage(bool accepted) : EuiMessageBase
 {
     public readonly bool Accepted = accepted;
 }
 
-public sealed class LavalandSecretBossSharedSystem : EntitySystem
+public sealed partial class LavalandSecretBossSharedSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
 
     public override void Initialize()
     {

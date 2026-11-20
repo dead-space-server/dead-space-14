@@ -8,10 +8,10 @@ namespace Content.Shared.Mech.Equipment.Systems;
 /// <summary>
 /// Handles everything for mech soundboard.
 /// </summary>
-public sealed class MechSoundboardSystem : EntitySystem
+public sealed partial class MechSoundboardSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     public override void Initialize()
     {
@@ -23,12 +23,16 @@ public sealed class MechSoundboardSystem : EntitySystem
 
     private void OnUiStateReady(EntityUid uid, MechSoundboardComponent comp, MechEquipmentUiStateReadyEvent args)
     {
-        // you have to specify a collection so it must exist probably
-        var sounds = comp.Sounds.Select(sound => sound.Collection!);
         var state = new MechSoundboardUiState
         {
-            Sounds = sounds.ToList()
+            Sounds = new List<string>(comp.Sounds.Count)
         };
+
+        foreach (var sound in comp.Sounds)
+        {
+            if (sound.Collection is { } collection)
+                state.Sounds.Add(collection);
+        }
         args.States.Add(GetNetEntity(uid), state);
     }
 

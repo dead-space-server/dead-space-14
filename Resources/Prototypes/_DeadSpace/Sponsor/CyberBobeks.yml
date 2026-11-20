@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackCyberBobeks
   name: тактическая сумка Syn.V // Mod.7
   description: На вид крайне вместительная и довольно модная сумка... Там точно нет гранат?...
@@ -8,10 +8,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CyberBobeks/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingWebbingCyberBobeks
@@ -48,7 +44,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitCyberBobeks
   name: скафандр Syn.V // Gen.14-1
   description: Скафандр, больше похожий на какой-то высокотехнологичный костюм от биоугроз, в прочем, мир этого заслуживает...
@@ -60,8 +56,6 @@
     sprite: _DeadSpace/Sponsor/CyberBobeks/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitCyberBobeks
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -73,9 +67,6 @@
         Heat: 0.50
         Radiation: 0.50
         Caustic: 0.50
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: HideLayerClothing
     clothingSlots: 
     - belt
@@ -84,7 +75,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitCyberBobeks
   categories: [ HideSpawnMenu ]
   name: шлем Syn.V // Gen.14-2
@@ -96,9 +87,6 @@
     sprite: _DeadSpace/Sponsor/CyberBobeks/helmet.rsi
   - type: PointLight
     color: "#ea2738"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: EyeProtection
   - type: Armor
     modifiers:
@@ -157,12 +145,16 @@
   description: Перчатки, созданные по особой ранее не известной технологии, явно усиленные для боевых и иных нестандартных ситуаций.
   categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/blueshield_gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/blueshield_gloves.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Magboots
 - type: entity
-  parent: ClothingShoesBootsMagsastr
+  parent: ClothingShoesBootsMagPvrsifvlAlt2
   id: ClothingShoesBootsMagCyberBobeks
   name: магнитные сапоги Syn.V
   description: Высококачественные магнитные сапоги, которыми можно кого-нибудь прибить...
@@ -513,13 +505,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/CyberBobeks/tools_jawsoflife.rsi
           state: syn_jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/CyberBobeks/tools_jawsoflife.rsi
           state: syn_jaws_cutter
@@ -549,7 +541,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_powerdrill.rsi
           state: drill_screw
@@ -557,7 +549,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_powerdrill.rsi
           state: drill_bolt

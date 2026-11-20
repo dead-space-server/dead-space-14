@@ -13,14 +13,14 @@ using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSyste
 
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
-public sealed class StunSlaveSystem : EntitySystem
+public sealed partial class StunSlaveSystem : EntitySystem
 {
     private static readonly EntProtoId MutedEffect = "StatusEffectUnitologySlaveMuted";
 
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
-    [Dependency] private readonly NewStatusEffectsSystem _newStatusEffects = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
+    [Dependency] private IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();

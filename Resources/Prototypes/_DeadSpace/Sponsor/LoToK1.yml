@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackLoToK1
   name: ведьмина сумочка
   description: Сумка использующая технологию блюспейса для увелечения своего максимального объёма. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -37,7 +37,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltLoToK1Filled
   name: ведьмин корсет
   description: Корсет-пояс, имеющий как декоративную функцию, так и функцию хранение вещей.
@@ -47,8 +47,6 @@
     sprite: _DeadSpace/Sponsor/LoToK1/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/LoToK1/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -110,7 +108,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitLoToK1
   name: модифицированный ведьмин скафандр
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -122,13 +120,11 @@
     sprite: _DeadSpace/Sponsor/LoToK1/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitLoToK1
-  - type: Item
-    size: Huge
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitLoToK1
   categories: [ HideSpawnMenu ]
   name: шлем ведьминого скафандра
@@ -140,9 +136,6 @@
     sprite: _DeadSpace/Sponsor/LoToK1/helmet.rsi
   - type: PointLight
     color: "#fc03c6"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 

@@ -12,12 +12,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Holosign;
 
-public sealed class LimitedHolosignSystem : EntitySystem
+public sealed partial class LimitedHolosignSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

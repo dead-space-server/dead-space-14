@@ -8,10 +8,10 @@ namespace Content.Server.DeadSpace.Objectives;
 /// <summary>
 /// Выбирает случайное описание из пула <see cref="RandomObjectiveDescriptionComponent"/> при выдаче цели.
 /// </summary>
-public sealed class RandomObjectiveDescriptionSystem : EntitySystem
+public sealed partial class RandomObjectiveDescriptionSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     public override void Initialize()
     {

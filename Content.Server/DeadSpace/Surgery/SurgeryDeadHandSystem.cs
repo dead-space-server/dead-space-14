@@ -7,10 +7,10 @@ using Content.Shared.Inventory.VirtualItem;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryDeadHandSystem : EntitySystem
+public sealed partial class SurgeryDeadHandSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedVirtualItemSystem _virtual = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedVirtualItemSystem _virtual = default!;
 
     private float _accumulator;
 

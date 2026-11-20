@@ -151,3 +151,121 @@
     sprite: _DeadSpace/Clothing/Shoes/Boots/samurai_boots.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Shoes/Boots/samurai_boots.rsi
+
+- type: entity
+  parent: [ClothingShoesMilitaryBase, BaseSecurityContraband]
+  id: ClothingShoesBootsIAAOfficer
+  name: подкованные сапоги офицера ВД
+  description: Прочные подкованные сапоги офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/iaa_officer_boots.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/iaa_officer_boots.rsi
+
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsBrigmedic
+  name: туфли бригмедика
+  description: Прочные и удобные туфли, рассчитанные на стремительные марш-броски к раненым бойцам. Иногда счёт идёт на секунды.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Shoes/Boots/sneakersmedsec.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Clothing/Shoes/Boots/sneakersmedsec.rsi
+
+- type: entity
+  parent: ClothingShoesClownBase
+  id: ClothingShoesClownBoots
+  name: клоунские ботинки
+  description: Тяжёлые клоунские ботинки. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Specific/clown_boots.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Specific/clown_boots.rsi
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepClown
+      params:
+        variation: 0.17
+  - type: Tag
+    tags:
+    - ClownShoes
+    - WhitelistChameleon
+
+- type: entity
+  parent: ClothingShoesClownBase
+  id: ClothingShoesClownSlippers
+  name: клоунские тапочки
+  description: Мягкие клоунские тапочки. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Specific/clown_slippers.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Specific/clown_slippers.rsi
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepClown
+      params:
+        variation: 0.17
+  - type: Tag
+    tags:
+    - ClownShoes
+    - WhitelistChameleon
+
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsJackCoroner
+  name: сапоги коронера
+  description: Кто сказал, что кровь не может быть модной? Ой, а что там на подошве...
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Shoes/Boots/coroner.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Clothing/Shoes/Boots/coroner.rsi
+
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsDetective
+  name: туфли детектива
+  description: Стильные коричневые туфли станционного детектива корпорации NanoTrasen, сделанные из синтетической кожи.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Shoes/Boots/detective_boots.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Clothing/Shoes/Boots/detective_boots.rsi
+
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsDetectiveGrey
+  name: нуарные туфли детектива
+  description: Стильные чёрные туфли нуарного детектива, сделанные из чёрной синтетической кожи..
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Clothing/Shoes/Boots/nuar_detective_boots.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Clothing/Shoes/Boots/nuar_detective_boots.rsi
+
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesBootsCombatSyndie
+  name: армейские сапоги синдиката
+  description: Сапоги военного преступника.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/syndicate.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/syndicate.rsi
+
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesTaipanBootsWork
+  name: рабочие ботинки
+  description: Тёмные рабочие ботинки, сделанные из синтетической кожи. Ударопрочные.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/workboots.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/workboots.rsi
+  - type: Matchbox

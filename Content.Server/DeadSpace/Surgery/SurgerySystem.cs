@@ -49,43 +49,43 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgerySystem : EntitySystem
+public sealed partial class SurgerySystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ISharedPlayerManager _players = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SurgeryLimbPort _port = default!;
-    [Dependency] private readonly SurgeryCavitySystem _cavity = default!;
-    [Dependency] private readonly SurgeryTeethSystem _teeth = default!;
-    [Dependency] private readonly SharedContentEyeSystem _eyes = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly SurgeryInfectionSystem _infection = default!;
-    [Dependency] private readonly SurgeryAnesthesiaSystem _anesthesia = default!;
-    [Dependency] private readonly SurgeryGraftSystem _graft = default!;
-    [Dependency] private readonly Content.Shared.PowerCell.PowerCellSystem _powerCell = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISharedPlayerManager _players = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SurgeryLimbPort _port = default!;
+    [Dependency] private SurgeryCavitySystem _cavity = default!;
+    [Dependency] private SurgeryTeethSystem _teeth = default!;
+    [Dependency] private SharedContentEyeSystem _eyes = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SurgeryInfectionSystem _infection = default!;
+    [Dependency] private SurgeryAnesthesiaSystem _anesthesia = default!;
+    [Dependency] private SurgeryGraftSystem _graft = default!;
+    [Dependency] private Content.Shared.PowerCell.PowerCellSystem _powerCell = default!;
 
-    [Dependency] private readonly SurgeryNearbySystem _nearby = default!;
-    [Dependency] private readonly LimbImplantSystem _implants = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
+    [Dependency] private SurgeryNearbySystem _nearby = default!;
+    [Dependency] private LimbImplantSystem _implants = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private StackSystem _stack = default!;
 
-    [Dependency] private readonly IComponentFactory _factory = default!;
+    [Dependency] private IComponentFactory _factory = default!;
 
     private const string HealthRules = "Default";
     private const string FloorPlace = "Floor";
@@ -227,6 +227,8 @@ public sealed class SurgerySystem : EntitySystem
         {
             if (tool.Passive && InOperation(ent.Owner, tool))
                 args.Handled = true;
+            else if (!tool.Passive && Machine(ent.Owner) && InOperation(ent.Owner, tool))
+                _popup.PopupEntity(Loc.GetString("surgery-wrong-step-tool"), ent.Owner, args.User);
             return;
         }
 
@@ -850,8 +852,10 @@ public sealed class SurgerySystem : EntitySystem
         }
         var stepVerb = SurgeryVerbKind.Inspect;
         string stepOrgan = "";
+        SurgeryOperationPrototype? stepOperation = null;
         if (Operation(patient.Value, site, out var operation) && site.Step < operation.Steps.Count)
         {
+            stepOperation = operation;
             stepVerb = operation.Steps[site.Step].Verb;
             stepOrgan = operation.Steps[site.Step].Organ;
         }
@@ -913,6 +917,20 @@ public sealed class SurgerySystem : EntitySystem
             result.Rejected = true;
             result.Key = "surgery-organ-gone";
             advance = false;
+        }
+        else if (result.RemoveOrgan && stepOperation != null && site.Step < stepOperation.Steps.Count
+                 && (stepOperation.Steps[site.Step].Drop != null || stepOperation.Steps[site.Step].DropBySpecies.Count > 0))
+        {
+            var partId = site.Part.Length > 0 ? site.Part : SurgeryPartPrototype.For(_prototype, stepOperation.ID);
+            if (partId.Length > 0
+                && TryComp<SurgeryPartsGoneComponent>(patient.Value, out var lostParts)
+                && lostParts.Parts.Contains(partId))
+            {
+                result.RemoveOrgan = false;
+                result.Rejected = true;
+                result.Key = "surgery-organ-gone";
+                advance = false;
+            }
         }
 
         if (result.RemoveImplant && (implantSlot.Length == 0 || !_implants.Occupied(patient.Value, implantSlot)))
@@ -2357,9 +2375,10 @@ public sealed class SurgerySystem : EntitySystem
         var cracked = SurgeryConditions.OrganCracked(limbs.Organs, zone);
         var mind = SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present);
         var foreign = Foreign(patient, zone);
+        var jaw = SurgeryConditions.JawBroken(limbs, zone);
         foreach (var when in SurgeryConditions.Order)
         {
-            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs), foreign: foreign, mind: mind))
+            if (!SurgeryConditions.Has(when, state, bone, infected, cracked, LimbWoundRules.HealthFor(zone, limbs), foreign: foreign, mind: mind, jaw: jaw))
                 continue;
 
             string? fallback = null;
@@ -2429,7 +2448,7 @@ public sealed class SurgerySystem : EntitySystem
         if (operation.When.Length > 0 && operation.When != "Severed"
             && !SurgeryConditions.Has(operation.When, limbs.Zones[index], HasLayer(patient, zone, SurgeryLayerKind.Bone), Infected(patient, zone),
                 SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs), SurgeryRot.Treatable(EntityManager, patient, zone, limbs), Foreign(patient, zone),
-                SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present)))
+                SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present), SurgeryConditions.JawBroken(limbs, zone)))
             return false;
 
         if (operation.Implant.Length > 0 && !ImplantMenuFits(patient, operation))

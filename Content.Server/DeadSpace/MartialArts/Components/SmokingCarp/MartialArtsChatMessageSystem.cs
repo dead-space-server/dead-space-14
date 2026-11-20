@@ -8,9 +8,9 @@ using Content.Shared.DeadSpace.MartialArts.CQC;
 
 namespace Content.Server.DeadSpace.MartialArts;
 
-public sealed class MartialArtsChatMessageSystem : SharedMartialArtsSystem
+public sealed partial class MartialArtsChatMessageSystem : SharedMartialArtsSystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private ChatSystem _chat = default!;
 
     public override void Initialize()
     {

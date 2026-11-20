@@ -9,12 +9,12 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
-public sealed class InfectionDeadMutationAnalyzerSystem : EntitySystem
+public sealed partial class InfectionDeadMutationAnalyzerSystem : EntitySystem
 {
-    [Dependency] private readonly PaperSystem _paperSystem = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private PaperSystem _paperSystem = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     public override void Initialize()
     {
         base.Initialize();

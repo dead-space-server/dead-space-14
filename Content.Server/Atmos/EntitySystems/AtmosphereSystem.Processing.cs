@@ -13,7 +13,7 @@ namespace Content.Server.Atmos.EntitySystems
 {
     public sealed partial class AtmosphereSystem
     {
-        [Dependency] private readonly IGameTiming _gameTiming = default!;
+        [Dependency] private IGameTiming _gameTiming = default!;
 
         // Kofeecheks Iprit decay timing: LicenseRef-Kofeecheks
         public TimeSpan CurrentSimulationTime => _gameTiming.CurTime;

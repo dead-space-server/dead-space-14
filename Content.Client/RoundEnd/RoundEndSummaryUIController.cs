@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.RoundEnd.Credits; // DS14
 using Content.Client.GameTicking.Managers;
 using Content.Shared.DeadSpace.Arena;
 using Content.Shared.GameTicking;
@@ -11,10 +12,10 @@ using Robust.Shared.Player;
 namespace Content.Client.RoundEnd;
 
 [UsedImplicitly]
-public sealed class RoundEndSummaryUIController : UIController,
+public sealed partial class RoundEndSummaryUIController : UIController,
     IOnSystemLoaded<ClientGameTicker>
 {
-    [Dependency] private readonly IInputManager _input = default!;
+    [Dependency] private IInputManager _input = default!;
 
     private RoundEndSummaryWindow? _window;
     private ArenaManifestEvent? _arenaManifest; // DS14
@@ -30,13 +31,36 @@ public sealed class RoundEndSummaryUIController : UIController,
         }
         else
         {
-            _window.OpenCenteredRight();
-            _window.ResumeManifestDollSnapshots(); // DS14
-            _window.MoveToFront();
+            OpenScoreboardWindow(); // DS14
         }
     }
 
+    // DS14-start
+    public void OpenScoreboardWindow()
+    {
+        if (_window == null || _window.IsOpen)
+            return;
+
+        _window.OpenCenteredRight();
+        UIManager.GetUIController<RoundEndCreditsUIController>().TryHostWindow(_window);
+        _window.ResumeManifestDollSnapshots();
+        _window.MoveToFront();
+    }
+    // DS14-end
+
     public void OpenRoundEndSummaryWindow(RoundEndMessageEvent message)
+    {
+        CreateRoundEndSummaryWindow(message, true); // DS14
+    }
+
+    // DS14-start
+    public void PrepareRoundEndSummaryWindow(RoundEndMessageEvent message)
+    {
+        CreateRoundEndSummaryWindow(message, false);
+    }
+
+    private void CreateRoundEndSummaryWindow(RoundEndMessageEvent message, bool open)
+    // DS14-end
     {
         // Don't open duplicate windows (mainly for replays).
         if (_window?.RoundId == message.RoundId)
@@ -45,7 +69,7 @@ public sealed class RoundEndSummaryUIController : UIController,
         _window?.Close(); // DS14
 
         _window = new RoundEndSummaryWindow(message.GamemodeTitle, message.RoundEndText,
-            message.RoundDuration, message.RoundId, message.AllPlayersEndInfo, EntityManager);
+            message.RoundDuration, message.RoundId, message.AllPlayersEndInfo, EntityManager, open); // DS14
 
         if (_arenaManifest != null) // DS14
             _window.SetArenaManifest(_arenaManifest); // DS14
@@ -58,12 +82,7 @@ public sealed class RoundEndSummaryUIController : UIController,
     }
 
     // DS14-Start
-    public override void Initialize()
-    {
-        SubscribeNetworkEvent<ArenaManifestEvent>(OnArenaManifest);
-    }
-
-    private void OnArenaManifest(ArenaManifestEvent ev, EntitySessionEventArgs args)
+    public void OnArenaManifest(ArenaManifestEvent ev)
     {
         _arenaManifest = ev;
         _window?.SetArenaManifest(ev);

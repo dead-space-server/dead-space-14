@@ -37,5 +37,18 @@
         <BoxContainer Name="Container"
                       Orientation="Horizontal"
                       Margin="5 0 5 0"/>
+        <!-- DS14-start -->
+        <BoxContainer Name="ReleaseBox"
+                      Access="Public"
+                      Orientation="Vertical"
+                      Visible="False"
+                      Margin="5 5 5 5">
+            <Button Name="ReleaseButton"
+                    Access="Public"
+                    Text="Release"
+                    StyleClasses="negative"
+                    HorizontalExpand="True"/>
+        </BoxContainer>
+        <!-- DS14-end -->
     </BoxContainer>
 </controls:FancyWindow>

@@ -21,15 +21,15 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.ERT;
 
-public sealed class ResponseErtImplantSystem : EntitySystem
+public sealed partial class ResponseErtImplantSystem : EntitySystem
 {
-    [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly ErtResponseSystem _response = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private ActionsSystem _actions = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private ErtResponseSystem _response = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private StationSystem _station = default!;
 
     private readonly HashSet<NetUserId> _usedPlayers = new();
     private readonly Dictionary<EntityUid, YesNoEui> _confirmations = new();

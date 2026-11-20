@@ -11,10 +11,10 @@ using Content.Server.DeadSpace.MartialArts.CQC.Components;
 
 namespace Content.Server.DeadSpace.MartialArts.CQC;
 
-public sealed class UseManualCQCSystem : EntitySystem
+public sealed partial class UseManualCQCSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private SharedActionsSystem _action = default!;
+    [Dependency] private TransformSystem _transform = default!;
     public override void Initialize()
     {
         base.Initialize();

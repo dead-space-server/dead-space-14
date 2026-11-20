@@ -8,10 +8,10 @@ using Robust.Shared.Player;
 
 namespace Content.Shared.DeadSpace.Actions;
 
-public sealed class WorldTargetActionKeybindSystem : EntitySystem
+public sealed partial class WorldTargetActionKeybindSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

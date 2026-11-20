@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackVjladosBio
   name: блюспейс органический рюкзак
   description: Рюкзак использующий технологию блюспейса для увелечения своего максимального объёма. Состоит из органических компонентов. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -13,10 +13,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/vjlados/bio/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
       - id: ClothingBeltVjladosBioFilled
@@ -41,7 +37,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltVjladosBioFilled
   name: органический пояс
   description: Пояс состоящий из биологических компонентов.
@@ -51,8 +47,6 @@
     sprite: _DeadSpace/Sponsor/vjlados/bio/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/vjlados/bio/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -86,7 +80,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitVjladosBio
   name: модифицированный биологический скафандр
   description: Скафандр, разработанный специально для представителей расы ксеноидов. Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации. Характеристики идентичны скафандру атмос-техника.
@@ -98,11 +92,9 @@
     sprite: _DeadSpace/Sponsor/vjlados/bio/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitVjladosBio
-  - type: Item
-    size: Huge
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitVjladosBio
   categories: [ HideSpawnMenu ]
   name: шлем биологического скафандра
@@ -114,11 +106,7 @@
     sprite: _DeadSpace/Sponsor/vjlados/bio/helmet.rsi
   - type: PointLight
     color: "#c6f50a"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Jumpsuit
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitVjladosBio

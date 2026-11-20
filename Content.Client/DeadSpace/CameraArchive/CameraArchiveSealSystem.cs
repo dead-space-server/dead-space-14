@@ -7,9 +7,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.CameraArchives;
 
-public sealed class CameraArchiveSealSystem : EntitySystem
+public sealed partial class CameraArchiveSealSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

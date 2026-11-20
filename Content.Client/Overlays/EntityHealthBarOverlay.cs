@@ -21,9 +21,9 @@ namespace Content.Client.Overlays;
 /// <summary>
 /// Overlay that shows a health bar on mobs.
 /// </summary>
-public sealed class EntityHealthBarOverlay : Overlay
+public sealed partial class EntityHealthBarOverlay : Overlay
 {
-    [Dependency] private readonly IPlayerManager _player = default!; //DS-14
+    [Dependency] private IPlayerManager _player = default!; //DS-14
 
     private readonly IEntityManager _entManager;
     private readonly IPrototypeManager _prototype;
