@@ -2277,6 +2277,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!_net.IsServer || VitalGone(limbs) || InStasis(uid))
             return;
 
+        if (_mobs.IsDead(uid) && (!limbs.LimbDeath || DeadByDamage(uid)))
+            return;
+
         var head = HeadHealth(limbs);
         var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
         var life = LimbWoundRules.Life(head, torso);
