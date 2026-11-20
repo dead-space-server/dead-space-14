@@ -133,7 +133,6 @@
       - EncryptionKeyScience
       - EncryptionKeyCommand
       - EncryptionKeyCommon
-      - EncryptionKeyBinary #DS14
   - type: Sprite
     sprite: Clothing/Ears/Headsets/science.rsi
   - type: Clothing

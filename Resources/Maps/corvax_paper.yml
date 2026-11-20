@@ -48636,14 +48636,6 @@ entities:
     - type: Transform
       pos: 13.297308,-18.88206
       parent: 2
-- proto: EncryptionKeyBinary
-  entities:
-  - uid: 7163
-    components:
-    - type: Transform
-      parent: 7162
-    - type: Physics
-      canCollide: False
 - proto: EncryptionKeyCargo
   entities:
   - uid: 7165
@@ -95111,8 +95103,7 @@ entities:
         key_slots: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - 7163
+          ents: []
         machine_board: !type:Container
           showEnts: False
           occludes: True

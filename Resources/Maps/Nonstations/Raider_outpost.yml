@@ -7073,16 +7073,6 @@ entities:
       canCollide: False
     - type: InsideEntityStorage
       storage: 688
-- proto: EncryptionKeyBinarySyndicate
-  entities:
-  - uid: 1181
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 16.59358,-13.70195
-      parent: 658
-    - type: Physics
-      canCollide: False
 - proto: EncryptionKeyCommon
   entities:
   - uid: 1084

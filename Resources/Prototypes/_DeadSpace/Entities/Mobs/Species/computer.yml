@@ -16,13 +16,6 @@
     damage:
       types:
         Blunt: 0.11 #per second, scales with pressure and other constants.
-  - type: IntrinsicRadioReceiver
-  - type: IntrinsicRadioTransmitter
-    channels:
-    - Binary
-  - type: ActiveRadio
-    channels:
-    - Binary
   - type: TypingIndicator
     proto: robot
   - type: Speech

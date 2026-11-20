@@ -262,7 +262,6 @@
     - id: DoorRemoteTaipan
     - id: ProtolatheMachineCircuitboardTaipan
     - id: ResearchComputerCircuitboardTaipan
-    - id: EncryptionKeyBinarySyndicate
 
 - type: entity
   id: LockerTaipanTechnicalOperationsSupervisorFilled
