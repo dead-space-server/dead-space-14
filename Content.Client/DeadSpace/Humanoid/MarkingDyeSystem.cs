@@ -13,7 +13,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Humanoid;
 
-public sealed class MarkingDyeSystem : EntitySystem
+public sealed partial class MarkingDyeSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private MarkingManager _markingManager = default!;
