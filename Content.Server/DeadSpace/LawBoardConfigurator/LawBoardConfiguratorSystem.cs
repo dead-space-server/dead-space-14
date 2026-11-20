@@ -18,15 +18,15 @@ using System.Linq;
 
 namespace Content.Server.DeadSpace.LawBoardConfigurator;
 
-public sealed class LawBoardConfiguratorSystem : EntitySystem
+public sealed partial class LawBoardConfiguratorSystem : EntitySystem
 {
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SiliconLawSystem _siliconLaw = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SiliconLawSystem _siliconLaw = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     private readonly Dictionary<EntityUid, Dictionary<ICommonSession, LawBoardConfiguratorEui>> _openEuis = new();
 
     // session utilities ----------------------------------------------------

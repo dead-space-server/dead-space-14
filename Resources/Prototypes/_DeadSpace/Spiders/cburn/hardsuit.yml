@@ -36,6 +36,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.1
         Poison: 0.9
 
 - type: entity
@@ -121,6 +122,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.1
         Poison: 0.9
 
 - type: entity

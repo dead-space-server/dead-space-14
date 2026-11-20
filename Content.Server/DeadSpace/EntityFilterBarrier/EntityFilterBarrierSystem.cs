@@ -8,10 +8,10 @@ using System.Numerics;
 
 namespace Content.Server.DeadSpace.EntityFilterBarrier;
 
-public sealed class EntityFilterBarrierSystem : SharedEntityFilterBarrierSystem
+public sealed partial class EntityFilterBarrierSystem : SharedEntityFilterBarrierSystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     protected override void OnPreventCollide(EntityUid uid, EntityFilterBarrierComponent component, ref PreventCollideEvent args)
     {

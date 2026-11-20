@@ -10,3 +10,13 @@
   materials:
     Steel: 25
     Plastic: 25
+
+- type: latheRecipe
+  id: BorgRemoteModule
+  result: BorgRemoteModule
+  completetime: 1
+  materials:
+    Steel: 1000
+    Plastic: 500
+    Gold: 500
+    Silver: 500

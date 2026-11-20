@@ -15,7 +15,7 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab
     [GenerateTypedNameReferences]
     public sealed partial class AdminShuttleWindow : DefaultWindow
     {
-        [Dependency] private readonly IConfigurationManager _cfg = default!; //DS14
+        [Dependency] private IConfigurationManager _cfg = default!; //DS14
 
         public AdminShuttleWindow()
         {

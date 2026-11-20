@@ -6,7 +6,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackqu0565
   name: рюкзак освободителя
   description: Тактический чёрный рюкзак с чёрными контурными линиями, имеющий повышенную вместимость.
@@ -16,10 +16,6 @@
     sprite: _DeadSpace/Sponsor/qu0565/backpack.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/qu0565/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingBeltqu0565
@@ -34,7 +30,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltqu0565
   name: РПС освободителя
   description: Чёрная РПС, оснащённая большим количеством карманов для снаряжения.
@@ -44,11 +40,6 @@
     sprite: _DeadSpace/Sponsor/qu0565/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/qu0565/belt.rsi
-  - type: Item
-    size: Huge
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: StorageFill
     contents:
     - id: JawsOfLifequ0565
@@ -58,7 +49,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitqu0565
   name: скафандр освободителя
   description: Угловатый серый скафандр, обеспечивающий максимальную защиту и свободу движений в вакууме.
@@ -70,8 +61,6 @@
     sprite: _DeadSpace/Sponsor/qu0565/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitqu0565
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -81,20 +70,25 @@
         Heat: 0.7
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Helmet
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitqu0565
   name: шлем скафандра освободителя
   description: Защитный чёрный шлем скафандра с голубым визором, обеспечивающий полный обзор и защиту в самых опасных условиях космоса.
   categories: [ HideSpawnMenu ]
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.5
   - type: Sprite
     sprite: _DeadSpace/Sponsor/qu0565/helmet.rsi
   - type: Clothing
@@ -102,9 +96,6 @@
   - type: PointLight
     radius: 7
     energy: 8
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -200,13 +191,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-    - behavior: Prying
+    - behavior: [ Prying ]
       sprite:
         sprite: _DeadSpace/Sponsor/qu0565/tools_jawsoflife.rsi
         state: syn_jaws_pry
       useSound: /Audio/Items/jaws_pry.ogg
       changeSound: /Audio/Items/change_jaws.ogg
-    - behavior: Cutting
+    - behavior: [ Cutting ]
       sprite:
         sprite: _DeadSpace/Sponsor/qu0565/tools_jawsoflife.rsi
         state: syn_jaws_cutter
@@ -250,7 +241,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-    - behavior: Screwing
+    - behavior: [ Screwing ]
       sprite:
         sprite: _DeadSpace/Sponsor/qu0565/tools_powerdrill.rsi
         state: drill_screw
@@ -258,7 +249,7 @@
         path: /Audio/Items/drill_use.ogg
       changeSound:
         path: /Audio/Items/change_drill.ogg
-    - behavior: Anchoring
+    - behavior: [ Anchoring ]
       sprite:
         sprite: _DeadSpace/Sponsor/qu0565/tools_powerdrill.rsi
         state: drill_bolt

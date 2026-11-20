@@ -15,8 +15,8 @@ namespace Content.Server.Nutrition;
 [AdminCommand(AdminFlags.Debug)]
 public sealed partial class Unsatiate : LocalizedEntityCommands
 {
-    [Dependency] private readonly IPrototypeManager _protoMan = default!;
-    [Dependency] private readonly SatiationSystem _satiation = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
 
     /// <inheritdoc/>
     public override string Command => "unsatiate";

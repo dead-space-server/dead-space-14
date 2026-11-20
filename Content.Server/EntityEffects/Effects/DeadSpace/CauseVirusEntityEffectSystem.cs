@@ -16,7 +16,7 @@ namespace Content.Server.EntityEffects.Effects.DeadSpace;
 /// </summary>
 public sealed partial class CauseVirusEntityEffectSystem : EntityEffectSystem<MobStateComponent, CauseVirus>
 {
-    [Dependency] private readonly VirusSystem _virus = default!;
+    [Dependency] private VirusSystem _virus = default!;
 
     protected override void Effect(Entity<MobStateComponent> entity, ref EntityEffectEvent<CauseVirus> args)
     {

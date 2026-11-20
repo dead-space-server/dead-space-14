@@ -28,23 +28,23 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.CameraArchives;
 
-public sealed class CameraArchiveConsoleSystem : EntitySystem
+public sealed partial class CameraArchiveConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly CameraArchiveSystem _stills = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly NavMapSystem _nav = default!;
-    [Dependency] private readonly SurveillanceCameraSystem _cameras = default!;
-    [Dependency] private readonly PaperSystem _paper = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IRobustSerializer _serializer = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private CameraArchiveSystem _stills = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private NavMapSystem _nav = default!;
+    [Dependency] private SurveillanceCameraSystem _cameras = default!;
+    [Dependency] private PaperSystem _paper = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IResourceManager _resources = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IRobustSerializer _serializer = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

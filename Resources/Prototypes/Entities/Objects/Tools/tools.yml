@@ -330,7 +330,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: Objects/Tools/drill.rsi
           state: drill_screw
@@ -338,7 +338,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: Objects/Tools/drill.rsi
           state: drill_bolt
@@ -523,7 +523,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: Objects/Tools/omnitool.rsi
           state: omnitool-screwing
@@ -531,7 +531,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: Objects/Tools/omnitool.rsi
           state: omnitool-prying
@@ -539,7 +539,7 @@
           path: /Audio/Items/jaws_pry.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: Objects/Tools/omnitool.rsi
           state: omnitool-wrenching
@@ -547,7 +547,7 @@
           path: /Audio/Items/ratchet.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: Objects/Tools/omnitool.rsi
           state: omnitool-snipping
@@ -555,7 +555,7 @@
           path: /Audio/Items/jaws_cut.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Pulsing
+      - behavior: [ Pulsing ]
         sprite:
           sprite: Objects/Tools/omnitool.rsi
           state: omnitool-pulsing

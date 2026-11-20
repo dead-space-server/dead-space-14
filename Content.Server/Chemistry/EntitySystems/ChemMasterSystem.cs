@@ -9,6 +9,7 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
+using Content.Shared.Interaction; // DS14
 using Content.Shared.Labels.EntitySystems;
 using Content.Shared.Storage;
 using JetBrains.Annotations;
@@ -28,16 +29,17 @@ namespace Content.Server.Chemistry.EntitySystems
     /// <seealso cref="ChemMasterComponent"/>
     /// </summary>
     [UsedImplicitly]
-    public sealed class ChemMasterSystem : EntitySystem
+    public sealed partial class ChemMasterSystem : EntitySystem
     {
-        [Dependency] private readonly PopupSystem _popupSystem = default!;
-        [Dependency] private readonly AudioSystem _audioSystem = default!;
-        [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-        [Dependency] private readonly ItemSlotsSystem _itemSlotsSystem = default!;
-        [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
-        [Dependency] private readonly StorageSystem _storageSystem = default!;
-        [Dependency] private readonly LabelSystem _labelSystem = default!;
-        [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+        [Dependency] private PopupSystem _popupSystem = default!;
+        [Dependency] private AudioSystem _audioSystem = default!;
+        [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+        [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
+        [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
+        [Dependency] private StorageSystem _storageSystem = default!;
+        [Dependency] private LabelSystem _labelSystem = default!;
+        [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+        [Dependency] private SharedInteractionSystem _interactionSystem = default!; // DS14
 
         private static readonly EntProtoId PillPrototypeId = "Pill";
 
@@ -68,6 +70,8 @@ namespace Content.Server.Chemistry.EntitySystems
         private void UpdateUiState(Entity<ChemMasterComponent> ent, bool updateLabel = false)
         {
             var (owner, chemMaster) = ent;
+            if (!_userInterfaceSystem.IsUiOpen(owner, ChemMasterUiKey.Key)) //DS-14
+                return;
             if (!_solutionContainerSystem.TryGetSolution(owner, SharedChemMaster.BufferSolutionName, out _, out var bufferSolution))
                 return;
             var inputContainer = _itemSlotsSystem.GetItemOrNull(owner, SharedChemMaster.InputSlotName);
@@ -83,8 +87,21 @@ namespace Content.Server.Chemistry.EntitySystems
             _userInterfaceSystem.SetUiState(owner, ChemMasterUiKey.Key, state);
         }
 
+        // DS14-start
+        private bool ValidateReach(Entity<ChemMasterComponent> chemMaster, BoundUserInterfaceMessage message)
+        {
+            return message.Actor.Valid
+                && _interactionSystem.InRangeUnobstructed(message.Actor, chemMaster.Owner);
+        }
+        // DS14-end
+
         private void OnSetModeMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterSetModeMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(chemMaster, message))
+                return;
+            // DS14-end
+
             // Ensure the mode is valid, either Transfer or Discard.
             if (!Enum.IsDefined(typeof(ChemMasterMode), message.ChemMasterMode))
                 return;
@@ -96,6 +113,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnCycleSortingTypeMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterSortingTypeCycleMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(chemMaster, message))
+                return;
+            // DS14-end
+
             chemMaster.Comp.SortingType++;
             if (chemMaster.Comp.SortingType > ChemMasterSortingType.Latest)
                 chemMaster.Comp.SortingType = ChemMasterSortingType.None;
@@ -105,6 +127,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnSetPillTypeMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterSetPillTypeMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(chemMaster, message))
+                return;
+            // DS14-end
+
             // Ensure valid pill type. There are 20 pills selectable, 0-19.
             if (message.PillType > SharedChemMaster.PillTypes - 1)
                 return;
@@ -116,6 +143,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnReagentButtonMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterReagentAmountButtonMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(chemMaster, message))
+                return;
+            // DS14-end
+
             // Ensure the amount corresponds to one of the reagent amount buttons.
             if (!Enum.IsDefined(typeof(ChemMasterReagentAmount), message.Amount))
                 return;
@@ -138,6 +170,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnSetDrawSourceMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterOutputDrawSourceMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(chemMaster, message))
+                return;
+            // DS14-end
+
             //Ensure draw source is valid, either from the internal buffer or the inserted beaker
             if (!Enum.IsDefined(message.DrawSource))
                 return;
@@ -199,6 +236,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnCreatePillsMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterCreatePillsMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(chemMaster, message))
+                return;
+            // DS14-end
+
             var user = message.Actor;
             var maybeContainer = _itemSlotsSystem.GetItemOrNull(chemMaster, SharedChemMaster.OutputSlotName);
             if (maybeContainer is not { Valid: true } container
@@ -265,6 +307,11 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void OnOutputToBottleMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterOutputToBottleMessage message)
         {
+            // DS14-start
+            if (!ValidateReach(chemMaster, message))
+                return;
+            // DS14-end
+
             var user = message.Actor;
             var maybeContainer = _itemSlotsSystem.GetItemOrNull(chemMaster, SharedChemMaster.OutputSlotName);
             if (maybeContainer is not { Valid: true } container

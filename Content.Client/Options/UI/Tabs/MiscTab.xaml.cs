@@ -16,8 +16,8 @@ namespace Content.Client.Options.UI.Tabs;
 [GenerateTypedNameReferences]
 public sealed partial class MiscTab : Control
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public MiscTab()
     {
@@ -72,6 +72,7 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(CCVars.OpaqueStorageWindow, OpaqueStorageWindowCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatEnableFancyBubbles, FancySpeechBubblesCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatFancyNameBackground, FancyNameBackgroundsCheckBox);
+        Control.AddOptionCheckBox(CCCCVars.PointingBubbles, PointingBubblesCheckBox); // DS14
         Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
         Control.AddOptionCheckBox(CCCCVars.MultipleInventoryWindows, MultipleInventoryWindowsCheckBox); // DS14
         Control.AddOptionCheckBox(CCCCVars.ActionsRestoreItemSlots, ActionsRestoreItemSlotsCheckBox); // DS14

@@ -5,10 +5,10 @@ using Content.Shared.DeadSpace.Smokables;
 
 namespace Content.Server.DeadSpace.Smokables.Systems;
 
-public sealed class TritiumCannabisSystem : EntitySystem
+public sealed partial class TritiumCannabisSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
 
     public override void Initialize()
     {

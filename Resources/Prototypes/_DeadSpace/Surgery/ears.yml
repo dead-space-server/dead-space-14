@@ -13,6 +13,14 @@
   - sprite: /Textures/Mobs/Species/Human/organs.rsi
     state: ears
 
+- type: surgeryHint
+  id: EarsInMachine
+  name: surgery-hint-ears-in
+  color: "#5ccf6a"
+  icons:
+  - sprite: /Textures/_DeadSpace/Mobs/Species/IPC/organs.rsi
+    state: ears-c-u
+
 - type: surgeryPart
   id: Ears
   zone: Head
@@ -136,6 +144,7 @@
     game: Hold
   - verb: Insert
     layer: Cavity
+    hint: EarsInMachine
     undo: Extract
     effect: EarsIn
     need:

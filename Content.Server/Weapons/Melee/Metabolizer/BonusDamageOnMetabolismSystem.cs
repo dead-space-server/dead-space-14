@@ -9,10 +9,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Weapons.Melee.Metabolizer;
 
-public sealed class BonusDamageOnMetabolismSystem : EntitySystem // DS14 - metabolism is server-side on this baseline
+public sealed partial class BonusDamageOnMetabolismSystem : EntitySystem // DS14 - metabolism is server-side on this baseline
 {
-    [Dependency] private readonly MetabolizerSystem _metabolizer = default!; // DS14 - pre-v288 IoC
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14 - current engine baseline has no EntitySystem.ProtoMan shortcut.
+    [Dependency] private MetabolizerSystem _metabolizer = default!; // DS14 - pre-v288 IoC
+    [Dependency] private IPrototypeManager _prototypeManager = default!; // DS14 - current engine baseline has no EntitySystem.ProtoMan shortcut.
 
     // DS14-Start - pre-v288 explicit event subscriptions
     public override void Initialize()

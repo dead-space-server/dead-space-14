@@ -11,12 +11,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Damage.Systems;
 
-public sealed class ProjectileSpawnAfterDamageSystem : EntitySystem
+public sealed partial class ProjectileSpawnAfterDamageSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

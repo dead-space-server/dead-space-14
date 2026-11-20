@@ -9,10 +9,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Surgery;
 
-public sealed class SurgeryAppendageVisualSystem : EntitySystem
+public sealed partial class SurgeryAppendageVisualSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private readonly Dictionary<EntityUid, List<string>> _drawn = new();
 

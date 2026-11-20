@@ -1,24 +1,21 @@
-﻿- type: body
+﻿# DS14: pests keep a torso so body checks still see them, and nothing else.
+- type: body
+  id: Critter
+  name: "мелкая живность"
+  root: torso
+  slots:
+    torso:
+      part: TorsoAnimal
+
+- type: body
   id: Animal
   name: "животное" # DS14
   root: torso
   slots:
     torso:
       part: TorsoAnimal
-      connections:
-      - legs
       organs:
-        lungs: OrganAnimalLungs
         stomach: OrganAnimalStomach
-        liver: OrganAnimalLiver
-        heart: OrganAnimalHeart
-        kidneys: OrganAnimalKidneys
-    legs:
-      part: LegsAnimal
-      connections:
-      - feet
-    feet:
-      part: FeetAnimal
 
 - type: body
   id: Mouse

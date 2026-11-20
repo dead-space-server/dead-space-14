@@ -24,16 +24,16 @@ using Content.Shared.DeadSpace.Necromorphs.InfectionDead;
 
 namespace Content.Server.DeadSpace.HardsuitIdentification;
 
-public sealed class HardsuitIdentificationSystem : EntitySystem
+public sealed partial class HardsuitIdentificationSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly VocalSystem _vocal = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedSubdermalImplantSystem _implants = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private VocalSystem _vocal = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedSubdermalImplantSystem _implants = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {
@@ -68,33 +68,32 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
 
     private void OnDnaChanged(Entity<DnaComponent> ent, ref GenerateDnaEvent args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: true);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.DnaChange);
     }
 
     private void OnZombieStartup(Entity<ZombieComponent> ent, ref ComponentStartup args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: false);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.Undead);
     }
 
     private void OnNecroficationStarted(Entity<DnaComponent> ent, ref NecroficationStartedEvent args)
     {
-        TryActivateEquippedItems(ent.Owner, requireDnaMismatch: false);
+        TryActivateEquippedItems(ent.Owner, DissolveTrigger.Undead);
     }
 
-    private void TryActivateEquippedItems(EntityUid wearer, bool requireDnaMismatch)
+    private void TryActivateEquippedItems(EntityUid wearer, DissolveTrigger trigger)
     {
         var slots = _inventory.GetSlotEnumerator(wearer);
         while (slots.NextItem(out var equipment, out var slot))
         {
             if (!TryComp<HardsuitIdentificationComponent>(equipment, out var comp) ||
                 !comp.DNAWasStored ||
-                comp.Activated ||
-                !comp.DissolveOnDnaChange)
+                comp.Activated)
             {
                 continue;
             }
 
-            if (requireDnaMismatch && TryComp<DnaComponent>(wearer, out var dna) && comp.DNA == dna.DNA)
+            if (!ShouldDissolve(wearer, comp, trigger))
                 continue;
 
             ActivateProtection((equipment, comp), wearer, slot.Name);
@@ -103,6 +102,24 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
             if (!comp.Nonlethal)
                 return;
         }
+    }
+
+    private bool ShouldDissolve(EntityUid wearer, HardsuitIdentificationComponent comp, DissolveTrigger trigger)
+    {
+        return trigger switch
+        {
+            DissolveTrigger.DnaChange => comp.DissolveOnDnaChange
+                && (!TryComp<DnaComponent>(wearer, out var dna) || comp.DNA != dna.DNA),
+            DissolveTrigger.Undead => comp.DissolveOnUndead,
+            _ => false,
+        };
+    }
+
+    private enum DissolveTrigger
+    {
+        DnaChange,
+
+        Undead,
     }
 
     private void ActivateProtection(Entity<HardsuitIdentificationComponent> equipment, EntityUid wearer, string slot)
@@ -231,9 +248,9 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
     {
         if (!comp.CanEmag)
             return;
-    
+
         _audio.PlayPvs(comp.SparkSound, uid);
-    
+
         if (comp.Activated)
         {
             _popupSystem.PopupEntity(Loc.GetString("hardsuit-identification-on-emagged-late"), uid);
@@ -244,7 +261,7 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         }
 
         RemComp<HardsuitIdentificationComponent>(uid);
-    
+
         args.Handled = true;
     }
 }

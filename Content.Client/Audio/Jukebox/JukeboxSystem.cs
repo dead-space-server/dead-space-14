@@ -11,16 +11,16 @@ using Robust.Shared.Prototypes;
 namespace Content.Client.Audio.Jukebox;
 
 
-public sealed class JukeboxSystem : SharedJukeboxSystem
+public sealed partial class JukeboxSystem : SharedJukeboxSystem
 {
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!; // DS14
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IConfigurationManager _cfg = default!; // DS14
 
-    [Dependency] private readonly SharedTransformSystem _transform = default!; // DS14
+    [Dependency] private SharedTransformSystem _transform = default!; // DS14
     private float _jukeboxAutoVolume; // DS14
 
     public override void Initialize()

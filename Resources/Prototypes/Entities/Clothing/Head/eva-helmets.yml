@@ -22,6 +22,15 @@
   name: EVA helmet
   description: An old-but-gold helmet designed for extravehicular activites.
   components:
+  #ds14-start
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+  #ds14-end
   - type: Sprite
     sprite: Clothing/Head/Helmets/eva_large.rsi
   - type: Clothing
@@ -45,13 +54,15 @@
     sprite: Clothing/Head/Helmets/eva_syndicate.rsi
   - type: StaticPrice
     price: 500 # Suit is 1000
-  - type: Armor # DS14
+  #ds14-start
+  - type: Armor
     modifiers:
       coefficients:
         Blunt: 0.9
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+  #ds14-end
 
 #Cosmonaut Helmet
 - type: entity

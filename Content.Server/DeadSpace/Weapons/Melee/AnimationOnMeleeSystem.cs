@@ -4,9 +4,9 @@ using Content.Server.Sirena.Animations;
 
 namespace Content.Server.DeadSpace.Weapons.Melee
 {
-    public sealed class AnimationOnMeleeSystem : EntitySystem
+    public sealed partial class AnimationOnMeleeSystem : EntitySystem
     {
-        [Dependency] private readonly EmoteAnimationSystem _animationSystem = default!;
+        [Dependency] private EmoteAnimationSystem _animationSystem = default!;
         public override void Initialize()
         {
             SubscribeLocalEvent<AnimationOnMeleeComponent, MeleeHitEvent>(OnMeleeHit);

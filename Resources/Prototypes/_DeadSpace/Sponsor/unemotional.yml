@@ -72,7 +72,7 @@
 
 # Belt
 - type: entity
-  parent: [ ClothingBeltStorageBase, ContentsExplosionResistanceBase ]
+  parent: [ClothingBeltDominatorFilled, ContentsExplosionResistanceBase]
   id: ClothingBeltdeFOA
   name: РПС "deFo"
   description: Изготовлено на заказ компанией "deFo".
@@ -82,11 +82,6 @@
     sprite: _DeadSpace/Sponsor/unemotional/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/unemotional/belt.rsi
-  - type: Storage
-    grid:
-      - 0,0,7,1
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: MultitoolIrisReda
@@ -155,13 +150,13 @@
       - Belt
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/unemotional/Tools/iris_tools_jawsoflife.rsi
           state: syn_jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/unemotional/Tools/iris_tools_jawsoflife.rsi
           state: syn_jaws_cutter
@@ -205,7 +200,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/unemotional/Tools/iris_tools_powerdrill.rsi
           state: drill_screw
@@ -213,7 +208,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/unemotional/Tools/iris_tools_powerdrill.rsi
           state: drill_bolt
@@ -330,12 +325,20 @@
     hideOnToggle: true
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitdeFOA
   categories: [ HideSpawnMenu ]
   name: шлем "deFo"
   description: Изготовлено на заказ компанией "deFo".
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.5
   - type: Sprite
     sprite: _DeadSpace/Sponsor/unemotional/helmet.rsi
   - type: Clothing
@@ -343,9 +346,6 @@
   - type: PointLight
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -368,7 +368,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackdeFoA
   name: рюкзак "deFo"
   description: Изготовлено на заказ компанией "deFo".

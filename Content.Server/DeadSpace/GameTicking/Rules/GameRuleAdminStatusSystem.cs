@@ -11,13 +11,13 @@ namespace Content.Server.GameTicking.Rules;
 /// <summary>
 /// Collects read-only status sections from every active game rule and sends one combined admin report.
 /// </summary>
-public sealed class GameRuleAdminStatusSystem : EntitySystem
+public sealed partial class GameRuleAdminStatusSystem : EntitySystem
 {
     private static readonly TimeSpan ReportInterval = TimeSpan.FromMinutes(1);
 
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private TimeSpan? _nextReport;
 
@@ -106,7 +106,7 @@ public sealed class GameRuleAdminStatusSystem : EntitySystem
 /// <summary>
 /// Directed event raised on each active rule entity.
 /// </summary>
-public sealed class CollectGameRuleAdminStatusEvent : EntityEventArgs
+public sealed partial class CollectGameRuleAdminStatusEvent : EntityEventArgs
 {
     public EntityUid Rule { get; }
     public List<GameRuleAdminStatusSection> Sections { get; } = new();

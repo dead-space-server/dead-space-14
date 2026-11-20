@@ -11,6 +11,7 @@
       effects:
       - !type:LimbMend
         bleed: 0.6
+        organBleed: true
         text: reagent-effect-guidebook-hemostatin
       - !type:HealthChange
         conditions:

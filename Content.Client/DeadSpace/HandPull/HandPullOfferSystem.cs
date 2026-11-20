@@ -4,9 +4,9 @@ using Robust.Client.Graphics;
 
 namespace Content.Client.DeadSpace.HandPull;
 
-public sealed class HandPullOfferSystem : EntitySystem
+public sealed partial class HandPullOfferSystem : EntitySystem
 {
-    [Dependency] private readonly IClyde _clyde = default!;
+    [Dependency] private IClyde _clyde = default!;
 
     private YesNoWindow? _window;
     private NetEntity? _offerUser;

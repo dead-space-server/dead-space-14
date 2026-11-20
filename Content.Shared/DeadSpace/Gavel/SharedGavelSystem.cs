@@ -14,11 +14,11 @@ namespace Content.Shared.DeadSpace.Gavel;
 /// and shows a strike popup to everyone nearby, rate-limited per block by
 /// its <see cref="UseDelayComponent"/> so it can't be spammed.
 /// </summary>
-public sealed class SharedGavelSystem : EntitySystem
+public sealed partial class SharedGavelSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     public override void Initialize()
     {

@@ -15,7 +15,7 @@ namespace Content.Server.DeadSpace.EntityConditions.Conditions;
 /// <inheritdoc cref="EntityConditionSystem{T, TCondition}"/>
 public sealed partial class WearingFullHardsuitEntityConditionSystem : EntityConditionSystem<InventoryComponent, WearingFullHardsuitCondition>
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     protected override void Condition(Entity<InventoryComponent> entity, ref EntityConditionEvent<WearingFullHardsuitCondition> args)
     {

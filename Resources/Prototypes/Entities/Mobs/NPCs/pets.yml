@@ -410,6 +410,8 @@
   id: MobMcGriff
   description: This dog can tell something smells around here, and that something is CRIME!
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterDog
   # DS14-start
   - type: CarrySize
     size: Small
@@ -544,6 +546,8 @@
   id: MobWalter
   description: He likes chems and treats. Walter.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterDog
   # DS14-start
   - type: CarrySize
     size: Small

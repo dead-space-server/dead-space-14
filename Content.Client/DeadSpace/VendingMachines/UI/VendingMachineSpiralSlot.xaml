@@ -1,12 +1,15 @@
 <PanelContainer xmlns="https://spacestation14.io"
                 xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-                MinSize="96 112"
+                MinHeight="128"
                 Margin="3"
                 MouseFilter="Stop">
     <PanelContainer.PanelOverride>
         <gfx:StyleBoxFlat BackgroundColor="#16181d" BorderColor="#30343c" BorderThickness="1" />
     </PanelContainer.PanelOverride>
     <BoxContainer Orientation="Vertical" Margin="4" SeparationOverride="2">
+        <RichTextLabel Name="NameLabel"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top" />
         <SpriteView Name="ItemPrototype"
                     HorizontalAlignment="Center"
                     MinSize="48 48"
@@ -19,6 +22,13 @@
         <Label Name="AmountLabel"
                HorizontalAlignment="Center"
                StyleClasses="LabelSubText" />
+        <Label Name="PriceLabel"
+               Visible="False"
+               HorizontalAlignment="Stretch"
+               HorizontalExpand="True"
+               Align="Center"
+               ClipText="True"
+               FontColorOverride="#e8c547" />
         <PanelContainer HorizontalAlignment="Center">
             <PanelContainer.PanelOverride>
                 <gfx:StyleBoxFlat BackgroundColor="#c9b458" ContentMarginLeftOverride="6" ContentMarginRightOverride="6" />

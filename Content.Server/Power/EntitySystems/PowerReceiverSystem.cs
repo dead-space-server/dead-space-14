@@ -12,10 +12,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Power.EntitySystems
 {
-    public sealed class PowerReceiverSystem : SharedPowerReceiverSystem
+    public sealed partial class PowerReceiverSystem : SharedPowerReceiverSystem
     {
-        [Dependency] private readonly IAdminManager _adminManager = default!;
-        [Dependency] private readonly PowerNetSystem _powerNet = default!; // DS14
+        [Dependency] private IAdminManager _adminManager = default!;
+        [Dependency] private PowerNetSystem _powerNet = default!; // DS14
         private EntityQuery<ApcPowerReceiverComponent> _recQuery;
         private EntityQuery<ApcPowerProviderComponent> _provQuery;
 

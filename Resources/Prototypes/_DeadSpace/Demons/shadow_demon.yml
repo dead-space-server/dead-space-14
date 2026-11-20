@@ -384,6 +384,7 @@
   - type: Tag
     tags:
       - CannotSuicide
+      - DevourImmune
   - type: MobState
     allowedStates:
     - Alive

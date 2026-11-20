@@ -12,7 +12,7 @@ namespace Content.Client.DeadSpace.Administration.UI;
 [GenerateTypedNameReferences]
 public sealed partial class RoundGameModeHistoryWindow : DefaultWindow
 {
-    [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
+    [Dependency] private IEntitySystemManager _entitySystem = default!;
 
     private readonly RoundGameModeHistorySystem _history;
 

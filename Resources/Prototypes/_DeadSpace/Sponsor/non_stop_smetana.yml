@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackNSS
   name: единица тактической поддержки C-90
   description: Несмотря на новейшую модель, этот дрон так и не смог достигнуть эффективности своей более ранней версии и потерял все боевые функции. Его динамик вырван, а на боковой стороне изображена фигура, напоминающая тигра.
@@ -53,21 +53,16 @@
 
 # belt.rsi
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltMilitaryWebbingnon_stop_smetana
   name: тактический набедренный подсумок
   description: Фиксируется на бедре с помощью ремня на фастекс-застежках. Позволяет очень быстро достать все необходимые предметы.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/non_stop_smetana/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/non_stop_smetana/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: JawsOfLifenon_stop_smetana
@@ -81,7 +76,7 @@
 
 # hardsuit.rsi
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitnon_stop_smetana
   name: диверсионно-разведывательный скафандр
   description: Тактический скафандр подразделения ОПЗ. Жесткие керамические бронепластины гарантируют защиту, а гибридная система привода обеспечивает рекордную мобильность, позволяя эффективно работать в ближнем бою и на пересеченной местности.
@@ -93,8 +88,6 @@
     sprite: _DeadSpace/Sponsor/non_stop_smetana/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitnon_stop_smetana
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -107,9 +100,6 @@
         Stun: 0.65
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: HideLayerClothing
     clothingSlots: 
     - belt
@@ -120,7 +110,7 @@
 
 # helmet.rsi
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   categories: [ HideSpawnMenu ]
   id: ClothingHeadHelmetHardsuitnon_stop_smetana
   name: шлем диверсионно-разведывательного скафандра
@@ -134,9 +124,6 @@
     color: "#ea2738"
     radius: 5
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -144,6 +131,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
   - type: HideLayerClothing
     slots:
     - Hair
@@ -544,13 +532,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/non_stop_smetana/tools_jawsoflife.rsi
           state: syn_jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/non_stop_smetana/tools_jawsoflife.rsi
           state: syn_jaws_cutter
@@ -578,7 +566,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/non_stop_smetana/tools_powerdrill.rsi
           state: drill_screw
@@ -586,7 +574,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/non_stop_smetana/tools_powerdrill.rsi
           state: drill_bolt

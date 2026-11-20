@@ -29,8 +29,8 @@ namespace Content.Client.DeadSpace.PersonnelRecords;
 [GenerateTypedNameReferences]
 public sealed partial class PersonnelRecordsConsoleWindow : FancyWindow
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private readonly SpriteSystem _spriteSystem;
     private readonly SharedJobSystem _jobSystem;

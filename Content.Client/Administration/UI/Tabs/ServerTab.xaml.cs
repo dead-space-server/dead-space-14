@@ -14,12 +14,12 @@ namespace Content.Client.Administration.UI.Tabs
     [GenerateTypedNameReferences]
     public sealed partial class ServerTab : Control
     {
-        [Dependency] private readonly IConfigurationManager _config = default!;
-        [Dependency] private readonly IClientConsoleHost _console = default!;
+        [Dependency] private IConfigurationManager _config = default!;
+        [Dependency] private IClientConsoleHost _console = default!;
 
         // DS14-start
-        [Dependency] private readonly IClientAdminManager _admin = default!;
-        [Dependency] private readonly IUserInterfaceManager _ui = default!;
+        [Dependency] private IClientAdminManager _admin = default!;
+        [Dependency] private IUserInterfaceManager _ui = default!;
 
         private AutoMapVoteAdminState? _autoMapVoteState;
         private AutoMapVoteConfigWindow? _autoMapVoteWindow;

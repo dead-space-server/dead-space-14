@@ -33,3 +33,49 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Back/Satchels/captain_black.rsi
+
+- type: entity
+  parent: ClothingBackpackSatchel
+  id: ClothingBackpackSatchelRobotics
+  name: сумка робототехника
+  description: Удобная сумка, которая не пропускает влагу, и позволяет носить модули и материалы для киборгов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Satchels/robotics.rsi
+
+- type: entity
+  parent: ClothingBackpackSatchelSecurity
+  id: ClothingBackpackSatchelIAAOfficer
+  name: сумка офицера ВД
+  description: Прочная сумка офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Satchels/iaa_officer.rsi
+
+- type: entity
+  parent: ClothingBackpackSatchel
+  id: ClothingBackpackSatchelCoroner
+  name: сумка коронера
+  description: Идеальная сумка, чтобы переносить свои тайны вместе с несколькими косточками в кармане.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Satchels/coroner.rsi
+
+- type: entity
+  parent: [ClothingBackpackSatchel, BaseSecurityContraband]
+  id: ClothingBackpackSatchelDetective
+  name: сумка детектива
+  description: Стильная и функциональная сумка из синтетической кожи, с удобными отделениями для инструментов расследования.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Satchels/detective.rsi
+
+- type: entity
+  parent: [ClothingBackpackSatchel, BaseSecurityContraband]
+  id: ClothingBackpackSatchelDetectiveGrey
+  name: нуарная сумка детектива
+  description: Стильная и функциональная сумка из чёрной синтетической кожи, с удобными отделениями для инструментов расследования.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Satchels/detective_nuar.rsi
+

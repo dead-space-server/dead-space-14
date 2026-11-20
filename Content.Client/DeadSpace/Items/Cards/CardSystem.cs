@@ -4,9 +4,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.Items.Cards;
 
-public sealed class CardSystem : EntitySystem
+public sealed partial class CardSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {

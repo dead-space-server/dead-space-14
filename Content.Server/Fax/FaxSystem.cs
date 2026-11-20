@@ -36,26 +36,27 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Fax;
 
-public sealed class FaxSystem : EntitySystem
+public sealed partial class FaxSystem : EntitySystem
 {
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlotsSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
-    [Dependency] private readonly PaperSystem _paperSystem = default!;
-    [Dependency] private readonly LabelSystem _labelSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private readonly ToolSystem _toolSystem = default!;
-    [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
-    [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly FaxecuteSystem _faxecute = default!;
-    [Dependency] private readonly EmagSystem _emag = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!; // DS14
-    [Dependency] private readonly GameTicker _gameTicker = default!; // DS14
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private DeviceNetworkSystem _deviceNetworkSystem = default!;
+    [Dependency] private PaperSystem _paperSystem = default!;
+    [Dependency] private LabelSystem _labelSystem = default!;
+    [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private ToolSystem _toolSystem = default!;
+    [Dependency] private QuickDialogSystem _quickDialog = default!;
+    [Dependency] private UserInterfaceSystem _userInterface = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private FaxecuteSystem _faxecute = default!;
+    [Dependency] private EmagSystem _emag = default!;
+    [Dependency] private IGameTiming _gameTiming = default!; // DS14
+    [Dependency] private GameTicker _gameTicker = default!; // DS14
+    [Dependency] private Content.Server.DeadSpace.CentCommFax.CentCommFaxSystem _centCommFax = default!; // DS14
 
     private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
 
@@ -413,6 +414,7 @@ public sealed class FaxSystem : EntitySystem
 
         component.DestinationFaxAddress = null;
         component.KnownFaxes.Clear();
+        _centCommFax.AddUplink(component); // DS14
 
         var payload = new NetworkPayload()
         {
@@ -553,7 +555,23 @@ public sealed class FaxSystem : EntitySystem
             payload[FaxConstants.FaxPaperStampedByData] = paper.StampedBy;
         }
 
-        _deviceNetworkSystem.QueuePacket(uid, component.DestinationFaxAddress, payload);
+        // DS14-start
+        if (component.DestinationFaxAddress == Content.Server.DeadSpace.CentCommFax.CentCommFaxSystem.UplinkAddress)
+        {
+            _centCommFax.Record(uid, component.FaxName, new FaxPrintout(paper.Content,
+                nameMod?.BaseName ?? metadata.EntityName,
+                labelComponent?.CurrentLabel,
+                metadata.EntityPrototype?.ID ?? component.PrintPaperId,
+                paper.StampState,
+                paper.StampedBy,
+                paper.EditingDisabled,
+                new List<string>(paper.Signatures)), notify: true);
+        }
+        else
+        {
+            _deviceNetworkSystem.QueuePacket(uid, component.DestinationFaxAddress, payload);
+        }
+        // DS14-end
 
         _adminLogger.Add(LogType.Action,
             LogImpact.Low,
@@ -597,6 +615,8 @@ public sealed class FaxSystem : EntitySystem
 
         if (component.NotifyAdmins)
             NotifyAdmins(faxName);
+        if (component.NotifyAdmins) // DS14
+            _centCommFax.Record(_centCommFax.FindFax(fromAddress), faxName, printout, notify: false); // DS14
         // DS14-start FaxHistory
         if (component.FaxHistory.Count >= 20)
         {

@@ -27,21 +27,21 @@ namespace Content.Server.DeadSpace.Lavaland.Celestial;
 /// Поведение босса Селестиала: медленно движется, разрушает всё под собой
 /// (как сингулярность), говорит субтитрами, атакует лучами и сферами.
 /// </summary>
-public sealed class CelestialSystem : EntitySystem
+public sealed partial class CelestialSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TileSystem _tiles = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ServerGlobalSoundSystem _globalSound = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
+[Dependency] private readonly IRobustRandom _random = default!;
+[Dependency] private readonly IMapManager _mapManager = default!;
+[Dependency] private readonly IPlayerManager _players = default!;
+[Dependency] private readonly SharedMapSystem _map = default!;
+[Dependency] private readonly SharedTransformSystem _transform = default!;
+[Dependency] private readonly TileSystem _tiles = default!;
+[Dependency] private readonly DamageableSystem _damage = default!;
+[Dependency] private readonly SharedAudioSystem _audio = default!;
+[Dependency] private readonly ServerGlobalSoundSystem _globalSound = default!;
+[Dependency] private readonly EntityLookupSystem _lookup = default!;
+[Dependency] private readonly MobStateSystem _mobState = default!;
+[Dependency] private readonly SharedPhysicsSystem _physics = default!;
+[Dependency] private readonly IChatManager _chat = default!;
 
     private readonly HashSet<EntityUid> _nearbySpheres = new();
 
@@ -842,7 +842,7 @@ public sealed class CelestialSystem : EntitySystem
                 // ломаем пол под ударом
                 if (!comp.BreakTiles)
                     return;
-                foreach (var gridEnt in _mapManager.GetAllGrids(strikeMap.MapId))
+                foreach (var gridEnt in _map.GetAllGrids(strikeMap.MapId))
                 {
                     foreach (var tile in _map.GetTilesIntersecting(gridEnt.Owner, gridEnt.Comp, new Circle(strikeMap.Position, 0.6f)))
                     {

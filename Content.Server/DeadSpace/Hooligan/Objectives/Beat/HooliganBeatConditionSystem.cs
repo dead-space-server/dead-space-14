@@ -14,7 +14,7 @@ namespace Content.Server.DeadSpace.Hooligan.Objectives;
 /// Логика цели "Преподать урок": считает урон, нанесённый Хулиганом жертве,
 /// вешает компонент-счётчик на тело жертвы и отвечает на вопрос о прогрессе.
 /// </summary>
-public sealed class HooliganBeatConditionSystem : EntitySystem
+public sealed partial class HooliganBeatConditionSystem : EntitySystem
 {
     public override void Initialize()
     {
@@ -25,7 +25,7 @@ public sealed class HooliganBeatConditionSystem : EntitySystem
         SubscribeLocalEvent<HooliganBeatConditionComponent, ObjectiveGetProgressEvent>(OnGetProgress);
     }
 
-    [Dependency] private readonly TargetObjectiveSystem _target = default!;
+    [Dependency] private TargetObjectiveSystem _target = default!;
 
     private void OnAssign(Entity<HooliganBeatConditionComponent> ent, ref ObjectiveAfterAssignEvent args)
     {

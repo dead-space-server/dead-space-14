@@ -16,16 +16,16 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.DeadSpace.CentComm;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class AddGameRuleCentCommCommand : LocalizedEntityCommands
+public sealed partial class AddGameRuleCentCommCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly CentCommSystem _centcomm = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly GameRulesServerSystem _rules = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private CentCommSystem _centcomm = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private GameRulesServerSystem _rules = default!;
 
     public override string Command => "addgamerulecentcomm";
 

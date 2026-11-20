@@ -9,10 +9,10 @@ using Robust.Shared.Configuration;
 
 namespace Content.Server.DeadSpace.AshWalkers;
 
-public sealed class AshWalkerSystem : EntitySystem
+public sealed partial class AshWalkerSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly GhostRoleSystem _ghostRoles = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private GhostRoleSystem _ghostRoles = default!;
 
     public override void Initialize()
     {

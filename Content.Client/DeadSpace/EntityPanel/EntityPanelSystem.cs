@@ -12,12 +12,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.EntityPanel;
 
-public sealed class EntityPanelSystem : EntitySystem
+public sealed partial class EntityPanelSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
-    [Dependency] private readonly IPlayerManager _playerMan = default!;
-    [Dependency] private readonly SpriteSystem _spriteSystem = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
+    [Dependency] private IPlayerManager _playerMan = default!;
+    [Dependency] private SpriteSystem _spriteSystem = default!;
 
     /// <summary>
     /// We should enable radial for single target

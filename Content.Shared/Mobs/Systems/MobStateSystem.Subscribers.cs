@@ -32,8 +32,8 @@ namespace Content.Shared.Mobs.Systems;
 
 public partial class MobStateSystem
 {
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
-    [Dependency] private readonly SharedJetpackSystem _jetpack = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedJetpackSystem _jetpack = default!;
 
     //General purpose event subscriptions. If you can avoid it register these events inside their own systems
     private void SubscribeEvents()

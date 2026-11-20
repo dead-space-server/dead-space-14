@@ -24,21 +24,31 @@ namespace Content.Shared.Fluids.EntitySystems;
 /// <summary>
 /// Handles the draining of solutions from containers into drains.
 /// </summary>
-public sealed class DrainSystem : EntitySystem
+public sealed partial class DrainSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambientSound = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedPuddleSystem _puddle = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPuddleSystem _puddle = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly HashSet<Entity<PuddleComponent>> _puddles = [];
+
+    // DS14-start
+    // Every chasm carries an auto drain, so there are thousands of them; almost all sit empty with no puddle around.
+    // Instead of each drain searching for puddles every second, the few puddles look for drains once a second.
+    private static readonly TimeSpan PuddleScanInterval = TimeSpan.FromSeconds(1);
+    private readonly HashSet<Entity<DrainComponent>> _nearDrains = [];
+    private readonly HashSet<EntityUid> _drainsNearPuddles = [];
+    private TimeSpan _nextPuddleScan;
+    private float _maxDrainRange;
+    // DS14-end
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -132,23 +142,41 @@ public sealed class DrainSystem : EntitySystem
 
         var query = EntityQueryEnumerator<DrainComponent, SolutionContainerManagerComponent>();
         var curTime = _timing.CurTime;
+
+        // DS14-start
+        if (curTime >= _nextPuddleScan)
+        {
+            _nextPuddleScan = curTime + PuddleScanInterval;
+            ScanPuddles();
+        }
+        // DS14-end
+
         while (query.MoveNext(out var uid, out var drain, out var manager))
         {
             if (curTime < drain.NextUpdate)
                 continue;
 
             drain.NextUpdate += drain.DrainInterval;
-            Dirty(uid, drain);
+            // DS14-start: a drain that fell far behind would otherwise run every tick until it caught up
+            if (drain.NextUpdate < curTime)
+                drain.NextUpdate = curTime + drain.DrainInterval;
+
+            _maxDrainRange = MathF.Max(_maxDrainRange, drain.Range);
+            // DS14-end
 
             // Best to do this one every second rather than once every tick...
             if (!_solutionContainerSystem.ResolveSolution((uid, manager), DrainComponent.SolutionName, ref drain.Solution, out var drainSolution))
                 continue;
 
-            if (drainSolution.Volume <= 0 && !drain.AutoDrain)
+            // DS14-start: an idle drain only moves its timer: no lookup and no network update
+            if (drainSolution.Volume <= 0 && (!drain.AutoDrain || !_drainsNearPuddles.Contains(uid)))
             {
                 _ambientSound.SetAmbience(uid, false);
                 continue;
             }
+
+            Dirty(uid, drain);
+            // DS14-end
 
             // Remove a bit from the buffer.
             _solutionContainerSystem.SplitSolution(drain.Solution.Value, drain.UnitsDestroyedPerSecond * drain.DrainInterval.TotalSeconds);
@@ -198,6 +226,31 @@ public sealed class DrainSystem : EntitySystem
             _solutionContainerSystem.UpdateChemicals(drain.Solution.Value);
         }
     }
+
+    // DS14-start
+    private void ScanPuddles()
+    {
+        _drainsNearPuddles.Clear();
+
+        if (_maxDrainRange <= 0f)
+            return;
+
+        var puddles = EntityQueryEnumerator<PuddleComponent, TransformComponent>();
+        while (puddles.MoveNext(out _, out var xform))
+        {
+            if (xform.MapUid == null)
+                continue;
+
+            _nearDrains.Clear();
+            _lookup.GetEntitiesInRange(xform.Coordinates, _maxDrainRange, _nearDrains);
+
+            foreach (var drain in _nearDrains)
+            {
+                _drainsNearPuddles.Add(drain.Owner);
+            }
+        }
+    }
+    // DS14-end
 
     private void OnExamined(Entity<DrainComponent> ent, ref ExaminedEvent args)
     {

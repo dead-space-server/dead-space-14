@@ -13,18 +13,18 @@ using Robust.Shared.Random;
 
 namespace Content.Client.DeadSpace.Flamethrower;
 
-public sealed class ContinuousFlamethrowerSystem : EntitySystem
+public sealed partial class ContinuousFlamethrowerSystem : EntitySystem
 {
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly CombatModeSystem _combatMode = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IResourceCache _resources = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPointLightSystem _lights = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private CombatModeSystem _combatMode = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IResourceCache _resources = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
 
     private const int MaxFlameLights = 12;
     private const float FlameLightLifetime = 0.22f;
@@ -205,7 +205,7 @@ public sealed class ContinuousFlamethrowerSystem : EntitySystem
             false));
     }
 
-    private sealed class FlameLight(EntityUid entity)
+    private sealed partial class FlameLight(EntityUid entity)
     {
         public EntityUid Entity = entity;
         public float Remaining = FlameLightLifetime;

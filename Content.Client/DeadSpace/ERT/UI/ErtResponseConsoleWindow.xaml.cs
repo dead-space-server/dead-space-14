@@ -13,8 +13,8 @@ namespace Content.Client.DeadSpace.ERT.UI
     [GenerateTypedNameReferences]
     public sealed partial class ErtResponseConsoleWindow : DefaultWindow
     {
-        [Dependency] private readonly IPrototypeManager _prototype = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
+        [Dependency] private IPrototypeManager _prototype = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
 
         private ErtResponseConsoleBoundUserInterfaceState? _lastUpdate;
         private readonly List<ErtTeamPrototype> _availableTeams = new();

@@ -19,18 +19,18 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Administration.Notes;
 
-public sealed class AdminNotesManager : IAdminNotesManager, IPostInjectInit
+public sealed partial class AdminNotesManager : IAdminNotesManager, IPostInjectInit
 {
-    [Dependency] private readonly IAdminManager _admins = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly EuiManager _euis = default!;
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private IAdminManager _admins = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private EuiManager _euis = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
+    [Dependency] private IConfigurationManager _config = default!;
     // DS14-start: readonly dependencies for the pre-v288 engine.
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IChatManager _chat = default!;
     // DS14-end
 
     public const string SawmillId = "admin.notes";

@@ -6,7 +6,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackN0rthAir
   name: рюкзак Vitezstvi
   description: Компактный рюкзак с технологией пространственного сжатия Vitezstvi. Всегда готов к миссии любой сложности.
@@ -16,10 +16,6 @@
     sprite: _DeadSpace/Sponsor/N0rthAir/backpack.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/N0rthAir/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingOuterHardsuitN0rthAir
@@ -41,7 +37,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltN0rthAir
   name: РПС Vitezstvi
   description: Универсальный пояс Vitezstvi, подбирающий идеальный инструмент под любую задачу.
@@ -51,11 +47,6 @@
     sprite: _DeadSpace/Sponsor/N0rthAir/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/N0rthAir/belt.rsi
-  - type: Item
-    size: Huge
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: StorageFill
     contents:
     - id: GasAnalyzerN0rthAir
@@ -98,7 +89,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitN0rthAir
   name: скафандр Vitezstvi MK5
   description: Разработан корпорацией Vitezstvi в 2678 году и стал стандартом военной экиперовки корпорации. Странно почему-то серийные номера перебиты на корпорацию NanoTrasen...
@@ -110,8 +101,6 @@
     sprite: _DeadSpace/Sponsor/N0rthAir/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitN0rthAir
-  - type: Item
-    size: Huge
   - type: ClothingSpeedModifier
     walkModifier: 1
     sprintModifier: 1
@@ -187,10 +176,15 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+        Shock: 0.65
+        Cold: 0.65
+        Caustic: 0.65
+        Radiation: 0.65
+
   - type: Tag
     tags: []
 
@@ -303,13 +297,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-    - behavior: Prying
+    - behavior: [ Prying ]
       sprite:
         sprite: _DeadSpace/Sponsor/N0rthAir/tools_jawsoflife.rsi
         state: syn_jaws_pry
       useSound: /Audio/Items/jaws_pry.ogg
       changeSound: /Audio/Items/change_jaws.ogg
-    - behavior: Cutting
+    - behavior: [ Cutting ]
       sprite:
         sprite: _DeadSpace/Sponsor/N0rthAir/tools_jawsoflife.rsi
         state: syn_jaws_cutter
@@ -342,7 +336,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-    - behavior: Screwing
+    - behavior: [ Screwing ]
       sprite:
         sprite: _DeadSpace/Sponsor/N0rthAir/tools_powerdrill.rsi
         state: drill_screw
@@ -350,7 +344,7 @@
         path: /Audio/Items/drill_use.ogg
       changeSound:
         path: /Audio/Items/change_drill.ogg
-    - behavior: Anchoring
+    - behavior: [ Anchoring ]
       sprite:
         sprite: _DeadSpace/Sponsor/N0rthAir/tools_powerdrill.rsi
         state: drill_bolt

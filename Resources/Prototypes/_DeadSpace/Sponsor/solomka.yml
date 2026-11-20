@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackSolomka
   name: сумка "Белая Пурга"
   description: Плотная блоснежная сумка из углеволокна. Сделана искусным мастером. Имеет расширенный отсек для сворачивания костюма.
@@ -13,10 +13,6 @@
       map: [ base ]
   - type: Appearance
     netsync: false
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingHandsGlovesSolomka
@@ -41,7 +37,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitSolomka
   name: экзо-костюм "Белая Пурга"
   description: Белоснежный модернизированный экзо-костюм с хорошей мобильностью, защитой и встроенными механическими крыльями, которые дают хорошую подвижность в космосе и пространствах с низкой гравитацией. Обладает искусственным интеллектом, которые предовтращает посторонние использование, а так же помогает владельцу в случае опасности. Данный костюм специально разработан для ведения в боевых условиях и космосе.
@@ -53,8 +49,6 @@
     sprite: _DeadSpace/Sponsor/solomka/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSolomka
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -66,9 +60,6 @@
         Heat: 0.50
         Radiation: 0.50
         Caustic: 0.50
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: HideLayerClothing
     clothingSlots:
     - belt
@@ -77,7 +68,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitSolomka
   categories: [ HideSpawnMenu ]
   name: шлем экзо-костюма "Белая Пурга"
@@ -96,9 +87,6 @@
       - state: on-equipped-HELMET
       - state: on-unshaded
         shader: unshaded
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: EyeProtection
   - type: Armor
     modifiers:
@@ -107,6 +95,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
   - type: HideLayerClothing
     slots:
     - Hair
@@ -297,13 +286,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/solomka/tools_jawsoflife.rsi
           state: jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/solomka/tools_jawsoflife.rsi
           state: jaws_cutter
@@ -341,7 +330,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/solomka/tools_drill.rsi
           state: drill_screw
@@ -349,7 +338,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/solomka/tools_drill.rsi
           state: drill_bolt
@@ -475,7 +464,7 @@
 
 # belt.rsi
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltSolomka
   name: разгрузка "Белая Пурга"
   description: Разгрузка, которая позволяет хранить множество инструментов и вещей. Удобная вещь!
@@ -485,11 +474,6 @@
     sprite: _DeadSpace/Sponsor/solomka/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/solomka/belt.rsi
-  - type: Storage
-    grid:
-    - 0,0,7,1
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
     - id: WelderExperimentalSolomka

@@ -20,7 +20,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Prison;
 
-public sealed class PrisonFaunaPopulationSystem : EntitySystem
+public sealed partial class PrisonFaunaPopulationSystem : EntitySystem
 {
     private const CollisionGroup SpawnBlockerMask =
         CollisionGroup.Impassable |
@@ -36,15 +36,14 @@ public sealed class PrisonFaunaPopulationSystem : EntitySystem
         new(0, -1),
     ];
 
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly BiomeSystem _biome = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private BiomeSystem _biome = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     private readonly Dictionary<EntProtoId, int> _counts = new();
     private readonly HashSet<EntityUid> _tileEntities = new();
@@ -409,7 +408,7 @@ public sealed class PrisonFaunaPopulationSystem : EntitySystem
     {
         _nearbyGrids.Clear();
         var bounds = Box2.CenteredAround(center, Vector2.One * (radius * 2f + 1f));
-        _mapManager.FindGridsIntersecting(Transform(mapUid).MapID, bounds, ref _nearbyGrids);
+        _map.FindGridsIntersecting(Transform(mapUid).MapID, bounds, ref _nearbyGrids);
         foreach (var grid in _nearbyGrids)
         {
             if (grid.Owner != mapUid)

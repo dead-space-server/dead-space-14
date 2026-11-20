@@ -49,13 +49,11 @@ public sealed class DistanceLimitOverlay : Overlay
     private readonly IPlayerManager _player;
     private readonly SharedTransformSystem _transform;
     private readonly SharedMapSystem _mapSystem;
-    private readonly IMapManager _mapManager;
 
     public DistanceLimitOverlay(IEntityManager entManager)
     {
         _entManager = entManager;
         _player = IoCManager.Resolve<IPlayerManager>();
-        _mapManager = IoCManager.Resolve<IMapManager>();
         _transform = _entManager.System<SharedTransformSystem>();
         _mapSystem = _entManager.System<SharedMapSystem>();
     }
@@ -84,7 +82,7 @@ public sealed class DistanceLimitOverlay : Overlay
 
     private void DrawTileRange(in OverlayDrawArgs args, MapCoordinates originMap, float range, Color color)
     {
-        if (!_mapManager.TryFindGridAt(originMap, out var gridUid, out var grid))
+        if (!_mapSystem.TryFindGridAt(originMap, out var gridUid, out var grid))
             return;
 
         var center = _mapSystem.CoordinatesToTile(gridUid, grid, originMap);

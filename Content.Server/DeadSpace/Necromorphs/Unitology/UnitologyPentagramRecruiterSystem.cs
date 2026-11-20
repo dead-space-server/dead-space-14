@@ -6,9 +6,9 @@ using Content.Shared.Actions;
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
 /// <inheritdoc cref="UnitologyPentagramRecruiterComponent"/>
-public sealed class UnitologyPentagramRecruiterSystem : EntitySystem
+public sealed partial class UnitologyPentagramRecruiterSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {

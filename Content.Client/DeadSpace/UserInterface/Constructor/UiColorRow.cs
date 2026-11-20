@@ -142,11 +142,10 @@ public sealed class UiColorRow : BoxContainer
         if (_suppress)
             return;
 
-        var parsed = Color.TryFromHex(_hex.Text);
-        if (parsed == null)
+        if (!Color.TryFromHex(_hex.Text, out var parsed))
             return;
 
-        SetColor(parsed.Value, true, notify: false);
+        SetColor(parsed, true, notify: false);
         UserChanged?.Invoke();
     }
 }

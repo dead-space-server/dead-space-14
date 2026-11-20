@@ -52,6 +52,9 @@ public sealed partial class LimbBodyComponent : Component
     public bool Soft;
 
     [DataField, AutoNetworkedField]
+    public bool Bleeds = true;
+
+    [DataField, AutoNetworkedField]
     public bool Plant;
 
     [DataField, AutoNetworkedField]
@@ -68,6 +71,9 @@ public sealed partial class LimbBodyComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool HasEars = true;
+
+    [DataField, AutoNetworkedField]
+    public bool HasJaw = true;
 
     [DataField, AutoNetworkedField]
     public byte EyesGone;

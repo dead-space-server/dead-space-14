@@ -20,14 +20,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Backmen.CartridgeLoader.Cartridges;
 
-public sealed class BankCartridgeSystem : EntitySystem
+public sealed partial class BankCartridgeSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly CartridgeLoaderSystem? _cartridgeLoaderSystem = default!;
-    [Dependency] private readonly RingerSystem _ringerSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly BankManagerSystem _bankManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private CartridgeLoaderSystem _cartridgeLoaderSystem = default!;
+    [Dependency] private RingerSystem _ringerSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private BankManagerSystem _bankManager = default!;
 
     public override void Initialize()
     {

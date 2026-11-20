@@ -17,5 +17,5 @@ job-supervisors-nobody = никому
 job-supervisors-everyone = вообще всем
 job-supervisors-crew = экипажу
 job-supervisors-security-borg = своим законам, офицерам, инструктору, смотрителю, и главе службы безопасности
-job-supervisors-centcom-administrator = администратору станции центрального командования
+job-supervisors-centcom-administrator = администратору центрального командования
 job-supervisors-no-one = никому

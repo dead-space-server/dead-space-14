@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace Content.Client.Necromorphs.InfectionDead;
 
-public sealed class NecromorfSystem : EntitySystem
+public sealed partial class NecromorfSystem : EntitySystem
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

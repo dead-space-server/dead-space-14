@@ -5,6 +5,7 @@ salvage-system-announcement-arrived = A piece of salvagable debris has been pull
 salvage-asteroid-name = Asteroid
 
 salvage-magnet-window-title = Salvage magnet
+salvage-magnet-window-release = Release debris
 salvage-expedition-window-progression = Progression
 
 salvage-magnet-resources = {$resource ->

@@ -8,13 +8,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.Tiles;
 
-public sealed class InvisibleTileOverlaySystem : EntitySystem
+public sealed partial class InvisibleTileOverlaySystem : EntitySystem
 {
     public const string TilePrototype = "FloorInvisible";
 
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private InvisibleTileOverlay _overlay = default!;
 

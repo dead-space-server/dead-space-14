@@ -5,9 +5,9 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client._Donate.UI;
 
-public sealed class DonateShopSystem : EntitySystem
+public sealed partial class DonateShopSystem : EntitySystem
 {
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
 
     public override void Initialize()
     {

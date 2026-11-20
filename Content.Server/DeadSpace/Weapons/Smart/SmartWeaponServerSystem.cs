@@ -11,11 +11,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Weapons.Smart;
 
-public sealed class SmartWeaponServerSystem : EntitySystem
+public sealed partial class SmartWeaponServerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {

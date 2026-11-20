@@ -14,9 +14,9 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// The beat of the Hierophant: tile-by-tile walking while blessed by the Hierophant staff or standing on an arena
 /// with <c>tileMovement</c> (the Hierophant arena).
 /// </summary>
-public sealed class LavalandHierophantBeatSystem : EntitySystem
+public sealed partial class LavalandHierophantBeatSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly TimeSpan ArenaCheckInterval = TimeSpan.FromSeconds(0.5);
     private TimeSpan _nextArenaCheck;

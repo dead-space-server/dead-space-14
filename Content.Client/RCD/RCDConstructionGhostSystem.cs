@@ -12,16 +12,17 @@ namespace Content.Client.RCD;
 /// <summary>
 /// System for handling structure ghost placement in places where RCD can create objects.
 /// </summary>
-public sealed class RCDConstructionGhostSystem : EntitySystem
+public sealed partial class RCDConstructionGhostSystem : EntitySystem
 {
     private const string PlacementMode = nameof(AlignRCDConstruction);
 
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPlacementManager _placementManager = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPlacementManager _placementManager = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private HandsSystem _hands = default!;
 
     private Direction _placementDirection = default;
+    private EntityUid? _syncRcd; //DS14
 
     public override void Update(float frameTime)
     {
@@ -50,6 +51,8 @@ public sealed class RCDConstructionGhostSystem : EntitySystem
 
         if (!TryComp<RCDComponent>(heldEntity, out var rcd))
         {
+            _syncRcd = null; //DS14
+
             // If the player was holding an RCD, but is no longer, cancel placement
             if (placerIsRCD || placementWasStartedByRCD)
                 _placementManager.Clear();
@@ -57,6 +60,15 @@ public sealed class RCDConstructionGhostSystem : EntitySystem
             return;
         }
         var prototype = _protoManager.Index(rcd.ProtoId);
+
+        // DS14-start
+        if (_syncRcd != heldEntity)
+        {
+            _syncRcd = heldEntity;
+            _placementDirection = rcd.ConstructionDirection;
+            _placementManager.Direction = rcd.ConstructionDirection;
+        }
+        // DS14-end
 
         // Update the direction the RCD prototype based on the placer direction
         if (_placementDirection != _placementManager.Direction)

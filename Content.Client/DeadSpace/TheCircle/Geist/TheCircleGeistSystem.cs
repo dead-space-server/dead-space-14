@@ -10,11 +10,11 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.TheCircle.Geist;
 
-public sealed class TheCircleGeistSystem : EntitySystem
+public sealed partial class TheCircleGeistSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private SimpleRadialMenu? _menu;
     private RichTextLabel? _arrivalMessage;

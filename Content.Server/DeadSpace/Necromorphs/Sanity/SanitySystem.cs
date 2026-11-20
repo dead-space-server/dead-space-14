@@ -26,21 +26,21 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Necromorphs.Sanity
 {
-    public sealed class SanitySystem : SharedSanitySystem
+    public sealed partial class SanitySystem : SharedSanitySystem
     {
-        [Dependency] private readonly IChatManager _chatMan = default!;
-        [Dependency] private readonly NPCSystem _npc = default!;
-        [Dependency] private readonly SharedPopupSystem _popup = default!;
-        [Dependency] private readonly MindSystem _mindSystem = default!;
-        [Dependency] private readonly GameTicker _gameTicker = default!;
-        [Dependency] private readonly GhostSystem _ghosts = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!;
-        [Dependency] private readonly NpcFactionSystem _faction = default!;
-        [Dependency] private readonly SharedJitteringSystem _sharedJittering = default!;
-        [Dependency] private readonly SlurredSystem _slurred = default!;
-        [Dependency] private readonly ISharedPlayerManager _player = default!;
-        [Dependency] private readonly IGameTiming _time = default!;
-        [Dependency] private readonly IRobustRandom _random = default!;
+        [Dependency] private IChatManager _chatMan = default!;
+        [Dependency] private NPCSystem _npc = default!;
+        [Dependency] private SharedPopupSystem _popup = default!;
+        [Dependency] private MindSystem _mindSystem = default!;
+        [Dependency] private GameTicker _gameTicker = default!;
+        [Dependency] private GhostSystem _ghosts = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
+        [Dependency] private NpcFactionSystem _faction = default!;
+        [Dependency] private SharedJitteringSystem _sharedJittering = default!;
+        [Dependency] private SlurredSystem _slurred = default!;
+        [Dependency] private ISharedPlayerManager _player = default!;
+        [Dependency] private IGameTiming _time = default!;
+        [Dependency] private IRobustRandom _random = default!;
 
         // private const string HighSanityMessage = "Вы чувствуете головную боль";
         // private const string MediumSanityMessage = "У вас болит голова, кости будто ломаются на части";

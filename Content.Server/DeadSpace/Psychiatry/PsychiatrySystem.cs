@@ -41,19 +41,19 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.Psychiatry;
 
-public sealed class PsychiatrySystem : SharedPsychiatrySystem
+public sealed partial class PsychiatrySystem : SharedPsychiatrySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly VomitSystem _vomit = default!;
-    [Dependency] private readonly ParacusiaSystem _paracusia = default!;
-    [Dependency] private readonly InternalsSystem _internals = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedJobSystem _jobs = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private VomitSystem _vomit = default!;
+    [Dependency] private ParacusiaSystem _paracusia = default!;
+    [Dependency] private InternalsSystem _internals = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private static readonly SoundSpecifier HallucinationSounds = new SoundCollectionSpecifier("Paracusia");
 

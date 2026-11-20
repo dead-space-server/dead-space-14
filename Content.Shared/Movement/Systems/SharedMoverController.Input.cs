@@ -7,6 +7,7 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Robust.Shared.GameStates;
 using Robust.Shared.Input;
+using Robust.Shared.Map; //DS-14
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
@@ -59,6 +60,8 @@ namespace Content.Shared.Movement.Systems
             SubscribeLocalEvent<InputMoverComponent, ComponentHandleState>(OnMoverHandleState);
             SubscribeLocalEvent<InputMoverComponent, EntParentChangedMessage>(OnInputParentChange);
             SubscribeLocalEvent<InputMoverComponent, AnchorStateChangedEvent>(OnAnchorState);
+            SubscribeLocalEvent<MapGridComponent, EntityTerminatingEvent>(OnMoverGridTerminating); //DS-14
+            SubscribeLocalEvent<MapComponent, EntityTerminatingEvent>(OnMoverMapTerminating); //DS-14
 
             SubscribeLocalEvent<FollowedComponent, EntParentChangedMessage>(OnFollowedParentChange);
 
@@ -133,10 +136,16 @@ namespace Content.Shared.Movement.Systems
 
         private void OnMoverGetState(Entity<InputMoverComponent> entity, ref ComponentGetState args)
         {
+            //DS-14 start
+            NetEntity? relativeNet = null;
+            if (entity.Comp.RelativeEntity is { } relative && !TerminatingOrDeleted(relative))
+                relativeNet = GetNetEntity(relative);
+            //DS-14 end
+
             args.State = new InputMoverComponentState()
             {
                 CanMove = entity.Comp.CanMove,
-                RelativeEntity = GetNetEntity(entity.Comp.RelativeEntity),
+                RelativeEntity = relativeNet, //DS-14
                 LerpTarget = entity.Comp.LerpTarget,
                 HeldMoveButtons = entity.Comp.HeldMoveButtons,
                 RelativeRotation = entity.Comp.RelativeRotation,
@@ -183,6 +192,8 @@ namespace Content.Shared.Movement.Systems
         {
             var relative = xform.GridUid;
             relative ??= xform.MapUid;
+            if (relative is { } relativeUid && TerminatingOrDeleted(relativeUid))
+                relative = null; //DS-14
 
             // So essentially what we want:
             // 1. If we go from grid to map then preserve our rotation and continue as usual
@@ -260,6 +271,8 @@ namespace Content.Shared.Movement.Systems
             // If we change our grid / map then delay updating our LastGridAngle.
             var relative = args.Transform.GridUid;
             relative ??= args.Transform.MapUid;
+            if (relative is { } relativeUid && TerminatingOrDeleted(relativeUid))
+                relative = null; //DS-14
 
             if (entity.Comp.LifeStage < ComponentLifeStage.Running)
             {
@@ -297,6 +310,35 @@ namespace Content.Shared.Movement.Systems
             entity.Comp.LerpTarget = TimeSpan.FromSeconds(InputMoverComponent.LerpTime) + Timing.CurTime;
             Dirty(entity.Owner, entity.Comp);
         }
+
+        //DS-14 start
+        private void OnMoverGridTerminating(Entity<MapGridComponent> ent, ref EntityTerminatingEvent args)
+        {
+            RetargetMoversFrom(ent.Owner);
+        }
+
+        private void OnMoverMapTerminating(Entity<MapComponent> ent, ref EntityTerminatingEvent args)
+        {
+            RetargetMoversFrom(ent.Owner);
+        }
+
+        private void RetargetMoversFrom(EntityUid relativeUid)
+        {
+            var query = EntityQueryEnumerator<InputMoverComponent, TransformComponent>();
+            while (query.MoveNext(out var uid, out var mover, out var xform))
+            {
+                if (mover.RelativeEntity != relativeUid || TerminatingOrDeleted(uid))
+                    continue;
+
+                TryUpdateRelative(uid, mover, xform);
+                if (mover.RelativeEntity != relativeUid)
+                    continue;
+
+                mover.RelativeEntity = null;
+                Dirty(uid, mover);
+            }
+        }
+        //DS-14 end
 
         private void OnAnchorState(Entity<InputMoverComponent> entity, ref AnchorStateChangedEvent args)
         {

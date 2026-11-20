@@ -9,7 +9,7 @@ namespace Content.Shared.Weapons.Ranged.Systems;
 
 public partial class SharedGunSystem
 {
-    [Dependency] private readonly SharedDeviceLinkSystem _deviceLink = default!; // DS14 - pre-v288 IoC
+    [Dependency] private SharedDeviceLinkSystem _deviceLink = default!; // DS14 - pre-v288 IoC
 
     // DS14-Start - pre-v288 explicit event subscriptions
     private void InitializeTargetFinder()
