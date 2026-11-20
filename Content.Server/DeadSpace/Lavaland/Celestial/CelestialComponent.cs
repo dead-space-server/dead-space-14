@@ -156,11 +156,11 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Минимальный урон мелкого луча.</summary>
     [DataField]
-    public float SmallBeamMinDamage = 24f;
+    public float SmallBeamMinDamage = 30f;
 
     /// <summary>Максимальный урон мелкого луча.</summary>
     [DataField]
-    public float SmallBeamMaxDamage = 48f;
+    public float SmallBeamMaxDamage = 58f;
 
     /// <summary>Сколько раз повторяется Cutter.</summary>
     [DataField]
@@ -204,7 +204,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон луча Cutter.</summary>
     [DataField]
-    public float CutterDamage = 48f;
+    public float CutterDamage = 58f;
 
     // ----- радиусы попадания (понижены: лучи били слишком широко) -----
 
@@ -296,7 +296,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон за тик гигантского луча.</summary>
     [DataField]
-    public float BloomBeamDamage = 32f;
+    public float BloomBeamDamage = 40f;
 
     /// <summary>Полуширина урона гигантского луча, метры (визуально луч чуть шире).</summary>
     [DataField]
@@ -328,7 +328,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон замершего луча при почернении.</summary>
     [DataField]
-    public float FreezeBeamDamage = 32f;
+    public float FreezeBeamDamage = 40f;
 
     /// <summary>Сколько замерших лучей проходит прямо через каждого игрока (остальные - по округе).</summary>
     [DataField]

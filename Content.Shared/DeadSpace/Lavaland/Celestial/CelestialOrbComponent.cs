@@ -36,7 +36,7 @@ public sealed partial class CelestialOrbComponent : Component
 
     /// <summary>Урон при касании: долетев до игрока, шар взрывается на нём.</summary>
     [DataField]
-    public float ContactDamage = 40f;
+    public float ContactDamage = 50f;
 
     /// <summary>Радиус взрыва при касании, метры.</summary>
     [DataField]

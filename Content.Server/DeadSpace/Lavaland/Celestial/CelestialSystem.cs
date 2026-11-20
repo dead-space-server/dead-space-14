@@ -99,9 +99,9 @@ public sealed class CelestialSystem : EntitySystem
     private static DamageSpecifier MakeBeamDamage()
     {
         var d = new DamageSpecifier();
-        d.DamageDict.TryAdd("Heat", 32f);
-        d.DamageDict.TryAdd("Blunt", 16f);
-        d.DamageDict.TryAdd("Structural", 40f);
+        d.DamageDict.TryAdd("Heat", 40f);
+        d.DamageDict.TryAdd("Blunt", 20f);
+        d.DamageDict.TryAdd("Structural", 50f);
         return d;
     }
 

@@ -27,7 +27,7 @@ public sealed partial class CelestialSphereComponent : Component
 
     /// <summary>Урон за тик всем сущностям внутри сферы.</summary>
     [DataField]
-    public float DamagePerTick = 24f;
+    public float DamagePerTick = 30f;
 
     /// <summary>Множитель радиуса урона от визуального радиуса сферы.</summary>
     [DataField]
