@@ -11,6 +11,7 @@ namespace Content.Server.DeadSpace.Diagnostics;
 public sealed partial class TickStarveProbeSystem : EntitySystem
 {
     private const double SlowTickMs = 100d;
+    private const double PausedTickMs = 30000d;
 
     private const string SchedStatPath = "/proc/thread-self/schedstat";
     private const string ThreadStatusPath = "/proc/thread-self/status";
@@ -50,6 +51,10 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
 
     private static readonly Counter ThrottledPeriods = Metrics.CreateCounter(
         "ds_cgroup_throttled_periods_total",
+        "");
+
+    private static readonly Counter GcPauseSeconds = Metrics.CreateCounter(
+        "ds_gc_pause_seconds_total",
         "");
 
     private static readonly Gauge PoolPendingItems = Metrics.CreateGauge(
@@ -106,7 +111,7 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
             return;
         }
 
-        if (wallMs < SlowTickMs || _timing.CurTime < _nextLog)
+        if (wallMs < SlowTickMs || wallMs > PausedTickMs || _timing.CurTime < _nextLog)
             return;
 
         _nextLog = _timing.CurTime + TimeSpan.FromSeconds(5);
@@ -119,6 +124,8 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
             $"host stall cpu some {UsToMs(now.CpuSome - last.CpuSome):0.0} ms, memory some {UsToMs(now.MemorySome - last.MemorySome):0.0} full {UsToMs(now.MemoryFull - last.MemoryFull):0.0} ms, " +
             $"io some {UsToMs(now.IoSome - last.IoSome):0.0} full {UsToMs(now.IoFull - last.IoFull):0.0} ms | " +
             $"throttled {UsToMs(now.ThrottledUs - last.ThrottledUs):0.0} ms ({now.ThrottledPeriods - last.ThrottledPeriods} periods) | " +
+            $"gc pause {(now.GcPause - last.GcPause).TotalMilliseconds:0.0} ms, gen0 {now.Gen0 - last.Gen0} gen1 {now.Gen1 - last.Gen1} gen2 {now.Gen2 - last.Gen2}, " +
+            $"allocated {(now.Allocated - last.Allocated) / 1048576d:0.0} MB | " +
             $"pool pending {ThreadPool.PendingWorkItemCount} threads {ThreadPool.ThreadCount} | tick {_timing.CurTick}");
     }
 
@@ -154,6 +161,12 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
             sample.ThrottledPeriods = FindLong(span, "nr_throttled"u8);
         }
 
+        sample.GcPause = GC.GetTotalPauseDuration();
+        sample.Gen0 = GC.CollectionCount(0);
+        sample.Gen1 = GC.CollectionCount(1);
+        sample.Gen2 = GC.CollectionCount(2);
+        sample.Allocated = GC.GetTotalAllocatedBytes();
+
         return sample;
     }
 
@@ -171,6 +184,7 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
         PressureStallSeconds.WithLabels("io", "full").IncTo(sample.IoFull / 1e6);
         ThrottledSeconds.IncTo(sample.ThrottledUs / 1e6);
         ThrottledPeriods.IncTo(sample.ThrottledPeriods);
+        GcPauseSeconds.IncTo(sample.GcPause.TotalSeconds);
     }
 
     private long ReadMajorFaults()
@@ -295,5 +309,10 @@ public sealed partial class TickStarveProbeSystem : EntitySystem
         public long IoFull;
         public long ThrottledUs;
         public long ThrottledPeriods;
+        public TimeSpan GcPause;
+        public int Gen0;
+        public int Gen1;
+        public int Gen2;
+        public long Allocated;
     }
 }
