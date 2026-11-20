@@ -172,6 +172,7 @@ namespace Content.Server.Entry
             cfg.SetCVar(CVars.NetTickrate, 20);
             cfg.SetCVar(CVars.NetMaxUpdateRange, 24f);
             cfg.SetCVar(CVars.NetPvsPriorityRange, 30f);
+            cfg.SetCVar(CVars.NetPvsDetailRange, 4f); //DS-14
 #endif
         }
 
