@@ -10581,3 +10581,10 @@ Entries:
   changes:
   - type: Tweak
     message: Обновление движка до актуальной версии, должно помочь с лагами
+- id: 1022
+  author: BlueDogDoc
+  time: '2026-11-20T15:22:18.364668+00:00'
+  pr: 2829
+  changes:
+  - type: Tweak
+    message: Расчет ЭХО от наркотиков.
