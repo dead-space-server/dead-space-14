@@ -49,6 +49,7 @@
   name: "Селестиал"
   description: "Нам конец..."
   components:
+  - type: HealingImmune
   - type: DestructionResistance
   - type: IgnoreKudzu
   - type: Insulated

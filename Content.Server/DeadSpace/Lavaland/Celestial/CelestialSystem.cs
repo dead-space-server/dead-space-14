@@ -30,7 +30,6 @@ namespace Content.Server.DeadSpace.Lavaland.Celestial;
 public sealed partial class CelestialSystem : EntitySystem
 {
 [Dependency] private readonly IRobustRandom _random = default!;
-[Dependency] private readonly IMapManager _mapManager = default!;
 [Dependency] private readonly IPlayerManager _players = default!;
 [Dependency] private readonly SharedMapSystem _map = default!;
 [Dependency] private readonly SharedTransformSystem _transform = default!;
