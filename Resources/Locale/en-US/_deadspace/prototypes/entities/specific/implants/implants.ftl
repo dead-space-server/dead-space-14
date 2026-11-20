@@ -1,3 +1,8 @@
+ent-CombatAdrenalineImplant = combat adrenaline implant
+    .desc = After a heavy wound the body produces adrenaline while the wearer is ready to fight.
+ent-CombatAdrenalineImplanter = { ent-Implanter }
+    .suffix = Combat adrenaline
+    .desc = { ent-BaseImplantOnlyImplanter.desc }
 ent-AdrenalImplant = adrenal implant
     .desc = An implant that will inject a dose of stimulants into you.
 ent-AdrenalImplanter = { ent-BaseImplantOnlyImplanterSyndi }

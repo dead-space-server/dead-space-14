@@ -20,4 +20,14 @@ public sealed partial class CameraArchiveConsoleComponent : Component
     public ProtoId<Content.Shared.DeadSpace.Photocopier.PaperworkFormPrototype> Form = "CameraArchive";
 
     public TimeSpan NextPrint;
+
+    public bool ArchiveOpen;
+
+    public EntityUid Watching;
+
+    public int WatchingId;
+
+    public int WatchingIndex = -1;
+
+    public TimeSpan WatchingTime;
 }

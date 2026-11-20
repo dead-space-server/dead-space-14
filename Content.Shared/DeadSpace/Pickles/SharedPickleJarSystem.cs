@@ -24,18 +24,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.DeadSpace.Pickles;
 
-public abstract class SharedPickleJarSystem : EntitySystem
+public abstract partial class SharedPickleJarSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly OpenableSystem _openable = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private OpenableSystem _openable = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
 
     private static readonly SoundSpecifier OpenSound = new SoundCollectionSpecifier("pop");
     private static readonly SoundSpecifier CloseSound = new SoundPathSpecifier("/Audio/Items/bottle_close1.ogg");

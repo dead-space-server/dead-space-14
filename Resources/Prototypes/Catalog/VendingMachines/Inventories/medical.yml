@@ -52,7 +52,9 @@
     Brutepack: 4
     Ointment: 4
     Bloodpack: 4
+    ChemistryBottleHemostatin: 2 # DS14
     ChemistryBottleEpinephrine: 3 # DS14
+    FieldSplint: 5 # DS14
     # Optional / Situational Gear
     BoxBottle: 3
     Defibrillator: 2 # Easily shared between several people
@@ -67,6 +69,8 @@
     HandheldEncephalograph: 1 # DS14
     ClothingHeadNeuroMesh: 1 # DS14
     ClothingMaskMedicalGag: 1 # DS14
+    VoxAnesthesiaTankFilled: 1 # DS14
+    ChemistryBottleMorphine: 2 # DS14
   contrabandInventory:
     PillCanisterRandom: 3
     PillSpaceDrugs: 3

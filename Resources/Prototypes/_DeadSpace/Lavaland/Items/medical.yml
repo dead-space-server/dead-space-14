@@ -28,7 +28,7 @@
   parent: ChemicalMedipen
   id: LavalandSurvMedipen
   name: медипен выживание Лаваленда
-  description: Содержит ророриум и ещё какуе-то хрень.
+  description: Содержит ророриум.
   components:
   - type: Sprite
     sprite: _DeadSpace/Necromorfs/medipen.rsi

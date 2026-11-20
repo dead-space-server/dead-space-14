@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
+using Content.Shared.DeadSpace.Changeling.Systems; //DS-14
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -8,9 +9,9 @@ using Content.Shared.Pointing;
 
 namespace Content.Shared.Body.Systems;
 
-public sealed class BrainSystem : EntitySystem
+public sealed partial class BrainSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
 
     public override void Initialize()
     {
@@ -25,6 +26,13 @@ public sealed class BrainSystem : EntitySystem
     {
         if (TerminatingOrDeleted(newEntity) || TerminatingOrDeleted(oldEntity))
             return;
+
+        //DS-14 start
+        var attempt = new BrainMindTransferAttemptEvent(newEntity);
+        RaiseLocalEvent(oldEntity, ref attempt);
+        if (attempt.Cancelled)
+            return;
+        //DS-14 end
 
         EnsureComp<MindContainerComponent>(newEntity);
         EnsureComp<MindContainerComponent>(oldEntity);

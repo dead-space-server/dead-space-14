@@ -11,9 +11,9 @@ namespace Content.Server.NameIdentifier;
 public sealed partial class NameIdentifierSystem : SharedNameIdentifierSystem
 {
     // DS14: retain the explicit prototype manager dependency used by this branch.
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
-    [Dependency] private readonly NameModifierSystem _nameModifier = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private NameModifierSystem _nameModifier = default!;
 
     /// <summary>
     /// Free IDs available per <see cref="NameIdentifierGroupPrototype"/>.

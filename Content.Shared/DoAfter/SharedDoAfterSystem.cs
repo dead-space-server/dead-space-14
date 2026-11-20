@@ -17,10 +17,10 @@ namespace Content.Shared.DoAfter;
 
 public abstract partial class SharedDoAfterSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming GameTiming = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] protected IGameTiming GameTiming = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     /// <summary>
     ///     We'll use an excess time so stuff like finishing effects can show.
@@ -197,6 +197,11 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
             Log.Warning("Awaited instant DoAfters are not supported fully supported");
             return DoAfterStatus.Finished;
         }
+
+        // DS14-start
+        if (_tag.HasTag(doAfter.User, InstantDoAftersTag))
+            return DoAfterStatus.Finished;
+        // DS14-end
 
         var tcs = new TaskCompletionSource<DoAfterStatus>();
         component.AwaitedDoAfters.Add(id.Value.Index, tcs);
@@ -384,6 +389,33 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         InternalCancel(doAfter, comp, force: force);
         Dirty(entity, comp);
     }
+
+    // DS14-start
+    public void CancelDoAfters<TEvent>(EntityUid entity, DoAfterComponent? comp = null) where TEvent : DoAfterEvent
+    {
+        if (!Resolve(entity, ref comp, false))
+            return;
+
+        List<ushort>? toCancel = null;
+        foreach (var (id, doAfter) in comp.DoAfters)
+        {
+            if (doAfter.Cancelled || doAfter.Completed)
+                continue;
+
+            if (doAfter.Args.Event is not TEvent)
+                continue;
+
+            toCancel ??= new List<ushort>();
+            toCancel.Add(id);
+        }
+
+        if (toCancel == null)
+            return;
+
+        foreach (var id in toCancel)
+            Cancel(entity, id, comp);
+    }
+    // DS14-end
 
     private void InternalCancel(DoAfter doAfter, DoAfterComponent component, bool force = false)
     {

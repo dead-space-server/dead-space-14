@@ -1,0 +1,189 @@
+# Honors
+
+- type: roundEndCreditsNomination
+  id: CreditsHonorMedic
+  name: round-end-credits-nomination-medic-name
+  description: round-end-credits-nomination-medic-desc
+  stat: HealingGiven
+  minimum: 150
+  kind: Honor
+
+- type: roundEndCreditsNomination
+  id: CreditsHonorReviver
+  name: round-end-credits-nomination-reviver-name
+  description: round-end-credits-nomination-reviver-desc
+  stat: Revives
+  minimum: 2
+  kind: Honor
+
+- type: roundEndCreditsNomination
+  id: CreditsHonorDefender
+  name: round-end-credits-nomination-defender-name
+  description: round-end-credits-nomination-defender-desc
+  stat: AntagKills
+  minimum: 1
+  kind: Honor
+  crewOnly: true
+
+- type: roundEndCreditsNomination
+  id: CreditsHonorReaper
+  name: round-end-credits-nomination-reaper-name
+  description: round-end-credits-nomination-reaper-desc
+  stat: Kills
+  minimum: 4
+  kind: Honor
+
+- type: roundEndCreditsNomination
+  id: CreditsHonorMastermind
+  name: round-end-credits-nomination-mastermind-name
+  description: round-end-credits-nomination-mastermind-desc
+  stat: ObjectivesCompleted
+  minimum: 3
+  kind: Honor
+  antagOnly: true
+
+- type: roundEndCreditsNomination
+  id: CreditsHonorHeavyHand
+  name: round-end-credits-nomination-heavy-hand-name
+  description: round-end-credits-nomination-heavy-hand-desc
+  stat: DamageDealt
+  minimum: 600
+  kind: Honor
+
+# Fun
+
+- type: roundEndCreditsNomination
+  id: CreditsFunSlips
+  name: round-end-credits-nomination-slips-name
+  description: round-end-credits-nomination-slips-desc
+  stat: Slips
+  minimum: 3
+
+- type: roundEndCreditsNomination
+  id: CreditsFunDeaths
+  name: round-end-credits-nomination-deaths-name
+  description: round-end-credits-nomination-deaths-desc
+  stat: Deaths
+  minimum: 2
+
+- type: roundEndCreditsNomination
+  id: CreditsFunCrits
+  name: round-end-credits-nomination-crits-name
+  description: round-end-credits-nomination-crits-desc
+  stat: Crits
+  minimum: 3
+
+- type: roundEndCreditsNomination
+  id: CreditsFunPunchingBag
+  name: round-end-credits-nomination-punching-bag-name
+  description: round-end-credits-nomination-punching-bag-desc
+  stat: DamageTaken
+  minimum: 400
+
+- type: roundEndCreditsNomination
+  id: CreditsFunSelfHarm
+  name: round-end-credits-nomination-self-harm-name
+  description: round-end-credits-nomination-self-harm-desc
+  stat: SelfDamage
+  minimum: 40
+
+- type: roundEndCreditsNomination
+  id: CreditsFunGlutton
+  name: round-end-credits-nomination-glutton-name
+  description: round-end-credits-nomination-glutton-desc
+  stat: Bites
+  minimum: 40
+
+- type: roundEndCreditsNomination
+  id: CreditsFunVomit
+  name: round-end-credits-nomination-vomit-name
+  description: round-end-credits-nomination-vomit-desc
+  stat: Vomits
+  minimum: 2
+
+- type: roundEndCreditsNomination
+  id: CreditsFunScreams
+  name: round-end-credits-nomination-screams-name
+  description: round-end-credits-nomination-screams-desc
+  stat: Screams
+  minimum: 5
+
+- type: roundEndCreditsNomination
+  id: CreditsFunEmotes
+  name: round-end-credits-nomination-emotes-name
+  description: round-end-credits-nomination-emotes-desc
+  stat: Emotes
+  minimum: 30
+
+- type: roundEndCreditsNomination
+  id: CreditsFunChatter
+  name: round-end-credits-nomination-chatter-name
+  description: round-end-credits-nomination-chatter-desc
+  stat: Messages
+  minimum: 80
+
+- type: roundEndCreditsNomination
+  id: CreditsFunShocks
+  name: round-end-credits-nomination-shocks-name
+  description: round-end-credits-nomination-shocks-desc
+  stat: Shocks
+  minimum: 2
+
+- type: roundEndCreditsNomination
+  id: CreditsFunCuffed
+  name: round-end-credits-nomination-cuffed-name
+  description: round-end-credits-nomination-cuffed-desc
+  stat: Cuffed
+  minimum: 2
+
+# Player votes
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteClown
+  name: round-end-credits-vote-clown-name
+  description: round-end-credits-vote-clown-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteSuspicious
+  name: round-end-credits-vote-suspicious-name
+  description: round-end-credits-vote-suspicious-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteRoleplay
+  name: round-end-credits-vote-roleplay-name
+  description: round-end-credits-vote-roleplay-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteWhoWasThat
+  name: round-end-credits-vote-who-was-that-name
+  description: round-end-credits-vote-who-was-that-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteSoul
+  name: round-end-credits-vote-soul-name
+  description: round-end-credits-vote-soul-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteDisaster
+  name: round-end-credits-vote-disaster-name
+  description: round-end-credits-vote-disaster-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteUnsungHero
+  name: round-end-credits-vote-unsung-hero-name
+  description: round-end-credits-vote-unsung-hero-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteBureaucrat
+  name: round-end-credits-vote-bureaucrat-name
+  description: round-end-credits-vote-bureaucrat-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVoteSurvivor
+  name: round-end-credits-vote-survivor-name
+  description: round-end-credits-vote-survivor-desc
+
+- type: roundEndCreditsVoteNomination
+  id: CreditsVotePolite
+  name: round-end-credits-vote-polite-name
+  description: round-end-credits-vote-polite-desc

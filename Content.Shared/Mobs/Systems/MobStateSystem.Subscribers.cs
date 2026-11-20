@@ -1,4 +1,4 @@
-﻿using Content.Shared.Bed.Sleep;
+using Content.Shared.Bed.Sleep;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Cuffs;
@@ -32,8 +32,8 @@ namespace Content.Shared.Mobs.Systems;
 
 public partial class MobStateSystem
 {
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
-    [Dependency] private readonly SharedJetpackSystem _jetpack = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedJetpackSystem _jetpack = default!;
 
     //General purpose event subscriptions. If you can avoid it register these events inside their own systems
     private void SubscribeEvents()
@@ -118,11 +118,13 @@ public partial class MobStateSystem
                 //unused
                 break;
             case MobState.Critical:
-                _standing.Stand(target);
+                if (!IsBuckledToDownStrap(target)) //DS-14
+                    _standing.Stand(target);
                 break;
             case MobState.Dead:
                 RemComp<CollisionWakeComponent>(target);
-                _standing.Stand(target);
+                if (!IsBuckledToDownStrap(target)) //DS-14
+                    _standing.Stand(target);
                 break;
             case MobState.Invalid:
                 //unused

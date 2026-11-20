@@ -11,18 +11,25 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Serialization;
+//DS14-start
+using Content.Shared.Tag;
+using Robust.Shared.Prototypes;
+//DS14-end
 
 namespace Content.Shared.Devour;
 
-public sealed class DevourSystem : EntitySystem
+public sealed partial class DevourSystem : EntitySystem
 {
-    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstreamSystem = default!;
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private BloodstreamSystem _bloodstreamSystem = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private TagSystem _tagSystem = default!; //DS14
+
+    private static readonly ProtoId<TagPrototype> DevourImmuneTag = "DevourImmune"; //DS14
 
     public override void Initialize()
     {
@@ -60,6 +67,15 @@ public sealed class DevourSystem : EntitySystem
     {
         if (args.Handled || _whitelistSystem.IsWhitelistFailOrNull(ent.Comp.Whitelist, args.Target))
             return;
+
+        // DS14-start
+        if (_tagSystem.HasTag(args.Target, DevourImmuneTag))
+        {
+            args.Handled = true;
+            _popupSystem.PopupClient(Loc.GetString("devour-action-popup-message-fail-target-not-valid"), ent.Owner, ent.Owner);
+            return;
+        }
+        // DS14-end
 
         args.Handled = true;
         var target = args.Target;
@@ -102,6 +118,9 @@ public sealed class DevourSystem : EntitySystem
     private void OnDoAfter(Entity<DevourerComponent> ent, ref DevourDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled)
+            return;
+
+        if (args.Args.Target != null && _tagSystem.HasTag(args.Args.Target.Value, DevourImmuneTag)) //DS14
             return;
 
         var ichorInjection = new Solution(ent.Comp.Chemical, ent.Comp.HealRate);

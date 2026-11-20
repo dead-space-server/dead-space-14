@@ -15,6 +15,9 @@
     # WeaponProtoKineticAcceleratorShotgun: 1 # DS14
     Fulton: 4
     FultonBeacon: 1
+    FieldSplint: 4
+    Tourniquet: 4
+    ProstheticPegLeg: 2
     #DS14-end
   contrabandInventory:
     PlushieCarp: 1

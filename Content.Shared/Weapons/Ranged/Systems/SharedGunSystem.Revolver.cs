@@ -79,13 +79,92 @@ public partial class SharedGunSystem
 
     private void OnRevolverGetState(Entity<RevolverAmmoProviderComponent> ent, ref ComponentGetState args)
     {
+        //DS-14 start
+        var slots = ent.Comp.AmmoSlots;
+        var netSlots = new List<NetEntity?>(slots.Count);
+        foreach (var slot in slots)
+        {
+            netSlots.Add(slot is { } uid && !TerminatingOrDeleted(uid) ? GetNetEntity(uid) : null);
+        }
+        //DS-14 end
+
         args.State = new RevolverAmmoProviderComponentState
         {
             CurrentIndex = ent.Comp.CurrentIndex,
-            AmmoSlots = GetNetEntityList(ent.Comp.AmmoSlots),
+            AmmoSlots = netSlots, //DS-14
             Chambers = ent.Comp.Chambers,
         };
     }
+
+    //DS-14 start
+    protected void OnRevolverAmmoRemoved(Entity<RevolverAmmoProviderComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        if (_netManager.IsClient || Timing.ApplyingState || args.Container.ID != RevolverContainer)
+            return;
+
+        if (!ClearRevolverSlot(ent.Comp, args.Entity) || TerminatingOrDeleted(ent))
+            return;
+
+        UpdateRevolverAppearance(ent);
+        UpdateAmmoCount(ent, prediction: false);
+        Dirty(ent);
+    }
+
+    private void UpdateRevolver()
+    {
+        if (_netManager.IsClient)
+            return;
+
+        var query = EntityQueryEnumerator<RevolverAmmoProviderComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (!ClearDeletedRevolverSlots(comp) || TerminatingOrDeleted(uid))
+                continue;
+
+            UpdateRevolverAppearance((uid, comp));
+            UpdateAmmoCount(uid, prediction: false);
+            Dirty(uid, comp);
+        }
+    }
+
+    private bool ClearRevolverSlot(RevolverAmmoProviderComponent comp, EntityUid removed)
+    {
+        var cleared = false;
+        var slots = comp.AmmoSlots;
+        for (var i = 0; i < slots.Count; i++)
+        {
+            if (slots[i] != removed)
+                continue;
+
+            slots[i] = null;
+            if (i < comp.Chambers.Length)
+                comp.Chambers[i] = null;
+
+            cleared = true;
+        }
+
+        return cleared;
+    }
+
+    private bool ClearDeletedRevolverSlots(RevolverAmmoProviderComponent comp)
+    {
+        var cleared = false;
+        var slots = comp.AmmoSlots;
+        for (var i = 0; i < slots.Count; i++)
+        {
+            if (slots[i] is not { } ammo || !TerminatingOrDeleted(ammo))
+                continue;
+
+            slots[i] = null;
+            if (i < comp.Chambers.Length)
+                comp.Chambers[i] = null;
+
+            cleared = true;
+        }
+
+        return cleared;
+    }
+    //DS-14 end
 
     private void OnRevolverHandleState(Entity<RevolverAmmoProviderComponent> ent, ref ComponentHandleState args)
     {

@@ -4,9 +4,11 @@ using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Shared.Actions;
 using Content.Shared.Chat;
+using Content.Shared.Cuffs;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Sandevistan;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -31,7 +33,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Sandevistan;
 
-public sealed class SandevistanSystem : EntitySystem
+public sealed partial class SandevistanSystem : EntitySystem
 {
     private static readonly TimeSpan ExhaustionStaminaCritBufferTime = TimeSpan.FromSeconds(3f);
     private static readonly TimeSpan ImplantTraumaDuration = TimeSpan.FromSeconds(10f);
@@ -46,17 +48,17 @@ public sealed class SandevistanSystem : EntitySystem
     private const float ImplantJitterAmplitude = 7.5f;
     private const float ImplantJitterFrequency = 10f;
 
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly SharedJitteringSystem _jittering = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private SharedJitteringSystem _jittering = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStaminaSystem _stamina = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
 
     public override void Initialize()
     {
@@ -319,12 +321,8 @@ public sealed class SandevistanSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!TryComp<SubdermalImplantComponent>(uid, out var subdermal) ||
-            subdermal.ImplantedEntity is not { } target ||
-            Deleted(target))
-        {
+        if (HostOf(uid) is not { } target)
             return;
-        }
 
         var curTime = _timing.CurTime;
         if (TryComp<ActiveSandevistanComponent>(target, out var currentActive))
@@ -460,6 +458,31 @@ public sealed class SandevistanSystem : EntitySystem
             _actions.SetToggled(action, false);
             _actions.ClearCooldown(action);
         }
+
+        var limbQuery = EntityQueryEnumerator<SandevistanImplantComponent, LimbImplantComponent>();
+        while (limbQuery.MoveNext(out _, out var sandevistan, out var limb))
+        {
+            if (limb.Host != uid)
+                continue;
+
+            sandevistan.NextReadyTime = TimeSpan.Zero;
+            if (limb.Action is not { } action)
+                continue;
+
+            _actions.SetToggled(action, false);
+            _actions.ClearCooldown(action);
+        }
+    }
+
+    private EntityUid? HostOf(EntityUid implant)
+    {
+        if (TryComp<LimbImplantComponent>(implant, out var limb) && limb.Host is { } host && !TerminatingOrDeleted(host))
+            return host;
+
+        if (TryComp<SubdermalImplantComponent>(implant, out var subdermal) && subdermal.ImplantedEntity is { } old && !TerminatingOrDeleted(old))
+            return old;
+
+        return null;
     }
 
     private void OnImplantRemoved(Entity<SandevistanImplantComponent> ent, ref ImplantRemovedEvent args)
@@ -475,8 +498,7 @@ public sealed class SandevistanSystem : EntitySystem
 
     private void OnImplantShutdown(Entity<SandevistanImplantComponent> ent, ref ComponentShutdown args)
     {
-        if (!TryComp<SubdermalImplantComponent>(ent.Owner, out var subdermal) ||
-            subdermal.ImplantedEntity is not { } target ||
+        if (HostOf(ent.Owner) is not { } target ||
             TerminatingOrDeleted(target) ||
             !TryComp<ActiveSandevistanComponent>(target, out var active) ||
             active.SourceImplant != ent.Owner)
@@ -525,15 +547,9 @@ public sealed class SandevistanSystem : EntitySystem
 
     private bool ShouldStop(EntityUid uid, ActiveSandevistanComponent active)
     {
-        if (active.SourceImplant is not { } implant ||
+        return active.SourceImplant is not { } implant ||
             Deleted(implant) ||
-            !TryComp<SubdermalImplantComponent>(implant, out var subdermal) ||
-            subdermal.ImplantedEntity != uid)
-        {
-            return true;
-        }
-
-        return false;
+            HostOf(implant) != uid;
     }
 
     private void StopSandevistan(EntityUid uid)
@@ -641,11 +657,8 @@ public sealed class SandevistanSystem : EntitySystem
         var cooldownEnd = curTime + cooldown;
         implantComp.NextReadyTime = cooldownEnd;
 
-        if (!TryComp<SubdermalImplantComponent>(implant, out var subdermal) ||
-            subdermal.Action is not { } action)
-        {
+        if ((CompOrNull<LimbImplantComponent>(implant)?.Action ?? CompOrNull<SubdermalImplantComponent>(implant)?.Action) is not { } action)
             return;
-        }
 
         _actions.SetToggled(action, false);
 
@@ -752,6 +765,9 @@ public sealed class SandevistanSystem : EntitySystem
 
         EnsureComp<ActiveStaminaComponent>(uid);
         Dirty(uid, stamina);
+
+        var critEntered = new StaminaCritEnteredEvent();
+        RaiseLocalEvent(uid, ref critEntered);
     }
 
     private bool IsStaminaExhausted(EntityUid uid)

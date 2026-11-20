@@ -1,0 +1,14 @@
+- type: entity
+  parent: OrganHumanEyes
+  id: OrganFelinidEyes
+  name: felinid eyes
+  description: They see better than human eyes in the dark.
+  components:
+  - type: SurgeryGift
+    grant:
+    - type: NightVision
+      animation: false
+      duration: 30
+      color: "#6E000011"
+      transitionSpeed: 100
+      actionToggleNightVision: ActionToggleNightVisionFelenid

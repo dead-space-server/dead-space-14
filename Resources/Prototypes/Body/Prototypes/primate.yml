@@ -22,3 +22,20 @@
       - feet
     feet:
       part: FeetAnimal
+
+- type: body
+  id: Ancestor
+  name: "предок" # DS14
+  root: torso
+  slots:
+    torso:
+      part: TorsoAnimal
+      connections:
+      - hands
+      - legs
+      organs:
+        stomach: OrganAnimalStomach
+    hands:
+      part: HandsAnimal
+    legs:
+      part: LegsAnimal

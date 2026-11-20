@@ -19,10 +19,10 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// the well bar, pipeline integrity and whether morkite is flowing.
 /// The cross closes it; a click on the bluespace well, an extractor or a pipe of their network opens it again.
 /// </summary>
-public sealed class LavalandMorkiteHudSystem : EntitySystem
+public sealed partial class LavalandMorkiteHudSystem : EntitySystem
 {
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly TimeSpan HideAfter = TimeSpan.FromSeconds(3);
 

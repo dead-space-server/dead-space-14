@@ -10,7 +10,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackVjlados
   name: зелёный украшенный блюспейс рюкзак
   description: Рюкзак использующий технологию блюспейса для увелечения своего максимального объёма. Окрашен в зелёный цвет. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -63,7 +63,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltVjladosFilled
   name: зелёный украшенный пояс
   description: Пояс окрашенный в зелёный цвет.
@@ -73,8 +73,6 @@
     sprite: _DeadSpace/Sponsor/vjlados/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/vjlados/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -146,7 +144,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitVjlados
   name: зелёный украшенный скафандр
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации. Характеристики идентичны скафандру атмос-техника.
@@ -158,11 +156,9 @@
     sprite: _DeadSpace/Sponsor/vjlados/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitVjlados
-  - type: Item
-    size: Huge
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitVjlados
   categories: [ HideSpawnMenu ]
   name: зелёный шлем
@@ -174,11 +170,7 @@
     sprite: _DeadSpace/Sponsor/vjlados/helmet.rsi
   - type: PointLight
     color: "#daffad"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Head
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatVjlados

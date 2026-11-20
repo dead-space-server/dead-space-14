@@ -1,10 +1,14 @@
-﻿- type: entity
+- type: entity
   abstract: true
   save: false
   parent: [BaseMobSpeciesOrganic]
   id: BaseMobVulpkanin
   name: Urist McBark
   components:
+  - type: PackCall
+    emote: Howl
+    minJoinDelay: 0.8
+    maxJoinDelay: 2
   # DS14-start
   - type: SpeedSliding
     minSlideSpeed: 4.7
@@ -69,16 +73,6 @@
   - type: TemperatureProtection
     heatingCoefficient: 1.2
     coolingCoefficient: 0.3
-  - type: JumpAbility
-    action: ActionVulpkaninGravityJump
-    canCollide: true
-    jumpDistance: 3
-    jumpSound:
-      path: /Audio/Weapons/punchmiss.ogg
-      params:
-        pitch: 1.33
-        volume: -5
-        variation: 0.05
   - type: Sprite # Drawlayers. Top to bottom in order I believe.
     netsync: false
     layers:

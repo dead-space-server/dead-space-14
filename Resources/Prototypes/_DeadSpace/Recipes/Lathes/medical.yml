@@ -28,3 +28,15 @@
     Plastic: 250
     Plasma: 100
     Silver: 50
+
+- type: latheRecipe
+  parent: BaseSurgicalRecipe
+  id: SurgerySaw
+  result: SurgerySaw
+
+- type: latheRecipe
+  id: Tourniquet
+  result: Tourniquet
+  completetime: 1
+  materials:
+    Plastic: 50

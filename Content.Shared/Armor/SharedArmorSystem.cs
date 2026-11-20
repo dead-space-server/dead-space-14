@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
@@ -12,9 +13,9 @@ namespace Content.Shared.Armor;
 /// <summary>
 ///     This handles logic relating to <see cref="ArmorComponent" />
 /// </summary>
-public abstract class SharedArmorSystem : EntitySystem
+public abstract partial class SharedArmorSystem : EntitySystem
 {
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     /// <inheritdoc />
     public override void Initialize()
@@ -51,6 +52,9 @@ public abstract class SharedArmorSystem : EntitySystem
         if (TryComp<MaskComponent>(ent, out var mask) && mask.IsToggled)
             return;
 
+        if (!CoversHit(ent, args.Owner)) // DS14
+            return; // DS14
+
         foreach (var armorCoefficient in ent.Comp.Modifiers.Coefficients)
         {
             args.Args.DamageModifiers.Coefficients[armorCoefficient.Key] = args.Args.DamageModifiers.Coefficients.TryGetValue(armorCoefficient.Key, out var coefficient) ? coefficient * armorCoefficient.Value : armorCoefficient.Value;
@@ -65,8 +69,21 @@ public abstract class SharedArmorSystem : EntitySystem
         if (component.Modifiers == null) // DS14
             return; // DS14
 
+        if (!CoversHit(uid, args.Owner)) // DS14
+            return; // DS14
+
         args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
     }
+
+    // DS14-start
+    private bool CoversHit(EntityUid clothing, EntityUid wearer)
+    {
+        if (!TryComp<LimbBodyComponent>(wearer, out var body) || body.ArmorZone is not { } zone)
+            return true;
+
+        return LimbCoverRules.Covers(clothing, zone, EntityManager);
+    }
+    // DS14-end
 
     private void OnBorgDamageModify(EntityUid uid, ArmorComponent component,
         ref BorgModuleRelayedEvent<DamageModifyEvent> args)
@@ -85,7 +102,7 @@ public abstract class SharedArmorSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess || !component.ShowArmorOnExamine)
             return;
 
-        var examineMarkup = GetArmorExamine(component.Modifiers);
+        var examineMarkup = GetArmorExamine(uid, component.Modifiers); // DS14
 
         var ev = new ArmorExamineEvent(examineMarkup);
         RaiseLocalEvent(uid, ref ev);
@@ -95,9 +112,31 @@ public abstract class SharedArmorSystem : EntitySystem
             Loc.GetString("armor-examinable-verb-message"));
     }
 
-    private FormattedMessage GetArmorExamine(DamageModifierSet armorModifiers)
+    private FormattedMessage GetArmorExamine(EntityUid uid, DamageModifierSet armorModifiers) // DS14
     {
         var msg = new FormattedMessage();
+
+        // DS14-start
+        var zones = new List<string>();
+        foreach (var zone in LimbCoverRules.ExamineOrder)
+        {
+            if (!LimbCoverRules.Covers(uid, zone, EntityManager))
+                continue;
+
+            var key = ZoneKey(zone);
+            if (key == null)
+                continue;
+
+            zones.Add(Loc.GetString("armor-zone-" + key));
+        }
+
+        if (zones.Count > 0)
+        {
+            msg.AddMarkupOrThrow(Loc.GetString("armor-examine-zones", ("zones", string.Join(", ", zones))));
+            msg.PushNewline();
+        }
+        // DS14-end
+
         msg.AddMarkupOrThrow(Loc.GetString("armor-examine"));
 
         foreach (var coefficientArmor in armorModifiers.Coefficients)
@@ -140,4 +179,27 @@ public abstract class SharedArmorSystem : EntitySystem
 
         return msg;
     }
+
+    // DS14-start
+    private static string? ZoneKey(LimbZone zone)
+    {
+        return zone switch
+        {
+            LimbZone.Head => "head",
+            LimbZone.Eyes => "eyes",
+            LimbZone.Mouth => "mouth",
+            LimbZone.Torso => "torso",
+            LimbZone.Groin => "groin",
+            LimbZone.ArmLeft => "arm-left",
+            LimbZone.ArmRight => "arm-right",
+            LimbZone.HandLeft => "hand-left",
+            LimbZone.HandRight => "hand-right",
+            LimbZone.LegLeft => "leg-left",
+            LimbZone.LegRight => "leg-right",
+            LimbZone.FootLeft => "foot-left",
+            LimbZone.FootRight => "foot-right",
+            _ => null,
+        };
+    }
+    // DS14-end
 }

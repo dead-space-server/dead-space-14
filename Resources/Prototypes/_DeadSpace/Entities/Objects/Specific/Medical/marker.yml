@@ -1,0 +1,16 @@
+- type: entity
+  parent: BaseItem
+  id: SurgeryMarker
+  name: хирургический маркер
+  description: Серый маркер. Им отмечают, где резать.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/marker.rsi
+    state: marker
+  - type: Item
+    sprite: _DeadSpace/Objects/Specific/Medical/marker.rsi
+    size: Tiny
+  - type: SurgeryMarker
+  - type: PhysicalComposition
+    materialComposition:
+      Plastic: 25

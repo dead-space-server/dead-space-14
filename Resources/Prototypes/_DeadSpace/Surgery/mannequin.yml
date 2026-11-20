@@ -1,0 +1,32 @@
+- type: entity
+  parent: MobHuman
+  id: MobSurgeryMannequin
+  name: mannequin
+  description: A gelatin training body. It never wakes up and never gets up. Its organs are real enough to practice on.
+  components:
+  - type: SurgeryMannequin
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: SurgeryMannequinCube
+  name: mannequin cube
+  description: A compressed gelatin training body. Just add water!
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/monkeycube.rsi
+    state: cube
+    color: "#f0d8b0"
+  - type: Rehydratable
+    possibleSpawns:
+    - MobSurgeryMannequin
+
+- type: entity
+  parent: CrateMedical
+  id: CrateMedicalSurgeryMannequin
+  name: mannequin crate
+  description: One gelatin training mannequin, compressed into a cube.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: SurgeryMannequinCube

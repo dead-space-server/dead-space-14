@@ -1,0 +1,572 @@
+- type: entity
+  id: OrganPrinter
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  name: ОрганоМех-3000
+  description: Печатает свежие органы прямо из биомассы. Доставка тела не требуется, гарантия производителя не распространяется на мозг.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/bioprinter.rsi
+    snapCardinals: true
+    layers:
+    - state: roboprinter
+      map: ["base"]
+    - state: lights_working
+      map: ["enum.OrganPrinterVisuals.Working"]
+      shader: unshaded
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.OrganPrinterVisuals.Working:
+        enum.OrganPrinterVisuals.Working:
+          True: { visible: true }
+          False: { visible: false }
+  - type: OrganPrinter
+    printDuration: 6
+    entries:
+    # сердца
+    - product: OrganHumanHeart
+      cost: 6
+      group: Humanoid
+    - product: OrganAnimalHeart
+      cost: 6
+      group: Feline
+    - product: OrganAnimalHeart
+      cost: 6
+      group: Canine
+    - product: OrganAnimalHeart
+      cost: 6
+      group: Reptilian
+    - product: OrganAnimalHeart
+      cost: 6
+      group: Moth
+    - product: OrganAnimalHeart
+      cost: 6
+      group: Kobolt
+    - product: OrganAnimalHeart
+      cost: 6
+      group: Shark
+    - product: OrganAnimalHeart
+      cost: 6
+      group: Demon
+    - product: OrganAnimalHeart
+      cost: 6
+      group: Felinid
+    - product: OrganVoxHeart
+      cost: 6
+      group: Vox
+    - product: OrganArachnidHeart
+      cost: 6
+      group: Arachnid
+    - product: OrganXenoHeart
+      cost: 6
+      group: Xenomorph
+    # лёгкие
+    - product: OrganHumanLungs
+      cost: 5
+      group: Humanoid
+    - product: OrganHumanLungs
+      cost: 5
+      group: Feline
+    - product: OrganHumanLungs
+      cost: 5
+      group: Canine
+    - product: OrganHumanLungs
+      cost: 5
+      group: Reptilian
+    - product: OrganHumanLungs
+      cost: 5
+      group: Moth
+    - product: OrganHumanLungs
+      cost: 5
+      group: Kobolt
+    - product: OrganHumanLungs
+      cost: 5
+      group: Shark
+    - product: OrganHumanLungs
+      cost: 5
+      group: Demon
+    - product: OrganHumanLungs
+      cost: 5
+      group: Felinid
+    - product: OrganVoxLungs
+      cost: 5
+      group: Vox
+    - product: OrganArachnidLungs
+      cost: 5
+      group: Arachnid
+    # желудки
+    - product: OrganHumanStomach
+      cost: 4
+      group: Humanoid
+    - product: OrganTajaranStomach
+      cost: 4
+      group: Feline
+    - product: OrganVulpkaninStomach
+      cost: 4
+      group: Canine
+    - product: OrganReptilianStomach
+      cost: 4
+      group: Reptilian
+    - product: OrganMothStomach
+      cost: 4
+      group: Moth
+    - product: OrganKoboltStomach
+      cost: 4
+      group: Kobolt
+    - product: OrganSharkStomach
+      cost: 4
+      group: Shark
+    - product: OrganDemonStomach
+      cost: 4
+      group: Demon
+    - product: OrganReptilianStomach
+      cost: 4
+      group: Felinid
+    - product: OrganVoxStomach
+      cost: 4
+      group: Vox
+    - product: OrganArachnidStomach
+      cost: 4
+      group: Arachnid
+    - product: OrganXenoStomach
+      cost: 4
+      group: Xenomorph
+    # печень
+    - product: OrganHumanLiver
+      cost: 5
+      group: Humanoid
+    - product: OrganAnimalLiver
+      cost: 5
+      group: Feline
+    - product: OrganAnimalLiver
+      cost: 5
+      group: Canine
+    - product: OrganAnimalLiver
+      cost: 5
+      group: Reptilian
+    - product: OrganAnimalLiver
+      cost: 5
+      group: Moth
+    - product: OrganAnimalLiver
+      cost: 5
+      group: Kobolt
+    - product: OrganAnimalLiver
+      cost: 5
+      group: Shark
+    - product: OrganAnimalLiver
+      cost: 5
+      group: Demon
+    - product: OrganVoxLiver
+      cost: 5
+      group: Vox
+    - product: OrganArachnidLiver
+      cost: 5
+      group: Arachnid
+    # почки
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Humanoid
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Feline
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Canine
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Reptilian
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Moth
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Kobolt
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Shark
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Demon
+    - product: OrganHumanKidneys
+      cost: 4
+      group: Felinid
+    - product: OrganVoxKidneys
+      cost: 4
+      group: Vox
+    - product: OrganArachnidKidneys
+      cost: 4
+      group: Arachnid
+    # глаза
+    - product: OrganHumanEyes
+      cost: 3
+      group: Humanoid
+    - product: OrganHumanEyes
+      cost: 3
+      group: Feline
+    - product: OrganHumanEyes
+      cost: 3
+      group: Canine
+    - product: OrganHumanEyes
+      cost: 3
+      group: Reptilian
+    - product: OrganHumanEyes
+      cost: 3
+      group: Moth
+    - product: OrganHumanEyes
+      cost: 3
+      group: Kobolt
+    - product: OrganHumanEyes
+      cost: 3
+      group: Shark
+    - product: OrganHumanEyes
+      cost: 3
+      group: Demon
+    - product: OrganFelinidEyes
+      cost: 3
+      group: Felinid
+    - product: OrganVoxEyes
+      cost: 3
+      group: Vox
+    - product: OrganArachnidEyes
+      cost: 3
+      group: Arachnid
+    - product: OrganXenoEyes
+      cost: 3
+      group: Xenomorph
+    # уши
+    - product: OrganHumanEars
+      cost: 3
+      group: Humanoid
+    # язык
+    - product: OrganHumanTongue
+      cost: 3
+      group: Humanoid
+    # руки
+    - product: LeftArmHuman
+      cost: 8
+      group: Humanoid
+    - product: RightArmHuman
+      cost: 8
+      group: Humanoid
+    - product: LeftArmTajaran
+      cost: 8
+      group: Feline
+    - product: RightArmTajaran
+      cost: 8
+      group: Feline
+    - product: LeftArmVulpkanin
+      cost: 8
+      group: Canine
+    - product: RightArmVulpkanin
+      cost: 8
+      group: Canine
+    - product: LeftArmReptilian
+      cost: 8
+      group: Reptilian
+    - product: RightArmReptilian
+      cost: 8
+      group: Reptilian
+    - product: LeftArmMoth
+      cost: 8
+      group: Moth
+    - product: RightArmMoth
+      cost: 8
+      group: Moth
+    - product: LeftArmKobolt
+      cost: 8
+      group: Kobolt
+    - product: RightArmKobolt
+      cost: 8
+      group: Kobolt
+    - product: LeftArmShark
+      cost: 8
+      group: Shark
+    - product: RightArmShark
+      cost: 8
+      group: Shark
+    - product: LeftArmDemon
+      cost: 8
+      group: Demon
+    - product: RightArmDemon
+      cost: 8
+      group: Demon
+    - product: LeftArmFelinid
+      cost: 8
+      group: Felinid
+    - product: RightArmFelinid
+      cost: 8
+      group: Felinid
+    - product: LeftArmVox
+      cost: 8
+      group: Vox
+    - product: RightArmVox
+      cost: 8
+      group: Vox
+    - product: LeftArmArachnid
+      cost: 8
+      group: Arachnid
+    - product: RightArmArachnid
+      cost: 8
+      group: Arachnid
+    - product: LeftArmXeno
+      cost: 8
+      group: Xenomorph
+    - product: RightArmXeno
+      cost: 8
+      group: Xenomorph
+    # кисти
+    - product: LeftHandHuman
+      cost: 5
+      group: Humanoid
+    - product: RightHandHuman
+      cost: 5
+      group: Humanoid
+    - product: LeftHandTajaran
+      cost: 5
+      group: Feline
+    - product: RightHandTajaran
+      cost: 5
+      group: Feline
+    - product: LeftHandVulpkanin
+      cost: 5
+      group: Canine
+    - product: RightHandVulpkanin
+      cost: 5
+      group: Canine
+    - product: LeftHandReptilian
+      cost: 5
+      group: Reptilian
+    - product: RightHandReptilian
+      cost: 5
+      group: Reptilian
+    - product: LeftHandMoth
+      cost: 5
+      group: Moth
+    - product: RightHandMoth
+      cost: 5
+      group: Moth
+    - product: LeftHandKobolt
+      cost: 5
+      group: Kobolt
+    - product: RightHandKobolt
+      cost: 5
+      group: Kobolt
+    - product: LeftHandShark
+      cost: 5
+      group: Shark
+    - product: RightHandShark
+      cost: 5
+      group: Shark
+    - product: LeftHandDemon
+      cost: 5
+      group: Demon
+    - product: RightHandDemon
+      cost: 5
+      group: Demon
+    - product: LeftHandFelinid
+      cost: 5
+      group: Felinid
+    - product: RightHandFelinid
+      cost: 5
+      group: Felinid
+    - product: LeftHandVox
+      cost: 5
+      group: Vox
+    - product: RightHandVox
+      cost: 5
+      group: Vox
+    - product: LeftHandArachnid
+      cost: 5
+      group: Arachnid
+    - product: RightHandArachnid
+      cost: 5
+      group: Arachnid
+    - product: LeftHandXeno
+      cost: 5
+      group: Xenomorph
+    - product: RightHandXeno
+      cost: 5
+      group: Xenomorph
+    # ноги
+    - product: LeftLegHuman
+      cost: 8
+      group: Humanoid
+    - product: RightLegHuman
+      cost: 8
+      group: Humanoid
+    - product: LeftLegTajaran
+      cost: 8
+      group: Feline
+    - product: RightLegTajaran
+      cost: 8
+      group: Feline
+    - product: LeftLegVulpkanin
+      cost: 8
+      group: Canine
+    - product: RightLegVulpkanin
+      cost: 8
+      group: Canine
+    - product: LeftLegReptilian
+      cost: 8
+      group: Reptilian
+    - product: RightLegReptilian
+      cost: 8
+      group: Reptilian
+    - product: LeftLegMoth
+      cost: 8
+      group: Moth
+    - product: RightLegMoth
+      cost: 8
+      group: Moth
+    - product: LeftLegKobolt
+      cost: 8
+      group: Kobolt
+    - product: RightLegKobolt
+      cost: 8
+      group: Kobolt
+    - product: LeftLegShark
+      cost: 8
+      group: Shark
+    - product: RightLegShark
+      cost: 8
+      group: Shark
+    - product: LeftLegDemon
+      cost: 8
+      group: Demon
+    - product: RightLegDemon
+      cost: 8
+      group: Demon
+    - product: LeftLegFelinid
+      cost: 8
+      group: Felinid
+    - product: RightLegFelinid
+      cost: 8
+      group: Felinid
+    - product: LeftLegVox
+      cost: 8
+      group: Vox
+    - product: RightLegVox
+      cost: 8
+      group: Vox
+    - product: LeftLegArachnid
+      cost: 8
+      group: Arachnid
+    - product: RightLegArachnid
+      cost: 8
+      group: Arachnid
+    - product: LeftLegXeno
+      cost: 8
+      group: Xenomorph
+    - product: RightLegXeno
+      cost: 8
+      group: Xenomorph
+    # стопы
+    - product: LeftFootHuman
+      cost: 5
+      group: Humanoid
+    - product: RightFootHuman
+      cost: 5
+      group: Humanoid
+    - product: LeftFootTajaran
+      cost: 5
+      group: Feline
+    - product: RightFootTajaran
+      cost: 5
+      group: Feline
+    - product: LeftFootVulpkanin
+      cost: 5
+      group: Canine
+    - product: RightFootVulpkanin
+      cost: 5
+      group: Canine
+    - product: LeftFootReptilian
+      cost: 5
+      group: Reptilian
+    - product: RightFootReptilian
+      cost: 5
+      group: Reptilian
+    - product: LeftFootMoth
+      cost: 5
+      group: Moth
+    - product: RightFootMoth
+      cost: 5
+      group: Moth
+    - product: LeftFootKobolt
+      cost: 5
+      group: Kobolt
+    - product: RightFootKobolt
+      cost: 5
+      group: Kobolt
+    - product: LeftFootShark
+      cost: 5
+      group: Shark
+    - product: RightFootShark
+      cost: 5
+      group: Shark
+    - product: LeftFootDemon
+      cost: 5
+      group: Demon
+    - product: RightFootDemon
+      cost: 5
+      group: Demon
+    - product: LeftFootFelinid
+      cost: 5
+      group: Felinid
+    - product: RightFootFelinid
+      cost: 5
+      group: Felinid
+    - product: LeftFootVox
+      cost: 5
+      group: Vox
+    - product: RightFootVox
+      cost: 5
+      group: Vox
+    - product: LeftFootArachnid
+      cost: 5
+      group: Arachnid
+    - product: RightFootArachnid
+      cost: 5
+      group: Arachnid
+    - product: LeftFootXeno
+      cost: 5
+      group: Xenomorph
+    - product: RightFootXeno
+      cost: 5
+      group: Xenomorph
+  - type: MaterialStorage
+    materialWhiteList:
+    - Biomass
+  - type: Machine
+    board: OrganPrinterMachineCircuitboard
+  - type: UserInterface
+    interfaces:
+      enum.OrganPrinterUiKey.Key:
+        type: OrganPrinterBoundUserInterface
+  - type: ActivatableUI
+    key: enum.OrganPrinterUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: PointLight
+    radius: 1.5
+    energy: 1.2
+    color: "#ff6b6b"
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StrongMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:ChangeConstructionNodeBehavior
+        node: machineFrame
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: StaticPrice
+    price: 500

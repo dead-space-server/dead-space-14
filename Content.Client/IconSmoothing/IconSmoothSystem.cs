@@ -16,14 +16,14 @@ namespace Content.Client.IconSmoothing
     [UsedImplicitly]
     public sealed partial class IconSmoothSystem : EntitySystem
     {
-        [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-        [Dependency] private readonly SpriteSystem _sprite = default!;
+        [Dependency] private SharedMapSystem _mapSystem = default!;
+        [Dependency] private SpriteSystem _sprite = default!;
 
         // DS14-start
         internal const int MaxQueueWorkPerFrame = 256;
         private const int MaxAnchorChangesPerFrame = MaxQueueWorkPerFrame / 2;
 
-        internal sealed class PendingEntityQueue
+        internal sealed partial class PendingEntityQueue
         {
             private readonly Queue<EntityUid> _queue = new();
             private readonly HashSet<EntityUid> _queued = new();

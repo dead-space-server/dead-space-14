@@ -17,7 +17,7 @@ public sealed partial class SatiationSpeedModifierSystem :
     }
     // DS14-end
 
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
 
     protected override Dictionary<ProtoId<SatiationTypePrototype>, SatiationThresholds<float>> GetThresholds(
         SatiationSpeedModifierComponent comp) => comp.Satiations;

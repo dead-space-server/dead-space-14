@@ -4,6 +4,8 @@ construction-graph-tag-toy-sword = игрушечный меч
 construction-graph-tag-gas-tank = баллон
 construction-graph-tag-nanopaste = нанопаста
 construction-graph-tag-rock-guitar = рок-гитара
+construction-graph-tag-seclite = фонарик СБ
+construction-graph-tag-zipties = стяжки
 
 construction-graph-tag-beer-bottle = бутылка пива
 construction-graph-tag-fried-sausage = жареная сосиска

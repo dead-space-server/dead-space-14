@@ -14,11 +14,11 @@ namespace Content.Client.DeadSpace.MedicalRecords.Overlays;
 /// security-visible subset on a security-only HUD. Mirrors
 /// <c>Content.Client.DeadSpace.PersonnelRecords.Overlays.ShowPersonnelRecordIconsSystem</c>.
 /// </summary>
-public sealed class ShowMedicalStatusIconsSystem : EquipmentHudSystem<ShowMedicalStatusIconsComponent>
+public sealed partial class ShowMedicalStatusIconsSystem : EquipmentHudSystem<ShowMedicalStatusIconsComponent>
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
-    [Dependency] private readonly ShowSecurityMedicalStatusIconsSystem _security = default!;
+    [Dependency] private ShowSecurityMedicalStatusIconsSystem _security = default!;
 
     public override void Initialize()
     {

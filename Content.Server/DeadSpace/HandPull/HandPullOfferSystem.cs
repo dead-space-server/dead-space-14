@@ -11,16 +11,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.HandPull;
 
-public sealed class HandPullOfferSystem : EntitySystem
+public sealed partial class HandPullOfferSystem : EntitySystem
 {
     private static readonly TimeSpan OfferLifetime = TimeSpan.FromSeconds(10);
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly HandPullSystem _handPull = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private HandPullSystem _handPull = default!;
+    [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private readonly Dictionary<EntityUid, HandPullOffer> _offers = new();
 

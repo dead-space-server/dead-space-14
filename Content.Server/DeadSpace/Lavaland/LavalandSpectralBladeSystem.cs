@@ -1,5 +1,8 @@
+using System.Linq;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.EUI;
+using Content.Shared.Eye;
+using Robust.Server.GameObjects;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -20,22 +23,25 @@ using Robust.Server.Player;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandSpectralBladeSystem : EntitySystem
+public sealed partial class LavalandSpectralBladeSystem : EntitySystem
 {
     private readonly Dictionary<EntityUid, PendingSummon> _activeSummons = new();
     private readonly Dictionary<EntityUid, TimeSpan> _nextGhostSummon = new();
     private readonly List<EntityUid> _expiredSummons = new();
     private readonly List<EntityUid> _expiredCooldowns = new();
 
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly FollowerSystem _follower = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private FollowerSystem _follower = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VisibilitySystem _visibility = default!;
+
+    private readonly HashSet<EntityUid> _stillFollowing = new();
 
     public override void Initialize()
     {
@@ -56,6 +62,8 @@ public sealed class LavalandSpectralBladeSystem : EntitySystem
         var query = EntityQueryEnumerator<LavalandSpectralBladeComponent>();
         while (query.MoveNext(out var uid, out var component))
         {
+            UpdateRevealedGhosts((uid, component), component.ActiveUntil > now);
+
             if (component.CurrentSpirits <= 0 || component.ActiveUntil > now)
                 continue;
 
@@ -68,6 +76,71 @@ public sealed class LavalandSpectralBladeSystem : EntitySystem
     {
         ent.Comp.CurrentSpirits = 0;
         ApplyDamage(ent);
+        UpdateRevealedGhosts(ent, false);
+    }
+
+    /// <summary>
+    /// While the blade is active the spirits circling it are seen by the living too; let go, or the blade calmed,
+    /// they are ghosts again.
+    /// </summary>
+    private void UpdateRevealedGhosts(Entity<LavalandSpectralBladeComponent> ent, bool active)
+    {
+        _stillFollowing.Clear();
+        if (active && TryComp<FollowedComponent>(ent, out var followed))
+        {
+            foreach (var follower in followed.Following)
+            {
+                if (HasComp<GhostComponent>(follower))
+                    _stillFollowing.Add(follower);
+            }
+        }
+
+        foreach (var ghost in ent.Comp.RevealedGhosts.ToArray())
+        {
+            if (_stillFollowing.Contains(ghost))
+                continue;
+
+            ent.Comp.RevealedGhosts.Remove(ghost);
+            SetGhostShown(ghost, false);
+        }
+
+        foreach (var ghost in _stillFollowing)
+        {
+            // A ghost already shown to all (the round's end) is left as it is.
+            if (ent.Comp.RevealedGhosts.Contains(ghost) ||
+                !TryComp<VisibilityComponent>(ghost, out var visibility) ||
+                (visibility.Layer & (int) VisibilityFlags.Normal) != 0)
+            {
+                continue;
+            }
+
+            ent.Comp.RevealedGhosts.Add(ghost);
+            SetGhostShown(ghost, true);
+        }
+    }
+
+    private void SetGhostShown(EntityUid ghost, bool shown)
+    {
+        // Back in a body, the ghost's own shutdown has already made it visible as it should be.
+        if (TerminatingOrDeleted(ghost) ||
+            !HasComp<GhostComponent>(ghost) ||
+            !TryComp<VisibilityComponent>(ghost, out var visibility))
+        {
+            return;
+        }
+
+        if (shown)
+        {
+            _visibility.AddLayer((ghost, visibility), (int) VisibilityFlags.Normal, false);
+            _visibility.RemoveLayer((ghost, visibility), (int) VisibilityFlags.Ghost, false);
+        }
+        else
+        {
+            _visibility.AddLayer((ghost, visibility), (int) VisibilityFlags.Ghost, false);
+            _visibility.RemoveLayer((ghost, visibility), (int) VisibilityFlags.Normal, false);
+        }
+
+        _visibility.RefreshVisibility(ghost, visibilityComponent: visibility);
     }
 
     private void OnUseInHand(Entity<LavalandSpectralBladeComponent> ent, ref UseInHandEvent args)

@@ -1,0 +1,62 @@
+- type: reagent
+  id: Morphine
+  name: reagent-name-morphine
+  group: Narcotics
+  desc: reagent-desc-morphine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: bitter
+  color: "#d9d2c4"
+  metabolisms:
+    Narcotic:
+      metabolismRate: 0.25
+      effects:
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectPainNumbness
+        time: 3
+        type: Update
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 0.5
+        sprintSpeedModifier: 0.5
+      - !type:PopupMessage
+        type: Local
+        visualType: Small
+        messages: [ "morphine-effect-warm" ]
+        probability: 0.05
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Morphine
+          min: 30
+        damage:
+          types:
+            Asphyxiation: 2
+
+- type: reaction
+  id: Morphine
+  minTemp: 380
+  reactants:
+    Diethylamine:
+      amount: 1
+    Ethanol:
+      amount: 1
+    Carbon:
+      amount: 1
+  products:
+    Morphine: 2
+
+- type: entity
+  id: ChemistryBottleMorphine
+  suffix: morphine
+  parent: BaseChemistryBottleFilled
+  components:
+  - type: PhysicalComposition
+    materialComposition: {}
+  - type: Label
+    currentLabel: reagent-name-morphine
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Morphine
+          Quantity: 30

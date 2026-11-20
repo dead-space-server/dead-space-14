@@ -19,7 +19,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.PatrolTablet;
 
-public sealed class PatrolTabletSystem : EntitySystem
+public sealed partial class PatrolTabletSystem : EntitySystem
 {
     private const int MaxSquads = 16;
     private const int MaxSquadNameLength = 30;
@@ -36,13 +36,13 @@ public sealed class PatrolTabletSystem : EntitySystem
     /// </summary>
     private readonly Dictionary<string, TimeSpan> _announcementBusyUntilByEquipment = new();
 
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

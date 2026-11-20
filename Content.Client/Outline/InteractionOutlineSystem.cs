@@ -2,7 +2,10 @@ using Content.Client.ContextMenu.UI;
 using Content.Client.Gameplay;
 using Content.Client.Interactable.Components;
 using Content.Client.Viewport;
+using Content.Shared.Atmos.Components;
 using Content.Shared.CCVar;
+using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -16,16 +19,17 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Outline;
 
-public sealed class InteractionOutlineSystem : EntitySystem
+public sealed partial class InteractionOutlineSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _configManager = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14 - Current engine has no ProtoMan shortcut.
-    [Dependency] private readonly IStateManager _stateManager = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private IConfigurationManager _configManager = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!; // DS14 - Current engine has no ProtoMan shortcut.
+    [Dependency] private IStateManager _stateManager = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
+    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private SharedHandsSystem _hands = default!; // DS14
 
     private EntityQuery<InteractionOutlineComponent> _outlineQuery;
     private EntityQuery<SpriteComponent> _spriteQuery;
@@ -150,6 +154,23 @@ public sealed class InteractionOutlineSystem : EntitySystem
             {
                 entityToClick = screen.GetClickedEntity(mousePosWorld);
             }
+
+            // DS14-start
+            if (localSession.AttachedEntity is { } tankUser
+                && _hands.TryGetActiveItem(tankUser, out var held)
+                && HasComp<GasTankComponent>(held)
+                && vp is ScalingViewport tankView)
+            {
+                foreach (var under in screen.GetClickableEntities(mousePosWorld, tankView.Eye))
+                {
+                    if (!HasComp<SurgeryTankMountComponent>(under))
+                        continue;
+
+                    entityToClick = under;
+                    break;
+                }
+            }
+            // DS14-end
         }
         else if (_uiManager.CurrentlyHovered is EntityMenuElement element)
         {

@@ -19,13 +19,13 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// A phase with <see cref="LavalandDayPhase.DeepNight"/> may turn into a deep night: with its one announcement the
 /// moon hides and equipment fails at once (effects in <see cref="LavalandDeepNightSystem"/>), then the usual night goes on.
 /// </summary>
-public sealed class LavalandDayNightSystem : EntitySystem
+public sealed partial class LavalandDayNightSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Update(float frameTime)
     {

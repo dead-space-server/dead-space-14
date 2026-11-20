@@ -13,6 +13,18 @@ public abstract class SharedDeviceListSystem : EntitySystem
         }
         return component.Devices;
     }
+
+    //DS-14 start
+    public void CopyAllowDevices(DeviceListComponent component, List<EntityUid> devices)
+    {
+        devices.Clear();
+        if (!component.IsAllowList)
+            return;
+
+        foreach (var device in component.Devices)
+            devices.Add(device);
+    }
+    //DS-14 end
 }
 
 public sealed class DeviceListUpdateEvent : EntityEventArgs

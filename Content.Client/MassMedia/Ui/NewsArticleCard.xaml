@@ -12,12 +12,8 @@
             <Control HorizontalExpand="True"/>
             <Label StyleClasses="LabelSmall DeadSpaceSubtitle" Name="PublishTimeLabel" Margin="6 6 6 6"/> <!-- DS14 -->
             <controls:ConfirmButton Name="DeleteButton" Text="{Loc news-write-ui-delete-text}"
-                    HorizontalAlignment="Right" Margin="8 6 6 6" SetHeight="19" SetWidth="52" Access="Public">
-                <Button.StyleClasses>
-                    <system:String>ButtonSmall</system:String>
-                    <system:String>negative</system:String>
-                </Button.StyleClasses>
-            </controls:ConfirmButton>
+                    HorizontalAlignment="Right" Margin="8 6 6 6" SetHeight="19" SetWidth="52" Access="Public"
+                    StyleClasses="ButtonSmall negative" />
         </BoxContainer>
     </BoxContainer>
 </Control>

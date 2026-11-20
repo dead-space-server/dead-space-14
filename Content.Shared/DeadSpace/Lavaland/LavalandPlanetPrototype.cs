@@ -190,6 +190,22 @@ public sealed partial class LavalandPlanetPrototype : IPrototype
         },
     };
 
+    /// <summary>Mini-bosses always placed on the planet as it is made, kept from the outpost like the tendrils.</summary>
+    [DataField]
+    public List<LavalandGuaranteedSpawnEntry> GuaranteedSpawns = new()
+    {
+        new()
+        {
+            Prototype = "MobLavalandMadMiner",
+            Count = 1,
+        },
+        new()
+        {
+            Prototype = "LavalandEliteTumor",
+            Count = 2,
+        },
+    };
+
     [DataField]
     public Dictionary<ProtoId<LavalandBossArenaPrototype>, int> BossArenas = new();
 
@@ -437,6 +453,31 @@ public sealed partial class LavalandTendrilSpawnEntry
 
     [DataField]
     public int MaxCount = 8;
+}
+
+[DataDefinition]
+public sealed partial class LavalandGuaranteedSpawnEntry
+{
+    [DataField(required: true)]
+    public EntProtoId Prototype = default;
+
+    [DataField]
+    public int Count = 1;
+
+    /// <summary>Distance (tiles) from the planet's centre it is placed within.</summary>
+    [DataField]
+    public int MinDistance = 60;
+
+    [DataField]
+    public int MaxDistance = 320;
+
+    /// <summary>Kept this far (tiles) from every other guaranteed spawn.</summary>
+    [DataField]
+    public int MinSeparation = 60;
+
+    /// <summary>The biome's rocks are kept off this many tiles around it.</summary>
+    [DataField]
+    public int ClearRadius = 2;
 }
 
 [DataDefinition]

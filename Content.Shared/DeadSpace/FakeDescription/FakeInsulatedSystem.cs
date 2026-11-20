@@ -3,9 +3,9 @@ using Content.Shared.Verbs;
 
 namespace Content.Shared.DeadSpace.FakeDescription;
 
-public sealed class FakeInsulatedSystem : EntitySystem
+public sealed partial class FakeInsulatedSystem : EntitySystem
 {
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     public override void Initialize()
     {

@@ -29,6 +29,9 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
+using Content.Shared.Physics;
 using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
@@ -39,28 +42,30 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// Megafauna loot ported from tgstation: mayhem in a bottle, anomalous crystals,
 /// the voice of god and the H.E.C.K. suit curse.
 /// </summary>
-public sealed class LavalandBossLootSystem : EntitySystem
+public sealed partial class LavalandBossLootSystem : EntitySystem
 {
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly GunSystem _gun = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly ITileDefinitionManager _tiles = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly StationSpawningSystem _spawning = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private GunSystem _gun = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private ITileDefinitionManager _tiles = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private StationSpawningSystem _spawning = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
     private readonly List<EntityUid> _expired = new();
@@ -342,8 +347,12 @@ public sealed class LavalandBossLootSystem : EntitySystem
         _lookup.GetEntitiesInRange(Transform(ent).Coordinates, ent.Comp.Range, _mobs);
         foreach (var mob in _mobs)
         {
-            if (mob.Owner == ent.Owner || _mobState.IsDead(mob, mob.Comp))
+            // The voice does not carry through walls.
+            if (mob.Owner == ent.Owner || _mobState.IsDead(mob, mob.Comp) ||
+                !_interaction.InRangeUnobstructed(ent.Owner, mob.Owner, ent.Comp.Range + 1f))
+            {
                 continue;
+            }
 
             // Frozen on the spot, still standing: knocking down is the kneel command's job. Whatever they hold
             // stays in their hands either way.
@@ -360,13 +369,35 @@ public sealed class LavalandBossLootSystem : EntitySystem
                 var away = _transform.GetWorldPosition(mob) - origin;
                 if (away.LengthSquared() > 0.01f)
                 {
-                    _throwing.TryThrow(mob.Owner, Vector2.Normalize(away) * command.RepelDistance, command.Repel, ent.Owner,
-                        pushbackRatio: 0f, compensateFriction: true, recoil: false, doSpin: false);
+                    // Only as far as the first wall behind them: this fast a throw went straight through thin rock.
+                    var direction = Vector2.Normalize(away);
+                    var distance = FreeDistance(mob.Owner, direction, command.RepelDistance);
+                    if (distance > 0.1f)
+                    {
+                        _throwing.TryThrow(mob.Owner, direction * distance, command.Repel, ent.Owner,
+                            pushbackRatio: 0f, compensateFriction: true, recoil: false, doSpin: false);
+                    }
                 }
             }
         }
 
         _adminLog.Add(LogType.Action, LogImpact.Medium, $"{ToPrettyString(ent.Owner):user} used the voice of god: {args.Message}");
+    }
+
+    /// <summary>How far (tiles) the mob can fly this way before something solid, short of it by half a tile.</summary>
+    private float FreeDistance(EntityUid mob, Vector2 direction, float wanted)
+    {
+        var position = _transform.GetMapCoordinates(mob);
+        var ray = new CollisionRay(position.Position, direction, (int) CollisionGroup.Impassable);
+        foreach (var hit in _physics.IntersectRay(position.MapId, ray, wanted, mob, returnOnFirstHit: false))
+        {
+            if (hit.HitEntity == mob || HasComp<MobStateComponent>(hit.HitEntity))
+                continue;
+
+            return MathF.Max(0f, hit.Distance - 0.5f);
+        }
+
+        return wanted;
     }
 
     /// <summary>

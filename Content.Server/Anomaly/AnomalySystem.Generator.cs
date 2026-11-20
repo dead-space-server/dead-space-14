@@ -22,9 +22,9 @@ namespace Content.Server.Anomaly;
 /// </summary>
 public sealed partial class AnomalySystem
 {
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IdCardSystem _idCardSystem = default!; // DS14
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IdCardSystem _idCardSystem = default!; // DS14
 
     private void InitializeGenerator()
     {

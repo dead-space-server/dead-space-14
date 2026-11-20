@@ -272,8 +272,8 @@
 - type: entity
   parent: ClothingUnderwearTopBase
   id: ClothingUnderwearTopBraCentcomm
-  name: бра центрального командования
-  description: Стандартное нижнее бельё центрального командования.
+  name: бра ЦК
+  description: Стандартное нижнее бельё сотрудников ЦК.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Underwear/Command/centcomm/women/bra.rsi

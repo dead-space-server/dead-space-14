@@ -23,23 +23,23 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.TheCircle.Dreadnought;
 
-public sealed class DreadnoughtLastStandSystem : EntitySystem
+public sealed partial class DreadnoughtLastStandSystem : EntitySystem
 {
     private const string OuterClothingSlot = "outerClothing";
     private static readonly EntProtoId AdrenalineEffect = "StatusEffectDreadnoughtAdrenaline";
     private readonly Dictionary<EntityUid, (EntityUid Wearer, TimeSpan StunDuration)> _pendingStrapDestruction = [];
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DestructibleSystem _destructible = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DestructibleSystem _destructible = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

@@ -31,17 +31,17 @@ namespace Content.Shared.Chemistry.EntitySystems;
 /// <seealso cref="InjectorModePrototype"/>
 public sealed partial class InjectorSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly OpenableSystem _openable = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly ReactiveSystem _reactiveSystem = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private readonly StandingStateSystem _standingState = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedForensicsSystem _forensics = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private OpenableSystem _openable = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ReactiveSystem _reactiveSystem = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private StandingStateSystem _standingState = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     public override void Initialize()
     {
@@ -263,6 +263,13 @@ public sealed partial class InjectorSystem : EntitySystem
     // DS14-start
     private bool IsInjectBlockedBeforeDoAfter(Entity<InjectorComponent> injector, EntityUid user, EntityUid target)
     {
+        // DS14-start
+        var attempt = new InjectorUseAttemptEvent();
+        RaiseLocalEvent(target, ref attempt);
+        if (attempt.Cancelled)
+            return true;
+        // DS14-end
+
         if (!_prototypeManager.Resolve(injector.Comp.ActiveModeProtoId, out var activeMode))
             return false;
 
@@ -284,6 +291,9 @@ public sealed partial class InjectorSystem : EntitySystem
 
         if (!ev.Cancelled)
             return false;
+
+        if (ev.OverrideMessage == "")
+            return true;
 
         var userMessage = ev.OverrideMessage ?? Loc.GetString("injector-component-blocked-user");
         var otherMessage = Loc.GetString("injector-component-blocked-other", ("target", target), ("user", user));
@@ -418,6 +428,13 @@ public sealed partial class InjectorSystem : EntitySystem
     /// <exception cref="ArgumentOutOfRangeException">The injector has a different <see cref="InjectorBehavior"/>.</exception>
     private bool TryUseInjector(Entity<InjectorComponent> injector, EntityUid user, EntityUid target)
     {
+        // DS14-start
+        var attempt = new InjectorUseAttemptEvent();
+        RaiseLocalEvent(target, ref attempt);
+        if (attempt.Cancelled)
+            return false;
+        // DS14-end
+
         if (!_prototypeManager.Resolve(injector.Comp.ActiveModeProtoId, out var activeMode))
             return false;
 

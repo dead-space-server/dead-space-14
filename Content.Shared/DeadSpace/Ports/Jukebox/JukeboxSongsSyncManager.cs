@@ -10,16 +10,16 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.DeadSpace.Ports.Jukebox;
 
-public abstract class JukeboxSongsSyncManager : IDisposable
+public abstract partial class JukeboxSongsSyncManager : IDisposable
 {
-    [Dependency] protected readonly INetManager NetManager = default!;
-    [Dependency] protected readonly ITransferManager TransferManager = default!;
+    [Dependency] protected INetManager NetManager = default!;
+    [Dependency] protected ITransferManager TransferManager = default!;
     protected const string UploadKey = "DS14.Jukebox.Upload";
     protected const string DownloadKey = "DS14.Jukebox.Download";
     // Array.MaxLength is unavailable in the client sandbox; byte arrays use this CLR limit.
     private const int MaxByteArrayLength = 0x7FFFFFC7;
     protected bool Disposed;
-    [Dependency] protected readonly IResourceManager ResourceManager = default!;
+    [Dependency] protected IResourceManager ResourceManager = default!;
 
     public static readonly ResPath Prefix = ResPath.Root / "Jukebox";
 

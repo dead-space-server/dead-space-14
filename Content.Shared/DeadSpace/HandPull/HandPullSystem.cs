@@ -7,11 +7,11 @@ using Content.Shared.Movement.Systems;
 
 namespace Content.Shared.DeadSpace.HandPull;
 
-public sealed class HandPullSystem : EntitySystem
+public sealed partial class HandPullSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private PullingSystem _pulling = default!;
 
     public override void Initialize()
     {

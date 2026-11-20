@@ -7,11 +7,11 @@ using Content.Shared.Ninja.Systems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class DashAbilitySystem : SharedDashAbilitySystem
+public sealed partial class DashAbilitySystem : SharedDashAbilitySystem
 {
-    [Dependency] private readonly BeamSystem _beam = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private BeamSystem _beam = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

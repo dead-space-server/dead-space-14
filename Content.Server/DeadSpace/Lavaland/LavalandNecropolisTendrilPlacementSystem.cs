@@ -17,10 +17,11 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Timer = Robust.Shared.Timing.Timer;
+using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
+public sealed partial class LavalandNecropolisTendrilPlacementSystem : EntitySystem
 {
     private const int InitialSpawnBatchSize = 2;
     private const float FtlLandingAreaPadding = 16f;
@@ -39,15 +40,14 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         new(0, -1),
     ];
 
-    [Dependency] private readonly BiomeSystem _biome = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly LavalandSecretBossSystem _secretBoss = default!;
+    [Dependency] private BiomeSystem _biome = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private LavalandSecretBossSystem _secretBoss = default!;
 
     private readonly Dictionary<EntProtoId, int> _counts = new();
     private readonly List<Vector2i> _placed = new();
@@ -268,15 +268,41 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         List<Vector2i> placed,
         out Vector2i indices)
     {
+        return TryFindSpawnTile(mapUid,
+            grid,
+            biome,
+            planet,
+            placed,
+            planet.TendrilMinDistance,
+            planet.TendrilMaxDistance,
+            planet.TendrilMinSeparation,
+            out indices);
+    }
+
+    /// <summary>
+    /// A free open tile between these distances from the planet's centre, apart from the tiles already taken and
+    /// kept out of the outpost, the landing, the Celestial's pit and other grids, as for the tendrils.
+    /// </summary>
+    public bool TryFindSpawnTile(
+        EntityUid mapUid,
+        MapGridComponent grid,
+        BiomeComponent biome,
+        LavalandPlanetPrototype planet,
+        List<Vector2i> placed,
+        int minDistanceWanted,
+        int maxDistanceWanted,
+        int minSeparation,
+        out Vector2i indices)
+    {
         indices = default;
 
         var limit = GetSpawnLimit(planet);
         if (limit <= 0)
             return false;
 
-        var minDistance = Math.Min(Math.Max(0, planet.TendrilMinDistance), limit);
-        var maxDistance = Math.Clamp(planet.TendrilMaxDistance, minDistance, limit);
-        var minSeparationSquared = planet.TendrilMinSeparation * planet.TendrilMinSeparation;
+        var minDistance = Math.Min(Math.Max(0, minDistanceWanted), limit);
+        var maxDistance = Math.Clamp(maxDistanceWanted, minDistance, limit);
+        var minSeparationSquared = minSeparation * minSeparation;
 
         for (var attempt = 0; attempt < planet.TendrilSpawnAttempts; attempt++)
         {
@@ -314,7 +340,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         var position = _map.GridTileToWorldPos(mapUid, grid, indices);
         var mapId = Transform(mapUid).MapID;
         var box = Box2.CenteredAround(position, new Vector2(OtherGridExclusion * 2f));
-        foreach (var other in _mapManager.FindGridsIntersecting(mapId, box))
+        foreach (var other in _map.GridsIntersecting(mapId, box))
         {
             if (other.Owner != mapUid)
                 return true;
@@ -379,7 +405,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         return false;
     }
 
-    private void ReserveArea(
+    public void ReserveArea(
         EntityUid mapUid,
         MapGridComponent grid,
         BiomeComponent biome,

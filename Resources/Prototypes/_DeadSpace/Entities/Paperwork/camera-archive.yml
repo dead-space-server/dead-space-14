@@ -1,5 +1,6 @@
 - type: paperworkForm
   id: CameraArchive
+  listed: false
   category: NTSecurity
   name: paperwork-form-title-camera-archive
   text: "/Paperwork/Security/camera-archive.xml"

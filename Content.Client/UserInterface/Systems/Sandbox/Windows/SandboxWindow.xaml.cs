@@ -1,4 +1,5 @@
-﻿using Content.Client.Markers;
+﻿using Content.Client.DeadSpace.DeviceLinkVis; //DS-14
+using Content.Client.Markers;
 using Content.Client.SubFloor;
 using Content.Client.Stylesheets;
 using Content.Shared.Eye; //DS-14
@@ -15,12 +16,13 @@ namespace Content.Client.UserInterface.Systems.Sandbox.Windows;
 [GenerateTypedNameReferences]
 public sealed partial class SandboxWindow : DefaultWindow
 {
-    [Dependency] private readonly IEntityManager _entManager = null!;
-    [Dependency] private readonly ILightManager _lightManager = null!;
-    [Dependency] private readonly IPlayerManager _playerManager = null!;
+    [Dependency] private IEntityManager _entManager = null!;
+    [Dependency] private ILightManager _lightManager = null!;
+    [Dependency] private IPlayerManager _playerManager = null!;
     private readonly DebugPhysicsSystem _debugPhysicsSystem;
     private readonly MarkerSystem _markerSystem;
     private readonly SubFloorHideSystem _subFloorSystem;
+    private readonly DeviceLinkVisSystem _deviceLinks; //DS-14
 
     public SandboxWindow()
     {
@@ -30,12 +32,15 @@ public sealed partial class SandboxWindow : DefaultWindow
         _debugPhysicsSystem = _entManager.System<DebugPhysicsSystem>();
         _markerSystem = _entManager.System<MarkerSystem>();
         _subFloorSystem = _entManager.System<SubFloorHideSystem>();
+        _deviceLinks = _entManager.System<DeviceLinkVisSystem>(); //DS-14
     }
 
     protected override void Opened()
     {
         base.Opened();
 
+        ToggleDeviceLinksButton.Pressed = _deviceLinks.Enabled; //DS-14
+        ToggleSubfloorButton.Pressed = _subFloorSystem.ShowAll; //DS-14
         ToggleDisposalButton.Pressed = (_subFloorSystem.ShowLayers & VisibilityFlags.SubfloorDisposal) != 0; //DS-14
         ToggleCableButton.Pressed = (_subFloorSystem.ShowLayers & VisibilityFlags.SubfloorCable) != 0; //DS-14
         ToggleAtmosButton.Pressed = (_subFloorSystem.ShowLayers & VisibilityFlags.SubfloorAtmos) != 0; //DS-14

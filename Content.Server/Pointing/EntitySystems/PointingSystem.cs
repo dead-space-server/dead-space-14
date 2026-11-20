@@ -11,6 +11,7 @@ using Content.Shared.Input;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Mind;
+using Content.Shared.DeadSpace.Pointing; //DS-14
 using Content.Shared.Pointing;
 using Content.Shared.Popups;
 using JetBrains.Annotations;
@@ -29,23 +30,22 @@ using Robust.Shared.Timing;
 namespace Content.Server.Pointing.EntitySystems
 {
     [UsedImplicitly]
-    internal sealed class PointingSystem : SharedPointingSystem
+    internal sealed partial class PointingSystem : SharedPointingSystem
     {
-        [Dependency] private readonly IConfigurationManager _config = default!;
-        [Dependency] private readonly IReplayRecordingManager _replay = default!;
-        [Dependency] private readonly IMapManager _mapManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly ITileDefinitionManager _tileDefinitionManager = default!;
-        [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly RotateToFaceSystem _rotateToFaceSystem = default!;
-        [Dependency] private readonly SharedContainerSystem _container = default!;
-        [Dependency] private readonly SharedPopupSystem _popup = default!;
-        [Dependency] private readonly VisibilitySystem _visibilitySystem = default!;
-        [Dependency] private readonly SharedMindSystem _minds = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!;
-        [Dependency] private readonly SharedMapSystem _map = default!;
-        [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly ExamineSystemShared _examine = default!;
+        [Dependency] private IConfigurationManager _config = default!;
+        [Dependency] private IReplayRecordingManager _replay = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
+        [Dependency] private IGameTiming _gameTiming = default!;
+        [Dependency] private RotateToFaceSystem _rotateToFaceSystem = default!;
+        [Dependency] private SharedContainerSystem _container = default!;
+        [Dependency] private SharedPopupSystem _popup = default!;
+        [Dependency] private VisibilitySystem _visibilitySystem = default!;
+        [Dependency] private SharedMindSystem _minds = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
+        [Dependency] private SharedMapSystem _map = default!;
+        [Dependency] private IAdminLogManager _adminLogger = default!;
+        [Dependency] private ExamineSystemShared _examine = default!;
 
         private TimeSpan _pointDelay = TimeSpan.FromSeconds(0.5f);
 
@@ -206,9 +206,11 @@ namespace Content.Server.Pointing.EntitySystems
             string viewerMessage;
             string? viewerPointedAtMessage = null;
             var playerName = Identity.Entity(player, EntityManager);
+            EntityUid? bubbleTarget = null; //DS-14
 
             if (Exists(pointed))
             {
+                bubbleTarget = pointed; //DS-14
                 var pointedName = Identity.Entity(pointed, EntityManager);
 
                 EntityUid? containingInventory = null;
@@ -284,7 +286,7 @@ namespace Content.Server.Pointing.EntitySystems
                 TileRef? tileRef = null;
                 string? position = null;
 
-                if (_mapManager.TryFindGridAt(mapCoordsPointed, out var gridUid, out var grid))
+                if (_map.TryFindGridAt(mapCoordsPointed, out var gridUid, out var grid))
                 {
                     position = $"EntId={gridUid} {_map.WorldToTile(gridUid, grid, mapCoordsPointed.Position)}";
                     tileRef = _map.GetTileRef(gridUid, grid, _map.WorldToTile(gridUid, grid, mapCoordsPointed.Position));
@@ -303,9 +305,33 @@ namespace Content.Server.Pointing.EntitySystems
             _pointers[session] = _gameTiming.CurTime;
 
             SendMessage(player, viewers, pointed, selfMessage, viewerMessage, viewerPointedAtMessage);
+            SendPointBubble(viewers, player, bubbleTarget); //DS-14
 
             return true;
         }
+
+        //DS-14 start
+        private void SendPointBubble(IEnumerable<ICommonSession> viewers, EntityUid pointer, EntityUid? target)
+        {
+            if (target is not { } shown)
+                return;
+
+            var ev = new PointingBubbleEvent(
+                GetNetEntity(pointer),
+                GetNetEntity(shown),
+                _gameTiming.CurTime + PointDuration);
+
+            foreach (var viewer in viewers)
+            {
+                if (viewer.AttachedEntity is not { Valid: true } viewerEntity)
+                    continue;
+
+                RaiseNetworkEvent(ev, viewerEntity);
+            }
+
+            _replay.RecordServerMessage(ev);
+        }
+        //DS-14 end
 
         public override void Initialize()
         {

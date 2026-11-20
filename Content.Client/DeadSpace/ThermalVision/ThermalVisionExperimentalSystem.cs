@@ -16,14 +16,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.ThermalVision;
 
-public sealed class ThermalVisionExperimentalSystem : EntitySystem
+public sealed partial class ThermalVisionExperimentalSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
-    [Dependency] private readonly SpriteSystem _spriteSys = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedBatterySystem _batterySys = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IOverlayManager _overlayMan = default!;
+    [Dependency] private SpriteSystem _spriteSys = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedBatterySystem _batterySys = default!;
 
     private ThermalVisionExperimentalOverlay _overlay = default!;
     private bool _wasActive;
@@ -133,7 +133,7 @@ public sealed class ThermalVisionExperimentalSystem : EntitySystem
     }
 }
 
-public sealed class ThermalVisionExperimentalOverlay : Overlay
+public sealed partial class ThermalVisionExperimentalOverlay : Overlay
 {
     // #b6225a
     private const float TintR = 0.7137255f;

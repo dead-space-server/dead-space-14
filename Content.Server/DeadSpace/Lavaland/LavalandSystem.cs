@@ -32,27 +32,27 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandSystem : EntitySystem
+public sealed partial class LavalandSystem : EntitySystem
 {
     private const int BoundaryBatchSize = 256;
     private const int StructureFootprintPadding = 96;
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly BiomeSystem _biome = default!;
-    [Dependency] private readonly IConfigurationManager _configuration = default!;
-    [Dependency] private readonly DungeonSystem _dungeon = default!;
-    [Dependency] private readonly LavalandBossArenaSystem _bossArena = default!;
-    [Dependency] private readonly LavalandChromiteCavesSystem _chromiteCaves = default!;
-    [Dependency] private readonly LavalandFaunaPopulationSystem _faunaPopulation = default!;
-    [Dependency] private readonly LavalandNecropolisTendrilPlacementSystem _tendrilPlacement = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TileSystem _tile = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private BiomeSystem _biome = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private DungeonSystem _dungeon = default!;
+    [Dependency] private LavalandBossArenaSystem _bossArena = default!;
+    [Dependency] private LavalandChromiteCavesSystem _chromiteCaves = default!;
+    [Dependency] private LavalandFaunaPopulationSystem _faunaPopulation = default!;
+    [Dependency] private LavalandNecropolisTendrilPlacementSystem _tendrilPlacement = default!;
+    [Dependency] private LavalandGuaranteedSpawnSystem _guaranteedSpawn = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinition = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TileSystem _tile = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
     private List<Entity<MapGridComponent>> _nearbyGrids = new();
@@ -218,6 +218,7 @@ public sealed class LavalandSystem : EntitySystem
         // The custom grids (the ash walkers' base) first: the tendrils keep away from them.
         LoadCustomGrids(mapId, mapUid, grid, biome, planet, random, placedStructures, cancellation);
         await _tendrilPlacement.SetupMap(mapUid, planet, cancellation);
+        await _guaranteedSpawn.SetupMap(mapUid, planet, cancellation);
         await _bossArena.SpawnConfiguredArenas(mapUid, grid, biome, planet, random, cancellation);
         await _faunaPopulation.SetupMap(mapUid, planet, cancellation);
         await _chromiteCaves.SetupCaves(mapUid, grid, planet, random, cancellation);
@@ -489,9 +490,6 @@ public sealed class LavalandSystem : EntitySystem
         List<Vector2i> wallTiles)
     {
         _map.SetTiles(mapUid, grid, tiles);
-
-        foreach (var tile in lavaTiles)
-            SpawnAnchored(planet.BoundaryLavaEntity, mapUid, grid, tile);
 
         foreach (var tile in wallTiles)
             SpawnAnchored(planet.BoundaryWallEntity, mapUid, grid, tile);
@@ -967,7 +965,7 @@ public sealed class LavalandSystem : EntitySystem
 
         var mapId = Transform(terrainGridUid).MapID;
         var bounds = Box2.CenteredAround(center, Vector2.One * (radius * 2f + 1f));
-        _mapManager.FindGridsIntersecting(mapId, bounds, ref _nearbyGrids);
+        _map.FindGridsIntersecting(mapId, bounds, ref _nearbyGrids);
 
         foreach (var grid in _nearbyGrids)
         {

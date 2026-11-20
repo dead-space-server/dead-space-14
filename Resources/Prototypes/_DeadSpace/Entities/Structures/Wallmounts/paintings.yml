@@ -7,3 +7,33 @@
   - type: Sprite
     sprite: _DeadSpace/Structures/Wallmounts/paintings.rsi
     state: painting01
+
+- type: entity
+  parent: PaintingBase
+  id: PaintingCentcomm2
+  name: Портрет Офицера Специальных Операций
+  description: Портрет офицера Корпуса Специальных Операций NanoTrasen. Помехи скрывают лицо и знаки различия. Вероятно, так и было задумано.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Wallmounts/paintings.rsi
+    state: painting02
+
+- type: entity
+  parent: PaintingBase
+  id: PaintingCentcomm3
+  name: Портрет Магистрата
+  description: Портрет одного из заслуженных Магистратов NanoTrasen. Кажется, он уже признал вас виновным.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Wallmounts/paintings.rsi
+    state: painting03
+
+- type: entity
+  parent: PaintingBase
+  id: PaintingSyndie
+  name: Портрет неизвестного
+  description: Портрет мужчины в подозрительной униформе. Ни подписи, ни даты, ни объяснения тому, почему эта картина вообще здесь находится.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Wallmounts/paintings.rsi
+    state: painting04

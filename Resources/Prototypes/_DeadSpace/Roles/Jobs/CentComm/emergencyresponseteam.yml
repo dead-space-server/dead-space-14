@@ -414,6 +414,8 @@
     - ADTCombatHypo
     - ChemistryBottleOmnizine
     - ChemistryBottleEpinephrine
+    - LimbRestorerERT
+    - FieldChemistryBox
 
 ## Red
 - type: job
@@ -474,6 +476,8 @@
     - ChemistryBottleOmnizine
     - ChemistryBottleBruizine
     - ChemistryBottlePyrazine
+    - LimbRestorerERT
+    - FieldChemistryBox
 
 ## Gamma
 - type: job
@@ -531,6 +535,8 @@
     - CrowbarRed
     - BSAACombatKitFilled
     - InjectorCaseERTFilled
+    - LimbRestorerERT
+    - FieldChemistryBox
 
 # Engineer
 ## Amber

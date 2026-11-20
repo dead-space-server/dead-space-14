@@ -492,4 +492,14 @@ public enum LogType
     /// A player started or finished controlling a shuttle.
     /// </summary>
     ShuttlePilot = 121, //DS-14
+
+    /// <summary>
+    /// Surgery: operations, organs, implants, cavity items, amputation and attachment.
+    /// </summary>
+    Surgery = 122, //DS-14
+
+    /// <summary>
+    /// Limbs: severed limbs, fractures, corpse harvest.
+    /// </summary>
+    Limb = 123, //DS-14
 }

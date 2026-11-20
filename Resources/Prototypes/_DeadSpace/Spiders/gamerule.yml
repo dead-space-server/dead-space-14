@@ -126,26 +126,17 @@
       sponsorsPriority: true
 
 - type: entity
-  id: SpiderTerrorSpawn
-  parent: BaseStationEventShortDelay
+  parent: SpiderTerror
+  id: SpiderTerrorOutbreak
   components:
   - type: StationEvent
-    startAnnouncement: station-event-vent-creatures-start-announcement
-    startAudio:
-      path: /Audio/_DeadSpace/Announcements/lifesigns.ogg # DS14-Announcements
-    earliestStart: 50
-    duration: 60
-    minimumPlayers: 30
-    willNotStartRandomly: true
-  - type: VentCrittersRule
-    entries:
-    - id: MobSpiderTerrorGuardian
-      prob: 0.05
-    - id: MobMouse
-      prob: 0.02
-    specialEntries:
-    - id: MobSpiderTerrorGuardianKingBlood
-      prob: 0.001
+    earliestStart: 60
+    minimumPlayers: 40
+    weight: 1
+    duration: null # SpiderTerrorRule must stay active for stage progression and round-end checks
+    reoccurrenceDelay: 60
+    maxOccurrences: 1
+    occursDuringRoundEnd: false
 
 - type: entity
   id: GiftsGunsSpiderTerror

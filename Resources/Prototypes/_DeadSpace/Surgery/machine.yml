@@ -1,0 +1,305 @@
+- type: surgeryAnatomy
+  id: MachineTorso
+  operation: MachineOpen
+  layers:
+  - Skin
+  - Cavity
+
+- type: surgeryAnatomy
+  id: MachineHead
+  operation: MachineOpen
+  layers:
+  - Skin
+  - Cavity
+
+- type: surgeryAnatomy
+  id: MachineGroin
+  operation: MachineRepair
+  layers:
+  - Skin
+
+- type: surgeryAnatomy
+  id: MachineLimb
+  operation: MachineRepair
+  layers:
+  - Skin
+
+- type: surgeryRepair
+  id: Default
+  heal:
+    groups:
+      Brute: -25
+      Burn: -25
+
+- type: surgeryHint
+  id: MachineUnscrew
+  name: surgery-hint-machine-unscrew
+  color: "#d9a441"
+  icons:
+  - sprite: /Textures/Objects/Tools/screwdriver.rsi
+    state: screwdriver
+
+- type: surgeryHint
+  id: MachinePry
+  name: surgery-hint-machine-pry
+  color: "#4aa3df"
+  icons:
+  - sprite: /Textures/Objects/Tools/crowbar.rsi
+    state: icon
+
+- type: surgeryHint
+  id: MachineWire
+  name: surgery-hint-machine-wire
+  color: "#5ccf6a"
+  icons:
+  - sprite: /Textures/Objects/Tools/cable-coils.rsi
+    state: coil-30
+
+- type: surgeryHint
+  id: MachinePulse
+  name: surgery-hint-machine-pulse
+  color: "#e8902a"
+  icons:
+  - sprite: /Textures/Objects/Tools/multitool.rsi
+    state: icon
+
+- type: surgeryHint
+  id: MachineWeld
+  name: surgery-hint-machine-weld
+  color: "#ff8c3a"
+  icons:
+  - sprite: /Textures/Objects/Tools/welder.rsi
+    state: icon
+
+- type: surgeryOperation
+  id: MachineOpen
+  name: surgery-op-machine-open
+  machine: true
+  sterile: false
+  side: Any
+  order: 0
+  zones:
+  - Torso
+  - Head
+  icon:
+    sprite: /Textures/Objects/Tools/screwdriver.rsi
+    state: screwdriver
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendMindMachine
+  name: surgery-op-mend-brain
+  machine: true
+  sterile: false
+  side: Any
+  when: MindRupture
+  order: 2
+  zones:
+  - Head
+  - Torso
+  icon:
+    sprite: /Textures/Objects/Tools/screwdriver.rsi
+    state: screwdriver
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Stanch
+    layer: Cavity
+    hint: MachineWire
+    effect: BrainMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
+
+- type: surgeryOperation
+  id: MachineRepair
+  name: surgery-op-machine-repair
+  machine: true
+  sterile: false
+  side: Any
+  when: Damaged
+  order: 1
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  icon:
+    sprite: /Textures/Objects/Tools/cable-coils.rsi
+    state: coil-30
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Stanch
+    layer: Skin
+    hint: MachineWire
+    game: Hold
+    effect: MachineRepair
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
+
+- type: surgeryOperation
+  id: MachineShard
+  name: surgery-op-machine-shard
+  machine: true
+  sterile: false
+  side: Any
+  when: Shard
+  order: 2
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  icon:
+    sprite: /Textures/Objects/Tools/crowbar.rsi
+    state: icon
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: PullEmbedded
+    layer: Skin
+    hint: MachinePry
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
+
+- type: surgeryOperation
+  id: MachineAmputate
+  name: surgery-op-machine-amputate
+  machine: true
+  sterile: false
+  side: Any
+  order: 5
+  across: true
+  whole: true
+  zones:
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  icon:
+    sprite: /Textures/Objects/Tools/multitool.rsi
+    state: icon
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Amputate
+    layer: Skin
+    hint: MachinePulse
+    game: Dots
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+
+- type: surgeryOperation
+  id: MachineAttach
+  name: surgery-op-machine-attach
+  machine: true
+  sterile: false
+  side: Any
+  limb: true
+  order: 6
+  across: true
+  stump: true
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_arm
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Seat
+    layer: Skin
+  - verb: Stanch
+    layer: Skin
+    hint: MachineWire
+    game: Hold
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise

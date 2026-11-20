@@ -5,10 +5,10 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.Medical.IvDrip;
 
-public sealed class IvDripSystem : SharedIvDripSystem
+public sealed partial class IvDripSystem : SharedIvDripSystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

@@ -192,6 +192,12 @@
     sideEffectChance: 0.25
     doAfterMinSeconds: 40
     doAfterMaxSeconds: 61
+  - type: SurgeryTool
+    passive: true
+    precision: 0.9
+    slip: 0.05
+    verbs:
+    - Shock
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_pickup.ogg

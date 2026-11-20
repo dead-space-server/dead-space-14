@@ -1,5 +1,5 @@
 {
-   "copyright" : "Taken from https://github.com/tgstation/tgstation, modified by marvelousjoker",
+   "copyright" : "Created by Amaliz(ckey) for Space Station 14 server Мёртвый Космос",
    "license" : "CC-BY-SA-3.0",
    "size" : {
       "x" : 32,
@@ -7,12 +7,64 @@
    },
    "states" : [
       {
-         "directions" : 1,
-         "name" : "medibot"
+        "directions" : 4,
+         "name" : "stay",
+        "delays": [
+                [
+                    0.3,
+                    0.3,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.3,
+                    0.3,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.3,
+                    0.3,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.3,
+                    0.3,
+                    0.2,
+                    0.2
+                ]
+            ]
       },
       {
-         "directions" : 1,
-         "name" : "powered"
+         "name" : "walk",
+         "directions" : 4,
+        "delays": [
+                [
+                    0.3,
+                    0.3,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.3,
+                    0.3,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.3,
+                    0.3,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.3,
+                    0.3,
+                    0.2,
+                    0.2
+                ]
+            ]
       }
    ],
    "version" : 1

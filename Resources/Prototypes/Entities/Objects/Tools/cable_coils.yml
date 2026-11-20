@@ -9,6 +9,13 @@
   name: cable stack
   suffix: Full
   components:
+  - type: SurgeryTool # DS14
+    passive: true
+    precision: 0.8
+    slip: 0.1
+    wobble: 12
+    machineVerbs:
+    - Stanch
   - type: Tag
     tags:
     - CableCoil

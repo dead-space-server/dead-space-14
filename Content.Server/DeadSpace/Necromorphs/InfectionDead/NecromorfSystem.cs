@@ -40,13 +40,13 @@ namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
 public sealed partial class NecromorfSystem : SharedInfectionDeadSystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
     private static readonly Color NecromorphVisionColor = new(110f / 255f, 0f, 0f, 0.067f);
 
     public override void Initialize()

@@ -121,6 +121,17 @@
   - type: Tag
     tags:
     - BotanyHatchet
+  - type: SurgeryTool # DS14
+    precision: 0.7
+    slip: 0.25
+    wobble: 20
+    sawHits: 3
+    verbs:
+    - Chop
+    - Amputate
+    plantVerbs:
+    - Chop
+    - Amputate
   - type: Sharp
   - type: Sprite
     sprite: Objects/Tools/Hydroponics/hatchet.rsi

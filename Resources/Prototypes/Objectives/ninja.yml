@@ -175,7 +175,7 @@
   - type: NinjaAiHackCondition
 
 - type: entity
-  parent: [BaseNinjaObjective, BaseCodeObjective]
+  parent: [BaseNinjaObjective]
   id: NinjaInfoScanObjective
   name: Сканирование целей
   description: Просканируйте необходимые объекты или персонал станции с помощью своего инфо-сканера для сбора разведданных.
@@ -187,7 +187,7 @@
   - type: NinjaInfoCondition
 
 - type: entity
-  parent: [BaseNinjaObjective, BaseCodeObjective]
+  parent: [BaseNinjaObjective]
   id: NinjaStealMoneyObjective
   components:
   - type: Objective

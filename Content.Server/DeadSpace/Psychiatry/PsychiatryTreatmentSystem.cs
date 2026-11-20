@@ -14,6 +14,7 @@ using Content.Shared.Changeling.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.DeadSpace.Psychiatry;
 using Content.Shared.DoAfter;
@@ -50,32 +51,33 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Psychiatry;
 
-public sealed class PsychiatryTreatmentSystem : EntitySystem
+public sealed partial class PsychiatryTreatmentSystem : EntitySystem
 {
-    [Dependency] private readonly BloodstreamSystem _blood = default!;
-    [Dependency] private readonly BlindableSystem _blinding = default!;
-    [Dependency] private readonly NewStatusEffectsSystem _newStatus = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly DoAfterSystem _doAfter = default!;
-    [Dependency] private readonly ElectrocutionSystem _electro = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly PsychiatrySystem _psychiatry = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly PuddleSystem _puddles = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private BloodstreamSystem _blood = default!;
+    [Dependency] private BlindableSystem _blinding = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatus = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private DoAfterSystem _doAfter = default!;
+    [Dependency] private ElectrocutionSystem _electro = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private PsychiatrySystem _psychiatry = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private PuddleSystem _puddles = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    private const float BrokenJawTrauma = 30f;
 
     private static readonly Vector2i[] Cardinal = [new(1, 0), new(-1, 0), new(0, 1), new(0, -1)];
 
@@ -102,7 +104,6 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
         SubscribeLocalEvent<CascadeSpikeComponent, CascadeSpikeDoAfterEvent>(OnCascadeDoAfter);
         SubscribeLocalEvent<AdminCurePatchComponent, AfterInteractEvent>(OnAdminPatchInteract);
         SubscribeLocalEvent<AdminCurePatchComponent, AdminCurePatchDoAfterEvent>(OnAdminPatchDoAfter);
-        SubscribeLocalEvent<ExpandICChatRecipientsEvent>(OnChatRecipients);
         SubscribeLocalEvent<RegenerativeStasisExitedEvent>(OnStasisExited);
     }
 
@@ -157,26 +158,6 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
             return;
 
         _blinding.AdjustEyeDamage((args.Target, blindable), -blindable.EyeDamage);
-    }
-
-    private void OnChatRecipients(ExpandICChatRecipientsEvent ev)
-    {
-        List<ICommonSession>? drop = null;
-        foreach (var (session, _) in ev.Recipients)
-        {
-            if (session.AttachedEntity is not { } listener || listener == ev.Source)
-                continue;
-            if (!_newStatus.HasEffectComp<DeafStatusEffectComponent>(listener))
-                continue;
-            drop ??= new List<ICommonSession>();
-            drop.Add(session);
-        }
-
-        if (drop == null)
-            return;
-
-        foreach (var session in drop)
-            ev.Recipients.Remove(session);
     }
 
     private void OnShockInteract(Entity<ShockTherapyComponent> ent, ref AfterInteractEvent args)
@@ -333,19 +314,7 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
     private void StrikeLiving(Entity<ShockTherapyComponent> ent, EntityUid target, EntityUid user, float hitDamage, bool first)
     {
         if (first)
-        {
-            var hasGag = _inventory.TryGetSlotEntity(target, "mask", out var mask) &&
-                         HasComp<MedicalGagComponent>(mask.Value);
-            if (!hasGag)
-            {
-                var crush = new DamageSpecifier();
-                crush.DamageDict["Blunt"] = FixedPoint2.New(35);
-                _damageable.TryChangeDamage(target, crush, origin: user);
-                if (TryComp<BloodstreamComponent>(target, out var blood))
-                    _blood.TryModifyBleedAmount((target, blood), 2f);
-                _popup.PopupEntity(Loc.GetString("psychiatry-shock-no-gag"), target, PopupType.LargeCaution);
-            }
-        }
+            BreakJawUngagged(target, user);
 
         var shock = new DamageSpecifier();
         shock.DamageDict["Shock"] = FixedPoint2.New(hitDamage);
@@ -381,20 +350,29 @@ public sealed class PsychiatryTreatmentSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("psychiatry-shock-done", ("stages", (int) SchizophreniaStage.Acute)), user, user, PopupType.Medium);
     }
 
+    private void BreakJawUngagged(EntityUid target, EntityUid user)
+    {
+        if (_inventory.TryGetSlotEntity(target, "mask", out var mask) && HasComp<MedicalGagComponent>(mask.Value))
+            return;
+
+        var crush = new DamageSpecifier();
+        crush.DamageDict["Blunt"] = FixedPoint2.New(35);
+        _damageable.TryChangeDamage(target, crush, origin: user);
+        if (TryComp<BloodstreamComponent>(target, out var blood))
+            _blood.TryModifyBleedAmount((target, blood), 2f);
+
+        if (TryComp<LimbBodyComponent>(target, out var limbs) && limbs.HasJaw && limbs.Mouth < BrokenJawTrauma)
+        {
+            limbs.Mouth = BrokenJawTrauma;
+            Dirty(target, limbs);
+        }
+
+        _popup.PopupEntity(Loc.GetString("psychiatry-shock-no-gag"), target, PopupType.LargeCaution);
+    }
+
     private void ShockBody(Entity<ShockTherapyComponent> ent, EntityUid target, EntityUid user, int damage)
     {
-        var hasGag = _inventory.TryGetSlotEntity(target, "mask", out var mask) &&
-                     HasComp<MedicalGagComponent>(mask.Value);
-
-        if (!hasGag)
-        {
-            var crush = new DamageSpecifier();
-            crush.DamageDict["Blunt"] = FixedPoint2.New(35);
-            _damageable.TryChangeDamage(target, crush, origin: user);
-            if (TryComp<BloodstreamComponent>(target, out var blood))
-                _blood.TryModifyBleedAmount((target, blood), 2f);
-            _popup.PopupEntity(Loc.GetString("psychiatry-shock-no-gag"), target, PopupType.LargeCaution);
-        }
+        BreakJawUngagged(target, user);
 
         _electro.TryDoElectrocution(target, ent.Owner, damage, TimeSpan.FromSeconds(3), refresh: true, ignoreInsulation: true);
         ShockPuddleNeighbors(ent.Owner, target, damage, user);

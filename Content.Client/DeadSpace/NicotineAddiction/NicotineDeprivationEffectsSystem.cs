@@ -6,11 +6,11 @@ using Robust.Shared.Random;
 
 namespace Content.Client.DeadSpace.NicotineAddiction;
 
-public sealed class NicotineDeprivationEffectsSystem : EntitySystem
+public sealed partial class NicotineDeprivationEffectsSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _cameraRecoil = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedCameraRecoilSystem _cameraRecoil = default!;
 
     private const float ScreenKick = 0.12f;
     private const float EyeNudge = 0.04f;

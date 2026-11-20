@@ -17,7 +17,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackKelic
   name: сумка с функцией РИГ "MS-06"
   description: Компактная, износостойкая сумка, специально созданная для скафандра MS-06.
@@ -27,10 +27,6 @@
     sprite: _DeadSpace/Sponsor/Kelic/backpack.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Kelic/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
       - id: ClothingNeckKelic
@@ -67,7 +63,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltKelic
   name: RX-79 «Core Belt»
   description: Лёгкий композитный пояс, надёжно удерживает инструменты и равномерно распределяет вес.
@@ -77,11 +73,6 @@
     sprite: _DeadSpace/Sponsor/Kelic/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Kelic/belt.rsi
-  - type: Item
-    size: Huge
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -107,7 +98,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitKelic
   name: MS-06
   description: Старая разработка не вышедшая в массовое производство. Теперь личная вещь, скорее всего выданная пользователю за какие-то заслуги перед командованием.
@@ -119,8 +110,6 @@
     sprite: _DeadSpace/Sponsor/Kelic/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitKelic
-  - type: Item
-    size: Huge
   - type: ClothingSpeedModifier
     walkModifier: 1
     sprintModifier: 1
@@ -163,12 +152,20 @@
           - PowerCell
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitKelic
   categories: [ HideSpawnMenu ]
   name: шлем MS-06
   description: Старая разработка не вышедшая в массовое производство. Теперь личная вещь, скорее всего выданная пользователю за какие-то заслуги перед командованием.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.5
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Kelic/helmet.rsi
   - type: Clothing
@@ -177,9 +174,6 @@
     color: "#d46f11"
     radius: 7
     energy: 8
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 

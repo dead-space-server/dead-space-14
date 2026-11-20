@@ -1,0 +1,19 @@
+- type: entity
+  parent: BaseSubdermalImplant
+  id: CombatAdrenalineImplant
+  name: combat adrenaline implant
+  description: Lets the body produce adrenaline after a heavy wound while the wearer is ready to fight.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantComponents:
+    - type: CombatAdrenalineImplant
+
+- type: entity
+  id: CombatAdrenalineImplanter
+  name: implanter
+  suffix: combat adrenaline
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: CombatAdrenalineImplant

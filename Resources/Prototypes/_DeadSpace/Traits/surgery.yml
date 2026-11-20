@@ -1,0 +1,15 @@
+- type: trait
+  id: OrganDonor
+  name: trait-organ-donor-name
+  description: trait-organ-donor-desc
+  category: Quirks
+  components:
+  - type: SurgeryOrganDonor
+
+- type: trait
+  id: Surgiphobia
+  name: trait-surgiphobia-name
+  description: trait-surgiphobia-desc
+  category: Disabilities
+  components:
+  - type: SurgeryPhobia

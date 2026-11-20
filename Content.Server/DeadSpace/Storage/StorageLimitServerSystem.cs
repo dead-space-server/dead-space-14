@@ -7,9 +7,9 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.Storage;
 
-public sealed class StorageLimitServerSystem : EntitySystem
+public sealed partial class StorageLimitServerSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     private readonly Dictionary<NetUserId, bool> _playerStorageLimits = new();
 

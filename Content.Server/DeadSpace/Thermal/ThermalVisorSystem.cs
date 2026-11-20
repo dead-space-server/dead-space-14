@@ -6,9 +6,9 @@ using Content.Shared.Inventory.Events;
 
 namespace Content.Server.DeadSpace.ThermalVision;
 
-public sealed class ThermalVisorSystem : EntitySystem
+public sealed partial class ThermalVisorSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     public override void Initialize()
     {

@@ -14,7 +14,7 @@
     sprite: Clothing/Head/Helmets/security.rsi
     state: icon
   product: CrateSecurityHelmet
-  cost: 750 # DS14
+  cost: 850 # DS14
   category: cargoproduct-category-name-security
   group: security # DS14
 

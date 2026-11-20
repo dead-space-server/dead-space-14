@@ -24,12 +24,12 @@ namespace Content.Client.UserInterface.Systems.Sandbox;
 
 // TODO hud refactor should part of this be in engine?
 [UsedImplicitly]
-public sealed class SandboxUIController : UIController, IOnStateChanged<GameplayState>, IOnSystemChanged<SandboxSystem>
+public sealed partial class SandboxUIController : UIController, IOnStateChanged<GameplayState>, IOnSystemChanged<SandboxSystem>
 {
-    [Dependency] private readonly IConsoleHost _console = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IConsoleHost _console = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     [UISystemDependency] private readonly SandboxSystem _sandbox = default!;
 
@@ -135,6 +135,13 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
         // _window.ToggleFovButton.OnToggled += _ => _sandbox.ToggleFov();
         _window.ToggleShadowsButton.OnToggled += _ => _sandbox.ToggleShadows();
         _window.SuicideButton.OnPressed += _ => _sandbox.Suicide();
+        //DS-14 start
+        _window.ToggleDeviceLinksButton.OnPressed += _ =>
+        {
+            _window.ToggleDeviceLinksButton.Pressed = _sandbox.ToggleDeviceLinks();
+        };
+        //DS-14 end
+        _window.ToggleSubfloorButton.OnPressed += _ => _sandbox.ToggleSubfloor(); //DS-14
         _window.ToggleDisposalButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("disposal"); //DS-14
         _window.ToggleCableButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("cable"); //DS-14
         _window.ToggleAtmosButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("atmos"); //DS-14
@@ -217,6 +224,7 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
             return;
 
         //DS-14 start
+        _window.ToggleSubfloorButton.Pressed = (layers & SubfloorVisibility.All) == SubfloorVisibility.All;
         _window.ToggleDisposalButton.Pressed = (layers & VisibilityFlags.SubfloorDisposal) != 0;
         _window.ToggleCableButton.Pressed = (layers & VisibilityFlags.SubfloorCable) != 0;
         _window.ToggleAtmosButton.Pressed = (layers & VisibilityFlags.SubfloorAtmos) != 0;

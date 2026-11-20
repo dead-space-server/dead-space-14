@@ -58,7 +58,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltswitzerlaandFilled
   name: зелёный украшенный пояс
   description: Пояс окрашенный в зелёный цвет.
@@ -68,8 +68,6 @@
     sprite: _DeadSpace/Sponsor/vjlados/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/vjlados/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -117,7 +115,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitBase
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitswitzerlaand
   name: скафандр NanoTrasen
   description: Очень дорогой усиленный скафандр сделанный на заказ. Окрашен в фирменный синий цвет NanoTrasen.
@@ -129,8 +127,6 @@
     sprite: _DeadSpace/Sponsor/switzerlaand/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitswitzerlaand
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -151,23 +147,27 @@
   - type: HeldSpeedModifier
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitswitzerlaand
   categories: [ HideSpawnMenu ]
   name: шлем скафандра NanoTrasen
   description: На внутренней стороне шлема нанесена гравировка "switzerlaand".
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.9
+        Radiation: 0.5
   - type: Sprite
     sprite: _DeadSpace/Sponsor/switzerlaand/helmet.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/switzerlaand/helmet.rsi
   - type: PointLight
     color: "#daffad"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Head
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatswitzerlaand

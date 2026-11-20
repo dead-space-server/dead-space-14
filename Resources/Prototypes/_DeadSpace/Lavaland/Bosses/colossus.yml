@@ -209,6 +209,7 @@
     deathRewards:
     - LavalandNecropolisChestHardsuit
     - LavalandNecropolisChest
+    - LavalandNecropolisChest
     - ColossusTrophy
     # Only one of its unique items drops.
     uniqueRewards:

@@ -18,12 +18,6 @@ ert-loadout-category-ares-swc-incendiary-description =
     Обладает барабанным магазином и общей мобильностью. 
     Создано по предварительному договору NanoTrasen с SWC.
     Имеет зажигательные патроны.
-ert-loadout-category-ares-swcbs-name = SWC-432-5 "Арес"
-ert-loadout-category-ares-swcbs-description =
-    Автоматический дробовик. Совершенно новый аналог нашумевшей "Сайге". 
-    Обладает барабанным магазином и общей мобильностью. 
-    Использует патроны калибра 12х70 дробь.
-    Набор содержит 3 барабана и SWC-432-5 "Арес".
 ert-loadout-category-energyshotgun-name = Энергетический дробовик
 ert-loadout-category-energyshotgun-description =
     Новейший прототип, с возможностью смены режима на летальный

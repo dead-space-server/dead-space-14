@@ -14,12 +14,12 @@ namespace Content.Server.DeadSpace.Hooligan.Objectives;
 /// Логика цели "Стравить": считает урон, нанесённый атакующим жертве,
 /// вешает компонент-счётчик на тело жертвы и отвечает на вопрос о прогрессе.
 /// </summary>
-public sealed class HooliganFightConditionSystem : EntitySystem
+public sealed partial class HooliganFightConditionSystem : EntitySystem
 {
 
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     public override void Initialize()
     {

@@ -2,9 +2,9 @@ using Robust.Client.Graphics;
 
 namespace Content.Client.DeadSpace.Guardian;
 
-public sealed class GuardianLightningArcSystem : EntitySystem
+public sealed partial class GuardianLightningArcSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     public override void Initialize()
     {

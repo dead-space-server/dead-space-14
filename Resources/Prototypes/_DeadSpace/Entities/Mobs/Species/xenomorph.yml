@@ -128,12 +128,13 @@
     species: Xenomorph
   - type: CorpseBurning
     messageType: chitin
-  - type: DamageVisuals
-    damageOverlayGroups:
+  - type: LimbWoundVisuals
+    groups:
       Brute:
         sprite: Mobs/Effects/brute_damage.rsi
         color: "#9106d1"
-
+    #bandage:
+    #  sprite: _DeadSpace/Mobs/Effects/bandage.rsi
 - type: entity
   parent: BaseSpeciesDummy
   id: MobXenomorphDummy

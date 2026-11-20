@@ -3,6 +3,10 @@
   id: BulletMalorian
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    bone: 30
+    organ: 1.3
+    bleed: 0.16
   - type: HitscanBasicDamage
     damage:
       types:

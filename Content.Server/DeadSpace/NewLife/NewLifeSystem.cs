@@ -25,13 +25,13 @@ namespace Content.Server.DeadSpace.NewLife;
 
 public sealed partial class NewLifeSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private PrisonSystem _prison = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private IChatManager _chat = default!;
 
     private static readonly TimeSpan RespawnDelay = TimeSpan.FromMinutes(15);
     private static readonly TimeSpan RulesDelay = TimeSpan.FromSeconds(5);
@@ -48,7 +48,7 @@ public sealed partial class NewLifeSystem : EntitySystem
         Used,
     }
 
-    private sealed class LifeRecord
+    private sealed partial class LifeRecord
     {
         public UseState Use;
         public EntityUid? Mind;

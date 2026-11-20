@@ -76,19 +76,16 @@ namespace Content.Client.UserInterface.Controls
 
         protected override Vector2 ArrangeOverride(Vector2 finalSize)
         {
-            var box = new UIBox2(Vector2.Zero, finalSize);
-
             var padSize = HasMargins ? PadSize : 0;
 
-            if (HasTopEdge)
-            {
-                box += (0, padSize + EdgeSize, 0, 0);
-            }
+            // DS14-start: when the stripe is shorter than its edges, keep the box from inverting (UIBox2 rejects it).
+            var top = HasTopEdge ? padSize + EdgeSize : 0f;
+            var bottom = finalSize.Y - (HasBottomEdge ? padSize + EdgeSize : 0f);
+            if (bottom < top)
+                top = bottom = Math.Clamp((top + bottom) / 2f, 0f, finalSize.Y);
 
-            if (HasBottomEdge)
-            {
-                box += (0, 0, 0, -(padSize + EdgeSize));
-            }
+            var box = new UIBox2(0, top, finalSize.X, bottom);
+            // DS14-end
 
             foreach (var child in Children)
             {

@@ -30,11 +30,11 @@ public sealed partial class BotanyProduceSystem : EntitySystem
     // DS14-start
     private EntityQuery<PlantTrayComponent> _trayQuery;
 
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly PlantSystem _plant = default!;
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private PlantSystem _plant = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     // DS14-end
 
     private void OnAfterInteract(Entity<ProduceComponent> ent, ref AfterInteractEvent args)

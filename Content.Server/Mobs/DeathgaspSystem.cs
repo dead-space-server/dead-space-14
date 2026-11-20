@@ -1,4 +1,4 @@
-﻿using Content.Server.Chat.Systems;
+using Content.Server.Chat.Systems;
 using Content.Server.Speech.EntitySystems;
 using Content.Shared.Chat;
 using Content.Shared.Inventory;
@@ -7,18 +7,20 @@ using Content.Shared.Speech.Muting;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing; //DS-14
 
 namespace Content.Server.Mobs;
 
 /// <see cref="DeathgaspComponent"/>
-public sealed class DeathgaspSystem: EntitySystem
+public sealed partial class DeathgaspSystem: EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private ChatSystem _chat = default!;
     // DS14-start
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     // DS14-end
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private IGameTiming _timing = default!; //DS-14
 
     public override void Initialize()
     {
@@ -72,6 +74,13 @@ public sealed class DeathgaspSystem: EntitySystem
 
         if (_statusEffects.HasEffectComp<MutedStatusEffectComponent>(uid))
             return false;
+
+        //DS-14 start
+        if (component.LastGasp != TimeSpan.Zero && _timing.CurTime < component.LastGasp + TimeSpan.FromSeconds(20))
+            return false;
+
+        component.LastGasp = _timing.CurTime;
+        //DS-14 end
 
         _chat.TryEmoteWithChat(uid, component.Prototype, ignoreActionBlocker: true);
 

@@ -24,7 +24,7 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobTileSystem : SharedBlobTileSystem
+public sealed partial class BlobTileSystem : SharedBlobTileSystem
 {
     private static readonly SoundPathSpecifier BlastSound = new("/Audio/Effects/explosion1.ogg");
     [Dependency] private readonly AudioSystem _audioSystem = default!;

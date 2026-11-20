@@ -5,13 +5,16 @@ using Content.Shared.DeadSpace.Administration.GameRules;
 using Robust.Client.Console;
 using Robust.Client.UserInterface;
 using Robust.Shared.Console;
+using Content.Shared.Administration;
+using Content.Client.Administration.Managers;
 
 namespace Content.Client.DeadSpace.Administration.GameRules;
 
-public sealed class GameRulesClientSystem : EntitySystem
+public sealed partial class GameRulesClientSystem : EntitySystem
 {
-    [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private IClientConsoleHost _consoleHost = default!;
+    [Dependency] private IClientAdminManager _adminManager = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
 
     public event Action<GameRulesListResponseMessage>? RulesUpdated;
 
@@ -36,6 +39,9 @@ public sealed class GameRulesClientSystem : EntitySystem
 
     private void ExecuteOpenGameRulesWindow(IConsoleShell shell, string argStr, string[] args)
     {
+        if (!_adminManager.HasFlag(AdminFlags.Admin))
+            return;
+
         var window = new GameRulesWindow();
         _uiManager.WindowRoot.AddChild(window);
         window.OpenCentered();
@@ -48,6 +54,9 @@ public sealed class GameRulesClientSystem : EntitySystem
 
     public void RequestRules()
     {
+        if (!_adminManager.HasFlag(AdminFlags.Admin))
+            return;
+
         RaiseNetworkEvent(new RequestGameRulesListMessage());
     }
 

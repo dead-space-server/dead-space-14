@@ -1,0 +1,1169 @@
+- type: reagent
+  id: GraftCellsArachnid
+  name: reagent-name-graft-cells-arachnid
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#3d6b8f"
+
+- type: reagent
+  id: GraftParticlesArachnid
+  name: reagent-name-graft-particles-arachnid
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#3d6b8f"
+
+- type: reaction
+  id: GraftParticlesArachnid
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    CopperBlood:
+      amount: 3
+    GraftCellsArachnid:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesArachnid: 1
+
+- type: reagent
+  id: GraftCellsDemon
+  name: reagent-name-graft-cells-arkan
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#8a3a8f"
+
+- type: reagent
+  id: GraftParticlesDemon
+  name: reagent-name-graft-particles-arkan
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#8a3a8f"
+
+- type: reaction
+  id: GraftParticlesDemon
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Blood:
+      amount: 3
+    GraftCellsDemon:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesDemon: 1
+
+- type: reagent
+  id: GraftCellsCanine
+  name: reagent-name-graft-cells-canine
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#8a5a34"
+
+- type: reagent
+  id: GraftParticlesCanine
+  name: reagent-name-graft-particles-canine
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#8a5a34"
+
+- type: reaction
+  id: GraftParticlesCanine
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Blood:
+      amount: 3
+    GraftCellsCanine:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesCanine: 1
+
+- type: reagent
+  id: GraftCellsFeline
+  name: reagent-name-graft-cells-feline
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#c98b3a"
+
+- type: reagent
+  id: GraftParticlesFeline
+  name: reagent-name-graft-particles-feline
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#c98b3a"
+
+- type: reaction
+  id: GraftParticlesFeline
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Blood:
+      amount: 3
+    GraftCellsFeline:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesFeline: 1
+
+- type: reagent
+  id: GraftCellsHuman
+  name: reagent-name-graft-cells-human
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#b84a4a"
+
+- type: reagent
+  id: GraftParticlesHuman
+  name: reagent-name-graft-particles-human
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#b84a4a"
+
+- type: reaction
+  id: GraftParticlesHuman
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Blood:
+      amount: 3
+    GraftCellsHuman:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesHuman: 1
+
+- type: reagent
+  id: GraftCellsMoth
+  name: reagent-name-graft-cells-moth
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#b7a07a"
+
+- type: reagent
+  id: GraftParticlesMoth
+  name: reagent-name-graft-particles-moth
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#b7a07a"
+
+- type: reaction
+  id: GraftParticlesMoth
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    InsectBlood:
+      amount: 3
+    GraftCellsMoth:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesMoth: 1
+
+- type: reagent
+  id: GraftCellsReptile
+  name: reagent-name-graft-cells-reptile
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#4f8a3c"
+
+- type: reagent
+  id: GraftParticlesReptile
+  name: reagent-name-graft-particles-reptile
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#4f8a3c"
+
+- type: reaction
+  id: GraftParticlesReptile
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Blood:
+      amount: 3
+    GraftCellsReptile:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesReptile: 1
+
+- type: reagent
+  id: GraftCellsShark
+  name: reagent-name-graft-cells-shark
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#5a7d9a"
+
+- type: reagent
+  id: GraftParticlesShark
+  name: reagent-name-graft-particles-shark
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#5a7d9a"
+
+- type: reaction
+  id: GraftParticlesShark
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Blood:
+      amount: 3
+    GraftCellsShark:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesShark: 1
+
+- type: reagent
+  id: GraftCellsVox
+  name: reagent-name-graft-cells-vox
+  desc: reagent-desc-graft-cells
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: metallic
+  color: "#5fa39a"
+
+- type: reagent
+  id: GraftParticlesVox
+  name: reagent-name-graft-particles-vox
+  desc: reagent-desc-graft-particles
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#5fa39a"
+
+- type: reaction
+  id: GraftParticlesVox
+  priority: 10
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    AmmoniaBlood:
+      amount: 3
+    GraftCellsVox:
+      amount: 0.01
+      catalyst: true
+  products:
+    GraftParticlesVox: 1
+
+- type: reagent
+  id: GraftMutagenArachnidCanine
+  name: reagent-name-graft-mutagen-arachnid-canine
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#636261"
+
+- type: reaction
+  id: GraftMutagenArachnidCanine
+  reactants:
+    GraftParticlesArachnid:
+      amount: 1
+    GraftParticlesCanine:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenArachnidCanine: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenArachnidCanine
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenArachnidDemon
+  name: reagent-name-graft-mutagen-arachnid-arkan
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#63528f"
+
+- type: reaction
+  id: GraftMutagenArachnidDemon
+  reactants:
+    GraftParticlesArachnid:
+      amount: 1
+    GraftParticlesDemon:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenArachnidDemon: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenArachnidDemon
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenArachnidFeline
+  name: reagent-name-graft-mutagen-arachnid-feline
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#837b64"
+
+- type: reaction
+  id: GraftMutagenArachnidFeline
+  reactants:
+    GraftParticlesArachnid:
+      amount: 1
+    GraftParticlesFeline:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenArachnidFeline: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenArachnidFeline
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenArachnidHuman
+  name: reagent-name-graft-mutagen-arachnid-human
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#7a5a6c"
+
+- type: reaction
+  id: GraftMutagenArachnidHuman
+  reactants:
+    GraftParticlesArachnid:
+      amount: 1
+    GraftParticlesHuman:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenArachnidHuman: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenArachnidHuman
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenArachnidMoth
+  name: reagent-name-graft-mutagen-arachnid-moth
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#7a8584"
+
+- type: reaction
+  id: GraftMutagenArachnidMoth
+  reactants:
+    GraftParticlesArachnid:
+      amount: 1
+    GraftParticlesMoth:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenArachnidMoth: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenArachnidMoth
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenArachnidReptile
+  name: reagent-name-graft-mutagen-arachnid-reptile
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#467a65"
+
+- type: reaction
+  id: GraftMutagenArachnidReptile
+  reactants:
+    GraftParticlesArachnid:
+      amount: 1
+    GraftParticlesReptile:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenArachnidReptile: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenArachnidReptile
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenArachnidShark
+  name: reagent-name-graft-mutagen-arachnid-shark
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#4b7494"
+
+- type: reaction
+  id: GraftMutagenArachnidShark
+  reactants:
+    GraftParticlesArachnid:
+      amount: 1
+    GraftParticlesShark:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenArachnidShark: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenArachnidShark
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenArachnidVox
+  name: reagent-name-graft-mutagen-arachnid-vox
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#4e8794"
+
+- type: reaction
+  id: GraftMutagenArachnidVox
+  reactants:
+    GraftParticlesArachnid:
+      amount: 1
+    GraftParticlesVox:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenArachnidVox: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenArachnidVox
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenCanineDemon
+  name: reagent-name-graft-mutagen-canine-arkan
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#8a4a61"
+
+- type: reaction
+  id: GraftMutagenCanineDemon
+  reactants:
+    GraftParticlesCanine:
+      amount: 1
+    GraftParticlesDemon:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenCanineDemon: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenCanineDemon
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenCanineFeline
+  name: reagent-name-graft-mutagen-canine-feline
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#a97237"
+
+- type: reaction
+  id: GraftMutagenCanineFeline
+  reactants:
+    GraftParticlesCanine:
+      amount: 1
+    GraftParticlesFeline:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenCanineFeline: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenCanineFeline
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenCanineHuman
+  name: reagent-name-graft-mutagen-canine-human
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#a1523f"
+
+- type: reaction
+  id: GraftMutagenCanineHuman
+  reactants:
+    GraftParticlesCanine:
+      amount: 1
+    GraftParticlesHuman:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenCanineHuman: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenCanineHuman
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenCanineMoth
+  name: reagent-name-graft-mutagen-canine-moth
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#a07d57"
+
+- type: reaction
+  id: GraftMutagenCanineMoth
+  reactants:
+    GraftParticlesCanine:
+      amount: 1
+    GraftParticlesMoth:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenCanineMoth: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenCanineMoth
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenCanineReptile
+  name: reagent-name-graft-mutagen-canine-reptile
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#6c7238"
+
+- type: reaction
+  id: GraftMutagenCanineReptile
+  reactants:
+    GraftParticlesCanine:
+      amount: 1
+    GraftParticlesReptile:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenCanineReptile: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenCanineReptile
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenCanineShark
+  name: reagent-name-graft-mutagen-canine-shark
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#726b67"
+
+- type: reaction
+  id: GraftMutagenCanineShark
+  reactants:
+    GraftParticlesCanine:
+      amount: 1
+    GraftParticlesShark:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenCanineShark: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenCanineShark
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenCanineVox
+  name: reagent-name-graft-mutagen-canine-vox
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#747e67"
+
+- type: reaction
+  id: GraftMutagenCanineVox
+  reactants:
+    GraftParticlesCanine:
+      amount: 1
+    GraftParticlesVox:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenCanineVox: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenCanineVox
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenDemonFeline
+  name: reagent-name-graft-mutagen-arkan-feline
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#a96264"
+
+- type: reaction
+  id: GraftMutagenDemonFeline
+  reactants:
+    GraftParticlesDemon:
+      amount: 1
+    GraftParticlesFeline:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenDemonFeline: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenDemonFeline
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenDemonHuman
+  name: reagent-name-graft-mutagen-arkan-human
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#a1426c"
+
+- type: reaction
+  id: GraftMutagenDemonHuman
+  reactants:
+    GraftParticlesDemon:
+      amount: 1
+    GraftParticlesHuman:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenDemonHuman: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenDemonHuman
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenDemonMoth
+  name: reagent-name-graft-mutagen-arkan-moth
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#a06d84"
+
+- type: reaction
+  id: GraftMutagenDemonMoth
+  reactants:
+    GraftParticlesDemon:
+      amount: 1
+    GraftParticlesMoth:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenDemonMoth: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenDemonMoth
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenDemonReptile
+  name: reagent-name-graft-mutagen-arkan-reptile
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#6c6265"
+
+- type: reaction
+  id: GraftMutagenDemonReptile
+  reactants:
+    GraftParticlesDemon:
+      amount: 1
+    GraftParticlesReptile:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenDemonReptile: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenDemonReptile
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenDemonShark
+  name: reagent-name-graft-mutagen-arkan-shark
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#725b94"
+
+- type: reaction
+  id: GraftMutagenDemonShark
+  reactants:
+    GraftParticlesDemon:
+      amount: 1
+    GraftParticlesShark:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenDemonShark: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenDemonShark
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenDemonVox
+  name: reagent-name-graft-mutagen-arkan-vox
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#746e94"
+
+- type: reaction
+  id: GraftMutagenDemonVox
+  reactants:
+    GraftParticlesDemon:
+      amount: 1
+    GraftParticlesVox:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenDemonVox: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenDemonVox
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenFelineHuman
+  name: reagent-name-graft-mutagen-feline-human
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#c06a42"
+
+- type: reaction
+  id: GraftMutagenFelineHuman
+  reactants:
+    GraftParticlesFeline:
+      amount: 1
+    GraftParticlesHuman:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenFelineHuman: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenFelineHuman
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenFelineMoth
+  name: reagent-name-graft-mutagen-feline-moth
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#c0955a"
+
+- type: reaction
+  id: GraftMutagenFelineMoth
+  reactants:
+    GraftParticlesFeline:
+      amount: 1
+    GraftParticlesMoth:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenFelineMoth: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenFelineMoth
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenFelineReptile
+  name: reagent-name-graft-mutagen-feline-reptile
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#8c8a3b"
+
+- type: reaction
+  id: GraftMutagenFelineReptile
+  reactants:
+    GraftParticlesFeline:
+      amount: 1
+    GraftParticlesReptile:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenFelineReptile: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenFelineReptile
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenFelineShark
+  name: reagent-name-graft-mutagen-feline-shark
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#91846a"
+
+- type: reaction
+  id: GraftMutagenFelineShark
+  reactants:
+    GraftParticlesFeline:
+      amount: 1
+    GraftParticlesShark:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenFelineShark: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenFelineShark
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenFelineVox
+  name: reagent-name-graft-mutagen-feline-vox
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#94976a"
+
+- type: reaction
+  id: GraftMutagenFelineVox
+  reactants:
+    GraftParticlesFeline:
+      amount: 1
+    GraftParticlesVox:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenFelineVox: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenFelineVox
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenHumanMoth
+  name: reagent-name-graft-mutagen-human-moth
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#b77562"
+
+- type: reaction
+  id: GraftMutagenHumanMoth
+  reactants:
+    GraftParticlesHuman:
+      amount: 1
+    GraftParticlesMoth:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenHumanMoth: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenHumanMoth
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenHumanReptile
+  name: reagent-name-graft-mutagen-human-reptile
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#836a43"
+
+- type: reaction
+  id: GraftMutagenHumanReptile
+  reactants:
+    GraftParticlesHuman:
+      amount: 1
+    GraftParticlesReptile:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenHumanReptile: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenHumanReptile
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenHumanShark
+  name: reagent-name-graft-mutagen-human-shark
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#896372"
+
+- type: reaction
+  id: GraftMutagenHumanShark
+  reactants:
+    GraftParticlesHuman:
+      amount: 1
+    GraftParticlesShark:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenHumanShark: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenHumanShark
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenHumanVox
+  name: reagent-name-graft-mutagen-human-vox
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#8b7672"
+
+- type: reaction
+  id: GraftMutagenHumanVox
+  reactants:
+    GraftParticlesHuman:
+      amount: 1
+    GraftParticlesVox:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenHumanVox: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenHumanVox
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenMothReptile
+  name: reagent-name-graft-mutagen-moth-reptile
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#83955b"
+
+- type: reaction
+  id: GraftMutagenMothReptile
+  reactants:
+    GraftParticlesMoth:
+      amount: 1
+    GraftParticlesReptile:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenMothReptile: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenMothReptile
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenMothShark
+  name: reagent-name-graft-mutagen-moth-shark
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#888e8a"
+
+- type: reaction
+  id: GraftMutagenMothShark
+  reactants:
+    GraftParticlesMoth:
+      amount: 1
+    GraftParticlesShark:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenMothShark: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenMothShark
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenMothVox
+  name: reagent-name-graft-mutagen-moth-vox
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#8ba18a"
+
+- type: reaction
+  id: GraftMutagenMothVox
+  reactants:
+    GraftParticlesMoth:
+      amount: 1
+    GraftParticlesVox:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenMothVox: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenMothVox
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenReptileShark
+  name: reagent-name-graft-mutagen-reptile-shark
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#54836b"
+
+- type: reaction
+  id: GraftMutagenReptileShark
+  reactants:
+    GraftParticlesReptile:
+      amount: 1
+    GraftParticlesShark:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenReptileShark: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenReptileShark
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenReptileVox
+  name: reagent-name-graft-mutagen-reptile-vox
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#57966b"
+
+- type: reaction
+  id: GraftMutagenReptileVox
+  reactants:
+    GraftParticlesReptile:
+      amount: 1
+    GraftParticlesVox:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenReptileVox: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenReptileVox
+    into: Amatoxin
+    probability: 0.01
+
+- type: reagent
+  id: GraftMutagenSharkVox
+  name: reagent-name-graft-mutagen-shark-vox
+  desc: reagent-desc-graft-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: sour
+  color: "#5c909a"
+
+- type: reaction
+  id: GraftMutagenSharkVox
+  reactants:
+    GraftParticlesShark:
+      amount: 1
+    GraftParticlesVox:
+      amount: 1
+    UnstableMutagen:
+      amount: 1
+  products:
+    GraftMutagenSharkVox: 2
+  effects:
+  - !type:GraftMutagenSpoil
+    reagent: GraftMutagenSharkVox
+    into: Amatoxin
+    probability: 0.01

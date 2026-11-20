@@ -109,6 +109,7 @@
         Slash: 0.95
         Piercing: 0.95
         Heat: 0.95
+        Radiation: 0.2
   - type: Item
     heldPrefix: off
     size: Normal

@@ -1,5 +1,6 @@
 // Dead Space 14, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Numerics;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.DeadSpace.CameraArchives;
@@ -9,4 +10,13 @@ public sealed partial class CameraArchivePrintComponent : Component
 {
     [AutoNetworkedField]
     public byte[] Image = [];
+
+    [AutoNetworkedField]
+    public byte[] Still = [];
+
+    [AutoNetworkedField]
+    public float Magnification = 1f;
+
+    [AutoNetworkedField]
+    public Vector2 Pan;
 }

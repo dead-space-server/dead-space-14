@@ -256,12 +256,8 @@ public static class EmoteAnimation
 
     private static bool TryColor(string text, out Color color)
     {
-        var hex = Color.TryFromHex(text);
-        if (hex != null)
-        {
-            color = hex.Value;
+        if (Color.TryFromHex(text, out color))
             return true;
-        }
 
         return Color.TryFromName(text, out color);
     }

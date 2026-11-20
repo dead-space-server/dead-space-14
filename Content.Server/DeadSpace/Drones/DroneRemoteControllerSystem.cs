@@ -18,16 +18,16 @@ using Content.Shared.Whitelist;
 
 namespace Content.Server.DeadSpace.Drones.Systems;
 
-public sealed class DroneRemoteControllerSystem : EntitySystem
+public sealed partial class DroneRemoteControllerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly DroneSystem _drone = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private DroneSystem _drone = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     public override void Initialize()
     {
         base.Initialize();

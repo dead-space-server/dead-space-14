@@ -43,40 +43,40 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandMadMinerSystem : EntitySystem
+public sealed partial class LavalandMadMinerSystem : EntitySystem
 {
     private static readonly float[] ShotgunSpread = [-18f, -9f, 0f, 9f, 18f];
 
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly BlinkSystem _blink = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly GunSystem _gun = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly Content.Shared.Administration.Systems.RejuvenateSystem _rejuvenate = default!;
-    [Dependency] private readonly Content.Shared.Mobs.Systems.MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly Content.Shared.Movement.Systems.MovementSpeedModifierSystem _speedModifier = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly Content.Server.NPC.Systems.NPCSystem _npc = default!;
-    [Dependency] private readonly Content.Shared.Popups.SharedPopupSystem _popup = default!;
-    [Dependency] private readonly Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly LavalandMadMinerHookSystem _hook = default!;
-    [Dependency] private readonly Content.Shared.Throwing.ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private BlinkSystem _blink = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private GunSystem _gun = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private Content.Shared.Administration.Systems.RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private Content.Shared.Mobs.Systems.MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private Content.Shared.Movement.Systems.MovementSpeedModifierSystem _speedModifier = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private Content.Server.NPC.Systems.NPCSystem _npc = default!;
+    [Dependency] private Content.Shared.Popups.SharedPopupSystem _popup = default!;
+    [Dependency] private Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
+    [Dependency] private LavalandMadMinerHookSystem _hook = default!;
+    [Dependency] private Content.Shared.Throwing.ThrowingSystem _throwing = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private LavalandFaunaRaidSystem _raids = default!;
 
     private int _nextHudId = 100000;
 
@@ -124,10 +124,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (xform.MapUid is not { } mapUid || xform.GridUid != mapUid)
             return false;
 
-        var box = Box2.CenteredAround(_transform.GetWorldPosition(xform), new Vector2(OtherGridExclusion * 2f));
-        foreach (var other in _mapManager.FindGridsIntersecting(xform.MapID, box))
+        var position = _transform.GetWorldPosition(xform);
+        var box = Box2.CenteredAround(position, new Vector2(OtherGridExclusion * 2f));
+        var circle = new Circle(position, OtherGridExclusion);
+        foreach (var other in _map.GridsIntersecting(xform.MapID, box))
         {
-            if (other.Owner != mapUid)
+            // The grid's bounds reach far past its tiles (a large outpost): only its real tiles nearby count.
+            if (other.Owner != mapUid && _map.GetTilesIntersecting(other.Owner, other, circle).Any())
                 return true;
         }
 
@@ -313,7 +316,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             foreach (var player in nearby)
             {
                 if (TryComp<PhysicsComponent>(player, out var victimBody))
-                    _physics.SetLinearVelocity(player, body.LinearVelocity, body: victimBody);
+                    _physics.SetLinearVelocity(player, ClampSpeed(body.LinearVelocity, MaxHookedSpeed), body: victimBody);
             }
         }
     }
@@ -564,7 +567,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
 
     private bool IsOpenGround(MapCoordinates coordinates)
     {
-        if (!_mapManager.TryFindGridAt(coordinates, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
             return false;
 
         var tile = _map.TileIndicesFor(gridUid, grid, coordinates);
@@ -709,7 +712,8 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                 ? dragBody.LinearVelocity : Vector2.Zero;
             foreach (var (target, visual) in miner.HookTargets.ToArray())
             {
-                if (!Exists(target) || IsDead(target) || Transform(target).MapID != Transform(uid).MapID)
+                if (!Exists(target) || IsDead(target) || Transform(target).MapID != Transform(uid).MapID ||
+                    !CanHook(uid, target, miner.HookMaxLength + HookSlack))
                 {
                     RemoveHookTarget(miner, target);
                     continue;
@@ -721,13 +725,14 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                     TryComp<PhysicsComponent>(target, out var body))
                 {
                     var correction = origin + offset - _transform.GetWorldPosition(target);
-                    _physics.SetLinearVelocity(target, velocity + correction * 10f, body: body);
+                    _physics.SetLinearVelocity(target, ClampSpeed(velocity + correction * 10f, MaxHookedSpeed), body: body);
                 }
             }
             return;
         }
 
-        if (TryComp<PhysicsComponent>(uid, out var minerPhysics))
+        // Mid-blink (the retreat of a hook) the dash drives it; set here, the two fought over its velocity.
+        if (!HasComp<ActiveBlinkDashComponent>(uid) && TryComp<PhysicsComponent>(uid, out var minerPhysics))
         {
             var velocity = Vector2.Zero;
             if (miner.HookAttacker is { Valid: true } attacker && Exists(attacker) &&
@@ -752,6 +757,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             if (now < miner.HookPullStarts)
                 continue;
 
+            // A rock between them: the chain catches on it and lets go, never drags anyone through.
+            if (!CanHook(uid, target, miner.HookMaxLength + HookSlack))
+            {
+                RemoveHookTarget(miner, target);
+                continue;
+            }
+
             ConstrainHookDistance(uid, target, miner.HookMaxLength);
             var direction = _transform.GetWorldPosition(uid) - _transform.GetWorldPosition(target);
             var distance = direction.Length();
@@ -775,6 +787,21 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                 _physics.SetLinearVelocity(target, Vector2.Normalize(direction) * pullSpeed, body: physics);
             }
         }
+    }
+
+    /// <summary>Slack (tiles) over the chain's length within which the miner still sees whom it holds.</summary>
+    private const float HookSlack = 2f;
+
+    /// <summary>
+    /// The most a hooked player is ever moved at (tiles a second): faster, the physics let them through thin rock and
+    /// on past the miner when let go.
+    /// </summary>
+    private const float MaxHookedSpeed = 12f;
+
+    private static Vector2 ClampSpeed(Vector2 velocity, float max)
+    {
+        var length = velocity.Length();
+        return length > max ? velocity / length * max : velocity;
     }
 
     private void ConstrainHookDistance(EntityUid miner, EntityUid target, float maxLength)
@@ -819,6 +846,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (miner.HookTargets.Remove(target, out var visual) && Exists(visual))
             QueueDel(visual);
         RemCompDeferred<LavalandMadMinerHookedComponent>(target);
+
+        // Let go, nobody keeps flying on with the drag's speed (a throw after this sets its own).
+        if (!TerminatingOrDeleted(target) && TryComp<PhysicsComponent>(target, out var body) &&
+            body.LinearVelocity.LengthSquared() > MaxHookedSpeed * MaxHookedSpeed)
+        {
+            _physics.SetLinearVelocity(target, Vector2.Zero, body: body);
+        }
     }
 
     private void ClearHooks(EntityUid uid, LavalandMadMinerComponent miner)
@@ -1145,5 +1179,5 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         }
     }
 
-    private bool IsDead(EntityUid uid) => TryComp<MobStateComponent>(uid, out var mob) && mob.CurrentState == MobState.Dead;
+    private bool IsDead(EntityUid uid) => !TryComp<MobStateComponent>(uid, out var mob) || mob.CurrentState == MobState.Dead;
 }

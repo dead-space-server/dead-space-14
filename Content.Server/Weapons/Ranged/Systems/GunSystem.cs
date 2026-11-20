@@ -7,6 +7,7 @@ using Content.Server.Weapons.Ranged.Components;
 using Content.Shared.Cargo;
 using Content.Shared.Damage;
 using Content.Shared.DeadSpace.Weapons.Akimbo; // DS14
+using Content.Shared.DeadSpace.Weapons.Ranged; // DS14
 using Content.Shared.DeadSpace.Player;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Melee;
@@ -26,9 +27,9 @@ namespace Content.Server.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
-    [Dependency] private readonly AkimboSystem _akimbo = default!; // DS14
-    [Dependency] private readonly PricingSystem _pricing = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private AkimboSystem _akimbo = default!; // DS14
+    [Dependency] private PricingSystem _pricing = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     // DS14-start
     private readonly Dictionary<EntityUid, BallisticConstructionTransferData> _ballisticConstructionTransfers = new();
@@ -249,7 +250,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
     private bool ShootOrThrow(EntityUid uid, Vector2 mapDirection, Vector2 gunVelocity, Entity<GunComponent> gun, EntityUid? user)
     {
-        ApplyExecutionShotDamage(uid, gun); // DS14
+        ApplyExecutionShotDamage(uid, gun, user); // DS14
 
         // DS14-start: cartridge-spawned hitscans bypass projectile physics entirely.
         if (HasComp<HitscanAmmoComponent>(uid))
@@ -261,6 +262,8 @@ public sealed partial class GunSystem : SharedGunSystem
                 Gun = gun,
                 Shooter = user,
                 Target = gun.Comp.Target,
+                // DS14
+                ExecutionTarget = HasComp<GunExecutionShotComponent>(gun) ? gun.Comp.Target ?? user : null,
             };
 
             RaiseLocalEvent(uid, ref hitscanEv);
@@ -290,7 +293,7 @@ public sealed partial class GunSystem : SharedGunSystem
     }
 
     // DS14-start
-    private void ApplyExecutionShotDamage(EntityUid uid, Entity<GunComponent> gun)
+    private void ApplyExecutionShotDamage(EntityUid uid, Entity<GunComponent> gun, EntityUid? user)
     {
         if (!HasComp<GunExecutionShotComponent>(gun))
             return;
@@ -307,6 +310,10 @@ public sealed partial class GunSystem : SharedGunSystem
             hitscan.Damage *= executionDamageMultiplier;
             hitscan.IgnoreResistances = true;
         }
+
+        var execution = EnsureComp<GunExecutionProjectileComponent>(uid);
+        execution.Target = gun.Comp.Target ?? user;
+        Dirty(uid, execution);
     }
     // DS14-end
 

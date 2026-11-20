@@ -19,17 +19,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Implants;
 
-public abstract class SharedImplanterSystem : EntitySystem
+public abstract partial class SharedImplanterSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedForensicsSystem _forensics = default!;
+    [Dependency] private Content.Shared.DeadSpace.Body.Limbs.LimbImplantSystem _limbImplants = default!; //DS-14
 
     public override void Initialize()
     {
@@ -120,6 +121,23 @@ public abstract class SharedImplanterSystem : EntitySystem
     //Set to draw mode if not implant only
     public void Implant(EntityUid user, EntityUid target, EntityUid implanter, ImplanterComponent component)
     {
+        //DS-14 start
+        if (CanImplantLimb(target, component, out var limbImplant))
+        {
+            if (!_limbImplants.TryPlace(target, limbImplant.Value))
+                return;
+
+            if (component.CurrentMode == ImplanterToggleMode.Inject && !component.ImplantOnly)
+                DrawMode(implanter, component);
+            else
+                ImplantMode(implanter, component);
+
+            _forensics.TransferDna(implanter, target);
+            Dirty(implanter, component);
+            return;
+        }
+        //DS-14 end
+
         if (!CanImplant(user, target, implanter, component, out var implant, out _))
             return;
 
@@ -174,6 +192,26 @@ public abstract class SharedImplanterSystem : EntitySystem
         RaiseLocalEvent(target, ev);
         return !ev.Cancelled;
     }
+
+    //DS-14 start
+    public bool CanImplantLimb(EntityUid target, ImplanterComponent component, [NotNullWhen(true)] out EntityUid? implant)
+    {
+        implant = component.ImplanterSlot.ContainerSlot?.ContainedEntities.FirstOrNull();
+        if (implant == null
+            || HasComp<SubdermalImplantComponent>(implant)
+            || !TryComp<Content.Shared.DeadSpace.Body.Limbs.LimbImplantComponent>(implant, out var limb)
+            || !CheckTarget(target, component.Whitelist, component.Blacklist))
+            return false;
+
+        foreach (var slot in limb.Slots)
+        {
+            if (_limbImplants.Fits(target, slot, implant.Value))
+                return true;
+        }
+
+        return false;
+    }
+    //DS-14 end
 
     protected bool CheckTarget(EntityUid target, EntityWhitelist? whitelist, EntityWhitelist? blacklist)
     {
@@ -354,7 +392,7 @@ public sealed partial class DrawEvent : SimpleDoAfterEvent
 {
 }
 
-public sealed class AddImplantAttemptEvent : CancellableEntityEventArgs
+public sealed partial class AddImplantAttemptEvent : CancellableEntityEventArgs
 {
     public readonly EntityUid User;
     public readonly EntityUid Target;
@@ -374,7 +412,7 @@ public sealed class AddImplantAttemptEvent : CancellableEntityEventArgs
 /// Change the chosen implanter in the UI.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class DeimplantChangeVerbMessage : BoundUserInterfaceMessage
+public sealed partial class DeimplantChangeVerbMessage : BoundUserInterfaceMessage
 {
     public readonly string? Implant;
 

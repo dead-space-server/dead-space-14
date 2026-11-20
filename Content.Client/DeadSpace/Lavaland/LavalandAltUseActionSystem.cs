@@ -15,11 +15,11 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// Alt + right click with an item that has <see cref="LavalandAltUseActionComponent"/> performs that item's action
 /// at the cursor, as if the action button had been used.
 /// </summary>
-public sealed class LavalandAltUseActionSystem : EntitySystem
+public sealed partial class LavalandAltUseActionSystem : EntitySystem
 {
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {

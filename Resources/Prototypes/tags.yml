@@ -1284,6 +1284,9 @@
   id: SecBeltEquip # Storage whitelist: ClothingBeltSecurity
 
 - type: Tag
+  id: Seclite # ConstructionGraph: ClothingHeadHelmetSecurityFlashlight
+
+- type: Tag
   id: SecurePlasmaWindoor # Used in ConstructionGraph "Windoor" to navigate between Windoor, PlasmaWindoor, and UraniumWindoor airlocks.
 
 - type: Tag
@@ -1638,4 +1641,8 @@
 
 ## Y ##
 ## Z ##
+
+- type: Tag
+  id: Zipties # ConstructionGraph: ClothingHeadHelmetSecurityFlashlight
+
 # ALPHABETICAL

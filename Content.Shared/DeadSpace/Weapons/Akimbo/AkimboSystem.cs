@@ -11,12 +11,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Weapons.Akimbo;
 
-public sealed class AkimboSystem : EntitySystem
+public sealed partial class AkimboSystem : EntitySystem
 {
-    [Dependency] private readonly SharedGunSystem _guns = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedGunSystem _guns = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

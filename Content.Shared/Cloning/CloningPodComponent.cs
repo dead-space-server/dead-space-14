@@ -67,6 +67,9 @@ public sealed partial class CloningPodComponent : Component
     /// </summary>
     [DataField]
     public bool CanCloneUnclonable = false;
+
+    [DataField]
+    public int HeadCost = 71;
     // DS14-end
 }
 

@@ -8,10 +8,10 @@ using Content.Shared.Cargo.Components;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaStealMoneyObjectiveSystem : EntitySystem
+public sealed partial class NinjaStealMoneyObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Initialize()
     {
@@ -65,7 +65,7 @@ public sealed class NinjaStealMoneyObjectiveSystem : EntitySystem
             return;
         }
 
-        args.Progress = Math.Clamp(comp.CurrentCount / comp.TargetCount, 0f, 1f);
+        args.Progress = Math.Clamp((float) comp.CurrentCount / comp.TargetCount, 0f, 1f);
     }
 
     private EntityUid? GetObjectiveStation(MindComponent mind)
@@ -82,8 +82,13 @@ public sealed class NinjaStealMoneyObjectiveSystem : EntitySystem
             }
         }
 
-        var stations = _station.GetStations();
-        return stations.Count == 1 ? stations[0] : null;
+        foreach (var station in _station.GetStations())
+        {
+            if (HasComp<StationBankAccountComponent>(station))
+                return station;
+        }
+
+        return null;
     }
 
     public void AddMoneyCount(NinjaStealMoneyConditionComponent comp, int toAdd)

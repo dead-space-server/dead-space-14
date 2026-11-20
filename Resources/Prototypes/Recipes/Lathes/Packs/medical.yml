@@ -6,6 +6,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - Tourniquet # DS14
 
 - type: latheRecipePack
   id: BasicChemistryStatic
@@ -110,3 +111,4 @@
   - StasisBedMachineCircuitboard
   - CryoPodMachineCircuitboard
   - BiomassReclaimerMachineCircuitboard
+  - OrganPrinterMachineCircuitboard

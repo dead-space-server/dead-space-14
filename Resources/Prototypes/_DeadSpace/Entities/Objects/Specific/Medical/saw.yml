@@ -1,0 +1,28 @@
+- type: entity
+  name: surgery saw
+  id: SurgerySaw
+  parent: BaseToolSurgery
+  description: It is used for sawing through bone during surgery. Please, try to save the limb.
+  components:
+  - type: SurgeryTool
+    precision: 0.9
+    slip: 0.08
+    wobble: 12
+    sawHits: 3
+    verbs:
+    - SawBone
+    - Amputate
+  - type: Sharp
+  - type: Utensil
+    types:
+      - Knife
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/surgery_saw.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Objects/Medical/surgery_saw.rsi
+    storedRotation: 90
+  - type: Tool
+    qualities:
+      - Sawing

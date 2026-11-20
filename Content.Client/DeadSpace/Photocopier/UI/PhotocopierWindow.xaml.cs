@@ -104,6 +104,9 @@ public sealed partial class PhotocopierWindow : FancyWindow
         var search = SearchBar.Text.Trim().ToLowerInvariant();
         foreach (var prototype in forms)
         {
+            if (!prototype.Listed)
+                continue;
+
             if (search.Length == 0 && _category == null ||
                 search.Length != 0 && Loc.GetString(prototype.Name).ToLowerInvariant().Contains(search) ||
                 search.Length == 0 && _category != null && prototype.Category.Equals(_category))

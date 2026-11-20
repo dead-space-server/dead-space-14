@@ -247,6 +247,7 @@
   name: торгомат Donk Co.
   description: Фирменный торгомат Donk Co. Содержит только свежие донкпокеты на любой вкус.
   components:
+  - type: VendingMachineKeypad
   - type: VendingMachine
     pack: DonkInventory
     initialStockQuality: 0.33

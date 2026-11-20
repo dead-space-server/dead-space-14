@@ -15,7 +15,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.CameraArchives;
 
-public sealed class CameraArchiveControl : Control
+public sealed partial class CameraArchiveControl : Control
 {
     public readonly LineEdit Search;
     public readonly BoxContainer CameraRows;
@@ -27,6 +27,8 @@ public sealed class CameraArchiveControl : Control
     public readonly Button ZoomInButton;
     public readonly Button ZoomOutButton;
     public readonly Button PrintButton;
+    public float Magnification => _zoomSteps[_zoomStep];
+    public Vector2 ViewPan => _pan;
     public readonly Slider Frames;
 
     private readonly float[] _zoomSteps = [1f, 2f, 4f];
@@ -48,8 +50,8 @@ public sealed class CameraArchiveControl : Control
     private static readonly ProtoId<ShaderPrototype> CameraStaticShader = "CameraStatic";
     private readonly PanelContainer _cover;
 
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IResourceCache _resources = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IResourceCache _resources = default!;
 
     public CameraArchiveControl()
     {
@@ -290,6 +292,27 @@ public sealed class CameraArchiveControl : Control
         }
     }
 
+    public bool HoldingFrame => View.Visible && _eye != null;
+
+    public void Retitle(int index, int count, TimeSpan time)
+    {
+        if (!HoldingFrame)
+            return;
+
+        _frameIndex = index;
+        _frameCount = count;
+        FrameLabel.Text = Loc.GetString("camera-archive-frame",
+            ("time", time.ToString("hh\\:mm\\:ss")),
+            ("index", index + 1),
+            ("count", count));
+        BackButton.Disabled = index <= 0;
+        ForwardButton.Disabled = index >= count - 1;
+        PrintButton.Disabled = count <= 0;
+        Frames.MaxValue = Math.Max(1, count - 1);
+        Frames.Value = Math.Clamp(index, 0, (int) Frames.MaxValue);
+        Frames.Disabled = count < 2;
+    }
+
     public void ShowFrame(FixedEye eye, int index, int count, TimeSpan time)
     {
         var keepView = _eye != null && View.Visible;
@@ -378,7 +401,7 @@ public sealed class CameraArchiveControl : Control
         ZoomInButton.Disabled = _zoomStep >= _zoomSteps.Length - 1;
     }
 
-    private sealed class FrameDrag : Control
+    private sealed partial class FrameDrag : Control
     {
         public event Action<Vector2>? Pan;
         private bool _drag;

@@ -223,6 +223,7 @@
       - Injector
       - Pill
       - HandLabeler
+      - SurgeryMarker # DS14
   - type: ItemMapper
     sprite: *BeltOverlay
     mapLayers:

@@ -1,0 +1,143 @@
+- type: surgerySound
+  id: Incise
+  sound:
+    path: /Audio/Effects/Fluids/blood1.ogg
+    params:
+      volume: -4
+      variation: 0.1
+
+- type: surgerySound
+  id: Retract
+  sound:
+    path: /Audio/Items/ratchet.ogg
+    params:
+      volume: -6
+      variation: 0.1
+
+- type: surgerySound
+  id: SawBone
+  sound:
+    path: /Audio/_DeadSpace/Autosurgeon/sound_weapons_circsawhit.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Amputate
+  sound:
+    path: /Audio/_DeadSpace/Autosurgeon/sound_weapons_circsawhit.ogg
+    params:
+      volume: -2
+
+- type: surgerySound
+  id: Drill
+  sound:
+    path: /Audio/Items/drill_use.ogg
+    params:
+      volume: -6
+
+- type: surgerySound
+  id: Cauterize
+  sound:
+    path: /Audio/Effects/sizzle.ogg
+    params:
+      volume: -6
+      variation: 0.1
+
+- type: surgerySound
+  id: Clamp
+  sound:
+    path: /Audio/Items/snap.ogg
+    params:
+      volume: -6
+
+- type: surgerySound
+  id: Extract
+  sound:
+    path: /Audio/Effects/Fluids/splat.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Insert
+  sound:
+    path: /Audio/Items/pop.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: PullEmbedded
+  sound:
+    path: /Audio/Items/pop.ogg
+    params:
+      volume: -2
+
+- type: surgerySound
+  id: SetBone
+  sound:
+    path: /Audio/_DeadSpace/Necromorfs/bone.ogg
+    params:
+      volume: -6
+
+- type: surgerySound
+  id: MendBone
+  sound:
+    path: /Audio/Items/Medical/ointment_end.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Stanch
+  sound:
+    path: /Audio/Items/Medical/ointment_begin.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Bandage
+  sound:
+    path: /Audio/Items/Medical/brutepack_end.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Graft
+  sound:
+    path: /Audio/Items/Medical/brutepack_end.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Inject
+  sound:
+    path: /Audio/Items/hypospray.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Append
+  sound:
+    path: /Audio/Items/Handcuffs/ziptie_end.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Seat
+  sound:
+    path: /Audio/Items/Handcuffs/ziptie_end.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Shock
+  sound:
+    path: /Audio/Items/Defib/defib_zap.ogg
+    params:
+      volume: -4
+
+- type: surgerySound
+  id: Miss
+  sound:
+    path: /Audio/Effects/Fluids/blood2.ogg
+    params:
+      volume: -2
+      variation: 0.15

@@ -18,7 +18,7 @@ namespace Content.Server.GameTicking
     [UsedImplicitly]
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
 
         private void InitializePlayer()
         {
@@ -205,7 +205,8 @@ namespace Content.Server.GameTicking
                 _chatManager.DispatchServerMessage(session, Loc.GetString("game-ticker-player-join-game-message"));
 
             _playerGameStatuses[session.UserId] = PlayerGameStatus.JoinedGame;
-            _db.AddRoundPlayers(RoundId, session.UserId);
+            if (RoundId != 0) // DS14: no round row yet, the insert would only fail on its foreign key
+                _db.AddRoundPlayers(RoundId, session.UserId);
 
             if (_adminManager.HasAdminFlag(session, AdminFlags.Admin))
             {
@@ -222,7 +223,8 @@ namespace Content.Server.GameTicking
         private void PlayerJoinLobby(ICommonSession session)
         {
             _playerGameStatuses[session.UserId] = LobbyEnabled ? PlayerGameStatus.NotReadyToPlay : PlayerGameStatus.ReadyToPlay;
-            _db.AddRoundPlayers(RoundId, session.UserId);
+            if (RoundId != 0) // DS14: no round row yet, the insert would only fail on its foreign key
+                _db.AddRoundPlayers(RoundId, session.UserId);
 
             var client = session.Channel;
             RaiseNetworkEvent(new TickerJoinLobbyEvent(), client);
@@ -237,7 +239,7 @@ namespace Content.Server.GameTicking
         }
     }
 
-    public sealed class PlayerJoinedLobbyEvent : EntityEventArgs
+    public sealed partial class PlayerJoinedLobbyEvent : EntityEventArgs
     {
         public readonly ICommonSession PlayerSession;
 

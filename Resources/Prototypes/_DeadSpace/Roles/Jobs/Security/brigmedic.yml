@@ -29,7 +29,7 @@
   #end-backmen: currency
   special:
   - !type:AddImplantSpecial
-    implants: [ MindShieldImplant ]
+    implants: [ MindShieldImplant, CombatAdrenalineImplant ]
 
 - type: startingGear
   id: BrigmedicGear

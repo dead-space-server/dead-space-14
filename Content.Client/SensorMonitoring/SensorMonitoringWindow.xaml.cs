@@ -19,8 +19,8 @@ namespace Content.Client.SensorMonitoring;
 [GenerateTypedNameReferences]
 public sealed partial class SensorMonitoringWindow : FancyWindow, IComputerWindow<ConsoleUIState>
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     private TimeSpan _retentionTime;
     private readonly Dictionary<int, SensorData> _sensorData = new();
@@ -198,7 +198,7 @@ public sealed partial class SensorMonitoringWindow : FancyWindow, IComputerWindo
         }
     }
 
-    private sealed class SensorData
+    private sealed partial class SensorData
     {
         public string Name = "";
         public string Address = "";
@@ -207,14 +207,14 @@ public sealed partial class SensorMonitoringWindow : FancyWindow, IComputerWindo
         public readonly Dictionary<int, SensorStream> Streams = new();
     }
 
-    private sealed class SensorStream
+    private sealed partial class SensorStream
     {
         public string Name = "";
         public SensorUnit Unit;
         public readonly Queue<SensorSample> Samples = new();
     }
 
-    private sealed class GraphView : Control
+    private sealed partial class GraphView : Control
     {
         private readonly Queue<SensorSample> _samples;
         private readonly TimeSpan _startTime;

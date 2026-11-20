@@ -32,26 +32,26 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
-public sealed class UnitologyHeadSystem : EntitySystem
+public sealed partial class UnitologyHeadSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly InfectionDeadSystem _infectionDead = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly DecalSystem _decals = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly UnitologyRuleSystem _unitologyRule = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedSubdermalImplantSystem _implants = default!;
-    [Dependency] private readonly SuperNecroobeliskSystem _superObelisk = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private InfectionDeadSystem _infectionDead = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private MindSystem _mindSystem = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private DecalSystem _decals = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private UnitologyRuleSystem _unitologyRule = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedSubdermalImplantSystem _implants = default!;
+    [Dependency] private SuperNecroobeliskSystem _superObelisk = default!;
 
 
     public const float DistanceRecruitmentDetermination = 2f;

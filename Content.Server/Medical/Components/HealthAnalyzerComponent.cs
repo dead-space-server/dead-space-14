@@ -1,5 +1,6 @@
 using Robust.Shared.Audio;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.MedicalScanner; //DS14
 using Content.Shared.FixedPoint; //DS14
 using Content.Server.DeadSpace.Ninja.Systems; /// DS14
@@ -18,7 +19,11 @@ public record HealthAnalyzerData(
     string PatientName,
     Dictionary<string, FixedPoint2>? DamageDict,
     FixedPoint2 TotalDamage,
-    List<HealthAnalyzerReagentEntry>? Reagents
+    List<HealthAnalyzerReagentEntry>? Reagents,
+    bool HasLimbs,
+    LimbScanSummary LimbSummary,
+    List<LimbScanIssue> LimbIssues,
+    List<byte> LimbShades
 );
 //DS14-end
 

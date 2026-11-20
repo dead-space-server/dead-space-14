@@ -11,13 +11,13 @@ using Robust.Shared.Audio;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling;
 
-public sealed class ShadowlingAnnihilationSystem : EntitySystem
+public sealed partial class ShadowlingAnnihilationSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly GibbingSystem _gibbing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
 
     public override void Initialize()

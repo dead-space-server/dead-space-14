@@ -114,6 +114,13 @@
           Piercing: 5
           Heat: 5
     #DS14-Start
+    - type: LimbCover
+      zones:
+      - Head
+      - Torso
+      - ArmLeft
+      - ArmRight
+      onlyWhenBlocking: true
     - type: ShieldDash
       damage:
         types:
@@ -175,6 +182,14 @@
           Piercing: 20
           Heat: 5
     #DS14-Start
+    - type: LimbCover
+      zones:
+      - Head
+      - Torso
+      - ArmLeft
+      - ArmRight
+      onlyWhenBlocking: true
+      ricochet: true
     - type: ShieldDash
       damage:
         types:
@@ -376,7 +391,7 @@
       sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
       state: icon
     - type: Item
-      heldPrefix: ratvarian
+      heldPrefix: icon #DS14
       sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
     - type: Clothing
       sprite: Objects/Weapons/Melee/ratvarian-shield.rsi

@@ -343,6 +343,13 @@
     sprite: Clothing/Hands/Gloves/combat.rsi
   - type: Insulated
     stunReduction: 2 #DS14
+  # DS14
+  - type: LimbCover
+    zones:
+    - HandLeft
+    - HandRight
+    grip: true
+    woundMultiplier: 0.6
   - type: Fiber
     fiberMaterial: fibers-insulative
     fiberColor: fibers-black

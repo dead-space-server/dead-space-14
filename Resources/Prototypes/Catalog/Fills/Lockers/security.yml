@@ -137,6 +137,7 @@
     - id: ClothingOuterVestSecurityMedic
     - id: ClothingOuterCoatLabSecurityMedic
     - id: MedkitFilled
+    - id: ChemistryBottleHemostatin #ds14
     - !type:GroupSelector
       prob: 0.7
       children:

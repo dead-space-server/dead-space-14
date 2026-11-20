@@ -5,6 +5,7 @@ using Content.Server.NPC.HTN;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Shared.Backmen.Blob.Components;
+using Content.Shared.Gravity; //DS-14
 using Content.Shared.Conveyor;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -13,20 +14,21 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Prometheus;
 using Robust.Shared.Player;
+using GameTick = Robust.Shared.Timing.GameTick; //DS-14
 using DependencyAttribute = Robust.Shared.IoC.DependencyAttribute;
 using DroneConsoleComponent = Content.Server.Shuttles.DroneConsoleComponent;
 
 namespace Content.Server.Physics.Controllers;
 
-public sealed class MoverController : SharedMoverController
+public sealed partial class MoverController : SharedMoverController
 {
     private static readonly Gauge ActiveMoverGauge = Metrics.CreateGauge(
         "physics_active_mover_count",
         "Amount of ActiveInputMovers being processed by MoverController");
 
-    [Dependency] private readonly ThrusterSystem _thruster = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ShuttleConsoleSystem _shuttleConsole = default!; //DS-14
+    [Dependency] private ThrusterSystem _thruster = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private ShuttleConsoleSystem _shuttleConsole = default!; //DS-14
 
     private Dictionary<EntityUid, (ShuttleComponent, List<(EntityUid, PilotComponent, InputMoverComponent, TransformComponent)>)> _shuttlePilots = new();
 
@@ -44,6 +46,20 @@ public sealed class MoverController : SharedMoverController
     private readonly HashSet<EntityUid> _seenRelayMovers = [];
     private readonly HashSet<Entity<DockingComponent>> _shuttleDockSet = [];
     private readonly List<Entity<InputMoverComponent>> _moversToUpdate = [];
+    private GameTick _stallTick; //DS-14
+    private double _stallMobsMs; //DS-14
+    private double _stallShuttleMs; //DS-14
+    private double _stallSlowMs; //DS-14
+    private double _stallIdleMs; //DS-14
+    private double _stallTileMs; //DS-14
+    private double _stallSpaceMs; //DS-14
+    private double _stallGroundMs; //DS-14
+    private int _stallCount; //DS-14
+    private int _stallIdle; //DS-14
+    private int _stallTile; //DS-14
+    private int _stallSpace; //DS-14
+    private int _stallGround; //DS-14
+    private EntityUid _stallSlowest; //DS-14
 
     public override void Initialize()
     {
@@ -229,12 +245,96 @@ public sealed class MoverController : SharedMoverController
 
         ActiveMoverGauge.Set(_moversToUpdate.Count);
 
-        foreach (var ent in _moversToUpdate)
+        //DS-14 start
+        if (Timing.CurTick != _stallTick)
         {
-            HandleMobMovement(ent, frameTime);
+            _stallTick = Timing.CurTick;
+            _stallMobsMs = 0;
+            _stallShuttleMs = 0;
+            _stallSlowMs = 0;
+            _stallIdleMs = 0;
+            _stallTileMs = 0;
+            _stallSpaceMs = 0;
+            _stallGroundMs = 0;
+            _stallSlowest = EntityUid.Invalid;
+            DiagTileStepTicks = 0;
+            DiagColliderTicks = 0;
+            DiagTileLookupTicks = 0;
+            DiagVelocityTicks = 0;
+            DiagTurnTicks = 0;
+            DiagFootTicks = 0;
         }
 
+        var mobStart = Stopwatch.GetTimestamp();
+        var slowestTicks = 0L;
+        var slowest = EntityUid.Invalid;
+        var idleTicks = 0L;
+        var tileTicks = 0L;
+        var spaceTicks = 0L;
+        var groundTicks = 0L;
+        var idleCount = 0;
+        var tileCount = 0;
+        var spaceCount = 0;
+        var groundCount = 0;
+        foreach (var ent in _moversToUpdate)
+        {
+            var one = Stopwatch.GetTimestamp();
+            HandleMobMovement(ent, frameTime);
+            var taken = Stopwatch.GetTimestamp() - one;
+            var idle = !ent.Comp.HasDirectionalMovement
+                       && PhysicsQuery.TryComp(ent.Owner, out var body)
+                       && body.LinearVelocity.Equals(Vector2.Zero)
+                       && body.AngularVelocity.Equals(0f);
+            if (idle)
+            {
+                idleTicks += taken;
+                idleCount++;
+            }
+            else if (TileStepQuery.HasComp(ent.Owner))
+            {
+                tileTicks += taken;
+                tileCount++;
+            }
+            else if (TryComp<GravityAffectedComponent>(ent.Owner, out var affected) && affected.Weightless)
+            {
+                spaceTicks += taken;
+                spaceCount++;
+            }
+            else
+            {
+                groundTicks += taken;
+                groundCount++;
+            }
+
+            if (taken <= slowestTicks)
+                continue;
+
+            slowestTicks = taken;
+            slowest = ent.Owner;
+        }
+
+        var shuttleStart = Stopwatch.GetTimestamp();
         HandleShuttleMovement(frameTime);
+        var shuttleEnd = Stopwatch.GetTimestamp();
+        var scale = 1000d / Stopwatch.Frequency;
+        _stallMobsMs += (shuttleStart - mobStart) * scale;
+        _stallShuttleMs += (shuttleEnd - shuttleStart) * scale;
+        _stallCount = _moversToUpdate.Count;
+        _stallIdle = idleCount;
+        _stallTile = tileCount;
+        _stallSpace = spaceCount;
+        _stallGround = groundCount;
+        _stallIdleMs += idleTicks * scale;
+        _stallTileMs += tileTicks * scale;
+        _stallSpaceMs += spaceTicks * scale;
+        _stallGroundMs += groundTicks * scale;
+        var slowMs = slowestTicks * scale;
+        if (slowMs >= _stallSlowMs)
+        {
+            _stallSlowMs = slowMs;
+            _stallSlowest = slowest;
+        }
+        //DS-14 end
         return;
 
         // When we insert a chain of relay sources we have to flip its ordering
@@ -275,6 +375,21 @@ public sealed class MoverController : SharedMoverController
             _moversToUpdate.Add(entity);
         }
     }
+
+    internal MoverStall ReadStall() //DS-14
+    {
+        var scale = 1000d / Stopwatch.Frequency;
+        return new MoverStall(
+            _stallMobsMs, _stallShuttleMs, _stallSlowMs, _stallSlowest, _stallCount,
+            _stallIdle, _stallIdleMs, _stallTile, _stallTileMs, _stallSpace, _stallSpaceMs, _stallGround, _stallGroundMs,
+            DiagTileStepTicks * scale, DiagColliderTicks * scale, DiagTileLookupTicks * scale,
+            DiagVelocityTicks * scale, DiagTurnTicks * scale, DiagFootTicks * scale);
+    }
+
+    internal readonly record struct MoverStall( //DS-14
+        double MobsMs, double ShuttleMs, double SlowMs, EntityUid Slowest, int Count,
+        int Idle, double IdleMs, int Tile, double TileMs, int Space, double SpaceMs, int Ground, double GroundMs,
+        double TileStepMs, double ColliderMs, double TileLookupMs, double VelocityMs, double TurnMs, double FootMs);
 
     // DS14-Start: keep dormant NPCs out of the mover hot path once they have fully stopped.
     private bool CanDeactivateDormantNpcMover(

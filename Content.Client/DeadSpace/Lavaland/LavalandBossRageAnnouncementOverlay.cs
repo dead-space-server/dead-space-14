@@ -13,9 +13,9 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// "ABSOLUTE RAGE" of the megafauna: red text on a dark red band across the upper screen, broken by interference -
 /// colour split, jitter, tearing bars, static grain, scrambled letters and dropouts, with a red flash at the start.
 /// </summary>
-public sealed class LavalandBossRageAnnouncementOverlay : Overlay
+public sealed partial class LavalandBossRageAnnouncementOverlay : Overlay
 {
-    [Dependency] private readonly IResourceCache _resources = default!;
+    [Dependency] private IResourceCache _resources = default!;
 
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 

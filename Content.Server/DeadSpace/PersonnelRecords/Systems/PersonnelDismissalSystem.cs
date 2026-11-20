@@ -31,17 +31,17 @@ namespace Content.Server.DeadSpace.PersonnelRecords.Systems;
 /// and the general-record sync it needs are both private there, and small enough to reimplement
 /// here rather than widen an upstream method's visibility for a six-line check.
 /// </summary>
-public sealed class PersonnelDismissalSystem : EntitySystem
+public sealed partial class PersonnelDismissalSystem : EntitySystem
 {
     private const string DismissedJobId = "Dismissed";
 
-    [Dependency] private readonly AccessSystem _access = default!;
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly StationRecordsSystem _records = default!;
+    [Dependency] private AccessSystem _access = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
 
     public override void Initialize()
     {

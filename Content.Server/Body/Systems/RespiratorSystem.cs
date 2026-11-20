@@ -21,6 +21,7 @@ using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects.Body;
 using Content.Shared.EntityEffects.Effects.Damage;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Rejuvenate; //DS-14
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -28,20 +29,20 @@ using Robust.Shared.Timing;
 namespace Content.Server.Body.Systems;
 
 [UsedImplicitly]
-public sealed class RespiratorSystem : EntitySystem
+public sealed partial class RespiratorSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IPrototypeManager _protoMan = default!;
-    [Dependency] private readonly AlertsSystem _alertsSystem = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosSys = default!;
-    [Dependency] private readonly BodySystem _bodySystem = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly DamageableSystem _damageableSys = default!;
-    [Dependency] private readonly LungSystem _lungSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedEntityConditionsSystem _entityConditions = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
+    [Dependency] private AlertsSystem _alertsSystem = default!;
+    [Dependency] private AtmosphereSystem _atmosSys = default!;
+    [Dependency] private BodySystem _bodySystem = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private DamageableSystem _damageableSys = default!;
+    [Dependency] private LungSystem _lungSystem = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedEntityConditionsSystem _entityConditions = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
 
     private static readonly ProtoId<MetabolismGroupPrototype> GasId = new("Gas");
 
@@ -53,11 +54,13 @@ public sealed class RespiratorSystem : EntitySystem
         UpdatesAfter.Add(typeof(MetabolizerSystem));
         SubscribeLocalEvent<RespiratorComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<RespiratorComponent, ApplyMetabolicMultiplierEvent>(OnApplyMetabolicMultiplier);
+        SubscribeLocalEvent<RespiratorComponent, RejuvenateEvent>(OnRejuvenate); //DS-14
 
         // BodyComp stuff
         SubscribeLocalEvent<BodyComponent, InhaledGasEvent>(OnGasInhaled);
         SubscribeLocalEvent<BodyComponent, ExhaledGasEvent>(OnGasExhaled);
         SubscribeLocalEvent<BodyComponent, CanMetabolizeGasEvent>(CanBodyMetabolizeGas);
+        SubscribeLocalEvent<BodyComponent, BreathableAirEvent>(OnBreathableAir); //DS-14
         SubscribeLocalEvent<BodyComponent, SuffocationEvent>(OnSuffocation);
         SubscribeLocalEvent<BodyComponent, StopSuffocatingEvent>(OnStopSuffocating);
     }
@@ -163,7 +166,15 @@ public sealed class RespiratorSystem : EntitySystem
         RaiseLocalEvent(entity, ref inhaleEv);
 
         if (inhaleEv.Handled && inhaleEv.Succeeded)
+        {
+            //DS-14 start
+            var breath = new CanMetabolizeGasEvent(gas);
+            RaiseLocalEvent(entity, ref breath);
+            if (breath.Saturation > 0f)
+                UpdateSaturation(entity, breath.Saturation, entity.Comp);
+            //DS-14 end
             return;
+        }
 
         // If nothing could inhale the gas give it back.
         _atmosSys.Merge(ev.Gas, gas);
@@ -254,6 +265,24 @@ public sealed class RespiratorSystem : EntitySystem
         return ev.Saturation > ent.Comp.UpdateInterval.TotalSeconds;
     }
 
+    //DS-14 start
+    private void OnBreathableAir(Entity<BodyComponent> ent, ref BreathableAirEvent args)
+    {
+        args.Handled = true;
+        args.Breathable = CanMetabolizeInhaledAir(ent.Owner, args.Air);
+    }
+
+    public bool Saturates(Entity<RespiratorComponent?> ent, GasMixture gas)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        var ev = new CanMetabolizeGasEvent(gas);
+        RaiseLocalEvent(ent, ref ev);
+        return ev.Handled && ev.Saturation > 0f;
+    }
+    //DS-14 end
+
     /// <summary>
     /// Tries to safely metabolize the current solutions in a body's lungs.
     /// </summary>
@@ -269,18 +298,15 @@ public sealed class RespiratorSystem : EntitySystem
         var solution = _lungSystem.GasToReagent(args.Gas);
 
         var saturation = 0f;
+        var toxic = false; //DS-14
         foreach (var organ in organs)
         {
-            saturation += GetSaturation(solution, organ.Owner, out var toxic);
-            if (!toxic)
-                continue;
-
-            args.Handled = true;
-            args.Toxic = true;
-            return;
+            saturation += GetSaturation(solution, organ.Owner, out var organToxic); //DS-14
+            toxic |= organToxic; //DS-14
         }
 
         args.Handled = true;
+        args.Toxic = toxic; //DS-14
         args.Saturation = saturation;
     }
 
@@ -442,6 +468,19 @@ public sealed class RespiratorSystem : EntitySystem
     {
         ent.Comp.UpdateIntervalMultiplier = args.Multiplier;
     }
+
+    //DS-14 start
+    private void OnRejuvenate(Entity<RespiratorComponent> ent, ref RejuvenateEvent args)
+    {
+        ent.Comp.Saturation = ent.Comp.MaxSaturation;
+        if (ent.Comp.SuffocationCycles > 0)
+        {
+            var ev = new StopSuffocatingEvent();
+            RaiseLocalEvent(ent, ref ev);
+        }
+        ent.Comp.SuffocationCycles = 0;
+    }
+    //DS-14 end
 
     private void OnGasInhaled(Entity<BodyComponent> entity, ref InhaledGasEvent args)
     {

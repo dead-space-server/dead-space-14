@@ -1,0 +1,16 @@
+surgery-organ-ipc-core = positronic brain
+surgery-organ-ipc-battery = battery
+surgery-organ-ipc-status = status module
+surgery-organ-ipc-voice = voice module
+surgery-organ-ipc-eyes = optical sensors
+surgery-hint-machine-unscrew = Unscrew the bolts (trace the dots)
+surgery-hint-machine-pry = Pry with a crowbar (hold LMB)
+surgery-hint-machine-wire = Lay the wiring (hold LMB)
+surgery-hint-machine-pulse = Probe the sockets (trace the dots)
+surgery-hint-machine-weld = Weld the seam
+surgery-op-machine-open = Open the chassis
+surgery-op-machine-repair = Repair
+surgery-op-machine-shard = Remove shrapnel
+surgery-op-machine-amputate = Detach limb
+surgery-op-machine-attach = Attach limb
+surgery-voice-missing = The voice module does not respond.

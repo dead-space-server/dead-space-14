@@ -7,7 +7,7 @@ namespace Content.Shared.EntityConditions.Conditions.Mind;
 
 public sealed partial class DifferentDepartmentConditionSystem : EntityConditionSystem<MindComponent, DifferentDepartmentCondition>
 {
-    [Dependency] private readonly SharedJobSystem _jobSystem = default!;
+    [Dependency] private SharedJobSystem _jobSystem = default!;
 
     protected override void Condition(Entity<MindComponent> entity, ref EntityConditionEvent<DifferentDepartmentCondition> args)
     {

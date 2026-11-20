@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Grid
-  engineVersion: 276.0.0
+  engineVersion: 276.0.6
   forkId: ""
   forkVersion: ""
-  time: 09/10/2026 07:53:39
+  time: 11/15/2026 10:06:24
   entityCount: 207
 maps: []
 grids:
@@ -26,7 +26,6 @@ entities:
     - type: MetaData
       name: CF - Tepors N831
     - type: Transform
-      pos: 0,0 # DS14
       parent: invalid
     - type: MapGrid
       chunks:
@@ -1059,15 +1058,6 @@ entities:
     - type: Transform
       pos: 1.5,-3.5
       parent: 1
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 163
-    components:
-    - type: Transform
-      pos: 3.5521054,-1.3845896
-      parent: 1
-    - type: Physics
-      canCollide: False
 - proto: HospitalCurtains
   entities:
   - uid: 204
@@ -1076,7 +1066,7 @@ entities:
       pos: 1.5,-1.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -700.25665
+      secondsUntilStateChange: -3162.5352
       state: Opening
 - proto: JetpackMiniFilled
   entities:
@@ -1096,6 +1086,13 @@ entities:
       canCollide: False
     - type: InsideEntityStorage
       storage: 139
+- proto: LimbRestorerCriticalForce
+  entities:
+  - uid: 163
+    components:
+    - type: Transform
+      pos: 3.74316,-1.4671509
+      parent: 1
 - proto: LockerSteel
   entities:
   - uid: 139

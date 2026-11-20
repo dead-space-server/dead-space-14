@@ -6,14 +6,15 @@ using Content.Shared.Actions;
 using Content.Server.DeadSpace.MartialArts.Arkalyse.Components;
 using Content.Server.DeadSpace.MartialArts.CQC.Components;
 using Content.Server.DeadSpace.MartialArts.SmokingCarp.Components;
+using Content.Server.Guardian;
 using Robust.Server.GameObjects;
 using Content.Shared.DeadSpace.MartialArts.SmokingCarp.Components;
 
 namespace Content.Server.DeadSpace.MartialArts.SmokingCarp;
-public sealed class UseArkalyseBookSystem : EntitySystem
+public sealed partial class UseArkalyseBookSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private SharedActionsSystem _action = default!;
+    [Dependency] private TransformSystem _transform = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -24,7 +25,8 @@ public sealed class UseArkalyseBookSystem : EntitySystem
     {
         if (args.Handled ||
             HasComp<ArkalyseComponent>(args.User) ||
-            HasComp<CQCComponent>(args.User))
+            HasComp<CQCComponent>(args.User) ||
+            HasComp<GuardianHostComponent>(args.User))
             return;
 
         if (HasComp<SmokingCarpComponent>(args.User))

@@ -17,3 +17,13 @@
   cost: 3500
   category: cargoproduct-category-name-medical
   group: medical # DS14
+
+- type: cargoProduct
+  id: MedicalSurgeryMannequin
+  icon:
+    sprite: Objects/Misc/monkeycube.rsi
+    state: cube
+  product: CrateMedicalSurgeryMannequin
+  cost: 800
+  category: cargoproduct-category-name-medical
+  group: medical # DS14

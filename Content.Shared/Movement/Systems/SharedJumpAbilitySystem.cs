@@ -1,3 +1,4 @@
+using System.Numerics; //DS-14
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Cloning.Events;
@@ -8,6 +9,7 @@ using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network; //DS-14
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
@@ -18,17 +20,18 @@ namespace Content.Shared.Movement.Systems;
 
 public sealed partial class SharedJumpAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private INetManager _net = default!; //DS-14
     // DS14-start
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly RayCastSystem _rayCast = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private RayCastSystem _rayCast = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     // DS14-end
 
     public override void Initialize()
@@ -36,6 +39,7 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<JumpAbilityComponent, MapInitEvent>(OnInit);
+        SubscribeLocalEvent<JumpAbilityComponent, ComponentStartup>(OnStartup); //DS-14
         SubscribeLocalEvent<JumpAbilityComponent, ComponentShutdown>(OnShutdown);
 
         SubscribeLocalEvent<JumpAbilityComponent, GravityJumpEvent>(OnGravityJump);
@@ -49,11 +53,26 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
 
     private void OnInit(Entity<JumpAbilityComponent> entity, ref MapInitEvent args)
     {
-        if (!TryComp(entity, out ActionsComponent? comp))
+        EnsureAction(entity);
+    }
+
+    //DS-14 start
+    private void OnStartup(Entity<JumpAbilityComponent> entity, ref ComponentStartup args)
+    {
+        if (_net.IsClient)
+            return;
+
+        EnsureAction(entity);
+    }
+
+    private void EnsureAction(Entity<JumpAbilityComponent> entity)
+    {
+        if (entity.Comp.ActionEntity != null || !TryComp(entity, out ActionsComponent? comp))
             return;
 
         _actions.AddAction(entity, ref entity.Comp.ActionEntity, entity.Comp.Action, component: comp);
     }
+    //DS-14 end
 
     private void OnShutdown(Entity<JumpAbilityComponent> entity, ref ComponentShutdown args)
     {
@@ -130,6 +149,9 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
             return true;
 
         var translation = end.Position - start.Position;
+        if (translation.LengthSquared() > 0.0001f && IsPressedIntoObstacle(performer, translation))
+            return true;
+
         var origin = _physics.GetPhysicsTransform(performer, xform);
 
         foreach (var fixture in fixtures.Fixtures.Values)
@@ -154,6 +176,38 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
             {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private bool IsPressedIntoObstacle(EntityUid performer, Vector2 translation)
+    {
+        var direction = translation.Normalized();
+        var contacts = _physics.GetContacts(performer);
+        while (contacts.MoveNext(out var contact))
+        {
+            if (!contact.IsTouching || !contact.Hard)
+                continue;
+
+            var other = contact.OtherEnt(performer);
+            if (!TryComp<PhysicsComponent>(other, out var otherBody) || otherBody.BodyType != BodyType.Static)
+                continue;
+
+            var (_, otherFixture) = contact.OtherFixture(performer);
+            var (_, ourFixture) = contact.OurFixture(performer);
+            if (!otherFixture.Hard || (otherFixture.CollisionLayer & ourFixture.CollisionMask) == 0)
+                continue;
+
+            var transformA = _physics.GetPhysicsTransform(contact.EntityA);
+            var transformB = _physics.GetPhysicsTransform(contact.EntityB);
+            contact.GetWorldManifold(transformA, transformB, out var normal);
+            var into = contact.EntityA == performer
+                ? Vector2.Dot(direction, normal)
+                : -Vector2.Dot(direction, normal);
+
+            if (into > 0.5f)
+                return true;
         }
 
         return false;

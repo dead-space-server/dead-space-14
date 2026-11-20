@@ -406,7 +406,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      2500: Dead
+      3000: Dead
   # The boss HUD shows its health; no health bar over it through a medical visor.
   - type: Damageable
     damageContainer: Biological
@@ -428,7 +428,7 @@
     analyzable: false
   - type: LavalandBoss
     bossName: баблгам
-    maxHealth: 2500
+    maxHealth: 3000
     music: /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
     deathSound: /Audio/_DeadSpace/Lavaland/Bubblegum/enter_blood.ogg
     deathRewards:

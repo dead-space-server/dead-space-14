@@ -6,15 +6,17 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Rejuvenate;
 using Robust.Shared.Containers;
+using Robust.Shared.Random; // DS14
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Atmos.Rotting;
 
-public abstract class SharedRottingSystem : EntitySystem
+public abstract partial class SharedRottingSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IRobustRandom _random = default!; // DS14
 
     public const int MaxStages = 3;
 
@@ -33,7 +35,7 @@ public abstract class SharedRottingSystem : EntitySystem
 
     private void OnPerishableMapInit(Entity<PerishableComponent> ent, ref MapInitEvent args)
     {
-        ent.Comp.RotNextUpdate = _timing.CurTime + ent.Comp.PerishUpdateRate;
+        ent.Comp.RotNextUpdate = _timing.CurTime + ent.Comp.PerishUpdateRate * _random.NextDouble(); // DS14
     }
 
     private void OnMobStateChanged(Entity<PerishableComponent> ent, ref MobStateChangedEvent args)

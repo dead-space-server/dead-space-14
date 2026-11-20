@@ -10,9 +10,9 @@ namespace Content.Server.Species.Systems;
 
 public sealed partial class NymphSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] private readonly ZombieSystem _zombie = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private MindSystem _mindSystem = default!;
+    [Dependency] private ZombieSystem _zombie = default!;
 
     public override void Initialize()
     {
@@ -25,6 +25,9 @@ public sealed partial class NymphSystem : EntitySystem
     {
         if (TerminatingOrDeleted(uid) || TerminatingOrDeleted(args.OldBody))
             return;
+
+        if (HasComp<Content.Shared.DeadSpace.Surgery.SurgeryKeepOrganComponent>(uid)) // DS14
+            return; // DS14
 
         if (!_protoManager.TryIndex<EntityPrototype>(comp.EntityPrototype, out var entityProto))
             return;

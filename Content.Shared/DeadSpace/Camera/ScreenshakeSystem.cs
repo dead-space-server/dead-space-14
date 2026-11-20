@@ -9,13 +9,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Camera;
 
-public sealed class ScreenshakeSystem : EntitySystem
+public sealed partial class ScreenshakeSystem : EntitySystem
 {
     private const float MaxOffset = 0.15f;
     private const float MaxRotationDegrees = 20f;
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly Dictionary<EntityUid, Dictionary<string, TimeSpan>> _cooldowns = [];
     private readonly List<ScreenshakeCommand> _expiredCommands = [];

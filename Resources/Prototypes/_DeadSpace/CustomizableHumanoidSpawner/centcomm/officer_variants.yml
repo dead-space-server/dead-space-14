@@ -1,0 +1,182 @@
+- type: entity
+  parent: CustomizableSpawnerCentralCommandOfficer
+  id: CustomizableSpawnerCentralCommandOfficerAlt
+  name: Офицер безопасности ЦК (штурмовой)
+  suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: CentralCommandOfficerAlt
+    allowedSpecies:
+    - Human
+    - Shark
+    - Demon
+    - Reptilian
+    - Arachnid
+    - SlimePerson
+    - Tajaran
+  - type: GhostRole
+    name: ghost-role-information-centcomofficer-name
+    description: ghost-role-information-centcomofficer-description
+    rules: ghost-role-information-centcom-personal-rules
+    category: ghost-role-information-centcomm-category
+    job: CentralCommandOfficerAlt
+    raffle:
+      settings: short
+
+- type: roleLoadout
+  id: JobCentralCommandOfficerAlt
+  groups:
+  - CentralCommandOfficerAltLoadout
+  - Survival
+  - GroupSpeciesBreathTool
+  - CentcommOfficerUnderwear
+
+- type: loadoutGroup
+  id: CentralCommandOfficerAltLoadout
+  name: spawner-loadout-centcomm-officer
+  hidden: true
+  loadouts:
+  - CentralCommandOfficerAltLoadout
+
+- type: loadout
+  id: CentralCommandOfficerAltLoadout
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomOfficerGreen
+    neck: SecurityWhistle
+    back: ClothingBackpackMilitarySatchel
+    shoes: ClothingShoesBootsCombatFilled
+    eyes: ClothingEyesGlassesHiddenSecurity
+    suitstorage: WeaponSubMachineGunMP5
+    pocket1: TelescopicShield
+    pocket2: WeaponPistolX01
+  storage:
+    back:
+    - BoxZiptie
+    - BoxMagazinePistolSubMachineGun
+
+- type: entity
+  parent: CustomizableSpawnerCentralCommandOfficer
+  id: CustomizableSpawnerCentralCommandOfficerArmored
+  name: Офицер безопасности ЦК (тяжёлый)
+  suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: CentralCommandOfficerArmored
+    allowedSpecies:
+    - Human
+    - Shark
+    - Demon
+    - Reptilian
+    - Arachnid
+    - SlimePerson
+    - Tajaran
+  - type: GhostRole
+    name: ghost-role-information-centcomofficer-name
+    description: ghost-role-information-centcomofficer-description
+    rules: ghost-role-information-centcom-personal-rules
+    category: ghost-role-information-centcomm-category
+    job: CentralCommandOfficer
+    raffle:
+      settings: short
+
+- type: roleLoadout
+  id: JobCentralCommandOfficerArmored
+  groups:
+  - CentralCommandOfficerArmoredLoadout
+  - Survival
+  - GroupSpeciesBreathTool
+  - CentcommOfficerUnderwear
+
+- type: loadoutGroup
+  id: CentralCommandOfficerArmoredLoadout
+  name: spawner-loadout-centcomm-officer
+  hidden: true
+  loadouts:
+  - CentralCommandOfficerArmoredLoadout
+
+- type: loadout
+  id: CentralCommandOfficerArmoredLoadout
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomOfficerGreen
+    neck: SecurityWhistle
+    back: ClothingBackpackMilitarySatchel
+    shoes: ClothingShoesBootsCombatFilled
+    eyes: ClothingEyesGlassesHiddenSecurity
+    suitstorage: WeaponRifleLecterXL8
+    pocket1: TelescopicShield
+    pocket2: WeaponPistolX01
+  storage:
+    back:
+    - BoxZiptie
+    - BoxMagazineRifle
+
+- type: entity
+  parent: CustomizableSpawnerBase
+  id: CustomizableSpawnerCentralCommandOfficer
+  name: Офицер безопасности ЦК (патрульный)
+  suffix: ОБЦК, Призрачная роль, Кастомизируемый персонаж
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: CentralCommandOfficer
+    allowedSpecies:
+    - Human
+    - Shark
+    - Demon
+    - Reptilian
+    - Arachnid
+    - SlimePerson
+    - Tajaran
+  - type: GhostRole
+    name: ghost-role-information-centcomofficer-name
+    description: ghost-role-information-centcomofficer-description
+    rules: ghost-role-information-centcom-personal-rules
+    category: ghost-role-information-centcomm-category
+    job: CentralCommandOfficerArmored
+    raffle:
+      settings: short
+
+- type: roleLoadout
+  id: JobCentralCommandOfficer
+  groups:
+  # - GroupTankHarness # outerClothing slot occupied by startingGear
+  - CentralCommandOfficerLoadout
+  - Survival
+  - GroupSpeciesBreathTool
+  - CentcommOfficerUnderwear
+
+- type: loadoutGroup
+  id: CentralCommandOfficerLoadout
+  name: spawner-loadout-centcomm-officer
+  hidden: true
+  loadouts:
+  - CentralCommandOfficerLoadout
+
+- type: loadout
+  id: CentralCommandOfficerLoadout
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomOfficer
+    neck: SecurityWhistle
+    back: ClothingBackpackMilitarySatchel
+    shoes: ClothingShoesBootsCombatFilled
+    eyes: ClothingEyesGlassesHiddenSecurity
+    suitstorage: WeaponEnergyShotgun
+    pocket1: TelescopicShield
+    pocket2: WeaponPistolX01
+  storage:
+    back:
+    - BoxZiptie

@@ -1,7 +1,7 @@
 - type: entity
   name: rat king
   id: MobRatKing
-  parent: [ SimpleMobBase, MobCombat ]
+  parent: [ SimpleMobBase, MobCombat, MobRespirator ] # DS14
   description: He's da rat. He make da roolz.
   components:
   # DS14-start
@@ -182,7 +182,7 @@
 - type: entity
   name: rat servant
   id: MobRatServant
-  parent: [ SimpleMobBase, MobCombat ]
+  parent: [ SimpleMobBase, MobCombat, MobRespirator ] # DS14
   description: He's da mini rat. He don't make da roolz.
   categories: [ HideSpawnMenu ] #Must be configured to a King or the AI breaks.
   components:

@@ -5,8 +5,11 @@ using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Server.DeadSpace.Lavaland.SecretBoss;
 using Content.Shared.DeadSpace.Lavaland.SecretBoss;
+using Content.Server.NPC.HTN;
 using Content.Server.Tiles;
 using Content.Shared.Chasm;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Interaction.Events;
@@ -26,23 +29,28 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandJaunterSystem : EntitySystem
+public sealed partial class LavalandJaunterSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedLavalandJaunterSystem _jaunter = default!;
-    [Dependency] private readonly LavalandMadMinerSystem _madMiner = default!;
-    [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!;
-    [Dependency] private readonly LavalandBossArenaSystem _arena = default!;
-    [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedLavalandJaunterSystem _jaunter = default!;
+    [Dependency] private LavalandMadMinerSystem _madMiner = default!;
+    [Dependency] private LavalandDayCycleSystem _dayCycle = default!;
+    [Dependency] private LavalandBossArenaSystem _arena = default!;
+    [Dependency] private LavalandChromiteCavesSystem _caves = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+
+    private readonly HashSet<Entity<HTNComponent>> _creatures = new();
 
     public override void Initialize()
     {
@@ -290,7 +298,31 @@ public sealed class LavalandJaunterSystem : EntitySystem
             return false;
 
         destination = _map.ToCenterCoordinates(tile.Value);
+
+        // The landing spot taken, a random one nearby could be a ruin's room full of basilisks: none with fauna close.
+        if (HasHostileNearby(_transform.ToMapCoordinates(destination), user))
+        {
+            destination = default;
+            return false;
+        }
+
         return true;
+    }
+
+    /// <summary>How far (tiles) from a jaunter's landing no living creature hostile to the user may be.</summary>
+    private const float HostileClearRadius = 8f;
+
+    private bool HasHostileNearby(MapCoordinates coordinates, EntityUid user)
+    {
+        _creatures.Clear();
+        _lookup.GetEntitiesInRange(coordinates, HostileClearRadius, _creatures);
+        foreach (var creature in _creatures)
+        {
+            if (!_mobState.IsDead(creature.Owner) && _npcFaction.IsEntityHostile(creature.Owner, user))
+                return true;
+        }
+
+        return false;
     }
 
     private bool HasUnsafeAnchoredEntity(TileRef tile)

@@ -3,4 +3,4 @@
 namespace Content.Shared.DeadSpace.Weapons.Parry;
 
 [ByRefEvent]
-public record struct BeforeMeleeDamageEvent(EntityUid Attacker, EntityUid Weapon, bool Cancelled = false);
+public record struct BeforeMeleeDamageEvent(EntityUid Attacker, EntityUid Weapon, bool Cancelled = false, bool Wide = false);

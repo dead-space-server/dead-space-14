@@ -24,22 +24,22 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Necromorphs.Deva;
 
-public sealed class DevaSystem : EntitySystem
+public sealed partial class DevaSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly CocoonSystem _cocoon = default!;
-    [Dependency] private readonly ServerInventorySystem _inventory = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private CocoonSystem _cocoon = default!;
+    [Dependency] private ServerInventorySystem _inventory = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

@@ -11,19 +11,18 @@ using Content.Shared.Silicons.StationAi;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Content.Server.DeadSpace.Languages;
-using Content.Shared.DeadSpace.Psychiatry; //DS-14
-using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem; //DS-14
+using Content.Server.DeadSpace.Body; //DS-14
 
 namespace Content.Server.Radio.EntitySystems;
 
-public sealed class HeadsetSystem : SharedHeadsetSystem
+public sealed partial class HeadsetSystem : SharedHeadsetSystem
 {
-    [Dependency] private readonly INetManager _netMan = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly LanguageSystem _language = default!; // DS14-Languages
-    [Dependency] private readonly IAdminManager _admin = default!; // DS14
-    [Dependency] private readonly GameTicker _gameTicker = default!; // DS14
-    [Dependency] private readonly NewStatusEffectsSystem _status = default!; //DS-14
+    [Dependency] private INetManager _netMan = default!;
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private LanguageSystem _language = default!; // DS14-Languages
+    [Dependency] private IAdminManager _admin = default!; // DS14
+    [Dependency] private GameTicker _gameTicker = default!; // DS14
+    [Dependency] private LimbHearingSystem _hearing = default!; //DS-14
 
     public override void Initialize()
     {
@@ -168,7 +167,7 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
         if (actor != null) // DS14
         {
             // DS14-start
-            if (sendMessage && !_status.HasEffectComp<DeafStatusEffectComponent>(receiver)) //DS-14
+            if (sendMessage && !_hearing.CantHear(receiver)) //DS-14
             {
                 if (ShouldSendCommandLinkSender(receiver, actor.PlayerSession, messageSource))
                     msg = WithCommandLinkSender(msg, messageSource);

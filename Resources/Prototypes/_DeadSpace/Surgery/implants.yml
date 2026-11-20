@@ -1,0 +1,831 @@
+- type: entity
+  id: ActionLimbImplantArmBlade
+  name: arm blade
+  description: Extend or retract the blade in this arm.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon:
+      sprite: Interface/Actions/changeling.rsi
+      state: armblade
+    useDelay: 2
+    raiseOnAction: true
+    itemIconStyle: BigAction
+  - type: InstantAction
+    event: !type:OnRetractableItemActionEvent
+  - type: RetractableItemAction
+    spawnedPrototype: ArmBlade
+    summonSounds:
+      collection: gib
+    retractSounds:
+      collection: gib
+
+- type: entity
+  parent: BaseItem
+  id: LimbImplantHudBase
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/limb_implants.rsi
+  - type: Item
+    size: Tiny
+
+- type: entity
+  parent: LimbImplantHudBase
+  id: LimbImplantMedicalHud
+  name: ocular medical HUD implant
+  description: A surgical ocular implant. Installed in the eyes, it grants a medical overlay.
+  components:
+  - type: Sprite
+    state: medhud
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: ShowHealthBars
+    - type: ShowHealthIcons
+    - type: ShowMedicalStatusIcons
+
+- type: entity
+  parent: [ LimbImplantHudBase, BaseSecurityContraband ]
+  id: LimbImplantSecurityHud
+  name: ocular security HUD implant
+  description: A surgical ocular implant. Installed in the eyes, it shows jobs, records, mindshields and contraband.
+  components:
+  - type: Sprite
+    state: sechud
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: ShowJobIcons
+    - type: ShowMindShieldIcons
+    - type: ShowCriminalRecordIcons
+    - type: ShowContrabandDetails
+    - type: ShowPatrolIcons
+    - type: ShowSecurityMedicalStatusIcons
+    - type: ShowPersonnelRecordIcons
+
+- type: entity
+  parent: LimbImplantHudBase
+  id: LimbImplantDiagnosticHud
+  name: ocular diagnostic HUD implant
+  description: A surgical ocular implant. Installed in the eyes, it shows the integrity of machines and borgs and access reader settings.
+  components:
+  - type: Sprite
+    state: diaghud
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: ShowHealthBars
+      damageContainers:
+      - Inorganic
+      - Silicon
+    - type: ShowAccessReaderSettings
+
+- type: entity
+  parent: [ LimbImplantHudBase, BaseCommandContraband ]
+  id: LimbImplantCommandHud
+  name: ocular administration HUD implant
+  description: A surgical ocular implant. Installed in the eyes, it shows jobs, personnel records and medical status.
+  components:
+  - type: Sprite
+    state: cmdhud
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: ShowJobIcons
+    - type: ShowPersonnelRecordIcons
+    - type: ShowMedicalStatusIcons
+
+- type: entity
+  parent: LimbImplantHudBase
+  id: LimbImplantNutritionHud
+  name: ocular nutrition HUD implant
+  description: A surgical ocular implant. Installed in the eyes, it shows how hungry and thirsty people are.
+  components:
+  - type: Sprite
+    state: foodhud
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: ShowSatiationIcons
+      shownTypes:
+      - Hunger
+      - Thirst
+
+- type: entity
+  parent: [ LimbImplantHudBase, BaseSyndicateContraband ]
+  id: LimbImplantSyndicateHud
+  name: ocular syndicate HUD implant
+  description: A surgical ocular implant. Installed in the eyes, it marks syndicate agents and shows security data.
+  components:
+  - type: Sprite
+    state: synhud
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: ShowSyndicateIcons
+    - type: ShowJobIcons
+    - type: ShowMindShieldIcons
+    - type: ShowCriminalRecordIcons
+
+- type: entity
+  parent: LimbImplantHudBase
+  id: LimbImplantFlashShield
+  name: ocular flash shield implant
+  description: A surgical ocular implant. Installed in the eyes, it shields them from flashes and welding light.
+  components:
+  - type: Sprite
+    state: flashshield
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: FlashImmunity
+      showInExamine: false
+    - type: EyeProtection
+
+- type: entity
+  parent: LimbImplantHudBase
+  id: LimbImplantWeldShield
+  name: ocular welding shield implant
+  description: A surgical ocular implant. Installed in the eyes, it shields them from welding light.
+  components:
+  - type: Sprite
+    state: weldshield
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: EyeProtection
+
+- type: entity
+  parent: LimbImplantHudBase
+  id: LimbImplantChemicalHud
+  name: ocular chemical scanner implant
+  description: A surgical ocular implant. Installed in the eyes, it shows the chemical composition of solutions.
+  components:
+  - type: Sprite
+    state: chemhud
+  - type: LimbImplant
+    slots:
+    - Eyes
+    implantComponents:
+    - type: SolutionScanner
+
+- type: entity
+  parent: BaseItem
+  id: LimbImplantArmBlade
+  name: arm blade implant
+  description: A surgical implant for an arm. Once installed, the arm can extend a retractable blade.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/limb_implants.rsi
+    state: armblade
+  - type: Item
+    size: Small
+  - type: LimbImplant
+    slots:
+    - ArmLeft
+    - ArmRight
+    size: 1
+    implantAction: ActionLimbImplantArmBlade
+
+# Eyes
+
+- type: surgeryPart
+  id: ImplantEyes
+  zone: Head
+  anatomy: Eyes
+  operation: TakeImplantEyes
+  put: PutImplantEyes
+  implant: Eyes
+  sprite: /Textures/_DeadSpace/Objects/Medical/limb_implants.rsi
+  state: medhud
+  wound: false
+  order: 20
+  ax: 13.5
+  ay: 6.5
+  bx: 17.5
+  by: 6.5
+
+- type: surgeryOperation
+  id: PutImplantEyes
+  name: surgery-op-put-implant-eyes
+  zone: Head
+  implant: Eyes
+  implantPut: true
+  steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
+  - verb: Insert
+    layer: Globe
+    undo: Extract
+    implant: Eyes
+  close:
+  - verb: Cauterize
+    layer: Globe
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantEyes
+  name: surgery-op-take-implant-eyes
+  zone: Head
+  implant: Eyes
+  steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
+  - verb: Extract
+    layer: Globe
+    undo: Insert
+    implant: Eyes
+  close:
+  - verb: Cauterize
+    layer: Globe
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryPart
+  id: ImplantEyesPlant
+  zone: Head
+  anatomy: Eyes
+  operation: TakeImplantEyesPlant
+  put: PutImplantEyesPlant
+  implant: Eyes
+  sprite: /Textures/_DeadSpace/Objects/Medical/limb_implants.rsi
+  state: medhud
+  wound: false
+  order: 20
+  ax: 13.5
+  ay: 6.5
+  bx: 17.5
+  by: 6.5
+
+- type: surgeryOperation
+  id: PutImplantEyesPlant
+  name: surgery-op-put-implant-eyes
+  zone: Head
+  plant: true
+  implant: Eyes
+  implantPut: true
+  steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
+  - verb: Insert
+    layer: Globe
+    undo: Extract
+    implant: Eyes
+  close:
+  - verb: SealSap
+    layer: Globe
+    game: Hold
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+
+- type: surgeryOperation
+  id: TakeImplantEyesPlant
+  name: surgery-op-take-implant-eyes
+  zone: Head
+  plant: true
+  implant: Eyes
+  steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
+  - verb: Extract
+    layer: Globe
+    undo: Insert
+    implant: Eyes
+  close:
+  - verb: SealSap
+    layer: Globe
+    game: Hold
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+
+# Slime eyes
+
+- type: surgeryPart
+  id: ImplantEyesSlime
+  zone: Head
+  anatomy: Eyes
+  operation: TakeImplantEyesSlime
+  put: PutImplantEyesSlime
+  implant: Eyes
+  sprite: /Textures/_DeadSpace/Objects/Medical/limb_implants.rsi
+  state: medhud
+  wound: false
+  order: 20
+  ax: 13.5
+  ay: 6.5
+  bx: 17.5
+  by: 6.5
+
+- type: surgeryOperation
+  id: PutImplantEyesSlime
+  name: surgery-op-put-implant-eyes
+  zone: Head
+  soft: true
+  implant: Eyes
+  implantPut: true
+  steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
+  - verb: Insert
+    layer: Globe
+    undo: Extract
+    implant: Eyes
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantEyesSlime
+  name: surgery-op-take-implant-eyes
+  zone: Head
+  soft: true
+  implant: Eyes
+  steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
+  - verb: Extract
+    layer: Globe
+    undo: Insert
+    implant: Eyes
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+# Arms
+
+- type: surgeryPart
+  id: ImplantArmLeft
+  zone: ArmLeft
+  anatomy: FleshLimb
+  operation: TakeImplantArmLeft
+  put: PutImplantArmLeft
+  implant: ArmLeft
+  sprite: /Textures/_DeadSpace/Objects/Medical/limb_implants.rsi
+  state: armblade
+  order: 20
+  ax: 22
+  ay: 12.5
+  bx: 22
+  by: 16.5
+
+- type: surgeryPart
+  id: ImplantArmRight
+  zone: ArmRight
+  anatomy: FleshLimb
+  operation: TakeImplantArmRight
+  put: PutImplantArmRight
+  implant: ArmRight
+  sprite: /Textures/_DeadSpace/Objects/Medical/limb_implants.rsi
+  state: armblade
+  order: 20
+  ax: 9
+  ay: 12.5
+  bx: 9
+  by: 16.5
+
+- type: surgeryOperation
+  id: PutImplantArmLeft
+  name: surgery-op-put-implant-arm
+  zone: ArmLeft
+  implant: ArmLeft
+  implantPut: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Insert
+    layer: Skin
+    undo: Extract
+    implant: ArmLeft
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantArmLeft
+  name: surgery-op-take-implant-arm
+  zone: ArmLeft
+  implant: ArmLeft
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Extract
+    layer: Skin
+    undo: Insert
+    implant: ArmLeft
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: PutImplantArmRight
+  name: surgery-op-put-implant-arm
+  zone: ArmRight
+  implant: ArmRight
+  implantPut: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Insert
+    layer: Skin
+    undo: Extract
+    implant: ArmRight
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantArmRight
+  name: surgery-op-take-implant-arm
+  zone: ArmRight
+  implant: ArmRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Extract
+    layer: Skin
+    undo: Insert
+    implant: ArmRight
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+# Back
+
+- type: surgeryOperation
+  id: PutImplantBack
+  name: surgery-op-put-implant-back
+  zone: Torso
+  side: Back
+  implant: Back
+  implantPut: true
+  order: 40
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+    state: implanter0
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Insert
+    layer: Skin
+    undo: Extract
+    implant: Back
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantBack
+  name: surgery-op-take-implant-back
+  zone: Torso
+  side: Back
+  implant: Back
+  order: 41
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+    state: implanter0
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Extract
+    layer: Skin
+    undo: Insert
+    implant: Back
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+# Brain
+
+- type: surgeryPart
+  id: ImplantBrain
+  zone: Head
+  anatomy: Head
+  operation: TakeImplantBrain
+  put: PutImplantBrain
+  implant: Brain
+  sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+  state: implanter0
+  wound: false
+  order: 20
+  ax: 13
+  ay: 4.5
+  bx: 18
+  by: 4.5
+
+- type: surgeryOperation
+  id: PutImplantBrain
+  name: surgery-op-put-implant-brain
+  zone: Head
+  implant: Brain
+  implantPut: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    implant: Brain
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantBrain
+  name: surgery-op-take-implant-brain
+  zone: Head
+  implant: Brain
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    implant: Brain
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryPart
+  id: ImplantBrainPlant
+  zone: Head
+  anatomy: Plant
+  operation: TakeImplantBrainPlant
+  put: PutImplantBrainPlant
+  implant: Brain
+  sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+  state: implanter0
+  wound: false
+  order: 20
+  ax: 13
+  ay: 4.5
+  bx: 18
+  by: 4.5
+
+- type: surgeryOperation
+  id: PutImplantBrainPlant
+  name: surgery-op-put-implant-brain
+  zone: Head
+  plant: true
+  implant: Brain
+  implantPut: true
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    implant: Brain
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+- type: surgeryOperation
+  id: TakeImplantBrainPlant
+  name: surgery-op-take-implant-brain
+  zone: Head
+  plant: true
+  implant: Brain
+  steps:
+  - verb: Chop
+    layer: Skin
+    game: Chop
+    undo: SealSap
+  - verb: Retract
+    layer: Skin
+    game: Spread
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    implant: Brain
+  close:
+  - verb: SealSap
+    layer: Skin
+    game: Hold
+    undo: Chop
+
+# Slime core
+
+- type: surgeryPart
+  id: ImplantCore
+  zone: Torso
+  anatomy: Slime
+  operation: TakeImplantCore
+  put: PutImplantCore
+  implant: Core
+  sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+  state: implanter0
+  wound: false
+  order: 20
+  ax: 14
+  ay: 16
+  bx: 17
+  by: 19
+
+- type: surgeryOperation
+  id: PutImplantCore
+  name: surgery-op-put-implant-core
+  zone: Torso
+  soft: true
+  implant: Core
+  implantPut: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    implant: Core
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantCore
+  name: surgery-op-take-implant-core
+  zone: Torso
+  soft: true
+  implant: Core
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: SlimeStretch
+    undo: MendBone
+  - verb: Retract
+    layer: Skin
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    implant: Core
+  close:
+  - verb: MendBone
+    layer: Skin
+    game: Glue
+    hint: SlimeStir
+    undo: Incise
+
+# IPC positronic brain
+
+- type: surgeryPart
+  id: ImplantPositronic
+  zone: Torso
+  anatomy: MachineTorso
+  machine: true
+  operation: TakeImplantPositronic
+  put: PutImplantPositronic
+  implant: Positronic
+  sprite: /Textures/Objects/Specific/Medical/implanter.rsi
+  state: implanter0
+  wound: false
+  order: 20
+  ax: 14
+  ay: 16
+  bx: 17
+  by: 19
+
+- type: surgeryOperation
+  id: PutImplantPositronic
+  name: surgery-op-put-implant-positronic
+  machine: true
+  sterile: false
+  side: Front
+  zone: Torso
+  implant: Positronic
+  implantPut: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    implant: Positronic
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeImplantPositronic
+  name: surgery-op-take-implant-positronic
+  machine: true
+  sterile: false
+  side: Front
+  zone: Torso
+  implant: Positronic
+  steps:
+  - verb: Incise
+    layer: Skin
+    hint: MachineUnscrew
+    game: Dots
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    hint: MachinePry
+    game: Hold
+  - verb: Extract
+    layer: Cavity
+    hint: MachinePry
+    undo: Insert
+    implant: Positronic
+  close:
+  - verb: Cauterize
+    layer: Skin
+    hint: MachineWeld
+    game: Steady
+    undo: Incise

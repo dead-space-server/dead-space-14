@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Edited by Blue Dog Doc. Original: Created by СyberBoich (Discord) for SS14 server Мёртвый Космос 14",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "chem"
+    }
+  ]
+}

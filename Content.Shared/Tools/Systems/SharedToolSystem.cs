@@ -21,21 +21,20 @@ namespace Content.Shared.Tools.Systems;
 
 public abstract partial class SharedToolSystem : EntitySystem
 {
-    [Dependency] private   readonly IGameTiming _timing = default!;
-    [Dependency] private   readonly IMapManager _mapManager = default!;
-    [Dependency] private   readonly IPrototypeManager _protoMan = default!;
-    [Dependency] protected readonly ISharedAdminLogManager AdminLogger = default!;
-    [Dependency] private   readonly ITileDefinitionManager _tileDefManager = default!;
-    [Dependency] private   readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private   readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] protected readonly SharedInteractionSystem InteractionSystem = default!;
-    [Dependency] protected readonly ItemToggleSystem ItemToggle = default!;
-    [Dependency] private   readonly SharedMapSystem _maps = default!;
-    [Dependency] private   readonly SharedPopupSystem _popup = default!;
-    [Dependency] protected readonly SharedSolutionContainerSystem SolutionContainerSystem = default!;
-    [Dependency] private   readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private   readonly TileSystem _tiles = default!;
-    [Dependency] private   readonly TurfSystem _turfs = default!;
+    [Dependency] private   IGameTiming _timing = default!;
+    [Dependency] private   IPrototypeManager _protoMan = default!;
+    [Dependency] protected ISharedAdminLogManager AdminLogger = default!;
+    [Dependency] private   ITileDefinitionManager _tileDefManager = default!;
+    [Dependency] private   SharedAudioSystem _audioSystem = default!;
+    [Dependency] private   SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] protected SharedInteractionSystem InteractionSystem = default!;
+    [Dependency] protected ItemToggleSystem ItemToggle = default!;
+    [Dependency] private   SharedMapSystem _maps = default!;
+    [Dependency] private   SharedPopupSystem _popup = default!;
+    [Dependency] protected SharedSolutionContainerSystem SolutionContainerSystem = default!;
+    [Dependency] private   SharedTransformSystem _transformSystem = default!;
+    [Dependency] private   TileSystem _tiles = default!;
+    [Dependency] private   TurfSystem _turfs = default!;
 
     public const string CutQuality = "Cutting";
     public const string PulseQuality = "Pulsing";
@@ -224,6 +223,48 @@ public abstract partial class SharedToolSystem : EntitySystem
     ///     Method used to get the localized names of the quality prototypes.
     /// </summary>
     /// <returns>Localized combined string from the quality prototypes names</returns>
+    // The engine dropped PrototypeFlags, so tools keep their qualities as prototype ids; these overloads hand them to
+    // the string-based API below unchanged.
+    public bool UseTool(
+        EntityUid tool,
+        EntityUid user,
+        EntityUid? target,
+        float doAfterDelay,
+        [ForbidLiteral] IEnumerable<ProtoId<ToolQualityPrototype>> toolQualitiesNeeded,
+        DoAfterEvent doAfterEv,
+        float fuel = 0,
+        ToolComponent? toolComponent = null)
+    {
+        return UseTool(tool, user, target, doAfterDelay, QualityIds(toolQualitiesNeeded), doAfterEv, fuel, toolComponent);
+    }
+
+    public bool UseTool(
+        EntityUid tool,
+        EntityUid user,
+        EntityUid? target,
+        TimeSpan delay,
+        [ForbidLiteral] IEnumerable<ProtoId<ToolQualityPrototype>> toolQualitiesNeeded,
+        DoAfterEvent doAfterEv,
+        out DoAfterId? id,
+        float fuel = 0,
+        ToolComponent? toolComponent = null)
+    {
+        return UseTool(tool, user, target, delay, QualityIds(toolQualitiesNeeded), doAfterEv, out id, fuel, toolComponent);
+    }
+
+    public string GetQualitiesText(IEnumerable<ProtoId<ToolQualityPrototype>> qualities, bool lowercase = false)
+    {
+        return GetQualitiesText(QualityIds(qualities), lowercase);
+    }
+
+    private static IEnumerable<string> QualityIds(IEnumerable<ProtoId<ToolQualityPrototype>> qualities)
+    {
+        foreach (var quality in qualities)
+        {
+            yield return quality.Id;
+        }
+    }
+
     public string GetQualitiesText(IEnumerable<string> qualities, bool lowercase = false)
     {
         // Create a list to store tool quality names
@@ -261,7 +302,7 @@ public abstract partial class SharedToolSystem : EntitySystem
     [PublicAPI]
     public bool HasAllQualities(EntityUid uid, [ForbidLiteral] IEnumerable<string> qualities, ToolComponent? tool = null)
     {
-        return Resolve(uid, ref tool, false) && tool.Qualities.ContainsAll(qualities);
+        return Resolve(uid, ref tool, false) && qualities.All(quality => tool.Qualities.Contains(quality));
     }
 
     private bool CanStartToolUse(EntityUid tool, EntityUid user, EntityUid? target, float fuel, IEnumerable<string> toolQualitiesNeeded, ToolComponent? toolComponent = null)
@@ -270,7 +311,7 @@ public abstract partial class SharedToolSystem : EntitySystem
             return false;
 
         // check if the tool can do what's required
-        if (!toolComponent.Qualities.ContainsAll(toolQualitiesNeeded))
+        if (!toolQualitiesNeeded.All(quality => toolComponent.Qualities.Contains(quality)))
             return false;
 
         // check if the user allows using the tool

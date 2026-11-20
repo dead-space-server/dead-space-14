@@ -31,17 +31,17 @@ namespace Content.Server.DeadSpace.MedicalRecords.Systems;
 /// <summary>
 /// Nothing about a patient's record is trusted from the client; the server re-validates every action on receipt.
 /// </summary>
-public sealed class MedicalRecordsConsoleSystem : SharedMedicalRecordsConsoleSystem
+public sealed partial class MedicalRecordsConsoleSystem : SharedMedicalRecordsConsoleSystem
 {
-    [Dependency] private readonly AccessReaderSystem _access = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly MedicalRecordsSystem _medicalRecords = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly StationRecordsSystem _records = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private AccessReaderSystem _access = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private MedicalRecordsSystem _medicalRecords = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

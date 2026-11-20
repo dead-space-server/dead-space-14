@@ -12,13 +12,13 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.Necromorphs.Leviathan;
 
-public sealed class LeviathanSystem : EntitySystem
+public sealed partial class LeviathanSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly GhostRoleSystem _ghost = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
+    [Dependency] private GhostRoleSystem _ghost = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

@@ -61,6 +61,8 @@
       collection: MantisAttack
   - type: SandevistanMeleeAttackRate
     modifier: 1.5
+  - type: ParryStagger
+    stagger: 1.2
   - type: SolutionContainerManager
     solutions:
       melee:

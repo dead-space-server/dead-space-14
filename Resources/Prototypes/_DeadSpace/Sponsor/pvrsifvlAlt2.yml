@@ -6,7 +6,7 @@
 
 # backpack.rsi
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackPvrsifvlAlt2
   categories: [ HideSpawnMenu ]
   name: разведывательная сумка mil.RELIABLE // gen.1
@@ -69,21 +69,16 @@
 
 # belt.rsi
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltMilitaryWebbingPvrsifvlAlt2
   name: разгрузочная нагрудная система mil.RAPID // gen.1
   description: Фиксированная разгрузочная система, содержащая все необходимые базовые подсумки.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: JawsOfLifePvrsifvlAlt2
@@ -98,7 +93,7 @@
 
 # hardsuit.rsi
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitPvrsifvlAlt2
   name: диверсионно-разведывательный скафандр mil.HAZE // gen.1
   description: Все самые лучшие при виде меня говорят «Вау». Ты пытаешься всем угодить — это провал.
@@ -110,8 +105,6 @@
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitPvrsifvlAlt2
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -137,7 +130,7 @@
 
 # helmet.rsi
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   categories: [ HideSpawnMenu ]
   id: ClothingHeadHelmetHardsuitPvrsifvlAlt2
   name: шлем диверсионно-разведывательного скафандра mil.HAZE // gen.1
@@ -151,9 +144,6 @@
     color: "#ea2738"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -161,6 +151,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
   - type: HideLayerClothing
     slots:
     - Hair
@@ -551,13 +542,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_jawsoflife.rsi
           state: syn_jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_jawsoflife.rsi
           state: syn_jaws_cutter
@@ -585,7 +576,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_powerdrill.rsi
           state: drill_screw
@@ -593,7 +584,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_powerdrill.rsi
           state: drill_bolt

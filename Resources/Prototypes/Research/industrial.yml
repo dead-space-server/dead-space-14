@@ -229,7 +229,6 @@
   - ClothingBackpackSatchelHolding
   - ClothingBackpackDuffelHolding
   - StorageModuleItem #DS14
-  - BluespaceMinerMachineCircuitboard # DS14
 
 - type: technology
   id: OptimizedMicrogalvanism

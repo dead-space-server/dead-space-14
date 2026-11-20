@@ -19,8 +19,8 @@ namespace Content.Client.DeadSpace.Administration.UI;
 [GenerateTypedNameReferences]
 public sealed partial class AutoMapVoteConfigControl : Control
 {
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IClientConsoleHost _console = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IClientConsoleHost _console = default!;
 
     private AutoMapVoteAdminState? _state;
     private bool _suppressTextEvents;

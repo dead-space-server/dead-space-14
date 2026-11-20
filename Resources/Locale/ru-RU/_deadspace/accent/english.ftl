@@ -225,7 +225,6 @@ accent-english-words-replace-56 = mine
 
 accent-english-words-57 = был
 accent-english-words-57-2 = была
-accent-english-words-57-3 = были
 accent-english-words-replace-57 = was
 
 accent-english-words-58 = будет
@@ -293,9 +292,8 @@ accent-english-words-72-3 = космосе
 accent-english-words-replace-72 = space
 
 accent-english-words-73 = станция
-accent-english-words-73-2 = станции
 accent-english-words-73-3 = станцией
-accent-english-words-73-4 = станция
+accent-english-words-73-5 = станцию
 accent-english-words-replace-73 = station
 
 accent-english-words-74 = станции
@@ -537,11 +535,7 @@ accent-english-words-116-2 = дракону
 accent-english-words-116-3 = дракона
 accent-english-words-replace-116 = dragon
 
-accent-english-words-117 = большой
-accent-english-words-117-2 = большая
-accent-english-words-117-3 = большое
 accent-english-words-117-4 = большому
-accent-english-words-117-5 = большой
 accent-english-words-replace-117 = big ass
 
 accent-english-words-118 = паук

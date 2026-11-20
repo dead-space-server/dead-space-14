@@ -14,8 +14,8 @@ namespace Content.Shared.EntityEffects.Effects.Botany;
 public sealed partial class PlantMutateExudeGasesEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantMutateExudeGases>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPlantConsumeExudeGasSystem _plantConsumeExudeGas = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPlantConsumeExudeGasSystem _plantConsumeExudeGas = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantMutateExudeGases> args)
@@ -58,8 +58,8 @@ public sealed partial class PlantMutateExudeGases : EntityEffectBase<PlantMutate
 public sealed partial class PlantMutateConsumeGasesEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantMutateConsumeGases>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPlantConsumeExudeGasSystem _plantConsumeExudeGas = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPlantConsumeExudeGasSystem _plantConsumeExudeGas = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantMutateConsumeGases> args)

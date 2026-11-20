@@ -156,3 +156,30 @@
     clientExclusive: true
   - type: InstantAction
     event: !type:StationAiLeaveRoundEvent
+
+- type: entity
+  id: AIActionBorgRemoteControl
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: borg_remote_control
+    priority: -2
+  - type: InstantAction
+    event: !type:ToggleIntrinsicUIEvent { key: enum.AiBorgControlUiKey.Key }
+
+- type: entity
+  parent: BaseAction
+  id: ActionAiReturnFromBorg
+  name: Return to core
+  description: Return your consciousness to the AI core.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: ai_core
+    priority: -8
+  - type: InstantAction
+    event: !type:AiBorgReturnToCoreEvent

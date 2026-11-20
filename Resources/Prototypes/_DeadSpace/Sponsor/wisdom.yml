@@ -6,7 +6,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackWisdom
   name: рюкзак Мед-Техника
   description: Этот рюкзак предназначен для хранения медицинских принадлежностей и инструментов, необходимых для быстрого реагирования в экстренных ситуациях.
@@ -85,7 +85,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitWisdom
   name: скафандр Мед-Техника
   description: Скафандр с биокодированием, обеспечивающий защиту в критических ситуациях.
@@ -97,8 +97,6 @@
     sprite: _DeadSpace/Sponsor/Wisdom/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitWisdom
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -110,28 +108,34 @@
         Heat: 0.65
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons]
+  parent: [ClothingHeadHelmetHardsuitDominator, ShowMedicalIcons]
   id: ClothingHeadHelmetHardsuitWisdom
   categories: [ HideSpawnMenu ]
   name: шлем скафандра Мед-Техника
   description: Шлем с встроенным медицинским визором, который обеспечивает защиту и освещение для работы в темных условиях.
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+        Shock: 0.65
+        Cold: 0.65
+        Caustic: 0.65
+        Radiation: 0.65
+
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/helmet.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/helmet.rsi
   - type: PointLight
     color: "#ebebeb"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: ShowHealthBars
     damageContainers:
     - Biological
@@ -253,13 +257,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-    - behavior: Prying
+    - behavior: [ Prying ]
       sprite:
         sprite: _DeadSpace/Sponsor/Wisdom/jawsoflife.rsi
         state: syn_jaws_pry
       useSound: /Audio/Items/jaws_pry.ogg
       changeSound: /Audio/Items/change_jaws.ogg
-    - behavior: Cutting
+    - behavior: [ Cutting ]
       sprite:
         sprite: _DeadSpace/Sponsor/Wisdom/jawsoflife.rsi
         state: syn_jaws_cutter

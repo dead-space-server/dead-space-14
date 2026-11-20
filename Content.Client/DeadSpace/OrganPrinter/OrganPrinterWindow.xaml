@@ -1,0 +1,112 @@
+<!--Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT-->
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               x:Class="Content.Client.DeadSpace.OrganPrinter.OrganPrinterWindow"
+               Title="{Loc organ-printer-title}"
+               MinSize="680 560"
+               SetSize="850 660">
+
+    <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+
+        <!-- Основной режим -->
+        <BoxContainer Name="MainContainer"
+                      Orientation="Horizontal"
+                      VerticalExpand="True"
+                      HorizontalExpand="True"
+                      SeparationOverride="10"
+                      Margin="6">
+
+            <!-- Каталог органов -->
+            <BoxContainer Orientation="Vertical"
+                          MinWidth="360"
+                          MaxWidth="360"
+                          VerticalExpand="True"
+                          SeparationOverride="6">
+                <PanelContainer StyleClasses="DeadSpaceSectionHeader">
+                    <Label Text="{Loc organ-printer-organs-label}"
+                           StyleClasses="DeadSpaceSectionTitle"
+                           HorizontalAlignment="Center" />
+                </PanelContainer>
+                <OptionButton Name="GroupFilter"
+                              StyleClasses="DeadSpaceFormField"
+                              MinHeight="34" />
+                <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
+                    <ScrollContainer VerticalExpand="True" HScrollEnabled="False" Margin="4">
+                        <BoxContainer Name="OrganList"
+                                      Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="3" />
+                    </ScrollContainer>
+                </PanelContainer>
+            </BoxContainer>
+
+            <!-- Карточка органа и статус -->
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          SeparationOverride="8">
+
+                <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
+                    <BoxContainer Name="PreviewContainer"
+                                  Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  SeparationOverride="8"
+                                  Margin="12">
+                        <PanelContainer MinSize="200 200"
+                                        MaxSize="200 200"
+                                        RectClipContent="True"
+                                        HorizontalAlignment="Center"
+                                        StyleClasses="DeadSpaceInset">
+                            <EntityPrototypeView Name="PreviewSprite"
+                                                 Scale="6 6"
+                                                 HorizontalExpand="True"
+                                                 VerticalExpand="True" />
+                        </PanelContainer>
+                        <Label Name="PreviewNameLabel"
+                               StyleClasses="DeadSpaceTitle"
+                               HorizontalAlignment="Center" />
+                        <ScrollContainer VerticalExpand="True" HScrollEnabled="False" HorizontalExpand="True">
+                            <RichTextLabel Name="PreviewDescLabel"
+                                           StyleClasses="LabelSubText"
+                                           HorizontalExpand="True"
+                                           MaxWidth="420" />
+                        </ScrollContainer>
+                        <Label Name="PreviewHintLabel"
+                               Text="{Loc organ-printer-select-hint}"
+                               HorizontalAlignment="Center"
+                               StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer StyleClasses="DeadSpaceInset">
+                    <BoxContainer Orientation="Horizontal"
+                                  Margin="10 6 10 6"
+                                  SeparationOverride="12">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      VerticalAlignment="Center"
+                                      SeparationOverride="3">
+                            <Label Text="{Loc organ-printer-biomass-title}" StyleClasses="LabelSubText" />
+                            <Label Name="BiomassLabel" />
+                            <Label Name="CostLabel" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical"
+                                      VerticalAlignment="Center"
+                                      SeparationOverride="4">
+                            <Button Name="PrintButton"
+                                    Text="{Loc organ-printer-print-button}"
+                                    StyleClasses="ButtonBig"
+                                    MinWidth="170"
+                                    Disabled="True" />
+                            <Button Name="EjectButton"
+                                    Text="{Loc organ-printer-eject-button}"
+                                    StyleClasses="ButtonBig"
+                                    MinWidth="170" />
+                        </BoxContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

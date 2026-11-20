@@ -26,11 +26,11 @@ namespace Content.Server.Station.Systems;
 [PublicAPI]
 public sealed partial class StationJobsSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14 - current engine baseline has no EntitySystem.ProtoMan shortcut.
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!; // DS14 - current engine baseline has no EntitySystem.ProtoMan shortcut.
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

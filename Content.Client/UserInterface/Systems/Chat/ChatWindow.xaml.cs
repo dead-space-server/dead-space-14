@@ -19,8 +19,8 @@ namespace Content.Client.UserInterface.Systems.Chat;
 public sealed partial class ChatWindow : FancyWindow
 {
     // DS14-start
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private ILogManager _log = default!;
 
     private ISawmill _sawmill = default!;
 

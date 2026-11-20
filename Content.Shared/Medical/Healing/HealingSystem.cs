@@ -18,22 +18,29 @@ using Content.Shared.Stacks;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
+using Content.Shared.DeadSpace.Body.Limbs;
+using Content.Shared.Tag;
+using Robust.Shared.Prototypes; // DS-14
 
 namespace Content.Shared.Medical.Healing;
 
-public sealed class HealingSystem : EntitySystem
+public sealed partial class HealingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstreamSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedStackSystem _stacks = default!;
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly BlindableSystem _blindableSystem= default!; // DS14
+    private static readonly ProtoId<TagPrototype> TourniquetTag = "Tourniquet"; // DS-14
+
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private BloodstreamSystem _bloodstreamSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedStackSystem _stacks = default!;
+    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private BlindableSystem _blindableSystem= default!; // DS14
+    [Dependency] private LimbWoundSystem _limbs = default!; // DS14
+    [Dependency] private TagSystem _tags = default!; // DS14
 
     public override void Initialize()
     {
@@ -62,8 +69,27 @@ public sealed class HealingSystem : EntitySystem
 
         TryComp<BloodstreamComponent>(target, out var bloodstream);
 
-        // Heal some bloodloss damage.
-        if (healing.BloodlossModifier != 0 && bloodstream != null)
+        // DS14-start: a tourniquet closes one bleeding source completely.
+        var tourniquet = args.Used is { } used && _tags.HasTag(used, TourniquetTag);
+        if (tourniquet)
+        {
+            var stopped = _limbs.StopOneBleed(target.Owner);
+            if (!stopped && bloodstream != null && bloodstream.BleedAmount > 0)
+            {
+                _bloodstreamSystem.TryModifyBleedAmount((target.Owner, bloodstream), -bloodstream.BleedAmount);
+                stopped = bloodstream.BleedAmount <= 0;
+            }
+
+            if (stopped)
+            {
+                var popup = (args.User == target.Owner)
+                    ? Loc.GetString("medical-item-stop-bleeding-self")
+                    : Loc.GetString("medical-item-stop-bleeding", ("target", Identity.Entity(target.Owner, EntityManager)));
+                _popupSystem.PopupClient(popup, target, args.User);
+            }
+        }
+        else if (healing.BloodlossModifier != 0 && bloodstream != null)
+        // DS14-end
         {
             var isBleeding = bloodstream.BleedAmount > 0;
             _bloodstreamSystem.TryModifyBleedAmount((target.Owner, bloodstream), healing.BloodlossModifier);
@@ -83,7 +109,7 @@ public sealed class HealingSystem : EntitySystem
         // DS14-start: eye damage can be the only injury the item repairs.
         var canHealEyes = healing.HealEyeDamage && TryComp<BlindableComponent>(target.Owner, out var damagedEyes) && damagedEyes.EyeDamage > 0;
         // if (!_damageable.TryChangeDamage(target.Owner, healing.Damage * _damageable.UniversalTopicalsHealModifier, out var healed, true, origin: args.Args.User) && healing.BloodlossModifier == 0)
-        if (!_damageable.TryChangeDamage(target.Owner, healing.Damage * _damageable.UniversalTopicalsHealModifier, out var healed, true, origin: args.Args.User) && healing.BloodlossModifier == 0 && !canHealEyes)
+        if (!_damageable.TryChangeDamage(target.Owner, healing.Damage * _damageable.UniversalTopicalsHealModifier, out var healed, true, origin: args.Args.User) && healing.BloodlossModifier == 0 && !canHealEyes && !_limbs.MendedNow(target.Owner))
         // DS14-end
             return;
 
@@ -179,6 +205,14 @@ public sealed class HealingSystem : EntitySystem
                 return true;
             }
         }
+
+        // DS14-start
+        if (_tags.HasTag(healing.Owner, TourniquetTag) && _limbs.CanStopOneBleed(target.Owner))
+            return true;
+
+        if (_limbs.CanMend(target.Owner, healing.Comp.Damage))
+            return true;
+        // DS14-end
 
         return false;
     }

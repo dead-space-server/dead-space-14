@@ -7,7 +7,13 @@
   - type: Sprite
     sprite: Mobs/Species/Vox/organs.rsi
   - type: Metabolizer
+    removeEmpty: true
+    solutionOnBody: false
+    solution: Lung
     metabolizerTypes: [ Vox ]
+    groups:
+    - id: Gas
+      rateModifier: 100.0
   - type: Lung
     alert: LowNitrogen
   - type: Item

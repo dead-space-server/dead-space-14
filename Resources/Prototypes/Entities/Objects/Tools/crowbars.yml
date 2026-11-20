@@ -30,6 +30,17 @@
   - type: StaticPrice
     price: 22
   - type: Prying
+  - type: SurgeryTool # DS14
+    precision: 0.75
+    slip: 0.2
+    wobble: 18
+    verbs:
+    - Retract
+    machineVerbs:
+    - Retract
+    - PullEmbedded
+    - Clamp
+    - Extract
   - type: Sprite
     sprite: Objects/Tools/crowbar.rsi
   - type: Clothing

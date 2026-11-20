@@ -21,13 +21,13 @@ namespace Content.Server.Power.EntitySystems;
 /// it merely reconfigures parameters on <see cref="PowerNetworkBatteryComponent"/> from the UI.
 /// </para>
 /// </remarks>
-public sealed class BatteryInterfaceSystem : EntitySystem
+public sealed partial class BatteryInterfaceSystem : EntitySystem
 {
     private static readonly Enum BatteryUiKeyBoxed = BatteryUiKey.Key; // DS14
 
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = null!;
-    [Dependency] private readonly SharedBatterySystem _battery = null!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = null!;
+    [Dependency] private SharedBatterySystem _battery = null!;
 
     public override void Initialize()
     {

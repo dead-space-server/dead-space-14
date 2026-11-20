@@ -23,4 +23,7 @@ public sealed partial class PaperworkFormPrototype : IPrototype
 
     [DataField(required: true)]
     public EntProtoId PaperPrototype = default!;
+
+    [DataField]
+    public bool Listed = true;
 }

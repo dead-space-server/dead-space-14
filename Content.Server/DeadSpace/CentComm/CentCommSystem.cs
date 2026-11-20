@@ -16,12 +16,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.CentComm;
 
-public sealed class CentCommSystem : EntitySystem
+public sealed partial class CentCommSystem : EntitySystem
 {
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private readonly HashSet<Type> _allowedComponents = new();
 

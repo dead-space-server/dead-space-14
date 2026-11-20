@@ -27,22 +27,23 @@ using Robust.Shared.Serialization;
 
 namespace Content.Client.DeadSpace.CameraArchives;
 
-public sealed class CameraArchivePlaybackSystem : EntitySystem
+public sealed partial class CameraArchivePlaybackSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IMapManager _mapMan = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
-    [Dependency] private readonly IRobustSerializer _serializer = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly StealthSystem _stealth = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private ITileDefinitionManager _tileDefs = default!;
+    [Dependency] private IRobustSerializer _serializer = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StealthSystem _stealth = default!;
 
     private MapId? _mapId;
+    private MapId? _sheetMapId;
     private ushort _platingId;
     private bool _platingReady;
 
     private int _playId;
+    private int _sheetPlayId;
     private CameraArchive? _queued;
     private bool _busy;
     public override void Initialize()
@@ -63,7 +64,7 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
         {
             var next = _queued;
             _queued = null;
-            last = Play(next);
+            last = Play(next, ref _mapId, ref _playId);
         }
 
         _busy = false;
@@ -72,16 +73,26 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
 
     public CameraArchiveView Play(CameraArchive still)
     {
-        var playId = ++_playId;
-        Clear();
+        return Play(still, ref _mapId, ref _playId);
+    }
+
+    public CameraArchiveView PlaySheet(CameraArchive still)
+    {
+        return Play(still, ref _sheetMapId, ref _sheetPlayId);
+    }
+
+    private CameraArchiveView Play(CameraArchive still, ref MapId? slot, ref int generation)
+    {
+        var playId = ++generation;
+        ClearSlot(ref slot);
 
         var mapUid = _map.CreateMap(out var mapId, runMapInit: true);
         _map.SetPaused(mapId, false);
-        _mapId = mapId;
+        slot = mapId;
         var mapLight = EnsureComp<MapLightComponent>(mapUid);
         mapLight.AmbientLightColor = Color.FromSrgb(new Color(0.85f, 0.85f, 0.85f));
 
-        var grid = _mapMan.CreateGridEntity(mapId);
+        var grid = _map.CreateGridEntity(mapId);
         var gravity = EnsureComp<GravityComponent>(grid.Owner);
         gravity.Enabled = true;
         gravity.Inherent = true;
@@ -106,13 +117,6 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
             if (entry.Parent < 0)
                 place -= origin;
             var uid = EntityManager.CreateEntityUninitialized(entry.Prototype, new EntityCoordinates(parent, entry.Container.Length == 0 || entry.ShowContents ? place : Vector2.Zero), rotation: entry.LocalRotation);
-            if (entry.Parent < 0 && (entry.Container.Length == 0 || entry.ShowContents))
-            {
-                var xform = Transform(uid);
-#pragma warning disable CS0618
-                xform.Anchored = entry.Anchored;
-#pragma warning restore CS0618
-            }
 
             if (TryComp<GravityAffectedComponent>(uid, out var weight))
                 weight.Weightless = false;
@@ -139,12 +143,26 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
 
         _map.SetTiles(grid.Owner, grid.Comp, finalTiles);
 
+        // Anchoring goes through the transform system now, and needs the floor laid first.
+        for (var i = 0; i < spawned.Count; i++)
+        {
+            var entry = still.Entities[i];
+            if (entry.Parent >= 0 || entry.Container.Length != 0 && !entry.ShowContents)
+                continue;
+
+            var xform = Transform(spawned[i]);
+            if (entry.Anchored && !xform.Anchored)
+                _xform.AnchorEntity(spawned[i], xform);
+            else if (!entry.Anchored && xform.Anchored)
+                _xform.Unanchor(spawned[i], xform);
+        }
+
         for (var i = 0; i < spawned.Count; i++)
             ApplyAppearance(spawned[i], still.Entities[i].Appearance);
 
-        if (playId != _playId)
+        if (playId != generation)
         {
-            Clear();
+            ClearSlot(ref slot);
             return new CameraArchiveView(EntityUid.Invalid, EntityUid.Invalid, MapId.Nullspace, new FixedEye());
         }
 
@@ -175,10 +193,20 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
 
     public void Clear()
     {
-        if (_mapId is { } mapId && _map.MapExists(mapId))
+        ClearSlot(ref _mapId);
+    }
+
+    public void ClearSheet()
+    {
+        ClearSlot(ref _sheetMapId);
+    }
+
+    private void ClearSlot(ref MapId? slot)
+    {
+        if (slot is { } mapId && _map.MapExists(mapId))
             _map.DeleteMap(mapId);
 
-        _mapId = null;
+        slot = null;
     }
 
     private void HideCloaked(List<EntityUid> spawned, CameraArchive still)
@@ -291,7 +319,7 @@ public sealed class CameraArchivePlaybackSystem : EntitySystem
     }
 }
 
-public sealed class CameraArchiveView(EntityUid map, EntityUid grid, MapId mapId, FixedEye eye)
+public sealed partial class CameraArchiveView(EntityUid map, EntityUid grid, MapId mapId, FixedEye eye)
 {
     public EntityUid Map { get; } = map;
     public EntityUid Grid { get; } = grid;

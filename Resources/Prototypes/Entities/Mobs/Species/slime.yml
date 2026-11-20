@@ -69,8 +69,8 @@
         Heat: -0.14
       groups:
         Brute: -0.14
-  - type: DamageVisuals
-    damageOverlayGroups:
+  - type: LimbWoundVisuals
+    groups:
       Brute:
         sprite: Mobs/Effects/brute_damage.rsi
         color: "#2cf274"
@@ -161,6 +161,7 @@
       enum.MagicMirrorUiKey.Key:
         toggleAction: HairstyleAction
   - type: SlimeForm
+  - type: SurgerySlimeRegrow # DS14
   # DS14-end
 
 - type: entity

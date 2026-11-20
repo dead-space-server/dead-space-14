@@ -48,30 +48,30 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// </summary>
 public sealed partial class LavalandAshWolfSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly Content.Shared.Examine.ExamineSystemShared _examine = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly Content.Server.Ghost.Roles.ToggleableGhostRoleSystem _ghostRoles = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly GatherableSystem _gatherable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly ParrySystem _parry = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _camera = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private Content.Shared.Examine.ExamineSystemShared _examine = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private Content.Server.Ghost.Roles.ToggleableGhostRoleSystem _ghostRoles = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private GatherableSystem _gatherable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private LavalandFaunaRaidSystem _raids = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private ParrySystem _parry = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedCameraRecoilSystem _camera = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStaminaSystem _stamina = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     private static readonly TimeSpan HudInterval = TimeSpan.FromSeconds(0.25);
 

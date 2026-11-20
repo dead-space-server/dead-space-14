@@ -10,18 +10,19 @@ using System.Numerics;
 
 namespace Content.Client.StatusIcon;
 
-public sealed class StatusIconOverlay : Overlay
+public sealed partial class StatusIconOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
 
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _player = default!; //DS-14
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _player = default!; //DS-14
 
     private readonly SpriteSystem _sprite;
     private readonly TransformSystem _transform;
     private readonly StatusIconSystem _statusIcon;
+    private readonly Content.Client.DeadSpace.Surgery.SurgeryClientSystem _surgery; //DS-14
     private readonly ShaderInstance _unshadedShader;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
@@ -33,6 +34,7 @@ public sealed class StatusIconOverlay : Overlay
         _sprite = _entity.System<SpriteSystem>();
         _transform = _entity.System<TransformSystem>();
         _statusIcon = _entity.System<StatusIconSystem>();
+        _surgery = _entity.System<Content.Client.DeadSpace.Surgery.SurgeryClientSystem>(); //DS-14
         _unshadedShader = _prototype.Index(UnshadedShader).Instance();
     }
 
@@ -56,6 +58,9 @@ public sealed class StatusIconOverlay : Overlay
         {
             if (xform.MapID != args.MapId || !sprite.Visible)
                 continue;
+
+            if (_surgery.Operating == uid) //DS-14
+                continue; //DS-14
 
             var bounds = comp.Bounds ?? _sprite.GetLocalBounds((uid, sprite));
 
