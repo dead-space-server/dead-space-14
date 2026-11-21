@@ -1,5 +1,0 @@
-# DS14: шрифт EuroStyle для реплик Селестиала в чате.
-# У шрифта не было прототипа, а тегу [font="..."] нужен именно прототип.
-- type: font
-  id: EuroStyle
-  path: /Fonts/EuroStyle/eurostile_roman.ttf
