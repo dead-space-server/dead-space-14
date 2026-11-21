@@ -8,9 +8,9 @@ using Robust.Shared.Utility;
 namespace Content.Server.DeadSpace.SaveGamemode;
 
 [AdminCommand(AdminFlags.Debug)]
-public sealed class SaveGamemodeCommand : LocalizedCommands
+public sealed partial class SaveGamemodeCommand : LocalizedCommands
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private static readonly ResPath SaveDir = new("/Saves/GameMode");
 

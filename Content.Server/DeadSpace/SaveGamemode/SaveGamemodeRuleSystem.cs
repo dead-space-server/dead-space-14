@@ -47,26 +47,26 @@ namespace Content.Server.DeadSpace.SaveGamemode;
 ///     Игровое правило режима сохранения/восстановления раунда:
 ///     при старте подменяет стандартную карту сохранением, при конце пишет карту обратно.
 /// </summary>
-public sealed class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComponent>
+public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemodeRuleComponent>
 {
-    [Dependency] private readonly SaveSystem _save = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly IResourceManager _res = default!;
-    [Dependency] private readonly IGameMapManager _gameMap = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly DeviceNetworkSystem _deviceNet = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly SharedWieldableSystem _wieldable = default!;
-    [Dependency] private readonly ItemCabinetSystem _cabinet = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly OpenableSystem _openable = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private SaveSystem _save = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private IResourceManager _res = default!;
+    [Dependency] private IGameMapManager _gameMap = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private DeviceNetworkSystem _deviceNet = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private CargoSystem _cargo = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private SharedWieldableSystem _wieldable = default!;
+    [Dependency] private ItemCabinetSystem _cabinet = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private OpenableSystem _openable = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     /// <summary>
     ///     Имя, которое движок даёт сущности сетки при создании. Для сетки из сохранения оно означает

@@ -18,11 +18,11 @@ namespace Content.Server.DeadSpace.SaveGamemode;
 /// </summary>
 public sealed partial class SaveSystem : EntitySystem
 {
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly IResourceManager _res = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private IResourceManager _res = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     /// <summary>
     ///     Проб полей компонентов для чистки ссылок: без него пост-процессор не знает,
