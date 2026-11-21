@@ -4,6 +4,7 @@ using Content.Client.DeadSpace.Mapping;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Systems.Chat;
 using Robust.Client.Console;
+using Robust.Client.Placement;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Shared.ContentPack;
@@ -123,10 +124,58 @@ public sealed class DeadSpaceMappingEditorTest
         var screen = ui.ActiveScreen as DeadSpaceMappingScreen;
         Assert.That(screen, Is.Not.Null);
 
-        await client.WaitPost(() => screen!.ExitEditor());
+        var decalPlacement = client.System<ClientDecalPlacementSystem>();
+        var placement = client.ResolveDependency<IPlacementManager>();
+
+        await client.WaitPost(() =>
+        {
+            decalPlacement.SetActive(true);
+            placement.Replacement = true;
+            screen!.ExitEditor();
+        });
         await client.WaitRunTicks(5);
 
         Assert.That(state.CurrentState, Is.TypeOf<GameplayState>());
+        Assert.Multiple(() =>
+        {
+            Assert.That(placement.IsActive, Is.False);
+            Assert.That(placement.Eraser, Is.False);
+            Assert.That(placement.Replacement, Is.False);
+            Assert.That(decalPlacement.GetActiveDecal().Decal, Is.Null);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FlipSidesKeepsLayoutIntact()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true
+        });
+        var client = pair.Client;
+        var state = client.ResolveDependency<IStateManager>();
+        var ui = client.ResolveDependency<IUserInterfaceManager>();
+
+        await client.WaitPost(() => state.RequestStateChange<DeadSpaceMappingState>());
+        await client.WaitRunTicks(5);
+
+        var screen = ui.ActiveScreen as DeadSpaceMappingScreen;
+        Assert.That(screen, Is.Not.Null);
+
+        await client.WaitPost(() => screen!.FlipSides());
+        await client.WaitRunTicks(2);
+
+        await client.WaitPost(() => screen.FlipSides());
+        await client.WaitRunTicks(2);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(state.CurrentState, Is.TypeOf<DeadSpaceMappingState>());
+            Assert.That(screen.Chat.Visible, Is.True);
+            Assert.That(screen.Chat.Size.X, Is.GreaterThan(0));
+        });
 
         await pair.CleanReturnAsync();
     }

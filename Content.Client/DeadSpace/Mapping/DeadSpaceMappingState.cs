@@ -112,7 +112,9 @@ public sealed partial class DeadSpaceMappingState : GameplayStateBase
         EnsureSetup();
         base.Startup();
 
-        _contextMenu.Setup();
+        // The previous gameplay state's exit handlers tear the context menu down after startup,
+        // so set it up once the state change has fully settled.
+        UserInterfaceManager.DeferAction(_contextMenu.Setup);
 
         UserInterfaceManager.LoadScreen<DeadSpaceMappingScreen>();
         _loadController.LoadScreen();
@@ -173,6 +175,17 @@ public sealed partial class DeadSpaceMappingState : GameplayStateBase
         CommandBinds.Unregister<DeadSpaceMappingState>();
         _input.FirstChanceOnKeyEvent -= OnFirstChanceOnKeyEvent;
         _contextMenu.Shutdown();
+
+        if (_setup)
+        {
+            _placement.Clear();
+            if (_placement.Eraser)
+                _placement.ToggleEraser();
+
+            _placement.Replacement = false;
+            _decal.SetActive(false);
+            Meta.State = CursorState.None;
+        }
 
         Screen.Entities.GetPrototypeData -= OnGetData;
         Screen.Entities.SelectionChanged -= OnSelected;
@@ -974,6 +987,7 @@ public sealed partial class DeadSpaceMappingState : GameplayStateBase
     private bool HandleOpenContextMenu(in PointerInputCmdArgs args)
     {
         Deselect();
+        _contextMenu.Setup();
 
         var coords = _transform.ToMapCoordinates(args.Coordinates);
         if (_verbs.TryGetEntityMenuEntities(coords, out var entities))

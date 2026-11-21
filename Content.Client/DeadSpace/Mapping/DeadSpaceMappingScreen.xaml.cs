@@ -131,10 +131,10 @@ public sealed partial class DeadSpaceMappingScreen : InGameScreen
 
     public void ExitEditor()
     {
-        _consoleHost.ExecuteCommand("scene GameplayState");
+        UserInterfaceManager.DeferAction(() => _consoleHost.ExecuteCommand("scene GameplayState"));
     }
 
-    private void FlipSides()
+    public void FlipSides()
     {
         LeftContainer.Flip();
         RightContainer.Flip();
