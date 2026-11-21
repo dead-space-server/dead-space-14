@@ -50,20 +50,23 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
         var ignored = args.IgnoredEntities;
         // DS14-start
         var executionTarget = args.ExecutionTarget;
-        var result = executionTarget != null
-            ? rayCastResults.FirstOrNull(hit =>
-                ignored?.Contains(hit.HitEntity) != true &&
-                (hit.HitEntity == executionTarget ||
-                 !HasComp<MobStateComponent>(hit.HitEntity) &&
-                  CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true))
-            : _container.IsEntityOrParentInContainer(shooter)
-                ? rayCastResults.FirstOrNull(hit => ignored?.Contains(hit.HitEntity) != true)
-                : rayCastResults.FirstOrNull(hit =>
+        RayCastResults? SelectResult()
+        {
+            return executionTarget != null
+                ? rayCastResults.FirstOrNull(hit =>
                     ignored?.Contains(hit.HitEntity) != true &&
-                    (hit.HitEntity == target || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true));
-        // DS14-end
+                    (hit.HitEntity == executionTarget ||
+                     !HasComp<MobStateComponent>(hit.HitEntity) &&
+                      CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true))
+                : _container.IsEntityOrParentInContainer(shooter)
+                    ? rayCastResults.FirstOrNull(hit => ignored?.Contains(hit.HitEntity) != true)
+                    : rayCastResults.FirstOrNull(hit =>
+                        ignored?.Contains(hit.HitEntity) != true &&
+                        (hit.HitEntity == target || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true));
+        }
 
-        var distanceTried = result?.Distance ?? ent.Comp.MaxDistance;
+        var result = SelectResult();
+        // DS14-end
 
         // DS14-start: aggregate the visual trace and render it after reflection handling.
         var isRoot = false;
@@ -72,22 +75,7 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
             args.OutputTrace = [];
             isRoot = true;
         }
-
-        if (GenerateTraceStep(args.FromCoordinates, distanceTried, args.ShotDirection.ToAngle(), result?.HitEntity) is { } trace)
-            args.OutputTrace.Add(trace);
         // DS14-end
-
-        // Do visuals without an event. They should always happen and putting it on the attempt event is weird!
-        // If more stuff gets added here, it should probably be turned into an event.
-        // DS14: visuals are fired after the hit attempt so reflected traces can be rendered together.
-
-        // Admin logging
-        if (result?.HitEntity != null && !HasComp<HitscanBasicDamageComponent>(ent.Owner)) // DS14
-        {
-            _log.Add(LogType.HitScanHit,
-                $"{ToPrettyString(shooter):user} hit {ToPrettyString(result.Value.HitEntity):target}"
-                + $" using {ToPrettyString(args.Gun):entity}.");
-        }
 
         var data = new HitscanRaycastFiredData
         {
@@ -102,6 +90,40 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
             HitPosition = result is { } hit ? new MapCoordinates(hit.HitPos, mapCords.MapId) : null,
             ExecutionTarget = executionTarget, // DS14
         };
+
+        // DS14-start
+        while (data.HitEntity is { } dodgeTarget)
+        {
+            var dodgeEvent = new HitscanDodgeAttemptEvent { Data = data };
+            RaiseLocalEvent(dodgeTarget, ref dodgeEvent);
+            if (!dodgeEvent.Cancelled)
+                break;
+
+            ignored = ignored == null
+                ? new List<EntityUid> { dodgeTarget }
+                : new List<EntityUid>(ignored) { dodgeTarget };
+            result = SelectResult();
+            data.HitEntity = result?.HitEntity;
+            data.HitPosition = result is { } dodgeHit ? new MapCoordinates(dodgeHit.HitPos, mapCords.MapId) : null;
+            data.IgnoredEntities = ignored;
+        }
+        // DS14-end
+
+        var distanceTried = result?.Distance ?? ent.Comp.MaxDistance;
+        if (GenerateTraceStep(args.FromCoordinates, distanceTried, args.ShotDirection.ToAngle(), result?.HitEntity) is { } trace)
+            args.OutputTrace.Add(trace);
+
+        // Do visuals without an event. They should always happen and putting it on the attempt event is weird!
+        // If more stuff gets added here, it should probably be turned into an event.
+        // DS14: visuals are fired after the hit attempt so reflected traces can be rendered together.
+
+        // Admin logging
+        if (result?.HitEntity != null && !HasComp<HitscanBasicDamageComponent>(ent.Owner)) // DS14
+        {
+            _log.Add(LogType.HitScanHit,
+                $"{ToPrettyString(shooter):user} hit {ToPrettyString(result.Value.HitEntity):target}"
+                + $" using {ToPrettyString(args.Gun):entity}.");
+        }
 
         var attemptEvent = new AttemptHitscanRaycastFiredEvent { Data = data };
         RaiseLocalEvent(ent, ref attemptEvent);

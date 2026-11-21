@@ -10,6 +10,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.DeadSpace.Cloning;
 using Content.Shared.DeadSpace.Items;
+using Content.Shared.DeadSpace.Weapons;
 using Content.Shared.Forensics.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
@@ -115,6 +116,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private LimbImplantSystem _implants = default!;
+    [Dependency] private LimbTargetBonusSystem _limbTargetBonus = default!;
+    [Dependency] private SemiAutoFireRateSystem _semiAutoFireRate = default!;
     [Dependency] private Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
@@ -1124,6 +1127,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnGunModifiers(Entity<GunComponent> ent, ref GunRefreshModifiersEvent args)
     {
+        _semiAutoFireRate.ApplyGunModifiers(ent, ref args);
+
         if (!LimbTuning.Enabled || Holder(ent.Owner) is not { } user || !TryComp<LimbAimComponent>(user, out var aim) || !aim.Aiming)
             return;
 
@@ -1153,7 +1158,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var aimPoint = ent.Comp.LimbAimPoint ?? hit;
         var aimed = ZoneForShot(aiming, aim, args.Target, from, hit, aimPoint);
         var slip = shooter != null ? Cover(args.Target, shooter.Value, aimed).Slip : 0f;
-        var zone = Present(limbs, Place(aimed, distance, ready, slip));
+        var zone = Present(limbs, PlaceShot(shooter, aimed, distance, ready, slip));
         limbs.LedgerZone = zone;
         limbs.ArmorZone = zone;
         limbs.FireOrigin = zone;
@@ -1219,7 +1224,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (TryComp<GunComponent>(args.Data.Gun, out var gun) && gun.ShootCoordinates is { } coords)
             aimPoint = _transform.ToMapCoordinates(coords).Position;
         var aimed = ZoneForShot(aiming, aim, ent, from, hit, aimPoint);
-        ent.Comp.ArmorZone = Present(ent.Comp, Place(aimed, distance, ready, Cover(ent, shooter, aimed).Slip));
+        ent.Comp.ArmorZone = Present(ent.Comp, PlaceShot(shooter, aimed, distance, ready, Cover(ent, shooter, aimed).Slip));
         ent.Comp.FireOrigin = ent.Comp.ArmorZone;
         ent.Comp.FireOriginTime = _timing.CurTime;
         ent.Comp.StrikeOpen = true;
@@ -1241,7 +1246,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var aimed = ZoneForShot(aiming, aim, args.Target, from, hit, aimPoint);
         var zone = limbs.FireOriginTime == _timing.CurTime && limbs.FireOrigin is { } rolled
             ? rolled
-            : Present(limbs, Place(aimed, distance, ready, Cover(args.Target, shooter, aimed).Slip));
+            : Present(limbs, PlaceShot(shooter, aimed, distance, ready, Cover(args.Target, shooter, aimed).Slip));
         limbs.ArmorZone = zone;
         var incoming = ent.Comp.IgnoreResistances ? new DamageSpecifier(ent.Comp.Damage) : Resist(args.Target, ent.Comp.Damage, shooter);
         limbs.ArmorZone = null;
@@ -2469,6 +2474,25 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return LimbWoundRules.SlipTo(zone);
 
         return zone;
+    }
+
+    private LimbZone PlaceShot(
+        EntityUid? shooter,
+        LimbZone aimed,
+        float distance,
+        bool ready,
+        float extra = 0f)
+    {
+        if (shooter is { } uid &&
+            HasComp<LimbTargetBonusComponent>(uid) &&
+            TryComp<LimbTargetComponent>(uid, out var selected) &&
+            selected.Selected is { } zone &&
+            _random.NextFloat() < _limbTargetBonus.GetChance(uid))
+        {
+            return zone;
+        }
+
+        return Place(aimed, distance, ready, extra);
     }
 
     private void ApplyResult(EntityUid uid, LimbZone zone, LimbStrikeResult result)

@@ -110,6 +110,13 @@ public struct AttemptHitscanRaycastFiredEvent
     public bool Cancelled;
 }
 
+[ByRefEvent]
+public struct HitscanDodgeAttemptEvent
+{
+    public HitscanRaycastFiredData Data;
+    public bool Cancelled;
+}
+
 /// <summary>
 /// Raised on the targeted entity of the hitscan to allow it to respond to being struck.
 /// </summary>

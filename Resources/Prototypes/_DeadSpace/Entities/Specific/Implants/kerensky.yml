@@ -1,0 +1,157 @@
+- type: entity
+  parent: BaseItem
+  id: KerenskyImplant
+  name: имплант «Керенский»
+  description: Нейроускоритель рефлексов. Устанавливается хирургически в слот спины. Разработан небольшой контор «Beruren Inc.».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/kerensky.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Objects/Specific/Medical/kerensky.rsi
+    size: Small
+  - type: LimbImplant
+    slots:
+    - Back
+    implantAction: ActionActivateKerenskyImplant
+    implantComponents:
+    - type: Dodge
+      passiveChance: 0.15
+      activeChance: 0.35
+      guaranteedStaminaCost: 6
+      noStaminaPopup: kerensky-dodge-no-stamina
+      noStaminaPopupCooldown: 1
+    - type: DodgeVisual
+      startColor: "#ffb000dd"
+      endColor: "#ff5a0000"
+      lifetime: 0.32
+      fallbackEffect: MantisDodgeEffect
+      sidewaysOffset: 0.16
+      backwardOffset: 0.12
+      outerBackwardOffset: 0.08
+      jitterDuration: 0.18
+      jitterAmplitude: 4
+      jitterFrequency: 24
+    - type: LimbTargetBonus
+      passiveChance: 0.5
+      activeChance: 1
+    - type: SemiAutoFireRate
+      activeMultiplier: 1.2
+      onlyWhileActive: true
+    - type: AkimboAccuracy
+      accuracy: 1
+    - type: SpeedSliding
+    - type: InstantStandUp
+    - type: NearbyCriticalShout
+      range: 10
+      cooldown: 5
+      onlyWhileActive: true
+      messages:
+      - kerensky-nearby-critical-1
+      - kerensky-nearby-critical-2
+      - kerensky-nearby-critical-3
+      - kerensky-nearby-critical-4
+      - kerensky-nearby-critical-5
+    - type: SandevistanBodyVisual
+      sprite: _DeadSpace/Mobs/Effects/kerensky.rsi
+      state: body
+  - type: DodgeModeImplant
+    modeAction: ActionCycleKerenskyDodgeMode
+    actionRsi: /Textures/_DeadSpace/Actions/kerensky_actions.rsi
+    chanceIcon: kerensky-dodge-chance
+    staminaIcon: kerensky-dodge-stamina
+    chancePopup: kerensky-dodge-mode-chance
+    staminaPopup: kerensky-dodge-mode-stamina
+  - type: SandevistanImplant
+    duration: 20
+    softcapTime: 12
+    cooldownMultiplier: 1.5
+    movementSpeedModifier: 1
+    attackRateModifier: 1
+    afterimageTrail: false
+    ensnareRemovalDurationMultiplier: 1
+    overloadInterval: 1
+    exhaustionStaminaDamage: 100
+    softcapPopups: []
+    softcapShouts: []
+    endWarningLeadTime: 4
+    endWarningPopups: []
+    recoveryPopups: []
+    afterimageInterval: 0.01
+    afterimageMinDistance: 0.15
+    afterimageLifetime: 0.7
+    deactivationVisualDuration: 1.5
+    afterimageColor: "#ff9900dd"
+    afterimageFallbackEffect: MantisDodgeEffect
+    popup: kerensky-implant-activated
+
+- type: entity
+  parent: BaseImplantOnlyImplanter
+  id: KerenskyImplanter
+  name: автоимплантер
+  suffix: Керенский
+  components:
+  - type: Implanter
+    implant: KerenskyImplant
+  - type: Item
+    sprite: _DeadSpace/Objects/Specific/Medical/monowire_implanter.rsi
+    heldPrefix: implanter
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/monowire_implanter.rsi
+    state: implanter1
+    layers:
+    - state: implanter0
+      map: [ "implantFull" ]
+      visible: true
+    - state: implanter1
+      map: [ "implantOnly" ]
+
+- type: entity
+  id: ActionActivateKerenskyImplant
+  name: "[color=orange]Активировать «Керенский»[/color]"
+  description: Поехали?
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    priority: -20
+    icon:
+      sprite: _DeadSpace/Actions/kerensky_actions.rsi
+      state: kerensky
+    useDelay: 2
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:ActivateSandevistanImplantEvent
+
+- type: entity
+  id: ActionCycleKerenskyDodgeMode
+  name: "[color=orange]«Керенский»: режим работы[/color]"
+  description: Переключичение между нормальный и экстремальным режимом работы.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    priority: -19
+    icon:
+      sprite: _DeadSpace/Actions/kerensky_actions.rsi
+      state: kerensky-dodge-chance
+    useDelay: 0.25
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:CycleDodgeModeEvent
+
+# - type: listing
+#   id: UplinkKerenskyImplanter
+#   name: uplink-kerensky-implanter-name
+#   description: uplink-kerensky-implanter-desc
+#   icon: { sprite: _DeadSpace/Actions/kerensky_actions.rsi, state: kerensky }
+#   productEntity: KerenskyImplanter
+#   cost:
+#     Telecrystal: 30
+#   categories:
+#   - UplinkImplants
+#   conditions:
+#   - !type:PopulationLimitedStockCondition
+#     stock: 2
+#     highPopulationStock: 2
+#     highPopulationThreshold: 110

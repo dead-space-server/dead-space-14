@@ -8,10 +8,6 @@ namespace Content.Client.DeadSpace.Sandevistan;
 
 public sealed partial class SandevistanBodyVisualSystem : EntitySystem
 {
-    private static readonly ResPath SpritePath =
-        new("/Textures/_DeadSpace/Mobs/Effects/sandevistan.rsi");
-
-    private const string SpriteState = "body";
     private const string OuterClothingSlot = "outerClothing";
 
     [Dependency] private SpriteSystem _sprite = default!;
@@ -35,7 +31,7 @@ public sealed partial class SandevistanBodyVisualSystem : EntitySystem
 
         var layer = _sprite.AddLayer(
             (ent.Owner, sprite),
-            new SpriteSpecifier.Rsi(SpritePath, SpriteState),
+            new SpriteSpecifier.Rsi(ent.Comp.Sprite, ent.Comp.State),
             outerClothingLayer);
 
         _sprite.LayerMapSet((ent.Owner, sprite), SandevistanBodyVisualLayers.Body, layer);

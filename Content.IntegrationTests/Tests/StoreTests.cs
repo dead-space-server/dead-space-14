@@ -174,4 +174,37 @@ public sealed class StoreTests
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task KerenskyUplinkListingIsDisabled()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var minds = entMan.System<SharedMindSystem>();
+            var uplinks = entMan.System<UplinkSystem>();
+
+            var human = entMan.SpawnEntity("HumanUniformDummy", testMap.GridCoords);
+            var uniform = entMan.SpawnEntity("UniformDummy", testMap.GridCoords);
+            var pda = entMan.SpawnEntity("InventoryPdaDummy", testMap.GridCoords);
+
+            Assert.That(inventory.TryEquip(human, uniform, "jumpsuit"), Is.True);
+            Assert.That(inventory.TryEquip(human, pda, "id"), Is.True);
+
+            var mind = minds.CreateMind(null);
+            minds.TransferTo(mind, human, mind: mind);
+            uplinks.AddUplink(human, FixedPoint2.Zero, null, true);
+
+            var store = entMan.GetComponent<StoreComponent>(pda);
+            var listing = store.FullListingsCatalog.FirstOrDefault(x => x.ID == "UplinkKerenskyImplanter");
+            Assert.That(listing, Is.Null);
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

@@ -22,6 +22,13 @@ public sealed partial class SharedSandevistanSystem : EntitySystem
         SubscribeLocalEvent<ActiveSandevistanComponent, GetMeleeAttackRateEvent>(OnGetMeleeAttackRate);
     }
 
+    public bool IsActive(EntityUid uid)
+    {
+        return TryComp<ActiveSandevistanComponent>(uid, out var active) &&
+               active.LifeStage <= ComponentLifeStage.Running &&
+               _timing.CurTime < active.EndTime;
+    }
+
     private void OnActiveStartup(Entity<ActiveSandevistanComponent> ent, ref ComponentStartup args)
     {
         _movement.RefreshMovementSpeedModifiers(ent.Owner);
