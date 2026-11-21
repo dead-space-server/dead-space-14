@@ -10581,3 +10581,39 @@ Entries:
   changes:
   - type: Tweak
     message: Обновление движка до актуальной версии, должно помочь с лагами
+- id: 1022
+  author: BlueDogDoc
+  time: '2026-11-20T15:22:18.364668+00:00'
+  pr: 2829
+  changes:
+  - type: Tweak
+    message: Расчет ЭХО от наркотиков.
+- id: 1023
+  author: Manstari
+  time: '2026-11-21T05:06:28.155270+00:00'
+  pr: 2785
+  changes:
+  - type: Tweak
+    message: Условия цели Нейрон-Ультима
+- id: 1024
+  author: IvanKuvalda
+  time: '2026-11-21T05:13:40.889865+00:00'
+  pr: 2835
+  changes:
+  - type: Fix
+    message: Поправил разрыв органов
+- id: 1025
+  author: IvanKuvalda
+  time: '2026-11-21T05:16:46.537701+00:00'
+  pr: 2834
+  changes:
+  - type: Tweak
+    message: 'небольшая поправка отпуска обломков: отпускать их можно через раз'
+- id: 1026
+  author: Manstari
+  time: '2026-11-21T05:29:30.428145+00:00'
+  pr: 2820
+  changes:
+  - type: Fix
+    message: Шаттл теперь не тормозит быстрее нужного, при нажатии тормоза и кнопки
+      движения, противоположной движению шаттла

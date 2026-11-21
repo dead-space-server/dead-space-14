@@ -49,7 +49,7 @@ public sealed partial class SalvageMagnetBoundUserInterface : BoundUserInterface
         _window.Claimed = current.EndTime != null;
         _window.Cooldown = current.Cooldown;
         _window.ProgressionCooldown = current.Duration;
-        _window.ReleaseBox.Visible = current.EndTime != null; // DS14
+        _window.ReleaseBox.Visible = current.EndTime != null && !current.ReleaseLocked; // DS14
 
         for (var i = 0; i < current.Offers.Count; i++)
         {
