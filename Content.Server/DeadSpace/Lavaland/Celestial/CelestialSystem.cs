@@ -104,7 +104,7 @@ public sealed partial class CelestialSystem : EntitySystem
         return d;
     }
 
-    private const float DestroyInterval = 0.25f;
+    private const float DestroyInterval = 0.5f;
     private const float DestroyRadius = 1.4f;
 
     public override void Initialize()
@@ -210,12 +210,22 @@ public sealed partial class CelestialSystem : EntitySystem
         });
     }
 
+    private float _tickAccumulator;
+    private const float TickInterval = 0.1f; // 10 Гц вместо 60 Гц
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        UpdateOrbs(frameTime);
-        UpdateCircles(frameTime);
+        _tickAccumulator += frameTime;
+        var throttledFrameTime = 0f;
+        if (_tickAccumulator >= TickInterval)
+        {
+            throttledFrameTime = _tickAccumulator;
+            _tickAccumulator = 0f;
+            UpdateOrbs(throttledFrameTime);
+            UpdateCircles(throttledFrameTime);
+        }
 
         var query = EntityQueryEnumerator<CelestialComponent>();
         while (query.MoveNext(out var uid, out var comp))
