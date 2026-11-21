@@ -14,12 +14,12 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.DeadSpace.UserInterface.Constructor;
 
-public sealed class UiLocBrowserWindow : DefaultWindow
+public sealed partial class UiLocBrowserWindow : DefaultWindow
 {
     public readonly record struct Choice(string Id);
 
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IResourceManager _resources = default!;
 
     public event Action<Choice>? OnSelected;
 

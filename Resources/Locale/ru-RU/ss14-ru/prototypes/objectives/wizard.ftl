@@ -3,4 +3,4 @@ ent-BaseWizardObjective = { ent-BaseObjective }
 ent-WizardSurviveObjective = Выжить
     .desc = Федерация Космических Магов желает, чтобы вы остались в живых.
 ent-WizardDemonstrateObjective = Проявить себя
-    .desc = Продемонстрируйте станции свои способности!
+    .desc = Продемонстрируйте станции свои способности задротам из NanoTrasen!

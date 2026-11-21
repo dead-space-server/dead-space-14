@@ -127,6 +127,7 @@
     - id: BoxBodyBag
     - id: SurgeryFieldKitFilled # DS14
     - id: SurgeryOrganCooler # DS14
+    - id: ChemistryBottleHemostatin #ds14
     - !type:GroupSelector
       children:
       - id: RollerBedSpawnFolded

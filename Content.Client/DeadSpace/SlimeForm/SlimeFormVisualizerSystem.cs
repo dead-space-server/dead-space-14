@@ -7,9 +7,9 @@ using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.DeadSpace.SlimeForm;
 
-public sealed class SlimeFormVisualizerSystem : EntitySystem
+public sealed partial class SlimeFormVisualizerSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

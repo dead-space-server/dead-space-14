@@ -32,10 +32,10 @@ public sealed partial class NinjaAppearanceSystem : SharedNinjaAppearanceSystem
 
     private readonly Dictionary<EntityUid, (string Prefix, NinjaStyle Style, bool Visible)> _applied = new();
 
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IResourceCache _cache = default!;
 
     public override void Initialize()
     {

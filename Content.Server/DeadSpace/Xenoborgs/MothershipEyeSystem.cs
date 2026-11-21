@@ -10,14 +10,14 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.DeadSpace.Xenoborgs;
 
-public sealed class MothershipEyeSystem : EntitySystem
+public sealed partial class MothershipEyeSystem : EntitySystem
 {
     private const string EyePrototype = "XenoborgMothershipEye";
 
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly SharedMoverController _mover = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private SharedMoverController _mover = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     public override void Initialize()
     {

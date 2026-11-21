@@ -7,10 +7,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.NightVision;
 
-public sealed class PNVSystem : EntitySystem
+public sealed partial class PNVSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public const SlotFlags ValidSlots =
             SlotFlags.HEAD |

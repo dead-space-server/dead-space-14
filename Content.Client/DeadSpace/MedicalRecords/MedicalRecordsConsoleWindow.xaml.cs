@@ -26,8 +26,8 @@ namespace Content.Client.DeadSpace.MedicalRecords;
 [GenerateTypedNameReferences]
 public sealed partial class MedicalRecordsConsoleWindow : FancyWindow
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private readonly SpriteSystem _spriteSystem;
 

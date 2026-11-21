@@ -8,7 +8,9 @@ using Content.Shared.Chemistry.Prototypes;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage.Components;
 using Content.Shared.DeadSpace.Medical.IvDrip;
+using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.FixedPoint;
+using Content.Shared.Humanoid;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Foldable;
 using Content.Shared.Hands.EntitySystems;
@@ -41,6 +43,7 @@ public sealed class IvDripTest : InteractionTest
     private static readonly ProtoId<VendingMachineInventoryPrototype> NanoMed = "NanoMedInventory";
     private static readonly ProtoId<ReagentPrototype> Bicaridine = "Bicaridine";
     private static readonly ProtoId<ReagentPrototype> Blood = "Blood";
+    private static readonly ProtoId<SurgeryGraftPrototype> GraftRules = "Default";
 
     [Test]
     public async Task UnfoldsOnceAndCannotRefold()
@@ -643,6 +646,7 @@ public sealed class IvDripTest : InteractionTest
 
         EntityUid patient = default;
         ProtoId<ReagentPrototype> donorReagent = default;
+        string graftCells = string.Empty;
         FixedPoint2 bloodBefore = default;
         FixedPoint2 donorBefore = default;
 
@@ -652,6 +656,7 @@ public sealed class IvDripTest : InteractionTest
             patient = SEntMan.SpawnEntity(TargetProto, coords);
             var drip = SEntMan.SpawnEntity(Drip, coords);
             donorReagent = SEntMan.GetComponent<IvDripComponent>(drip).BloodReagent;
+            graftCells = GraftCellsOf(patient);
 
             var bloodstream = SEntMan.System<BloodstreamSystem>();
             Assert.That(bloodstream.TryModifyBloodLevel(patient, FixedPoint2.New(-30)), Is.True);
@@ -666,10 +671,10 @@ public sealed class IvDripTest : InteractionTest
             bloodBefore = blood!.GetTotalPrototypeQuantity(Blood);
             donorBefore = blood.GetTotalPrototypeQuantity(donorReagent);
             Assert.That(donorBefore, Is.EqualTo(FixedPoint2.New(4)));
-            AssertNoForeignBloodReagents(blood, donorReagent);
+            AssertNoForeignBloodReagents(blood, donorReagent, graftCells);
         });
 
-        await RunSeconds(6f);
+        await RunSeconds(11f);
 
         await Server.WaitAssertion(() =>
         {
@@ -679,7 +684,8 @@ public sealed class IvDripTest : InteractionTest
             var consumed = donorBefore - donorNow;
             Assert.That(consumed, Is.EqualTo(donorBefore));
             Assert.That(blood.GetTotalPrototypeQuantity(Blood) - bloodBefore, Is.EqualTo(consumed));
-            AssertNoForeignBloodReagents(blood, donorReagent);
+            Assert.That(blood.GetTotalPrototypeQuantity(graftCells), Is.GreaterThan(FixedPoint2.Zero));
+            AssertNoForeignBloodReagents(blood, donorReagent, graftCells);
         });
     }
 
@@ -832,12 +838,21 @@ public sealed class IvDripTest : InteractionTest
         });
     }
 
-    private static void AssertNoForeignBloodReagents(Solution blood, ProtoId<ReagentPrototype> donorReagent)
+    private string GraftCellsOf(EntityUid body)
+    {
+        var look = SEntMan.GetComponent<HumanoidAppearanceComponent>(body);
+        var lineage = SurgerySpeciesPrototype.LineageOf(ProtoMan, look.Species.Id);
+        Assert.That(lineage, Is.Not.Null);
+        var rules = ProtoMan.Index(GraftRules);
+        return rules.Cells + lineage!;
+    }
+
+    private static void AssertNoForeignBloodReagents(Solution blood, ProtoId<ReagentPrototype> donorReagent, string graftCells)
     {
         foreach (var quantity in blood.Contents)
         {
             var id = quantity.Reagent.Prototype;
-            Assert.That(id == Blood.Id || id == donorReagent.Id, Is.True);
+            Assert.That(id == Blood.Id || id == donorReagent.Id || id == graftCells, Is.True, $"Unexpected reagent {id}");
         }
     }
 }

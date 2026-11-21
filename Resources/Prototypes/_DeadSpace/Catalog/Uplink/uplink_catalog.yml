@@ -38,20 +38,21 @@
       - LoneOpsUplink
 
 - type: listing
-  id: UplinkEswordDoubleLone
+  id: UplinkEswordDouble
   name: uplink-esword-double-name
-  description: uplink-esword-double-desc
+  description: uplink-esword-double-agent-desc
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: BriefcaseWeaponESwordDoubleFilled
+  productEntity: EnergySwordDouble
   cost:
-    Telecrystal: 36
+    Telecrystal: 21
   categories:
   - UplinkWeaponry
   conditions:
   - !type:StoreWhitelistCondition
-    whitelist:
+    blacklist:
       tags:
       - LoneOpsUplink
+      - NukeOpsUplink
   - !type:ListingLimitedStockCondition
     stock: 1
   - !type:BuyerWhitelistCondition
@@ -418,6 +419,10 @@
     blacklist:
       tags:
       - NukeOpsUplink
+  - !type:PurchasedBlacklistCondition
+    blacklist:
+    - UplinkHoloparaKit
+    - UplinkTraitorUltraHoloparaKit
 
 - type: listing
   id: UplinkArkalyseBundleNukeOps
@@ -692,7 +697,7 @@
   description: uplink-osteogen-desc
   productEntity: ChemistryBottleOsteogen
   cost:
-    Telecrystal: 6
+    Telecrystal: 4
   categories:
   - UplinkChemicals
   conditions:
@@ -701,21 +706,6 @@
       tags:
       - NukeOpsUplink
     blacklist:
-      tags:
-      - LoneOpsUplink
-
-- type: listing
-  id: UplinkOsteogenLone
-  name: uplink-osteogen-name
-  description: uplink-osteogen-desc
-  productEntity: ChemistryBottleOsteogen
-  cost:
-    Telecrystal: 6
-  categories:
-  - UplinkChemicals
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
       tags:
       - LoneOpsUplink
 
@@ -736,6 +726,25 @@
     whitelist:
       tags:
       - NukeOpsUplink
+
+- type: listing
+  id: UplinkChemVendSyndicateNukeOps
+  name: uplink-chemvend-syndicate-name
+  description: uplink-chemvend-syndicate-desc
+  icon: { sprite: _DeadSpace/Objects/Specific/Service/vending_machine_restock.rsi, state: base }
+  productEntity: VendingMachineRestockChemVendSyndicate
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
 
 - type: listing
   id: UplinkClothingEyesHudSyndicateAgent

@@ -10,10 +10,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Autopsy;
 
-public sealed class HumanoidDamageSequenceSystem : EntitySystem
+public sealed partial class HumanoidDamageSequenceSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

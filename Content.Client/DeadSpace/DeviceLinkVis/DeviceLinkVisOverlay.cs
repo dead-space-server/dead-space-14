@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Shared.DeadSpace.DeviceLinkVis;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
@@ -63,21 +64,20 @@ public sealed class DeviceLinkVisOverlay : Overlay
         world = default;
         if (_entities.TryGetEntity(net, out var uid) &&
             _entities.TryGetComponent(uid.Value, out TransformComponent? xform) &&
-            xform.MapID == map)
+            DeviceLinkVisMap.IsOnMap(_entities, uid.Value, xform, map))
         {
             world = _transform.GetWorldPosition(uid.Value);
             return true;
         }
 
         var coords = _entities.GetCoordinates(fallback);
-        if (!coords.IsValid(_entities))
+        if (!coords.IsValid(_entities) || !_entities.TryGetComponent(coords.EntityId, out TransformComponent? parent))
             return false;
 
-        var mapCoords = _transform.ToMapCoordinates(coords);
-        if (mapCoords.MapId != map)
+        if (!DeviceLinkVisMap.IsOnMap(_entities, coords.EntityId, parent, map))
             return false;
 
-        world = mapCoords.Position;
+        world = _transform.ToWorldPosition(coords);
         return true;
     }
 

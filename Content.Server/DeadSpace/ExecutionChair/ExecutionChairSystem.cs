@@ -15,15 +15,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.ExecutionChair;
 
-public sealed class ExecutionChairSystem : EntitySystem
+public sealed partial class ExecutionChairSystem : EntitySystem
 {
-    [Dependency] private readonly DeviceLinkSystem _deviceLink = default!;
-    [Dependency] private readonly ElectrocutionSystem _electrocution = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private DeviceLinkSystem _deviceLink = default!;
+    [Dependency] private ElectrocutionSystem _electrocution = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private const float VolumeVariationMin = 0.8f;
     private const float VolumeVariationMax = 1.2f;

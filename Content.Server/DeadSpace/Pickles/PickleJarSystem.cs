@@ -21,21 +21,21 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Pickles;
 
-public sealed class PickleJarSystem : SharedPickleJarSystem
+public sealed partial class PickleJarSystem : SharedPickleJarSystem
 {
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly StomachSystem _stomach = default!;
-    [Dependency] private readonly IngestionSystem _ingestion = default!;
-    [Dependency] private readonly FlavorProfileSystem _flavor = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ReactiveSystem _reaction = default!;
-    [Dependency] private readonly SharedPuddleSystem _puddle = default!;
-    [Dependency] private readonly BlindableSystem _blindable = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private StomachSystem _stomach = default!;
+    [Dependency] private IngestionSystem _ingestion = default!;
+    [Dependency] private FlavorProfileSystem _flavor = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ReactiveSystem _reaction = default!;
+    [Dependency] private SharedPuddleSystem _puddle = default!;
+    [Dependency] private BlindableSystem _blindable = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
 
     private static readonly SoundSpecifier EatSound = new SoundCollectionSpecifier("eating");
 

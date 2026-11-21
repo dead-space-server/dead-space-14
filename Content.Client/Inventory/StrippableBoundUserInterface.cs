@@ -38,13 +38,13 @@ using Robust.Shared.Containers; //DS-14
 namespace Content.Client.Inventory
 {
     [UsedImplicitly]
-    public sealed class StrippableBoundUserInterface : BoundUserInterface
+    public sealed partial class StrippableBoundUserInterface : BoundUserInterface
     {
-        [Dependency] private readonly IPlayerManager _player = default!;
-        [Dependency] private readonly IUserInterfaceManager _ui = default!;
+        [Dependency] private IPlayerManager _player = default!;
+        [Dependency] private IUserInterfaceManager _ui = default!;
         // DS14-start - the current engine still uses the pre-source-generator IoC pattern.
-        [Dependency] private readonly IPrototypeManager _proto = default!;
-        [Dependency] private readonly IConfigurationManager _cvar = default!;
+        [Dependency] private IPrototypeManager _proto = default!;
+        [Dependency] private IConfigurationManager _cvar = default!;
         // DS14-end
 
         private readonly ExamineSystem _examine;

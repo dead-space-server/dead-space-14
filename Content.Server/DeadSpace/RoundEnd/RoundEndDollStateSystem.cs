@@ -20,11 +20,11 @@ namespace Content.Server.DeadSpace.RoundEnd;
 /// <summary>
 /// Maintains compact round-end doll descriptions without spawning display entities or doing per-tick work.
 /// </summary>
-public sealed class RoundEndDollStateSystem : EntitySystem
+public sealed partial class RoundEndDollStateSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly RoundEndManifestStatsSystem _manifest = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private RoundEndManifestStatsSystem _manifest = default!;
 
     private readonly Dictionary<EntityUid, DollState> _stateByMind = new();
     private readonly Dictionary<EntityUid, EntityUid> _mindByBody = new();
@@ -266,7 +266,7 @@ public sealed class RoundEndDollStateSystem : EntitySystem
         _bodyByMind.Clear();
     }
 
-    private sealed class DollState
+    private sealed partial class DollState
     {
         public EntProtoId? BodyPrototype;
         public ProtoId<StartingGearPrototype>? FallbackGear;

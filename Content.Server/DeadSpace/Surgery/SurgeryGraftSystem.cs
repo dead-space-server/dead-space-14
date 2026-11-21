@@ -19,19 +19,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryGraftSystem : EntitySystem
+public sealed partial class SurgeryGraftSystem : EntitySystem
 {
     private const string Rules = "Default";
     private const string OrganLines = "-organ";
     private const string AppendageLines = "-tail";
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private float _accumulator;
     private float _cellsAccumulator;
@@ -156,8 +156,17 @@ public sealed class SurgeryGraftSystem : EntitySystem
         if (HasComp<ChangelingIdentityComponent>(ent))
             return;
 
-        if (!TryComp<HumanoidAppearanceComponent>(ent, out var look)
-            || flesh.Unstable
+        if (!TryComp<HumanoidAppearanceComponent>(ent, out var look))
+        {
+            args.Cancelled = true;
+            _popup.PopupEntity(Loc.GetString("surgery-graft-refused"), ent, PopupType.MediumCaution);
+            return;
+        }
+
+        if (!flesh.Unstable && !HasComp<UncloningComponent>(ent) && look.Species.Id == flesh.Species)
+            return;
+
+        if (flesh.Unstable
             || HasComp<UncloningComponent>(ent)
             || SurgerySpeciesPrototype.LineageOf(_prototype, look.Species.Id) == null
             || SurgerySpeciesPrototype.LineageOf(_prototype, flesh.Species) == null)
@@ -353,8 +362,7 @@ public sealed class SurgeryGraftSystem : EntitySystem
     {
         return _prototype.TryIndex<SurgeryAppendagePrototype>(id, out var appendage)
                && TryComp<HumanoidAppearanceComponent>(body, out var look)
-               && look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list)
-               && list.Count > 0;
+               && SurgeryAppendageRules.Present(look, appendage, _prototype);
     }
 
     private void KeepCells(SurgeryGraftPrototype rules)

@@ -7,6 +7,7 @@ using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Cuffs.Components;
+using Content.Shared.Damage.Components; // DS14
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
@@ -42,20 +43,20 @@ namespace Content.Shared.Cuffs
     // TODO remove all the IsServer() checks.
     public abstract partial class SharedCuffableSystem : EntitySystem
     {
-        [Dependency] private readonly INetManager _net = default!;
-        [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-        [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-        [Dependency] private readonly AlertsSystem _alerts = default!;
-        [Dependency] private readonly SharedAudioSystem _audio = default!;
-        [Dependency] private readonly SharedContainerSystem _container = default!;
-        [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-        [Dependency] private readonly SharedHandsSystem _hands = default!;
-        [Dependency] private readonly SharedVirtualItemSystem _virtualItem = default!;
-        [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-        [Dependency] private readonly SharedPopupSystem _popup = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!;
-        [Dependency] private readonly UseDelaySystem _delay = default!;
-        [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
+        [Dependency] private INetManager _net = default!;
+        [Dependency] private ISharedAdminLogManager _adminLog = default!;
+        [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+        [Dependency] private AlertsSystem _alerts = default!;
+        [Dependency] private SharedAudioSystem _audio = default!;
+        [Dependency] private SharedContainerSystem _container = default!;
+        [Dependency] private SharedDoAfterSystem _doAfter = default!;
+        [Dependency] private SharedHandsSystem _hands = default!;
+        [Dependency] private SharedVirtualItemSystem _virtualItem = default!;
+        [Dependency] private SharedInteractionSystem _interaction = default!;
+        [Dependency] private SharedPopupSystem _popup = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
+        [Dependency] private UseDelaySystem _delay = default!;
+        [Dependency] private SharedCombatModeSystem _combatMode = default!;
 
         public override void Initialize()
         {
@@ -90,7 +91,15 @@ namespace Content.Shared.Cuffs
             SubscribeLocalEvent<HandcuffComponent, MeleeHitEvent>(OnCuffMeleeHit);
             SubscribeLocalEvent<HandcuffComponent, AddCuffDoAfterEvent>(OnAddCuffDoAfter);
             SubscribeLocalEvent<HandcuffComponent, VirtualItemDeletedEvent>(OnCuffVirtualItemDeleted);
+            SubscribeLocalEvent<StaminaComponent, StaminaCritEnteredEvent>(OnStaminaCrit); // DS14
         }
+
+        // DS14-start
+        private void OnStaminaCrit(Entity<StaminaComponent> ent, ref StaminaCritEnteredEvent args)
+        {
+            _doAfter.CancelDoAfters<UnCuffDoAfterEvent>(ent.Owner);
+        }
+        // DS14-end
 
         private void CheckInteract(Entity<CuffableComponent> ent, ref InteractionAttemptEvent args)
         {
@@ -899,4 +908,7 @@ namespace Content.Shared.Cuffs
     /// <seealso cref="HandcuffComponent.StunBonus"/>
     [ByRefEvent]
     public record struct CheckIncapacitatedCuffEvent(bool Incapacitated);
+
+    [ByRefEvent]
+    public readonly record struct StaminaCritEnteredEvent; // DS14
 }

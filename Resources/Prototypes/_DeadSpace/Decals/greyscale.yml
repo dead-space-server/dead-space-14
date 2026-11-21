@@ -1,0 +1,314 @@
+- type: decal
+  id: DSGreyscaleFulltileWhite
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: fulltile_white
+
+- type: decal
+  id: DSGreyscaleFulltileSteel
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: fulltile_steel
+
+- type: decal
+  id: DSGreyscaleFulltileDark
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: fulltile_dark
+
+- type: decal
+  id: DSGreyscaleThreequartertileWhite
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_white
+
+- type: decal
+  id: DSGreyscaleThreequartertileWhite90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_white_90
+
+- type: decal
+  id: DSGreyscaleThreequartertileWhite180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_white_180
+
+- type: decal
+  id: DSGreyscaleThreequartertileWhite270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_white_270
+
+- type: decal
+  id: DSGreyscaleThreequartertileSteel
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_steel
+
+- type: decal
+  id: DSGreyscaleThreequartertileSteel90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_steel_90
+
+- type: decal
+  id: DSGreyscaleThreequartertileSteel180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_steel_180
+
+- type: decal
+  id: DSGreyscaleThreequartertileSteel270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_steel_270
+
+- type: decal
+  id: DSGreyscaleThreequartertileDark
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_dark
+
+- type: decal
+  id: DSGreyscaleThreequartertileDark90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_dark_90
+
+- type: decal
+  id: DSGreyscaleThreequartertileDark180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_dark_180
+
+- type: decal
+  id: DSGreyscaleThreequartertileDark270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: threequartertile_dark_270
+
+- type: decal
+  id: DSGreyscaleHalftileWhite
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_white
+
+- type: decal
+  id: DSGreyscaleHalftileWhite90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_white_90
+
+- type: decal
+  id: DSGreyscaleHalftileWhite180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_white_180
+
+- type: decal
+  id: DSGreyscaleHalftileWhite270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_white_270
+
+- type: decal
+  id: DSGreyscaleHalftileSteel
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_steel
+
+- type: decal
+  id: DSGreyscaleHalftileSteel90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_steel_90
+
+- type: decal
+  id: DSGreyscaleHalftileSteel180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_steel_180
+
+- type: decal
+  id: DSGreyscaleHalftileSteel270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_steel_270
+
+- type: decal
+  id: DSGreyscaleHalftileDark
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_dark
+
+- type: decal
+  id: DSGreyscaleHalftileDark90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_dark_90
+
+- type: decal
+  id: DSGreyscaleHalftileDark180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_dark_180
+
+- type: decal
+  id: DSGreyscaleHalftileDark270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: halftile_dark_270
+
+- type: decal
+  id: DSGreyscaleQuartertileWhite
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_white
+
+- type: decal
+  id: DSGreyscaleQuartertileWhite90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_white_90
+
+- type: decal
+  id: DSGreyscaleQuartertileWhite180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_white_180
+
+- type: decal
+  id: DSGreyscaleQuartertileWhite270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_white_270
+
+- type: decal
+  id: DSGreyscaleQuartertileSteel
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_steel
+
+- type: decal
+  id: DSGreyscaleQuartertileSteel90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_steel_90
+
+- type: decal
+  id: DSGreyscaleQuartertileSteel180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_steel_180
+
+- type: decal
+  id: DSGreyscaleQuartertileSteel270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_steel_270
+
+- type: decal
+  id: DSGreyscaleQuartertileDark
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_dark
+
+- type: decal
+  id: DSGreyscaleQuartertileDark90
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_dark_90
+
+- type: decal
+  id: DSGreyscaleQuartertileDark180
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_dark_180
+
+- type: decal
+  id: DSGreyscaleQuartertileDark270
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: quartertile_dark_270
+
+- type: decal
+  id: DSGreyscaleCheckerneswWhite
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: checkerNESW_white
+
+- type: decal
+  id: DSGreyscaleCheckerneswSteel
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: checkerNESW_steel
+
+- type: decal
+  id: DSGreyscaleCheckerneswDark
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: checkerNESW_dark
+
+- type: decal
+  id: DSGreyscaleCheckernwseWhite
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: checkerNWSE_white
+
+- type: decal
+  id: DSGreyscaleCheckernwseSteel
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: checkerNWSE_steel
+
+- type: decal
+  id: DSGreyscaleCheckernwseDark
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/greyscale.rsi
+    state: checkerNWSE_dark

@@ -12,10 +12,10 @@ namespace Content.Shared.DeadSpace.Surgery;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SurgeryMannequinComponent : Component;
 
-public sealed class SurgeryMannequinStandSystem : EntitySystem
+public sealed partial class SurgeryMannequinStandSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

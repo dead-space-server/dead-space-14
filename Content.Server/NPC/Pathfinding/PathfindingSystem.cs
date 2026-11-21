@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
 using Content.Server.Destructible;
 using Content.Server.NPC.Systems;
+using Content.Server.Parallax; //DS-14
 using Content.Shared.Access.Components;
 using Content.Shared.Administration;
 using Content.Shared.Climbing.Components;
@@ -41,18 +42,19 @@ namespace Content.Server.NPC.Pathfinding
          * See PathfindingSystem.Grid for a description of the grid implementation.
          */
 
-        [Dependency] private readonly IAdminManager _adminManager = default!;
-        [Dependency] private readonly IGameTiming _timing = default!;
-        [Dependency] private readonly IParallelManager _parallel = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly DestructibleSystem _destructible = default!;
-        [Dependency] private readonly EntityLookupSystem _lookup = default!;
-        [Dependency] private readonly FixtureSystem _fixtures = default!;
-        [Dependency] private readonly NPCSystem _npc = default!;
-        [Dependency] private readonly SharedMapSystem _maps = default!;
-        [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!;
+        [Dependency] private IAdminManager _adminManager = default!;
+        [Dependency] private IGameTiming _timing = default!;
+        [Dependency] private IParallelManager _parallel = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IRobustRandom _random = default!;
+        [Dependency] private DestructibleSystem _destructible = default!;
+        [Dependency] private EntityLookupSystem _lookup = default!;
+        [Dependency] private FixtureSystem _fixtures = default!;
+        [Dependency] private NPCSystem _npc = default!;
+        [Dependency] private BiomeSystem _biome = default!; //DS-14
+        [Dependency] private SharedMapSystem _maps = default!;
+        [Dependency] private SharedPhysicsSystem _physics = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
 
         private readonly Dictionary<ICommonSession, PathfindingDebugMode> _subscribedSessions = new();
 
@@ -116,7 +118,7 @@ namespace Content.Server.NPC.Pathfinding
                 MaxDegreeOfParallelism = _parallel.ParallelProcessCount,
             };
 
-            UpdateGrid(options);
+            UpdateGrid(options); //DS-14
             _stopwatch.Restart();
             var amount = Math.Min(PathTickLimit, _pathRequests.Count);
             var results = ArrayPool<PathResult>.Shared.Rent(amount);

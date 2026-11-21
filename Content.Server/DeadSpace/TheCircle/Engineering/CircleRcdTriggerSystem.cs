@@ -8,10 +8,10 @@ using Robust.Shared.Physics.Events;
 
 namespace Content.Server.DeadSpace.TheCircle.Engineering;
 
-public sealed class CircleRcdTriggerSystem : EntitySystem
+public sealed partial class CircleRcdTriggerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedFlashSystem _flash = default!;
-    [Dependency] private readonly NpcFactionSystem _factions = default!;
+    [Dependency] private SharedFlashSystem _flash = default!;
+    [Dependency] private NpcFactionSystem _factions = default!;
 
     public override void Initialize()
     {

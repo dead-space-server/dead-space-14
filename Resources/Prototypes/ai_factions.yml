@@ -34,6 +34,7 @@
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - Blob # DS14
+  - Ninja # DS14
 
 - type: npcFaction
   id: Mouse
@@ -246,6 +247,7 @@
   - SpiderTerror # DS14
   - SyndicateAgent # DS14-agents-faction
   - Blob # DS14
+  - Ninja # DS14
 
 - type: npcFaction
   id: Wizard

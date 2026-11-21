@@ -3,7 +3,6 @@ using Content.Shared.Movement.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.CombatMode
 {
@@ -33,7 +32,7 @@ namespace Content.Shared.CombatMode
 
         #endregion
 
-        [DataField("combatToggleAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        [DataField("combatToggleAction")]
         public string CombatToggleAction = "ActionCombatModeToggle";
 
         [DataField, AutoNetworkedField]

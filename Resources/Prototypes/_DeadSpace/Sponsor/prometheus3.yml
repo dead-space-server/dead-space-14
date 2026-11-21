@@ -5,7 +5,7 @@
 
 # BACKPACK
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackPrometheus3
   categories: [ HideSpawnMenu ]
   name: тактический подсумок «BlackOps»
@@ -165,7 +165,7 @@
 
 # BELT
 - type: entity
-  parent: [ ClothingBeltStorageBase, ContentsExplosionResistanceBase ]
+  parent: [ClothingBeltDominatorFilled, ContentsExplosionResistanceBase]
   id: ClothingBeltPrometheus3
   name: тактический РПС «BlackOps»
   description: Расширенные карманы для хранения. Пахнет порохом.
@@ -180,8 +180,6 @@
     sprite: _DeadSpace/Sponsor/Prometheus3/belt.rsi
     slots:
     - belt
-  - type: Item
-    size: Huge
   - type: Storage
     maxItemSize: Normal
     grid:

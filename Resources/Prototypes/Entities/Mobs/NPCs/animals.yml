@@ -1,9 +1,11 @@
 - type: entity
   name: bat
-  parent: [ SimpleMobBase, FlyingMobBase ] # DS14
+  parent: [ CritterMobBase, FlyingMobBase ] # DS14
   id: MobBat
   description: Some cultures find them terrifying, others crunchy on the teeth.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterBat
   - type: MovementSpeedModifier
     baseWalkSpeed : 3
     baseSprintSpeed : 6
@@ -49,11 +51,6 @@
       path: /Audio/Animals/fox_squeak.ogg
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-organic
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 50
   - type: ReplacementAccent
     accent: mouse
   - type: MeleeWeapon
@@ -90,10 +87,12 @@
 
 - type: entity
   name: bee
-  parent: [ SimpleMobBase, FlyingMobBase ]
+  parent: [ CritterMobBase, FlyingMobBase ] # DS14
   id: MobBee
   description: Nice to have, but you can't build a civilization on a foundation of honey alone.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterBee
   - type: CombatMode
   - type: MovementSpeedModifier
     baseWalkSpeed : 3
@@ -148,11 +147,6 @@
     tags:
     - Bee
     - Trash
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: InsectBlood
-        Quantity: 0.1
   - type: MobPrice
     price: 50
   - type: NPCRetaliation
@@ -162,7 +156,7 @@
     - Passive
   - type: HTN
     rootTask:
-      task: SimpleHostileCompound
+      task: CritterHostileCompound # DS14
   - type: ZombieImmune
   - type: Destructible
     thresholds:
@@ -193,15 +187,10 @@
   - type: MobMover
   - type: HTN
     rootTask:
-      task: SimpleHostileCompound
+      task: CritterHostileCompound # DS14
   - type: NpcFactionMember
     factions:
     - SimpleHostile
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 0.1
   - type: ZombieImmune
 
 
@@ -211,6 +200,8 @@
   id: MobChicken
   description: Comes before an egg, and IS a dinosaur!
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterChicken
   # DS14-start
   - type: CarrySize
     size: Small
@@ -364,10 +355,12 @@
 
 - type: entity
   name: cockroach
-  parent: SimpleMobBase
+  parent: CritterMobBase # DS14
   id: MobCockroach
   description: This station is just crawling with bugs.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterRoach
   # DS14-start
   - type: CarrySize
     size: Small
@@ -383,7 +376,7 @@
   - type: HTN
     constantlyReplan: false
     rootTask:
-      task: MouseCompound
+      task: CritterSnackCompound # DS14
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -412,21 +405,12 @@
         Base: cockroach_dead
       Dead:
         Base: cockroach_dead
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: InsectBlood
-        Quantity: 20
   - type: Edible
   - type: FlavorProfile
     flavors:
     - horrible
     - terrible
     - chewy
-  - type: Satiation
-    satiations:
-      Hunger:
-        prototype: CockroachHunger
   - type: Extractable
     grindableSolutionName: food
   - type: SolutionContainerManager
@@ -515,6 +499,8 @@
   id: MobMothroach
   description: This is the adorable by-product of multiple attempts at genetically mixing mothpeople with cockroaches.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterMothroach
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -588,18 +574,6 @@
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Moth
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: InsectBlood
-        Quantity: 20
-  - type: Respirator
-    damage:
-      types:
-        Asphyxiation: 0.5
-    damageRecovery:
-      types:
-        Asphyxiation: -0.5
   - type: CombatMode
   - type: Butcherable
     spawned:
@@ -634,8 +608,6 @@
   - type: NpcFactionMember
     factions:
     - Mouse
-  - type: Body
-    prototype: Mothroach
   - type: TypingIndicator
     proto: moth
   - type: Destructible
@@ -700,6 +672,8 @@
   id: MobDuckMallard
   description: An adorable mallard duck, it's fluffy and soft!
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterDuck
   # DS14-start
   - type: CarrySize
     size: Small
@@ -831,10 +805,12 @@
 
 - type: entity
   name: butterfly
-  parent: [ SimpleMobBase, FlyingMobBase ]
+  parent: [ CritterMobBase, FlyingMobBase ] # DS14
   id: MobButterfly
   description: Despite popular misconceptions, it's not actually made of butter.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterButterfly
   - type: MovementSpeedModifier
     baseWalkSpeed : 3
     baseSprintSpeed : 6
@@ -888,11 +864,6 @@
   - type: Tag
     tags:
     - Trash
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: InsectBlood
-        Quantity: 0.1
   - type: MobPrice
     price: 50
   - type: Destructible
@@ -916,6 +887,8 @@
   id: MobCow
   description: Moo.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterCow
   - type: Sprite
     drawdepth: Mobs
     layers:
@@ -1006,6 +979,8 @@
   id: MobCrab
   description: A folk legend goes around that his claw snaps spacemen out of existence over distasteful remarks. Be polite and tolerant for your own safety.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterCrab
   # DS14-start
   - type: CarrySize
     size: Small
@@ -1080,6 +1055,8 @@
   id: MobGoat
   description: Her spine consists of long sharp segments, no wonder she is so grumpy.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterGoat
   # DS14-start
   - type: CarrySize
     size: Large
@@ -1190,6 +1167,8 @@
   name: sheepBase
   description: A sheep.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterSheep
   - type: Sprite
     drawdepth: Mobs
     layers:
@@ -1378,6 +1357,8 @@
   id: MobGoose
   description: Its stomach and mind are an enigma beyond human comprehension.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterGoose
   # DS14-start
   - type: CarrySize
     size: Small
@@ -1433,6 +1414,8 @@
   id: MobGorilla
   description: Smashes, roars, looks cool. Don't stand near one.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterGorilla
   - type: Sprite
     drawdepth: Mobs
     layers:
@@ -1520,6 +1503,8 @@
   id: MobKangaroo
   description: A large marsupial herbivore. It has powerful hind legs, with nails that resemble long claws.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterKangaroo
   - type: MovementSpeedModifier
     baseWalkSpeed: 3.5
     baseSprintSpeed: 4.5
@@ -1677,7 +1662,7 @@
           True: {visible: true}
           False: {visible: false}
   - type: Body
-    prototype: Primate
+    prototype: Ancestor # DS14
     requiredLegs: 1 # TODO: More than 1 leg
   - type: CreamPied
   - type: FireVisuals
@@ -1744,6 +1729,8 @@
   parent: MobBaseAncestor
   description: New church of neo-darwinists actually believe that EVERY animal evolved from a monkey. Tastes like pork, and killing them is both fun and relaxing.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterMonkey
   # DS14-start
   - type: CarrySize
     size: Small
@@ -2029,16 +2016,16 @@
 
 - type: entity
   name: mouse
-  parent: SimpleMobBase
+  parent: CritterMobBase # DS14
   id: MobMouse
   description: Squeak!
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterMouse
   # DS14-start
   - type: CarrySize
     size: Small
   # DS14-end
-  - type: Body
-    prototype: Mouse
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -2081,7 +2068,7 @@
   - type: HTN
     constantlyReplan: false
     rootTask:
-      task: MouseCompound
+      task: CritterSnackCompound # DS14
   - type: Physics
   - type: FaxableObject
     insertingState: inserting_mouse
@@ -2126,12 +2113,6 @@
   - type: FlavorProfile
     flavors:
     - meaty
-  - type: Satiation
-    satiations:
-      Hunger:
-        prototype: MouseHunger
-      Thirst:
-        prototype: MouseThirst
   - type: Extractable
     grindableSolutionName: food
   - type: SolutionContainerManager
@@ -2154,17 +2135,6 @@
     - Mouse
     - Meat
     - FelinidFood # DS14
-  - type: Respirator
-    damage:
-      types:
-        Asphyxiation: 0.25
-    damageRecovery:
-      types:
-        Asphyxiation: -0.25
-  - type: Barotrauma
-    damage:
-      types:
-        Blunt: 0.1
   - type: Vocal
     sounds:
       Male: Mouse
@@ -2181,11 +2151,6 @@
     damage:
       types:
         Piercing: 0
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 50
   - type: CanEscapeInventory
   - type: MobPrice
     price: 50
@@ -2241,6 +2206,26 @@
   # intended for swarms that eat pills so only temporary
   - type: TimedDespawn
     lifetime: 60
+  - type: CritterGraze
+    sleepRange: 24
+  # DS14: this swarm exists to metabolize pills, so it keeps the old mouse body.
+  - type: Body
+    prototype: Mouse
+  - type: Bloodstream
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 50
+  - type: HTN
+    constantlyReplan: false
+    rootTask:
+      task: MouseCompound
   - type: Satiation
     satiations:
       Hunger:
@@ -2329,6 +2314,12 @@
     intensity: 0.5
     slope: 0.3
   - type: Bloodstream
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
     bloodReferenceSolution:
       reagents:
       - ReagentId: UnstableMutagen
@@ -2357,6 +2348,8 @@
   id: MobLizard
   description: A harmless dragon.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterLizard
   # DS14-start
   - type: CarrySize
     size: Small
@@ -2418,6 +2411,8 @@
   id: MobSlug
   description: And they called this a lizard?
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterSlug
   # DS14-start
   - type: CarrySize
     size: Small
@@ -2472,6 +2467,8 @@
   id: MobFrog
   description: Hop hop hop. Lookin' moist.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterFrog
   # DS14-start
   - type: CarrySize
     size: Small
@@ -2558,6 +2555,8 @@
   abstract: true
   description: Infiltrates your domain, spies on you, and somehow still a cool pet.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterParrot
   - type: MovementSpeedModifier
     baseWalkSpeed : 2.5
     baseSprintSpeed : 6
@@ -2644,6 +2643,8 @@
   id: MobPenguin
   description: Their lives are constant pain due to their inner-body knees.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterPenguin
   # DS14-start
   - type: CarrySize
     size: Small
@@ -2787,6 +2788,8 @@
   id: MobSnake
   description: Hissss! Bites aren't poisonous.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterSnake
   # DS14-start
   - type: CarrySize
     size: Small
@@ -2844,6 +2847,8 @@
   id: MobSpiderBase
   abstract: true
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterSpider
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -3076,6 +3081,8 @@
   id: MobPossum
   description: '"O Possum! My Possum!" -- Walt Whitman, 1865'
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterPossum
   # DS14-start
   - type: CarrySize
     size: Small
@@ -3153,6 +3160,8 @@
   id: MobRaccoon
   description: Trash panda!
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterRaccoon
   # DS14-start
   - type: CarrySize
     size: Small
@@ -3210,6 +3219,8 @@
   id: MobFox
   description: They're a fox.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterFox
   # DS14-start
   - type: CarrySize
     size: Small
@@ -3297,6 +3308,8 @@
   name: corgi
   description: Finally, a space corgi!
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterDog
   # DS14-start
   - type: CarrySize
     size: Small
@@ -3471,6 +3484,8 @@
   id: MobCat
   description: Feline pet, very funny.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterCat
   # DS14-start
   - type: CarrySize
     size: Small
@@ -3665,8 +3680,6 @@
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
       path: /Audio/Animals/cat_meow.ogg
-  - type: Respirator #It just works?
-    minSaturation: 5.0
 
 - type: entity
   name: caracal cat
@@ -3727,6 +3740,8 @@
   id: MobSloth
   description: Very slow animal. For people with low energy.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterSloth
   # DS14-start
   - type: CarrySize
     size: Small
@@ -3788,6 +3803,8 @@
   id: MobFerret
   description: Just a silly little guy!
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterFerret
   # DS14-start
   - type: CarrySize
     size: Small
@@ -3846,6 +3863,8 @@
   id: MobHamster
   description: A cute, fluffy, robust hamster.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterHamster
   # DS14-start
   - type: CarrySize
     size: Small
@@ -3951,17 +3970,6 @@
     - Trash
     - Hamster
     - Meat
-  - type: Respirator
-    damage:
-      types:
-        Asphyxiation: 0.25
-    damageRecovery:
-      types:
-        Asphyxiation: -0.25
-  - type: Barotrauma
-    damage:
-      types:
-        Blunt: 0.1
   - type: CombatMode
   - type: MeleeWeapon
     soundHit:
@@ -4013,6 +4021,8 @@
   id: MobPig
   description: Oink.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterPig
   # DS14-start
   - type: CarrySize
     size: Large
@@ -4190,6 +4200,8 @@
   id: MobReindeerBuck
   description: You think it can pull a sleigh?
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterReindeer
   - type: Sprite
     drawdepth: Mobs
     layers:

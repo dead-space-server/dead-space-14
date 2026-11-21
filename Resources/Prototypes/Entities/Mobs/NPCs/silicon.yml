@@ -385,7 +385,7 @@
     interactFailureString: petting-failure-medibot
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
-      path: /Audio/Animals/cat_meow.ogg
+      path: /Audio/Ambience/Objects/periodic_beep.ogg #ds14
   - type: ShowHealthBars
     damageContainers:
     - Biological
@@ -486,7 +486,7 @@
     enabled: false
     radius: 3.5
     softness: 2
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
   - type: FootstepModifier
     footstepSoundCollection:

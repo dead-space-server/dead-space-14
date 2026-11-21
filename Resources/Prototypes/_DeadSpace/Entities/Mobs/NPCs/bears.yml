@@ -4,6 +4,8 @@
   parent: SimpleMobBase
   description: Обычный медведь. Может быть, его можно погладить.
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterBear
   - type: Sprite
     drawdepth: Mobs
     sprite: _DeadSpace/Mobs/Animals/bear_normal.rsi
@@ -82,6 +84,8 @@
   parent: SimpleMobBase
   description: Полярный медведь, крупнее и опаснее обычного. Точно ли его стоит гладить?
   components:
+  - type: AnimalChatter
+    dataset: AnimalChatterBear
   - type: Sprite
     drawdepth: Mobs
     sprite: _DeadSpace/Mobs/Animals/bear_polar.rsi

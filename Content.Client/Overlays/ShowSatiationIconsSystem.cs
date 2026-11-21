@@ -23,7 +23,7 @@ public sealed partial class ShowSatiationIconsSystem : EquipmentHudSystem<ShowSa
     }
     // DS14-end
 
-    [Dependency] private readonly SatiationSystem _satiation = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
 
     private HashSet<ProtoId<SatiationTypePrototype>> _types = [];
 

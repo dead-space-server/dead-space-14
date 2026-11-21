@@ -22,18 +22,18 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.GameRules;
 
-public sealed class BrokenTechGameRuleSystem : GameRuleSystem<BrokenTechGameRuleComponent>
+public sealed partial class BrokenTechGameRuleSystem : GameRuleSystem<BrokenTechGameRuleComponent>
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly EntityTableSystem _entityTable = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly ArrivalsSystem _arrivals = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityTableSystem _entityTable = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private ArrivalsSystem _arrivals = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Update(float frameTime)
     {

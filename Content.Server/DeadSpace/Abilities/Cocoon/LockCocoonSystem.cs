@@ -13,15 +13,15 @@ using Content.Shared.Cuffs.Components;
 
 namespace Content.Server.DeadSpace.Abilities.Cocoon;
 
-public sealed class LockCocoonSystem : EntitySystem
+public sealed partial class LockCocoonSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly SharedCuffableSystem _cuffs = default!;
-    [Dependency] private readonly CocoonSystem _cocoon = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private SharedCuffableSystem _cuffs = default!;
+    [Dependency] private CocoonSystem _cocoon = default!;
 
     public override void Initialize()
     {

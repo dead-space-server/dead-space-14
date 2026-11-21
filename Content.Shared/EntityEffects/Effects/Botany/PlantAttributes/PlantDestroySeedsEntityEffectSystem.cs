@@ -13,8 +13,8 @@ namespace Content.Shared.EntityEffects.Effects.Botany.PlantAttributes;
 public sealed partial class PlantDestroySeedsEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantDestroySeeds>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantDestroySeeds> args)

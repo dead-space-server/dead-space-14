@@ -1,6 +1,5 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Prototypes;
 
 namespace Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
@@ -9,7 +8,7 @@ namespace Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 public sealed partial class InitialNecroficationComponent : Component
 {
 
-    [DataField("necroPrototype", required: false, customTypeSerializer: typeof(PrototypeIdSerializer<NecromorfPrototype>))]
+    [DataField("necroPrototype", required: false)]
     public string? NecroPrototype { get; set; } = null;
 
     [ViewVariables(VVAccess.ReadOnly)]

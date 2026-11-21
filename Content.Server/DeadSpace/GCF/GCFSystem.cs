@@ -12,11 +12,11 @@ namespace Content.Server.AutoGCF;
 /// <summary>
 ///     Handles periodically GCF (Garbage Collector)
 /// </summary>
-public sealed class GCFSystem : EntitySystem
+public sealed partial class GCFSystem : EntitySystem
 {
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private bool _gcfEnabled;
     private bool _gcfNotify;

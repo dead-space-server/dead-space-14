@@ -13,12 +13,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class RandomViralSolutionSystem : EntitySystem
+public sealed partial class RandomViralSolutionSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
-    [Dependency] private readonly VirusSystem _virus = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private VirusSystem _virus = default!;
 
     public override void Initialize()
     {

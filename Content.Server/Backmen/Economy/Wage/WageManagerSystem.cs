@@ -16,14 +16,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Backmen.Economy.Wage;
 
-public sealed class WagePaydayEvent : EntityEventArgs
+public sealed partial class WagePaydayEvent : EntityEventArgs
 {
     public FixedPoint2 Mod { get; set; } = 1;
     public FixedPoint2? Value { get; set; } = null;
     public readonly HashSet<Entity<BankAccountComponent>> WhiteListTo = new();
 }
 
-public sealed class WagePaydayPayout
+public sealed partial class WagePaydayPayout
 {
     public uint Id { get; }
     public Entity<BankAccountComponent> FromAccountNumber { get; }
@@ -46,11 +46,11 @@ public sealed class WagePaydayPayout
     }
 }
 
-public sealed class WageManagerSystem : EntitySystem
+public sealed partial class WageManagerSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly BankManagerSystem _bankManagerSystem = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private BankManagerSystem _bankManagerSystem = default!;
 
     private uint _nextId = 1;
 

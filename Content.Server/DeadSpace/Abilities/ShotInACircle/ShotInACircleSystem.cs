@@ -6,10 +6,10 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Server.DeadSpace.Abilities.Systems;
 
-public sealed class ShotInACircleSystem : EntitySystem
+public sealed partial class ShotInACircleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

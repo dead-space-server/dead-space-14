@@ -12,7 +12,7 @@ namespace Content.Server.Atmos.EntitySystems;
 
 public sealed partial class AtmosphereSystem
 {
-    [Dependency] public readonly ParacusiaHallucinationsSystem Hallucinations = default!;
+    [Dependency] public ParacusiaHallucinationsSystem Hallucinations = default!;
 
     private const string RadiationPulsePrototype = "RadiationPulseSilent";
 

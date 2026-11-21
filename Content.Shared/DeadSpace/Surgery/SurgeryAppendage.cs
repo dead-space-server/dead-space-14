@@ -1,6 +1,8 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Inventory;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -51,6 +53,9 @@ public sealed partial class SurgeryAppendageComponent : Component
     [DataField, AutoNetworkedField]
     public List<string> Carry = new();
 
+    [DataField, AutoNetworkedField]
+    public bool Base;
+
     [DataField]
     public ComponentRegistry Grant = new();
 
@@ -62,6 +67,37 @@ public sealed partial class SurgeryAppendageComponent : Component
 
     [DataField]
     public List<ProtoId<InventoryTemplatePrototype>> TemplateFrom = new();
+}
+
+public static class SurgeryAppendageRules
+{
+    public const string MarkingAnchor = "MobHumanoidAnyMarking";
+
+    public static bool Layer(SurgeryAppendagePrototype appendage, out HumanoidVisualLayers layer)
+        => Enum.TryParse(appendage.Category.ToString(), out layer);
+
+    public static bool BaseSprite(HumanoidAppearanceComponent look, SurgeryAppendagePrototype appendage,
+        IPrototypeManager prototypes, out HumanoidVisualLayers layer, out string sprite)
+    {
+        sprite = string.Empty;
+        if (!Layer(appendage, out layer)
+            || !prototypes.TryIndex<SpeciesPrototype>(look.Species.Id, out var species)
+            || !prototypes.TryIndex<HumanoidSpeciesBaseSpritesPrototype>(species.SpriteSet, out var set)
+            || !set.Sprites.TryGetValue(layer, out var found)
+            || found == MarkingAnchor)
+            return false;
+
+        sprite = found;
+        return true;
+    }
+
+    public static bool Present(HumanoidAppearanceComponent look, SurgeryAppendagePrototype appendage, IPrototypeManager prototypes)
+    {
+        if (look.MarkingSet.Markings.TryGetValue(appendage.Category, out var list) && list.Count > 0)
+            return true;
+
+        return BaseSprite(look, appendage, prototypes, out _, out _);
+    }
 }
 
 [RegisterComponent]

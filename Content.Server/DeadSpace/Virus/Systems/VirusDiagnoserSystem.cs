@@ -31,7 +31,7 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class VirusDiagnoserSystem : EntitySystem
+public sealed partial class VirusDiagnoserSystem : EntitySystem
 {
     private static readonly TimeSpan ConsoleStatusUpdateCooldown = TimeSpan.FromSeconds(5);
     private static readonly HashSet<string> BloodReagentIds = new(StringComparer.Ordinal)
@@ -44,19 +44,19 @@ public sealed class VirusDiagnoserSystem : EntitySystem
         "AcidicBlood"
     };
 
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly VirusDiagnoserConsoleSystem _console = default!;
-    [Dependency] private readonly PowerReceiverSystem _powerReceiverSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly VirusDiagnoserDataServerSystem _dataServer = default!;
-    [Dependency] private readonly PaperSystem _paperSystem = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly TimedWindowSystem _timedWindowSystem = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private readonly CrewManifestSystem _crewManifest = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private VirusDiagnoserConsoleSystem _console = default!;
+    [Dependency] private PowerReceiverSystem _powerReceiverSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private VirusDiagnoserDataServerSystem _dataServer = default!;
+    [Dependency] private PaperSystem _paperSystem = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private TimedWindowSystem _timedWindowSystem = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private CrewManifestSystem _crewManifest = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private const string DnaContainerKey = "dna_container_virus_diagnoser";
     private const string FlaskContainerKey = "flask_container_virus_diagnoser";
     public ProtoId<ReagentPrototype> Reagent = "ViralSolution";

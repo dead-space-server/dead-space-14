@@ -46,7 +46,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Surgery;
 
-public sealed class SurgeryClientSystem : EntitySystem
+public sealed partial class SurgeryClientSystem : EntitySystem
 {
     private const string WoundPrefix = "surgery-wound-";
     private const string PenTag = "Pen";
@@ -55,27 +55,27 @@ public sealed class SurgeryClientSystem : EntitySystem
     private static readonly ResPath Rsi = new("/Textures/_DeadSpace/Mobs/Surgery/human_male.rsi");
     private static readonly ResPath LineRsi = new("/Textures/_DeadSpace/Mobs/Surgery/line.rsi");
 
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly SpriteSystem _sprites = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly SurgeryNearbySystem _nearby = default!;
-    [Dependency] private readonly LimbImplantSystem _implants = default!;
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private SurgeryNearbySystem _nearby = default!;
+    [Dependency] private LimbImplantSystem _implants = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
 
     private const float NearDistance = 2.5f;
     private const float BodyTexels = 32f;
@@ -434,6 +434,10 @@ public sealed class SurgeryClientSystem : EntitySystem
                 _verb = close;
             else if (_tool != null && FewOrgans() && ToolHas(SurgeryVerbKind.Extract))
                 _verb = SurgeryVerbKind.Extract;
+            else if (held != null && step == SurgeryVerbKind.Seat
+                     && _board is { } seatBoard
+                     && Has(seatBoard.Verbs, SurgeryVerbKind.Seat))
+                _verb = step;
             else if (held == null && step == SurgeryVerbKind.SetBone)
                 _verb = step;
             else
@@ -1499,7 +1503,7 @@ public sealed class SurgeryClientSystem : EntitySystem
             return false;
 
         if (_board.StepVerb != (byte) SurgeryVerbKind.Retract)
-            return _board.UndoVerb == (byte) SurgeryVerbKind.Retract;
+            return _board.UndoVerb == (byte) SurgeryVerbKind.Retract || _board.CloseVerb == (byte) SurgeryVerbKind.Retract;
 
         return _board.StepLayer < _board.Retracted.Length && _board.Retracted[_board.StepLayer] != 0;
     }
@@ -2166,7 +2170,8 @@ public sealed class SurgeryClientSystem : EntitySystem
         return SurgeryConditions.Has(when, limbs.Zones[index], HasBone(patient, zone), infected, SurgeryConditions.OrganCracked(limbs.Organs, zone), LimbWoundRules.HealthFor(zone, limbs),
             SurgeryRot.Treatable(EntityManager, patient, zone, limbs),
             TryComp<SurgeryCavityComponent>(patient, out var cavity) && cavity.Holds(zone),
-            SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present));
+            SurgeryConditions.MindTorn(limbs.Organs, zone, limbs.Present),
+            SurgeryConditions.JawBroken(limbs, zone));
     }
 
     private bool HasBone(EntityUid patient, LimbZone zone)
@@ -2984,6 +2989,9 @@ public sealed class SurgeryClientSystem : EntitySystem
             return SurgeryVerbKind.Extract;
         if (Has(board.Verbs, SurgeryVerbKind.Insert))
             return SurgeryVerbKind.Insert;
+
+        if (Has(board.Verbs, SurgeryVerbKind.Seat))
+            return SurgeryVerbKind.Seat;
 
         var layer = Top(board);
         if ((uint) layer >= (uint) board.LayerKinds.Length || (uint) layer >= (uint) board.Integrity.Length)

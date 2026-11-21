@@ -7,13 +7,13 @@ using Robust.Shared.Console;
 namespace Content.Server.GameTicking.Commands
 {
     [AnyCommand]
-    sealed class ObserveCommand : IConsoleCommand
+    sealed partial class ObserveCommand : IConsoleCommand
     {
-        [Dependency] private readonly IEntityManager _e = default!;
-        [Dependency] private readonly IAdminManager _adminManager = default!;
+        [Dependency] private IEntityManager _e = default!;
+        [Dependency] private IAdminManager _adminManager = default!;
         // DS14-start
-        [Dependency] private readonly IConGroupController _conGroupController = default!;
-        [Dependency] private readonly IServerConsoleHost _consoleHost = default!;
+        [Dependency] private IConGroupController _conGroupController = default!;
+        [Dependency] private IServerConsoleHost _consoleHost = default!;
         // DS14-end
 
         public string Command => "observe";

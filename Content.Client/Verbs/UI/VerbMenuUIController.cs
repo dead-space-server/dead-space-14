@@ -23,15 +23,15 @@ namespace Content.Client.Verbs.UI
     ///     open a verb menu for a given entity, add verbs to it, and add server-verbs when the server response is
     ///     received.
     /// </remarks>
-    public sealed class VerbMenuUIController : UIController,
+    public sealed partial class VerbMenuUIController : UIController,
         IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>,
         IOnStateEntered<MappingState>, IOnStateExited<MappingState>,
         // DeadSpace14 BetterMappingEditor start
         IOnStateEntered<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>, IOnStateExited<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>
         // DeadSpace14 BetterMappingEditor end
     {
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly ContextMenuUIController _context = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private ContextMenuUIController _context = default!;
 
         [UISystemDependency] private readonly CombatModeSystem _combatMode = default!;
         [UISystemDependency] private readonly VerbSystem _verbSystem = default!;

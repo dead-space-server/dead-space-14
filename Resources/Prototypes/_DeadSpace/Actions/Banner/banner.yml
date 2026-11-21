@@ -1,0 +1,53 @@
+- type: entity
+  parent: BaseAction
+  id: ActionBannerOffense
+  name: offense
+  description: Command an advance. Everyone nearby moves faster for a minute.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 60
+    itemIconStyle: BigAction
+    icon:
+      sprite: _DeadSpace/Structures/Decoration/banner.rsi
+      state: opz
+  - type: InstantAction
+    event: !type:BannerOffenseActionEvent
+  - type: SpeakOnAction
+    sentence: action-speech-banner-offense
+
+- type: entity
+  parent: BaseAction
+  id: ActionBannerDefense
+  name: staunch defense
+  description: Command a staunch defense. Everyone nearby gains 25% resistance to damage for a minute.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 60
+    itemIconStyle: BigAction
+    icon:
+      sprite: _DeadSpace/Structures/Decoration/banner.rsi
+      state: snk
+  - type: InstantAction
+    event: !type:BannerDefenseActionEvent
+  - type: SpeakOnAction
+    sentence: action-speech-banner-defense
+
+- type: entity
+  parent: BaseAction
+  id: ActionBannerConcentrateFire
+  name: concentrate fire
+  description: Command everyone to concentrate fire. Weapons nearby fire faster and more accurately for 30 seconds.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 30
+    itemIconStyle: BigAction
+    icon:
+      sprite: _DeadSpace/Structures/Decoration/banner.rsi
+      state: banner-deathsquad
+  - type: InstantAction
+    event: !type:BannerConcentrateFireActionEvent
+  - type: SpeakOnAction
+    sentence: action-speech-banner-concentrate

@@ -13,17 +13,17 @@ using Robust.Shared.Timing;
 namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>Necropolis gates (open / close by hand, the Legion gate) and two-part necropolis structures.</summary>
-public sealed class LavalandNecropolisGateSystem : EntitySystem
+public sealed partial class LavalandNecropolisGateSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly LavalandLegionMegafaunaSystem _legion = default!;
-    [Dependency] private readonly LavalandBossArenaSystem _arenas = default!;
-    [Dependency] private readonly OccluderSystem _occluder = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private LavalandLegionMegafaunaSystem _legion = default!;
+    [Dependency] private LavalandBossArenaSystem _arenas = default!;
+    [Dependency] private OccluderSystem _occluder = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

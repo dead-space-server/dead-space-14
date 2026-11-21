@@ -152,7 +152,7 @@
   parent: BaseItem
   id: BlueprintRIGSalvageAdvancedInfinite
   name: чертёж продвинутого РИГа карго
-  description: Диск, что, зачастую, содержит какую-то ебуристику.
+  description: Диск с чертежом продвинутого РИГа карго.
   components:
   - type: Sprite
     sprite: Objects/Misc/module.rsi
@@ -489,7 +489,7 @@
   parent: BaseItem
   id: BlueprintRIGSalvageAdvancedOneUse
   name: чертёж продвинутого РИГа карго (одноразовый)
-  description: Диск, что, зачастую, содержит какую-то ебуристику.
+  description: Диск с чертежом продвинутого РИГа карго.
   components:
   - type: Sprite
     sprite: Objects/Misc/module.rsi
@@ -511,7 +511,7 @@
   parent: BaseItem
   id: BlueprintRIGSalvageAdvancedThreeUse
   name: чертёж продвинутого РИГа карго (трёхразовый)
-  description: Диск, что, зачастую, содержит какую-то ебуристику.
+  description: Диск с чертежом продвинутого РИГа карго.
   components:
   - type: Sprite
     sprite: Objects/Misc/module.rsi

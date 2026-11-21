@@ -31,17 +31,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Xenoborgs;
 
-public sealed class XenoborgTeleportationSystem : EntitySystem
+public sealed partial class XenoborgTeleportationSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     public override void Initialize()
     {

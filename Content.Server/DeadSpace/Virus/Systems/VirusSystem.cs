@@ -32,17 +32,17 @@ namespace Content.Server.DeadSpace.Virus.Systems;
 
 public sealed partial class VirusSystem : SharedVirusSystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly TimedWindowSystem _timedWindowSystem = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private TimedWindowSystem _timedWindowSystem = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     private ISawmill _sawmill = default!;
 
     /// <summary>

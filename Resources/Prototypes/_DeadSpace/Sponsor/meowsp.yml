@@ -37,7 +37,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltmeowspFilled
   name: чёрный пояс
   description: Пояс в котором можно носить небольшие предметы.
@@ -47,8 +47,6 @@
     sprite: Clothing/Belt/security.rsi
   - type: Clothing
     sprite: Clothing/Belt/security.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -74,7 +72,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitmeowsp
   name: няно скафандр
   description: Очень дорогой скафандр сделанный на заказ. Встроенный экзоскелет увеличивает скорость передвижения владельца. Не фелиниду будет в нём крайне не удобно находится.
@@ -86,15 +84,13 @@
     sprite: _DeadSpace/Sponsor/meowsp/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitmeowsp
-  - type: Item
-    size: Huge
   - type: ClothingSpeedModifier
     walkModifier: 1.1
     sprintModifier: 1.15
   - type: HeldSpeedModifier
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitmeowsp
   categories: [ HideSpawnMenu ]
   name: шлем няно скафанда
@@ -106,11 +102,7 @@
     sprite: _DeadSpace/Sponsor/meowsp/helmet.rsi
   - type: PointLight
     color: "#3281FD"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Head
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatmeowsp

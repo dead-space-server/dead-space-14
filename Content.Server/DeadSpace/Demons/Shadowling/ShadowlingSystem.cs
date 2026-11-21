@@ -13,15 +13,15 @@ using Content.Shared.Damage.Systems;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling;
 
-public sealed class ShadowlingSystem : SharedShadowlingSystem
+public sealed partial class ShadowlingSystem : SharedShadowlingSystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private const float ConeHalfAngle = 60f * MathF.PI / 180f;
 
@@ -77,7 +77,7 @@ public sealed class ShadowlingSystem : SharedShadowlingSystem
             if (distance > light.Radius)
                 continue;
 
-            if (light.MaskPath != null)
+            if (light.LightMask != null)
             {
                 var directionToShadowling = shadowlingPos - lightPos;
 

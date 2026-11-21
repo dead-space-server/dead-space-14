@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackfffgfgggg
   name: блюспейс рюкзак смерти
   description: Рюкзак использующий технологию блюспейса для увелечения своего максимального объёма. Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -41,7 +41,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitfffgfgggg
   name: скафандр с черепами
   description: Огромный, красивый скафандр с большим красным плащом на спине.
@@ -53,8 +53,6 @@
     sprite: _DeadSpace/Sponsor/fffgfgggg/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitfffgfgggg
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -69,12 +67,9 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitfffgfgggg
   categories: [ HideSpawnMenu ]
   name: шлем смерти
@@ -87,9 +82,6 @@
   - type: PointLight
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -97,6 +89,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
 
 # Magboots
 - type: entity

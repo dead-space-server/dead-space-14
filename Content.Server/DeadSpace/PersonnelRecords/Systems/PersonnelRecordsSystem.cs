@@ -21,11 +21,11 @@ namespace Content.Server.DeadSpace.PersonnelRecords.Systems;
 /// <c>PersonnelRecordsConsoleSystem</c> calls into after its own permission checks pass.
 /// Order-execution detection (<c>PersonnelOrderCompletionSystem</c>) is added in Phase 5.
 /// </summary>
-public sealed class PersonnelRecordsSystem : SharedPersonnelRecordsSystem
+public sealed partial class PersonnelRecordsSystem : SharedPersonnelRecordsSystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly StationRecordsSystem _records = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
 
     public override void Initialize()
     {

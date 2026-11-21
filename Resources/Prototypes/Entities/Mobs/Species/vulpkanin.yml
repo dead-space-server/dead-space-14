@@ -5,6 +5,10 @@
   id: BaseMobVulpkanin
   name: Urist McBark
   components:
+  - type: PackCall
+    emote: Howl
+    minJoinDelay: 0.8
+    maxJoinDelay: 2
   # DS14-start
   - type: SpeedSliding
     minSlideSpeed: 4.7

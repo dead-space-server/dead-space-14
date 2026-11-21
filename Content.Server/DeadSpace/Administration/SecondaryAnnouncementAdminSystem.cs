@@ -11,10 +11,10 @@ namespace Content.Server.DeadSpace.Administration;
 /// Runtime switch for targeted secondary announcements.
 /// The state is intentionally not persisted and resets to enabled on round restart.
 /// </summary>
-public sealed class SecondaryAnnouncementAdminSystem : EntitySystem
+public sealed partial class SecondaryAnnouncementAdminSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IChatManager _chatManager = default!;
 
     public bool Enabled { get; private set; } = true;
 

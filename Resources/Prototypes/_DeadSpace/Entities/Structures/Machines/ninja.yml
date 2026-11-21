@@ -127,7 +127,7 @@
           True: { state: folded_extraction }
           False: { state: extraction_point }
   - type: Sprite
-    sprite: Objects/Tools/thief_beacon.rsi
+    sprite: _DeadSpace/Objects/Tools/ninja_beacon.rsi
     drawdepth: SmallObjects
     noRot: true
     layers:

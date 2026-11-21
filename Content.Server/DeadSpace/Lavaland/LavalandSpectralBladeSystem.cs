@@ -23,23 +23,23 @@ using Robust.Server.Player;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandSpectralBladeSystem : EntitySystem
+public sealed partial class LavalandSpectralBladeSystem : EntitySystem
 {
     private readonly Dictionary<EntityUid, PendingSummon> _activeSummons = new();
     private readonly Dictionary<EntityUid, TimeSpan> _nextGhostSummon = new();
     private readonly List<EntityUid> _expiredSummons = new();
     private readonly List<EntityUid> _expiredCooldowns = new();
 
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly FollowerSystem _follower = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly VisibilitySystem _visibility = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private FollowerSystem _follower = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VisibilitySystem _visibility = default!;
 
     private readonly HashSet<EntityUid> _stillFollowing = new();
 

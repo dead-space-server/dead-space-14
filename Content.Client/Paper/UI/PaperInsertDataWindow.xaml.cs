@@ -15,7 +15,7 @@ namespace Content.Client.Paper.UI;
 [GenerateTypedNameReferences]
 public sealed partial class PaperInsertDataWindow : FancyWindow
 {
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
 
     private readonly ClientGameTicker _ticker;
     private PaperInsertDataResponseMessage? _data;

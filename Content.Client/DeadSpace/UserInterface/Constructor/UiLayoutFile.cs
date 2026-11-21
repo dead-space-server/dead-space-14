@@ -380,6 +380,6 @@ public static class UiLayoutFile
 
     private static Color ParseColor(string value)
     {
-        return Color.TryFromHex(value) ?? Color.White;
+        return Color.TryFromHex(value, out var color) ? color : Color.White;
     }
 }

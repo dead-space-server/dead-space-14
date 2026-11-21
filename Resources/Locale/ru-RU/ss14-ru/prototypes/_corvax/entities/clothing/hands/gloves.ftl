@@ -1,4 +1,4 @@
 ent-ClothingHandsGlovesAerostatic = аэростатические перчатки
     .desc = Дышащие красные перчатки для профессиональной работы с ручкой и блокнотом.
-ent-ClothingHandsGlovesCentcomNaval = перчатки Центком
+ent-ClothingHandsGlovesCentcomNaval = перчатки ЦК
     .desc = Пара высококачественных плотных перчаток, украшенных золотым шитьём, которые выдаются высокопоставленным сотрудникам NanoTrasen.

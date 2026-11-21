@@ -8,6 +8,7 @@ using Content.Shared.Gibbing;
 using Content.Shared.Guardian;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Humanoid; // DS14
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -28,15 +29,15 @@ namespace Content.Server.Guardian
     /// </summary>
     public sealed partial class GuardianSystem : EntitySystem // DS14-Edit
     {
-        [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-        [Dependency] private readonly PopupSystem _popupSystem = default!;
-        [Dependency] private readonly DamageableSystem _damageSystem = default!;
-        [Dependency] private readonly SharedActionsSystem _actionSystem = default!;
-        [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-        [Dependency] private readonly SharedAudioSystem _audio = default!;
-        [Dependency] private readonly GibbingSystem _gibbing = default!;
-        [Dependency] private readonly SharedContainerSystem _container = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!;
+        [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+        [Dependency] private PopupSystem _popupSystem = default!;
+        [Dependency] private DamageableSystem _damageSystem = default!;
+        [Dependency] private SharedActionsSystem _actionSystem = default!;
+        [Dependency] private SharedHandsSystem _handsSystem = default!;
+        [Dependency] private SharedAudioSystem _audio = default!;
+        [Dependency] private GibbingSystem _gibbing = default!;
+        [Dependency] private SharedContainerSystem _container = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
 
         public override void Initialize()
         {
@@ -211,7 +212,8 @@ namespace Content.Server.Guardian
             }
 
             // Can only inject things with the component...
-            if (!HasComp<CanHostGuardianComponent>(target))
+            // DS14: only humanoid species can host a guardian.
+            if (!HasComp<CanHostGuardianComponent>(target) || !HasComp<HumanoidAppearanceComponent>(target))
             {
                 var msg = Loc.GetString("guardian-activator-invalid-target", ("entity", Identity.Entity(target, EntityManager, user)));
 
@@ -244,7 +246,7 @@ namespace Content.Server.Guardian
             if (args.Handled || args.Args.Target == null)
                 return;
 
-            if (args.Cancelled || component.Deleted || component.Used || !_handsSystem.IsHolding(args.Args.User, uid, out _) || HasComp<GuardianHostComponent>(args.Args.Target) || HasComp<SmokingCarpComponent>(args.Args.Target)) // DS14
+            if (args.Cancelled || component.Deleted || component.Used || !_handsSystem.IsHolding(args.Args.User, uid, out _) || HasComp<GuardianHostComponent>(args.Args.Target) || HasComp<SmokingCarpComponent>(args.Args.Target) || !HasComp<HumanoidAppearanceComponent>(args.Args.Target)) // DS14
                 return;
 
             var hostXform = Transform(args.Args.Target.Value);

@@ -8,10 +8,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.TheCircle.Geist;
 
-public sealed class GeistLethalStrikeSystem : EntitySystem
+public sealed partial class GeistLethalStrikeSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

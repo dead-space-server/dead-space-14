@@ -24,22 +24,22 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Voting;
 
-public sealed class AutoMapVoteSystem : EntitySystem
+public sealed partial class AutoMapVoteSystem : EntitySystem
 {
     private const int MaxVoteOptions = byte.MaxValue;
     private const string UnknownServerId = "unknown_server_id";
 
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IVoteManager _voteManager = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IGameMapManager _gameMapManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IVoteManager _voteManager = default!;
 
     private readonly Dictionary<AutoMapVoteCategory, AutoMapVoteCategoryConfig> _configs = new();
     private readonly Dictionary<AutoMapVoteCategory, HashSet<string>> _playedMaps = new();
@@ -1079,7 +1079,7 @@ public sealed class AutoMapVoteSystem : EntitySystem
         return result;
     }
 
-    private sealed class AutoMapVoteCategoryConfig
+    private sealed partial class AutoMapVoteCategoryConfig
     {
         public int MaxPlayers;
         public string MapsCsv = string.Empty;

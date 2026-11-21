@@ -7,7 +7,7 @@ namespace Content.Shared.Weapons.Ranged.Systems;
 
 public partial class SharedGunSystem
 {
-    [Dependency] private readonly SharedSpaceNinjaSystem _ninja = default!;
+    [Dependency] private SharedSpaceNinjaSystem _ninja = default!;
     private void InitializeNinja()
     {
         SubscribeLocalEvent<NinjaAmmoProviderComponent, TakeAmmoEvent>(OnNinjaTakeAmmo);

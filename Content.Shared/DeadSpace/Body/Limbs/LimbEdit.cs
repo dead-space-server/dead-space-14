@@ -32,6 +32,8 @@ public struct LimbOrganEdit
     public bool SetDamage;
     public bool Ruptured;
     public bool SetRuptured;
+    public bool BleedStopped;
+    public bool SetBleedStopped;
     public bool Missing;
     public bool SetMissing;
     public int EyesGone;

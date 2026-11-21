@@ -296,7 +296,7 @@
   components:
   - type: Stamp
     stampedName: stamp-component-stamped-name-hos
-    stampedColor: "#cc0000"
+    stampedColor: "#1c8a97" # DS14
     stampState: "paper_stamp-hos"
     # DS14-start
     stampPatternTexture: "/Textures/Interface/Stamps/headdep_print_pattern.png"
@@ -311,11 +311,11 @@
       left:
       - state: stamp-inhand-left
       - state: handle-inhand-left
-        color: "#cc0000"
+        color: "#1c8a97" # DS14
       right:
       - state: stamp-inhand-right
       - state: handle-inhand-right
-        color: "#cc0000"
+        color: "#1c8a97" # DS14
 
 - type: entity
   name: mime's rubber stamp

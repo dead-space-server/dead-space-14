@@ -9,7 +9,7 @@ namespace Content.Client.Effects;
 /// </summary>
 public sealed partial class ScreechShockWaveSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+    [Dependency] private IOverlayManager _overlayMan = default!;
 
     private readonly HashSet<EntityUid> _registered = [];
     private ScreechShockWaveOverlay _overlay = default!; // DS14 - the current engine does not auto-register overlays.

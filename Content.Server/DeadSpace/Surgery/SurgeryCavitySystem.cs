@@ -13,19 +13,19 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryCavitySystem : EntitySystem
+public sealed partial class SurgeryCavitySystem : EntitySystem
 {
     private static readonly ProtoId<SurgeryLodgePrototype> Lodge = "Lodge";
     private static readonly ProtoId<ItemSizePrototype> Tiny = "Tiny";
     private static readonly ProtoId<ItemSizePrototype> Small = "Small";
     private static readonly ProtoId<ItemSizePrototype> Normal = "Normal";
 
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedItemSystem _items = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IComponentFactory _factory = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedItemSystem _items = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IComponentFactory _factory = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
 
     public override void Initialize()
     {

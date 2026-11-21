@@ -23,7 +23,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackMaelstormAlt
   name: старая командирская сумка
   description: Старая командирская сумка красноармейца времён революций, однако получившая модернизацию блюспейс технологиями. Выглядит потрёпанной.

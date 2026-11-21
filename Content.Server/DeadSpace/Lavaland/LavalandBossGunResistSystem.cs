@@ -12,9 +12,9 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// The lavaland's bosses are not shot down with station guns: every bullet of an ordinary gun that hits one makes the
 /// next weaker (as the super resonator's blasts), down to a tenth. Kinetic guns, made for them, keep their full damage.
 /// </summary>
-public sealed class LavalandBossGunResistSystem : EntitySystem
+public sealed partial class LavalandBossGunResistSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>Each recent hit takes this much off the next.</summary>
     private const float Falloff = 0.05f;

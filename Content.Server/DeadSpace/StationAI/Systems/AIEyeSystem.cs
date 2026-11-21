@@ -23,7 +23,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.StationAI.Systems;
 
-public sealed class AiEyeSystem : EntitySystem
+public sealed partial class AiEyeSystem : EntitySystem
 {
     private const int MinSearchLength = 2;
     private const int MinItemSearchLength = 3;
@@ -36,15 +36,15 @@ public sealed class AiEyeSystem : EntitySystem
     private static readonly TimeSpan SensorCacheRefreshRate = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan CamLinkValidity = TimeSpan.FromSeconds(40);
 
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly StationAiSystem _stationAi = default!;
-    [Dependency] private readonly StationAiVisionSystem _vision = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private StationAiSystem _stationAi = default!;
+    [Dependency] private StationAiVisionSystem _vision = default!;
 
     private EntityQuery<BroadphaseComponent> _broadphaseQuery;
     private EntityQuery<MapGridComponent> _gridQuery;

@@ -1,0 +1,83 @@
+- type: decal
+  id: DSBricktileWhiteAngleNe
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: white_angle_ne
+
+- type: decal
+  id: DSBricktileWhiteAngleNw
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: white_angle_nw
+
+- type: decal
+  id: DSBricktileWhiteAngleSe
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: white_angle_se
+
+- type: decal
+  id: DSBricktileWhiteAngleSw
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: white_angle_sw
+
+- type: decal
+  id: DSBricktileDarkAngleNe
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: dark_angle_ne
+
+- type: decal
+  id: DSBricktileDarkAngleNw
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: dark_angle_nw
+
+- type: decal
+  id: DSBricktileDarkAngleSe
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: dark_angle_se
+
+- type: decal
+  id: DSBricktileDarkAngleSw
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: dark_angle_sw
+
+- type: decal
+  id: DSBricktileSteelAngleNe
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: steel_angle_ne
+
+- type: decal
+  id: DSBricktileSteelAngleNw
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: steel_angle_nw
+
+- type: decal
+  id: DSBricktileSteelAngleSe
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: steel_angle_se
+
+- type: decal
+  id: DSBricktileSteelAngleSw
+  tags: ["station", "markings"]
+  sprite:
+    sprite: _DeadSpace/Decals/bricktile.rsi
+    state: steel_angle_sw

@@ -5,9 +5,9 @@ using Content.Shared.Temperature.Components;
 
 namespace Content.Server.DeadSpace.AshWalkers;
 
-public sealed class AshWalkerHearthSystem : SharedAshWalkerHearthSystem
+public sealed partial class AshWalkerHearthSystem : SharedAshWalkerHearthSystem
 {
-    [Dependency] private readonly TemperatureSystem _temperature = default!;
+    [Dependency] private TemperatureSystem _temperature = default!;
 
     private readonly List<EntityUid> _heatedItems = new();
 

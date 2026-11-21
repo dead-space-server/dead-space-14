@@ -25,13 +25,13 @@ namespace Content.Server.Construction
 {
     public sealed partial class ConstructionSystem
     {
-        [Dependency] private readonly InventorySystem _inventorySystem = default!;
-        [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-        [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-        [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-        [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
-        [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-        [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+        [Dependency] private InventorySystem _inventorySystem = default!;
+        [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+        [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+        [Dependency] private SharedHandsSystem _handsSystem = default!;
+        [Dependency] private EntityLookupSystem _lookupSystem = default!;
+        [Dependency] private SharedTransformSystem _transformSystem = default!;
+        [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
         // --- WARNING! LEGACY CODE AHEAD! ---
         // This entire file contains the legacy code for initial construction.
@@ -91,6 +91,16 @@ namespace Content.Server.Construction
                 if (_interactionSystem.InRangeUnobstructed(pos, near, 2f) && _container.IsInSameOrParentContainer(user, near))
                     yield return near;
             }
+        }
+
+        //DS-14
+        private void DropSecretStash(EntityUid entity, EntityCoordinates coords)
+        {
+            if (!TryComp<Content.Shared.Storage.Components.SecretStashComponent>(entity, out var stash)
+                || stash.ItemContainer.Count == 0)
+                return;
+
+            _container.EmptyContainer(stash.ItemContainer, force: true, destination: coords);
         }
 
         // LEGACY CODE. See warning at the top of the file!
@@ -223,8 +233,7 @@ namespace Content.Server.Construction
                             }
 
                             // DS14-start: and what was hidden in it (a nuke disk in a plushie sewn into slippers)
-                            if (TryComp<Content.Shared.Storage.Components.SecretStashComponent>(entity, out var stash))
-                                _container.EmptyContainer(stash.ItemContainer);
+                            DropSecretStash(entity, coords);
                             // DS14-end
 
                             if (string.IsNullOrEmpty(arbitraryStep.Store))

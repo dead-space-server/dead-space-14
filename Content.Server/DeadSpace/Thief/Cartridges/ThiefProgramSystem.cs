@@ -47,23 +47,23 @@ namespace Content.Server.DeadSpace.Thief.Cartridges;
 /// Dirty credits are physical stackable cash (<see cref="StackPrototype"/> DirtyCredit), they are
 /// stored in the thief's inventory, not on the PDA.
 /// </summary>
-public sealed class ThiefProgramSystem : EntitySystem
+public sealed partial class ThiefProgramSystem : EntitySystem
 {
-    [Dependency] private readonly CartridgeLoaderSystem _cartridgeLoader = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private CartridgeLoaderSystem _cartridgeLoader = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     /// <summary>Entity spawned as dirty credits payout.</summary>
     public static readonly EntProtoId DirtyCashProto = "DirtyCash";

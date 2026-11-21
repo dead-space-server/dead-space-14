@@ -16,7 +16,7 @@ namespace Content.Client.DeadSpace.CustomizableHumanoidSpawner;
 [GenerateTypedNameReferences]
 public sealed partial class CustomizableHumanoidSpawnerUI : FancyWindow
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public event Action<bool, int, string, bool, string>? OnConfirm;
 

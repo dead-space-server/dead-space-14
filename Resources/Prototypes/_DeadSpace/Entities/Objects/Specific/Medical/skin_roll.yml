@@ -10,6 +10,6 @@
   - type: Item
     sprite: Objects/Materials/materials.rsi
     heldPrefix: cloth
-    size: Normal
+    size: Small
   - type: SurgerySkinRoll
     uses: 4

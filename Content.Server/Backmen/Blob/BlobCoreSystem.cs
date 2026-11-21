@@ -27,7 +27,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobCoreSystem : SharedBlobCoreSystem
+public sealed partial class BlobCoreSystem : SharedBlobCoreSystem
 {
     private static readonly EntProtoId BlobCaptureObjective = "BlobCaptureObjective";
 
@@ -42,15 +42,15 @@ public sealed class BlobCoreSystem : SharedBlobCoreSystem
     private static readonly EntProtoId ActionSwapBlobCore = "ActionSwapBlobCore";
 
     private static readonly ProtoId<AlertPrototype> BlobResource = "BlobResource";
-    [Dependency] private readonly ActionsSystem _action = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly MetaDataSystem _metaDataSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RoundEndSystem _roundEndSystem = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
+    [Dependency] private ActionsSystem _action = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private MetaDataSystem _metaDataSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RoundEndSystem _roundEndSystem = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
     private EntityQuery<BlobFactoryComponent> _factory;
 
     private EntityQuery<BlobTileComponent> _tile;

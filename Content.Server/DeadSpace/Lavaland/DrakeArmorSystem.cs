@@ -21,7 +21,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class DrakeArmorSystem : EntitySystem
+public sealed partial class DrakeArmorSystem : EntitySystem
 {
     private static readonly Vector2[] Cardinals =
     {
@@ -31,19 +31,19 @@ public sealed class DrakeArmorSystem : EntitySystem
         new(-1, 0),
     };
 
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly LavalandNecropolisArtifactSystem _artifacts = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private PolymorphSystem _polymorph = default!;
+    [Dependency] private LavalandNecropolisArtifactSystem _artifacts = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private StunSystem _stun = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -353,7 +353,7 @@ public sealed partial class DrakeArmorAbilityRuntimeComponent : Component
     public SoundSpecifier SwoopImpactSound = new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/AshDrake/meteorimpact.ogg");
 }
 
-public sealed class DrakeArmorPendingEffect
+public sealed partial class DrakeArmorPendingEffect
 {
     public MapCoordinates Coordinates;
     public EntProtoId Prototype;

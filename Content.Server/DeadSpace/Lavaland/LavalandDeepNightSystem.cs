@@ -36,25 +36,25 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// lights die quickly and go on cooldown, flashlights drain their battery, and players out of any light get burnt.
 /// Released lantern wisps are the exception: they shine brightly and lead home.
 /// </summary>
-public sealed class LavalandDeepNightSystem : EntitySystem
+public sealed partial class LavalandDeepNightSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly AttachmentSystem _attachment = default!;
-    [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly HandheldLightSystem _handheldLight = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly UnpoweredFlashlightSystem _unpoweredFlashlight = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private AttachmentSystem _attachment = default!;
+    [Dependency] private LavalandChromiteCavesSystem _caves = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private HandheldLightSystem _handheldLight = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private UnpoweredFlashlightSystem _unpoweredFlashlight = default!;
 
     private static readonly TimeSpan EquipmentInterval = TimeSpan.FromSeconds(0.2);
     private static readonly TimeSpan DarknessCheckInterval = TimeSpan.FromSeconds(1);
@@ -71,7 +71,7 @@ public sealed class LavalandDeepNightSystem : EntitySystem
     private readonly Dictionary<EntityUid, (float Radius, float Energy)> _wisps = new();
     private readonly HashSet<Entity<PointLightComponent>> _nearbyLights = new();
 
-    private sealed class LightState
+    private sealed partial class LightState
     {
         /// <summary>When it was switched on this time.</summary>
         public TimeSpan? OnSince;
@@ -86,7 +86,7 @@ public sealed class LavalandDeepNightSystem : EntitySystem
         public TimeSpan CooldownUntil;
     }
 
-    private sealed class DarkState
+    private sealed partial class DarkState
     {
         public TimeSpan DarkSince;
         public TimeSpan NextBurn;

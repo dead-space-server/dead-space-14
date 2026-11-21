@@ -14,6 +14,9 @@ public sealed partial class LimbMend : EntityEffectBase<LimbMend>
     public float Bleed;
 
     [DataField]
+    public bool OrganBleed;
+
+    [DataField]
     public float Bone;
 
     [DataField]
@@ -40,9 +43,9 @@ public sealed partial class LimbMend : EntityEffectBase<LimbMend>
 
 public sealed partial class LimbMendSystem : EntityEffectSystem<LimbBodyComponent, LimbMend>
 {
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private INetManager _net = default!;
 
     protected override void Effect(Entity<LimbBodyComponent> entity, ref EntityEffectEvent<LimbMend> args)
     {
@@ -97,6 +100,18 @@ public sealed partial class LimbMendSystem : EntityEffectSystem<LimbBodyComponen
 
             if (touched)
                 _limbs.ApplyEdit(entity, zone, edit);
+        }
+
+        if (effect.OrganBleed && effect.Bleed > 0f)
+        {
+            for (var i = 0; i < entity.Comp.Organs.Count && i < LimbOrganRules.Count; i++)
+            {
+                var organ = entity.Comp.Organs[i];
+                if (!organ.Ruptured || organ.BleedStopped)
+                    continue;
+
+                _limbs.ApplyOrganEdit(entity, (LimbOrgan) i, new LimbOrganEdit { SetBleedStopped = true, BleedStopped = true });
+            }
         }
     }
 

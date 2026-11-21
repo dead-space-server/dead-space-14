@@ -581,8 +581,8 @@ public sealed class LimbWoundRulesTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(blunt.Bone, Is.EqualTo(0f));
-            Assert.That(LimbWoundRules.Limp(blunt, false), Is.False);
+            Assert.That(blunt.Bone, Is.EqualTo(60f));
+            Assert.That(LimbWoundRules.Limp(blunt, false), Is.True);
             Assert.That(bullet.Bone, Is.EqualTo(0f));
             Assert.That(bullet.Flesh, Is.EqualTo(60f));
             Assert.That(bullet.Embedded, Is.False);
@@ -610,7 +610,7 @@ public sealed class LimbWoundRulesTest
             Assert.That(through.Bone, Is.EqualTo(0f));
             Assert.That(aimedStuck.Embedded, Is.True);
             Assert.That(aimedThrough.Embedded, Is.False);
-            Assert.That(shattered.Bone, Is.EqualTo(0f));
+            Assert.That(shattered.Bone, Is.EqualTo(30f));
             Assert.That(shattered.Embedded, Is.False);
         });
     }
@@ -627,7 +627,7 @@ public sealed class LimbWoundRulesTest
         {
             Assert.That(state.Embedded, Is.False);
             Assert.That(state.Flesh, Is.LessThan(20f));
-            Assert.That(state.Bone, Is.EqualTo(0f));
+            Assert.That(state.Bone, Is.EqualTo(40f * LimbWoundRules.BehindArmorBone));
             Assert.That(missed.Bone, Is.EqualTo(0f));
             Assert.That(missed.Flesh, Is.EqualTo(40f * 0.55f));
         });
@@ -704,9 +704,9 @@ public sealed class LimbWoundRulesTest
         Assert.Multiple(() =>
         {
             Assert.That(hit.Severed, Is.False);
-            Assert.That(state.Bone, Is.EqualTo(0f));
+            Assert.That(state.Bone, Is.EqualTo(42f));
             Assert.That(state.Bleed, Is.EqualTo(0.2f));
-            Assert.That(LimbWoundRules.Limp(state, false), Is.False);
+            Assert.That(LimbWoundRules.Limp(state, false), Is.True);
         });
     }
 
@@ -729,11 +729,12 @@ public sealed class LimbWoundRulesTest
     }
 
     [Test]
-    public void RibsBreakOnlyThroughACrack()
+    public void BluntBruisesBoneAndACrackEscalatesIt()
     {
         var torso = new LimbZoneState();
-        LimbWoundRules.Apply(ref torso, Strike(LimbZone.Torso, LimbMark.Blunt, 80f, 0f));
-        Assert.That(torso.Bone, Is.EqualTo(0f));
+        LimbWoundRules.Apply(ref torso, Strike(LimbZone.Torso, LimbMark.Blunt, 20f, 0f));
+        Assert.That(torso.Bone, Is.EqualTo(20f));
+        Assert.That(torso.Bone, Is.LessThan(LimbWoundRules.BreakBone));
 
         Assert.That(LimbWoundRules.RollCrack(ref torso, 0.6f, 0.04f), Is.True);
         Assert.That(torso.Bone, Is.EqualTo(LimbWoundRules.StrainBone));
@@ -964,7 +965,7 @@ public sealed class LimbWoundRulesTest
             Assert.That(state.Embedded, Is.True);
             Assert.That(state.Bleed, Is.GreaterThan(0f));
             Assert.That(state.Skin, Is.GreaterThanOrEqualTo(LimbWoundRules.BurnFirst));
-            Assert.That(state.Bone, Is.EqualTo(0f));
+            Assert.That(state.Bone, Is.EqualTo(12f));
             Assert.That(state.Health, Is.LessThan(LimbWoundRules.LimbHealth));
             Assert.That(skipped, Is.False);
             Assert.That(LimbWoundRules.CanGrasp(arm, fine, fine, fine), Is.True);

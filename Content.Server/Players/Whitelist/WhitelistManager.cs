@@ -13,9 +13,9 @@ namespace Content.Server.Players.Whitelist;
 // TODO: This manager can likely be converted into a more general purpose manager once we expand the IServerDbManager's functions.
 public sealed partial class WhitelistManager : IPostInjectInit
 {
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly UserDbDataManager _userDb = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private UserDbDataManager _userDb = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private readonly Dictionary<NetUserId, bool> _whitelistStatus = new();
     private ISawmill _sawmill = default!;

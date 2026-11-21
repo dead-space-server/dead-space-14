@@ -1,24 +1,23 @@
 using Content.Shared.DeviceLinking;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.DeviceLinking.Components
 {
     [RegisterComponent]
     public sealed partial class DoorSignalControlComponent : Component
     {
-        [DataField("openPort", customTypeSerializer: typeof(PrototypeIdSerializer<SinkPortPrototype>))]
+        [DataField("openPort")]
         public string OpenPort = "Open";
 
-        [DataField("closePort", customTypeSerializer: typeof(PrototypeIdSerializer<SinkPortPrototype>))]
+        [DataField("closePort")]
         public string ClosePort = "Close";
 
-        [DataField("togglePort", customTypeSerializer: typeof(PrototypeIdSerializer<SinkPortPrototype>))]
+        [DataField("togglePort")]
         public string TogglePort = "Toggle";
 
-        [DataField("boltPort", customTypeSerializer: typeof(PrototypeIdSerializer<SinkPortPrototype>))]
+        [DataField("boltPort")]
         public string InBolt = "DoorBolt";
 
-        [DataField("onOpenPort", customTypeSerializer: typeof(PrototypeIdSerializer<SourcePortPrototype>))]
+        [DataField("onOpenPort")]
         public string OutOpen = "DoorStatus";
     }
 }

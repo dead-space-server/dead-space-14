@@ -1,0 +1,43 @@
+
+- type: entity
+  parent: BaseStructure
+  id: TelevisionWallNanoTrasen
+  name: телевизор NanoTrasen
+  description: Настенный телевизор, транслирующий корпоративную символику NanoTrasen.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Wallmounts/flatscreentv.rsi
+    drawdepth: WallMountedItems
+    layers:
+    - state: television_wall
+    - state: television_wallscreen
+      shader: unshaded
+  - type: Transform
+    anchored: true
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.20,0.45,0.20"
+        density: 100
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Appearance
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Electronic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]

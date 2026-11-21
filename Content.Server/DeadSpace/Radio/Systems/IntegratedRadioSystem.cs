@@ -8,10 +8,10 @@ using Robust.Shared.Containers;
 namespace Content.Server.DeadSpace.Radio.Systems;
 
 /// <summary>Puts a radio inside the creature and gives it the radio's on/off action.</summary>
-public sealed class IntegratedRadioSystem : EntitySystem
+public sealed partial class IntegratedRadioSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
 
     public override void Initialize()
     {

@@ -12,10 +12,10 @@ using Robust.Shared.Containers;
 
 namespace Content.Client.DeadSpace.UniformAccessories;
 
-public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
+public sealed partial class UniformAccessorySystem : SharedUniformAccessorySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedItemSystem _item = default!;
     private readonly Dictionary<EntityUid, string> _layerKeyCache = new();
 
     public event Action? PlayerAccessoryVisualsUpdated;

@@ -392,3 +392,18 @@
     blacklist:
       components:
       - SurplusBundle
+
+- type: listing
+  id: UplinkOsteogenLone
+  name: uplink-osteogen-name
+  description: uplink-osteogen-desc
+  productEntity: ChemistryBottleOsteogen
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
