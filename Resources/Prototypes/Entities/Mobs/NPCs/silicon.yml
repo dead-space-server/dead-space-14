@@ -1,6 +1,6 @@
  # Used for generic robotic entities (like Hivelords)
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   abstract: true
   parent: BaseMob
   id: MobRobotic
@@ -54,7 +54,7 @@
 
 # Used for bots
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   abstract: true
   parent: MobRobotic
   id: MobSiliconBase

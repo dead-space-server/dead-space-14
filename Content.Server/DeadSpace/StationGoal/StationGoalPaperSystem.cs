@@ -47,12 +47,14 @@ public sealed partial class StationGoalPaperSystem : EntitySystem
         var wasSent = false;
         var wasModifiedOnce = false;
 
-        string text = _resourceManager.ContentFileReadText(goal.Text).ReadToEnd();
+        var template = _resourceManager.ContentFileReadText(goal.Text).ReadToEnd();
 
         var query = EntityQueryEnumerator<FaxMachineComponent>();
         while (query.MoveNext(out var uid, out var fax))
         {
             if (!fax.ReceiveStationGoal) continue;
+
+            var text = template;
 
             if (_station.GetOwningStation(uid) is { } station)
             {
