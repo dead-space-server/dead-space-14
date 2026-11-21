@@ -10,14 +10,14 @@ using Content.Shared.Weapons.Melee.Events;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaCloneSystem : EntitySystem
+public sealed partial class NinjaCloneSystem : EntitySystem
 {
     private const int MaxSpawnAttempts = 20;
 
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoidAppearance = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     public override void Initialize()
     {

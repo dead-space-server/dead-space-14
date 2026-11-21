@@ -19,13 +19,22 @@ namespace Content.Server.DeadSpace.Narcotics;
 public sealed partial class DrugEchoSystem : EntitySystem
 {
     private const string NarcoticsGroup = "Narcotics";
+    private const float CheckEvery = 1f;
 
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+
+    private float _accumulator;
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        _accumulator += frameTime;
+        if (_accumulator < CheckEvery)
+            return;
+
+        _accumulator = 0f;
 
         var query = EntityQueryEnumerator<BloodstreamComponent, ActorComponent>();
         while (query.MoveNext(out var uid, out var bloodstream, out _))

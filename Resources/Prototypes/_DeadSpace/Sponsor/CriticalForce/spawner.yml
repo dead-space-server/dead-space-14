@@ -24,6 +24,7 @@
   storage:
     back:
     - MedkitAdvancedFilled
+    - SurgeryFieldKitFilled
     - JawsOfLife
     - KukriKnife
     - HandheldGPSBasic
@@ -31,6 +32,9 @@
     - DefibrillatorCompact
     - HandheldHealthAnalyzer
     - BodyBagFolded
+    - ChemistryBottlePanacemycin
+    - Multitool
+    - RemoteSignallerAdvanced
     belt:
     - MagazinePistol
     - MagazinePistol
@@ -68,14 +72,21 @@
     - JawsOfLife
     - KukriKnife
     - HandheldGPSBasic
+    - DefibrillatorCompact
+    - SurgeryFieldKitFilled
+    - Multitool
+    - RemoteSignallerAdvanced
+    - ChemistryBottlePanacemycin
     belt:
-    - MagazinePistolSubMachineGun
-    - MagazinePistolSubMachineGun
-    - MagazinePistolSubMachineGun
-    - MagazinePistolSubMachineGun
+    - MagazinePistolSubMachineGunExtended
+    - MagazinePistolSubMachineGunExtended
+    - MagazinePistolSubMachineGunExtended
+    - MagazinePistolSubMachineGunExtended
     - ADTtelescopicBaton
     - Zipties
     - Zipties
+    - AirlossAutoInjector
+    - AirlossAutoInjector
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -122,6 +133,8 @@
     - type: AutoImplant
       implants:
       - MindShieldImplant
+      - RezervImplant
+      - DeathAcidifierImplant
     - type: GhostRole
       name: Офицер CriticalForce
       description: Стабилизируйте указанного пациента и организуйте медицинскую эвакуацию. Согласуйте действия с медотделом и службой безопасности станции.
@@ -153,6 +166,8 @@
     - type: AutoImplant
       implants:
       - MindShieldImplant
+      - RezervImplant
+      - DeathAcidifierImplant
     - type: GhostRole
       name: Офицер CriticalForce
       description: Стабилизируйте указанного пациента и организуйте медицинскую эвакуацию. Согласуйте действия с медотделом и службой безопасности станции.

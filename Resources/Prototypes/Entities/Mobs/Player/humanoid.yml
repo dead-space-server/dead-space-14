@@ -750,6 +750,7 @@
       - NamesFirstERTLeader
       - NamesLastERT
       nameFormat: name-format-ert
+    - type: ImmunNecroobelisk # DS14
     - type: Loadout
       prototypes: [ SCNTLeaderGear ]
     - type: GhostRoleNotifys # DS14
@@ -904,6 +905,7 @@
       - NamesFirstERT
       - NamesLastERT
       nameFormat: name-format-ert
+    - type: ImmunNecroobelisk # DS14
     - type: Loadout
       prototypes: [ SCNTAgentGear ]
     - type: GhostRoleNotifys # DS14

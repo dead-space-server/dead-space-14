@@ -18,13 +18,13 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// Stabilizing serum: injected into a legion soul, it stops the soul from decaying into an inert husk. The soul
 /// itself (<see cref="LavalandRegenerativeCoreComponent"/>), while it has not faded, heals all of someone's wounds.
 /// </summary>
-public sealed class LavalandSoulStabilizerSystem : EntitySystem
+public sealed partial class LavalandSoulStabilizerSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

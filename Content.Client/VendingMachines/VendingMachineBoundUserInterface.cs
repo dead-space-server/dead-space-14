@@ -1,5 +1,8 @@
+using Content.Client.UserInterface.Controls;
+using Content.Client.VendingMachines.UI;
 using Content.Shared.VendingMachines;
 using Robust.Client.UserInterface;
+using Robust.Shared.Input;
 using System.Linq;
 using Content.Shared.VendingMachines.Components;
 using Content.Client.DeadSpace.VendingMachines.UI; // DS-14
@@ -10,6 +13,9 @@ namespace Content.Client.VendingMachines;
 public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]
+    private VendingMachineMenu? _menu;
+
+    [ViewVariables]
     private VendingMachineKeypadMenu? _keypadMenu; // DS-14
 
     [ViewVariables]
@@ -19,13 +25,21 @@ public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey
     {
         base.Open();
         // DS-14-start
-        if (!EntMan.TryGetComponent(Owner, out VendingMachineKeypadComponent? keypad))
-            keypad = new VendingMachineKeypadComponent();
+        var title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
 
-        _keypadMenu = this.CreateWindowCenteredLeft<VendingMachineKeypadMenu>();
-        _keypadMenu.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
-        _keypadMenu.Configure(keypad.Columns, keypad.SpiralCapacity);
-        _keypadMenu.OnCodeApproved += OnCodeApproved;
+        if (EntMan.TryGetComponent(Owner, out VendingMachineKeypadComponent? keypad))
+        {
+            _keypadMenu = this.CreateWindowCenteredLeft<VendingMachineKeypadMenu>();
+            _keypadMenu.Title = title;
+            _keypadMenu.Configure(keypad.Columns, keypad.SpiralCapacity);
+            _keypadMenu.OnCodeApproved += OnCodeApproved;
+        }
+        else
+        {
+            _menu = this.CreateWindowCenteredLeft<VendingMachineMenu>();
+            _menu.Title = title;
+            _menu.OnItemSelected += OnItemSelected;
+        }
         // DS-14-end
         Refresh();
     }
@@ -37,6 +51,7 @@ public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey
         var system = EntMan.System<VendingMachineSystem>();
         _cachedInventory = system.GetAllInventory(Owner);
 
+        _menu?.Populate(_cachedInventory, enabled);
         _keypadMenu?.Populate(_cachedInventory, enabled); // DS-14
     }
 
@@ -46,10 +61,27 @@ public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey
 
         var system = EntMan.System<VendingMachineSystem>();
         _cachedInventory = system.GetAllInventory(Owner);
+        _menu?.UpdateAmounts(_cachedInventory, enabled);
         _keypadMenu?.UpdateAmounts(_cachedInventory, enabled); // DS-14
+    }
+
+    private void OnItemSelected(GUIBoundKeyEventArgs args, ListData data)
+    {
+        if (args.Function != EngineKeyFunctions.UIClick)
+            return;
+
+        if (data is not VendorItemsListData { ItemIndex: var itemIndex })
+            return;
+
+        Eject(itemIndex); // DS-14
     }
     // DS-14-start
     private void OnCodeApproved(int itemIndex)
+    {
+        Eject(itemIndex);
+    }
+
+    private void Eject(int itemIndex)
     {
         var selectedItem = _cachedInventory.ElementAtOrDefault(itemIndex);
         if (selectedItem == null)
@@ -64,6 +96,13 @@ public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey
         base.Dispose(disposing);
         if (!disposing)
             return;
+
+        if (_menu != null)
+        {
+            _menu.OnItemSelected -= OnItemSelected;
+            _menu.OnClose -= Close;
+            _menu.Dispose();
+        }
         // DS-14-start
         if (_keypadMenu != null)
         {

@@ -13,11 +13,11 @@ namespace Content.Shared.DeadSpace.FlipPaper;
 /// Лицевая сторона листка — та, где есть компонент Paper; вторая (чистая)
 /// выглядит пустой и текст на ней посмотреть нельзя.
 /// </summary>
-public sealed class FlippablePaperSystem : EntitySystem
+public sealed partial class FlippablePaperSystem : EntitySystem
 {
-    [Dependency] private readonly PaperSystem _paper = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private PaperSystem _paper = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

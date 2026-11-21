@@ -39,4 +39,4 @@
         Heat: 0.1
         Shock: 0.1
         Cold: 0.2
-        Radiation: 0.2
+        Radiation: 0.1 #ds14

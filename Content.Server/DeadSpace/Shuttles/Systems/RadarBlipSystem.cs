@@ -14,12 +14,12 @@ using Robust.Shared.Physics.Events;
 
 namespace Content.Server.DeadSpace.Shuttles.Systems;
 
-public sealed class RadarBlipSystem : EntitySystem
+public sealed partial class RadarBlipSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private TagSystem _tags = default!;
 
     private const float BlipRadius = 0.5f;
     private const float BucketSize = 32f;

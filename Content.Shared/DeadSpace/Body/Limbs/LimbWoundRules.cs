@@ -606,7 +606,7 @@ public static class LimbWoundRules
         return Math.Clamp(blade * Math.Clamp(slash / 12f, 0.75f, 1.5f), 0.5f, 2f);
     }
 
-    public static bool ApplyBlast(ref LimbZoneState state, float heat, float pierce, float blunt, float slash, bool soft = false)
+    public static bool ApplyBlast(ref LimbZoneState state, float heat, float pierce, float blunt, float slash, bool soft = false, bool bleeds = true)
     {
         if (state.Severed || heat <= 0f && pierce <= 0f && blunt <= 0f && slash <= 0f)
             return false;
@@ -623,7 +623,7 @@ public static class LimbWoundRules
             state.Pierce += pierce;
             state.Embedded = true;
             state.Flesh += pierce;
-            if (!soft)
+            if (bleeds && !soft)
                 state.Bleed += pierce * ShrapnelBleed;
             state.Health = MathF.Max(0f, state.Health - pierce * BlastPierceHealth);
         }
@@ -638,6 +638,8 @@ public static class LimbWoundRules
         {
             if (soft)
                 state.Flesh += blunt;
+            else
+                state.Bone += blunt;
             state.Health = MathF.Max(0f, state.Health - blunt * BlastBluntHealth);
         }
 
@@ -892,7 +894,7 @@ public static class LimbWoundRules
         return 4;
     }
 
-    public static LimbStrikeResult Apply(ref LimbZoneState state, LimbStrike strike, bool soft = false)
+    public static LimbStrikeResult Apply(ref LimbZoneState state, LimbStrike strike, bool soft = false, bool bleeds = true)
     {
         if (strike.ShieldBlocked && strike.Projectile && TryRicochet(strike))
             return LimbStrikeResult.Glanced();
@@ -954,18 +956,27 @@ public static class LimbWoundRules
                     state.Flesh += amount * BehindArmorFlesh;
                     if (soft)
                         state.Flesh += strike.Amount * BehindArmorBone;
+                    else
+                        state.Bone += strike.Amount * BehindArmorBone;
                     break;
                 }
 
                 state.Flesh += amount;
                 if (strike.Projectile && strike.Roll < (strike.Aimed ? AimedEmbedChance : EmbedChance))
                     state.Embedded = true;
-                if (soft && strike.Projectile && strike.Aimed && strike.SecondaryRoll < AimedShatterChance)
-                    state.Flesh += amount;
+                if (strike.Projectile && strike.Aimed && strike.SecondaryRoll < AimedShatterChance)
+                {
+                    if (soft)
+                        state.Flesh += amount;
+                    else
+                        state.Bone += amount;
+                }
                 break;
             case LimbMark.Blunt:
                 if (soft)
                     state.Flesh += amount;
+                else
+                    state.Bone += amount;
                 break;
             case LimbMark.Heat:
                 state.Heat += amount;
@@ -983,11 +994,16 @@ public static class LimbWoundRules
         if (StripsSkin(strike.Pellet, strike.Distance, state.Skin, strike.Blast))
             state.SkinBare = true;
 
-        if (soft && strike.RoundBone > 0f)
-            state.Flesh += strike.RoundBone * strike.WoundMultiplier;
+        if (strike.RoundBone > 0f)
+        {
+            if (soft)
+                state.Flesh += strike.RoundBone * strike.WoundMultiplier;
+            else
+                state.Bone += strike.RoundBone * strike.WoundMultiplier;
+        }
 
         var bleedAdded = 0f;
-        if (!soft && strike.RoundBleed > 0f)
+        if (bleeds && !soft && strike.RoundBleed > 0f)
         {
             var internalBleed = strike.RoundBleed * strike.WoundMultiplier;
             if (state.Bandaged)
@@ -996,7 +1012,7 @@ public static class LimbWoundRules
             state.Bleed += internalBleed;
             bleedAdded += internalBleed;
         }
-        if (!soft && state.Flesh >= StrainFlesh && strike.Mark is LimbMark.Edge or LimbMark.Point)
+        if (bleeds && !soft && state.Flesh >= StrainFlesh && strike.Mark is LimbMark.Edge or LimbMark.Point)
         {
             var open = amount * BleedPerFlesh;
             if (state.Bandaged)

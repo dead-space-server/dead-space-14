@@ -36,7 +36,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltWhoTo
   name: РПС инженера ОБР
   description: Усовершенствованная разгрузочная система инженера Отряда Быстрого Реагирования.
@@ -46,11 +46,6 @@
     sprite: _DeadSpace/Sponsor/WhoTo/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/WhoTo/belt.rsi
-  - type: Item
-    size: Huge
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: StorageFill
     contents:
     - id: JawsOfLife
@@ -78,7 +73,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitWhoTo
   name: устаревший скафандр ОБР
   description: Надёжный, но старый скафандр Отряда Быстрого Реагирования. Отличается повышенной защитой от физических воздействий и высокой температуры.
@@ -90,8 +85,6 @@
     sprite: _DeadSpace/Sponsor/WhoTo/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitWhoTo
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -101,15 +94,12 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Helmet
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitWhoTo
   name: шлем устаревшего скафандра ОБР
   description: Герметичный шлем от устаревшей модели скафандра ОБР. Оснащён стандартным светом.
@@ -123,9 +113,6 @@
     color: "#ebebeb"
     energy: 0.9
     radius: 5
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -133,6 +120,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 

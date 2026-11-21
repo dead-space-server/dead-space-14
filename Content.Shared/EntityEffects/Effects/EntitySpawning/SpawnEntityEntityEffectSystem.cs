@@ -9,8 +9,8 @@ namespace Content.Shared.EntityEffects.Effects.EntitySpawning;
 /// <inheritdoc cref="EntityEffectSystem{T,TEffect}"/>
 public sealed partial class SpawnEntityEntityEffectSystem : EntityEffectSystem<TransformComponent, SpawnEntity>
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!; // DS14
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedTransformSystem _transform = default!; // DS14
 
     protected override void Effect(Entity<TransformComponent> entity, ref EntityEffectEvent<SpawnEntity> args)
     {
@@ -26,7 +26,7 @@ public sealed partial class SpawnEntityEntityEffectSystem : EntityEffectSystem<T
             {
                 for (var i = 0; i < quantity; i++)
                 {
-                    EntityManager.PredictedSpawn(proto, mapCoords);
+                    PredictedSpawn(proto, mapCoords);
                 }
             }
             else if (_net.IsServer)

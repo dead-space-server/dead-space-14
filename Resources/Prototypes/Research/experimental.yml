@@ -12,6 +12,7 @@
   recipeUnlocks:
   - ProximitySensor
   - Nanopaste # DS14
+  - BorgRemoteModule # DS14
 
 - type: technology
   id: BasicAnomalousResearch

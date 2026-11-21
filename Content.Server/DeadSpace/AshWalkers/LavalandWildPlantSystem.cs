@@ -3,10 +3,10 @@ using Content.Shared.Botany.Systems;
 
 namespace Content.Server.DeadSpace.AshWalkers;
 
-public sealed class LavalandWildPlantSystem : EntitySystem
+public sealed partial class LavalandWildPlantSystem : EntitySystem
 {
-    [Dependency] private readonly PlantTraySystem _trays = default!;
-    [Dependency] private readonly PlantHolderSystem _holders = default!;
+    [Dependency] private PlantTraySystem _trays = default!;
+    [Dependency] private PlantHolderSystem _holders = default!;
 
     public override void Initialize()
     {

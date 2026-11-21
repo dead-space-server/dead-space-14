@@ -16,7 +16,7 @@ namespace Content.Client.DeadSpace.BSAConsole;
 [GenerateTypedNameReferences]
 public sealed partial class BSAConsoleWindow : DefaultWindow
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public event Action<MapCoordinates>? OnFirePressed;
     public event Action<BSAConsoleViewMode>? OnSwitchViewPressed;

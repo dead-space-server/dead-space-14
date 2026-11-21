@@ -17,15 +17,15 @@ namespace Content.Server.DeadSpace.Weapons.Ranged;
 /// The modkits of a proto-kinetic gun come out again, like a crusher's trophies: one "Eject" verb per modkit puts it
 /// into the user's hands.
 /// </summary>
-public sealed class GunUpgradeRemovalSystem : EntitySystem
+public sealed partial class GunUpgradeRemovalSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly GunUpgradeSystem _upgrades = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private GunUpgradeSystem _upgrades = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

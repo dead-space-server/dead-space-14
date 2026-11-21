@@ -15,11 +15,11 @@ namespace Content.Server.DeadSpace.Notify;
 /// <summary>
 /// Notifies ghosting players when their original body becomes available again.
 /// </summary>
-public sealed class ReturnToBodyNotificationSystem : EntitySystem
+public sealed partial class ReturnToBodyNotificationSystem : EntitySystem
 {
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
 
     public override void Initialize()
     {

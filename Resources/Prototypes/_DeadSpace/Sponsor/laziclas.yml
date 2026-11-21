@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpacklaziclas
   name: ранец патрульный
   description: Многофункциональный тактический ранец объёмом 25 л, предназначен для перевозки боевой и походной выкладки.

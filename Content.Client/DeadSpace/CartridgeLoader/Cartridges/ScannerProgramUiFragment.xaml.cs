@@ -14,7 +14,7 @@ namespace Content.Client.DeadSpace.CartridgeLoader.Cartridges;
 [GenerateTypedNameReferences]
 public sealed partial class ScannerProgramUiFragment : BoxContainer
 {
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     private List<ScannedDocument> _documents = new();
     private int _selectedIndex = -1;

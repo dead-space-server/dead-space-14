@@ -8,11 +8,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Shared.DeadSpace.Ninja;
 
-public abstract class SharedNinjaInfoScannerSystem : EntitySystem
+public abstract partial class SharedNinjaInfoScannerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     public override void Initialize()
     {

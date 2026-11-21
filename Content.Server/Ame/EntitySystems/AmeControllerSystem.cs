@@ -12,6 +12,7 @@ using Content.Shared.Database;
 using Content.Shared.Mind.Components;
 using Content.Shared.NodeContainer;
 using Content.Shared.Power;
+using Content.Shared.UserInterface; //DS-14
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -21,14 +22,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Ame.EntitySystems;
 
-public sealed class AmeControllerSystem : EntitySystem
+public sealed partial class AmeControllerSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly AppearanceSystem _appearanceSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private AppearanceSystem _appearanceSystem = default!;
+    [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
 
     public override void Initialize()
     {
@@ -40,6 +41,7 @@ public sealed class AmeControllerSystem : EntitySystem
         SubscribeLocalEvent<AmeControllerComponent, EntRemovedFromContainerMessage>(OnItemSlotChanged);
         SubscribeLocalEvent<AmeControllerComponent, PowerChangedEvent>(OnPowerChanged);
         SubscribeLocalEvent<AmeControllerComponent, UiButtonPressedMessage>(OnUiButtonPressed);
+        SubscribeLocalEvent<AmeControllerComponent, BoundUIOpenedEvent>(OnUiOpened); //DS-14
     }
 
     private void OnInit(EntityUid uid, AmeControllerComponent component, ComponentInit args)
@@ -129,13 +131,28 @@ public sealed class AmeControllerSystem : EntitySystem
             group.ExplodeCores();
     }
 
+    //DS-14 start
+    private void OnUiOpened(EntityUid uid, AmeControllerComponent component, BoundUIOpenedEvent args)
+    {
+        if (!args.UiKey.Equals(AmeControllerUiKey.Key))
+            return;
+
+        UpdateUi(uid, component);
+    }
+    //DS-14 end
+
     public void UpdateUi(EntityUid uid, AmeControllerComponent? controller = null)
     {
         if (!Resolve(uid, ref controller))
             return;
 
-        if (!_userInterfaceSystem.HasUi(uid, AmeControllerUiKey.Key))
+        //DS-14 start
+        if (!_userInterfaceSystem.IsUiOpen(uid, AmeControllerUiKey.Key))
+        {
+            controller.NextUIUpdate = _gameTiming.CurTime + controller.UpdateUIPeriod;
             return;
+        }
+        //DS-14 end
 
         var state = GetUiState(uid, controller);
         _userInterfaceSystem.SetUiState(uid, AmeControllerUiKey.Key, state);

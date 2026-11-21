@@ -5,7 +5,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackTheQG
   name: белый украшенный вещмешок
   description: Вместительный вещмешок. Окрашен в белый цвет. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.

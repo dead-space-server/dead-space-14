@@ -16,18 +16,18 @@ using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling;
 
-public sealed class ShadowlingRevealSystem : EntitySystem
+public sealed partial class ShadowlingRevealSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly ShadowlingRecruitSystem _recruit = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SmokeSystem _smoke = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private ShadowlingRecruitSystem _recruit = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SmokeSystem _smoke = default!;
 
     public override void Initialize()
     {

@@ -9,10 +9,10 @@ using Content.Shared.Eui;
 
 namespace Content.Server.DeadSpace.CentComm;
 
-public sealed class CentCommTransferEui : BaseEui
+public sealed partial class CentCommTransferEui : BaseEui
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
     private readonly CentCommTransferSystem _transfer;
     private string? _error;
 

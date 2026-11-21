@@ -6,13 +6,13 @@ using Content.Shared.Stacks;
 
 namespace Content.Shared.DeadSpace.AshWalkers;
 
-public abstract class SharedAshWalkerHearthSystem : EntitySystem
+public abstract partial class SharedAshWalkerHearthSystem : EntitySystem
 {
-    [Dependency] private readonly SharedStackSystem _stacks = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedPointLightSystem _lights = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStackSystem _stacks = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

@@ -14,12 +14,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.Storage.Systems;
 
-public sealed class StorageSystem : SharedStorageSystem
+public sealed partial class StorageSystem : SharedStorageSystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly EntityPickupAnimationSystem _entityPickupAnimation = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!; // DS14
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private EntityPickupAnimationSystem _entityPickupAnimation = default!;
+    [Dependency] private IConfigurationManager _cfg = default!; // DS14
 
     private Dictionary<EntityUid, ItemStorageLocation> _oldStoredItems = new();
     private Dictionary<EntityUid, EntityUid> _oldPriorityItems = new(); // DS14

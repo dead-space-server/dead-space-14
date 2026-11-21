@@ -21,14 +21,14 @@ namespace Content.Server.DeadSpace.PersonnelRecords.Systems;
 /// command, CentCom - is picked up here identically, because all of them go through
 /// <c>StationRecordsSystem.Synchronize</c> and raise <see cref="RecordModifiedEvent"/>.
 /// </summary>
-public sealed class PersonnelOrderCompletionSystem : EntitySystem
+public sealed partial class PersonnelOrderCompletionSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly PersonnelRecordsConsoleSystem _console = default!;
-    [Dependency] private readonly PersonnelRecordsSystem _personnelRecords = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly StationRecordsSystem _records = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private PersonnelRecordsConsoleSystem _console = default!;
+    [Dependency] private PersonnelRecordsSystem _personnelRecords = default!;
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
+    [Dependency] private StationSystem _station = default!;
 
     public override void Initialize()
     {

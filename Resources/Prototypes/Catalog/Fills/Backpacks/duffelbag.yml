@@ -6,12 +6,24 @@
   components:
   - type: StorageFill
     contents:
-      - id: Hemostat
-      - id: SurgerySaw # DS14
-      - id: Drill
-      - id: Cautery
-      - id: Retractor
-      - id: Scalpel
+        - id: Scalpel
+        - id: Retractor
+        - id: Cautery
+        - id: Drill
+        - id: Hemostat
+#ds14-start
+        - id: SurgerySaw
+        - id: ClothingMaskSterile
+        - id: SurgeryMarker
+        - id: SurgeryBoneGel
+        - id: SurgeryOrganCooler
+        - id: SurgerySlimeGel
+        - id: SurgeryDionaSap
+        - id: SurgeryHatchet
+        - id: SurgerySkinRoll
+        - id: ClothingHeadHatBluespaceBald
+        - id: SurgeryMannequinCube
+#ds14-end
 
 - type: entity
   parent: ClothingBackpackDuffelSyndicateMedicalBundle

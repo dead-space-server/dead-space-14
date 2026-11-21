@@ -8,7 +8,7 @@ namespace Content.Shared.DeadSpace.Abilities.HipoBite;
 public sealed partial class SharedHipoBiteSystem : EntitySystem
 {
 
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

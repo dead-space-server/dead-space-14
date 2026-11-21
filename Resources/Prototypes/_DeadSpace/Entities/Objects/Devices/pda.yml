@@ -559,3 +559,24 @@
       - AstroNavCartridge
       - TaipanMessengerCartridge
       - PdaGamesCartridge
+
+- type: entity
+  parent: IAAPDA
+  id: IAAOfficerPDA
+  name: КПК офицера ВД
+  description: КПК офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/pda.rsi
+  - type: Icon
+    sprite: Objects/Devices/pda.rsi
+    state: pda-iaaofficer
+  - type: Clothing
+    sprite: Objects/Devices/pda.rsi
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-iaaofficer
+  - type: Pda
+    id: IAAOfficerIDCard

@@ -14,8 +14,8 @@ namespace Content.Client.UserInterface.Controls
     [Virtual]
     public partial class FancyWindow : BaseWindow
     {
-        [Dependency] private readonly IEntitySystemManager _sysMan = default!;
-        [Dependency] private readonly IStylesheetManager _styleMan = default!;
+        [Dependency] private IEntitySystemManager _sysMan = default!;
+        [Dependency] private IStylesheetManager _styleMan = default!;
         private GuidebookSystem? _guidebookSystem;
         private const int DRAG_MARGIN_SIZE = 7;
 
@@ -107,7 +107,7 @@ namespace Content.Client.UserInterface.Controls
     /// <summary>
     /// Helper functions for working with <see cref="FancyWindow"/>.
     /// </summary>
-    public static class FancyWindowExt
+    public static partial class FancyWindowExt
     {
         /// <summary>
         /// Sets information for a window (title and guidebooks) based on an entity.

@@ -13,13 +13,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Abilities.Systems;
 
-public sealed class ThrowingThingsSystem : EntitySystem
+public sealed partial class ThrowingThingsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private SharedProjectileSystem _projectiles = default!;
 
     public override void Initialize()
     {
@@ -124,8 +125,8 @@ public sealed class ThrowingThingsSystem : EntitySystem
 
         if (TryComp<ProjectileComponent>(item, out var projectile))
         {
-            projectile.Shooter = shooter;
-            projectile.Weapon = shooter;
+            _projectiles.SetShooter(item, projectile, shooter);
+            _projectiles.SetWeapon(item, projectile, shooter);
         }
     }
 

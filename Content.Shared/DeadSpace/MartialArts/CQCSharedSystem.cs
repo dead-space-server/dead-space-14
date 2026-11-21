@@ -7,10 +7,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.MartialArts.CQC;
 
-public abstract class CQCSharedSystem : EntitySystem
+public abstract partial class CQCSharedSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

@@ -18,12 +18,12 @@ namespace Content.Client.DeadSpace.Lavaland.AshWolf;
 /// the bright zone, a few times in a row. A press outside the zone, or a full turn without one, fails it. Only the result goes to the server. It starts
 /// with a moment to get ready.
 /// </summary>
-public sealed class LavalandAshWolfQteSystem : EntitySystem
+public sealed partial class LavalandAshWolfQteSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IResourceCache _cache = default!;
 
     private LavalandAshWolfQteOverlay _overlay = default!;
 
@@ -143,7 +143,7 @@ public sealed class LavalandAshWolfQteSystem : EntitySystem
 }
 
 /// <summary>The dial of the quick time event, low in the middle of the screen.</summary>
-public sealed class LavalandAshWolfQteOverlay : Overlay
+public sealed partial class LavalandAshWolfQteOverlay : Overlay
 {
     private const string FontPath = "/Fonts/NotoSans/NotoSans-Bold.ttf";
     private const float Radius = 58f;

@@ -17,7 +17,7 @@ namespace Content.Server.Corvax.JoinQueue;
 /// <summary>
 ///     Manages new player connections when the server is full and queues them up, granting access when a slot becomes free
 /// </summary>
-public sealed class JoinQueueManager
+public sealed partial class JoinQueueManager
 {
     private static readonly Gauge QueueCount = Metrics.CreateGauge(
         "join_queue_count",
@@ -36,11 +36,11 @@ public sealed class JoinQueueManager
             Buckets = Histogram.ExponentialBuckets(1, 2, 14),
         });
 
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IConnectionManager _connectionManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IServerNetManager _netManager = default!;
-    [Dependency] private readonly DiscordAuthManager _discordAuthManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IConnectionManager _connectionManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IServerNetManager _netManager = default!;
+    [Dependency] private DiscordAuthManager _discordAuthManager = default!;
 
     /// <summary>
     ///     Queue of active player sessions

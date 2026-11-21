@@ -4,7 +4,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 namespace Content.Client.DeadSpace.Sanity;
 
-public sealed class SanityOverlay : Overlay
+public sealed partial class SanityOverlay : Overlay
 {
     private readonly float _outerCircleValue = 0.9f;
     private readonly float _innerCircleValue = 0.65f;

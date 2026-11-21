@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Content.Server.Body.Components;
 using Content.Server.DeadSpace.Hooligan.Objectives; // DS14
+using Content.Shared.DeadSpace.Lavaland.Components; // DS14
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
@@ -25,18 +26,18 @@ using Robust.Shared.Timing;
 namespace Content.Server.Body.Systems;
 
 /// <inheritdoc/>
-public sealed class MetabolizerSystem : SharedMetabolizerSystem
+public sealed partial class MetabolizerSystem : SharedMetabolizerSystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly SharedEntityConditionsSystem _entityConditions = default!;
-    [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly BodySystem _bodySystem = default!; // DS14 - #45152 metabolism lookup adaptation
-
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobStateSystem = default!;
+    [Dependency] private SharedEntityConditionsSystem _entityConditions = default!;
+    [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private BodySystem _bodySystem = default!; // DS14 - #45152 metabolism lookup adaptation
     private EntityQuery<OrganComponent> _organQuery;
+    private EntityQuery<LavalandFaunaComponent> _faunaQuery; // DS14
     private EntityQuery<BloodstreamComponent> _bloodstreamQuery; // DS14
     private EntityQuery<SolutionContainerManagerComponent> _solutionQuery;
     private static readonly ProtoId<MetabolismGroupPrototype> Gas = "Gas";
@@ -54,6 +55,7 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
 
         _organQuery = GetEntityQuery<OrganComponent>();
         _bloodstreamQuery = GetEntityQuery<BloodstreamComponent>(); // DS14
+        _faunaQuery = GetEntityQuery<LavalandFaunaComponent>(); // DS14
         _solutionQuery = GetEntityQuery<SolutionContainerManagerComponent>();
 
         SubscribeLocalEvent<MetabolizerComponent, ComponentInit>(OnMetabolizerInit);
@@ -126,7 +128,8 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
             }
 
             metab.NextUpdate += metab.AdjustedUpdateInterval;
-            TryMetabolize((scheduled.Uid, metab));
+            if (!IsFauna(scheduled.Uid))
+                TryMetabolize((scheduled.Uid, metab));
 
             if (TryComp<MetabolizerComponent>(scheduled.Uid, out metab) && !Paused(scheduled.Uid))
                 _rescheduleMetabolizers.Add(scheduled.Uid);
@@ -141,6 +144,11 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
     }
 
     // DS14-start
+    private bool IsFauna(EntityUid organ)
+    {
+        return _faunaQuery.HasComp(_organQuery.CompOrNull(organ)?.Body ?? organ);
+    }
+
     private void ScheduleMetabolizer(Entity<MetabolizerComponent> ent)
     {
         ent.Comp.ScheduleToken++;

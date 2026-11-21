@@ -12,7 +12,7 @@ namespace Content.Client.DeadSpace.NewLife;
 [GenerateTypedNameReferences]
 public sealed partial class NewLifeWindow : FancyWindow
 {
-    [Dependency] private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
+    [Dependency] private IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
     private NewLifeEuiState? _state;
     private bool _submitting;
     private TimeSpan _nextRefresh;

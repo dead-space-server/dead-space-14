@@ -77,7 +77,7 @@
     enabled: false
     radius: 7 # DS14-value
     energy: 1
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
     netsync: false
   - type: Appearance
@@ -197,7 +197,7 @@
         Slash: 0.90
         Piercing: 0.95
         Heat: 0.90
-        Radiation: 0.25
+    # Radiation: 0.25  # ds14
   # DS14
   - type: LimbCover
     face: true
@@ -256,7 +256,7 @@
     enabled: false
     radius: 4 # DS14
     energy: 2
-    mask: "/Textures/Effects/LightMasks/cone.png" # DS14
+    lightMask: ConeSingle # DS14
     autoRot: true
     netsync: false
   - type: Appearance

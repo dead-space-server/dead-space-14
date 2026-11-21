@@ -202,7 +202,13 @@ public sealed class LavaFishingTest : InteractionTest
         }
         await SetKey(ContentKeyFunctions.UseItemInHand, BoundKeyState.Up);
         await RunTicks(15);
-        await Client.WaitAssertion(() => Assert.That(fishingWindow.IsOpen, Is.False));
+        // Windows keep their position relative to the screen when it resizes, so remember where it actually closed.
+        var closedPosition = Vector2.Zero;
+        await Client.WaitAssertion(() =>
+        {
+            Assert.That(fishingWindow.IsOpen, Is.False);
+            closedPosition = fishingWindow.Position;
+        });
         EntityUid catchUid = default;
         await Server.WaitAssertion(() =>
         {
@@ -228,7 +234,7 @@ public sealed class LavaFishingTest : InteractionTest
         await Client.WaitAssertion(() =>
         {
             Assert.That(GetWindow<LavaFishingWindow>(), Is.SameAs(fishingWindow));
-            Assert.That(Vector2.Distance(fishingWindow.Position, windowPosition), Is.LessThan(1));
+            Assert.That(Vector2.Distance(fishingWindow.Position, closedPosition), Is.LessThan(1));
         });
         await ClickControl<LavaFishingWindow, Button>("CancelButton");
         await RunTicks(10);

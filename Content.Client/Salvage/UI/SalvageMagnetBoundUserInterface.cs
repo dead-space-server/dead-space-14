@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Message;
+using Content.Shared.DeadSpace.Salvage.Magnet; // DS14
 using Content.Shared.Salvage;
 using Content.Shared.Salvage.Magnet;
 using Robust.Client.UserInterface;
@@ -7,9 +8,9 @@ using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.Salvage.UI;
 
-public sealed class SalvageMagnetBoundUserInterface : BoundUserInterface
+public sealed partial class SalvageMagnetBoundUserInterface : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     private OfferingWindow? _window;
 
@@ -24,6 +25,13 @@ public sealed class SalvageMagnetBoundUserInterface : BoundUserInterface
 
         _window = this.CreateWindowCenteredLeft<OfferingWindow>();
         _window.Title = Loc.GetString("salvage-magnet-window-title");
+        // DS14-start
+        _window.ReleaseButton.Text = Loc.GetString("salvage-magnet-window-release");
+        _window.ReleaseButton.OnPressed += _ =>
+        {
+            SendMessage(new MagnetReleaseOfferEvent());
+        };
+        // DS14-end
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -41,6 +49,7 @@ public sealed class SalvageMagnetBoundUserInterface : BoundUserInterface
         _window.Claimed = current.EndTime != null;
         _window.Cooldown = current.Cooldown;
         _window.ProgressionCooldown = current.Duration;
+        _window.ReleaseBox.Visible = current.EndTime != null && !current.ReleaseLocked; // DS14
 
         for (var i = 0; i < current.Offers.Count; i++)
         {

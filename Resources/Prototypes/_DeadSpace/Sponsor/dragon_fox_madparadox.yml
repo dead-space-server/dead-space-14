@@ -50,7 +50,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltDragonFoxMadParadox
   name: РПС "Покров Бездны"
   description: Ременноплечевая-система «Покров Бездны» вдохновлена физикой чёрных дыр и воплощает в себе идею гравитационного поглощения и искажения пространства. Внешне напоминает фрагмент космической аномалии — будто часть горизонта событий материализовалась в тактическом снаряжении.
@@ -63,8 +63,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillDragonFoxMadParadox
@@ -132,6 +130,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
   - type: GroupExamine
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
@@ -146,7 +145,7 @@
           False: {visible: true}
 
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitDragonFoxMadParadox
   name: броня «Покров чёрной бездны»
   description: Броня выглядит как переливающаяся тёмная субстанция, напоминающая ткань пространства‑времени вблизи чёрной дыры. Её поверхность не отражает свет — напротив, она будто поглощает его, создавая эффект мерцающей пустоты. По контурам доспехов пробегают тонкие линии искривлённого света — словно гравитационные волны, застывшие в металле. Шлем скрывает лицо носителя, оставляя лишь две точки тусклого излучения вместо глаз. Воплощает мощь и таинственность космических чёрных дыр. Её конструкция использует принципы гравитационного искажения и квантовой защиты. Капюшон создаёт вокруг носителя поле, имитирующее горизонт событий, — оно поглощает и рассеивает атаки. Броня предназначена для воинов и исследователей, работающих в экстремальных условиях - от радиационных зон до областей с гравитационными аномалиями.
@@ -158,8 +157,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDragonFoxMadParadox
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -173,9 +170,6 @@
         Cold: 0.4
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: FireProtection
     reduction: 0.6
   - type: ZombificationResistance
@@ -206,7 +200,7 @@
   - type: UnpoweredFlashlight
   - type: PointLight
     enabled: false
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
     color: "#9f2489"
     radius: 10
@@ -217,7 +211,7 @@
 
 # hardsuit.rsi
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitDragonFoxMadParadox2
   name: броня Antium Ana Wao
   description: Если вам нужна первоклассная защита, усовершенствованная с помощью новейших технологий, обратите внимание на комплект брони Antium. Этот костюм, разработанный отмеченной наградами командой инженеров Quirinus Tech, полностью закрывает тело, защищая владельца от опасных условий и угроз на поле боя. Вместо традиционной ламинированной лицевой панели в шлеме используется набор датчиков, обеспечивающих беспрепятственный обзор.
@@ -238,8 +232,6 @@
         shader: unshaded
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDragonFoxMadParadox2
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -253,9 +245,6 @@
         Cold: 0.4
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: FireProtection
     reduction: 0.6
   - type: ZombificationResistance
@@ -288,7 +277,7 @@
 
 # helmet.rsi
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: ClothingHeadHelmetHardsuitDominator
   categories: [ HideSpawnMenu ]
   id: ClothingHeadHelmetHardsuitDragonFoxMadParadox2
   name: шлем Antium Ana Wao
@@ -316,16 +305,18 @@
     color: "#f2e492"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+        Shock: 0.65
+        Cold: 0.65
+        Caustic: 0.65
+        Radiation: 0.65
+
   - type: ToggleableVisuals
     spriteLayer: light
     clothingVisuals:
@@ -677,7 +668,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/tools_powerdrill.rsi
           state: drill_screw
@@ -685,7 +676,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/tools_powerdrill.rsi
           state: drill_bolt
@@ -728,13 +719,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/tools_jawsoflife.rsi
           state: syn_jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/tools_jawsoflife.rsi
           state: syn_jaws_cutter

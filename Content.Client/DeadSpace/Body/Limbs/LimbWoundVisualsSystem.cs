@@ -6,12 +6,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Body.Limbs;
 
-public sealed class LimbWoundVisualsSystem : EntitySystem
+public sealed partial class LimbWoundVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IResourceCache _cache = default!;
 
-    private sealed class WoundLayer
+    private sealed partial class WoundLayer
     {
         public readonly string Key;
         public readonly string Group;
@@ -29,7 +29,7 @@ public sealed class LimbWoundVisualsSystem : EntitySystem
         }
     }
 
-    private sealed class WoundLayers
+    private sealed partial class WoundLayers
     {
         public readonly Dictionary<LimbZone, List<WoundLayer>> ByZone = new();
         public readonly List<WoundLayer> All = new();

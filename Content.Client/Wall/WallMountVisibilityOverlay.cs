@@ -16,11 +16,11 @@ namespace Content.Client.Wall;
 /// Manages the visibility of wall-mounted entities based on their facing arc relative to the viewport's eye.
 /// </summary>
 // DS14: Current engine injects overlay dependencies without source generation.
-public sealed class WallMountVisibilityOverlay : Overlay
+public sealed partial class WallMountVisibilityOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _player = default!; //DS-14
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _player = default!; //DS-14
 
     private readonly SharedMapSystem _map;
     private readonly SpriteSystem _sprite;

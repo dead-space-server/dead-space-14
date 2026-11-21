@@ -88,35 +88,35 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 
 public sealed partial class LimbWoundSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly BlindableSystem _blind = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedGunSystem _guns = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly LimbImplantSystem _implants = default!;
-    [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private BlindableSystem _blind = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedGunSystem _guns = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private LimbImplantSystem _implants = default!;
+    [Dependency] private Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
     private EntityUid? _cause;
 
@@ -126,7 +126,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private readonly Dictionary<string, int> _fields = new();
     private readonly bool[] _fireBlocked = new bool[LimbWoundRules.BodyZoneCount];
-    private readonly float[] _wornBefore = new float[LimbWoundRules.BodyZoneCount];
     private readonly HashSet<EntityUid> _legless = new();
 
     private const SlotFlags Worn = SlotFlags.WITHOUT_POCKET;
@@ -243,13 +242,26 @@ public sealed partial class LimbWoundSystem : EntitySystem
             Dirty(uid, limbs);
         }
 
+        if (!limbs.Bleeds)
+        {
+            var zeroed = false;
+            for (var i = 0; i < zones.Length; i++)
+            {
+                if (zones[i].Bleed <= 0f)
+                    continue;
+
+                zones[i].Bleed = 0f;
+                zeroed = true;
+            }
+
+            if (zeroed)
+                Dirty(uid, limbs);
+        }
+
         var bleed = BleedTotal(uid, limbs);
-        LostShares(limbs, _wornBefore);
         if (!Machine(uid) && LimbWoundRules.DrainBleed(zones, limbs.TorsoPool))
             Dirty(uid, limbs);
         ApplyLife(uid, limbs);
-        if (RuptureWorn(uid, limbs, _wornBefore))
-            Dirty(uid, limbs);
         var failure = LimbOrganRules.Tick(CollectionsMarshal.AsSpan(limbs.Organs));
         if (_mobs.IsCritical(uid))
             failure = failure with { Asphyxiation = failure.Asphyxiation + LimbWoundRules.CritAir };
@@ -383,7 +395,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (LimbWoundRules.IsSmall(strike.Zone))
         {
             var dummy = span[LimbWoundRules.Index(LimbZone.Head)];
-            var small = LimbWoundRules.Apply(ref dummy, strike, limbs.Soft);
+            var small = LimbWoundRules.Apply(ref dummy, strike, limbs.Soft, limbs.Bleeds);
             if (small.Applied)
                 ApplySmallToHead(span, strike);
             ApplyOrgans(uid, limbs, strike, small, ready);
@@ -395,7 +407,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var index = LimbWoundRules.Index(strike.Zone);
         ref var state = ref span[index];
         var boneBefore = state.Bone;
-        var result = LimbWoundRules.Apply(ref state, strike, limbs.Soft);
+        var result = LimbWoundRules.Apply(ref state, strike, limbs.Soft, limbs.Bleeds);
         ApplyOrgans(uid, limbs, strike, result, ready);
         var pelletSevered = ApplyPelletSever(uid, limbs, strike);
         Dirty(uid, limbs);
@@ -1312,9 +1324,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.Burn = profile.Burn;
         ent.Comp.LiquidSever = profile.LiquidSever;
         ent.Comp.Soft = profile.Soft;
+        ent.Comp.Bleeds = profile.Bleeds;
         ent.Comp.Plant = profile.Plant;
         ent.Comp.HeadVital = profile.HeadVital;
         ent.Comp.HasEars = profile.Ears;
+        ent.Comp.HasJaw = profile.Jaw;
         Dirty(ent);
         _implants.EnsureSlots(ent.Owner);
     }
@@ -1424,9 +1438,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.Burn = profile.Burn;
         ent.Comp.LiquidSever = profile.LiquidSever;
         ent.Comp.Soft = profile.Soft;
+        ent.Comp.Bleeds = profile.Bleeds;
         ent.Comp.Plant = profile.Plant;
         ent.Comp.HeadVital = profile.HeadVital;
         ent.Comp.HasEars = profile.Ears;
+        ent.Comp.HasJaw = profile.Jaw;
     }
 
     private void RestoreParts(EntityUid body)
@@ -1689,6 +1705,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var count = Math.Min(zones.Length, LimbWoundRules.BodyZoneCount);
         var worn = new float[LimbWoundRules.BodyZoneCount];
         LostShares(ent.Comp, worn);
+        var mech = new bool[LimbWoundRules.BodyZoneCount];
         var heat = new float[count];
         var pierce = new float[count];
         var blunt = new float[count];
@@ -1726,7 +1743,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 if (zones[i].Severed)
                     continue;
 
-                if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * ent.Comp.Burn * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share, ent.Comp.Soft))
+                if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * ent.Comp.Burn * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share, ent.Comp.Soft, ent.Comp.Bleeds))
                     changed = true;
 
                 if (caustic[i] > 0f || other[i] > 0f)
@@ -1736,6 +1753,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 }
 
                 var zoneDamage = heat[i] + pierce[i] + blunt[i] + slash[i] + caustic[i] + other[i];
+                mech[i] = pierce[i] > 0f || blunt[i] > 0f || slash[i] > 0f;
                 if (LimbWoundRules.TryBlastSever(args.Distance, BlastBlocked(ent, (LimbZone) i), _random.NextFloat(), (LimbZone) i, zoneDamage))
                     sever.Add((LimbZone) i);
             }
@@ -1760,7 +1778,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!changed)
             return;
 
-        RuptureWorn(ent.Owner, ent.Comp, worn);
+        RuptureWorn(ent.Owner, ent.Comp, worn, mech);
         Dirty(ent);
         ApplyLife(ent.Owner, ent.Comp);
         RefreshActive(ent.Owner, ent.Comp);
@@ -2122,7 +2140,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
     }
 
-    private bool RuptureWorn(EntityUid uid, LimbBodyComponent limbs, float[] before)
+    private bool RuptureWorn(EntityUid uid, LimbBodyComponent limbs, float[] before, bool[] mechanical)
     {
         EnsureZones(limbs);
         var zones = CollectionsMarshal.AsSpan(limbs.Zones);
@@ -2130,11 +2148,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var any = false;
         for (var i = 0; i < count; i++)
         {
-            if (zones[i].Severed || before[i] >= LimbOrganRules.RuptureShare)
+            if (zones[i].Severed || !LimbOrganRules.ShouldRupture(before[i]))
                 continue;
 
-            var zone = (LimbZone) i;
-            any |= RuptureIf(uid, limbs, zone, LimbWoundRules.LostShare(zones[i], LimbWoundRules.HealthFor(zone, limbs)));
+            if (i >= mechanical.Length || !mechanical[i])
+                continue;
+
+            any |= RuptureIf(uid, limbs, (LimbZone) i, before[i]);
         }
 
         return any;
@@ -2142,7 +2162,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private bool RuptureIf(EntityUid uid, LimbBodyComponent limbs, LimbZone zone, float lost)
     {
-        if (lost < LimbOrganRules.RuptureShare || !LimbWoundRules.IsBody(zone))
+        if (!LimbWoundRules.IsBody(zone) || !LimbOrganRules.ShouldRupture(lost))
             return false;
 
         EnsureOrgans(limbs);
@@ -2151,7 +2171,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var heart = (int) LimbOrgan.Heart;
         var brainWas = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartWas = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
-        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, lost);
+        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), _random.NextFloat());
         var brainNow = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartNow = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
         if (eyes > 0 && TryComp<BlindableComponent>(uid, out var blind))
@@ -2185,8 +2205,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 RefreshPosture(uid, limbs);
             if (_net.IsServer && !limbs.Soft && !state.Severed)
                 LimbWoundRules.RollCrack(ref state, lost, _random.NextFloat());
-            if (_net.IsServer)
-                RuptureIf(uid, limbs, strike.Zone, LimbWoundRules.LostShare(state, LimbWoundRules.HealthFor(strike.Zone, limbs)));
+            if (_net.IsServer && !state.Severed
+                && LimbOrganRules.ShouldRupture(lost)
+                && strike.Mark is LimbMark.Edge or LimbMark.Point or LimbMark.Blunt)
+                RuptureIf(uid, limbs, strike.Zone, lost);
             Dirty(uid, limbs);
         }
 
@@ -2340,7 +2362,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void NoteFace(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike)
     {
-        if (strike.Zone == LimbZone.Mouth)
+        if (strike.Zone == LimbZone.Mouth && limbs.HasJaw)
         {
             var gain = strike.Amount * strike.WoundMultiplier;
             if (strike.Mark == LimbMark.Liquid)
@@ -2894,14 +2916,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
     private EntityUid? Holder(EntityUid item)
     {
         var parent = Transform(item).ParentUid;
-        while (parent.IsValid())
-        {
-            if (HasComp<LimbAimComponent>(parent))
-                return parent;
+        if (!parent.IsValid() || !HasComp<LimbAimComponent>(parent))
+            return null;
 
-            parent = Transform(parent).ParentUid;
-        }
-
+        if (_hands.IsHolding(parent, item))
+            return parent;
         return null;
     }
 
@@ -3027,7 +3046,7 @@ public readonly record struct LimbCover(bool Face, bool Ricochet, bool Grip, boo
 public record struct LimbArmorZoneEvent(HitscanRaycastFiredData Data);
 
 [Serializable, NetSerializable]
-public sealed class LimbAimSetEvent : EntityEventArgs
+public sealed partial class LimbAimSetEvent : EntityEventArgs
 {
     public bool Aiming;
 
@@ -3038,7 +3057,7 @@ public sealed class LimbAimSetEvent : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
-public sealed class LimbZoneSetEvent : EntityEventArgs
+public sealed partial class LimbZoneSetEvent : EntityEventArgs
 {
     public LimbZone? Zone;
 

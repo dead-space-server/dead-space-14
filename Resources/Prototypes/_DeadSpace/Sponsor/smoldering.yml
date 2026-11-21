@@ -6,7 +6,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackSmoldering
   name: Спринфирас
   description: Небольшой разумный дракон с чешуёй, переливающейся глубокими фиолетовыми оттенками. Её глаза мерцают загадочным светом, а крылья трепещут, реагируя на малейшую угрозу. Она не просто спутник - она хранитель ваших тайн.
@@ -41,7 +41,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltSmolderingFilled
   name: блюспейс хранилище
   description: Изящная чешуйчатая перевязь с блюспейс-отсеком, позволяющая носить инструменты в компактном пространстве.
@@ -51,8 +51,6 @@
     sprite: _DeadSpace/Sponsor/Smoldering/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Smoldering/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
     - id: PowerDrillSmoldering
@@ -97,7 +95,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitSmoldering
   name: скафандр осколков реальности
   description: Этот скафандр создан из материалов, в которых сплелись обломки артефактов и передовые технологии. Его поверхность сияет мистическими знаками.
@@ -109,8 +107,6 @@
     sprite: _DeadSpace/Sponsor/Smoldering/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSmoldering
-  - type: Item
-    size: Huge
   - type: PressureProtection
     highPressureMultiplier: 0.05
     lowPressureMultiplier: 1000
@@ -125,14 +121,11 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitSmoldering
   categories: [ HideSpawnMenu ]
   name: шлем осколков реальности
@@ -144,9 +137,6 @@
     sprite: _DeadSpace/Sponsor/Smoldering/helmet.rsi
   - type: PointLight
     color: "#daffad"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -154,6 +144,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+        Radiation: 0.5
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -331,13 +322,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-    - behavior: Prying
+    - behavior: [ Prying ]
       sprite:
         sprite: _DeadSpace/Sponsor/Smoldering/jawsoflife.rsi
         state: syn_jaws_pry
       useSound: /Audio/Items/jaws_pry.ogg
       changeSound: /Audio/Items/change_jaws.ogg
-    - behavior: Cutting
+    - behavior: [ Cutting ]
       sprite:
         sprite: _DeadSpace/Sponsor/Smoldering/jawsoflife.rsi
         state: syn_jaws_cutter
@@ -378,7 +369,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-    - behavior: Screwing
+    - behavior: [ Screwing ]
       sprite:
         sprite: _DeadSpace/Sponsor/Smoldering/powerdrill.rsi
         state: drill_screw
@@ -386,7 +377,7 @@
         path: /Audio/Items/drill_use.ogg
       changeSound:
         path: /Audio/Items/change_drill.ogg
-    - behavior: Anchoring
+    - behavior: [ Anchoring ]
       sprite:
         sprite: _DeadSpace/Sponsor/Smoldering/powerdrill.rsi
         state: drill_bolt

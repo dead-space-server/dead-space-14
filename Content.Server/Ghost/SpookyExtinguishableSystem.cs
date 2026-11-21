@@ -10,11 +10,11 @@ namespace Content.Server.Ghost;
 /// Handles spooky extinguishing without replacing this branch's legacy ghost and powered-light systems.
 /// </summary>
 // DS14: semantic #44810 adapter for the current explicit-subscription engine baseline.
-public sealed class SpookyExtinguishableSystem : EntitySystem
+public sealed partial class SpookyExtinguishableSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private FlammableSystem _flammable = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

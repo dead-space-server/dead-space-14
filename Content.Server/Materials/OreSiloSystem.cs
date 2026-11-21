@@ -7,12 +7,12 @@ using Robust.Shared.Player;
 namespace Content.Server.Materials;
 
 /// <inheritdoc/>
-public sealed class OreSiloSystem : SharedOreSiloSystem
+public sealed partial class OreSiloSystem : SharedOreSiloSystem
 {
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly NavMapSystem _navMap = default!;
-    [Dependency] private readonly PvsOverrideSystem _pvsOverride = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _userInterface = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private NavMapSystem _navMap = default!;
+    [Dependency] private PvsOverrideSystem _pvsOverride = default!;
+    [Dependency] private SharedUserInterfaceSystem _userInterface = default!;
 
     private const float OreSiloPreloadRangeSquared = 225f; // ~1 screen
 
@@ -91,10 +91,20 @@ public sealed class OreSiloSystem : SharedOreSiloSystem
             _silosToRemove.Clear();
 
             var clientQuery = EntityQueryEnumerator<OreSiloClientComponent, TransformComponent>();
-            while (clientQuery.MoveNext(out _, out var clientComp, out var clientXform))
+            while (clientQuery.MoveNext(out var client, out var clientComp, out var clientXform))
             {
-                if (clientComp.Silo == null)
+                if (clientComp.Silo is not { } silo)
                     continue;
+
+                //DS-14 start
+                if (TerminatingOrDeleted(silo))
+                {
+                    _pvsOverride.RemoveSessionOverride(silo, actorComp.PlayerSession);
+                    clientComp.Silo = null;
+                    Dirty(client, clientComp);
+                    continue;
+                }
+                //DS-14 end
 
                 // We limit it to same-grid checks only for peak perf
                 if (actorXform.GridUid != clientXform.GridUid)
@@ -102,7 +112,7 @@ public sealed class OreSiloSystem : SharedOreSiloSystem
 
                 if ((actorXform.LocalPosition - clientXform.LocalPosition).LengthSquared() <= OreSiloPreloadRangeSquared)
                 {
-                    _silosToAdd.Add(clientComp.Silo.Value);
+                    _silosToAdd.Add(silo);
                 }
                 else
                 {

@@ -46,18 +46,18 @@ namespace Content.Server.DeadSpace.ConsoleCraft;
 
 public sealed partial class ConsoleCraftSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     private ConsoleCraftBlueprintSystem? _blueprints;
     private ConsoleCraftBlueprintSystem Blueprints =>
@@ -721,7 +721,7 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
                     {
                         const BindingFlags bf = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-                        if (EntityManager.TryGetComponent(moduleTarget, compType, out var existingComp))
+                        if (TryComp(moduleTarget, compType, out var existingComp))
                         {
                             FieldInfo? actionField = null;
                             foreach (var name in new[] { "ActionEntity", "_actionEntity", "action", "Action" })
@@ -768,7 +768,7 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
                     }
                     else
                     {
-                        if (EntityManager.TryGetComponent(moduleTarget, compType, out var existingToggle))
+                        if (TryComp(moduleTarget, compType, out var existingToggle))
                             PatchComponentFields((Component) existingToggle, compType, mappedRaw);
                     }
 
@@ -791,7 +791,7 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
                     continue;
                 }
 
-                if (EntityManager.TryGetComponent(moduleTarget, compType, out var existing))
+                if (TryComp(moduleTarget, compType, out var existing))
                 {
                     MappingDataNode existingMapping;
                     try
@@ -801,7 +801,7 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
                     }
                     catch (InvalidOperationException)
                     {
-                        if (EntityManager.TryGetComponent(moduleTarget, compType, out var existingForPatch))
+                        if (TryComp(moduleTarget, compType, out var existingForPatch))
                             PatchComponentFields((Component) existingForPatch, compType, rawNode);
                         continue;
                     }

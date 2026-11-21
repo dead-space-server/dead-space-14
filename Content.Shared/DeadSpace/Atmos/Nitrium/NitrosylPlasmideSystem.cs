@@ -8,12 +8,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Atmos.Nitrium;
 
-public sealed class NitrosylPlasmideSystem : EntitySystem
+public sealed partial class NitrosylPlasmideSystem : EntitySystem
 {
-    [Dependency] private readonly IComponentFactory _factory = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
-    [Dependency] private readonly SleepingSystem _sleeping = default!;
+    [Dependency] private IComponentFactory _factory = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private SleepingSystem _sleeping = default!;
 
     public override void Initialize()
     {

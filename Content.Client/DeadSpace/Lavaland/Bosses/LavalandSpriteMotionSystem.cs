@@ -14,12 +14,12 @@ namespace Content.Client.DeadSpace.Lavaland.Bosses;
 /// Draws <see cref="LavalandSpriteMotionComponent"/>: the sprite flies along its way, spinning and fading.
 /// Also spawns the things of the boss intros on this client only.
 /// </summary>
-public sealed class LavalandSpriteMotionSystem : EntitySystem
+public sealed partial class LavalandSpriteMotionSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SpriteTreeSystem _spriteTree = default!;
 
     /// <summary>The sprite as the prototype made it, before any motion.</summary>
     private readonly Dictionary<EntityUid, (Vector2 Offset, Color Color, Angle Rotation)> _base = new();

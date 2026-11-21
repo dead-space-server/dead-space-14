@@ -8,9 +8,9 @@ using Robust.Client.UserInterface;
 namespace Content.Client._Donate.Emerald;
 
 [Virtual]
-public class EmeraldLabel : Control
+public partial class EmeraldLabel : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const int BaseFontSize = 12;
 

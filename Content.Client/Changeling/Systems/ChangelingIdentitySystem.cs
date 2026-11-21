@@ -7,7 +7,7 @@ namespace Content.Client.Changeling.Systems;
 
 public sealed partial class ChangelingIdentitySystem : SharedChangelingIdentitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

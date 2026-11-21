@@ -11,14 +11,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Renegade;
 
-public sealed class RenegadeEswordSystem : EntitySystem
+public sealed partial class RenegadeEswordSystem : EntitySystem
 {
     private static readonly EntProtoId RecallRenegadeEswordAction = "ActionRecallRenegadeEsword";
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private ActionsSystem _actions = default!;
+    [Dependency] private AudioSystem _audio = default!;
 
     public override void Initialize()
     {

@@ -8,10 +8,10 @@ using Content.Server.Station.Systems;
 
 namespace Content.Server.DeadSpace.Spiders.SpiderTerror;
 
-public sealed class SpiderTerrorConditionSystem : EntitySystem
+public sealed partial class SpiderTerrorConditionSystem : EntitySystem
 {
-    [Dependency] private readonly NumberObjectiveSystem _number = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private NumberObjectiveSystem _number = default!;
+    [Dependency] private StationSystem _station = default!;
     private Dictionary<EntityUid, List<TileRef>> TileRefs { get; set; } = new Dictionary<EntityUid, List<TileRef>>();
 
     public override void Initialize()

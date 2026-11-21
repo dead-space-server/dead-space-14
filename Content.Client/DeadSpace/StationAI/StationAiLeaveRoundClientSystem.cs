@@ -7,9 +7,9 @@ using Robust.Client.Player;
 
 namespace Content.Client.DeadSpace.StationAI;
 
-public sealed class StationAiLeaveRoundClientSystem : EntitySystem
+public sealed partial class StationAiLeaveRoundClientSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private StationAiLeaveRoundConfirmationWindow? _window;
 

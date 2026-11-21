@@ -4,7 +4,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Sirena.Animations;
 
-public abstract class SharedEmoteAnimationSystem : EntitySystem
+public abstract partial class SharedEmoteAnimationSystem : EntitySystem
 {
     public const string EmoteFlipActionPrototype = "EmoteFlip";
     public const string EmoteJumpActionPrototype = "EmoteJump";
@@ -12,8 +12,8 @@ public abstract class SharedEmoteAnimationSystem : EntitySystem
     public const string EmoteStopTailActionPrototype = "EmoteStopTail";
     public const string EmoteStartTailActionPrototype = "EmoteStartTail";
 
-    [Dependency] public readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] public readonly IPrototypeManager _proto = default!;
+    [Dependency] public SharedAppearanceSystem _appearance = default!;
+    [Dependency] public IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {

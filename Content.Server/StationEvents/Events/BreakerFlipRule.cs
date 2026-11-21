@@ -9,10 +9,10 @@ using JetBrains.Annotations;
 namespace Content.Server.StationEvents.Events;
 
 [UsedImplicitly]
-public sealed class BreakerFlipRule : StationEventSystem<BreakerFlipRuleComponent>
+public sealed partial class BreakerFlipRule : StationEventSystem<BreakerFlipRuleComponent>
 {
-    [Dependency] private readonly ApcSystem _apcSystem = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!; // DS14 - pre-v288 engine
+    [Dependency] private ApcSystem _apcSystem = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!; // DS14 - pre-v288 engine
 
     protected override void Added(EntityUid uid, BreakerFlipRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {

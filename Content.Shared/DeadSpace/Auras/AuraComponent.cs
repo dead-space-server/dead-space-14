@@ -2,7 +2,6 @@
 
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.DeadSpace.Auras;
 
@@ -28,7 +27,7 @@ public sealed partial class AuraComponent : Component
     /// <summary>
     /// Optional unnetworked visual entity prototype to attach to affected targets on the client.
     /// </summary>
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField]
     [AutoNetworkedField]
     public string? VisualEffectPrototype;
 }

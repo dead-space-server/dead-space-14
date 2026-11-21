@@ -20,16 +20,16 @@ using Content.Shared.DeadSpace.GameRules.Components;
 
 namespace Content.Server.Atmos.Monitor.Systems;
 
-public sealed class AtmosAlertsComputerSystem : SharedAtmosAlertsComputerSystem
+public sealed partial class AtmosAlertsComputerSystem : SharedAtmosAlertsComputerSystem
 {
-    [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
-    [Dependency] private readonly AirAlarmSystem _airAlarmSystem = default!;
-    [Dependency] private readonly AtmosDeviceNetworkSystem _atmosDevNet = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly TransformSystem _transformSystem = default!;
-    [Dependency] private readonly NavMapSystem _navMapSystem = default!;
-    [Dependency] private readonly DeviceListSystem _deviceListSystem = default!;
+    [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
+    [Dependency] private AirAlarmSystem _airAlarmSystem = default!;
+    [Dependency] private AtmosDeviceNetworkSystem _atmosDevNet = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private TransformSystem _transformSystem = default!;
+    [Dependency] private NavMapSystem _navMapSystem = default!;
+    [Dependency] private DeviceListSystem _deviceListSystem = default!;
 
     private const float UpdateTime = 1.0f;
 
@@ -154,6 +154,7 @@ public sealed class AtmosAlertsComputerSystem : SharedAtmosAlertsComputerSystem
             // Keep a list of UI entries for each gridUid, in case multiple consoles stand on the same grid
             var airAlarmEntriesForEachGrid = new Dictionary<EntityUid, AtmosAlertsComputerEntry[]>();
             var fireAlarmEntriesForEachGrid = new Dictionary<EntityUid, AtmosAlertsComputerEntry[]>();
+            var navMapDataForEachGrid = new Dictionary<EntityUid, HashSet<AtmosAlertsDeviceNavMapData>>(); // DS14
 
             var query = AllEntityQuery<AtmosAlertsComputerComponent, TransformComponent>();
             while (query.MoveNext(out var ent, out var entConsole, out var entXform))
@@ -161,23 +162,31 @@ public sealed class AtmosAlertsComputerSystem : SharedAtmosAlertsComputerSystem
                 if (entXform?.GridUid == null)
                     continue;
 
-                // Make a list of alarm state data for all the air and fire alarms on the grid
-                if (!airAlarmEntriesForEachGrid.TryGetValue(entXform.GridUid.Value, out var airAlarmEntries))
+                // DS14-start
+                // One pass over the world's alarms per grid collects both groups, instead of one full pass per group.
+                if (!airAlarmEntriesForEachGrid.TryGetValue(entXform.GridUid.Value, out var airAlarmEntries) ||
+                    !fireAlarmEntriesForEachGrid.TryGetValue(entXform.GridUid.Value, out var fireAlarmEntries))
                 {
-                    airAlarmEntries = GetAlarmStateData(entXform.GridUid.Value, AtmosAlertsComputerGroup.AirAlarm).ToArray();
-                    airAlarmEntriesForEachGrid[entXform.GridUid.Value] = airAlarmEntries;
-                }
+                    var airList = new List<AtmosAlertsComputerEntry>();
+                    var fireList = new List<AtmosAlertsComputerEntry>();
+                    GetAlarmStateData(entXform.GridUid.Value, airList, fireList);
+                    fireList.AddRange(GetFireStateData(entXform.GridUid.Value));
 
-                if (!fireAlarmEntriesForEachGrid.TryGetValue(entXform.GridUid.Value, out var fireAlarmEntries))
-                {
-                    // DS14-start
-                    fireAlarmEntries = GetAlarmStateData(entXform.GridUid.Value, AtmosAlertsComputerGroup.FireAlarm)
-                        .Concat(GetFireStateData(entXform.GridUid.Value))
-                        .ToArray(); // DS14
+                    airAlarmEntries = airList.ToArray();
+                    fireAlarmEntries = fireList.ToArray();
+                    airAlarmEntriesForEachGrid[entXform.GridUid.Value] = airAlarmEntries;
                     fireAlarmEntriesForEachGrid[entXform.GridUid.Value] = fireAlarmEntries;
                 }
 
-                RefreshConsoleNavMapData(ent, entConsole, entXform.GridUid.Value); // DS14
+                // The device set is the same for every console on a grid, so it is gathered once per grid.
+                if (!navMapDataForEachGrid.TryGetValue(entXform.GridUid.Value, out var navMapData))
+                {
+                    navMapData = GetAllAtmosDeviceNavMapData(entXform.GridUid.Value);
+                    navMapDataForEachGrid[entXform.GridUid.Value] = navMapData;
+                }
+
+                RefreshConsoleNavMapData(ent, entConsole, navMapData);
+                // DS14-end
 
                 // Determine the highest level of alert for the console (based on non-silenced alarms)
                 var highestAlert = AtmosAlarmType.Invalid;
@@ -236,9 +245,12 @@ public sealed class AtmosAlertsComputerSystem : SharedAtmosAlertsComputerSystem
             new AtmosAlertsComputerBoundInterfaceState(airAlarmStateData, fireAlarmStateData, focusAlarmData));
     }
 
-    private List<AtmosAlertsComputerEntry> GetAlarmStateData(EntityUid gridUid, AtmosAlertsComputerGroup group)
+    // DS14-start: fills both groups in one pass
+    private void GetAlarmStateData(EntityUid gridUid, List<AtmosAlertsComputerEntry> airAlarmStateData, List<AtmosAlertsComputerEntry> fireAlarmStateData)
     {
-        var alarmStateData = new List<AtmosAlertsComputerEntry>();
+        if (!TryComp<MapGridComponent>(gridUid, out var mapGrid) || !TryComp<NavMapComponent>(gridUid, out var navMap))
+            return;
+    // DS14-end
 
         var queryAlarms = AllEntityQuery<AtmosAlertsDeviceComponent, AtmosAlarmableComponent, DeviceNetworkComponent, TransformComponent>();
         while (queryAlarms.MoveNext(out var ent, out var entDevice, out var entAtmosAlarmable, out var entDeviceNetwork, out var entXform))
@@ -249,14 +261,15 @@ public sealed class AtmosAlertsComputerSystem : SharedAtmosAlertsComputerSystem
             if (!entXform.Anchored)
                 continue;
 
-            if (entDevice.Group != group)
+            // DS14-start
+            List<AtmosAlertsComputerEntry> alarmStateData;
+            if (entDevice.Group == AtmosAlertsComputerGroup.AirAlarm)
+                alarmStateData = airAlarmStateData;
+            else if (entDevice.Group == AtmosAlertsComputerGroup.FireAlarm)
+                alarmStateData = fireAlarmStateData;
+            else
                 continue;
-
-            if (!TryComp<MapGridComponent>(entXform.GridUid, out var mapGrid))
-                continue;
-
-            if (!TryComp<NavMapComponent>(entXform.GridUid, out var navMap))
-                continue;
+            // DS14-end
 
             // If emagged, change the alarm type to normal
             var alarmState = (entAtmosAlarmable.LastAlarmState == AtmosAlarmType.Emagged) ? AtmosAlarmType.Normal : entAtmosAlarmable.LastAlarmState;
@@ -306,8 +319,6 @@ public sealed class AtmosAlertsComputerSystem : SharedAtmosAlertsComputerSystem
 
             alarmStateData.Add(entry);
         }
-
-        return alarmStateData;
     }
 
     // DS14-start
@@ -493,14 +504,13 @@ public sealed class AtmosAlertsComputerSystem : SharedAtmosAlertsComputerSystem
 
     private readonly record struct FireAlertGroup(EntityUid Entity, NetCoordinates Coordinates, int Count);
 
-    private void RefreshConsoleNavMapData(EntityUid uid, AtmosAlertsComputerComponent component, EntityUid gridUid)
+    private void RefreshConsoleNavMapData(EntityUid uid, AtmosAlertsComputerComponent component, HashSet<AtmosAlertsDeviceNavMapData> atmosDevices)
     {
-        var atmosDevices = GetAllAtmosDeviceNavMapData(gridUid);
-
         if (component.AtmosDevices.SetEquals(atmosDevices))
             return;
 
-        component.AtmosDevices = atmosDevices;
+        // Each console keeps its own copy: the anchor handlers edit it in place.
+        component.AtmosDevices = new HashSet<AtmosAlertsDeviceNavMapData>(atmosDevices);
         Dirty(uid, component);
     }
     // DS14-end

@@ -16,16 +16,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.StationAI.Systems;
 
-public sealed class StationAiLeaveRoundSystem : EntitySystem
+public sealed partial class StationAiLeaveRoundSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly StationAiSystem _stationAi = default!;
-    [Dependency] private readonly StationJobsSystem _stationJobs = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private StationAiSystem _stationAi = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private StationSystem _station = default!;
 
     private readonly ProtoId<JobPrototype> _stationAiJob = "StationAi";
 

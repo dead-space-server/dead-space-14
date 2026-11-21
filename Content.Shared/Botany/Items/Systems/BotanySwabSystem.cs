@@ -27,10 +27,10 @@ public sealed partial class BotanySwabSystem : EntitySystem
     // DS14-start
     private EntityQuery<PlantComponent> _plantQuery;
 
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly PlantMutationSystem _mutation = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private PlantMutationSystem _mutation = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     // DS14-end
 
     /// <summary>

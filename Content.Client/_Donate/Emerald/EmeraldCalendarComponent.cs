@@ -7,9 +7,9 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client._Donate.Emerald;
 
-public sealed class EmeraldCalendarHeader : Control
+public sealed partial class EmeraldCalendarHeader : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const int TitleFontSize = 14;
     private const int SubtitleFontSize = 9;
@@ -153,9 +153,9 @@ public sealed class EmeraldCalendarHeader : Control
     }
 }
 
-public sealed class EmeraldPremiumLockedCard : Control
+public sealed partial class EmeraldPremiumLockedCard : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const int TitleFontSize = 12;
     private const int MessageFontSize = 10;
@@ -269,9 +269,9 @@ public sealed class EmeraldPremiumLockedCard : Control
     }
 }
 
-public sealed class EmeraldTodayRewardCard : Control
+public sealed partial class EmeraldTodayRewardCard : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const int TitleFontSize = 10;
     private const int ItemFontSize = 9;

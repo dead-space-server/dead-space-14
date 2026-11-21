@@ -22,8 +22,8 @@ namespace Content.Shared.Nutrition.EntitySystems;
 public abstract partial class BaseSatiationEffectSystem<TComp, T> : EntitySystem where TComp : Component
 {
     // DS14-start: current engine uses readonly IoC fields and initializes entity queries explicitly.
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SatiationSystem _satiation = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
     private EntityQuery<SatiationComponent> _satiationQuery;
     // DS14-end
 

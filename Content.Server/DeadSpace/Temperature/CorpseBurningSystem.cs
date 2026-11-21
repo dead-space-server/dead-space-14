@@ -12,10 +12,10 @@ using Content.Shared.Popups;
 
 namespace Content.Server.DeadSpace.Temperature;
 
-public sealed class CorpseBurningSystem : EntitySystem
+public sealed partial class CorpseBurningSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

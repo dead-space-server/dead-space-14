@@ -19,7 +19,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandShelterCapsuleSystem : EntitySystem
+public sealed partial class LavalandShelterCapsuleSystem : EntitySystem
 {
     private const CollisionGroup ShelterBlockerMask =
         CollisionGroup.Impassable |
@@ -27,17 +27,16 @@ public sealed class LavalandShelterCapsuleSystem : EntitySystem
         CollisionGroup.MidImpassable |
         CollisionGroup.LowImpassable;
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     private List<Entity<MapGridComponent>> _nearbyGrids = new();
 
@@ -211,7 +210,7 @@ public sealed class LavalandShelterCapsuleSystem : EntitySystem
 
         var mapId = Transform(mapUid).MapID;
         var bounds = Box2.CenteredAround(center, Vector2.One * (radius * 2 + 1));
-        _mapManager.FindGridsIntersecting(mapId, bounds, ref _nearbyGrids);
+        _map.FindGridsIntersecting(mapId, bounds, ref _nearbyGrids);
 
         foreach (var grid in _nearbyGrids)
         {

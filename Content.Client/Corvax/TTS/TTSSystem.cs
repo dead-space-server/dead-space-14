@@ -21,18 +21,18 @@ namespace Content.Client.Corvax.TTS;
 /// Plays TTS audio in world
 /// </summary>
 // ReSharper disable once InconsistentNaming
-public sealed class TTSSystem : EntitySystem
+public sealed partial class TTSSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IResourceManager _res = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IResourceManager _res = default!;
+    [Dependency] private AudioSystem _audio = default!;
     // DS14-start
-    [Dependency] private readonly AreaEchoSystem _echo = default!;
-    [Dependency] private readonly IAudioManager _audioManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private AreaEchoSystem _echo = default!;
+    [Dependency] private IAudioManager _audioManager = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     private readonly Dictionary<EntityUid, (AudioStream Stream, bool Radio)> _streams = new();
     private readonly List<Transmission> _transmissions = new();
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private readonly List<EntityUid> _finished = new();
     private bool _radioCues = true;
     // DS14-end
@@ -150,7 +150,7 @@ public sealed class TTSSystem : EntitySystem
         }
     }
 
-    private sealed class Transmission(AudioStream? stream, EntityUid? source, AudioParams parameters,
+    private sealed partial class Transmission(AudioStream? stream, EntityUid? source, AudioParams parameters,
         PlayTTSEvent ev, TimeSpan nextAt)
     {
         public AudioStream? Stream = stream;

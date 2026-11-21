@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Content.Server.Salvage.Magnet;
+using Content.Shared.DeadSpace.Salvage.Magnet; // DS14
 using Content.Shared.Mobs.Components;
 using Content.Shared.Procedural;
 using Content.Shared.Radio;
@@ -9,12 +10,13 @@ using Content.Shared.Salvage.Magnet;
 using Robust.Shared.Exceptions;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Map.Components;
 
 namespace Content.Server.Salvage;
 
 public sealed partial class SalvageSystem
 {
-    [Dependency] private readonly IRuntimeLog _runtimeLog = default!;
+    [Dependency] private IRuntimeLog _runtimeLog = default!;
 
     private static readonly ProtoId<RadioChannelPrototype> MagnetChannel = "Supply";
 
@@ -33,6 +35,7 @@ public sealed partial class SalvageSystem
         SubscribeLocalEvent<SalvageMagnetTargetComponent, GridSplitEvent>(OnMagnetTargetSplit);
 
         SubscribeLocalEvent<SalvageMagnetComponent, MagnetClaimOfferEvent>(OnMagnetClaim);
+        SubscribeLocalEvent<SalvageMagnetComponent, MagnetReleaseOfferEvent>(OnMagnetRelease); // DS14
         SubscribeLocalEvent<SalvageMagnetComponent, ComponentStartup>(OnMagnetStartup);
         SubscribeLocalEvent<SalvageMagnetComponent, AnchorStateChangedEvent>(OnMagnetAnchored);
     }
@@ -42,10 +45,15 @@ public sealed partial class SalvageSystem
         var station = _station.GetOwningStation(uid);
 
         if (!TryComp(station, out SalvageMagnetDataComponent? dataComp) ||
-            dataComp.EndTime != null)
+        // DS14-Start
+            dataComp.EndTime != null ||
+            dataComp.Offered.Count == 0 ||
+            args.Index >= dataComp.Offered.Count ||
+            args.Index < 0)
         {
             return;
         }
+        // DS14-end
 
         var index = args.Index;
         async void TryTakeMagnetOffer()
@@ -61,6 +69,24 @@ public sealed partial class SalvageSystem
         }
         TryTakeMagnetOffer();
     }
+
+    // DS14-start
+    private void OnMagnetRelease(EntityUid uid, SalvageMagnetComponent component, ref MagnetReleaseOfferEvent args)
+    {
+        var station = _station.GetOwningStation(uid);
+
+        if (!TryComp(station, out SalvageMagnetDataComponent? dataComp) ||
+            dataComp.EndTime == null ||
+            dataComp.ReleaseLocked)
+        {
+            return;
+        }
+
+        EndMagnet((station.Value, dataComp));
+        dataComp.ReleaseLocked = true;
+        CreateMagnetOffers((station.Value, dataComp));
+    }
+    // DS14-end
 
     private void OnMagnetStartup(EntityUid uid, SalvageMagnetComponent component, ComponentStartup args)
     {
@@ -105,6 +131,7 @@ public sealed partial class SalvageSystem
                 if (magnetData.EndTime.Value < curTime)
                 {
                     EndMagnet((uid, magnetData));
+                    magnetData.ReleaseLocked = false; // DS14
                 }
                 else if (!magnetData.Announced && (magnetData.EndTime.Value - curTime).TotalSeconds < 31)
                 {
@@ -252,6 +279,7 @@ public sealed partial class SalvageSystem
                 EndTime = dataComp.EndTime,
                 NextOffer = dataComp.NextOffer,
                 ActiveSeed = dataComp.ActiveSeed,
+                ReleaseLocked = dataComp.ReleaseLocked, // DS14
             });
     }
 
@@ -274,6 +302,7 @@ public sealed partial class SalvageSystem
                     EndTime = data.Comp.EndTime,
                     NextOffer = data.Comp.NextOffer,
                     ActiveSeed = data.Comp.ActiveSeed,
+                    ReleaseLocked = data.Comp.ReleaseLocked, // DS14
                 });
         }
     }
@@ -295,12 +324,12 @@ public sealed partial class SalvageSystem
         switch (offering)
         {
             case AsteroidOffering asteroid:
-                var grid = _mapManager.CreateGridEntity(salvMap);
+                var grid = _mapSystem.CreateGridEntity(salvMap);
                 await _dungeon.GenerateDungeonAsync(asteroid.DungeonConfig, grid.Owner, grid.Comp, Vector2i.Zero, seed);
                 break;
             case DebrisOffering debris:
                 var debrisProto = _prototypeManager.Index<DungeonConfigPrototype>(debris.Id);
-                var debrisGrid = _mapManager.CreateGridEntity(salvMap);
+                var debrisGrid = _mapSystem.CreateGridEntity(salvMap);
                 await _dungeon.GenerateDungeonAsync(debrisProto, debrisGrid.Owner, debrisGrid.Comp, Vector2i.Zero, seed);
                 break;
             case SalvageOffering wreck:
@@ -425,6 +454,7 @@ public sealed partial class SalvageSystem
         var magnetPos = _transform.GetWorldPosition(magnet) + worldAngle.ToVec() * bounds.MaxDimension;
         var origin = attachedAABB.ClosestPoint(magnetPos);
         var fraction = 0.50f;
+        var grids = new List<Entity<MapGridComponent>>();
 
         // Thanks 20kdc
         for (var i = 0; i < 20; i++)
@@ -440,7 +470,9 @@ public sealed partial class SalvageSystem
 
             // This doesn't stop it from spawning on top of random things in space
             // Might be better like this, ghosts could stop it before
-            if (_mapManager.FindGridsIntersecting(finalCoords.MapId, box2Rot).Any())
+            grids.Clear();
+            _mapSystem.FindGridsIntersecting(finalCoords.MapId, box2Rot, ref grids);
+            if (grids.Count > 0)
             {
                 // Bump it further and further just in case.
                 fraction += 0.1f;

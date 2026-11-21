@@ -16,7 +16,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class LimbRestorerSystem : EntitySystem
+public sealed partial class LimbRestorerSystem : EntitySystem
 {
     private static readonly LimbZone[] RegrowOrder =
     {
@@ -30,14 +30,14 @@ public sealed class LimbRestorerSystem : EntitySystem
         LimbZone.FootRight,
     };
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SurgeryLimbPort _port = default!;
-    [Dependency] private readonly Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SurgeryLimbPort _port = default!;
+    [Dependency] private Content.Server.DeadSpace.Body.LimbHearingSystem _hearing = default!;
 
     public override void Initialize()
     {
@@ -49,6 +49,41 @@ public sealed class LimbRestorerSystem : EntitySystem
         SubscribeLocalEvent<LimbRestorerComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<LimbRestorerComponent, LimbRestorerImplantEvent>(OnImplantUsed);
         SubscribeLocalEvent<LimbRestorerComponent, ImplantRelayEvent<MobStateChangedEvent>>(OnImplantedState);
+        SubscribeLocalEvent<LimbRestorerComponent, ComponentInit>(OnComponentInit);
+    }
+
+    private void OnComponentInit(Entity<LimbRestorerComponent> ent, ref ComponentInit args)
+    {
+        if (ent.Comp.MaxCharges <= 0)
+            ent.Comp.MaxCharges = ent.Comp.Charges;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<LimbRestorerComponent>();
+        while (query.MoveNext(out var uid, out var restorer))
+        {
+            if (restorer.Recharge <= 0f || restorer.RechargeAt == TimeSpan.Zero || _timing.CurTime < restorer.RechargeAt)
+                continue;
+
+            if (restorer.MaxCharges <= 0)
+                restorer.MaxCharges = Math.Max(restorer.Charges, 1);
+
+            if (restorer.Charges >= restorer.MaxCharges)
+            {
+                restorer.RechargeAt = TimeSpan.Zero;
+                continue;
+            }
+
+            restorer.Charges++;
+            restorer.RechargeAt = restorer.Charges >= restorer.MaxCharges
+                ? TimeSpan.Zero
+                : _timing.CurTime + TimeSpan.FromSeconds(restorer.Recharge);
+
+            Dirty(uid, restorer);
+        }
     }
 
     private void OnImplantUsed(Entity<LimbRestorerComponent> ent, ref LimbRestorerImplantEvent args)
@@ -71,7 +106,7 @@ public sealed class LimbRestorerSystem : EntitySystem
     {
         if (ent.Comp.Charges <= 0)
         {
-            _popup.PopupEntity(Loc.GetString("limb-restorer-implant-empty"), target, target);
+            PopupEmpty(ent.Comp, target);
             return false;
         }
 
@@ -83,7 +118,47 @@ public sealed class LimbRestorerSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString(ent.Comp.DoneLine), target, target);
         ent.Comp.Charges--;
         Dirty(ent);
+        StartRecharge(ent);
+
+        if (ent.Comp.Charges <= 0)
+            PopupEmpty(ent.Comp, target);
+
         return true;
+    }
+
+    private void PopupEmpty(LimbRestorerComponent restorer, EntityUid target)
+    {
+        if (restorer.Recharge > 0f && restorer.RechargeAt > _timing.CurTime)
+        {
+            var remaining = restorer.RechargeAt - _timing.CurTime;
+            var seconds = Math.Max(1, (int) Math.Ceiling(remaining.TotalSeconds));
+            var time = $"{seconds / 60}:{seconds % 60:D2}";
+            _popup.PopupEntity(Loc.GetString("limb-restorer-implant-recharging", ("time", time)), target, target);
+            return;
+        }
+
+        _popup.PopupEntity(Loc.GetString("limb-restorer-implant-empty"), target, target);
+    }
+
+    private void StartRecharge(Entity<LimbRestorerComponent> ent)
+    {
+        if (ent.Comp.Recharge <= 0f)
+            return;
+
+        if (ent.Comp.MaxCharges <= 0)
+        {
+            ent.Comp.MaxCharges = Math.Max(ent.Comp.Charges, 1);
+            Dirty(ent);
+        }
+
+        if (ent.Comp.Charges >= ent.Comp.MaxCharges)
+        {
+            ent.Comp.RechargeAt = TimeSpan.Zero;
+            return;
+        }
+
+        if (ent.Comp.RechargeAt == TimeSpan.Zero)
+            ent.Comp.RechargeAt = _timing.CurTime + TimeSpan.FromSeconds(ent.Comp.Recharge);
     }
 
     private bool Primed(LimbRestorerComponent restorer)
@@ -187,7 +262,8 @@ public sealed class LimbRestorerSystem : EntitySystem
         ent.Comp.Charges--;
         ent.Comp.PrimedUntil = TimeSpan.Zero;
         Dirty(ent);
-        if (ent.Comp.Charges <= 0 && ent.Comp.DeleteEmpty)
+        StartRecharge(ent);
+        if (ent.Comp.Charges <= 0 && ent.Comp.DeleteEmpty && ent.Comp.Recharge <= 0f)
             QueueDel(ent);
     }
 
