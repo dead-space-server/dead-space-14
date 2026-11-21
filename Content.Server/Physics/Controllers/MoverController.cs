@@ -846,6 +846,7 @@ public sealed partial class MoverController : SharedMoverController
                 var linearDir = angle.GetDir();
                 var dockFlag = linearDir.AsFlag();
                 var totalForce = Vector2.Zero;
+                var brakeLocalVel = (-shuttleNorthAngle).RotateVec(body.LinearVelocity); // DS-14
 
                 // Won't just do cardinal directions.
                 foreach (DirectionFlag dir in Enum.GetValues(typeof(DirectionFlag)))
@@ -891,6 +892,12 @@ public sealed partial class MoverController : SharedMoverController
                     }
 
                     _thruster.EnableLinearThrustDirection(shuttle, dir);
+
+                    // DS14-Start
+                    if (brakeInput > 0f && Vector2.Dot(force, brakeLocalVel) < 0f)
+                        continue;
+                    // DS14-End
+
                     var impulse = force * linearInput.Length();
                     totalForce += impulse;
                 }
