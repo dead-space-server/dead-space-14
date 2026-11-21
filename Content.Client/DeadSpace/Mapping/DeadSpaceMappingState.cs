@@ -346,8 +346,12 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
         if (_localization.TryGetString($"mapping-decal-group-{key}", out var name))
             return name;
 
-        var pretty = key.Replace('_', ' ');
-        return pretty.Length == 0 ? key : char.ToUpperInvariant(pretty[0]) + pretty[1..];
+        var pretty = key.Replace('_', ' ').ToCharArray();
+        if (pretty.Length == 0)
+            return key;
+
+        pretty[0] = char.ToUpperInvariant(pretty[0]);
+        return new string(pretty);
     }
 
     private DeadSpaceMappingPrototype? Register<T>(T? prototype, string id, DeadSpaceMappingPrototype topLevel) where T : class, IPrototype, IInheritingPrototype    {
