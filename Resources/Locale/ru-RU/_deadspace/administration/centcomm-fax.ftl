@@ -30,6 +30,9 @@ centcomm-fax-stamp = Печать
 centcomm-fax-stamp-none = Без печати
 centcomm-fax-lock = Запретить правку
 centcomm-fax-return-original = Отправить эту же бумагу обратно (текст, печати и подписи сохранятся)
+centcomm-fax-comment-placeholder = [small][color=red][pfont="ComicSans"]текст[/pfont][/color][/small]
+centcomm-fax-print = Печать
+centcomm-fax-load = Загрузить
 centcomm-fax-stamp-add = Добавить печать
 centcomm-fax-stamp-clear = Очистить
 centcomm-fax-stamp-list-empty = Печати не добавлены, будет поставлена выбранная
