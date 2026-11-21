@@ -6,6 +6,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Atmos.Rotting;
 using Content.Shared.Body.Components;
 using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.DeadSpace.Cloning;
@@ -100,6 +101,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobs = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private SharedRottingSystem _rotting = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
@@ -2286,8 +2288,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var state = life == LimbLife.Dead ? MobState.Dead : life == LimbLife.Crit ? MobState.Critical : MobState.Alive;
         if (state == MobState.Dead && HasComp<SurgeryMannequinComponent>(uid))
             state = MobState.Critical;
+        var rot = SnapshotRot(uid);
         _thresholds.SetCurrentThresholdState(uid, state);
         _mobs.ChangeMobState(uid, state);
+        RestoreRot(uid, rot);
     }
 
     private void ApplyLife(EntityUid uid, LimbBodyComponent limbs)
@@ -2295,6 +2299,19 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!_net.IsServer)
             return;
 
+        var rot = SnapshotRot(uid);
+        try
+        {
+            ApplyLifeInner(uid, limbs);
+        }
+        finally
+        {
+            RestoreRot(uid, rot);
+        }
+    }
+
+    private void ApplyLifeInner(EntityUid uid, LimbBodyComponent limbs)
+    {
         var life = LifeOf(uid, limbs);
         if (life == LimbLife.Dead)
         {
@@ -2326,6 +2343,17 @@ public sealed partial class LimbWoundSystem : EntitySystem
             limbs.LimbCrit = false;
             _mobs.UpdateMobState(uid);
         }
+    }
+
+    private TimeSpan SnapshotRot(EntityUid uid)
+    {
+        return TryComp<PerishableComponent>(uid, out var perishable) ? perishable.RotAccumulator : TimeSpan.Zero;
+    }
+
+    private void RestoreRot(EntityUid uid, TimeSpan rot)
+    {
+        if (TryComp<PerishableComponent>(uid, out var perishable) && perishable.RotAccumulator != rot)
+            _rotting.SetRotAccumulator(uid, rot, perishable);
     }
 
     private LimbLife LifeOf(EntityUid uid, LimbBodyComponent limbs)

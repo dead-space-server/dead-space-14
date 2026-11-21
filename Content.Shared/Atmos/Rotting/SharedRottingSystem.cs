@@ -141,6 +141,17 @@ public abstract partial class SharedRottingSystem : EntitySystem
         return Resolve(uid, ref rotting, false);
     }
 
+    // DS14-start
+    public void SetRotAccumulator(EntityUid uid, TimeSpan rot, PerishableComponent? perishable = null)
+    {
+        if (!Resolve(uid, ref perishable, false) || perishable.RotAccumulator == rot)
+            return;
+
+        perishable.RotAccumulator = rot;
+        DirtyField(uid, perishable, nameof(PerishableComponent.RotAccumulator));
+    }
+    // DS14-end
+
     public void ReduceAccumulator(EntityUid uid, TimeSpan time)
     {
         if (!TryComp<PerishableComponent>(uid, out var perishable))
