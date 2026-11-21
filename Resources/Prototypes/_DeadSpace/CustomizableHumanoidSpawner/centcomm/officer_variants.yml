@@ -2,7 +2,7 @@
   parent: CustomizableSpawnerCentralCommandOfficer
   id: CustomizableSpawnerCentralCommandOfficerAlt
   name: Офицер безопасности ЦК (штурмовой)
-  suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
+  suffix: ОБЦК, Призрачная роль, Кастомизируемый персонаж
   components:
   - type: Sprite
     layers:
@@ -19,6 +19,7 @@
     - Arachnid
     - SlimePerson
     - Tajaran
+    randomNameFirstDataset: NamesCentcomOfficer
   - type: GhostRole
     name: ghost-role-information-centcomofficer-name
     description: ghost-role-information-centcomofficer-description
@@ -63,7 +64,7 @@
   parent: CustomizableSpawnerCentralCommandOfficer
   id: CustomizableSpawnerCentralCommandOfficerArmored
   name: Офицер безопасности ЦК (тяжёлый)
-  suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
+  suffix: ОБЦК, Призрачная роль, Кастомизируемый персонаж
   components:
   - type: Sprite
     layers:
@@ -80,6 +81,7 @@
     - Arachnid
     - SlimePerson
     - Tajaran
+    randomNameFirstDataset: NamesCentcomOfficer
   - type: GhostRole
     name: ghost-role-information-centcomofficer-name
     description: ghost-role-information-centcomofficer-description
@@ -141,6 +143,7 @@
     - Arachnid
     - SlimePerson
     - Tajaran
+    randomNameFirstDataset: NamesCentcomOfficer
   - type: GhostRole
     name: ghost-role-information-centcomofficer-name
     description: ghost-role-information-centcomofficer-description
