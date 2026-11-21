@@ -5,6 +5,7 @@ blob-target-node-blob-invalid = Неподходящий тип блоба, не
 blob-target-close-to-resource = Слишком близко к другому ресурсному тайлу.
 blob-target-nearby-not-node = Рядом нету узла или ядра.
 blob-target-close-to-node = Слишком близко к другому узлу.
+blob-mine-invalid-target = Здесь нельзя заложить мину. Мины ставятся на свободные клетки рядом с плитками блоба.
 blob-target-already-produce-blobbernaut = Данная фабрика уже произвела блоббернаута.
 blob-cant-split = Вы не можете разделить ядро.
 blob-not-have-nodes = У вас нету узлов.
@@ -24,7 +25,7 @@ blob-mob-zombify-third-end = { $pod } превращает { $target } в зом
 blob-chem-swap-ui-window-name = Смена химиката
 blob-chem-reactivespines-info =
     Реактивные шипы
-    Наносит 25 единиц брут урона.
+    Наносит 20 единиц брут урона и повышенный структурный урон по строениям.
 blob-chem-blazingoil-info =
     Пылающее масло
     Наносит 15 урона ожогами и поджигает цели.
@@ -32,17 +33,20 @@ blob-chem-blazingoil-info =
 blob-chem-regenerativemateria-info =
     Регенеративная Материя
     Наносит 15 единиц урона ядами.
-    Ядро востанавливает здоровье в 10 раз быстрее и дает на 1 очко больше.
+    Ядро востанавливает здоровье в 5 раз быстрее и дает на 1 очко больше.
 blob-chem-explosivelattice-info =
     Взрывная решетка
-    Наносит 5 единиц урона ожогами и взрывает цель, нанося 10 брут урона.
+    Наносит 5 единиц урона ожогами и взрывает цель, нанося 20 брут урона.
     Споры при смерти взрываются.
-    Вы получаете имунитет к взрывам.
+    Уничтоженная плитка взрывается на 30 урона на расстоянии 3 клеток.
+    Направление взрыва (горизонтально/вертикально) выбирается через ПКМ по плитке.
+    Вы получаете имунитет к взрывам и собственному огню.
     Вы получаете на 50% больше урона ожогами и электричеством.
 blob-chem-electromagneticweb-info =
     Электромагнитная паутина
     Наносит 20 урона ожогами, 20% шанс вызывать ЭМИ разряд при атаке.
-    Любая уничтоженая плитка гарантировано вызовет ЭМИ.
+    Любая уничтоженая плитка гарантировано вызовет ЭМИ в радиусе 5 клеток:
+    разряжает оружие, свет и технику, нанося 20 урона ожогами.
     Вы получаете на 25% больше урона теплом и брутом.
 blob-alert-out-off-station = Блоб был удален т.к. был обнаружен вне станции!
 
@@ -71,6 +75,10 @@ blob-pod-verb-zombify = Зомбировать
 blob-verb-upgrade-to-strong = Улучшить до сильного блоба
 blob-verb-upgrade-to-reflective = Улучшить до отражающего блоба
 blob-verb-remove-blob-tile = Убрать блоба
+blob-verb-explosion-direction-toggle = Направление взрыва: { $dir }
+blob-explosion-direction-horizontal = горизонтально
+blob-explosion-direction-vertical = вертикально
+blob-verb-explosion-direction = Взрыв теперь бахает { $dir }
 # Alerts
 blob-resource-alert-name = Ресурсы ядра
 blob-resource-alert-desc = Ваши ресурсы которые производят ресурсные блобы и само ядро, требуются для разрастанция и особых блобов.
@@ -105,3 +113,7 @@ roles-antag-blob-name = Блоб
 roles-antag-blob-objective = Захватите станцию, поглотив её целиком.
 objective-condition-success = { $condition } | [color={ $markupColor }]Успех![/color]
 objective-condition-fail = { $condition } | [color={ $markupColor }]Провал![/color] ({ $progress }%)
+blob-mine-tile-name = мина блоба
+blob-mine-tile-desc = Спрятанная в биомассе мина. От неё лучше держаться подальше.
+blob-plant-mine-action-name = Заложить мину (25)
+blob-plant-mine-action-desc = Превращает выбранную клетку рядом с плитками блоба в мину. Мина невидима, а наступивший на неё поджигается и получает 15-20 урона термами.

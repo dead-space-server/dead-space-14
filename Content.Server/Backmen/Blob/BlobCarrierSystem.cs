@@ -1,14 +1,23 @@
-﻿using Content.Server.Actions;
+﻿using System.Linq; // DS14
+using Content.Server.Actions; // DS14
 using Content.Server.Backmen.Blob.Components;
 using Content.Shared.Gibbing;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind;
 using Content.Server.DeadSpace.Administration;
+using Content.Server.NPC;
+using Content.Server.NPC.HTN;
+using Content.Server.NPC.Systems;
 using Content.Shared.Backmen.Blob;
 using Content.Shared.Backmen.Blob.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
+using Content.Shared.NPC;
+using Content.Shared.NPC.Components; //DS14
+using Content.Shared.NPC.Prototypes; //DS14
+using Content.Shared.NPC.Systems; //DS14
 using Robust.Shared.Map.Components;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Backmen.Blob;
@@ -20,8 +29,11 @@ public sealed partial class BlobCarrierSystem : SharedBlobCarrierSystem
     [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private ActionsSystem _action = default!;
     // DS14-start
-    [Dependency] private BlobAntagRollbackSystem _rollback = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private readonly BlobAntagRollbackSystem _rollback = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly NPCSystem _npc = default!;
+    [Dependency] private readonly NpcFactionSystem _faction = default!;
+    private static readonly ProtoId<NpcFactionPrototype> BlobFaction = "Blob";
     // DS14-end
 
     public override void Initialize()
@@ -35,6 +47,9 @@ public sealed partial class BlobCarrierSystem : SharedBlobCarrierSystem
 
         SubscribeLocalEvent<BlobCarrierComponent, MindAddedMessage>(OnMindAdded);
         SubscribeLocalEvent<BlobCarrierComponent, MindRemovedMessage>(OnMindRemove);
+
+        SubscribeLocalEvent<BlobCarrierComponent, PlayerDetachedEvent>(ActivateNPC);
+        SubscribeLocalEvent<BlobCarrierComponent, PlayerAttachedEvent>(DeactivateNPC);
     }
 
     private static readonly EntProtoId ActionTransformToBlob = "ActionTransformToBlob";
@@ -104,5 +119,46 @@ public sealed partial class BlobCarrierSystem : SharedBlobCarrierSystem
         }
 
         _gibbing.Gib(ent);
+    }
+
+    private void ActivateNPC(EntityUid uid, BlobCarrierComponent component, ref PlayerDetachedEvent args)
+    {
+        // при превращении в блоба разум покидает тело — ИИ включать нельзя
+        if (!component.HasMind)
+            return;
+
+        // DS14-start
+        if (component.OldFactions.Count == 0)
+        {
+            if (TryComp<NpcFactionMemberComponent>(uid, out var member))
+                component.OldFactions = member.Factions.ToList();
+            _faction.ClearFactions(uid, dirty: false);
+            _faction.AddFaction(uid, BlobFaction);
+        }
+        // DS14-end
+
+        var htn = EnsureComp<HTNComponent>(uid);
+        htn.RootTask = new HTNCompoundTask() { Task = "SimpleHostileCompound" };
+        htn.Blackboard.SetValue(NPCBlackboard.Owner, uid);
+        _npc.WakeNPC(uid, htn);
+        EnsureComp<ActiveNPCComponent>(uid);
+    }
+
+    private void DeactivateNPC(EntityUid uid, BlobCarrierComponent component, ref PlayerAttachedEvent args)
+    {
+        // DS14-start
+        if (component.OldFactions.Count > 0)
+        {
+            _faction.ClearFactions(uid, dirty: false);
+            foreach (var faction in component.OldFactions)
+            {
+                _faction.AddFaction(uid, faction);
+            }
+            component.OldFactions.Clear();
+        }
+        // DS14-end
+
+        RemCompDeferred<HTNComponent>(uid);
+        RemCompDeferred<ActiveNPCComponent>(uid);
     }
 }
