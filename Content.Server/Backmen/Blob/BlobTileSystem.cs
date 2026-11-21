@@ -97,7 +97,7 @@ public sealed partial class BlobTileSystem : SharedBlobTileSystem
         {
             case BlobChemType.ElectromagneticWeb:
             {
-                _empSystem.EmpPulse(_transform.GetMapCoordinates(uid), 5f, 50000f, TimeSpan.FromSeconds(3));
+                _empSystem.EmpPulse(_transform.GetMapCoordinates(uid), 5f, 2500f, TimeSpan.FromSeconds(3)); // DS14
 
                 var empDamage = new DamageSpecifier
                 {

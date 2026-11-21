@@ -213,6 +213,7 @@ public sealed partial class BlobCoreActionSystem : EntitySystem
 
         switch (ent.Comp.CurrentChem)
         {
+            // DS14-start
             case BlobChemType.ExplosiveLattice:
             {
                 var xform = Transform(target);
@@ -220,11 +221,11 @@ public sealed partial class BlobCoreActionSystem : EntitySystem
                 {
                     var tileRef = _mapSystem.GetTileRef(xform.GridUid.Value, grid, xform.Coordinates);
                     var horizontal = ent.Comp.ExplosionDirection == BlobExplosionDirection.Horizontal;
-                    for (var offset = -3; offset <= 3; offset++)
+                    for (var i = 1; i <= 3; i++)
                     {
                         var indices = horizontal
-                            ? new Vector2i(tileRef.GridIndices.X + offset, tileRef.GridIndices.Y)
-                            : new Vector2i(tileRef.GridIndices.X, tileRef.GridIndices.Y + offset);
+                            ? new Vector2i(tileRef.GridIndices.X + i, tileRef.GridIndices.Y)
+                            : new Vector2i(tileRef.GridIndices.X, tileRef.GridIndices.Y + i);
                         var coords = _mapSystem.ToCenterCoordinates(xform.GridUid.Value, indices, grid);
                         _explosionSystem.QueueExplosion(_transform.ToMapCoordinates(coords), ent.Comp.BlobExplosive, 3f, 2f, 6f, ent, maxTileBreak: 0);
                     }
@@ -236,6 +237,7 @@ public sealed partial class BlobCoreActionSystem : EntitySystem
 
                 break;
             }
+            // DS14-end
             case BlobChemType.ElectromagneticWeb:
             {
                 if (_random.Prob(0.2f))

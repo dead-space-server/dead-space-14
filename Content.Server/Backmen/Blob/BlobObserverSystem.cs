@@ -791,17 +791,35 @@ public sealed partial class BlobObserverSystem : SharedBlobObserverSystem
 
         var centerCoords = _mapSystem.ToCenterCoordinates(gridUid.Value, centerTile[0].GridIndices, grid);
 
+        // DS14-start
         foreach (var tileRef in centerTile)
         {
+            if (tileRef.Tile.IsEmpty)
+            {
+                _popup.PopupEntity(Loc.GetString("blob-mine-invalid-target"), args.Performer, args.Performer, PopupType.Large);
+                return;
+            }
+
             foreach (var ent in _mapSystem.GetAnchoredEntities(gridUid.Value, grid, tileRef.GridIndices))
             {
-                if (_tileQuery.HasComponent(ent))
-                {
-                    _popup.PopupEntity(Loc.GetString("blob-mine-invalid-target"), args.Performer, args.Performer, PopupType.Large);
-                    return;
-                }
+                _popup.PopupEntity(Loc.GetString("blob-mine-invalid-target"), args.Performer, args.Performer, PopupType.Large);
+                return;
             }
         }
+
+        var mineOnTile = false;
+        foreach (var ent in _lookup.GetEntitiesInRange<BlobMineComponent>(centerCoords, 0.5f))
+        {
+            mineOnTile = true;
+            break;
+        }
+
+        if (mineOnTile)
+        {
+            _popup.PopupEntity(Loc.GetString("blob-mine-invalid-target"), args.Performer, args.Performer, PopupType.Large);
+            return;
+        }
+        // DS14-end
 
         var nearTile = false;
         foreach (var ent in _lookup.GetEntitiesInRange<BlobTileComponent>(centerCoords, 2.5f))

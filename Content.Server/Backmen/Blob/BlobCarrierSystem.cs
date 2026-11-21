@@ -128,10 +128,13 @@ public sealed partial class BlobCarrierSystem : SharedBlobCarrierSystem
             return;
 
         // DS14-start
-        if (TryComp<NpcFactionMemberComponent>(uid, out var member))
-            component.OldFactions = member.Factions.ToList();
-        _faction.ClearFactions(uid, dirty: false);
-        _faction.AddFaction(uid, BlobFaction);
+        if (component.OldFactions.Count == 0)
+        {
+            if (TryComp<NpcFactionMemberComponent>(uid, out var member))
+                component.OldFactions = member.Factions.ToList();
+            _faction.ClearFactions(uid, dirty: false);
+            _faction.AddFaction(uid, BlobFaction);
+        }
         // DS14-end
 
         var htn = EnsureComp<HTNComponent>(uid);
@@ -144,12 +147,15 @@ public sealed partial class BlobCarrierSystem : SharedBlobCarrierSystem
     private void DeactivateNPC(EntityUid uid, BlobCarrierComponent component, ref PlayerAttachedEvent args)
     {
         // DS14-start
-        _faction.ClearFactions(uid, dirty: false);
-        foreach (var faction in component.OldFactions)
+        if (component.OldFactions.Count > 0)
         {
-            _faction.AddFaction(uid, faction);
+            _faction.ClearFactions(uid, dirty: false);
+            foreach (var faction in component.OldFactions)
+            {
+                _faction.AddFaction(uid, faction);
+            }
+            component.OldFactions.Clear();
         }
-        component.OldFactions.Clear();
         // DS14-end
 
         RemCompDeferred<HTNComponent>(uid);
