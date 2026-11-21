@@ -10,6 +10,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
+using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
 using static Robust.Client.UserInterface.Controls.BaseButton;
 
@@ -18,7 +19,8 @@ namespace Content.Client.DeadSpace.Mapping;
 [GenerateTypedNameReferences]
 public sealed partial class DeadSpaceMappingScreen : InGameScreen
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IConsoleHost _consoleHost = default!;
 
     public DecalPlacementSystem DecalSystem = default!;
 
@@ -50,9 +52,8 @@ public sealed partial class DeadSpaceMappingScreen : InGameScreen
         SetAnchorPreset(MainViewport, LayoutPreset.Wide);
         SetAnchorAndMarginPreset(Hotbar, LayoutPreset.BottomWide, margin: 5);
         SetAnchorAndMarginPreset(Actions, LayoutPreset.TopWide, margin: 5);
-        SetAnchorPreset(Chat, LayoutPreset.BottomLeft);
+        SetAnchorAndMarginPreset(Chat, LayoutPreset.BottomLeft, margin: 95);
         SetMarginLeft(Chat, 10);
-        SetMarginBottom(Chat, 85);
 
         LeftContainer.OnSplitResizeFinished += () =>
             OnChatResized?.Invoke(new Vector2(LeftContainer.SplitFraction, 0));
@@ -106,10 +107,12 @@ public sealed partial class DeadSpaceMappingScreen : InGameScreen
         Pick.Texture.TexturePath = "/Textures/Interface/eyedropper.svg.png";
         Flip.Texture.TexturePath = "/Textures/Interface/VerbIcons/rotate_cw.svg.192dpi.png";
         ChatToggle.Texture.TexturePath = "/Textures/Interface/VerbIcons/bubbles.svg.192dpi.png";
+        ExitEditorButton.Texture.TexturePath = "/Textures/_DeadSpace/Interface/VerbIcons/xmark-solid.svg.192dpi.png";
         HideLeftSide.Texture.TexturePath = "/Textures/_DeadSpace/Interface/VerbIcons/caret-left-solid.svg.192dpi.png";
         HideRightSide.Texture.TexturePath = "/Textures/_DeadSpace/Interface/VerbIcons/caret-right-solid.svg.192dpi.png";
 
         ChatToggle.OnToggled += args => SetChatVisible(args.Pressed);
+        ExitEditorButton.OnPressed += _ => ExitEditor();
         Flip.OnPressed += _ => FlipSides();
         HideLeftSide.OnPressed += OnToggleLeftContainer;
         HideRightSide.OnPressed += OnToggleRightContainer;
@@ -124,6 +127,11 @@ public sealed partial class DeadSpaceMappingScreen : InGameScreen
     {
         Chat.Visible = visible;
         ChatToggle.Pressed = visible;
+    }
+
+    public void ExitEditor()
+    {
+        _consoleHost.ExecuteCommand("scene GameplayState");
     }
 
     private void FlipSides()

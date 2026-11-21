@@ -18,6 +18,7 @@ using Robust.Client.Input;
 using Robust.Client.Placement;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
@@ -43,27 +44,27 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace Content.Client.DeadSpace.Mapping;
 
-public sealed class DeadSpaceMappingState : GameplayStateBase
+public sealed partial class DeadSpaceMappingState : GameplayStateBase
 {
     private const string FavoritesPath = "/mapping_editor_favorites.yml";
 
     #if !FULL_RELEASE
-    [Dependency] private readonly IClientAdminManager _admin = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
     #endif
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IEntityNetworkManager _entityNetwork = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly MappingManager _mapping = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IPlacementManager _placement = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IResourceCache _resources = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ILocalizationManager _localization = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IEntityNetworkManager _entityNetwork = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private ILogManager _log = default!;
+    [Dependency] private MappingManager _mapping = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IPlacementManager _placement = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IResourceCache _resources = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ILocalizationManager _localization = default!;
 
     private EntityMenuUIController _entityMenuController = default!;
     private ContextMenuUIController _contextMenu = default!;
@@ -159,6 +160,8 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
 
         _prototypeManager.PrototypesReloaded += OnPrototypesReloaded;
 
+        _input.FirstChanceOnKeyEvent += OnFirstChanceOnKeyEvent;
+
         ReloadPrototypes();
         LoadFavorites();
         UpdateLocale();
@@ -168,6 +171,7 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
     {
         SaveFavorites();
         CommandBinds.Unregister<DeadSpaceMappingState>();
+        _input.FirstChanceOnKeyEvent -= OnFirstChanceOnKeyEvent;
         _contextMenu.Shutdown();
 
         Screen.Entities.GetPrototypeData -= OnGetData;
@@ -923,6 +927,31 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
             EnablePick();
         else
             DisablePick();
+    }
+
+    private void TogglePick()
+    {
+        if (Screen.Pick.Pressed)
+        {
+            Screen.Pick.Pressed = false;
+            DisablePick();
+            return;
+        }
+
+        Screen.Pick.Pressed = true;
+        EnablePick();
+    }
+
+    private void OnFirstChanceOnKeyEvent(KeyEventArgs args, KeyEventType type)
+    {
+        if (type != KeyEventType.Down || args.Key != Keyboard.Key.P)
+            return;
+
+        if (UserInterfaceManager.KeyboardFocused is LineEdit or TextEdit)
+            return;
+
+        TogglePick();
+        args.Handle();
     }
 
     private void EnablePick()

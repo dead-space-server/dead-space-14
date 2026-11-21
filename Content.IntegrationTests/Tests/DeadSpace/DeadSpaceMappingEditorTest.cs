@@ -84,7 +84,9 @@ public sealed class DeadSpaceMappingEditorTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(screen.Chat.Visible, Is.True);
+            Assert.That(screen!.Chat.Visible, Is.True);
+            Assert.That(screen.Chat.Size.X, Is.GreaterThan(0));
+            Assert.That(screen.Chat.Size.Y, Is.GreaterThan(0));
             Assert.That(screen.ChatBox.Main, Is.True);
             Assert.That(screen.ChatToggle.Pressed, Is.True);
         });
@@ -100,6 +102,31 @@ public sealed class DeadSpaceMappingEditorTest
         await client.WaitPost(() => screen!.SetChatVisible(true));
 
         Assert.That(screen!.Chat.Visible, Is.True);
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ExitButtonLeavesEditor()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true
+        });
+        var client = pair.Client;
+        var state = client.ResolveDependency<IStateManager>();
+        var ui = client.ResolveDependency<IUserInterfaceManager>();
+
+        await client.WaitPost(() => state.RequestStateChange<DeadSpaceMappingState>());
+        await client.WaitRunTicks(5);
+
+        var screen = ui.ActiveScreen as DeadSpaceMappingScreen;
+        Assert.That(screen, Is.Not.Null);
+
+        await client.WaitPost(() => screen!.ExitEditor());
+        await client.WaitRunTicks(5);
+
+        Assert.That(state.CurrentState, Is.TypeOf<GameplayState>());
 
         await pair.CleanReturnAsync();
     }

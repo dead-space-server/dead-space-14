@@ -68,6 +68,9 @@
                         <mapping:DeadSpaceMappingActionsButton Name="HideRightSide" Access="Public" ToggleMode="False"
                                                       ToolTip="{Loc 'mapping-hide-right-side-tooltip'}" SetWidth="24"
                                                       Margin="0" />
+                        <mapping:DeadSpaceMappingActionsButton Name="ExitEditorButton" Access="Public" ToggleMode="False"
+                                                      ToolTip="{Loc 'mapping-exit-tooltip'}" SetWidth="24"
+                                                      Margin="5 0 0 0" />
                     </BoxContainer>
                 </PanelContainer>
                 <widgets:ChatBox Name="Chat" Access="Public" Visible="True" ReservesSpace="False" MinSize="320 160" />

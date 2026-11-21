@@ -7,11 +7,11 @@ using Robust.Shared.Console;
 
 namespace Content.Client.DeadSpace.Commands;
 
-public sealed class DeadSpaceMappingEditorCommand : LocalizedEntityCommands
+public sealed partial class DeadSpaceMappingEditorCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public override string Command => "mappingeditor";
 
