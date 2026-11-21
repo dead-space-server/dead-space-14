@@ -10602,3 +10602,10 @@ Entries:
   changes:
   - type: Fix
     message: Поправил разрыв органов
+- id: 1025
+  author: IvanKuvalda
+  time: '2026-11-21T05:16:46.537701+00:00'
+  pr: 2834
+  changes:
+  - type: Tweak
+    message: 'небольшая поправка отпуска обломков: отпускать их можно через раз'
