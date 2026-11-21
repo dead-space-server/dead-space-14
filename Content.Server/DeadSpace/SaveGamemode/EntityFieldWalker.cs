@@ -98,12 +98,14 @@ public sealed class ComponentFieldProbe : IComponentFieldProbe
 
         MappingDataNode? mapping = null;
 
+        // В свежем движке ComponentRegistryEntry хранит только десериализованный компонент;
+        // YAML-маппинг после разбора наследования отдаёт PrototypeManager.GetPrototypeData —
+        // те же самые данные, что читатель подмешивает к узлу файла (EntityDeserializer).
         if (Proto(protoId) is { } proto
-            && proto.Components.TryGetValue(RegisteredName(componentName), out var entry))
+            && _prototypes.GetPrototypeData(proto).TryGetValue(RegisteredName(componentName), out var entry))
         {
-            // Маппинг после разбора наследования: именно его движок подмешивает к узлу файла.
-            // Наружу отдаём как есть, но менять его нельзя — он принадлежит прототипу.
-            mapping = entry.Mapping;
+            // Наружу отдаём как есть, но менять его нельзя — кэш принадлежит прототип-менеджеру.
+            mapping = entry;
         }
 
         _protoFieldsCache[key] = mapping;
