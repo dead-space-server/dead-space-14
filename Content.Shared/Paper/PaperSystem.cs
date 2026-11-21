@@ -402,6 +402,9 @@ public sealed class PaperSystem : EntitySystem
         if (newText == entity.Comp.Content)
             return;
 
+        if (newText.Length > entity.Comp.ContentSize) // DS14
+            return; // DS14
+
         SetContent(entity, newText);
 
         _adminLogger.Add(LogType.Chat,
@@ -552,6 +555,8 @@ public sealed class PaperSystem : EntitySystem
 
         target.Comp.StampedBy = new List<StampDisplayInfo>(source.Comp.StampedBy);
         target.Comp.StampState = source.Comp.StampState;
+        if (target.Comp.StampedBy.Count > 0) // DS14
+            target.Comp.Content = FreezeCheckTags(target.Comp.Content); // DS14
         Dirty(target);
 
         if (TryComp<AppearanceComponent>(target, out var appearance))

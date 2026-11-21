@@ -635,6 +635,8 @@ public sealed class FaxSystem : EntitySystem
             }
 
             paper.EditingDisabled = printout.Locked;
+
+            Dirty(printed, paper); // DS14
         }
 
         _metaData.SetEntityName(printed, printout.Name);

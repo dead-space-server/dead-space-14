@@ -76,14 +76,12 @@ public sealed class CheckTagHandler : IMarkupTagHandler
 
     private static int CountPaperCheckButtonsBefore(Control clickedButton)
     {
+        if (FindPaperWindow(clickedButton) is not { } window)
+            return 0;
+
         var count = 0;
-        var root = clickedButton;
-
-        while (root.Parent != null)
-            root = root.Parent;
-
         var found = false;
-        CountPaperCheckButtonsRecursive(root, clickedButton, ref count, ref found);
+        CountPaperCheckButtonsRecursive(window, clickedButton, ref count, ref found);
         return found ? count : 0;
     }
 
