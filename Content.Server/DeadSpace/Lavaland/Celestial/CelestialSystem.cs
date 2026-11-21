@@ -519,8 +519,8 @@ public sealed partial class CelestialSystem : EntitySystem
 
         var phrase = _random.Pick(KillPhrases);
 
-        // чат: чистая фраза, шрифт EuroStyle, цвет d05e8b
-        var wrapped = $"[font=\"EuroStyle\"][color=#D05E8B]{phrase}[/color][/font]";
+        // чат: чистая фраза, шрифт Exo2, цвет d05e8b
+        var wrapped = $"[font=\"Exo2\"][color=#D05E8B]{phrase}[/color][/font]";
         var filter = localized && mapId != MapId.Nullspace
             ? Filter.BroadcastMap(mapId)
             : Filter.Broadcast();
@@ -1486,51 +1486,42 @@ public sealed partial class CelestialSystem : EntitySystem
             Sound(comp.BloomFireSound, ent, -4f);
         });
 
-        // стадия 2: чёрные лучи наносят урон, продолжая вращаться
-        var damageTicks = (int) (comp.BloomFireTime / comp.BloomDamageInterval);
-        for (var tick = 1; tick <= damageTicks; tick++)
+        // стадия 2: чёрные лучи наносят урон — ОДИН повторяющийся таймер
+        var tickCount = 0;
+        var maxTicks = (int) (comp.BloomFireTime / comp.BloomDamageInterval);
+        Timer.SpawnRepeating(TimeSpan.FromSeconds(comp.BloomDamageInterval), () =>
         {
-            var delay = comp.BloomSweepTime + comp.BloomStageGap + (tick - 1) * comp.BloomDamageInterval;
+            tickCount++;
+            if (TerminatingOrDeleted(ent) || tickCount > maxTicks)
+                return;
 
-            // угол считаем ДО таймера: переменная цикла захватывается лямбдой
-            // по ссылке, и внутри таймера tick всегда равен damageTicks + 1 —
-            // урон уходил в одну повёрнутую сторону, а не по видимым лучам
-            var tickElapsed = (tick - 1) * comp.BloomDamageInterval;
-            var tickAngle = baseAngle + comp.BloomRotateSpeed * (comp.BloomSweepTime + tickElapsed);
+            var tickElapsed = (tickCount - 1) * comp.BloomDamageInterval;
+            var tickAngle = baseAngle + comp.BloomRotateSpeed * (comp.BloomSweepTime + comp.BloomStageGap + tickElapsed);
 
-            Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
+            var bloomDamage = new DamageSpecifier();
+            bloomDamage.DamageDict.TryAdd("Heat", comp.BloomBeamDamage);
+
+            _nearbySpheres.Clear();
+            foreach (var victim in _lookup.GetEntitiesInRange(
+                new MapCoordinates(center, mapId), comp.BloomLength, LookupFlags.Uncontained))
             {
-                if (TerminatingOrDeleted(ent))
-                    return;
+                if (HasComp<CelestialComponent>(victim) || TerminatingOrDeleted(victim))
+                    continue;
 
-                var bloomDamage = new DamageSpecifier();
-                bloomDamage.DamageDict.TryAdd("Heat", comp.BloomBeamDamage);
+                var victimPos = _transform.GetMapCoordinates(victim).Position;
 
-                // радиус запроса = вся длина луча (плюс запас)
-                var queryRadius = comp.BloomLength + 4f;
-                _nearbySpheres.Clear();
-                foreach (var victim in _lookup.GetEntitiesInRange(
-                    new MapCoordinates(center, mapId), queryRadius, LookupFlags.Uncontained))
+                for (var k = 0; k < 4; k++)
                 {
-                    if (HasComp<CelestialComponent>(victim) || TerminatingOrDeleted(victim))
-                        continue;
-
-                    var victimPos = _transform.GetMapCoordinates(victim).Position;
-
-                    // 4 луча по 90 градусов
-                    for (var k = 0; k < 4; k++)
+                    var ang = tickAngle + k * MathF.PI / 2f;
+                    var rayEnd = center + new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * comp.BloomLength;
+                    if (DistanceToSegment(victimPos, center, rayEnd) <= comp.BloomDamageRadius)
                     {
-                        var ang = tickAngle + k * MathF.PI / 2f;
-                        var rayEnd = center + new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * comp.BloomLength;
-                        if (DistanceToSegment(victimPos, center, rayEnd) <= comp.BloomDamageRadius)
-                        {
-                            Hurt(victim, bloomDamage);
-                            break;
-                        }
+                        Hurt(victim, bloomDamage);
+                        break;
                     }
                 }
-            });
-        }
+            }
+        }, default(System.Threading.CancellationToken));
 
         // атака заканчивается после обеих стадий
         Timer.Spawn(TimeSpan.FromSeconds(comp.BloomSweepTime + comp.BloomStageGap + comp.BloomFireTime + 0.5f), () =>
