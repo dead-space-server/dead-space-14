@@ -1,0 +1,5 @@
+# Шрифт Exo2 для реплик Селестиала в чате.
+# Тег [font="Exo2"] в чат-сообщениях использует этот прототип.
+- type: font
+  id: Exo2
+  path: /Fonts/Exo2/Exo2-VariableFont_wght.ttf
