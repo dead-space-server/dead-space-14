@@ -1,3 +1,4 @@
+﻿using Content.Shared.DeadSpace.Humanoid.Markings; // DS14
 using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
@@ -95,8 +96,7 @@ public abstract partial class SharedMagicMirrorSystem : EntitySystem
             hair,
             humanoid.MarkingSet.PointsLeft(MarkingCategories.Hair) + hair.Count,
             facialHair,
-            humanoid.MarkingSet.PointsLeft(MarkingCategories.FacialHair) + facialHair.Count,
-            humanoid.HairGradientEnabled, humanoid.HairGradientColor); // DS14
+            humanoid.MarkingSet.PointsLeft(MarkingCategories.FacialHair) + facialHair.Count);
 
         // TODO: Component states
         component.Target = targetUid;
@@ -150,16 +150,20 @@ public sealed partial class MagicMirrorChangeColorMessage : BoundUserInterfaceMe
 
 // DS14-start
 [Serializable, NetSerializable]
-public sealed partial class MagicMirrorChangeGradientMessage : BoundUserInterfaceMessage
+public sealed partial class MagicMirrorChangeDyeMessage : BoundUserInterfaceMessage
 {
-    public MagicMirrorChangeGradientMessage(bool enabled, Color color)
+    public MagicMirrorChangeDyeMessage(MagicMirrorCategory category, List<Color> colors, MarkingDye? dye, int slot)
     {
-        Enabled = enabled;
-        Color = color;
+        Category = category;
+        Colors = colors;
+        Dye = dye;
+        Slot = slot;
     }
 
-    public bool Enabled { get; }
-    public Color Color { get; }
+    public MagicMirrorCategory Category { get; }
+    public List<Color> Colors { get; }
+    public MarkingDye? Dye { get; }
+    public int Slot { get; }
 }
 // DS14-end
 
@@ -203,19 +207,13 @@ public sealed partial class MagicMirrorAddSlotMessage : BoundUserInterfaceMessag
 [Serializable, NetSerializable]
 public sealed partial class MagicMirrorUiState : BoundUserInterfaceState
 {
-    // DS14-start
-    public MagicMirrorUiState(string species, List<Marking> hair, int hairSlotTotal, List<Marking> facialHair, int facialHairSlotTotal, bool hairGradientEnabled = false, Color hairGradientColor = default)
-    // DS14-end
+    public MagicMirrorUiState(string species, List<Marking> hair, int hairSlotTotal, List<Marking> facialHair, int facialHairSlotTotal)
     {
         Species = species;
         Hair = hair;
         HairSlotTotal = hairSlotTotal;
         FacialHair = facialHair;
         FacialHairSlotTotal = facialHairSlotTotal;
-        // DS14-start
-        HairGradientEnabled = hairGradientEnabled;
-        HairGradientColor = hairGradientColor;
-        // DS14-end
     }
 
     public NetEntity Target;
@@ -227,11 +225,6 @@ public sealed partial class MagicMirrorUiState : BoundUserInterfaceState
 
     public List<Marking> FacialHair;
     public int FacialHairSlotTotal;
-
-    // DS14-start
-    public bool HairGradientEnabled;
-    public Color HairGradientColor;
-    // DS14-end
 }
 
 [Serializable, NetSerializable]
@@ -270,10 +263,12 @@ public sealed partial class MagicMirrorChangeColorDoAfterEvent : DoAfterEvent
 
 // DS14-start
 [Serializable, NetSerializable]
-public sealed partial class MagicMirrorChangeGradientDoAfterEvent : DoAfterEvent
+public sealed partial class MagicMirrorChangeDyeDoAfterEvent : DoAfterEvent
 {
     public override DoAfterEvent Clone() => this;
-    public bool Enabled;
-    public Color Color;
+    public MagicMirrorCategory Category;
+    public int Slot;
+    public List<Color> Colors = new();
+    public MarkingDye? Dye;
 }
 // DS14-end

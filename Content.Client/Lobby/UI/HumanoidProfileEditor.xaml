@@ -1,4 +1,4 @@
-<BoxContainer xmlns="https://spacestation14.io"
+﻿<BoxContainer xmlns="https://spacestation14.io"
               xmlns:humanoid="clr-namespace:Content.Client.Humanoid"
               xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
               xmlns:ds="clr-namespace:Content.Client.DeadSpace.UserInterface.Controls"
@@ -158,6 +158,11 @@
                             <Label Text="{Loc 'humanoid-profile-editor-skin-color-label'}"/>
                             <Slider HorizontalExpand="True" Name="Skin" MinValue="0" MaxValue="100" Value="20" />
                             <BoxContainer Name="RgbSkinColorContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True"></BoxContainer>
+                            <!-- DS14-start -->
+                            <BoxContainer Name="BodyDyeContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True">
+                                <Label Text="{Loc 'body-dye-label'}"/>
+                            </BoxContainer>
+                            <!-- DS14-end -->
                         </BoxContainer>
 
                         <cc:HSeparator />

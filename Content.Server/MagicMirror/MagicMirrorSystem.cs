@@ -1,6 +1,7 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Server.DoAfter;
 using Content.Server.Humanoid;
+using Content.Shared.DeadSpace.Humanoid.Markings; // DS14
 using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
@@ -42,7 +43,7 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
             subs.Event<MagicMirrorChangeColorMessage>(OnTryMagicMirrorChangeColor);
             subs.Event<MagicMirrorAddSlotMessage>(OnTryMagicMirrorAddSlot);
             subs.Event<MagicMirrorRemoveSlotMessage>(OnTryMagicMirrorRemoveSlot);
-            subs.Event<MagicMirrorChangeGradientMessage>(OnTryMagicMirrorChangeGradient); // DS14
+            subs.Event<MagicMirrorChangeDyeMessage>(OnTryMagicMirrorChangeDye); // DS14
         });
 
 
@@ -50,7 +51,7 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
         SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorChangeColorDoAfterEvent>(OnChangeColorDoAfter);
         SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorRemoveSlotDoAfterEvent>(OnRemoveSlotDoAfter);
         SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorAddSlotDoAfterEvent>(OnAddSlotDoAfter);
-        SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorChangeGradientDoAfterEvent>(OnChangeGradientDoAfter); // DS14
+        SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorChangeDyeDoAfterEvent>(OnChangeDyeDoAfter); // DS14
     }
 
     private void OnMagicMirrorSelect(EntityUid uid, MagicMirrorComponent component, MagicMirrorSelectMessage message)
@@ -118,21 +119,13 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
             return;
 
         MarkingCategories category;
-        var markingId = args.Marking; // DS14
+        var markingId = args.Marking;
+        MarkingDye? oldDye = null; // DS14
 
         switch (args.Category)
         {
             case MagicMirrorCategory.Hair:
                 category = MarkingCategories.Hair;
-                // DS14-start
-                if (TryComp<HumanoidAppearanceComponent>(component.Target.Value, out var humanoid)
-                    && humanoid.HairGradientEnabled)
-                {
-                    var gradientId = markingId + "Gradient";
-                    if (_markings.Markings.ContainsKey(gradientId))
-                        markingId = gradientId;
-                }
-                // DS14-end
                 break;
             case MagicMirrorCategory.FacialHair:
                 category = MarkingCategories.FacialHair;
@@ -141,18 +134,18 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
                 return;
         }
 
-        _humanoid.SetMarkingId(component.Target.Value, category, args.Slot, markingId);
-
         // DS14-start
-        if (args.Category == MagicMirrorCategory.Hair
-            && TryComp<HumanoidAppearanceComponent>(component.Target.Value, out var h)
-            && h.HairGradientEnabled && _markings.Markings.TryGetValue(markingId, out var proto)
-            && proto.Sprites.Count > 1)
+        if (TryComp<HumanoidAppearanceComponent>(component.Target.Value, out var humanoid)
+            && humanoid.MarkingSet.TryGetCategory(category, out var currentMarkings)
+            && args.Slot >= 0 && args.Slot < currentMarkings.Count)
         {
-            var colors = new List<Color>(2) { h.HairGradientColor, h.HairGradientColor };
-            _humanoid.SetMarkingColor(component.Target.Value, MarkingCategories.Hair, args.Slot, colors);
+            oldDye = currentMarkings[args.Slot].Dye;
         }
         // DS14-end
+
+        _humanoid.SetMarkingId(component.Target.Value, category, args.Slot, markingId);
+
+        _humanoid.SetMarkingDye(component.Target.Value, category, args.Slot, oldDye); // DS14
 
         UpdateInterface(uid, component.Target.Value, component);
     }
@@ -383,15 +376,7 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
         {
             case MagicMirrorCategory.Hair:
                 category = MarkingCategories.Hair;
-                // DS14-start
-                markingId = _markings.MarkingsByCategoryAndSpecies(category, humanoid.Species).Keys.FirstOrDefault();
-                if (!string.IsNullOrEmpty(markingId) && humanoid.HairGradientEnabled)
-                {
-                    var gradientId = markingId + "Gradient";
-                    if (_markings.Markings.ContainsKey(gradientId))
-                        markingId = gradientId;
-                }
-                // DS14-end
+                markingId = _markings.MarkingsByCategoryAndSpecies(category, humanoid.Species).Keys.FirstOrDefault(); // DS14
                 break;
             case MagicMirrorCategory.FacialHair:
                 category = MarkingCategories.FacialHair;
@@ -411,7 +396,7 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
     }
 
     // DS14-start
-    private void OnTryMagicMirrorChangeGradient(EntityUid uid, MagicMirrorComponent component, MagicMirrorChangeGradientMessage message)
+    private void OnTryMagicMirrorChangeDye(EntityUid uid, MagicMirrorComponent component, MagicMirrorChangeDyeMessage message)
     {
         if (component.Target is not { } target)
             return;
@@ -435,10 +420,12 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
         if (component.Target == message.Actor)
             doafterTime /= 3;
 
-        var doAfter = new MagicMirrorChangeGradientDoAfterEvent()
+        var doAfter = new MagicMirrorChangeDyeDoAfterEvent()
         {
-            Enabled = message.Enabled,
-            Color = message.Color,
+            Category = message.Category,
+            Slot = message.Slot,
+            Colors = message.Colors,
+            Dye = message.Dye,
         };
 
         _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, message.Actor, doafterTime, doAfter, uid, target: target, used: uid)
@@ -449,10 +436,18 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
         },
             out var doAfterId);
 
+        _popup.PopupEntity(
+            target == message.Actor
+                ? Loc.GetString("magic-mirror-change-color-self")
+                : Loc.GetString("magic-mirror-change-color-target", ("user", Identity.Entity(message.Actor, EntityManager))),
+            target,
+            target,
+            PopupType.Medium);
+
         component.DoAfter = doAfterId;
     }
 
-    private void OnChangeGradientDoAfter(EntityUid uid, MagicMirrorComponent component, MagicMirrorChangeGradientDoAfterEvent args)
+    private void OnChangeDyeDoAfter(EntityUid uid, MagicMirrorComponent component, MagicMirrorChangeDyeDoAfterEvent args)
     {
         component.DoAfter = null;
 
@@ -462,44 +457,22 @@ public sealed partial class MagicMirrorSystem : SharedMagicMirrorSystem
         if (component.Target != args.Target)
             return;
 
-        if (!TryComp<HumanoidAppearanceComponent>(component.Target.Value, out var humanoid))
-            return;
-
-        humanoid.HairGradientEnabled = args.Enabled;
-        humanoid.HairGradientColor = args.Color;
-
-        if (humanoid.MarkingSet.TryGetCategory(MarkingCategories.Hair, out var hairMarkings) && hairMarkings.Count > 0)
+        MarkingCategories category;
+        switch (args.Category)
         {
-            var currentId = hairMarkings[0].MarkingId;
-            var baseColor = hairMarkings[0].MarkingColors.Count > 0 ? hairMarkings[0].MarkingColors[0] : Color.White;
-
-            if (args.Enabled)
-            {
-                var baseId = currentId.EndsWith("Gradient") ? currentId[..^"Gradient".Length] : currentId;
-                var gradientId = baseId + "Gradient";
-                if (_markings.Markings.ContainsKey(gradientId))
-                {
-                    var colors = new List<Color> { baseColor, args.Color };
-                    _humanoid.SetMarkingId(component.Target.Value, MarkingCategories.Hair, 0, gradientId);
-                    _humanoid.SetMarkingColor(component.Target.Value, MarkingCategories.Hair, 0, colors);
-                }
-            }
-            else
-            {
-                if (currentId.EndsWith("Gradient"))
-                {
-                    var baseId = currentId[..^"Gradient".Length];
-                    if (_markings.Markings.ContainsKey(baseId))
-                    {
-                        var colors = new List<Color> { baseColor };
-                        _humanoid.SetMarkingId(component.Target.Value, MarkingCategories.Hair, 0, baseId);
-                        _humanoid.SetMarkingColor(component.Target.Value, MarkingCategories.Hair, 0, colors);
-                    }
-                }
-            }
+            case MagicMirrorCategory.Hair:
+                category = MarkingCategories.Hair;
+                break;
+            case MagicMirrorCategory.FacialHair:
+                category = MarkingCategories.FacialHair;
+                break;
+            default:
+                return;
         }
 
-        Dirty(component.Target.Value, humanoid);
+        _humanoid.SetMarkingColor(component.Target.Value, category, args.Slot, args.Colors);
+        _humanoid.SetMarkingDye(component.Target.Value, category, args.Slot, args.Dye);
+
         UpdateInterface(uid, component.Target.Value, component);
     }
     // DS14-end

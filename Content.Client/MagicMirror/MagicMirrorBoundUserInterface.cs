@@ -1,4 +1,4 @@
-using Content.Shared.Humanoid.Markings;
+﻿using Content.Shared.Humanoid.Markings;
 using Content.Shared.MagicMirror;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
@@ -25,7 +25,7 @@ public sealed class MagicMirrorBoundUserInterface : BoundUserInterface
         _window.OnHairSlotAdded += delegate () { AddSlot(MagicMirrorCategory.Hair); };
         _window.OnHairSlotRemoved += args => RemoveSlot(MagicMirrorCategory.Hair, args);
         // DS14-start
-        _window.OnHairGradientChanged += args => ChangeGradient(args.enabled, args.color);
+        _window.OnDyeSubmitted += args => ChangeDye(args.category, args.marking, args.slot);
         // DS14-end
 
         _window.OnFacialHairSelected += tuple => SelectHair(MagicMirrorCategory.FacialHair, tuple.id, tuple.slot);
@@ -36,9 +36,9 @@ public sealed class MagicMirrorBoundUserInterface : BoundUserInterface
     }
 
     // DS14-start
-    private void ChangeGradient(bool enabled, Color color)
+    private void ChangeDye(MagicMirrorCategory category, Marking marking, int slot)
     {
-        SendMessage(new MagicMirrorChangeGradientMessage(enabled, color));
+        SendMessage(new MagicMirrorChangeDyeMessage(category, new(marking.MarkingColors), marking.Dye, slot));
     }
     // DS14-end
 

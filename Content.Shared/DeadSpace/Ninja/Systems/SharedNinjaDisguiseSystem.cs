@@ -1,4 +1,4 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+﻿// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Actions;
@@ -106,8 +106,7 @@ public abstract partial class SharedNinjaDisguiseSystem : EntitySystem
             PermanentlyHidden = new HashSet<HumanoidVisualLayers>(humanoid.PermanentlyHidden),
             HiddenLayers = new Dictionary<HumanoidVisualLayers, SlotFlags>(humanoid.HiddenLayers),
             CustomBaseLayers = new Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo>(humanoid.CustomBaseLayers),
-            HairGradientEnabled = humanoid.HairGradientEnabled,
-            HairGradientColor = humanoid.HairGradientColor,
+            BodyDye = humanoid.BodyDye,
         };
     }
 
@@ -129,8 +128,6 @@ public abstract partial class SharedNinjaDisguiseSystem : EntitySystem
         humanoid.Comp.CustomBaseLayers = new Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo>(saved.CustomBaseLayers);
 
         humanoid.Comp.HiddenLayers = new Dictionary<HumanoidVisualLayers, SlotFlags>(saved.HiddenLayers);
-
-        humanoid.Comp.HairGradientEnabled = saved.HairGradientEnabled;
-        humanoid.Comp.HairGradientColor = saved.HairGradientColor;
+        humanoid.Comp.BodyDye = saved.BodyDye;
     }
 }
