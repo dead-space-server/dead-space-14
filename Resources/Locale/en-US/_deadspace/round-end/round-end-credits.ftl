@@ -53,6 +53,7 @@ round-end-credits-stat-messages = Lines spoken: { $value }
 round-end-credits-stat-shocks = Shocks: { $value }
 round-end-credits-stat-cuffed = Times cuffed: { $value }
 round-end-credits-stat-objectivescompleted = Objectives completed: { $value }
+round-end-credits-stat-assists = Kill assists: { $value }
 
 round-end-credits-status-escaped = Evacuated
 round-end-credits-status-alive = Stayed on station
@@ -142,3 +143,8 @@ round-end-credits-vote-survivor-name = Survivor of the year
 round-end-credits-vote-survivor-desc = Got out of places nobody gets out of
 round-end-credits-vote-polite-name = Most polite
 round-end-credits-vote-polite-desc = Said "please" even to a changeling
+architect-mvp-title = MVP
+architect-mvp-stats = Kills: { $kills }   Assists: { $assists }
+architect-mvp-contender = WORTHY CONTENDER
+architect-mvp-placeholder-deacon = Deacon
+architect-mvp-placeholder-seraphim = Seraphim

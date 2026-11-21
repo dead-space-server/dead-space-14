@@ -76,6 +76,10 @@ public sealed partial class RoundEndCreditsOverlay : LayoutContainer
     private readonly Button _skipButton;
     private bool _skipped;
 
+    private ArchitectMvpShowcase? _architectShowcase;
+    private Control? _architectCard;
+    private bool _architectShown;
+
     public event Action? Closed;
     public event Action<int, int>? VoteCast;
     public event Action? Skipped;
@@ -281,6 +285,8 @@ public sealed partial class RoundEndCreditsOverlay : LayoutContainer
         {
             doll.Animate(time);
         }
+
+        UpdateArchitectShowcase();
     }
 
     private void UpdateCredits(TimeSpan now, float frameTime)

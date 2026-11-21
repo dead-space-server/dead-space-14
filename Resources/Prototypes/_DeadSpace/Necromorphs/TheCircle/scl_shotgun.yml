@@ -1,0 +1,104 @@
+## Дробовик СКЛ
+
+- type: Tag
+  id: ShellShotgunSCL
+
+- type: entity
+  id: WeaponShotgunSCL
+  parent: [ BaseWeaponShotgun, BaseGunWieldable, BaseMajorContraband ]
+  name: дробовик СКЛ
+  description: Дробовик Круга под разрывные пули, которые летят цельными, а на излёте раскрываются веером картечи. Обычные ружейные патроны тоже принимает.
+  suffix: Дробовик
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/scl/scl.rsi
+  - type: Item
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/scl/scl_inhands.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/scl/scl_inhands.rsi
+  - type: GunRequiresWield
+  - type: Gun
+    fireRate: 1.5
+    soundGunshot:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/Weapon/sfx/ks23-sfx/ks23.ogg
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - ShellShotgun
+      - ShellShotgunSCL
+    capacity: 5
+    proto: ShellShotgunSCL
+
+- type: entity
+  id: ShellShotgunSCL
+  parent: BaseShellShotgun
+  name: ружейный патрон (разрывная пуля СКЛ)
+  description: Цельная пуля, которая через шесть метров полёта раскрывается веером картечи.
+  components:
+  - type: Tag
+    tags:
+    - ShellShotgunSCL
+  - type: Sprite
+    layers:
+    - state: slug
+      map: [ "enum.AmmoVisualLayers.Base" ]
+      color: "#c8a040"
+  - type: CartridgeAmmo
+    proto: BulletShotgunSCL
+  - type: SpentAmmoVisuals
+    state: slug
+
+# Hits as hard as a full KS-23 load (15 pellets x 5); after 6.5 tiles it splits into 5 pellets x 15 of the same total.
+- type: entity
+  id: BulletShotgunSCL
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 75
+  - type: ProjectileBurst
+    pellet: PelletShotgunSCL
+    count: 5
+    spread: 40
+    distance: 6.5
+
+- type: entity
+  id: PelletShotgunSCL
+  parent: BulletTrace
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LimbRound
+    pellet: true
+    sever: true
+    bone: 9
+    organ: 0.6
+    bleed: 0.09
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Piercing: 15
+
+- type: entity
+  id: BoxShotgunSCL
+  parent: AmmoProviderShotgunShell
+  name: коробка разрывных патронов СКЛ
+  description: Коробка разрывных пуль для дробовика СКЛ.
+  components:
+  - type: BallisticAmmoProvider
+    proto: ShellShotgunSCL
+    whitelist:
+      tags:
+      - ShellShotgunSCL
+  - type: MagazineVisuals
+    magState: mag-slug
+    steps: 3
+    zeroVisible: false
+  - type: Sprite
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-slug-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: practice

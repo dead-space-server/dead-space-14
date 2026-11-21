@@ -142,6 +142,7 @@
     categories:
     - UniPhoneGeistUplinkTraps
     - UniPhoneGeistMidroundUplinkSupply
+    - UniPhoneGeistUplinkImplants
     currencyWhitelist:
     - Telecrystal
     balance:

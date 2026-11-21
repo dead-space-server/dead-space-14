@@ -13,6 +13,7 @@
       tags:
       - AshWalkerWearableFootwear
   - type: AshWalkerTribeMember
+  - type: LimbImmune
   - type: PermanentStatusEffects
     statusEffects:
     - StatusEffectPressureImmunity

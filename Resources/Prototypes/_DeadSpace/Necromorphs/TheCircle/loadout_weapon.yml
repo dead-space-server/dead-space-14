@@ -130,6 +130,10 @@
         amount: 2
       - id: MagRifleZastaba
         amount: 2
+      - id: BoxShotgunSCL
+        amount: 2
+      - id: BoxShotgun23MM
+        amount: 2
 
 - type: entity
   id: CrateDreadnoughtBundle

@@ -119,6 +119,7 @@ public sealed partial class RoundEndCreditsStatsSystem : EntitySystem
             AddStat(attacker, RoundEndCreditsStat.DamageDealt, delta);
             component.LastAttackerMind = attacker;
             component.LastAttackTime = _timing.CurTime;
+            component.Attackers[attacker] = _timing.CurTime;
             return;
         }
 
@@ -162,6 +163,15 @@ public sealed partial class RoundEndCreditsStatsSystem : EntitySystem
         }
 
         component.LastAttackerMind = null;
+
+        // Everyone else who hurt the body shortly before it died helped with the kill.
+        foreach (var (helper, time) in component.Attackers)
+        {
+            if (helper != killer && helper != targetMind && _timing.CurTime - time <= KillCreditWindow)
+                AddStat(helper, RoundEndCreditsStat.Assists);
+        }
+
+        component.Attackers.Clear();
 
         if (killer is not { } killerMind || killerMind == targetMind)
             return;

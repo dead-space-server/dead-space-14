@@ -257,6 +257,9 @@ public sealed partial class RoundEndCreditsOverlay
         if (doll != null)
             card.AddChild(doll);
 
+        if (award.Showcase == RoundEndCreditsShowcase.Architect)
+            PrepareArchitectShowcase(card, GetDisplayName(info));
+
         card.AddChild(MakeLabel(GetDisplayName(info), 34, TextColor, BoldFont));
         card.AddChild(MakeLabel(GetJobText(info), 16, DimColor));
         card.AddChild(MakeLabel(GetCkeyText(info), 14, Cyan));
@@ -597,6 +600,37 @@ public sealed partial class RoundEndCreditsOverlay
         panel.AddChild(view);
 
         return panel;
+    }
+
+    /// <summary>
+    /// The Architect's full-screen scene, played once their MVP card scrolls into view.
+    /// </summary>
+    private void PrepareArchitectShowcase(Control card, string name)
+    {
+        if (_architectShowcase != null)
+            return;
+
+        var showcase = new ArchitectMvpShowcase(_entMan) { CharacterName = name };
+        AddChild(showcase);
+        SetAnchorPreset(showcase, LayoutPreset.Wide);
+        _architectShowcase = showcase;
+        _architectCard = card;
+        _dollPreviews.Request(_dollOwner, ArchitectMvpShowcase.ArchitectLook, snapshot => showcase.SetCharacter(snapshot));
+        if (_credits?.Showcase is { } cast)
+            showcase.SetCast(cast, _dollPreviews, _dollOwner);
+    }
+
+    private void UpdateArchitectShowcase()
+    {
+        if (_architectShowcase == null || _architectCard == null || _architectShown)
+            return;
+
+        var top = _architectCard.GlobalPixelPosition.Y;
+        if (top > PixelSize.Y * 0.75f || top + _architectCard.PixelSize.Y < 0f)
+            return;
+
+        _architectShown = true;
+        _architectShowcase.Play();
     }
 
     private bool TryGetPlayer(int index, out RoundEndMessageEvent.RoundEndPlayerInfo info)

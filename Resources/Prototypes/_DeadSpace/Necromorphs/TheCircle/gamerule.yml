@@ -103,6 +103,7 @@
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
       - type: Legion
+      - type: LimbImmune # no fractures or organ ruptures
       - type: GunUsageBlocker
       - type: WeaponRetention
       - type: RandomMetadata
@@ -121,6 +122,32 @@
         spritePrototype: WeaponUnitologyLegionKnife
         components:
         - type: LegionPredatorPerk
+    sets:
+    - roles:
+      - CircleMedic
+      gear:
+      - name: antag-gear-selector-seraphim-mend-name
+        description: antag-gear-selector-seraphim-mend-description
+        spritePrototype: UnitologyMedicHypospray
+        startingGear: TheCircleMedicGear
+        roleLoadout: RoleSurvivalTheCircle
+        briefing:
+          text: roles-antag-thecircle-medic-start
+          color: CornflowerBlue
+          sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
+        components:
+        - type: SeraphimMend
+      - name: antag-gear-selector-seraphim-bond-name
+        description: antag-gear-selector-seraphim-bond-description
+        spritePrototype: WeaponHandHook
+        startingGear: TheCircleMedicGear
+        roleLoadout: RoleSurvivalTheCircle
+        briefing:
+          text: roles-antag-thecircle-medic-start
+          color: CornflowerBlue
+          sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
+        components:
+        - type: SeraphimBond
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/ds_thecircle_outpost_docked.yml
   - type: AntagSelection
@@ -191,6 +218,7 @@
       roleLoadout:
         - RoleSurvivalTheCircle
       components:
+      - type: SteadyDoAfter # works on the move; only a hit interrupts
       - type: GhostRoleIntroduction
         operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
         textLoc: roles-antag-thecircle-medic-start
@@ -260,6 +288,7 @@
         textDelay: 0.8
         charactersPerSecond: 50
       - type: CircleDeacon
+      - type: NecroOrganRegrowth
       - type: ObeliskActivateAbility
       - type: IntrinsicRadioTransmitter
         channels:
@@ -299,6 +328,7 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: LimbImmune # no fractures or organ ruptures
       - type: GhostRoleIntroduction
         operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
         textLoc: roles-antag-thecircle-light-start
@@ -366,6 +396,7 @@
         textDelay: 0.8
         charactersPerSecond: 50
       - type: CircleDeacon
+      - type: NecroOrganRegrowth
       - type: ObeliskActivateAbility
       - type: IntrinsicRadioTransmitter
         channels:
@@ -405,6 +436,7 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: LimbImmune # no fractures or organ ruptures
       - type: GhostRoleIntroduction
         operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
         textLoc: roles-antag-thecircle-light-start
@@ -457,6 +489,7 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: ArchitectBiomass
       - type: GhostRoleIntroduction
         operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
         textLoc: roles-antag-thecircle-engineer-start

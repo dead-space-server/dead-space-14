@@ -33,3 +33,8 @@
   id: NecromorphSeveredMask
   kind: source
   path: "/Textures/_DeadSpace/Shaders/severed_mask.swsl"
+
+- type: shader
+  id: ArchitectMvpAdditive
+  kind: canvas
+  blend_mode: Add
