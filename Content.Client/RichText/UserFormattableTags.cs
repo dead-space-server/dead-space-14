@@ -18,6 +18,7 @@ public static class UserFormattableTags
         typeof(BoldItalicTag),
         typeof(BoldTag),
         typeof(BulletTag),
+        typeof(CheckTagHandler), // DS14
         typeof(ColorTag),
         typeof(HeadingTag),
         typeof(ItalicTag),

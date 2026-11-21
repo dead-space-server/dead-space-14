@@ -58,6 +58,12 @@ public sealed partial class PaperSystem : EntitySystem
     private const string ClownJobId = "Clown";
     private const string ForcedPaperFont = "ComicSans";
 
+    public const string CheckTag = "[check]"; // DS14
+
+    public const string CheckTagPrefix = "[check"; // DS14
+
+    public static readonly string[] CheckGlyphs = { "☐", "☑", "☒" }; // DS14
+
     private static readonly Regex PaperFontTagRegex = new(@"\[/pfont\]|\[pfont=(?:""[^""]*""|[^\]]*)\]");
     // DS14-end
 
@@ -77,6 +83,7 @@ public sealed partial class PaperSystem : EntitySystem
         SubscribeLocalEvent<PaperComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<PaperComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<PaperComponent, PaperInputTextMessage>(OnInputTextMessage);
+        SubscribeLocalEvent<PaperComponent, PaperCheckMessage>(OnCheckMessage); // DS14
 
         SubscribeLocalEvent<RandomPaperContentComponent, MapInitEvent>(OnRandomPaperContentMapInit);
 
@@ -371,6 +378,117 @@ public sealed partial class PaperSystem : EntitySystem
         // DS14-end
     }
 
+    // DS14-start
+    private void OnCheckMessage(Entity<PaperComponent> entity, ref PaperCheckMessage args)
+    {
+        if (!_net.IsServer)
+            return;
+
+        if (!Equals(args.UiKey, PaperUiKey.Key))
+            return;
+
+        if (args.State is not (PaperCheckState.Blank or PaperCheckState.Check or PaperCheckState.Cross))
+            return;
+
+        if (entity.Comp.EditingDisabled || entity.Comp.Signatures.Count > 0 || entity.Comp.StampedBy.Count > 0)
+            return;
+
+        var ev = new PaperWriteAttemptEvent(entity.Owner);
+        RaiseLocalEvent(args.Actor, ref ev);
+        if (ev.Cancelled)
+            return;
+
+        var newText = ReplaceNthCheckTag(entity.Comp.Content, args.Index, args.State);
+        if (newText == entity.Comp.Content)
+            return;
+
+        if (newText.Length > entity.Comp.ContentSize) // DS14
+            return; // DS14
+
+        SetContent(entity, newText);
+
+        _adminLogger.Add(LogType.Chat,
+            LogImpact.Low,
+            $"{ToPrettyString(args.Actor):player} set checkbox #{args.Index} to {args.State} on {ToPrettyString(entity):entity}");
+
+        _audio.PlayPvs(entity.Comp.Sound, entity);
+    }
+
+    public static string ReplaceNthCheckTag(string text, int index, PaperCheckState state)
+    {
+        var currentIndex = 0;
+        var pos = 0;
+
+        while (pos < text.Length)
+        {
+            var foundPos = text.IndexOf(CheckTagPrefix, pos, StringComparison.Ordinal);
+            if (foundPos == -1)
+                break;
+
+            var end = text.IndexOf(']', foundPos);
+            if (end == -1)
+                break;
+
+            var body = text.Substring(foundPos + CheckTagPrefix.Length, end - foundPos - CheckTagPrefix.Length);
+            if (!IsCheckTagBody(body))
+            {
+                pos = end + 1;
+                continue;
+            }
+
+            if (currentIndex == index)
+                return $"{text.Substring(0, foundPos)}[check={(int) state}]{text.Substring(end + 1)}";
+
+            currentIndex++;
+            pos = end + 1;
+        }
+
+        return text;
+    }
+
+    public static string FreezeCheckTags(string text)
+    {
+        var pos = 0;
+
+        while (pos < text.Length)
+        {
+            var foundPos = text.IndexOf(CheckTagPrefix, pos, StringComparison.Ordinal);
+            if (foundPos == -1)
+                break;
+
+            var end = text.IndexOf(']', foundPos);
+            if (end == -1)
+                break;
+
+            var body = text.Substring(foundPos + CheckTagPrefix.Length, end - foundPos - CheckTagPrefix.Length);
+            if (IsCheckTagBody(body))
+            {
+                text = text.Substring(0, foundPos) + CheckGlyphs[(int) ParseCheckTagState(body)] + text.Substring(end + 1);
+                pos = foundPos + 1;
+            }
+            else
+            {
+                pos = foundPos + CheckTagPrefix.Length;
+            }
+        }
+
+        return text;
+    }
+
+    private static bool IsCheckTagBody(string body)
+    {
+        return body.Length == 0 || body[0] == '=';
+    }
+
+    private static PaperCheckState ParseCheckTagState(string body)
+    {
+        if (body.Length <= 1 || !long.TryParse(body.AsSpan(1), out var value))
+            return PaperCheckState.Blank;
+
+        return (PaperCheckState) Math.Clamp(value, (long) PaperCheckState.Blank, CheckGlyphs.Length - 1);
+    }
+    // DS14-end
+
     private void OnRandomPaperContentMapInit(Entity<RandomPaperContentComponent> ent, ref MapInitEvent args)
     {
         if (!_paperQuery.TryComp(ent, out var paperComp))
@@ -410,6 +528,9 @@ public sealed partial class PaperSystem : EntitySystem
             return false;
 
         entity.Comp.StampedBy.Add(stampInfo);
+
+        entity.Comp.Content = FreezeCheckTags(entity.Comp.Content); // DS14
+
         Dirty(entity);
 
         if (entity.Comp.StampState == null && TryComp<AppearanceComponent>(entity, out var appearance))
@@ -434,6 +555,8 @@ public sealed partial class PaperSystem : EntitySystem
 
         target.Comp.StampedBy = new List<StampDisplayInfo>(source.Comp.StampedBy);
         target.Comp.StampState = source.Comp.StampState;
+        if (target.Comp.StampedBy.Count > 0) // DS14
+            target.Comp.Content = FreezeCheckTags(target.Comp.Content); // DS14
         Dirty(target);
 
         if (TryComp<AppearanceComponent>(target, out var appearance))
@@ -488,7 +611,7 @@ public sealed partial class PaperSystem : EntitySystem
 
     private PaperBoundUserInterfaceState CreateUserInterfaceState(Entity<PaperComponent> entity, PaperAction mode)
     {
-        return new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Signatures, mode);
+        return new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Signatures, mode, entity.Comp.EditingDisabled); // DS14
     }
 
     private void AddWriter(EntityUid paper, EntityUid writer)
