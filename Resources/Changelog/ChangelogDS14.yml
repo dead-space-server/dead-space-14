@@ -10595,3 +10595,10 @@ Entries:
   changes:
   - type: Tweak
     message: Условия цели Нейрон-Ультима
+- id: 1024
+  author: IvanKuvalda
+  time: '2026-11-21T05:13:40.889865+00:00'
+  pr: 2835
+  changes:
+  - type: Fix
+    message: Поправил разрыв органов
