@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Content.Server.Cargo.Systems;
 using Content.Server.DeviceNetwork.Systems;
@@ -776,7 +777,9 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
             {
                 stationIds.Add(becomes.Id);
 
-                var tiles = (int)(gridComp.LocalAABB.Width * gridComp.LocalAABB.Height);
+                // Реальное число тайлов, а не площадь AABB: у станции AABB захватывает пустоту
+                // и может сместить «главную» сетку на другую сущность (ловушка про Empty).
+                var tiles = _mapSystem.GetAllTiles(uid, gridComp).Count();
                 if (primaryGrid == null || tiles > primaryTiles)
                 {
                     primaryGrid = uid;
