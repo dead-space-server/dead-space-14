@@ -50,6 +50,9 @@ public sealed partial class DeadSpaceMappingScreen : InGameScreen
         SetAnchorPreset(MainViewport, LayoutPreset.Wide);
         SetAnchorAndMarginPreset(Hotbar, LayoutPreset.BottomWide, margin: 5);
         SetAnchorAndMarginPreset(Actions, LayoutPreset.TopWide, margin: 5);
+        SetAnchorPreset(Chat, LayoutPreset.BottomLeft);
+        SetMarginLeft(Chat, 10);
+        SetMarginBottom(Chat, 85);
 
         LeftContainer.OnSplitResizeFinished += () =>
             OnChatResized?.Invoke(new Vector2(LeftContainer.SplitFraction, 0));
@@ -102,9 +105,11 @@ public sealed partial class DeadSpaceMappingScreen : InGameScreen
 
         Pick.Texture.TexturePath = "/Textures/Interface/eyedropper.svg.png";
         Flip.Texture.TexturePath = "/Textures/Interface/VerbIcons/rotate_cw.svg.192dpi.png";
+        ChatToggle.Texture.TexturePath = "/Textures/Interface/VerbIcons/bubbles.svg.192dpi.png";
         HideLeftSide.Texture.TexturePath = "/Textures/_DeadSpace/Interface/VerbIcons/caret-left-solid.svg.192dpi.png";
         HideRightSide.Texture.TexturePath = "/Textures/_DeadSpace/Interface/VerbIcons/caret-right-solid.svg.192dpi.png";
 
+        ChatToggle.OnToggled += args => SetChatVisible(args.Pressed);
         Flip.OnPressed += _ => FlipSides();
         HideLeftSide.OnPressed += OnToggleLeftContainer;
         HideRightSide.OnPressed += OnToggleRightContainer;
@@ -113,6 +118,12 @@ public sealed partial class DeadSpaceMappingScreen : InGameScreen
         EraseDecalButton.Group = eraseGroup;
         EraseTileButton.Group = eraseGroup;
         EraseEntityButton.Group = eraseGroup;
+    }
+
+    public void SetChatVisible(bool visible)
+    {
+        Chat.Visible = visible;
+        ChatToggle.Pressed = visible;
     }
 
     private void FlipSides()
@@ -242,18 +253,25 @@ public sealed partial class DeadSpaceMappingScreen : InGameScreen
 
     public void SelectDecal(Decal decal)
     {
-        if (!_decalAuto)
-            return;
-
         _id = decal.Id;
         _decalCleanable = decal.Cleanable;
+        _decalRotation = (float) decal.Angle.Degrees;
+        _decalZIndex = decal.ZIndex;
 
         if (decal.Color is { } color)
+        {
+            _decalEnableColor = true;
             DecalColor = color;
+        }
         else
+        {
             _decalEnableColor = false;
+            DecalColor = Color.White;
+        }
 
         DecalColorPicker.Color = DecalColor;
+        _rotationSpinBox.Value = _decalRotation;
+        DecalZIndexSpinBox.Value = _decalZIndex;
         DecalEnableCleanable.Pressed = _decalCleanable;
         DecalEnableSnap.Pressed = _decalSnap;
         DecalEnableColor.Pressed = _decalEnableColor;

@@ -1,7 +1,5 @@
-﻿# DeadSpace14 BetterMappingEditor start
-- type: decal
+﻿- type: decal
   id: MiniTileWhiteBox
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -9,7 +7,6 @@
 
 - type: decal
   id: MiniTileWhiteCornerNe
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -17,7 +14,6 @@
 
 - type: decal
   id: MiniTileWhiteCornerSe
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -25,7 +21,6 @@
 
 - type: decal
   id: MiniTileWhiteCornerNw
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -33,7 +28,6 @@
 
 - type: decal
   id: MiniTileWhiteCornerSw
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -41,7 +35,6 @@
 
 - type: decal
   id: MiniTileWhiteInnerNe
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -49,7 +42,6 @@
 
 - type: decal
   id: MiniTileWhiteInnerSe
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -57,7 +49,6 @@
 
 - type: decal
   id: MiniTileWhiteInnerNw
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -65,7 +56,6 @@
 
 - type: decal
   id: MiniTileWhiteInnerSw
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -73,7 +63,6 @@
 
 - type: decal
   id: MiniTileWhiteEndN
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -81,7 +70,6 @@
 
 - type: decal
   id: MiniTileWhiteEndE
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -89,7 +77,6 @@
 
 - type: decal
   id: MiniTileWhiteEndS
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -97,7 +84,6 @@
 
 - type: decal
   id: MiniTileWhiteEndW
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -105,7 +91,6 @@
 
 - type: decal
   id: MiniTileWhiteLineN
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -113,7 +98,6 @@
 
 - type: decal
   id: MiniTileWhiteLineE
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -121,7 +105,6 @@
 
 - type: decal
   id: MiniTileWhiteLineS
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
@@ -129,9 +112,7 @@
 
 - type: decal
   id: MiniTileWhiteLineW
-  parent: MiniTileWhite
   tags: ["station", "markings"]
   sprite:
     sprite: Decals/minitile.rsi
     state: white_line_w
-# DeadSpace14 BetterMappingEditor end

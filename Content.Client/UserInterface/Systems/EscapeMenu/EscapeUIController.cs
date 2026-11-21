@@ -18,9 +18,9 @@ namespace Content.Client.UserInterface.Systems.EscapeMenu;
 
 [UsedImplicitly]
 public sealed partial class EscapeUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>,
-    // DeadSpace14 BetterMappingEditor start
+    // DS14-start
     IOnStateEntered<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>, IOnStateExited<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>
-    // DeadSpace14 BetterMappingEditor end
+    // DS14-end
 {
     [Dependency] private IClientConsoleHost _console = default!;
     [Dependency] private IUriOpener _uri = default!;
@@ -67,7 +67,7 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
         OpenEscapeWindow();
     }
 
-    // DeadSpace14 BetterMappingEditor start
+    // DS14-start
     private void OpenEscapeWindow()
     {
         DebugTools.Assert(_escapeWindow == null);
@@ -149,9 +149,9 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
                 InputCmdHandler.FromDelegate(_ => ToggleWindow()))
             .Register<EscapeUIController>();
     }
-    // DeadSpace14 BetterMappingEditor end
+    // DS14-end
 
-    // DeadSpace14 BetterMappingEditor start
+    // DS14-start
     public void OnStateEntered(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
     {
         OpenEscapeWindow();
@@ -161,14 +161,14 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
     {
         TeardownEscapeWindow();
     }
-    // DeadSpace14 BetterMappingEditor end
+    // DS14-end
 
     public void OnStateExited(GameplayState state)
     {
         TeardownEscapeWindow();
     }
 
-    // DeadSpace14 BetterMappingEditor start
+    // DS14-start
     private void TeardownEscapeWindow()
     {
         _cfg.UnsubValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged);
@@ -181,7 +181,7 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
 
         CommandBinds.Unregister<EscapeUIController>();
     }
-    // DeadSpace14 BetterMappingEditor end
+    // DS14-end
 
     private void OnSeeOwnNotesChanged(bool seeOwnNotes)
     {

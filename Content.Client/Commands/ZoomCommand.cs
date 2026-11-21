@@ -4,9 +4,6 @@ using JetBrains.Annotations;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Console;
-// DeadSpace14 BetterMappingEditor start
-using System.Globalization;
-// DeadSpace14 BetterMappingEditor end
 using System.Numerics;
 
 namespace Content.Client.Commands;
@@ -29,9 +26,7 @@ public sealed partial class ZoomCommand : LocalizedCommands
             return;
         }
 
-        // DeadSpace14 BetterMappingEditor start
-        if (!float.TryParse(args[0], NumberStyles.Float, CultureInfo.InvariantCulture, out var arg0))
-        // DeadSpace14 BetterMappingEditor end
+        if (!float.TryParse(args[0], out var arg0))
         {
             shell.WriteError(LocalizationManager.GetString("cmd-parse-failure-float", ("arg", args[0])));
             return;
@@ -47,9 +42,7 @@ public sealed partial class ZoomCommand : LocalizedCommands
 
         if (args.Length == 2)
         {
-            // DeadSpace14 BetterMappingEditor start
-            if (!float.TryParse(args[1], NumberStyles.Float, CultureInfo.InvariantCulture, out var arg1))
-            // DeadSpace14 BetterMappingEditor end
+            if (!float.TryParse(args[1], out var arg1))
             {
                 shell.WriteError(LocalizationManager.GetString("cmd-parse-failure-float", ("arg", args[1])));
                 return;

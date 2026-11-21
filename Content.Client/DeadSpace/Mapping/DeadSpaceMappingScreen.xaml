@@ -60,6 +60,8 @@
                         <mapping:DeadSpaceMappingActionsButton Name="Move" Access="Public"
                                                       ToolTip="" Visible="False" />
                         <mapping:DeadSpaceMappingActionsButton Name="Pick" Access="Public" />
+                        <mapping:DeadSpaceMappingActionsButton Name="ChatToggle" Access="Public" Pressed="True"
+                                                      ToolTip="{Loc 'mapping-chat-toggle-tooltip'}" />
                         <mapping:DeadSpaceMappingActionsButton Name="Flip" Access="Public" ToggleMode="False"
                                                       ToolTip="{Loc 'mapping-flip-tooltip'}" />
                         <BoxContainer HorizontalExpand="True" />
@@ -68,7 +70,7 @@
                                                       Margin="0" />
                     </BoxContainer>
                 </PanelContainer>
-                <widgets:ChatBox Visible="False" ReservesSpace="False" />
+                <widgets:ChatBox Name="Chat" Access="Public" Visible="True" ReservesSpace="False" MinSize="320 160" />
             </LayoutContainer>
             <BoxContainer Name="RightSpawnContainer" Orientation="Vertical" VerticalExpand="True" MinWidth="200" SetWidth="500">
                 <PanelContainer VerticalExpand="True" HorizontalExpand="True">

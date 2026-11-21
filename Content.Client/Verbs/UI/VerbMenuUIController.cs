@@ -26,9 +26,9 @@ namespace Content.Client.Verbs.UI
     public sealed partial class VerbMenuUIController : UIController,
         IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>,
         IOnStateEntered<MappingState>, IOnStateExited<MappingState>,
-        // DeadSpace14 BetterMappingEditor start
+        // DS14-start
         IOnStateEntered<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>, IOnStateExited<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>
-        // DeadSpace14 BetterMappingEditor end
+        // DS14-end
     {
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private ContextMenuUIController _context = default!;
@@ -78,7 +78,7 @@ namespace Content.Client.Verbs.UI
             Close();
         }
 
-        // DeadSpace14 BetterMappingEditor start
+        // DS14-start
         public void OnStateEntered(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
         {
             _context.OnContextKeyEvent += OnKeyBindDown;
@@ -94,7 +94,7 @@ namespace Content.Client.Verbs.UI
                 _verbSystem.OnVerbsResponse -= HandleVerbsResponse;
             Close();
         }
-        // DeadSpace14 BetterMappingEditor end
+        // DS14-end
 
         /// <summary>
         ///     Open a verb menu and fill it with verbs applicable to the given target entity.

@@ -27,9 +27,6 @@ namespace Content.Client.UserInterface.Systems.Admin;
 public sealed partial class AdminUIController : UIController,
     IOnStateEntered<GameplayState>,
     IOnStateEntered<LobbyState>,
-    // DeadSpace14 BetterMappingEditor start
-    IOnStateEntered<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>,
-    // DeadSpace14 BetterMappingEditor end
     IOnSystemChanged<AdminSystem>
 {
     [Dependency] private IClientAdminManager _admin = default!;
@@ -81,14 +78,6 @@ public sealed partial class AdminUIController : UIController,
         EnsureWindow();
         AdminStatusUpdated();
     }
-
-    // DeadSpace14 BetterMappingEditor start
-    public void OnStateEntered(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
-    {
-        EnsureWindow();
-        AdminStatusUpdated();
-    }
-    // DeadSpace14 BetterMappingEditor end
 
     public void OnSystemLoaded(AdminSystem system)
     {

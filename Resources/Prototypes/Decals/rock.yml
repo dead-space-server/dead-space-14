@@ -1,7 +1,5 @@
-# DeadSpace14 BetterMappingEditor start
 - type: decal
   id: Basalt1
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
@@ -11,7 +9,6 @@
 
 - type: decal
   id: Basalt2
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
@@ -21,7 +18,6 @@
 
 - type: decal
   id: Basalt3
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
@@ -31,7 +27,6 @@
 
 - type: decal
   id: Basalt4
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
@@ -41,7 +36,6 @@
 
 - type: decal
   id: Basalt5
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
@@ -51,7 +45,6 @@
 
 - type: decal
   id: Basalt6
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
@@ -61,7 +54,6 @@
 
 - type: decal
   id: Basalt7
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
@@ -71,7 +63,6 @@
 
 - type: decal
   id: Basalt8
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
@@ -81,11 +72,9 @@
 
 - type: decal
   id: Basalt9
-  parent: Rock
   tags: ["rock"]
   snapCardinals: true
   defaultSnap: false
   sprite:
     sprite: Decals/basalt.rsi
     state: basalt9
-# DeadSpace14 BetterMappingEditor end

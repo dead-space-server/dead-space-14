@@ -55,7 +55,6 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
     [Dependency] private readonly IEntityNetworkManager _entityNetwork = default!;
     [Dependency] private readonly IInputManager _input = default!;
     [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly MappingManager _mapping = default!;
     [Dependency] private readonly IOverlayManager _overlays = default!;
     [Dependency] private readonly IPlacementManager _placement = default!;
@@ -67,12 +66,15 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
     [Dependency] private readonly ILocalizationManager _localization = default!;
 
     private EntityMenuUIController _entityMenuController = default!;
+    private ContextMenuUIController _contextMenu = default!;
 
     private DecalPlacementSystem _decal = default!;
     private SpriteSystem _sprite = default!;
     private TransformSystem _transform = default!;
     private VerbSystem _verbs = default!;
     private MapSystem _map = default!;
+    private SharedMapSystem? _mapManCache;
+    private SharedMapSystem _mapMan => _mapManCache ??= _entityManager.System<SharedMapSystem>();
 
     // 1 off in case something else uses these colors since we use them to compare
     private static readonly Color PickColor = new(1, 255, 0);
@@ -108,6 +110,8 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
     {
         EnsureSetup();
         base.Startup();
+
+        _contextMenu.Setup();
 
         UserInterfaceManager.LoadScreen<DeadSpaceMappingScreen>();
         _loadController.LoadScreen();
@@ -164,6 +168,7 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
     {
         SaveFavorites();
         CommandBinds.Unregister<DeadSpaceMappingState>();
+        _contextMenu.Shutdown();
 
         Screen.Entities.GetPrototypeData -= OnGetData;
         Screen.Entities.SelectionChanged -= OnSelected;
@@ -208,6 +213,7 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
         _setup = true;
 
         _entityMenuController = UserInterfaceManager.GetUIController<EntityMenuUIController>();
+        _contextMenu = UserInterfaceManager.GetUIController<ContextMenuUIController>();
 
         _decal = _entityManager.System<DecalPlacementSystem>();
         _sprite = _entityManager.System<SpriteSystem>();
@@ -281,10 +287,35 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
         mappings.Clear();
 
         var decals = new DeadSpaceMappingPrototype(null, Loc.GetString("mapping-decals")) { Children = new List<DeadSpaceMappingPrototype>() };
+        var decalGroups = new Dictionary<string, DeadSpaceMappingPrototype>();
         foreach (var decal in _prototypeManager.EnumeratePrototypes<DecalPrototype>())
         {
-            if (decal.ShowMenu)
-                Register(decal, decal.ID, decals);
+            if (!decal.ShowMenu)
+                continue;
+
+            var groupKey = GetDecalGroupKey(decal);
+            if (!decalGroups.TryGetValue(groupKey, out var group))
+            {
+                group = new DeadSpaceMappingPrototype(null, GetDecalGroupName(groupKey))
+                {
+                    Children = new List<DeadSpaceMappingPrototype>(),
+                    Parents = new List<DeadSpaceMappingPrototype> { decals },
+                };
+                decals.Children.Add(group);
+                decalGroups.Add(groupKey, group);
+            }
+
+            if (Register(decal, decal.ID, decals) is not { } mapping)
+                continue;
+
+            decals.Children.Remove(mapping);
+            mapping.Parents = new List<DeadSpaceMappingPrototype> { group };
+            group.Children!.Add(mapping);
+        }
+
+        foreach (var group in decalGroups.Values)
+        {
+            group.Children!.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase));
         }
 
         Sort(mappings, decals);
@@ -303,8 +334,23 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
             _allPrototypes.GetOrNew(typeof(DecalPrototype)));
     }
 
-    private DeadSpaceMappingPrototype? Register<T>(T? prototype, string id, DeadSpaceMappingPrototype topLevel) where T : class, IPrototype, IInheritingPrototype
+    private static string GetDecalGroupKey(DecalPrototype decal)
     {
+        return decal.Sprite is SpriteSpecifier.Rsi rsi
+            ? rsi.RsiPath.FilenameWithoutExtension
+            : "other";
+    }
+
+    private string GetDecalGroupName(string key)
+    {
+        if (_localization.TryGetString($"mapping-decal-group-{key}", out var name))
+            return name;
+
+        var pretty = key.Replace('_', ' ');
+        return pretty.Length == 0 ? key : char.ToUpperInvariant(pretty[0]) + pretty[1..];
+    }
+
+    private DeadSpaceMappingPrototype? Register<T>(T? prototype, string id, DeadSpaceMappingPrototype topLevel) where T : class, IPrototype, IInheritingPrototype    {
         {
             if (prototype == null &&
                 _prototypeManager.TryIndex(id, out prototype) &&
@@ -967,25 +1013,32 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
             {
                 var mapPos = _transform.ToMapCoordinates(coords);
 
-                if (_mapMan.TryFindGridAt(mapPos, out var gridUid, out var grid) &&
-                    _entityManager.System<SharedMapSystem>().TryGetTileRef(gridUid, grid, coords, out var tileRef) &&
-                    _allPrototypesDict.TryGetValue(_entityManager.System<TurfSystem>().GetContentTileDefinition(tileRef), out button))
+                if (_mapMan.TryFindGridAt(mapPos, out var gridUid, out var grid))
                 {
-                    switch (button.Prototype)
-                    {
-                        case EntityPrototype:
-                        {
-                            OnSelected(Screen.Entities, button);
-                            break;
-                        }
-                        case ContentTileDefinition:
-                        {
-                            OnSelected(Screen.Tiles, button);
-                            break;
-                        }
-                    }
+                    // DeadSpace14 BetterMappingEditor start
+                    if (TryPickDecal(gridUid, coords))
+                        return true;
+                    // DeadSpace14 BetterMappingEditor end
 
-                    return true;
+                    if (_entityManager.System<SharedMapSystem>().TryGetTileRef(gridUid, grid, coords, out var tileRef) &&
+                        _allPrototypesDict.TryGetValue(_entityManager.System<TurfSystem>().GetContentTileDefinition(tileRef), out button))
+                    {
+                        switch (button.Prototype)
+                        {
+                            case EntityPrototype:
+                            {
+                                OnSelected(Screen.Entities, button);
+                                break;
+                            }
+                            case ContentTileDefinition:
+                            {
+                                OnSelected(Screen.Tiles, button);
+                                break;
+                            }
+                        }
+
+                        return true;
+                    }
                 }
             }
         }
@@ -1013,6 +1066,39 @@ public sealed class DeadSpaceMappingState : GameplayStateBase
 
         return true;
     }
+
+    // DeadSpace14 BetterMappingEditor start
+    private bool TryPickDecal(EntityUid gridUid, EntityCoordinates coords)
+    {
+        var localPos = _transform.WithEntityId(coords, gridUid).Position;
+        var decals = DeadSpaceMappingDecalLookup.GetDecalsInRange(
+            _entityManager,
+            gridUid,
+            localPos,
+            validDelegate: decal => _prototypeManager.HasIndex<DecalPrototype>(decal.Id));
+
+        if (decals.Count == 0)
+            return false;
+
+        var picked = decals
+            .OrderByDescending(entry => entry.Decal.ZIndex)
+            .ThenBy(entry => (entry.Decal.Coordinates - localPos).LengthSquared())
+            .First().Decal;
+
+        if (_allPrototypesDict.TryGetValue(_prototypeManager.Index<DecalPrototype>(picked.Id), out var mapping))
+        {
+            OnSelected(Screen.Decals, mapping);
+        }
+        else
+        {
+            _placement.Clear();
+            _decal.SetActive(true);
+        }
+
+        Screen.SelectDecal(picked);
+        return true;
+    }
+    // DeadSpace14 BetterMappingEditor end
 
     private bool HandleEditorCancelPlace(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
     {
