@@ -69,10 +69,17 @@ public sealed partial class ShuttleSystem
 
         if (_loader.TryLoadGrid(mapId, component.Path, out var ent))
         {
-            if (HasComp<ShuttleComponent>(ent))
-                TryFTLProximity(ent.Value, targetGrid.Value);
-
-            _station.AddGridToStation(uid, ent.Value);
+            // DS14-start
+            if (!HasComp<ShuttleComponent>(ent) || TryFTLProximity(ent.Value, targetGrid.Value))
+            {
+                _station.AddGridToStation(uid, ent.Value);
+            }
+            else
+            {
+                Log.Error($"Failed to find empty space near {ToPrettyString(targetGrid.Value)} for cargo shuttle {component.Path}; deleting it");
+                QueueDel(ent.Value);
+            }
+            // DS14-end
         }
 
         _mapSystem.DeleteMap(mapId);
@@ -138,8 +145,14 @@ public sealed partial class ShuttleSystem
 
         if (_loader.TryLoadGrid(mapId, path, out var grid))
         {
-            if (HasComp<ShuttleComponent>(grid))
-                TryFTLProximity(grid.Value, targetGrid);
+            // DS14-start
+            if (HasComp<ShuttleComponent>(grid) && !TryFTLProximity(grid.Value, targetGrid))
+            {
+                Log.Error($"Failed to find empty space near {ToPrettyString(targetGrid)} for gridspawn {path}; deleting it");
+                QueueDel(grid.Value);
+                return false;
+            }
+            // DS14-end
 
             if (group.NameGrid)
             {

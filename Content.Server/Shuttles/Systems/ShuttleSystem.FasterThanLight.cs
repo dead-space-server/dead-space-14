@@ -75,8 +75,8 @@ public sealed partial class ShuttleSystem
     // Lua-end
 
     // DS14-start
-    private const int ExpeditionLandingRings = 6;
-    private const int ExpeditionLandingSpokes = 8;
+    private const int ExpeditionLandingRings = 8;
+    private const int ExpeditionLandingSpokes = 16;
 
     private const float ExpeditionLandingMinOffset = 10f;
     private const float ExpeditionLandingMaxOffset = 72f;
@@ -86,13 +86,22 @@ public sealed partial class ShuttleSystem
     /// How many times we try to proximity warp close to something before falling back to map-wideAABB.
     /// </summary>
     private const int FTLProximityIterations = 5;
-    private const int FTLProximityCandidateAttempts = 32;
+    private const int FTLProximityCandidateAttempts = 64; // DS14
+
+    // DS14-start
+    private const int FTLProximityFarRings = 4;
+    private const float FTLProximityRingGrowth = 2f;
+    private const int FTLProximityFarAttempts = 32;
+    private const float FTLPlacementMargin = 0.5f;
+    // DS14-end
+
     private const float LavalandTendrilFTLExclusionRange = 8f;
 
     private readonly HashSet<EntityUid> _lookupEnts = new();
     private readonly HashSet<EntityUid> _immuneEnts = new();
     private readonly HashSet<Entity<NoFTLComponent>> _noFtls = new();
     private List<Entity<MapGridComponent>> _ftlCandidateGrids = new();
+    private readonly HashSet<EntityUid> _ftlCandidateEnts = new(); // DS14
 
     private EntityQuery<BodyComponent> _bodyQuery;
     private EntityQuery<FTLSmashImmuneComponent> _immuneQuery;
@@ -604,7 +613,14 @@ public sealed partial class ShuttleSystem
         {
             // TODO: This should now use tryftlproximity
             mapId = _transform.GetMapId(target);
-            _transform.SetCoordinates(uid, xform, target, rotation: entity.Comp1.TargetAngle);
+
+            // DS14-start
+            if (IsFTLTargetCoordinatesValid(uid, target, entity.Comp1.TargetAngle) ||
+                !TryFTLProximity((uid, xform), target))
+            {
+                _transform.SetCoordinates(uid, xform, target, rotation: entity.Comp1.TargetAngle);
+            }
+            // DS14-end
         }
 
         if (_physicsQuery.TryGetComponent(uid, out body))
@@ -955,45 +971,64 @@ public sealed partial class ShuttleSystem
 
         var offset = -shuttleAABB.Center;
         var randomizePosition = nearbyGrids.Count > 1 || !HasComp<MapComponent>(targetXform.GridUid);
-        var candidateAttempts = randomizePosition ? FTLProximityCandidateAttempts : 1;
 
-        for (var attempt = 0; attempt < candidateAttempts; attempt++)
+        // DS14-start
+        var halfSize = targetAABB.Size * 0.5f;
+        for (var ring = 0; ring <= FTLProximityFarRings; ring++)
         {
-            // TODO: This should prefer the position's angle instead.
-            // TODO: This is pretty crude for multiple landings.
-            Vector2 spawnPos;
-            if (randomizePosition)
+            var ringMaxOffset = maxOffset * MathF.Pow(FTLProximityRingGrowth, ring);
+            var candidateAttempts = ring == 0
+                ? (randomizePosition ? FTLProximityCandidateAttempts : 1)
+                : FTLProximityFarAttempts;
+        // DS14-end
+
+            for (var attempt = 0; attempt < candidateAttempts; attempt++)
             {
-                var offsetAngle = _random.NextAngle();
+                // TODO: This should prefer the position's angle instead.
+                // TODO: This is pretty crude for multiple landings.
+                Vector2 spawnPos;
+                // DS14-start
+                if (ring == 0 && !randomizePosition)
+                {
+                    if (shuttleBody != null)
+                        (spawnPos, _) = _transform.GetWorldPositionRotation(targetXform);
+                    else
+                        spawnPos = _transform.GetWorldPosition(targetXform);
+                }
+                else
+                {
+                    var offsetAngle = _random.NextAngle();
 
-                // Our valid spawn positions are <targetAABB width / height +  offset> away.
-                var minRadius = MathF.Max(targetAABB.Width / 2f, targetAABB.Height / 2f);
-                spawnPos = targetAABB.Center + offsetAngle.RotateVec(new Vector2(_random.NextFloat(minRadius + minOffset, minRadius + maxOffset), 0f));
+                    // Our valid spawn positions are <targetAABB surface +  offset> away.
+                    var direction = offsetAngle.RotateVec(new Vector2(1f, 0f));
+                    var surfaceDist = float.MaxValue;
+
+                    if (direction.X != 0f)
+                        surfaceDist = MathF.Min(surfaceDist, halfSize.X / MathF.Abs(direction.X));
+
+                    if (direction.Y != 0f)
+                        surfaceDist = MathF.Min(surfaceDist, halfSize.Y / MathF.Abs(direction.Y));
+
+                    spawnPos = targetAABB.Center + offsetAngle.RotateVec(new Vector2(_random.NextFloat(surfaceDist + minOffset, surfaceDist + ringMaxOffset), 0f));
+                }
+                // DS14-end
+
+                if (!HasComp<MapComponent>(targetXform.GridUid))
+                    angle = _random.NextAngle();
+                else
+                    angle = Angle.Zero;
+
+                // Rotate our localcenter around so we spawn exactly where we "think" we should (center of grid on the dot).
+                var transform = new Transform(spawnPos, angle);
+                spawnPos = Robust.Shared.Physics.Transform.Mul(transform, offset);
+
+                var candidateCoordinates = new EntityCoordinates(targetXform.MapUid.Value, spawnPos - offset);
+                if (!IsFTLTargetCoordinatesValid(shuttleUid, candidateCoordinates, angle, shuttleGrid))
+                    continue;
+
+                coordinates = candidateCoordinates;
+                return true;
             }
-            else if (shuttleBody != null)
-            {
-                (spawnPos, angle) = _transform.GetWorldPositionRotation(targetXform);
-            }
-            else
-            {
-                spawnPos = _transform.GetWorldPosition(targetXform);
-            }
-
-            if (!HasComp<MapComponent>(targetXform.GridUid))
-                angle = _random.NextAngle();
-            else
-                angle = Angle.Zero;
-
-            // Rotate our localcenter around so we spawn exactly where we "think" we should (center of grid on the dot).
-            var transform = new Transform(spawnPos, angle);
-            spawnPos = Robust.Shared.Physics.Transform.Mul(transform, offset);
-
-            var candidateCoordinates = new EntityCoordinates(targetXform.MapUid.Value, spawnPos - offset);
-            if (!IsFTLTargetCoordinatesValid(shuttleUid, candidateCoordinates, angle, shuttleGrid))
-                continue;
-
-            coordinates = candidateCoordinates;
-            return true;
         }
 
         if (IsFTLTargetCoordinatesValid(shuttleUid, targetCoordinates, Angle.Zero, shuttleGrid))
@@ -1006,7 +1041,7 @@ public sealed partial class ShuttleSystem
         return false;
     }
 
-    private bool IsFTLTargetCoordinatesValid(
+    public bool IsFTLTargetCoordinatesValid( // DS14
         EntityUid shuttleUid,
         EntityCoordinates coordinates,
         Angle angle,
@@ -1024,7 +1059,7 @@ public sealed partial class ShuttleSystem
             return false;
 
         var shuttleBounds = new Box2Rotated(
-            shuttleGrid.LocalAABB.Translated(mapCoordinates.Position),
+            shuttleGrid.LocalAABB.Enlarged(FTLPlacementMargin).Translated(mapCoordinates.Position), // DS14
             angle,
             mapCoordinates.Position);
 
@@ -1051,6 +1086,25 @@ public sealed partial class ShuttleSystem
             return false;
         }
 
+        // DS14-start
+        _ftlCandidateEnts.Clear();
+        _lookup.GetLocalEntitiesIntersecting(mapUid, shuttleBounds.CalcBoundingBox(), _ftlCandidateEnts, flags: LookupFlags.Uncontained);
+
+        foreach (var ent in _ftlCandidateEnts)
+        {
+            if (ent == shuttleUid)
+                continue;
+
+            if (!_xformQuery.TryComp(ent, out var entXform) || entXform.GridUid is { Valid: true })
+                continue;
+
+            if (!_physicsQuery.TryComp(ent, out var entBody) || !entBody.CanCollide)
+                continue;
+
+            return false;
+        }
+        // DS14-end
+
         return true;
     }
 
@@ -1075,6 +1129,12 @@ public sealed partial class ShuttleSystem
             return false;
         }
 
+        // DS14-start
+        var center = _physicsQuery.TryComp(shuttleUid, out var shuttleBody)
+            ? shuttleBody.LocalCenter
+            : shuttleGrid.LocalAABB.Center;
+        // DS14-end
+
         for (var ring = 0; ring < ExpeditionLandingRings; ring++)
         {
             var radius = ExpeditionLandingMinOffset +
@@ -1086,11 +1146,19 @@ public sealed partial class ShuttleSystem
                 var direction = Angle.FromDegrees(spoke * 360f / ExpeditionLandingSpokes);
                 var position = beacon.Position + direction.RotateVec(new Vector2(radius, 0f));
 
-                if (!IsExpeditionLandingSpotClear(mapUid, mapGrid, shuttleGrid.LocalAABB, position, angle))
+                // DS14-start
+                var origin = position + angle.RotateVec(-center);
+                // DS14-end
+
+                if (!IsExpeditionLandingSpotClear(mapUid, mapGrid, shuttleGrid.LocalAABB, origin, angle))
                     continue;
 
-                // Centre the grid on the dot, same as TryGetFTLProximity does.
-                coordinates = new EntityCoordinates(mapUid, position - shuttleGrid.LocalAABB.Center);
+                // DS14-start
+                if (!IsFTLTargetCoordinatesValid(shuttleUid, new EntityCoordinates(mapUid, origin), angle))
+                    continue;
+                // DS14-end
+
+                coordinates = new EntityCoordinates(mapUid, position);
                 return true;
             }
         }
@@ -1102,11 +1170,11 @@ public sealed partial class ShuttleSystem
         EntityUid mapUid,
         MapGridComponent mapGrid,
         Box2 shuttleAabb,
-        Vector2 position,
+        Vector2 origin,
         Angle angle)
     {
         // The map entity is its own grid on expedition maps, so map coordinates are grid coordinates.
-        var bounds = new Box2Rotated(shuttleAabb.Translated(position), angle, position).CalcBoundingBox();
+        var bounds = new Box2Rotated(shuttleAabb.Translated(origin), angle, origin).CalcBoundingBox();
 
         for (var x = (int) MathF.Floor(bounds.Left); x <= MathF.Ceiling(bounds.Right); x++)
         {
