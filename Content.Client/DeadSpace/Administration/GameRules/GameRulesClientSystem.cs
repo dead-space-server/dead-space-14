@@ -10,11 +10,11 @@ using Content.Client.Administration.Managers;
 
 namespace Content.Client.DeadSpace.Administration.GameRules;
 
-public sealed class GameRulesClientSystem : EntitySystem
+public sealed partial class GameRulesClientSystem : EntitySystem
 {
-    [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-    [Dependency] private readonly IClientAdminManager _adminManager = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private IClientConsoleHost _consoleHost = default!;
+    [Dependency] private IClientAdminManager _adminManager = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
 
     public event Action<GameRulesListResponseMessage>? RulesUpdated;
 

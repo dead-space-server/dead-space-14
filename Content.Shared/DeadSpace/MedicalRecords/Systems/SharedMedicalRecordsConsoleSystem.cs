@@ -12,11 +12,11 @@ namespace Content.Shared.DeadSpace.MedicalRecords.Systems;
 /// Shared base for the Medical Records console system, mirroring
 /// <c>Content.Shared.CriminalRecords.Systems.SharedCriminalRecordsConsoleSystem</c>.
 /// </summary>
-public abstract class SharedMedicalRecordsConsoleSystem : EntitySystem
+public abstract partial class SharedMedicalRecordsConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMedicalRecordsSystem _medicalRecords = default!;
-    [Dependency] private readonly SharedStationRecordsSystem _records = default!;
-    [Dependency] private readonly SharedStationSystem _station = default!;
+    [Dependency] private SharedMedicalRecordsSystem _medicalRecords = default!;
+    [Dependency] private SharedStationRecordsSystem _records = default!;
+    [Dependency] private SharedStationSystem _station = default!;
 
     public override void Initialize()
     {

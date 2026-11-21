@@ -7,10 +7,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.Ninja.UI;
 
-public sealed class SpiderOSWindowBoundUserInterface : BoundUserInterface
+public sealed partial class SpiderOSWindowBoundUserInterface : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
 
     [ViewVariables]
     private SpiderOSWindow? _window;

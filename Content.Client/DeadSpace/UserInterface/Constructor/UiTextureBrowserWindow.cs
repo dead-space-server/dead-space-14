@@ -17,15 +17,15 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.DeadSpace.UserInterface.Constructor;
 
-public sealed class UiTextureBrowserWindow : DefaultWindow
+public sealed partial class UiTextureBrowserWindow : DefaultWindow
 {
     private static readonly ResPath TextureRoot = new("/Textures");
     private static readonly string[] PictureExtensions = { ".png", ".jpg", ".jpeg", ".webp", ".gif" };
 
     public event Action<UiTextureChoice>? OnSelected;
 
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private IResourceManager _resources = default!;
 
     private readonly LineEdit _filter = new()
     {

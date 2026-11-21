@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Sprite by awkskieru (discord) for Space Station 14 server Мёртвый Космос, resprite by sastr. (discord) for Space Station 14 server Мёртвый Космос, plaf by .teffy_(discord) for DS",
+  "copyright": "Sprite by awkskieru (discord) for Space Station 14 server Мёртвый Космос, resprite by sastr. (discord) for Space Station 14 server Мёртвый Космос, plaf,vulpkanin,tajaran by .teffy_(discord) for DS",
   "size": {
     "x": 32,
     "y": 32
@@ -20,6 +20,14 @@
     },
     {
       "name": "equipped-HELMET-plaf",
+      "directions": 4
+    },
+    {
+      "name": "equipped-HELMET-vulpkanin",
+      "directions": 4
+    },
+    {
+      "name": "equipped-HELMET-tajaran",
       "directions": 4
     },
     {

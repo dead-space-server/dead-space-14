@@ -28,11 +28,11 @@ public sealed partial class LavalandMadMinerHookVisualComponent : Component
 public sealed partial class LavalandRemoveMadMinerHookDoAfterEvent : SimpleDoAfterEvent;
 
 /// <summary>Keeps a hooked player in place; a hook left behind by a dead or vanished miner falls off.</summary>
-public sealed class LavalandMadMinerHookSystem : EntitySystem
+public sealed partial class LavalandMadMinerHookSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     public override void Initialize()
     {

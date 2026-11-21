@@ -508,6 +508,7 @@
     - WizardDemonstrateObjective
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/wizardsden.yml
+  - type: PauseMapWhenEmpty # DS14
   - type: RuleGrids
   - type: AntagSelection
   - type: AntagLoadProfileRule
@@ -594,6 +595,7 @@
   - type: RuleGrids
   - type: LoadMapRule
     gridPath: /Maps/Shuttles/mothership.yml
+  - type: PauseMapWhenEmpty # DS14
 
 - type: entity
   parent: BaseXenoborgsRule

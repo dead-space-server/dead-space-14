@@ -16,9 +16,9 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.Wires.UI
 {
-    public sealed class WiresMenu : BaseWindow
+    public sealed partial class WiresMenu : BaseWindow
     {
-        [Dependency] private readonly IResourceCache _resourceCache = default!;
+        [Dependency] private IResourceCache _resourceCache = default!;
 
         private readonly Control _wiresHBox;
         private readonly Control _topContainer;
@@ -284,7 +284,7 @@ namespace Content.Client.Wires.UI
             return false;
         }
 
-        private sealed class WireControl : Control
+        private sealed partial class WireControl : Control
         {
             private IResourceCache _resourceCache;
 
@@ -373,7 +373,7 @@ namespace Content.Client.Wires.UI
                 return base.HasPoint(point) && point.Y <= 80;
             }
 
-            private sealed class WireRender : Control
+            private sealed partial class WireRender : Control
             {
                 private readonly WireColor _color;
                 private readonly bool _isCut;
@@ -424,14 +424,21 @@ namespace Content.Client.Wires.UI
                     var t = 0f;
                     var b = tex.Height + t;
 
+                    // DS14-start: since engine v295 UIBox2 no longer takes swapped edges (it collapses to zero width),
+                    // so a flipped or mirrored wire is drawn through a transform instead
+                    var origHandleT = handle.GetTransform();
+                    var drawTransform = origHandleT;
+
                     if (_flip)
                     {
-                        (t, b) = (b, t);
+                        var flip = new Matrix3x2(1, 0, 0, -1, 0, b * UIScale);
+                        drawTransform = Matrix3x2.Multiply(flip, drawTransform);
                     }
 
                     if (_mirror)
                     {
-                        (l, r) = (r, l);
+                        var mirror = new Matrix3x2(-1, 0, 0, 1, r * UIScale, 0);
+                        drawTransform = Matrix3x2.Multiply(mirror, drawTransform);
                     }
 
                     l *= UIScale;
@@ -439,6 +446,7 @@ namespace Content.Client.Wires.UI
                     t *= UIScale;
                     b *= UIScale;
 
+                    handle.SetTransform(drawTransform);
                     var rect = new UIBox2(l, t, r, b);
                     if (_isCut)
                     {
@@ -448,11 +456,13 @@ namespace Content.Client.Wires.UI
                     }
 
                     handle.DrawTextureRect(tex, rect, colorValue);
+                    handle.SetTransform(origHandleT);
+                    // DS14-end
                 }
             }
         }
 
-        private sealed class StatusLight : Control
+        private sealed partial class StatusLight : Control
         {
             private static readonly Animation _blinkingFast = new()
             {
@@ -577,7 +587,7 @@ namespace Content.Client.Wires.UI
             }
         }
 
-        private sealed class HelpPopup : Popup
+        private sealed partial class HelpPopup : Popup
         {
             public HelpPopup()
             {

@@ -15,9 +15,9 @@ namespace Content.Client.VendingMachines.UI;
 [GenerateTypedNameReferences]
 public sealed partial class VendingMachineMenu : FancyWindow
 {
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private readonly Dictionary<VendorItemKey, (ListContainerButton Button, VendingMachineItem Item)> _listItems = new();
     private readonly Dictionary<VendorItemKey, uint> _amounts = new();

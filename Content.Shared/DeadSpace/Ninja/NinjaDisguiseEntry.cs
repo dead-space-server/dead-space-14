@@ -10,8 +10,9 @@ using Content.Shared.NPC.Prototypes;
 
 namespace Content.Shared.DeadSpace.Ninja;
 
+[DataDefinition]
 [Serializable, NetSerializable]
-public sealed class NinjaDisguiseEntry
+public sealed partial class NinjaDisguiseEntry
 {
     [DataField]
     public string Name = string.Empty;
@@ -62,8 +63,9 @@ public sealed class NinjaDisguiseEntry
     public List<ProtoId<NpcFactionPrototype>> Factions = new();
 }
 
+[DataDefinition]
 [Serializable, NetSerializable]
-public sealed class NinjaDisguiseInventoryEntry
+public sealed partial class NinjaDisguiseInventoryEntry
 {
     [DataField]
     public string Slot = string.Empty;

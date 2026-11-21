@@ -12,11 +12,11 @@ using Robust.Shared.Map.Components;
 namespace Content.Server.DeadSpace.Atmos.Piping;
 
 [UsedImplicitly]
-public sealed class GasHeatExchangerSystem : EntitySystem
+public sealed partial class GasHeatExchangerSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     private static readonly Direction[] Cardinals =
         { Direction.North, Direction.East, Direction.South, Direction.West };

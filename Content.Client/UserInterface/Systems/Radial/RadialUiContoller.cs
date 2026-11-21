@@ -13,11 +13,11 @@ using Robust.Shared.Timing;
 namespace Content.Client.UserInterface.Systems.Radial;
 
 [UsedImplicitly]
-public sealed class RadialUiController : UIController
+public sealed partial class RadialUiController : UIController
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     private LayoutContainer _radials = default!;
     private List<RadialContainer> _attachedRadials = new();

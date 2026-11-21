@@ -16,8 +16,8 @@ public sealed partial class VentriloquistPuppetSystem : SharedVentriloquistPuppe
 {
     public static readonly EntProtoId MutedEffect = "StatusEffectVentriloquistPuppetMuted";
 
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     // DS14-start: explicit subscriptions are required by the current engine baseline.
     public override void Initialize()

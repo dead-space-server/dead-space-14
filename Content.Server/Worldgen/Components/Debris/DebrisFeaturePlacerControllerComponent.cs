@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using Content.Server.Worldgen.Prototypes;
 using Content.Server.Worldgen.Systems.Debris;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Worldgen.Components.Debris;
 
@@ -37,7 +36,7 @@ public sealed partial class DebrisFeaturePlacerControllerComponent : Component
     /// <summary>
     ///     The noise channel to use as a density controller.
     /// </summary>
-    [DataField("densityNoiseChannel", customTypeSerializer: typeof(PrototypeIdSerializer<NoiseChannelPrototype>))]
+    [DataField("densityNoiseChannel")]
     public string DensityNoiseChannel { get; private set; } = default!;
 }
 

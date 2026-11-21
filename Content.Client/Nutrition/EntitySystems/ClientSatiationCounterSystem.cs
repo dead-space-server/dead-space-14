@@ -8,10 +8,10 @@ namespace Content.Client.Nutrition.EntitySystems;
 /// <summary>
 /// Supplies satiation values to generic counter alerts.
 /// </summary>
-public sealed class ClientSatiationCounterSystem : EntitySystem
+public sealed partial class ClientSatiationCounterSystem : EntitySystem
 {
-    [Dependency] private readonly SatiationSystem _satiation = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     private EntityQuery<SatiationCounterAlertComponent> _counterQuery; // DS14 - initialized explicitly on the current engine.
 
     public override void Initialize()

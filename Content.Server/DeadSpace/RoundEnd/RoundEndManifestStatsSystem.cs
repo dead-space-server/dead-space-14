@@ -20,9 +20,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.RoundEnd;
 
-public sealed class RoundEndManifestStatsSystem : EntitySystem
+public sealed partial class RoundEndManifestStatsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
 
     private const int MinQuoteLength = 8;
     private const int MaxQuoteLength = 160;
@@ -415,7 +415,7 @@ public sealed class RoundEndManifestStatsSystem : EntitySystem
                IsSameManifestCharacter(source, mind, identity);
     }
 
-    private bool TryGetDamageSourceMind(EntityUid? source, out EntityUid mindId, out MindComponent mind)
+    public bool TryGetDamageSourceMind(EntityUid? source, out EntityUid mindId, out MindComponent mind)
     {
         mindId = default;
         mind = default!;
@@ -485,7 +485,7 @@ public sealed class RoundEndManifestStatsSystem : EntitySystem
         return true;
     }
 
-    private bool TryGetPlayerMind(EntityUid uid, out EntityUid mindId, out MindComponent mind)
+    public bool TryGetPlayerMind(EntityUid uid, out EntityUid mindId, out MindComponent mind)
     {
         if (!TryGetMind(uid, out mindId, out mind) || !IsTrackedPlayerMind(mindId, mind))
             return false;
@@ -493,7 +493,7 @@ public sealed class RoundEndManifestStatsSystem : EntitySystem
         return true;
     }
 
-    private bool IsAntagPlayerMind(EntityUid mindId, MindComponent mind)
+    public bool IsAntagPlayerMind(EntityUid mindId, MindComponent mind)
     {
         return IsTrackedPlayerMind(mindId, mind) && _roles.MindIsAntagonist(mindId);
     }

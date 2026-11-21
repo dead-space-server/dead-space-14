@@ -6,11 +6,11 @@ using Robust.Shared.Random;
 
 namespace Content.Client.Animations;
 
-public sealed class SineWaveAnimationSystem : EntitySystem // DS14 - pre-v288 event/IoC style
+public sealed partial class SineWaveAnimationSystem : EntitySystem // DS14 - pre-v288 event/IoC style
 {
-    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!; // DS14 - pre-v288 IoC
-    [Dependency] private readonly IRobustRandom _random = default!; // DS14 - pre-v288 IoC
-    [Dependency] private readonly SpriteSystem _sprite = default!; // DS14 - pre-v288 IoC
+    [Dependency] private AnimationPlayerSystem _animationPlayer = default!; // DS14 - pre-v288 IoC
+    [Dependency] private IRobustRandom _random = default!; // DS14 - pre-v288 IoC
+    [Dependency] private SpriteSystem _sprite = default!; // DS14 - pre-v288 IoC
 
     private readonly string _sineWaveAnimationKey = "sinWave";
 

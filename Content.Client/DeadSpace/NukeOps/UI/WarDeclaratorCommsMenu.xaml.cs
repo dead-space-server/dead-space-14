@@ -18,9 +18,9 @@ namespace Content.Client.DeadSpace.NukeOps.UI;
 [GenerateTypedNameReferences]
 public sealed partial class WarDeclaratorCommsMenu : FancyWindow
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly ILocalizationManager _localizationManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private ILocalizationManager _localizationManager = default!;
 
     public event Action<string>? OnActivated;
     public event Action<string, string>? OnSecondaryAnnouncement;

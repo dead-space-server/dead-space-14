@@ -6,9 +6,9 @@ using Content.Shared.Silicons.Laws.Components;
 
 namespace Content.Server.DeadSpace.LawConfigurator;
 
-public sealed class LawConfiguratorServerSystem : EntitySystem
+public sealed partial class LawConfiguratorServerSystem : EntitySystem
 {
-    [Dependency] private readonly SiliconLawSystem _siliconLaw = default!;
+    [Dependency] private SiliconLawSystem _siliconLaw = default!;
 
     public override void Initialize()
     {

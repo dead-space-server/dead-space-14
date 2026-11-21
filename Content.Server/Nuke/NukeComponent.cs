@@ -6,7 +6,6 @@ using Content.Shared.Nuke;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Nuke
 {
@@ -109,7 +108,7 @@ namespace Content.Server.Nuke
         ///     information (e.g., the light that the explosion gives off).
         /// </summary>
         [ViewVariables(VVAccess.ReadWrite)]
-        [DataField("explosionType", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<ExplosionPrototype>))]
+        [DataField("explosionType", required: true)]
         public string ExplosionType = default!;
 
         /// <summary>

@@ -24,21 +24,21 @@ using System.Numerics;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryLimbPort : EntitySystem
+public sealed partial class SurgeryLimbPort : EntitySystem
 {
-    [Dependency] private readonly LimbWoundSystem _limbs = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SurgeryOrganSystem _organs = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SurgeryOrganFreshSystem _fresh = default!;
-    [Dependency] private readonly SurgeryGraftSystem _graft = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly BloodstreamSystem _blood = default!;
-    [Dependency] private readonly SharedProjectileSystem _projectiles = default!;
+    [Dependency] private LimbWoundSystem _limbs = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SurgeryOrganSystem _organs = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SurgeryOrganFreshSystem _fresh = default!;
+    [Dependency] private SurgeryGraftSystem _graft = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private BloodstreamSystem _blood = default!;
+    [Dependency] private SharedProjectileSystem _projectiles = default!;
 
     private const float Detox = 0.6f;
 

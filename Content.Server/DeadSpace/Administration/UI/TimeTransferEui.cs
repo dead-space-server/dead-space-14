@@ -12,13 +12,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Administration.UI;
 
-public sealed class TimeTransferEui : BaseEui
+public sealed partial class TimeTransferEui : BaseEui
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly PlayTimeTrackingManager _playTime = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private PlayTimeTrackingManager _playTime = default!;
 
     private const int MaxMinutes = 1_000_000;
 

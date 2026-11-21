@@ -15,6 +15,10 @@ public sealed class SalvageMagnetBoundUserInterfaceState : BoundUserInterfaceSta
 
     public List<int> Offers;
 
+    // DS14-start
+    public bool ReleaseLocked;
+    // DS14-end
+
     public SalvageMagnetBoundUserInterfaceState(List<int> offers)
     {
         Offers = offers;

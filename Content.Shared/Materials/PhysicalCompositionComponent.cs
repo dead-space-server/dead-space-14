@@ -1,6 +1,5 @@
 ﻿using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 
 namespace Content.Shared.Materials;
 
@@ -19,13 +18,13 @@ public sealed partial class PhysicalCompositionComponent : Component
     /// <summary>
     /// The materials that "make up" this entity
     /// </summary>
-    [DataField("materialComposition", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<int, MaterialPrototype>))]
+    [DataField("materialComposition")]
     public Dictionary<string, int> MaterialComposition = new();
 
     /// <summary>
     /// The chemicals that "make up" this entity
     /// </summary>
-    [DataField("chemicalComposition", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<FixedPoint2, ReagentPrototype>))]
+    [DataField("chemicalComposition")]
     public Dictionary<string, FixedPoint2> ChemicalComposition = new();
     // TODO use ReagentQuantity[]
 }

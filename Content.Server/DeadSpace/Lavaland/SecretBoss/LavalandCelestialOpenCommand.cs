@@ -12,9 +12,9 @@ namespace Content.Server.DeadSpace.Lavaland.SecretBoss;
 /// on the lavaland the admin stands on, or on every lavaland otherwise.
 /// </summary>
 [AdminCommand(AdminFlags.Admin)]
-public sealed class LavalandCelestialOpenCommand : IConsoleCommand
+public sealed partial class LavalandCelestialOpenCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "celestialopen";
     public string Description => "Открыть яму и лабиринт Селестиала на Лаваленде без выполнения условий.";

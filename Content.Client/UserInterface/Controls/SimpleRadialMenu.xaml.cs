@@ -20,9 +20,9 @@ public sealed partial class SimpleRadialMenu : RadialMenu
 
     private EntityUid? _attachMenuToEntity;
 
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
 
     public SimpleRadialMenu()
     {
@@ -345,7 +345,7 @@ public sealed record RadialMenuTextureIconSpecifier(SpriteSpecifier Sprite) : Ra
 public sealed record RadialMenuEntityPrototypeIconSpecifier(EntProtoId ProtoId) : RadialMenuIconSpecifier;
 
 /// <summary> Container for common options for radial menu button. </summary>
-public abstract class RadialMenuOptionBase
+public abstract partial class RadialMenuOptionBase
 {
     // DS14-start
     /// <summary>
@@ -378,21 +378,21 @@ public abstract class RadialMenuOptionBase
 
 /// <summary> Base type for model of radial menu button with some action on button pressed. </summary>
 /// <param name="onPressed"></param>
-public abstract class RadialMenuActionOptionBase(Action onPressed) : RadialMenuOptionBase
+public abstract partial class RadialMenuActionOptionBase(Action onPressed) : RadialMenuOptionBase
 {
     /// <summary> Action to be executed on button press. </summary>
     public Action OnPressed { get; } = onPressed;
 }
 
 /// <summary> Strong-typed model for radial menu button with action, stores provided data to be used upon button press. </summary>
-public sealed class RadialMenuActionOption<T>(Action<T> onPressed, T data) : RadialMenuActionOptionBase(onPressed: () => onPressed(data));
+public sealed partial class RadialMenuActionOption<T>(Action<T> onPressed, T data) : RadialMenuActionOptionBase(onPressed: () => onPressed(data));
 
 /// <summary>
 /// Model for radial menu button that represents reference for next layer of radial buttons.
 /// </summary>
 /// <param name="nested">List of button models for next layer of menu.</param>
 /// <param name="containerRadius">Radius for radial menu buttons of next layer.</param>
-public sealed class RadialMenuNestedLayerOption(IReadOnlyCollection<RadialMenuOptionBase> nested, float containerRadius = 100) : RadialMenuOptionBase
+public sealed partial class RadialMenuNestedLayerOption(IReadOnlyCollection<RadialMenuOptionBase> nested, float containerRadius = 100) : RadialMenuOptionBase
 {
     /// <summary> Radius for radial menu buttons of next layer. </summary>
     public float? ContainerRadius { get; } = containerRadius;
@@ -404,7 +404,7 @@ public sealed class RadialMenuNestedLayerOption(IReadOnlyCollection<RadialMenuOp
 /// <summary>
 /// Additional settings for radial menu render.
 /// </summary>
-public sealed class SimpleRadialMenuSettings
+public sealed partial class SimpleRadialMenuSettings
 {
     /// <summary>
     /// Default container draw radius. Is going to be further affected by per sector increment.

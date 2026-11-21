@@ -18,14 +18,14 @@ namespace Content.Server.Objectives.Systems;
 /// </summary>
 public sealed partial class ChangelingEscapeDepartmentConditionSystem : EntitySystem
 {
-    [Dependency] private readonly EmergencyShuttleSystem _emergencyShuttle = default!;
-    [Dependency] private readonly SharedChangelingIdentitySystem _changelingIdentity = default!;
-    [Dependency] private readonly SharedCuffableSystem _cuffable = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly TargetObjectiveSystem _target = default!;
-    [Dependency] private readonly SharedJobSystem _job = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private EmergencyShuttleSystem _emergencyShuttle = default!;
+    [Dependency] private SharedChangelingIdentitySystem _changelingIdentity = default!;
+    [Dependency] private SharedCuffableSystem _cuffable = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private TargetObjectiveSystem _target = default!;
+    [Dependency] private SharedJobSystem _job = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     // DS14-start: pre-v288 RobustToolbox has no event-subscription source generator.
     public override void Initialize()

@@ -6,9 +6,9 @@ using Content.Shared.Eui;
 
 namespace Content.Server.DeadSpace.AdminToy;
 
-public sealed class AdminToySelectionEui : BaseEui
+public sealed partial class AdminToySelectionEui : BaseEui
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private readonly NetEntity _target;
 

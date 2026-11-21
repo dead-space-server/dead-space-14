@@ -12,9 +12,9 @@ namespace Content.Client.Atmos.UI;
 /// </summary>
 [UsedImplicitly]
 // DS14: Current engine does not require source generation for this BUI.
-public sealed class GasFilterBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
+public sealed partial class GasFilterBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
 
     [ViewVariables]
     private GasFilterWindow? _window;

@@ -10,7 +10,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackYosif
   name: cозвездие Ориона
   description: Вы видите перед собой созвездие из нескольких звёзд, вглядываясь в него вы чувствуете желание погрузить руку в самый центр него.
@@ -49,7 +49,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltYosifFilled
   name: инструментальный пояс Властителя звёзд
   description: Пояс подготовленный специально под заказ для хранения инструментов высшего качества.
@@ -59,8 +59,6 @@
     sprite: _DeadSpace/Sponsor/Yosif/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Yosif/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrillYosif
@@ -99,13 +97,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/Yosif/jaws_of_life.rsi
           state: jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/Yosif/jaws_of_life.rsi
           state: jaws_cutter
@@ -132,7 +130,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/Yosif/drill.rsi
           state: drill_screw
@@ -140,7 +138,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/Yosif/drill.rsi
           state: drill_bolt
@@ -178,7 +176,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitYosif
   name: скафандр модификации "Орион"
   description: Идеально подходящий скафандр для путешествий по неизведанным просторам космоса.
@@ -190,11 +188,9 @@
     sprite: _DeadSpace/Sponsor/Yosif/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitYosif
-  - type: Item
-    size: Huge
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitYosif
   categories: [ HideSpawnMenu ]
   name: шлем скафандра "Орион"
@@ -206,11 +202,7 @@
     sprite: _DeadSpace/Sponsor/Yosif/helmet.rsi
   - type: PointLight
     color: "#ffffff"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Magboots
 - type: entity
   parent: ClothingShoesBootsMag
   id: ClothingShoesBootsMagYosif

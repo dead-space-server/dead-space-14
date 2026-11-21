@@ -12,8 +12,8 @@ public sealed partial class ShishaSystem
 {
     private static readonly ProtoId<TagPrototype> FillerTag = "Smokable";
 
-    [Dependency] private readonly SharedStackSystem _stacks = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
+    [Dependency] private SharedStackSystem _stacks = default!;
+    [Dependency] private TagSystem _tags = default!;
 
     private void InitializeFuel()
     {

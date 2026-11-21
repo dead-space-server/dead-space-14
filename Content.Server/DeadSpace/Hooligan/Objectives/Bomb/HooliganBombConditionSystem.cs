@@ -17,12 +17,12 @@ namespace Content.Server.DeadSpace.Hooligan.Objectives;
 /// Логика цели на подрыв самодельных бомб
 /// Считает взрывы бомб из банок колы в разных отделах станции
 /// </summary>
-public sealed class HooliganBombConditionSystem : EntitySystem
+public sealed partial class HooliganBombConditionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private static readonly EntProtoId FireBombId = "FireBomb";
 

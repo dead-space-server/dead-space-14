@@ -15,16 +15,16 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.AdminCommandLogger;
 
-public sealed class AdminCommandLoggerSystem : EntitySystem
+public sealed partial class AdminCommandLoggerSystem : EntitySystem
 {
     private const int MaxLogValueLength = 256;
 
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IConsoleHost _consoleHost = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly IResourceManager _resource = default!;
-    [Dependency] private readonly ToolshedManager _toolshed = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IConsoleHost _consoleHost = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private IResourceManager _resource = default!;
+    [Dependency] private ToolshedManager _toolshed = default!;
 
     private readonly AdminCommandPermissions _engineCommandPermissions = new();
 

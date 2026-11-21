@@ -12,12 +12,12 @@ using Content.Shared.Tag;
 
 namespace Content.Server.DeadSpace.Holopad;
 
-public sealed class HolopadAdminNotificationSystem: EntitySystem
+public sealed partial class HolopadAdminNotificationSystem: EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly TagSystem _tagSystem = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
+    [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
 
     private static readonly ProtoId<TagPrototype> HolopadAdminNotificationTag = "HolopadAdminNotification";
     public override void Initialize()

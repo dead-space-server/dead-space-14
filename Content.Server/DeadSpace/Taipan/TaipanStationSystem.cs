@@ -19,16 +19,16 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.Taipan;
 
-public sealed class TaipanStationSystem : EntitySystem
+public sealed partial class TaipanStationSystem : EntitySystem
 {
     private static readonly ProtoId<TagPrototype> TaipanTag = "Taipan";
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly ShuttleSystem _shuttle = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private ShuttleSystem _shuttle = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     private EntityUid _stationGrid = EntityUid.Invalid;
     private MapId _mapId = MapId.Nullspace;

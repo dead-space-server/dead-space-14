@@ -2,10 +2,10 @@ using Content.Shared.Actions;
 
 namespace Content.Shared.UserInterface;
 
-public sealed class IntrinsicUISystem : EntitySystem
+public sealed partial class IntrinsicUISystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
 
     public override void Initialize()
     {
@@ -55,7 +55,7 @@ public sealed class IntrinsicUISystem : EntitySystem
 }
 
 // Competing with ActivatableUI for horrible event names.
-public sealed class IntrinsicUIOpenAttemptEvent : CancellableEntityEventArgs
+public sealed partial class IntrinsicUIOpenAttemptEvent : CancellableEntityEventArgs
 {
     public EntityUid User { get; }
     public Enum? Key { get; }
@@ -67,7 +67,7 @@ public sealed class IntrinsicUIOpenAttemptEvent : CancellableEntityEventArgs
 }
 
 // DS14-slimeperson-internal-magic-mirror-start
-public sealed class BeforeIntrinsicUIOpenEvent : CancellableEntityEventArgs
+public sealed partial class BeforeIntrinsicUIOpenEvent : CancellableEntityEventArgs
 {
     public EntityUid User { get; }
     public Enum? Key { get; }

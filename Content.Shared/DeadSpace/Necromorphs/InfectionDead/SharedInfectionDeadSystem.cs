@@ -12,11 +12,11 @@ using Content.Shared.Zombies;
 
 namespace Content.Shared.DeadSpace.Necromorphs.InfectionDead;
 
-public abstract class SharedInfectionDeadSystem : EntitySystem
+public abstract partial class SharedInfectionDeadSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public override void Initialize()
     {

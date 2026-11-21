@@ -7,12 +7,12 @@ using Content.Shared.Popups;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryHeadTraumaSystem : EntitySystem
+public sealed partial class SurgeryHeadTraumaSystem : EntitySystem
 {
     private const string Effect = "HeadTrauma";
 
-    [Dependency] private readonly PsychiatrySystem _psychiatry = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private PsychiatrySystem _psychiatry = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

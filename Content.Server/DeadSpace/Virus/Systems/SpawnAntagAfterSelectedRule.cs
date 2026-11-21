@@ -8,12 +8,12 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class SpawnAntagAfterSelectedRule : GameRuleSystem<SpawnAntagAfterSelectedComponent>
+public sealed partial class SpawnAntagAfterSelectedRule : GameRuleSystem<SpawnAntagAfterSelectedComponent>
 {
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly GhostRoleSystem _ghost = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private GhostRoleSystem _ghost = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

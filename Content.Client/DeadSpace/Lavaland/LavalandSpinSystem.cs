@@ -6,9 +6,9 @@ using Robust.Client.GameObjects;
 namespace Content.Client.DeadSpace.Lavaland;
 
 /// <summary>Turns the sprites of spinning entities; puts them back upright when they stop.</summary>
-public sealed class LavalandSpinSystem : EntitySystem
+public sealed partial class LavalandSpinSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void FrameUpdate(float frameTime)
     {

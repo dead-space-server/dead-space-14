@@ -12,131 +12,24 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Projectiles;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
-using System.Numerics; //DS-14
-using Content.Server.DeadSpace.Physics; //DS-14
-using Robust.Shared.Map; //DS-14
-using Robust.Shared.Physics; //DS-14
-using Robust.Shared.Physics.Components; //DS-14
-using Robust.Shared.Physics.Dynamics; //DS-14
-using Robust.Shared.Physics.Systems; //DS-14
+
 namespace Content.Server.Projectiles;
 
-public sealed class ProjectileSystem : SharedProjectileSystem
+public sealed partial class ProjectileSystem : SharedProjectileSystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ColorFlashEffectSystem _color = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly DestructibleSystem _destructibleSystem = default!;
-    [Dependency] private readonly GunSystem _guns = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _sharedCameraRecoil = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!; //DS-14
-    //DS-14 start
-    private const float SweepMinDistance = 0.25f;
-    private const float SweepInset = 0.1f;
-    private readonly Dictionary<EntityUid, HashSet<EntityUid>> _sweptHits = new();
-    private readonly List<EntityUid> _deadSweeps = new();
-    //DS-14 end
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private ColorFlashEffectSystem _color = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private DestructibleSystem _destructibleSystem = default!;
+    [Dependency] private GunSystem _guns = default!;
+    [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<ProjectileComponent, StartCollideEvent>(OnStartCollide);
-        UpdatesAfter.Add(typeof(SharedPhysicsSystem)); //DS-14
     }
-
-    //DS-14 start
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        var query = EntityQueryEnumerator<ProjectileComponent, PhysicsComponent, FixturesComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var projectile, out var body, out var fixtures, out var xform))
-        {
-            if (projectile.ProjectileSpent || projectile is { Weapon: null, OnlyCollideWhenShot: true })
-                continue;
-
-            if (SweepPath.TryGet(xform, body, frameTime, SweepMinDistance, _transform, out var mapId, out var from, out var to))
-                Sweep(uid, body, fixtures, mapId, from, to);
-        }
-
-        foreach (var uid in _sweptHits.Keys)
-        {
-            if (TerminatingOrDeleted(uid))
-                _deadSweeps.Add(uid);
-        }
-
-        foreach (var uid in _deadSweeps)
-        {
-            _sweptHits.Remove(uid);
-        }
-
-        _deadSweeps.Clear();
-    }
-
-    private void Sweep(
-        EntityUid uid,
-        PhysicsComponent body,
-        FixturesComponent fixtures,
-        MapId mapId,
-        Vector2 from,
-        Vector2 to)
-    {
-        var delta = to - from;
-        var distance = delta.Length();
-        if (distance < SweepMinDistance || !fixtures.Fixtures.TryGetValue(ProjectileFixture, out var ourFixture))
-            return;
-
-        var direction = delta / distance;
-        var ray = new CollisionRay(from, direction, ourFixture.CollisionMask);
-        foreach (var hit in _physics.IntersectRay(mapId, ray, distance, uid, false))
-        {
-            if (!CanSweepHit(uid, body, ourFixture, hit.HitEntity))
-                continue;
-
-            if (_sweptHits.TryGetValue(uid, out var hits) && hits.Contains(hit.HitEntity))
-                continue;
-
-            _transform.SetWorldPosition(uid, hit.HitPos + direction * SweepInset);
-            return;
-        }
-    }
-
-    private bool CanSweepHit(EntityUid uid, PhysicsComponent body, Fixture ourFixture, EntityUid target)
-    {
-        if (target == uid ||
-            HasComp<ProjectileComponent>(target) ||
-            !TryComp<PhysicsComponent>(target, out var otherBody) ||
-            !otherBody.CanCollide ||
-            !TryComp<FixturesComponent>(target, out var otherFixtures))
-        {
-            return false;
-        }
-
-        Fixture? otherFixture = null;
-        foreach (var fixture in otherFixtures.Fixtures.Values)
-        {
-            if (fixture.Hard && (fixture.CollisionLayer & ourFixture.CollisionMask) != 0)
-            {
-                otherFixture = fixture;
-                break;
-            }
-        }
-
-        if (otherFixture == null)
-            return false;
-
-        var ourEv = new PreventCollideEvent(uid, target, body, otherBody, ourFixture, otherFixture);
-        RaiseLocalEvent(uid, ref ourEv);
-        if (ourEv.Cancelled)
-            return false;
-
-        var otherEv = new PreventCollideEvent(target, uid, otherBody, body, otherFixture, ourFixture);
-        RaiseLocalEvent(target, ref otherEv);
-        return !otherEv.Cancelled;
-    }
-    //DS-14 end
 
     private void OnStartCollide(EntityUid uid, ProjectileComponent component, ref StartCollideEvent args)
     {
@@ -145,22 +38,7 @@ public sealed class ProjectileSystem : SharedProjectileSystem
             || component.ProjectileSpent || component is { Weapon: null, OnlyCollideWhenShot: true })
             return;
 
-        //DS-14 start
-        HitTarget(uid, component, args.OtherEntity, args.OurBody.LinearVelocity);
-    }
-
-    private void HitTarget(EntityUid uid, ProjectileComponent component, EntityUid target, Vector2 velocity)
-    {
-        if (!_sweptHits.TryGetValue(uid, out var hits))
-        {
-            hits = new HashSet<EntityUid>();
-            _sweptHits[uid] = hits;
-        }
-
-        if (!hits.Add(target))
-            return;
-        //DS-14 end
-
+        var target = args.OtherEntity;
         // DS14-start
         // Filter.Pvs ignores session view subscriptions used by remote eyes.
         var effectOrigin = _transform.GetMapCoordinates(target);
@@ -213,8 +91,8 @@ public sealed class ProjectileSystem : SharedProjectileSystem
         {
             _guns.PlayImpactSound(target, damage, component.SoundHit, component.ForceSound);
 
-            if (!velocity.IsLengthZero()) //DS-14
-                _sharedCameraRecoil.KickCamera(target, velocity.Normalized()); //DS-14
+            if (!args.OurBody.LinearVelocity.IsLengthZero())
+                _sharedCameraRecoil.KickCamera(target, args.OurBody.LinearVelocity.Normalized());
         }
 
         if (component.DeleteOnCollide && component.ProjectileSpent)

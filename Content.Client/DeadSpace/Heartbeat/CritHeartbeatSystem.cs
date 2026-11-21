@@ -15,13 +15,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Heartbeat;
 
-public sealed class CritHeartbeatSystem : EntitySystem
+public sealed partial class CritHeartbeatSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private EntityUid? _trackedEntity;
     private EntityUid? _currentStream;

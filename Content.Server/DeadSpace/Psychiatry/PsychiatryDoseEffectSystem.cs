@@ -10,10 +10,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Psychiatry;
 
-public sealed class PsychiatryClarityDoseSystem : EntityEffectSystem<MobStateComponent, PsychiatryClarityDose>
+public sealed partial class PsychiatryClarityDoseSystem : EntityEffectSystem<MobStateComponent, PsychiatryClarityDose>
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly PsychiatrySystem _psychiatry = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private PsychiatrySystem _psychiatry = default!;
 
     protected override void Effect(Entity<MobStateComponent> entity, ref EntityEffectEvent<PsychiatryClarityDose> args)
     {
@@ -28,9 +28,9 @@ public sealed class PsychiatryClarityDoseSystem : EntityEffectSystem<MobStateCom
     }
 }
 
-public sealed class PsychiatryPsychogenDoseSystem : EntityEffectSystem<MobStateComponent, PsychiatryPsychogenDose>
+public sealed partial class PsychiatryPsychogenDoseSystem : EntityEffectSystem<MobStateComponent, PsychiatryPsychogenDose>
 {
-    [Dependency] private readonly PsychiatrySystem _psychiatry = default!;
+    [Dependency] private PsychiatrySystem _psychiatry = default!;
 
     protected override void Effect(Entity<MobStateComponent> entity, ref EntityEffectEvent<PsychiatryPsychogenDose> args)
     {
@@ -38,10 +38,10 @@ public sealed class PsychiatryPsychogenDoseSystem : EntityEffectSystem<MobStateC
     }
 }
 
-public sealed class PsychiatryInhaleSystem : EntityEffectSystem<MobStateComponent, PsychiatryInhale>
+public sealed partial class PsychiatryInhaleSystem : EntityEffectSystem<MobStateComponent, PsychiatryInhale>
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly PsychiatrySystem _psychiatry = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private PsychiatrySystem _psychiatry = default!;
 
     protected override void Effect(Entity<MobStateComponent> entity, ref EntityEffectEvent<PsychiatryInhale> args)
     {

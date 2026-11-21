@@ -8,11 +8,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.TheCircle.Dreadnought;
 
-public sealed class DreadnoughtLastStandClientSystem : EntitySystem
+public sealed partial class DreadnoughtLastStandClientSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private DreadnoughtLastStandTimerControl? _timer;
     private EntityUid? _trackedEntity;

@@ -32,20 +32,20 @@ using Robust.Shared.Network;
 
 namespace Content.Server.Backmen.GameTicking.Rules;
 
-public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
+public sealed partial class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
 {
-    [Dependency] private readonly IAdminManager _admin = default!; // DS14
-    [Dependency] private readonly RoundEndSystem _roundEndSystem = default!;
-    // [Dependency] private readonly ChatSystem _chatSystem = default!; // DS14: announcements use RuleStation.
-    [Dependency] private readonly NukeCodeSendQueueSystem _nukeCodeQueue = default!; // DS14
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly ObjectivesSystem _objectivesSystem = default!;
-    [Dependency] private readonly CargoSystem _cargoSystem = default!;
-    [Dependency] private readonly AlertLevelSystem _alertLevel = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!; // DS14
-    [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private IAdminManager _admin = default!; // DS14
+    [Dependency] private RoundEndSystem _roundEndSystem = default!;
+    // [Dependency] private ChatSystem _chatSystem = default!; // DS14: announcements use RuleStation.
+    [Dependency] private NukeCodeSendQueueSystem _nukeCodeQueue = default!; // DS14
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private ObjectivesSystem _objectivesSystem = default!;
+    [Dependency] private CargoSystem _cargoSystem = default!;
+    [Dependency] private AlertLevelSystem _alertLevel = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private ErtResponseSystem _ertResponseSystem = default!; // DS14
+    [Dependency] private IServerDbManager _db = default!;
     private static readonly ProtoId<ErtTeamPrototype> ErtTeam = "CburnSierra";
     private static readonly ProtoId<CargoAccountPrototype> Account = "Security";
     private const int AdditionalSupport = 70000;

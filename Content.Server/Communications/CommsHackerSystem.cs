@@ -12,17 +12,17 @@ using Robust.Shared.Timing; //DS14
 
 namespace Content.Server.Communications;
 
-public sealed class CommsHackerSystem : SharedCommsHackerSystem
+public sealed partial class CommsHackerSystem : SharedCommsHackerSystem
 {
-    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
     // TODO: remove when generic check event is used
-    [Dependency] private readonly NinjaGlovesSystem _gloves = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!; //DS14
-    [Dependency] private readonly IGameTiming _timing = default!; //DS14
+    [Dependency] private NinjaGlovesSystem _gloves = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!; //DS14
+    [Dependency] private IGameTiming _timing = default!; //DS14
 
     public override void Initialize()
     {

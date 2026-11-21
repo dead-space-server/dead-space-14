@@ -5,10 +5,10 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.Corvax.JoinQueue;
 
-public sealed class QueueState : State
+public sealed partial class QueueState : State
 {
-    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
-    [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
+    [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
+    [Dependency] private IClientConsoleHost _consoleHost = default!;
 
     // private const string JoinSoundPath = "/Audio/Effects/voteding.ogg";
 

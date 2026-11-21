@@ -9,9 +9,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class PartialParalysisSymptom : VirusSymptomBase
+public sealed partial class PartialParalysisSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     public override VirusSymptom Type => VirusSymptom.PartialParalysis;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "PartialParalysisSymptom";
 

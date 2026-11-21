@@ -13,12 +13,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Item;
 
-public abstract class SharedItemSystem : EntitySystem
+public abstract partial class SharedItemSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private   readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] protected readonly SharedContainerSystem Container = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!; // DS14
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private   SharedHandsSystem _handsSystem = default!;
+    [Dependency] protected SharedContainerSystem Container = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!; // DS14
 
     public override void Initialize()
     {

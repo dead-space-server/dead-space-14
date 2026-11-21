@@ -7,13 +7,13 @@ using System.Linq;
 
 namespace Content.Shared.DeadSpace.Necromorphs.Necroobelisk;
 
-public abstract class SharedSuperNecroobeliskSystem : EntitySystem
+public abstract partial class SharedSuperNecroobeliskSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedSanitySystem _sharedSanity = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedSanitySystem _sharedSanity = default!;
 
 
 

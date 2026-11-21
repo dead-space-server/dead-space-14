@@ -31,9 +31,9 @@ namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly IAdminManager _adminManager = default!;
-        [Dependency] private readonly SharedJobSystem _jobs = default!;
-        [Dependency] private readonly AdminSystem _admin = default!;
+        [Dependency] private IAdminManager _adminManager = default!;
+        [Dependency] private SharedJobSystem _jobs = default!;
+        [Dependency] private AdminSystem _admin = default!;
 
         public static readonly EntProtoId ObserverPrototypeName = "MobObserver";
         public static readonly EntProtoId AdminObserverPrototypeName = "AdminObserver";
@@ -411,6 +411,22 @@ namespace Content.Server.GameTicking
                 SpawnPlayer(player, EntityUid.Invalid);
         }
 
+        // DS14-start
+        public void ReturnToLobbyAfterRound(ICommonSession player)
+        {
+            if (RunLevel != GameRunLevel.PostRound ||
+                !LobbyEnabled ||
+                !_playerGameStatuses.TryGetValue(player.UserId, out var status) ||
+                status != PlayerGameStatus.JoinedGame)
+            {
+                return;
+            }
+
+            _mind.WipeMind(player);
+            PlayerJoinLobby(player);
+        }
+        // DS14-end
+
         /// <summary>
         /// Makes a player join into the game and spawn on a station.
         /// </summary>
@@ -515,7 +531,7 @@ namespace Content.Server.GameTicking
                 var spawn = _robustRandom.Pick(_possiblePositions);
                 var toMap = _transform.ToMapCoordinates(spawn);
 
-                if (_mapManager.TryFindGridAt(toMap, out var gridUid, out _))
+                if (_map.TryFindGridAt(toMap, out var gridUid, out _))
                 {
                     var gridXform = Transform(gridUid);
 

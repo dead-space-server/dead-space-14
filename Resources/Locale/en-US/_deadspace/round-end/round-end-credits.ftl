@@ -1,0 +1,144 @@
+round-end-credits-studio = DEAD SPACE
+round-end-credits-round = Round #{ $roundId } · { $gamemode }
+round-end-credits-round-no-mode = Round #{ $roundId }
+round-end-credits-duration = Shift length: { $time }
+round-end-credits-crew-summary = Evacuated: { $escaped } · Left on station: { $alive } · Dead: { $dead } of { $total }
+
+round-end-credits-headline-crew-victory = Crew victory
+round-end-credits-headline-crew-victory-sub = The station held. The villains got nothing.
+round-end-credits-headline-antag-victory = Major victory: { $team }
+round-end-credits-headline-antag-partial = Minor victory: { $team }
+round-end-credits-headline-undetermined = The outcome is unclear
+round-end-credits-headline-calm = A quiet shift
+round-end-credits-headline-calm-sub = Not a single antagonist. Just work.
+round-end-credits-headline-massacre = Bloodbath
+round-end-credits-headline-massacre-sub = Dead: { $dead }. No villains were needed.
+
+round-end-credits-section-outcome = Shift results
+round-end-credits-section-report = Game mode report
+round-end-credits-section-honors = Honorable mentions
+round-end-credits-section-nominations = Shift awards
+round-end-credits-section-votes = Popular vote
+round-end-credits-section-antags = Antagonists
+round-end-credits-section-arena = Arena
+round-end-credits-section-cast = Cast
+round-end-credits-no-antags = There were no antagonists this shift.
+
+round-end-credits-team = { $team } ({ $members })
+round-end-credits-team-major-victory = Major victory
+round-end-credits-team-minor-victory = Minor victory
+round-end-credits-team-minor-defeat = Minor defeat
+round-end-credits-team-major-defeat = Major defeat
+round-end-credits-team-unknown = See the game mode report
+round-end-credits-team-details = Objectives: { $completed }/{ $total } · Survived: { $survivors }/{ $members }
+round-end-credits-team-details-no-objectives = Survived: { $survivors }/{ $members }
+
+round-end-credits-mvp-title = Round MVP
+round-end-credits-antag-mvp-title = Villain of the round
+round-end-credits-stat-kills = Kills: { $value }
+round-end-credits-stat-antagkills = Antagonists stopped: { $value }
+round-end-credits-stat-deaths = Deaths: { $value }
+round-end-credits-stat-crits = Times in crit: { $value }
+round-end-credits-stat-damagetaken = Damage taken: { $value }
+round-end-credits-stat-damagedealt = Damage dealt: { $value }
+round-end-credits-stat-selfdamage = Self-inflicted damage: { $value }
+round-end-credits-stat-healinggiven = Damage healed: { $value }
+round-end-credits-stat-revives = Brought back to life: { $value }
+round-end-credits-stat-slips = Slips: { $value }
+round-end-credits-stat-bites = Bites: { $value }
+round-end-credits-stat-vomits = Vomits: { $value }
+round-end-credits-stat-emotes = Emotes: { $value }
+round-end-credits-stat-screams = Screams: { $value }
+round-end-credits-stat-messages = Lines spoken: { $value }
+round-end-credits-stat-shocks = Shocks: { $value }
+round-end-credits-stat-cuffed = Times cuffed: { $value }
+round-end-credits-stat-objectivescompleted = Objectives completed: { $value }
+
+round-end-credits-status-escaped = Evacuated
+round-end-credits-status-alive = Stayed on station
+round-end-credits-status-dead = Dead
+round-end-credits-status-custody = In custody
+round-end-credits-status-observer = Observer
+round-end-credits-ckey = @{ $ckey }
+round-end-credits-kills-assists = Kills: { $kills } · Assists: { $assists }
+round-end-credits-quote = "{ $quote }"
+round-end-credits-arena-row = { $place }. { $name }: { $kills } / { $deaths }
+
+round-end-credits-outro-title = End of shift
+round-end-credits-outro-thanks = Thanks for playing on Dead Space
+round-end-credits-skip = Skip
+round-end-credits-wall-title = Wall of honor
+round-end-credits-wall-subtitle = Crew of round #{ $roundId } · A new shift is about to begin
+
+round-end-credits-vote-title = Popular vote
+round-end-credits-vote-subtitle = The shift is over. While the shuttle is in transit, decide who the crew will remember
+round-end-credits-vote-time = Credits in: { $seconds } s
+round-end-credits-vote-nobody = The people abstained
+round-end-credits-vote-votes = { $votes } { $votes ->
+        [one] vote
+       *[other] votes
+    }
+round-end-credits-vote-search = Search by name, surname or job...
+round-end-credits-vote-not-picked = Not picked, click a card
+round-end-credits-vote-picked = Your pick: { $name }
+round-end-credits-vote-card-tags = Your vote: { $nominations }
+round-end-credits-vote-no-candidates = Nobody to vote for
+
+round-end-credits-nomination-medic-name = Golden hands
+round-end-credits-nomination-medic-desc = Healed { $value } damage
+round-end-credits-nomination-reviver-name = Second chance
+round-end-credits-nomination-reviver-desc = Brought back to life: { $value }
+round-end-credits-nomination-defender-name = Station defender
+round-end-credits-nomination-defender-desc = Antagonists stopped: { $value }
+round-end-credits-nomination-reaper-name = Angel of death
+round-end-credits-nomination-reaper-desc = Sent to the other side: { $value }
+round-end-credits-nomination-mastermind-name = Evil genius
+round-end-credits-nomination-mastermind-desc = Objectives completed: { $value }
+round-end-credits-nomination-heavy-hand-name = Heavy hand
+round-end-credits-nomination-heavy-hand-desc = Dealt { $value } damage
+
+round-end-credits-nomination-slips-name = Banana star
+round-end-credits-nomination-slips-desc = Slipped { $value } times
+round-end-credits-nomination-deaths-name = Cat with nine lives
+round-end-credits-nomination-deaths-desc = Died { $value } times in one shift
+round-end-credits-nomination-crits-name = On the edge
+round-end-credits-nomination-crits-desc = Went into crit { $value } times
+round-end-credits-nomination-punching-bag-name = Punching bag
+round-end-credits-nomination-punching-bag-desc = Took { $value } damage
+round-end-credits-nomination-self-harm-name = Own worst enemy
+round-end-credits-nomination-self-harm-desc = Dealt { $value } damage to themselves
+round-end-credits-nomination-glutton-name = Black hole
+round-end-credits-nomination-glutton-desc = Ate and drank { $value } servings
+round-end-credits-nomination-vomit-name = Fountain
+round-end-credits-nomination-vomit-desc = Threw up { $value } times
+round-end-credits-nomination-screams-name = Siren
+round-end-credits-nomination-screams-desc = Screamed { $value } times
+round-end-credits-nomination-emotes-name = Mime master
+round-end-credits-nomination-emotes-desc = Emotes this shift: { $value }
+round-end-credits-nomination-chatter-name = Chatterbox radio
+round-end-credits-nomination-chatter-desc = Said { $value } lines
+round-end-credits-nomination-shocks-name = Lightning rod
+round-end-credits-nomination-shocks-desc = Got shocked { $value } times
+round-end-credits-nomination-cuffed-name = Brig regular
+round-end-credits-nomination-cuffed-desc = Got cuffed { $value } times
+
+round-end-credits-vote-clown-name = Clown of the shift
+round-end-credits-vote-clown-desc = Made everyone laugh, even while the station burned
+round-end-credits-vote-suspicious-name = Most suspicious
+round-end-credits-vote-suspicious-desc = Acted like they were hiding something
+round-end-credits-vote-roleplay-name = Best roleplay
+round-end-credits-vote-roleplay-desc = A character everyone believed in
+round-end-credits-vote-who-was-that-name = Who was that?
+round-end-credits-vote-who-was-that-desc = Showed up once and was remembered forever
+round-end-credits-vote-soul-name = Heart of the crew
+round-end-credits-vote-soul-desc = Made even hell feel cozy
+round-end-credits-vote-disaster-name = Walking disaster
+round-end-credits-vote-disaster-desc = Wherever they go, there is fire
+round-end-credits-vote-unsung-hero-name = Unsung hero
+round-end-credits-vote-unsung-hero-desc = Saved the shift and nobody noticed
+round-end-credits-vote-bureaucrat-name = Master of bureaucracy
+round-end-credits-vote-bureaucrat-desc = No stamp, no service
+round-end-credits-vote-survivor-name = Survivor of the year
+round-end-credits-vote-survivor-desc = Got out of places nobody gets out of
+round-end-credits-vote-polite-name = Most polite
+round-end-credits-vote-polite-desc = Said "please" even to a changeling

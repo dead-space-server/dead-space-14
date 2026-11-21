@@ -14,11 +14,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.DeadSpace.UserInterface.Constructor;
 
-public sealed class UiLayoutFactory
+public sealed partial class UiLayoutFactory
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     public UiLayoutFactory()
     {

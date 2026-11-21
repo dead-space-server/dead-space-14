@@ -37,26 +37,26 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// ones when it runs out of health (large -> 3 medium -> 3 small each). The arena boss role moves to a
 /// surviving body, so the arena fight and its rewards end only with the last skull.
 /// </summary>
-public sealed class LavalandLegionMegafaunaSystem : EntitySystem
+public sealed partial class LavalandLegionMegafaunaSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly LavalandNecropolisGateSystem _gates = default!;
-    [Dependency] private readonly LavalandBossArenaSystem _arenas = default!;
-    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
-    [Dependency] private readonly Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly LavalandLegionHandsSystem _hands = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private LavalandNecropolisGateSystem _gates = default!;
+    [Dependency] private LavalandBossArenaSystem _arenas = default!;
+    [Dependency] private LavalandFaunaRaidSystem _raids = default!;
+    [Dependency] private Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
+    [Dependency] private LavalandLegionHandsSystem _hands = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     private readonly List<Vector2i> _freeTiles = new();
     private readonly List<EntityUid> _bodies = new();
@@ -73,7 +73,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
     private readonly Dictionary<EntityUid, FreeLegionHud> _freeHuds = new();
     private readonly Dictionary<EntityUid, List<EntityUid>> _bodiesByRoot = new();
 
-    private sealed class FreeLegionHud
+    private sealed partial class FreeLegionHud
     {
         public int Id;
         public string Name = string.Empty;

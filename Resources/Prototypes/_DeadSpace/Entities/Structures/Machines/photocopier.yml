@@ -220,7 +220,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 - type: entity
   name: распечатанный документ
@@ -244,7 +244,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 - type: entity
   name: распечатанный документ
@@ -268,7 +268,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 - type: entity
   name: распечатанный документ
@@ -292,7 +292,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 - type: entity
   name: распечатанный документ
@@ -316,7 +316,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 - type: entity
   name: распечатанный документ
@@ -340,7 +340,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 - type: entity
   name: распечатанный документ
@@ -364,7 +364,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 - type: entity
   name: распечатанный документ
@@ -388,7 +388,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 - type: entity
   name: распечатанный документ
@@ -412,7 +412,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 2.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 2.0
 
 # USSP
 
@@ -438,7 +438,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 4.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 4.0
 # Syndicate
 
 - type: entity
@@ -463,7 +463,7 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 4.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 4.0
 - type: entity
   name: распечатанный документ
   parent: Paper
@@ -486,4 +486,4 @@
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 6.0, 6.0, 6.0, 6.0
-    headerMargin: 0.0, 4.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 4.0

@@ -14,14 +14,14 @@ using Content.Server.Popups;
 
 namespace Content.Server.DeadSpace.Spiders.SpiderKnight;
 
-public sealed class SpiderKnightSystem : SharedBloodsuckerSystem
+public sealed partial class SpiderKnightSystem : SharedBloodsuckerSystem
 {
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     public override void Initialize()
     {

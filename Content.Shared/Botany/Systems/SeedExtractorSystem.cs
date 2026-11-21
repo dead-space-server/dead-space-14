@@ -22,10 +22,10 @@ public sealed partial class SeedExtractorSystem : EntitySystem
     // DS14-end
 
     // DS14-start
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _powerReceiver = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPowerReceiverSystem _powerReceiver = default!;
 
     private EntityQuery<ProduceComponent> _produceQuery;
     // DS14-end

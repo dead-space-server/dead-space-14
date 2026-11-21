@@ -16,14 +16,14 @@ using Content.Shared.Body.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Systems;
 
-public sealed class VirusEvolutionConsoleSystem : EntitySystem
+public sealed partial class VirusEvolutionConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly PowerReceiverSystem _powerReceiverSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly VirusSolutionAnalyzerSystem _virusSolutionAnalyzer = default!;
-    [Dependency] private readonly VirusSystem _virusSystem = default!;
-    [Dependency] private readonly VirusDiagnoserDataServerSystem _dataServer = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private PowerReceiverSystem _powerReceiverSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private VirusSolutionAnalyzerSystem _virusSolutionAnalyzer = default!;
+    [Dependency] private VirusSystem _virusSystem = default!;
+    [Dependency] private VirusDiagnoserDataServerSystem _dataServer = default!;
 
     public override void Initialize()
     {

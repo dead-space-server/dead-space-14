@@ -1,5 +1,6 @@
 using Content.Server.DeadSpace.Lavaland;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.Materials;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Stack;
 using Content.Shared.Construction;
@@ -360,6 +361,64 @@ public sealed class LavalandOreRedeemerTest
                 user,
                 oreBox,
                 (processor, entMan.GetComponent<LavalandOreRedeemerComponent>(processor)));
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(GetBalance(entMan, card), Is.EqualTo(0));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task OreBoxOreThroughOtherLatheIsPenalizedInOreBox()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = false,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var (user, card, _, oreBox) = await SetupMiner(pair);
+
+        EntityUid lathe = default;
+        await server.WaitPost(() =>
+        {
+            lathe = entMan.SpawnEntity("OreProcessorTaipan", entMan.GetComponent<TransformComponent>(oreBox).Coordinates);
+            server.System<PowerReceiverSystem>().SetNeedsPower(lathe, false);
+
+            var ore = SpawnOre(entMan, server.System<StackSystem>(), SteelOre, 10);
+            Assert.That(InsertInto(entMan, user, ore, oreBox), Is.True);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            Assert.That(GetBalance(entMan, card), Is.EqualTo(10));
+            var ores = GetSteelOre(entMan);
+            Assert.That(ores, Is.Not.Empty);
+            foreach (var ore in ores)
+                Assert.That(server.System<MaterialStorageSystem>().TryInsertMaterialEntity(user, ore, lathe), Is.True);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            Assert.That(GetSteelOre(entMan), Is.Empty);
+            entMan.EventBus.RaiseLocalEvent(lathe, new MachineDeconstructedEvent());
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var ejected = GetSteelOre(entMan);
+            Assert.That(ejected, Is.Not.Empty);
+            foreach (var ore in ejected)
+                InsertInto(entMan, user, ore, oreBox);
         });
         await pair.RunTicksSync(5);
 

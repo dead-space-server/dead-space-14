@@ -7,12 +7,12 @@ using System.Numerics;
 
 namespace Content.Client.DeadSpace.Pickles;
 
-public sealed class FermentationBarrelSystem : SharedFermentationSystem;
+public sealed partial class FermentationBarrelSystem : SharedFermentationSystem;
 
-public sealed class PickleJarSystem : SharedPickleJarSystem
+public sealed partial class PickleJarSystem : SharedPickleJarSystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
@@ -50,9 +50,9 @@ public sealed class PickleJarSystem : SharedPickleJarSystem
     }
 }
 
-public sealed class PickledProduceSystem : EntitySystem
+public sealed partial class PickledProduceSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

@@ -23,7 +23,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitDragonFox
   name: королевский украшенный скафандр
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -35,8 +35,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/suit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDragonFox
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -49,12 +47,9 @@
         Stun: 0.75
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitDragonFox
   name: королевский шлем
   description: Шлем изолирующий владельца от страшного вакуума снаружи.
@@ -66,9 +61,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/helmet_suit.rsi
   - type: PointLight
     color: "#daffad"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -81,7 +73,7 @@
 # HardSuit Event
 
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitDragonFoxEvent
   categories: [ HideSpawnMenu ]
   name: силовой доспех эгида
@@ -93,8 +85,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDragonFoxEvent
-  - type: Item
-    size: Huge
   - type: Armor
     modifiers:
       coefficients:
@@ -107,12 +97,9 @@
         Stun: 0.7
   - type: ExplosionResistance
     damageCoefficient: 0.8
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitDragonFoxEvent
   categories: [ HideSpawnMenu ]
   name: шлем эгида
@@ -124,9 +111,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/hardsuit_helmet.rsi
   - type: PointLight
     color: "#daffad"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -284,7 +268,7 @@
 
 #Сестра битв
 - type: entity
-  parent: ClothingOuterHardsuitBase
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitDragonFoxAlt
   name: скафандр Адепта Сороритас
   categories: [ HideSpawnMenu ]
@@ -301,9 +285,6 @@
         Caustic: 0.5
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/SisterOfBattle/hardsuit.rsi
   - type: Clothing
@@ -311,11 +292,9 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDragonFoxAlt
-  - type: Item
-    size: Huge
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitDragonFoxAlt
   name: шлем Адепта Сороритас
   categories: [ HideSpawnMenu ]
@@ -335,13 +314,9 @@
     sprite: _DeadSpace/Sponsor/DragonFox/SisterOfBattle/head.rsi
   - type: PointLight
     color: "#ff1929"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-#МедТех-Элит
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackDragonFoxMedTech
   name: боевой медицинский рюкзак МедТех-Элит
   description: Предназначен для удобного размещения и переноски медицинского оборудования в условиях боевых действий.
@@ -371,7 +346,7 @@
       - id: PaperLawdragon_fox
 
 - type: entity
-  parent: ClothingOuterHardsuitBase
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitDragonFoxMedTech
   name: скафандр Боевой Прототип Медика
   categories: [ HideSpawnMenu ]
@@ -388,17 +363,12 @@
         Caustic: 0.5
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/hardsuit/suit.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/hardsuit/suit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDragonFoxMedTech
-  - type: Item
-    size: Huge
   - type: HardsuitSpeedBuff
   - type: PowerCellDraw
     drawRate: 3.6 # 100 seconds on the default cell
@@ -422,7 +392,7 @@
             - PowerCell
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitDragonFoxMedTech
   name: шлем скафандра Боевого Прототипа Медика
   categories: [ HideSpawnMenu ]
@@ -444,12 +414,9 @@
     color: "#ffefad"
     radius: 7
     energy: 3
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltWebbingDragonFoxMedTech
   name: РПС МедТех-Элит
   description: Обеспечивает надёжную фиксацию и удобство при переноске необходимых предметов, что делает её незаменимой в полевых условиях.
@@ -463,8 +430,6 @@
     maxItemSize: Normal
     grid:
     - 0,0,9,1
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill

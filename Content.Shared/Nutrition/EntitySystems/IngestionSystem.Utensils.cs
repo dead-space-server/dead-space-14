@@ -18,8 +18,8 @@ public sealed partial class IngestionSystem
     private static readonly FixedPoint2 ForkDrinkTransferAmount = FixedPoint2.New(0.5f);
     // DS14-end
 
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private EntityQuery<UtensilComponent> _utensilsQuery;
 

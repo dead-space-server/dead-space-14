@@ -22,21 +22,21 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.AntagGearSelector;
 
-public sealed class AntagGearSelectorSystem : EntitySystem
+public sealed partial class AntagGearSelectorSystem : EntitySystem
 {
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly LoadoutSystem _loadout = default!;
-    [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
-    [Dependency] private readonly RandomMetadataSystem _randomMetadata = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly IServerPreferencesManager _preferences = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private LoadoutSystem _loadout = default!;
+    [Dependency] private AntagSelectionSystem _antagSelection = default!;
+    [Dependency] private RandomMetadataSystem _randomMetadata = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private IServerPreferencesManager _preferences = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private readonly HashSet<EntityUid> _selected = new();
     private readonly Dictionary<EntityUid, PendingSelection> _pending = new();

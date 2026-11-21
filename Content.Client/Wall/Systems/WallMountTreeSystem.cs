@@ -11,9 +11,9 @@ namespace Content.Client.Wall.Systems;
 /// Maintains the <see cref="WallMountTreeComponent"/> component tree.
 /// </summary>
 // DS14: Current engine uses explicit dependency injection without system source generation.
-public sealed class WallMountTreeSystem : ComponentTreeSystem<WallMountTreeComponent, WallMountComponent>
+public sealed partial class WallMountTreeSystem : ComponentTreeSystem<WallMountTreeComponent, WallMountComponent>
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     /// <inheritdoc/>
     protected override bool DoFrameUpdate => true;

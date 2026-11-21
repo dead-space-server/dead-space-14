@@ -9,10 +9,10 @@ using Content.Shared.Whitelist;
 
 namespace Content.Server.DeadSpace.Wear;
 
-public sealed class AddWearAfterUseSystem : EntitySystem
+public sealed partial class AddWearAfterUseSystem : EntitySystem
 {
-    [Dependency] private readonly WearSystem _wear = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private WearSystem _wear = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
     public override void Initialize()
     {
         base.Initialize();

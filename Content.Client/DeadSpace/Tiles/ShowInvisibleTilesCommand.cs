@@ -4,9 +4,9 @@ using Robust.Shared.Console;
 
 namespace Content.Client.DeadSpace.Tiles;
 
-public sealed class ShowInvisibleTilesCommand : LocalizedEntityCommands
+public sealed partial class ShowInvisibleTilesCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly InvisibleTileOverlaySystem _overlay = default!;
+    [Dependency] private InvisibleTileOverlaySystem _overlay = default!;
 
     public override string Command => "showinvisibletiles";
 
