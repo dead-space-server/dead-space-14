@@ -275,12 +275,10 @@
   # The miners' radio on top of the borgs' own channels.
   - type: IntrinsicRadioTransmitter
     channels:
-    - Binary
     - Common
     - Supply
   - type: ActiveRadio
     channels:
-    - Binary
     - Common
     - Supply
   # A handheld radio built in: its frequency heard and spoken on, switched on from its own action bar.

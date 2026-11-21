@@ -1161,17 +1161,6 @@
   # DS14-end
 
 - type: listing
-  id: UplinkTraitorUltraBinaryTranslatorKey
-  name: uplink-binary-translator-key-name
-  description: uplink-binary-translator-key-desc
-  icon: { sprite: /Textures/Objects/Devices/encryption_keys.rsi, state: ai_label }
-  productEntity: EncryptionKeyBinarySyndicate
-  cost:
-    Telecrystal: 1
-  categories:
-  - TraitorUltraUplinkDeception
-
-- type: listing
   id: UplinkTraitorUltraCyberpen
   name: uplink-cyberpen-name
   description: uplink-cyberpen-desc
