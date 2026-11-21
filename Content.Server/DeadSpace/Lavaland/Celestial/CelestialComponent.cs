@@ -65,7 +65,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Радиус урона удара луча, метры.</summary>
     [DataField]
-    public float BeamDamageRadius = 0.6f;
+    public float BeamDamageRadius = 0.7f;
 
     /// <summary>Количество одиночных лучей перед финальным залпом.</summary>
     [DataField]
@@ -95,19 +95,35 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Сколько целей получает трещины и шары.</summary>
     [DataField]
-    public int FutilityTargets = 5;
+    public int FutilityTargets = 1;
 
-    /// <summary>Сколько раз повторяется последовательность трещина-шар.</summary>
+    /// <summary>Сколько шаров всего выпускает атака: по одному за раз, каждый из нового портала.</summary>
     [DataField]
-    public int FutilityRepeats = 4;
+    public int FutilityOrbCount = 4;
 
-    /// <summary>Пауза между повторами, сек.</summary>
+    /// <summary>Насколько далеко перед игроком открывается портал для второго и следующих шаров, метры.</summary>
     [DataField]
-    public float FutilityRepeatDelay = 1.2f;
+    public float FutilityPortalDistance = 30f;
 
-    /// <summary>Скорость шара, м/с. Медленнее бегущего игрока: от шара можно убежать, но не стоять на месте.</summary>
+    /// <summary>Сколько портал целится перед выстрелом шаром, сек.</summary>
     [DataField]
-    public float OrbSpeed = 4.2f;
+    public float FutilityAimTime = 0.5f;
+
+    /// <summary>Интервал глитч-рывков шара, сек: 16 рывков по 0.125 с ≈ две секунды полёта.</summary>
+    [DataField]
+    public float FutilityJumpInterval = 0.125f;
+
+    /// <summary>Боковой разброс каждого глитч-рывка шара, метры.</summary>
+    [DataField]
+    public float FutilityJumpJitter = 1.1f;
+
+    /// <summary>Длительность фазы шаров: после неё начинаются Cutter и лучи, сек.</summary>
+    [DataField]
+    public float FutilityOrbPhaseTime = 8f;
+
+    /// <summary>Скорость шара, м/с. Быстрее бегущего игрока: уходить нужно маневром, а не спринтом.</summary>
+    [DataField]
+    public float OrbSpeed = 9.5f;
 
     /// <summary>Максимальное время жизни шара, сек.</summary>
     [DataField]
@@ -121,10 +137,6 @@ public sealed partial class CelestialComponent : Component
 
     [DataField]
     public float RiftMaxDistance = 7f;
-
-    /// <summary>Сколько шаров выходит из одной трещины.</summary>
-    [DataField]
-    public int OrbsPerCrack = 3;
 
     /// <summary>Неповоротливость шаров: скорость поворота, рад/сек. Чем меньше - тем тяжелее им доворачивать за игроком.</summary>
     [DataField]
@@ -144,11 +156,11 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Минимальный урон мелкого луча.</summary>
     [DataField]
-    public float SmallBeamMinDamage = 15f;
+    public float SmallBeamMinDamage = 30f;
 
     /// <summary>Максимальный урон мелкого луча.</summary>
     [DataField]
-    public float SmallBeamMaxDamage = 30f;
+    public float SmallBeamMaxDamage = 58f;
 
     /// <summary>Сколько раз повторяется Cutter.</summary>
     [DataField]
@@ -192,17 +204,17 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон луча Cutter.</summary>
     [DataField]
-    public float CutterDamage = 30f;
+    public float CutterDamage = 58f;
 
     // ----- радиусы попадания (понижены: лучи били слишком широко) -----
 
     /// <summary>Радиус попадания лучей Cutter, метры.</summary>
     [DataField]
-    public float CutterDamageRadius = 0.8f;
+    public float CutterDamageRadius = 1.2f;
 
     /// <summary>Радиус попадания замерших лучей атаки "ЗАМРИ", метры.</summary>
     [DataField]
-    public float FreezeBeamRadius = 0.6f;
+    public float FreezeBeamRadius = 0.45f;
 
     /// <summary>Радиус попадания мелких лучей шара-снаряда, метры.</summary>
     [DataField]
@@ -262,13 +274,33 @@ public sealed partial class CelestialComponent : Component
     [DataField]
     public float BloomChargeTime = 5f;
 
-    /// <summary>Время обхода карты лучами, сек.</summary>
+    /// <summary>Время чёрной стадии (урон), сек.</summary>
     [DataField]
-    public float BloomFireTime = 15f;
+    public float BloomFireTime = 12f;
+
+    /// <summary>Задержка между розовой и чёрной стадией, сек.</summary>
+    [DataField]
+    public float BloomStageGap = 0.5f;
+
+    /// <summary>Время розовой стадии (вращение без урона), сек.</summary>
+    [DataField]
+    public float BloomSweepTime = 5f;
+
+    /// <summary>Длина лучей креста, метры.</summary>
+    [DataField]
+    public float BloomLength = 60f;
+
+    /// <summary>Скорость вращения креста, рад/сек.</summary>
+    [DataField]
+    public float BloomRotateSpeed = 0.24f;
 
     /// <summary>Урон за тик гигантского луча.</summary>
     [DataField]
-    public float BloomBeamDamage = 10f;
+    public float BloomBeamDamage = 40f;
+
+    /// <summary>Полуширина урона гигантского луча, метры (визуально луч чуть шире).</summary>
+    [DataField]
+    public float BloomDamageRadius = 1.2f;
 
     /// <summary>Интервал урона гигантского луча, сек.</summary>
     [DataField]
@@ -296,7 +328,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон замершего луча при почернении.</summary>
     [DataField]
-    public float FreezeBeamDamage = 20f;
+    public float FreezeBeamDamage = 40f;
 
     /// <summary>Сколько замерших лучей проходит прямо через каждого игрока (остальные - по округе).</summary>
     [DataField]

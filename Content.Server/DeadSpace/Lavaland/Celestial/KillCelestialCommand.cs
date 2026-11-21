@@ -97,7 +97,14 @@ public sealed partial class KillCelestialCommand : IConsoleCommand
             });
         }
 
-        Timer.Spawn(TimeSpan.FromSeconds(phrases.Length * duration), () =>
+        // глаз возвращается в центр, затем инверсия цветов на 10 секунд
+        Timer.Spawn(TimeSpan.FromSeconds(phrases.Length * duration + 1.5f), () =>
+        {
+            celestial.BroadcastDeathInvert();
+        });
+
+        // после инверсии оба фейдятся в игру
+        Timer.Spawn(TimeSpan.FromSeconds(phrases.Length * duration + 1.5f + 10f), () =>
         {
             celestial.BroadcastDeathEnd();
         });

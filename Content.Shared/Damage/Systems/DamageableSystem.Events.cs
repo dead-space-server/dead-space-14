@@ -160,6 +160,10 @@ public sealed partial class DamageableSystem
 
     private void OnRejuvenate(Entity<DamageableComponent> ent, ref RejuvenateEvent args)
     {
+        // DS14: сущности с HealingImmuneComponent нельзя вылечить, в том числе Rejuvenate'ом
+        if (HasComp<HealingImmuneComponent>(ent))
+            return;
+
         // Do this so that the state changes when we set the damage
         _mobThreshold.SetAllowRevives(ent, true);
         ClearAllDamage(ent.AsNullable());

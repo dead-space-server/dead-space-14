@@ -16,6 +16,12 @@ public sealed class CelestialDeathSpeakEvent(string text, float duration) : Enti
     public float Duration = duration;
 }
 
+/// <summary>Инверсия цветов: глаз в центр, фон чернеет на 10 секунд.</summary>
+[Serializable, NetSerializable]
+public sealed class CelestialDeathInvertEvent : EntityEventArgs
+{
+}
+
 /// <summary>Конец катсцены смерти.</summary>
 [Serializable, NetSerializable]
 public sealed class CelestialDeathEndEvent : EntityEventArgs
