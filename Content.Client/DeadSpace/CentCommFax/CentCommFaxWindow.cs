@@ -155,6 +155,7 @@ public sealed class CentCommFaxWindow : DefaultWindow
         _stampDisplay = new StampCollection
         {
             HorizontalExpand = true,
+            MinSize = Vector2.Zero,
             MouseFilter = MouseFilterMode.Ignore,
             Margin = new Thickness(0, 8, 0, 8),
         };
