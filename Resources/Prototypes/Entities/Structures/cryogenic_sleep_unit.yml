@@ -20,6 +20,8 @@
         type: CryostorageBoundUserInterface
   - type: ActivatableUI
     key: enum.CryostorageUIKey.Key
+  - type: ActivatableUIRequiresAccess
+    popupMessage: cryostorage-popup-access-denied
   - type: AccessReader
     breakOnAccessBreaker: false
     access: [["Cryogenics"]]

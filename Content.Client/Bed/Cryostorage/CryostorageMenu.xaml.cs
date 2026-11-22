@@ -12,8 +12,8 @@ namespace Content.Client.Bed.Cryostorage;
 [GenerateTypedNameReferences]
 public sealed partial class CryostorageMenu : FancyWindow
 {
-    public event Action<NetEntity, string>? SlotRemoveButtonPressed;
-    public event Action<NetEntity, string>? HandRemoveButtonPressed;
+    public event Action<int, string>? SlotRemoveButtonPressed; //DS-14
+    public event Action<int, string>? HandRemoveButtonPressed; //DS-14
 
     public CryostorageMenu()
     {
@@ -31,7 +31,7 @@ public sealed partial class CryostorageMenu : FancyWindow
             if (control is not CryostorageEntryControl entryControl)
                 continue;
 
-            if (data.Where(p => p.PlayerEnt == entryControl.Entity).FirstOrNull() is not { } datum)
+            if (data.Where(p => p.EntryId == entryControl.EntryId).FirstOrNull() is not { } datum) //DS-14
             {
                 EntriesContainer.Children.Remove(entryControl);
                 continue;
@@ -44,8 +44,8 @@ public sealed partial class CryostorageMenu : FancyWindow
         foreach (var player in nonexistentEntries)
         {
             var control = new CryostorageEntryControl(player);
-            control.SlotRemoveButtonPressed += a => SlotRemoveButtonPressed?.Invoke(player.PlayerEnt, a);
-            control.HandRemoveButtonPressed += a => HandRemoveButtonPressed?.Invoke(player.PlayerEnt, a);
+            control.SlotRemoveButtonPressed += a => SlotRemoveButtonPressed?.Invoke(player.EntryId, a); //DS-14
+            control.HandRemoveButtonPressed += a => HandRemoveButtonPressed?.Invoke(player.EntryId, a); //DS-14
             EntriesContainer.Children.Add(control);
         }
 
