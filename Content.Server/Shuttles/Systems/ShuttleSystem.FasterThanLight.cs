@@ -93,6 +93,7 @@ public sealed partial class ShuttleSystem
     private const float FTLProximityRingGrowth = 2f;
     private const int FTLProximityFarAttempts = 32;
     private const float FTLPlacementMargin = 0.5f;
+    private const float FTLObstructionMinSize = 1f;
     // DS14-end
 
     private const float LavalandTendrilFTLExclusionRange = 8f;
@@ -1099,6 +1100,26 @@ public sealed partial class ShuttleSystem
                 continue;
 
             if (!_physicsQuery.TryComp(ent, out var entBody) || !entBody.CanCollide)
+                continue;
+
+            if (!TryComp(ent, out FixturesComponent? entFixtures))
+                continue;
+
+            var entTransform = _physics.GetRelativePhysicsTransform((ent, entXform), mapUid);
+            Box2 entAabb = default;
+            var anyFixture = false;
+
+            foreach (var fixture in entFixtures.Fixtures.Values)
+            {
+                if (!fixture.Hard)
+                    continue;
+
+                var fixtureAabb = fixture.Shape.ComputeAABB(entTransform, 0);
+                entAabb = anyFixture ? entAabb.Union(fixtureAabb) : fixtureAabb;
+                anyFixture = true;
+            }
+
+            if (!anyFixture || MathF.Max(entAabb.Width, entAabb.Height) < FTLObstructionMinSize)
                 continue;
 
             return false;
