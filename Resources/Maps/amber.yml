@@ -3,9 +3,9 @@ meta:
   category: Map
   engineVersion: 276.0.6
   forkId: dspublicfobos
-  forkVersion: b756dec5fc67ab80ffd9cb4b41ff2e371e201e6d
-  time: 11/08/2026 07:40:14
-  entityCount: 22922
+  forkVersion: 6b7eba8909943640804a106899543e000eae64d2
+  time: 11/17/2026 08:28:09
+  entityCount: 22939
 maps:
 - 1
 grids:
@@ -805,6 +805,7 @@ entities:
             23757: -25,-49
             23758: -26,-52
             23764: -30,-53
+            24127: -17,-55
         - node:
             cleanable: True
             color: '#FFFFFFFF'
@@ -7860,6 +7861,11 @@ entities:
             23546: -29,-54
             23547: -30,-55
         - node:
+            color: '#334E6D9A'
+            id: ShiptestMonoOverlay
+          decals:
+            24126: -17,-55
+        - node:
             color: '#52B4E963'
             id: ShiptestMonoOverlay
           decals:
@@ -14415,13 +14421,15 @@ entities:
           4,-13:
             0: 61154
           5,-12:
-            0: 59579
+            0: 59547
+            8: 32
           5,-11:
             0: 56559
           5,-10:
             0: 30493
           5,-13:
-            0: 48048
+            0: 48016
+            8: 32
           6,-12:
             0: 56793
           6,-11:
@@ -15396,6 +15404,11 @@ entities:
           moles:
             Oxygen: 20.078888
             Nitrogen: 75.53487
+        - volume: 2500
+          temperature: 293.15
+          moles:
+            Oxygen: 21.6852
+            Nitrogen: 81.57766
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
@@ -19578,7 +19591,7 @@ entities:
       pos: -8.5,-12.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -12450.73
+      secondsUntilStateChange: -13359.004
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -20189,6 +20202,8 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 57.5,-16.5
       parent: 2
+    - type: AccessReader
+      accessListsOriginal: []
     - type: DeviceLinkSink
       invokeCounter: 3
   - uid: 295
@@ -20205,6 +20220,8 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 57.5,-18.5
       parent: 2
+    - type: AccessReader
+      accessListsOriginal: []
     - type: DeviceLinkSink
       invokeCounter: 3
 - proto: AirlockExternalGlassShuttleEscape
@@ -57275,11 +57292,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -38.5,-50.5
       parent: 2
-  - uid: 6784
-    components:
-    - type: Transform
-      pos: 0.5,-27.5
-      parent: 2
   - uid: 6785
     components:
     - type: Transform
@@ -62821,7 +62833,7 @@ entities:
     - type: MetaData
       desc: Полоса ткани, закрывающего глаза но, на удивление, видимость отличная.
     - type: Transform
-      pos: 12.541359,-29.393791
+      pos: 12.64804,-29.400291
       parent: 2
     - type: Physics
       canCollide: False
@@ -63353,8 +63365,7 @@ entities:
   - uid: 21099
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 20.822886,-49.549202
+      pos: 20.515503,-50.244904
       parent: 2
     - type: Physics
       canCollide: False
@@ -65027,6 +65038,20 @@ entities:
       canCollide: False
     missingComponents:
     - Contraband
+- proto: ClothingUniformJumpsuitERTJanitor
+  entities:
+  - uid: 22937
+    components:
+    - type: MetaData
+      desc: Специальный костюм, созданный для самых элитных уборщиков.
+      name: униформа специалиста по уборке
+    - type: Transform
+      pos: 27.752823,2.6691575
+      parent: 2
+    - type: Physics
+      canCollide: False
+    missingComponents:
+    - Contraband
 - proto: ClothingUniformJumpsuitMime
   entities:
   - uid: 21136
@@ -65093,6 +65118,7 @@ entities:
     - type: Transform
       parent: 3105
     - type: SuitSensor
+      station: invalid
       nextUpdate: 0.4366193
       mode: SensorCords
     - type: DeviceNetwork
@@ -67287,7 +67313,7 @@ entities:
       pos: -24.5,-55.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -63284.26
+      secondsUntilStateChange: -64192.535
       state: Closing
 - proto: CurtainsGreenOpen
   entities:
@@ -115649,6 +115675,16 @@ entities:
     - type: Transform
       pos: -37.646317,15.780424
       parent: 2
+- proto: LandMineExplosive
+  entities:
+  - uid: 6784
+    components:
+    - type: MetaData
+      desc: Этот плохиш может скрывать в себе множество опасностей. Или велосипедный клаксон.
+      name: модульная мина
+    - type: Transform
+      pos: -9.479949,30.445639
+      parent: 2
 - proto: LandMineKick
   entities:
   - uid: 8094
@@ -115660,13 +115696,6 @@ entities:
       pos: -4.4933004,30.407362
       parent: 2
     - type: ViewSubscriber
-- proto: LandMineModular
-  entities:
-  - uid: 8097
-    components:
-    - type: Transform
-      pos: -9.46205,30.438612
-      parent: 2
 - proto: LandMineModularUnarmed
   entities:
   - uid: 3737
@@ -116508,34 +116537,34 @@ entities:
         immutable: False
         temperature: 293.14673
         moles:
-          Oxygen: 1.7459903
-          Nitrogen: 6.568249
+          Oxygen: 1.8856695
+          Nitrogen: 7.0937095
     - type: ContainerContainer
       containers:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
           ents:
-          - 21098
-          - 21090
-          - 21069
-          - 21067
-          - 21066
-          - 21064
-          - 21029
-          - 21028
-          - 21027
-          - 21023
-          - 21022
-          - 21021
-          - 21050
-          - 21051
-          - 21052
-          - 21093
-          - 21094
           - 21095
           - 21096
           - 21097
+          - 21066
+          - 21069
+          - 21022
+          - 21067
+          - 21090
+          - 21098
+          - 21051
+          - 21052
+          - 21021
+          - 21029
+          - 21094
+          - 21028
+          - 21093
+          - 21023
+          - 21064
+          - 21027
+          - 21050
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -116835,29 +116864,29 @@ entities:
         immutable: False
         temperature: 293.14673
         moles:
-          Oxygen: 1.7459903
-          Nitrogen: 6.568249
+          Oxygen: 1.8856695
+          Nitrogen: 7.0937095
     - type: ContainerContainer
       containers:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
           ents:
-          - 21786
-          - 21776
+          - 21790
           - 21777
+          - 21786
           - 21778
           - 21779
           - 21780
           - 21781
           - 21782
           - 21783
+          - 21776
           - 21784
           - 21785
           - 21787
           - 21788
           - 21789
-          - 21790
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -118603,11 +118632,6 @@ entities:
       parent: 2
 - proto: MouseTimedSpawner
   entities:
-  - uid: 14540
-    components:
-    - type: Transform
-      pos: 24.5,5.5
-      parent: 2
   - uid: 14541
     components:
     - type: Transform
@@ -118936,11 +118960,18 @@ entities:
   entities:
   - uid: 3104
     components:
+    - type: MetaData
+      desc: Стенд, удерживающий трофейное оружие.
+      name: стенд для трофеев
     - type: Transform
       pos: -8.5,-29.5
       parent: 2
     - type: Fixtures
       fixtures: {}
+    missingComponents:
+    - StorageFillVisualizer
+    - Storage
+    - UserInterface
   - uid: 14572
     components:
     - type: Transform
@@ -123259,6 +123290,12 @@ entities:
       rot: 3.141592653589793 rad
       pos: 14.5,-13.5
       parent: 2
+  - uid: 14540
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -0.5,-29.5
+      parent: 2
   - uid: 14916
     components:
     - type: Transform
@@ -123567,6 +123604,12 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -37.5,1.5
+      parent: 2
+  - uid: 22939
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 1.5,-29.5
       parent: 2
 - proto: PoweredLEDLightPostSmall
   entities:
@@ -135032,6 +135075,12 @@ entities:
     - type: Transform
       pos: 33.5,-31.5
       parent: 2
+  - uid: 22938
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 29.5,1.5
+      parent: 2
 - proto: SmartFridgeMedical
   entities:
   - uid: 16771
@@ -136701,6 +136750,13 @@ entities:
     - type: Transform
       pos: 36.5,-10.5
       parent: 2
+- proto: SpawnPointChef
+  entities:
+  - uid: 22933
+    components:
+    - type: Transform
+      pos: -2.5,-33.5
+      parent: 2
 - proto: SpawnPointChemist
   entities:
   - uid: 17038
@@ -136781,6 +136837,11 @@ entities:
     - type: Transform
       pos: -15.5,-48.5
       parent: 2
+  - uid: 22926
+    components:
+    - type: Transform
+      pos: -35.5,-54.5
+      parent: 2
 - proto: SpawnPointHeadOfSecurity
   entities:
   - uid: 17051
@@ -136792,6 +136853,23 @@ entities:
     components:
     - type: Transform
       pos: -30.5,10.5
+      parent: 2
+- proto: SpawnPointJanitor
+  entities:
+  - uid: 22934
+    components:
+    - type: Transform
+      pos: -8.5,-43.5
+      parent: 2
+  - uid: 22935
+    components:
+    - type: Transform
+      pos: 27.5,3.5
+      parent: 2
+  - uid: 22936
+    components:
+    - type: Transform
+      pos: 31.5,0.5
       parent: 2
 - proto: SpawnPointLatejoin
   entities:
@@ -137008,6 +137086,30 @@ entities:
     - type: Transform
       pos: 35.5,-16.5
       parent: 2
+  - uid: 22925
+    components:
+    - type: Transform
+      pos: -28.5,-43.5
+      parent: 2
+- proto: SpawnPointPsychologist
+  entities:
+  - uid: 22924
+    components:
+    - type: Transform
+      pos: -33.5,-44.5
+      parent: 2
+- proto: SpawnPointQuartermaster
+  entities:
+  - uid: 20879
+    components:
+    - type: Transform
+      pos: 4.5,26.5
+      parent: 2
+  - uid: 22923
+    components:
+    - type: Transform
+      pos: 7.5,25.5
+      parent: 2
 - proto: SpawnPointReporter
   entities:
   - uid: 17115
@@ -137174,6 +137276,28 @@ entities:
     - type: Transform
       pos: -27.5,9.5
       parent: 2
+- proto: SpawnPointSeniorAdministrator
+  entities:
+  - uid: 22927
+    components:
+    - type: Transform
+      pos: -11.5,-33.5
+      parent: 2
+  - uid: 22928
+    components:
+    - type: Transform
+      pos: -0.5,-41.5
+      parent: 2
+  - uid: 22929
+    components:
+    - type: Transform
+      pos: -1.5,-45.5
+      parent: 2
+  - uid: 22930
+    components:
+    - type: Transform
+      pos: -0.5,-32.5
+      parent: 2
 - proto: SpawnPointSeniorEngineer
   entities:
   - uid: 16005
@@ -137223,6 +137347,18 @@ entities:
     components:
     - type: Transform
       pos: 14.5,17.5
+      parent: 2
+- proto: SpawnPointServiceWorker
+  entities:
+  - uid: 22931
+    components:
+    - type: Transform
+      pos: -8.5,-32.5
+      parent: 2
+  - uid: 22932
+    components:
+    - type: Transform
+      pos: -1.5,-33.5
       parent: 2
 - proto: SpawnPointStationEngineer
   entities:
@@ -137359,14 +137495,14 @@ entities:
   - uid: 22538
     components:
     - type: Transform
-      pos: 27.333626,2.557302
+      pos: 27.492407,2.5754075
       parent: 2
     - type: Physics
       canCollide: False
   - uid: 22539
     components:
     - type: Transform
-      pos: 27.63571,2.7031355
+      pos: 27.284073,2.5441575
       parent: 2
     - type: Physics
       canCollide: False
@@ -158686,11 +158822,6 @@ entities:
     - type: Transform
       pos: -30.5,-41.5
       parent: 2
-  - uid: 20879
-    components:
-    - type: Transform
-      pos: 23.5,6.5
-      parent: 2
   - uid: 20880
     components:
     - type: Transform
@@ -158717,6 +158848,11 @@ entities:
     components:
     - type: Transform
       pos: -19.5,-29.5
+      parent: 2
+  - uid: 8097
+    components:
+    - type: Transform
+      pos: 23.5,6.5
       parent: 2
   - uid: 22919
     components:
