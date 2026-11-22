@@ -20562,14 +20562,6 @@ entities:
     - type: Transform
       parent: 2
       pos: -19.5,16.5
-- proto: PoweredlightBlack
-  entities:
-  - uid: 656
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: -46.5,13.5
 - proto: AmmoniaCanister
   entities:
   - uid: 657
@@ -133852,6 +133844,12 @@ entities:
       parent: 2
       rot: 1.5707963267948966 rad
       pos: -41.5,-8.5
+  - uid: 656
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: -46.5,13.5
 - proto: PoweredlightBlue
   entities:
   - uid: 18228

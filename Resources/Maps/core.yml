@@ -17679,106 +17679,6 @@ entities:
     - type: Transform
       parent: 2
       pos: -26.5,-37.5
-- proto: PoweredLightLED
-  entities:
-  - uid: 720
-    components:
-    - type: Transform
-      parent: 2
-      pos: -1.5,-39.5
-  - uid: 721
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: 4.5,-46.5
-  - uid: 722
-    components:
-    - type: Transform
-      parent: 2
-      pos: 3.5,-39.5
-  - uid: 723
-    components:
-    - type: Transform
-      parent: 2
-      rot: 3.141592653589793 rad
-      pos: -31.5,40.5
-  - uid: 724
-    components:
-    - type: Transform
-      parent: 2
-      rot: 3.141592653589793 rad
-      pos: 70.5,8.5
-  - uid: 725
-    components:
-    - type: Transform
-      parent: 2
-      rot: 3.141592653589793 rad
-      pos: 85.5,-7.5
-  - uid: 726
-    components:
-    - type: Transform
-      parent: 2
-      rot: 1.5707963267948966 rad
-      pos: 17.5,30.5
-  - uid: 727
-    components:
-    - type: Transform
-      parent: 2
-      rot: 1.5707963267948966 rad
-      pos: -41.5,-69.5
-  - uid: 728
-    components:
-    - type: Transform
-      parent: 2
-      rot: 3.141592653589793 rad
-      pos: -51.5,15.5
-  - uid: 729
-    components:
-    - type: Transform
-      parent: 2
-      rot: 3.141592653589793 rad
-      pos: -61.5,-17.5
-  - uid: 730
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: -61.5,-37.5
-  - uid: 731
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: -57.5,-50.5
-  - uid: 732
-    components:
-    - type: Transform
-      parent: 2
-      rot: 1.5707963267948966 rad
-      pos: -37.5,-50.5
-  - uid: 733
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: -53.5,-69.5
-  - uid: 734
-    components:
-    - type: Transform
-      parent: 2
-      pos: 49.5,-40.5
-  - uid: 735
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: 12.5,-55.5
-  - uid: 736
-    components:
-    - type: Transform
-      parent: 2
-      pos: 77.5,-33.5
 - proto: AmeController
   entities:
   - uid: 737
@@ -106085,6 +105985,104 @@ entities:
       pos: 27.5,-7.5
 - proto: PoweredlightLED
   entities:
+  - uid: 720
+    components:
+    - type: Transform
+      parent: 2
+      pos: -1.5,-39.5
+  - uid: 721
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: 4.5,-46.5
+  - uid: 722
+    components:
+    - type: Transform
+      parent: 2
+      pos: 3.5,-39.5
+  - uid: 723
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: -31.5,40.5
+  - uid: 724
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: 70.5,8.5
+  - uid: 725
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: 85.5,-7.5
+  - uid: 726
+    components:
+    - type: Transform
+      parent: 2
+      rot: 1.5707963267948966 rad
+      pos: 17.5,30.5
+  - uid: 727
+    components:
+    - type: Transform
+      parent: 2
+      rot: 1.5707963267948966 rad
+      pos: -41.5,-69.5
+  - uid: 728
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: -51.5,15.5
+  - uid: 729
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: -61.5,-17.5
+  - uid: 730
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: -61.5,-37.5
+  - uid: 731
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: -57.5,-50.5
+  - uid: 732
+    components:
+    - type: Transform
+      parent: 2
+      rot: 1.5707963267948966 rad
+      pos: -37.5,-50.5
+  - uid: 733
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: -53.5,-69.5
+  - uid: 734
+    components:
+    - type: Transform
+      parent: 2
+      pos: 49.5,-40.5
+  - uid: 735
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: 12.5,-55.5
+  - uid: 736
+    components:
+    - type: Transform
+      parent: 2
+      pos: 77.5,-33.5
   - uid: 14936
     components:
     - type: Transform

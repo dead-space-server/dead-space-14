@@ -24297,20 +24297,6 @@ entities:
     - type: Transform
       parent: 2
       pos: -67.5,-5.5
-- proto: PoweredlightRed
-  entities:
-  - uid: 802
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: -69.5,23.5
-  - uid: 803
-    components:
-    - type: Transform
-      parent: 2
-      rot: 3.141592653589793 rad
-      pos: -61.5,33.5
 - proto: AmbrosiaVulgarisSeeds
   entities:
   - uid: 804
@@ -156791,6 +156777,18 @@ entities:
       pos: 37.5,-19.5
 - proto: PoweredlightRed
   entities:
+  - uid: 803
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: -61.5,33.5
+  - uid: 802
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: -69.5,23.5
   - uid: 21748
     components:
     - type: Transform
