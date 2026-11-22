@@ -29,10 +29,10 @@ public sealed partial class BlobCarrierSystem : SharedBlobCarrierSystem
     [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private ActionsSystem _action = default!;
     // DS14-start
-    [Dependency] private readonly BlobAntagRollbackSystem _rollback = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
+    [Dependency] private BlobAntagRollbackSystem _rollback = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
     private static readonly ProtoId<NpcFactionPrototype> BlobFaction = "Blob";
     // DS14-end
 

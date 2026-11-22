@@ -27,15 +27,15 @@ namespace Content.Server.Backmen.Blob;
 public sealed partial class BlobTileSystem : SharedBlobTileSystem
 {
     private static readonly SoundPathSpecifier BlastSound = new("/Audio/Effects/explosion1.ogg");
-    [Dependency] private readonly AudioSystem _audioSystem = default!;
-    [Dependency] private readonly BlobCoreSystem _blobCoreSystem = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly EmpSystem _empSystem = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private AudioSystem _audioSystem = default!;
+    [Dependency] private BlobCoreSystem _blobCoreSystem = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private EmpSystem _empSystem = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     private EntityQuery<BlobCoreComponent> _blobCoreQuery;
 

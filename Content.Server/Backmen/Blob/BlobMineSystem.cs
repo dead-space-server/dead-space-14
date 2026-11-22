@@ -13,12 +13,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobMineSystem : EntitySystem
+public sealed partial class BlobMineSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private FlammableSystem _flammable = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private static readonly SoundPathSpecifier DetonateSound = new("/Audio/Effects/explosion1.ogg");
 

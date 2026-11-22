@@ -4,9 +4,9 @@ using Content.Shared.Verbs;
 
 namespace Content.Shared.Backmen.Blob;
 
-public abstract class SharedBlobTileSystem : EntitySystem
+public abstract partial class SharedBlobTileSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     protected EntityQuery<BlobObserverComponent> ObserverQuery;
     protected EntityQuery<BlobCoreComponent> CoreQuery;
