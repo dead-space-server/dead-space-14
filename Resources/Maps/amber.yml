@@ -136671,6 +136671,13 @@ entities:
     - type: Transform
       pos: 10.5,-1.5
       parent: 2
+- proto: SpawnPointBartender
+  entities:
+  - uid: 22940
+    components:
+    - type: Transform
+      pos: -11.5,-31.5
+      parent: 2
 - proto: SpawnPointBlueShieldOfficer
   entities:
   - uid: 17015
