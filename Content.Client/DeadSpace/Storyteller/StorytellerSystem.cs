@@ -24,7 +24,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Storyteller;
 
-public sealed class StorytellerSystem : EntitySystem
+public sealed partial class StorytellerSystem : EntitySystem
 {
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IOverlayManager _overlays = default!;

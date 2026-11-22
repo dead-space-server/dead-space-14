@@ -34,7 +34,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.Storyteller;
 
-public sealed class StorytellerSystem : EntitySystem
+public sealed partial class StorytellerSystem : EntitySystem
 {
     private const int MaxEffects = 32;
     private const string TintPrefix = "tint-";
