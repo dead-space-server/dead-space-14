@@ -17,9 +17,7 @@ public sealed partial class TemperatureSystem : SharedTemperatureSystem
 {
     [Dependency] private AtmosphereSystem _atmosphere = default!;
 
-    // DS14-start
-    private const float CorpseAtmosTransferFactor = 0.05f;
-    // DS14-end
+    private const float CorpseAtmosTransferFactor = 0.05f; // DS14
 
     public override void Initialize()
     {
@@ -66,7 +64,7 @@ public sealed partial class TemperatureSystem : SharedTemperatureSystem
         UpdateDamage();
     }
 
-    public void ForceChangeTemperature(EntityUid uid, float temp, TemperatureComponent? temperature = null)
+    public override void ForceChangeTemperature(EntityUid uid, float temp, TemperatureComponent? temperature = null) // DS14
     {
         if (!TemperatureQuery.Resolve(uid, ref temperature))
             return;
