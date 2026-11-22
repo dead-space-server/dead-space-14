@@ -10,7 +10,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.DeadSpace.Storyteller;
 
-[Prototype("storySettings")]
+[Prototype]
 public sealed partial class StorySettingsPrototype : IPrototype
 {
     [IdDataField]
@@ -158,7 +158,7 @@ public sealed partial class StorySettingsPrototype : IPrototype
     public Color LaserTrail = Color.FromHex("#ff4033e6");
 }
 
-[Prototype("storyLocation")]
+[Prototype]
 public sealed partial class StoryLocationPrototype : IPrototype
 {
     [IdDataField]
@@ -214,7 +214,7 @@ public partial struct StoryProp
     public Direction Dir = Direction.South;
 }
 
-[Prototype("storyKind")]
+[Prototype]
 public sealed partial class StoryKindPrototype : IPrototype
 {
     [IdDataField]
@@ -236,7 +236,7 @@ public sealed partial class StoryKindPrototype : IPrototype
     public EntProtoId? Mob;
 }
 
-[Prototype("storyRole")]
+[Prototype]
 public sealed partial class StoryRolePrototype : IPrototype
 {
     [IdDataField]
@@ -266,7 +266,7 @@ public enum StoryItemUse : byte
     Laser,
 }
 
-[Prototype("storyItem")]
+[Prototype]
 public sealed partial class StoryItemPrototype : IPrototype
 {
     [IdDataField]
@@ -288,7 +288,7 @@ public sealed partial class StoryItemPrototype : IPrototype
     public StoryItemUse Use;
 }
 
-[Prototype("storyEmote")]
+[Prototype]
 public sealed partial class StoryEmotePrototype : IPrototype
 {
     [IdDataField]
@@ -307,7 +307,7 @@ public sealed partial class StoryEmotePrototype : IPrototype
     public List<string> Phrases = new();
 }
 
-[Prototype("storyLight")]
+[Prototype]
 public sealed partial class StoryLightPrototype : IPrototype
 {
     [IdDataField]
@@ -335,7 +335,7 @@ public sealed partial class StoryLightPrototype : IPrototype
     public List<string> Phrases = new();
 }
 
-[Prototype("storyTint")]
+[Prototype]
 public sealed partial class StoryTintPrototype : IPrototype
 {
     [IdDataField]
@@ -351,7 +351,7 @@ public sealed partial class StoryTintPrototype : IPrototype
     public Color? Color;
 }
 
-[Prototype("storyPropGroup")]
+[Prototype]
 public sealed partial class StoryPropGroupPrototype : IPrototype
 {
     [IdDataField]
@@ -395,7 +395,7 @@ public enum StoryVerb : byte
     Be,
 }
 
-[Prototype("storyLanguage")]
+[Prototype]
 public sealed partial class StoryLanguagePrototype : IPrototype
 {
     [IdDataField]
