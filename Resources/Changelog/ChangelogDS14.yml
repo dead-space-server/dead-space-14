@@ -10658,3 +10658,10 @@ Entries:
   changes:
   - type: Tweak
     message: Ревенант не может усыплять синтетиков (в тч и КПБ)
+- id: 1032
+  author: BlueDogDoc
+  time: '2026-11-22T22:56:21.450160+00:00'
+  pr: 2845
+  changes:
+  - type: Fix
+    message: Титры в окне переподключения
