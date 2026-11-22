@@ -1,0 +1,94 @@
+- type: storySettings
+  id: Default
+  width: 15
+  height: 10
+  doorY: 5
+  walkSpeed: 2.4
+  runSpeed: 5
+  fadeTime: 0.6
+  joinRange: 8
+  leaveRange: 14
+  lookRange: 12
+  maxActors: 8
+  maxProps: 80
+  closeUp: 1.7
+  maxZoom: 2
+  stepX: 3
+  stepY: 2
+  spots: [ 7.5, 5.5, 9.5, 4.5, 10.5, 6.5, 8.5, 3.5, 11.5, 2.5, 12.5 ]
+  defaultKind: Human
+  defaultRole: Passenger
+  defaultLocation: Corridor
+  language: Russian
+  tellerJobs: [ Librarian, Bartender ]
+  tellerIcon:
+    sprite: /Textures/Objects/Misc/books.rsi
+    state: book_icon
+  tellerIconScale: 0.75
+  tellerIconHeight: 0.18
+  tellerIconSpeed: 4
+  tellerIconOffset: 0.05
+  footstepVolume: -9
+  footstepInterval: 0.32
+  doorSound:
+    path: /Audio/Machines/airlock_open.ogg
+    params:
+      volume: -8
+  punchSound:
+    path: /Audio/Weapons/punch1.ogg
+    params:
+      volume: -2
+  smashSound:
+    path: /Audio/Weapons/genhit1.ogg
+    params:
+      volume: -2
+  bulletSound:
+    path: /Audio/Weapons/Guns/Gunshots/pistol.ogg
+    params:
+      volume: -4
+  laserSound:
+    path: /Audio/Weapons/Guns/Gunshots/laser.ogg
+    params:
+      volume: -4
+  hugSound:
+    path: /Audio/Effects/thudswoosh.ogg
+    params:
+      volume: -4
+  fallSound:
+    path: /Audio/Effects/bodyfall1.ogg
+    params:
+      volume: -3
+  giveSound:
+    path: /Audio/Effects/pop.ogg
+    params:
+      volume: -6
+  shakeSound:
+    path: /Audio/Effects/hit_kick.ogg
+    params:
+      volume: -2
+  punchArc:
+    sprite: /Textures/Effects/arcs.rsi
+    state: punch
+  slashArc:
+    sprite: /Textures/Effects/arcs.rsi
+    state: slash
+  hearts:
+    sprite: /Textures/Effects/hearts.rsi
+    state: hearts
+  pointer:
+    sprite: /Textures/Interface/Misc/pointing.rsi
+    state: pointing
+  bulletMuzzle:
+    sprite: /Textures/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: muzzle_bullet
+  laserMuzzle:
+    sprite: /Textures/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: muzzle_laser
+  bulletImpact:
+    sprite: /Textures/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: impact_debug
+  laserImpact:
+    sprite: /Textures/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: impact_laser
+  bulletTrail: "#ffeb8cd9"
+  laserTrail: "#ff4033e6"

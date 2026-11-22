@@ -1,0 +1,35 @@
+- type: storyPropGroup
+  id: Furniture
+  name: storyteller-props-Furniture
+  order: 0
+  props: [ TableWood, TableCounterWood, TableCounterMetal, TableReinforced, TableGlass, TableFancyRed, Table, ChairWood, ChairOfficeDark, ChairOfficeLight, ChairFolding, Chair, ComfyChair, StoolBar, Stool, ChairPilotSeat, Bed, MedicalBed, Dresser, Bookshelf, Rack ]
+
+- type: storyPropGroup
+  id: Machines
+  name: storyteller-props-Machines
+  order: 1
+  props: [ ComputerComms, ComputerId, ComputerCrewMonitoring, ComputerShuttle, ComputerAlert, ComputerPowerMonitoring, ComputerCriminalRecords, ComputerSurveillanceCameraMonitor, ComputerCargoOrders, ComputerResearchAndDevelopment, Protolathe, Autolathe, CircuitImprinter, ChemDispenser, ChemMaster, BoozeDispenser, SodaDispenser, KitchenMicrowave, KitchenReagentGrinder, KitchenElectricGrill, SmartFridge, MedicalScanner, CryoPod, StasisBed, OperatingTable, SubstationBasic, SMESBasic, GeneratorRTG, Emitter, Jukebox ]
+
+- type: storyPropGroup
+  id: Vending
+  name: storyteller-props-Vending
+  order: 2
+  props: [ VendingMachineCola, VendingMachineSnack, VendingMachineCoffee, VendingMachineCigs, VendingMachineBooze, VendingMachineMedical, VendingMachineSec, VendingMachineEngivend, VendingMachineChefvend, VendingMachineSeeds, VendingMachineNutri, VendingMachineTheater, VendingMachineChapel, SpaceVillainArcade, BlockGameArcade ]
+
+- type: storyPropGroup
+  id: Structures
+  name: storyteller-props-Structures
+  order: 3
+  props: [ WallSolid, WallReinforced, WallSolidRust, WallRock, Window, ReinforcedWindow, Grille, Girder, AirlockGlass, Airlock, AirlockMaint, FirelockGlass, Catwalk, AsteroidRock, Thruster, Gyroscope ]
+
+- type: storyPropGroup
+  id: Storage
+  name: storyteller-props-Storage
+  order: 4
+  props: [ CrateGeneric, CrateFreezer, OreBox, LockerSecurity, LockerMedical, LockerCaptain, DisposalUnit, WaterCooler, AirCanister, OxygenCanister, PlasmaCanister, Morgue, Crematorium, hydroponicsTray, SeedExtractor ]
+
+- type: storyPropGroup
+  id: Decor
+  name: storyteller-props-Decor
+  order: 5
+  props: [ PottedPlant1, PottedPlant10, LampGold, Mirror, AltarNanotrasen, SignBar, SignMedical, SignBridge, SignSecurity, SignEngineering, SignCargo, SignScience, SignChapel, SignKitchen, SignMorgue, SignHydro1, AirAlarm, FireAlarm, PuddleBlood, ShardGlass ]
