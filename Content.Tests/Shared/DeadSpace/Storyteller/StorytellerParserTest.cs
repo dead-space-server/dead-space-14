@@ -48,10 +48,12 @@ public sealed class StorytellerParserTest : ContentUnitTest
         return "";
     }
 
+    private const string LanguageId = "Russian";
+
     private static StoryLexicon Lexicon(IPrototypeManager prototypes)
     {
         var lexicon = new StoryLexicon();
-        lexicon.SetLanguage(prototypes.Index<StoryLanguagePrototype>("Russian"));
+        lexicon.SetLanguage(prototypes.Index<StoryLanguagePrototype>(LanguageId));
         foreach (var emote in prototypes.EnumeratePrototypes<StoryEmotePrototype>())
             lexicon.AddEmote(emote.ID, emote.Stems, emote.Phrases);
         foreach (var light in prototypes.EnumeratePrototypes<StoryLightPrototype>())
