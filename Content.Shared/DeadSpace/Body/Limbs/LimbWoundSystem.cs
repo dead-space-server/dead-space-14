@@ -6,7 +6,6 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
-using Content.Shared.Atmos.Rotting;
 using Content.Shared.Body.Components;
 using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.DeadSpace.Cloning;
@@ -101,7 +100,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobs = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
-    [Dependency] private SharedRottingSystem _rotting = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
@@ -2274,44 +2272,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return (uint) index < (uint) limbs.Organs.Count && limbs.Organs[index].Missing;
     }
 
-    private void ReleaseOrganDeath(EntityUid uid, LimbBodyComponent limbs)
-    {
-        if (!_net.IsServer || VitalGone(limbs) || InStasis(uid))
-            return;
-
-        if (_mobs.IsDead(uid) && (!limbs.LimbDeath || DeadByDamage(uid)))
-            return;
-
-        var head = HeadHealth(limbs);
-        var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
-        var life = LimbWoundRules.Life(head, torso);
-        var state = life == LimbLife.Dead ? MobState.Dead : life == LimbLife.Crit ? MobState.Critical : MobState.Alive;
-        if (state == MobState.Dead && HasComp<SurgeryMannequinComponent>(uid))
-            state = MobState.Critical;
-        var rot = SnapshotRot(uid);
-        _thresholds.SetCurrentThresholdState(uid, state);
-        _mobs.ChangeMobState(uid, state);
-        RestoreRot(uid, rot);
-    }
-
     private void ApplyLife(EntityUid uid, LimbBodyComponent limbs)
     {
         if (!_net.IsServer)
             return;
 
-        var rot = SnapshotRot(uid);
-        try
-        {
-            ApplyLifeInner(uid, limbs);
-        }
-        finally
-        {
-            RestoreRot(uid, rot);
-        }
-    }
-
-    private void ApplyLifeInner(EntityUid uid, LimbBodyComponent limbs)
-    {
         var life = LifeOf(uid, limbs);
         if (life == LimbLife.Dead)
         {
@@ -2319,16 +2284,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return;
         }
 
+        // DS14: мёртвое тело не оживает от конечностей и возврата органов —
+        // оживление только через дефибриллятор и подобные системы.
         if (_mobs.IsDead(uid))
-        {
-            if (limbs.LimbDeath && !DeadByDamage(uid))
-            {
-                limbs.LimbDeath = false;
-                _mobs.UpdateMobState(uid);
-            }
-
             return;
-        }
 
         if (life == LimbLife.Crit)
         {
@@ -2343,17 +2302,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
             limbs.LimbCrit = false;
             _mobs.UpdateMobState(uid);
         }
-    }
-
-    private TimeSpan SnapshotRot(EntityUid uid)
-    {
-        return TryComp<PerishableComponent>(uid, out var perishable) ? perishable.RotAccumulator : TimeSpan.Zero;
-    }
-
-    private void RestoreRot(EntityUid uid, TimeSpan rot)
-    {
-        if (TryComp<PerishableComponent>(uid, out var perishable) && perishable.RotAccumulator != rot)
-            _rotting.SetRotAccumulator(uid, rot, perishable);
     }
 
     private LimbLife LifeOf(EntityUid uid, LimbBodyComponent limbs)
@@ -2381,14 +2329,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         limbs.LimbDeath = true;
         _mobs.ChangeMobState(uid, MobState.Dead);
-    }
-
-    private bool DeadByDamage(EntityUid uid)
-    {
-        return TryComp<MobThresholdsComponent>(uid, out var thresholds)
-            && TryComp<DamageableComponent>(uid, out var damage)
-            && (thresholds.CurrentThresholdState == MobState.Dead && !thresholds.AllowRevives
-                || _thresholds.TryGetThresholdForState(uid, MobState.Dead, out var dead, thresholds) && damage.TotalDamage >= dead.Value);
     }
 
     private void NoteFace(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike)
