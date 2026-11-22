@@ -296,7 +296,11 @@ public sealed partial class HealthAnalyzerSystem : EntitySystem
             && timed.Died is { } died
             && TryComp<MobStateComponent>(entity, out var mob)
             && mob.CurrentState == MobState.Dead)
-            bodyTemperature = LimbWoundRules.CorpseKelvin((float) (_timing.CurTime - died).TotalMinutes);
+        {
+            var corpseKelvin = LimbWoundRules.CorpseKelvin((float) (_timing.CurTime - died).TotalMinutes);
+            if (float.IsNaN(bodyTemperature) || corpseKelvin > bodyTemperature)
+                bodyTemperature = corpseKelvin;
+        }
         // DS14-end
 
         var bloodAmount = float.NaN;
