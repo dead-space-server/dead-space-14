@@ -189,7 +189,7 @@ public sealed partial class PsychiatrySystem : SharedPsychiatrySystem
         if (!_cfg.GetCVar(CCCCVars.PsychiatryEnabled))
             return false;
 
-        if (IsPositronic(uid) || IsMindShielded(uid) || IsAntagImmune(uid, pillForced: false, gas: true))
+        if (IsPositronic(uid) || IsSkeleton(uid) || IsMindShielded(uid) || IsAntagImmune(uid, pillForced: false, gas: true))
             return false;
 
         if (IsPsychogenBlocked(uid))
@@ -238,7 +238,7 @@ public sealed partial class PsychiatrySystem : SharedPsychiatrySystem
         if (OnTreatmentHold(uid))
             return false;
 
-        if (IsPositronic(uid) || IsMindShielded(uid))
+        if (IsPositronic(uid) || IsSkeleton(uid) || IsMindShielded(uid))
             return false;
 
         if (IsAntagImmune(uid, pillForced))
@@ -329,7 +329,7 @@ public sealed partial class PsychiatrySystem : SharedPsychiatrySystem
         if (stage <= SchizophreniaStage.None)
             return;
 
-        if (kind == PsychiatryIllnessKind.Schizophrenia && (IsPositronic(uid) || IsMindShielded(uid)))
+        if (kind == PsychiatryIllnessKind.Schizophrenia && (IsPositronic(uid) || IsSkeleton(uid) || IsMindShielded(uid)))
             return;
 
         if (kind == PsychiatryIllnessKind.Cyberpsychosis && !IsPositronic(uid))
@@ -399,7 +399,7 @@ public sealed partial class PsychiatrySystem : SharedPsychiatrySystem
 
     public bool TryStepStage(EntityUid uid)
     {
-        if (IsPositronic(uid) || IsMindShielded(uid))
+        if (IsPositronic(uid) || IsSkeleton(uid) || IsMindShielded(uid))
             return false;
 
         if (!TryComp<SchizophreniaComponent>(uid, out var schizo))
@@ -417,7 +417,7 @@ public sealed partial class PsychiatrySystem : SharedPsychiatrySystem
 
     public void ApplyPsychogenDose(EntityUid uid, float units)
     {
-        if (units <= 0f || IsPositronic(uid) || IsMindShielded(uid) || OnTreatmentHold(uid))
+        if (units <= 0f || IsPositronic(uid) || IsSkeleton(uid) || IsMindShielded(uid) || OnTreatmentHold(uid))
             return;
 
         if (TryComp<SchizophreniaComponent>(uid, out var existing) && existing.Stage >= SchizophreniaStage.Acute)
@@ -459,7 +459,7 @@ public sealed partial class PsychiatrySystem : SharedPsychiatrySystem
 
     private void OnHeadTrauma(Entity<PsychiatryHeadTraumaComponent> ent, ref ComponentStartup args)
     {
-        if (IsPositronic(ent.Owner) || HasComp<SchizophreniaComponent>(ent.Owner))
+        if (IsPositronic(ent.Owner) || IsSkeleton(ent.Owner) || HasComp<SchizophreniaComponent>(ent.Owner))
             return;
 
         if (IsMindShielded(ent.Owner))
@@ -492,7 +492,7 @@ public sealed partial class PsychiatrySystem : SharedPsychiatrySystem
         var traumaQuery = EntityQueryEnumerator<PsychiatryHeadTraumaComponent>();
         while (traumaQuery.MoveNext(out var uid, out var trauma))
         {
-            if (!trauma.Suppressed || HasComp<MindShieldComponent>(uid) || HasComp<SchizophreniaComponent>(uid) || IsPositronic(uid))
+            if (!trauma.Suppressed || HasComp<MindShieldComponent>(uid) || HasComp<SchizophreniaComponent>(uid) || IsPositronic(uid) || IsSkeleton(uid))
                 continue;
             restore.Add(uid);
         }
