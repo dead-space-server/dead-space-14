@@ -17,6 +17,7 @@ public sealed partial class TraitorUltraRuleComponent : Component
 {
     public readonly Dictionary<EntityUid, TraitorUltraMindState> Minds = new();
     public readonly Dictionary<EntityUid, string?> PendingRecruitOffers = new();
+    public readonly Dictionary<EntityUid, TimeSpan> ObjectiveTransitSince = new();
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextCheck;
@@ -38,6 +39,9 @@ public sealed partial class TraitorUltraRuleComponent : Component
 
     [DataField]
     public TimeSpan BountyPreparationTime = TimeSpan.FromMinutes(3);
+
+    [DataField]
+    public TimeSpan TransplantGrace = TimeSpan.FromMinutes(3);
 
     [DataField]
     public TimeSpan RewardDelay = TimeSpan.FromSeconds(10);
@@ -351,6 +355,7 @@ public sealed class TraitorUltraMindState
     public bool UltraUplinkInitialized;
     public bool BountyAnnouncementSuppressed;
     public EntityUid? BountyBody;
+    public TimeSpan? BountyMovedAt;
     public EntityUid? UltraUplinkEntity;
     public EntityUid? UpgradeOfferActionEntity;
     public EntityUid? FirstPostUpgradeObjective;

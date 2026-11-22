@@ -44,6 +44,9 @@ public sealed partial class LimbFleshComponent : Component
     [DataField]
     public string Donor = "";
 
+    [DataField]
+    public Dictionary<string, string> DonorVoices = new();
+
     [DataField, AutoNetworkedField]
     public Color Eyes = Color.White;
 
