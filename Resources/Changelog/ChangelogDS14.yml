@@ -10665,3 +10665,10 @@ Entries:
   changes:
   - type: Fix
     message: Титры в окне переподключения
+- id: 1033
+  author: BlueDogDoc
+  time: '2026-11-22T23:01:42.330276+00:00'
+  pr: 2844
+  changes:
+  - type: Tweak
+    message: Отключено ЧМТ для скелета
