@@ -20,6 +20,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Silicons.Borgs.Components; // DS14
 using Content.Shared.Sound.Components;
 using Content.Shared.Strip.Components;
 using Content.Shared.Verbs;
@@ -78,7 +79,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
             return;
 
         // DS14-start: don't offer to strip a target that can't be stripped (e.g. a stasis cocoon).
-        if (args.Target is { Valid: true } target && TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+        if (args.Target is { Valid: true } target && IsEntityStripBlocked(target))
             return;
         // DS14-end
 
@@ -98,7 +99,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
             return;
 
         // DS14-start: don't offer to strip a target that can't be stripped (e.g. a stasis cocoon).
-        if (args.Target is { Valid: true } target && TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+        if (args.Target is { Valid: true } target && IsEntityStripBlocked(target))
             return;
         // DS14-end
 
@@ -197,7 +198,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
         // DS14-end
 
         // DS14-start: a stasis cocoon blocks inventory slots as well as hands.
-        if (TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+        if (IsEntityStripBlocked(target))
             return false;
         // DS14-end
 
@@ -313,7 +314,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
         // DS14-end
 
         // DS14-start: re-check during the strip do-after so entering a cocoon cancels it.
-        if (TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+        if (IsEntityStripBlocked(target))
             return false;
         // DS14-end
 
@@ -796,7 +797,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
 
         // DS14-start: don't let anyone open the stripping UI on a target that
         // can't be stripped (e.g. a changeling in a stasis cocoon).
-        if (TryComp<HandsComponent>(target.Owner, out var targetHands) && !targetHands.CanBeStripped)
+        if (IsEntityStripBlocked(target.Owner))
         {
             _popupSystem.PopupCursor(Loc.GetString("strip-cannot-strip"), user);
             return false;
@@ -839,6 +840,13 @@ public abstract partial class SharedStrippableSystem : EntitySystem
     }
 
     // DS14-start
+    private bool IsEntityStripBlocked(EntityUid target)
+    {
+        return TryComp<HandsComponent>(target, out var hands)
+            && !hands.CanBeStripped
+            && !HasComp<BorgChassisComponent>(target);
+    }
+
     private bool CanDirectInsertHand(EntityUid user, EntityUid target, bool allowClientUnknownSession = false)
     {
         if (IsInteractiveGhost(user))
