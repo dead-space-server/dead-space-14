@@ -17,6 +17,7 @@ using Content.Shared.Database;
 using Content.Shared.DeadSpace.Virus;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
+using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Mind.Components;
 using Content.Shared.StationRecords;
 using Content.Shared.UserInterface;
@@ -58,6 +59,7 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
 
         SubscribeLocalEvent<CryostorageComponent, BeforeActivatableUIOpenEvent>(OnBeforeUIOpened);
         SubscribeLocalEvent<CryostorageComponent, CryostorageRemoveItemBuiMessage>(OnRemoveItemBuiMessage);
+        SubscribeLocalEvent<CryostorageStoredGearComponent, EntityTerminatingEvent>(OnGearTerminating); //DS-14
 
         SubscribeLocalEvent<CryostorageContainedComponent, PlayerSpawnCompleteEvent>(OnPlayerSpawned);
         SubscribeLocalEvent<CryostorageContainedComponent, MindRemovedMessage>(OnMindRemoved);
@@ -79,12 +81,25 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
 
     private void OnRemoveItemBuiMessage(Entity<CryostorageComponent> ent, ref CryostorageRemoveItemBuiMessage args)
     {
-        var (_, comp) = ent;
         var attachedEntity = args.Actor;
-        var cryoContained = GetEntity(args.StoredEntity);
 
-        if (!comp.StoredPlayers.Contains(cryoContained) || !IsInPausedMap(cryoContained))
+        //DS-14 start
+        if (!TryComp<CryostorageStoredGearComponent>(ent, out var gear))
             return;
+
+        CryostorageGearEntry? entry = null;
+        foreach (var candidate in gear.Entries)
+        {
+            if (candidate.Id != args.EntryId)
+                continue;
+
+            entry = candidate;
+            break;
+        }
+
+        if (entry == null)
+            return;
+        //DS-14 end
 
         if (!HasComp<HandsComponent>(attachedEntity))
             return;
@@ -95,29 +110,50 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
             return;
         }
 
-        EntityUid? entity = null;
-        if (args.Type == CryostorageRemoveItemBuiMessage.RemovalType.Hand)
-        {
-            entity = _hands.GetHeldItem(cryoContained, args.Key);
-        }
-        else
-        {
-            if (_inventory.TryGetSlotContainer(cryoContained, args.Key, out var slot, out _))
-                entity = slot.ContainedEntity;
-        }
+        //DS-14 start
+        var stored = args.Type == CryostorageRemoveItemBuiMessage.RemovalType.Hand
+            ? entry.Hands
+            : entry.Inventory;
 
-        if (entity == null)
+        if (!stored.TryGetValue(args.Key, out var entity) || TerminatingOrDeleted(entity))
+        {
+            stored.Remove(args.Key);
+            if (entry.Inventory.Count == 0 && entry.Hands.Count == 0)
+                gear.Entries.Remove(entry);
+
+            UpdateCryostorageUIState(ent);
             return;
+        }
 
         AdminLog.Add(LogType.Action, LogImpact.High,
-            $"{ToPrettyString(attachedEntity):player} removed item {ToPrettyString(entity)} from cryostorage-contained player " +
-            $"{ToPrettyString(cryoContained):player}, stored in cryostorage {ToPrettyString(ent)}");
+            $"{ToPrettyString(attachedEntity):player} removed item {ToPrettyString(entity)} from cryostorage {ToPrettyString(ent)} ({entry.Name})");
 
-        _container.TryRemoveFromContainer(entity.Value);
-        _transform.SetCoordinates(entity.Value, Transform(attachedEntity).Coordinates);
-        _hands.PickupOrDrop(attachedEntity, entity.Value);
+        _container.TryRemoveFromContainer(entity);
+        _transform.SetCoordinates(entity, Transform(attachedEntity).Coordinates);
+        _hands.PickupOrDrop(attachedEntity, entity);
+        stored.Remove(args.Key);
+
+        if (entry.Inventory.Count == 0 && entry.Hands.Count == 0)
+            gear.Entries.Remove(entry);
+        //DS-14 end
+
         UpdateCryostorageUIState(ent);
     }
+
+    //DS-14 start
+    private void OnGearTerminating(Entity<CryostorageStoredGearComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (!_container.TryGetContainer(ent, CryostorageStoredGearComponent.ContainerId, out var container))
+            return;
+
+        var coords = Transform(ent).Coordinates;
+        var items = new List<EntityUid>(container.ContainedEntities);
+        foreach (var item in items)
+            _container.Remove(item, container, force: true, destination: coords);
+
+        ent.Comp.Entries.Clear();
+    }
+    //DS-14 end
 
     private void UpdateCryostorageUIState(Entity<CryostorageComponent> ent)
     {
@@ -210,21 +246,7 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
         comp.AllowReEnteringBody = false;
         //DS-14 start
         comp.GracePeriodEndTime = null;
-        var pod = Transform(cryostorageEnt.Value).Coordinates;
-        var hands = new List<string>();
-        foreach (var hand in _hands.EnumerateHands(ent.Owner))
-            hands.Add(hand);
-        foreach (var hand in hands)
-            _hands.TryDrop((ent.Owner, null), hand, pod, checkActionBlocker: false, doDropInteraction: false);
-
-        var worn = new List<string>();
-        var slots = _inventory.GetSlotEnumerator(ent.Owner);
-        while (slots.NextItem(out _, out var slotDef))
-            worn.Add(slotDef.Name);
-
-        foreach (var slot in worn)
-            _inventory.TryUnequip(ent.Owner, slot, silent: true, force: true);
-
+        StoreGear(ent.Owner, cryostorageEnt.Value, name);
         _container.TryRemoveFromContainer(ent.Owner);
         QueueDel(ent.Owner);
         //DS-14 end
@@ -311,38 +333,140 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
     private List<CryostorageContainedPlayerData> GetAllContainedData(Entity<CryostorageComponent> ent)
     {
         var data = new List<CryostorageContainedPlayerData>();
-        data.EnsureCapacity(ent.Comp.StoredPlayers.Count);
+        //DS-14 start
+        if (!TryComp<CryostorageStoredGearComponent>(ent, out var gear))
+            return data;
 
-        foreach (var contained in ent.Comp.StoredPlayers)
+        for (var i = gear.Entries.Count - 1; i >= 0; i--)
         {
-            data.Add(GetContainedData(contained));
+            var entry = gear.Entries[i];
+            PruneMissingGear(entry);
+            if (entry.Inventory.Count == 0 && entry.Hands.Count == 0)
+            {
+                gear.Entries.RemoveAt(i);
+                continue;
+            }
+
+            var contained = new CryostorageContainedPlayerData
+            {
+                PlayerName = entry.Name,
+                EntryId = entry.Id,
+            };
+
+            foreach (var (slot, item) in entry.Inventory)
+                contained.ItemSlots.Add(slot, Name(item));
+
+            foreach (var (hand, item) in entry.Hands)
+                contained.HeldItems.Add(hand, Name(item));
+
+            data.Add(contained);
         }
+        //DS-14 end
 
         return data;
     }
 
-    private CryostorageContainedPlayerData GetContainedData(EntityUid uid)
+    //DS-14 start
+    private void StoreGear(EntityUid body, EntityUid cryo, string playerName)
     {
-        var data = new CryostorageContainedPlayerData();
-        data.PlayerName = Name(uid);
-        data.PlayerEnt = GetNetEntity(uid);
-
-        var enumerator = _inventory.GetSlotEnumerator(uid);
-        while (enumerator.NextItem(out var item, out var slotDef))
+        var gear = EnsureComp<CryostorageStoredGearComponent>(cryo);
+        var container = _container.EnsureContainer<Container>(cryo, CryostorageStoredGearComponent.ContainerId);
+        var entry = new CryostorageGearEntry
         {
-            data.ItemSlots.Add(slotDef.Name, Name(item));
+            Id = gear.NextId++,
+            Name = playerName,
+        };
+
+        var handItems = new List<(string Hand, EntityUid Item)>();
+        foreach (var hand in _hands.EnumerateHands(body))
+        {
+            if (_hands.TryGetHeldItem(body, hand, out var held))
+                handItems.Add((hand, held.Value));
         }
 
-        foreach (var hand in _hands.EnumerateHands(uid))
+        foreach (var (hand, item) in handItems)
         {
-            if (!_hands.TryGetHeldItem(uid, hand, out var heldEntity))
+            if (TerminatingOrDeleted(item))
                 continue;
 
-            data.HeldItems.Add(hand, Name(heldEntity.Value));
+            if (HasComp<VirtualItemComponent>(item))
+            {
+                _hands.TryDrop((body, null), hand, checkActionBlocker: false, doDropInteraction: false);
+                continue;
+            }
+
+            _hands.TryDrop((body, null), hand, checkActionBlocker: false, doDropInteraction: false);
+            if (!TryStoreItem(item, container))
+                continue;
+
+            entry.Hands[hand] = item;
         }
 
-        return data;
+        var worn = new List<(string Slot, EntityUid Item)>();
+        var slots = _inventory.GetSlotEnumerator(body);
+        while (slots.NextItem(out var item, out var slotDef))
+            worn.Add((slotDef.Name, item));
+
+        foreach (var (slot, item) in worn)
+        {
+            if (TerminatingOrDeleted(item))
+                continue;
+
+            if (_container.TryGetContainingContainer((item, null, null), out var current) && current.Owner == body)
+                _inventory.TryUnequip(body, slot, silent: true, force: true);
+
+            if (!TryStoreItem(item, container))
+                continue;
+
+            entry.Inventory[slot] = item;
+        }
+
+        if (entry.Inventory.Count == 0 && entry.Hands.Count == 0)
+            return;
+
+        gear.Entries.Add(entry);
     }
+
+    private bool TryStoreItem(EntityUid item, BaseContainer container)
+    {
+        if (TerminatingOrDeleted(item))
+            return false;
+
+        if (container.Contains(item))
+            return true;
+
+        if (_container.Insert(item, container))
+            return true;
+
+        if (_container.IsEntityInContainer(item))
+            _container.TryRemoveFromContainer(item, force: true);
+
+        return !TerminatingOrDeleted(item) && _container.Insert(item, container, force: true);
+    }
+
+    private void PruneMissingGear(CryostorageGearEntry entry)
+    {
+        var slots = new List<string>();
+        foreach (var (slot, item) in entry.Inventory)
+        {
+            if (TerminatingOrDeleted(item))
+                slots.Add(slot);
+        }
+
+        foreach (var slot in slots)
+            entry.Inventory.Remove(slot);
+
+        var hands = new List<string>();
+        foreach (var (hand, item) in entry.Hands)
+        {
+            if (TerminatingOrDeleted(item))
+                hands.Add(hand);
+        }
+
+        foreach (var hand in hands)
+            entry.Hands.Remove(hand);
+    }
+    //DS-14 end
 
     public override void Update(float frameTime)
     {
