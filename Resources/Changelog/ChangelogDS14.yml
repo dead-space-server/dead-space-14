@@ -10651,3 +10651,10 @@ Entries:
   changes:
   - type: Fix
     message: При попытке обыскать кокон, борга - не пишет, что это человек
+- id: 1031
+  author: BlueDogDoc
+  time: '2026-11-22T22:53:34.234895+00:00'
+  pr: 2847
+  changes:
+  - type: Tweak
+    message: Ревенант не может усыплять синтетиков (в тч и КПБ)
