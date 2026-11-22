@@ -48,9 +48,7 @@ public sealed class CheckTagHandler : IMarkupTagHandler
         {
             if (FindPaperWindow(btn) is { } window)
             {
-                var next = btn.State == PaperCheckState.Blank
-                    ? PaperCheckState.Check
-                    : PaperCheckState.Blank;
+                var next = (PaperCheckState) (((int) btn.State + 1) % CheckGlyphs.Length);
                 window.SetCheckState(CountPaperCheckButtonsBefore(btn), next);
             }
         };

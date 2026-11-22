@@ -72,3 +72,5 @@ paper-ui-insert-requires-pda = A PDA with the crew manifest program is required.
 paper-ui-insert-unavailable = The crew manifest is currently unavailable.
 paper-ui-insert-empty = The crew manifest has no entries yet.
 paper-ui-insert-no-results = No matching crew members. Try another search.
+
+paper-ui-toolbar-checkbox = Checkbox
