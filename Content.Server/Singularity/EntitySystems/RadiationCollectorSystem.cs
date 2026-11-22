@@ -231,4 +231,21 @@ public sealed partial class RadiationCollectorSystem : EntitySystem
 
         UpdatePressureIndicatorAppearance(uid, component, gasTank, appearance);
     }
+
+    // DS14-start
+    /// <summary>
+    /// Возвращает коллектору внешний вид после загрузки карты из сохранения: <c>Enabled</c> приезжает
+    /// из файла, а ключей внешнего вида в файле нет и <see cref="OnMapInit"/>, который их навёл бы,
+    /// не приходил. Попапов нет — игроков рядом на загрузке ещё нет.
+    /// </summary>
+    public void RefreshLoadedAppearance(EntityUid uid, RadiationCollectorComponent? component = null)
+    {
+        if (!Resolve(uid, ref component, false))
+            return;
+
+        UpdateMachineAppearance(uid, component);
+        TryGetLoadedGasTank(uid, out var gasTank);
+        UpdateTankAppearance(uid, component, gasTank);
+    }
+    // DS14-end
 }

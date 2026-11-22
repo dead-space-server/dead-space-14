@@ -1,9 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Content.Server.Machines.EntitySystems;
+using Content.Server.ParticleAccelerator.Components;
+using Content.Server.ParticleAccelerator.EntitySystems;
+using Content.Server.Singularity.Components;
+using Content.Server.Singularity.EntitySystems;
 using Content.Shared.Materials;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
+using Content.Shared.Singularity.Components;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Maths;
 
 namespace Content.Server.DeadSpace.SaveGamemode;
 
@@ -53,6 +61,11 @@ public sealed partial class SaveGamemodeLoadedStateSystem : EntitySystem
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedPowerStateSystem _powerState = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ContainmentFieldGeneratorSystem _fieldGenerator = default!;
+    [Dependency] private MultipartMachineSystem _multipart = default!;
+    [Dependency] private ParticleAcceleratorSystem _accelerator = default!;
+    [Dependency] private RadiationCollectorSystem _collector = default!;
 
     /// <summary>
     ///     Маркерные компоненты переходящих процессов: на загрузке снимаются со всех сущностей.

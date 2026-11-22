@@ -669,6 +669,21 @@ public sealed partial class ContainmentFieldGeneratorSystem : EntitySystem
         _visualizer.SetData(generator, ContainmentFieldGeneratorVisuals.OnLight, generator.Comp.IsConnected);
         UpdateConnectionLights(generator);
     }
+
+    // DS14-start
+    /// <summary>
+    /// Перерисовывает все лампочки генератора по его текущему состоянию.
+    /// Нужен загрузке карты из сохранения: ключи внешнего вида в файл не пишутся, а <see cref="OnMapInit"/>,
+    /// который их навёл бы, на такой загрузке не приходил.
+    /// </summary>
+    public void RefreshLoadedVisuals(Entity<ContainmentFieldGeneratorComponent> generator)
+    {
+        // Аргумент power в ChangePowerVisualizer не участвует — считается по PowerBuffer.
+        ChangePowerVisualizer(0, generator);
+        ChangeFieldVisualizer(generator);
+        ChangeOnLightVisualizer(generator);
+    }
+    // DS14-end
     #endregion
 
     /// <summary>

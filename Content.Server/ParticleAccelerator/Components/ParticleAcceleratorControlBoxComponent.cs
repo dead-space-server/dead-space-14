@@ -18,6 +18,11 @@ public sealed partial class ParticleAcceleratorControlBoxComponent : Component
     /// Requires <see cref="Assembled"/> to be true.
     /// </summary>
     [ViewVariables]
+    // DS14-start
+    // Без [DataField] режим в файл сохранения не приезжал: ускоритель после загрузки всегда
+    // оказывался выключенным. Чинится на загрузке в SaveGamemodeLoadedStateSystem.
+    [DataField("enabled")]
+    // DS14-end
     public bool Enabled = false;
 
     /// <summary>
@@ -40,6 +45,9 @@ public sealed partial class ParticleAcceleratorControlBoxComponent : Component
     /// Modified by <see cref="ParticleAcceleratorStrengthWireAction"/>.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
+    // DS14-start: уровень мощности — часть режима работы, должен доезжать до сохранения (см. Enabled).
+    [DataField("selectedStrength")]
+    // DS14-end
     public ParticleAcceleratorPowerState SelectedStrength = ParticleAcceleratorPowerState.Standby;
 
     /// <summary>
