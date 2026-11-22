@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
+using Content.Client.Launcher;
 using Content.Client.Lobby;
 using Content.Client.MainMenu;
 using Content.Client.RoundEnd;
@@ -20,7 +21,10 @@ using Robust.Shared.Timing;
 namespace Content.Client.DeadSpace.RoundEnd.Credits;
 
 [UsedImplicitly]
-public sealed partial class RoundEndCreditsUIController : UIController, IOnStateEntered<MainScreen>, IOnStateEntered<LobbyState>
+public sealed partial class RoundEndCreditsUIController : UIController,
+    IOnStateEntered<MainScreen>,
+    IOnStateEntered<LobbyState>,
+    IOnStateEntered<LauncherConnecting>
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IResourceCache _cache = default!;
@@ -44,12 +48,12 @@ public sealed partial class RoundEndCreditsUIController : UIController, IOnState
 
     public void OnStateEntered(MainScreen state)
     {
-        CloseOverlay();
-        _round = null;
-        _vote = null;
-        _credits = null;
-        _arena = null;
-        _roundOver = false;
+        ClearRoundEnd();
+    }
+
+    public void OnStateEntered(LauncherConnecting state)
+    {
+        ClearRoundEnd();
     }
 
     public void OnStateEntered(LobbyState state)
@@ -203,6 +207,16 @@ public sealed partial class RoundEndCreditsUIController : UIController, IOnState
         }
 
         return position;
+    }
+
+    private void ClearRoundEnd()
+    {
+        CloseOverlay();
+        _round = null;
+        _vote = null;
+        _credits = null;
+        _arena = null;
+        _roundOver = false;
     }
 
     private void CloseOverlay()
