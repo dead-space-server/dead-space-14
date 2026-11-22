@@ -45,7 +45,7 @@ public static class LimbWoundRules
     public const float CrackShare = 0.5f;
     public const float CrackHeavyShare = 0.8f;
     public const float CrackLightChance = 0.05f;
-    public const float CrackHeavyChance = 0.1f;
+    public const float CrackHeavyChance = 0.05f;
     public const float EmbedChance = 0.08f;
     public const float AimedEmbedChance = 0.18f;
     public const float AimedShatterChance = 0.12f;

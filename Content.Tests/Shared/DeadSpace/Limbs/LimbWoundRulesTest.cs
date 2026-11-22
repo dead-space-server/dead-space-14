@@ -359,13 +359,13 @@ public sealed class LimbWoundRulesTest
         {
             Assert.That(LimbWoundRules.CrackChance(0.5f), Is.EqualTo(0f));
             Assert.That(LimbWoundRules.CrackChance(0.6f), Is.EqualTo(0.05f));
-            Assert.That(LimbWoundRules.CrackChance(0.81f), Is.EqualTo(0.1f));
+            Assert.That(LimbWoundRules.CrackChance(0.81f), Is.EqualTo(0.05f));
             Assert.That(LimbWoundRules.RollCrack(ref state, 0.6f, 0.06f), Is.False);
         });
 
         Assert.That(LimbWoundRules.RollCrack(ref state, 0.6f, 0.04f), Is.True);
         Assert.That(state.Bone, Is.EqualTo(LimbWoundRules.StrainBone));
-        Assert.That(LimbWoundRules.RollCrack(ref state, 0.9f, 0.09f), Is.True);
+        Assert.That(LimbWoundRules.RollCrack(ref state, 0.9f, 0.04f), Is.True);
         Assert.That(state.Bone, Is.EqualTo(LimbWoundRules.BreakBone));
     }
 
