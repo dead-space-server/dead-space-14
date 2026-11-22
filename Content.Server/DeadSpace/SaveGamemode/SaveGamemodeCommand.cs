@@ -61,10 +61,22 @@ public sealed partial class SaveGamemodeCommand : LocalizedCommands
             return;
         }
 
-        if (saveSystem.TrySaveFilteredSlot(mapId, args[0], out var report))
-            shell.WriteLine($"Сохранение '{args[0]}' выполнено успешно. {report}");
-        else
-            shell.WriteLine($"Не удалось сохранить '{args[0]}'. Старое сохранение не тронуто, смотрите логи сервера.");
+        // Метку состояния существ навешиваем здесь так же, как на конце раунда: без неё в файл
+        // не попадут ни MobState, ни урон (см. SavedMobStateComponent), и загрузка будет выводить
+        // состояние по косвенным признакам.
+        var mobStateSave = _entityManager.System<SaveGamemodeMobStateSystem>();
+        mobStateSave.StampMobStates();
+        try
+        {
+            if (saveSystem.TrySaveFilteredSlot(mapId, args[0], out var report))
+                shell.WriteLine($"Сохранение '{args[0]}' выполнено успешно. {report}");
+            else
+                shell.WriteLine($"Не удалось сохранить '{args[0]}'. Старое сохранение не тронуто, смотрите логи сервера.");
+        }
+        finally
+        {
+            mobStateSave.ClearMobStateStamps();
+        }
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)

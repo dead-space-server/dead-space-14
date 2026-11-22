@@ -24,6 +24,7 @@ using Content.Shared.GameTicking.Components;
 using Content.Shared.Item;
 using Content.Shared.Lock;
 using Content.Shared.Maps;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Paper;
@@ -68,6 +69,9 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private OpenableSystem _openable = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SaveGamemodeMobStateSystem _mobStateSave = default!;
+    [Dependency] private SaveGamemodeLoadedStateSystem _loadedState = default!;
 
     /// <summary>
     ///     Имя, которое движок даёт сущности сетки при создании. Для сетки из сохранения оно означает
@@ -696,6 +700,11 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
 
         Log.Info($"SaveGamemode: сохранение '{slot}' загружено на карту {defaultMap}");
 
+        // Состояние существ (MobState и урон) в файле не лежит — возвращаем ДО пробуждения NPC:
+        // смена состояния усыпляет планировщик, а разбуженный труп оживает для поведения,
+        // сохранив спрайт живого. См. RestoreLoadedMobStates.
+        RestoreLoadedMobStates();
+
         WakeLoadedNpcs(defaultMap);
 
         // Состояние, которое навёл бы MapInit, а в файле его нет: задержки использования, *Modified у
@@ -704,6 +713,10 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
         FixLoadedGuns();
         FixLoadedItemCabinets();
         FixLoadedItemSlotLocks();
+
+        // Состояние переходящих процессов: маркеры, приехавшие из файла («станок печатает» вечно), и
+        // ключи внешнего вида, которые навёл бы MapInit (слой «inserting» у автолатов). См. файл системы.
+        _loadedState.FixLoadedTransientStates();
 
         // Станция не часть карты, но живая на момент сохранения затаскивается в файл ссылками сеток:
         // такие сущности убираем перед регистрацией, см. PurgeSavedStations. Без станции раунд
@@ -1451,6 +1464,33 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
     }
 
     /// <summary>
+    ///     Возвращает на загруженной карте состояние существ, которого в файле нет: <c>MobState</c> и урон.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///     Состояние в сохранение не пишется в принципе: <c>MobStateComponent.CurrentState</c> — не
+    ///     <c>[DataField]</c>, а <c>DamageableComponent.Damage</c> ещё и <c>readOnly</c> (там же и пометка
+    ///     <c>//TODO FULL GAME SAVE</c>). Спрайт берётся из <c>appearance</c>, куда состояние кладёт только
+    ///     момент его смены. Вот почему «мёртвые существа принимают спрайт живых», а гниение —
+    ///     маркерный <c>RottingComponent</c>, оно в файле остаётся: «мёртвые животные возрождаются,
+    ///     при этом всё ещё считаясь гнилыми».
+    ///     </para>
+    ///     <para>
+    ///     Режим дописывает своё поле при записи (<see cref="SaveGamemodeMobStateSystem.StampMobStates"/>),
+    ///     а старые сохранения чинятся по тому, что в файле уцелело:
+    ///     <c>MobThresholdsComponent.CurrentThresholdState</c> и наличию гниения. См.
+    ///     <see cref="SaveGamemodeMobStateSystem"/> — там же про порядок «урон, затем состояние».
+    ///     </para>
+    /// </remarks>
+    private void RestoreLoadedMobStates()
+    {
+        var (restored, damaged) = _mobStateSave.RestoreMobStates();
+
+        Log.Info($"SaveGamemode: состояния существ на загруженной карте: состояний возвращено {restored}, " +
+                 $"существ с восстановленным уроном {damaged}");
+    }
+
+    /// <summary>
     ///     Будит NPC на загруженной карте.
     /// </summary>
     /// <remarks>
@@ -1459,6 +1499,8 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
     ///     не реагирует. Из сохранения MapInit не приходит — флаг <c>mapInit</c> в файле стоит именно затем.
     ///     Спальным режимом по расстоянию это не лечится: <c>NPCSystem</c> будит лишь тех, кого усыпил сам.
     ///     Дальние существа он усыпит обратно за пятнадцать секунд, цена — одна волна планирования на старте.
+    ///     Мёртвых и беспамятных пропускаем: их усыпляет смена состояния, а возвращает её
+    ///     <see cref="RestoreLoadedMobStates"/> — отсюда и порядок вызовов на загрузке.
     /// </remarks>
     private void WakeLoadedNpcs(MapId mapId)
     {
@@ -1467,6 +1509,12 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
         while (query.MoveNext(out var uid, out _, out var xform))
         {
             if (xform.MapID != mapId || TerminatingOrDeleted(uid))
+                continue;
+
+            // Мёртвых и беспамятных не будим: их усыпляет смена состояния (NPCSystem.OnMobStateChange),
+            // а будильник здесь всеобщий — существо ожило бы поведению назло спрайту.
+            // Спальным режимом по расстоянию это не лечится: он таких пропускает сам.
+            if (_mobState.IsIncapacitated(uid))
                 continue;
 
             _npc.WakeNPC(uid);
@@ -1915,16 +1963,39 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
         // станции никто не трогает, но и тянуть её после долгого сохранения не за чем.
         var states = CollectStationStates(mapId);
 
+        // Состояние существ (MobState и урон) в файл не пишется — его дописывает метка режима,
+        // см. SavedMobStateComponent. Живёт она ровно столько, сколько сериализация: в живом мире
+        // компонента быть не должно, иначе следующее сохранение возьмёт состояние из устаревшей метки.
+        var stamped = _mobStateSave.StampMobStates();
+
         // Сохранение через пост-процессор: он вычищает runtime-состояние и снимает mapInit,
         // чтобы карта загрузилась как неинициализированная.
-        if (!_save.TrySaveFilteredSlot(mapId, slot, out var report))
+        MapFilterReport report;
+        bool saved;
+        var cleared = 0;
+        try
+        {
+            saved = _save.TrySaveFilteredSlot(mapId, slot, out report);
+        }
+        finally
+        {
+            cleared = _mobStateSave.ClearMobStateStamps();
+        }
+
+        // Метка — состояние записи, а не мира: снять её обязаны со всех, кому навешивали.
+        // Разница возможна, только если существо погибло за время долгой записи.
+        if (cleared != stamped)
+            Log.Warning($"SaveGamemode: меток состояния снято {cleared}, а навешано было {stamped}");
+
+        if (!saved)
         {
             Log.Error($"SaveGamemode: не удалось сохранить карту {mapId} в слот '{slot}' " +
                       $"(старое сохранение слота не тронуто)");
             return;
         }
 
-        Log.Info($"SaveGamemode: карта {mapId} сохранена в слот '{slot}'. {report}");
+        Log.Info($"SaveGamemode: карта {mapId} сохранена в слот '{slot}' " +
+                 $"(меток состояния существ: {stamped}). {report}");
 
         // Станция — сущность вне карты, в файл карты она не попадает: её имя и балансы пишутся
         // рядом в station.yml. Без них станция при загрузке рождается заново — с новым именем
