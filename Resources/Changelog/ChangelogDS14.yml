@@ -10672,3 +10672,10 @@ Entries:
   changes:
   - type: Tweak
     message: Отключено ЧМТ для скелета
+- id: 1034
+  author: BlueDogDoc
+  time: '2026-11-22T23:04:35.201577+00:00'
+  pr: 2843
+  changes:
+  - type: Tweak
+    message: Вещи игроков остаются внутри криокапсулы.
