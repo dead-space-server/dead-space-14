@@ -1,7 +1,5 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Content.Shared.Atmos;
-
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
 public enum LimbLife : byte
@@ -75,7 +73,6 @@ public static class LimbWoundRules
     public const float BlastBluntHealth = 0.35f;
     public const float ShrapnelBleed = 0.2f;
     public const float LivingCelsius = 37f;
-    public const float CorpseDegreePerMinute = 1f;
     public const float UrgeSoon = 8f;
     public const float UrgeMissing = 4f;
     public const float UrgeVital = 2.5f;
@@ -546,12 +543,6 @@ public static class LimbWoundRules
         state.Fire = 0f;
         state.Skin = 0f;
         state.Heat = 0f;
-    }
-
-    public static float CorpseKelvin(float minutes)
-    {
-        var celsius = MathF.Max(0f, LivingCelsius - minutes * CorpseDegreePerMinute);
-        return Atmospherics.T0C + celsius;
     }
 
     public readonly record struct LimbWork(LimbZone Zone, float Seconds);
