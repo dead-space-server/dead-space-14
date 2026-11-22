@@ -10624,3 +10624,14 @@ Entries:
   changes:
   - type: Tweak
     message: Окно факса для ЦКРП
+- id: 1028
+  author: BlueDogDoc
+  time: '2026-11-22T01:07:16.131721+00:00'
+  pr: 2839
+  changes:
+  - type: Remove
+    message: Механика Ферментации
+  - type: Remove
+    message: Механика Архива камер
+  - type: Remove
+    message: Замарозка карт мидраунд антагов
