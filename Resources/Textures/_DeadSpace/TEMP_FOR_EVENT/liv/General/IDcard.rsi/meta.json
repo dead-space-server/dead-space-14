@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Deathsquad states resprite by inspector_jeleshka (discord) for Space Station 14 server Мёртвый Космос, recolored by andrew_fenriz and semkagamez (discord) for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "eng_IDcard"
+    },
+    {
+      "name": "eng_IRASI_IDcard"
+    },
+    {
+      "name": "eng_IR_IDcard"
+    },
+    {
+      "name": "leviathan_IDcard"
+    },
+    {
+      "name": "matros_IDcard"
+    },
+    {
+      "name": "med_IDcard"
+    },
+    {
+      "name": "St2_IDcard"
+    },
+    {
+      "name": "card-inhand-left"
+    },
+    {
+      "name": "card-inhand-right"
+    }
+  ]
+}
