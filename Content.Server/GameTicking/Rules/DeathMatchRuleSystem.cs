@@ -124,7 +124,7 @@ public sealed class DeathMatchRuleSystem : GameRuleSystem<DeathMatchRuleComponen
 
         if (component.Victor != null && _player.TryGetPlayerData(component.Victor.Value, out var data))
         {
-            args.AddLine(Loc.GetString("point-scoreboard-winner", ("player", data.UserName)));
+            args.AddOutcome(Loc.GetString("point-scoreboard-winner", ("player", data.UserName))); // DS14
             args.AddLine("");
         }
         args.AddLine(Loc.GetString("point-scoreboard-header"));

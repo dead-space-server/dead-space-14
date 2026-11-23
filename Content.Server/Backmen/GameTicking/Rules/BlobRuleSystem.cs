@@ -25,10 +25,6 @@ using Content.Shared.DeadSpace.Nuke;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using System.Linq;
-using Content.Shared.Objectives.Components;
-using Robust.Server.Player;
-using Content.Server.Objectives;
-using Robust.Shared.Network;
 
 namespace Content.Server.Backmen.GameTicking.Rules;
 
@@ -39,10 +35,8 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
     // [Dependency] private readonly ChatSystem _chatSystem = default!; // DS14: announcements use RuleStation.
     [Dependency] private readonly NukeCodeSendQueueSystem _nukeCodeQueue = default!; // DS14
     [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly ObjectivesSystem _objectivesSystem = default!;
     [Dependency] private readonly CargoSystem _cargoSystem = default!;
     [Dependency] private readonly AlertLevelSystem _alertLevel = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!; // DS14
     [Dependency] private readonly IServerDbManager _db = default!;
@@ -308,84 +302,4 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
             }
         });
     }
-
-    // DS14-start
-    protected override void AppendRoundEndDiscordText(EntityUid uid,
-        BlobRuleComponent blob,
-        GameRuleComponent gameRule,
-        ref RoundEndDiscordTextAppendEvent ev)
-    {
-        if (blob.Blobs.Count < 1)
-            return;
-
-        foreach (var (mindId, mind) in blob.Blobs)
-        {
-            var name = mind.CharacterName;
-            var username = GetBlobUsername(mind.UserId ?? mind.OriginalOwnerUserId);
-
-            var objectives = mind.Objectives.ToArray();
-            if (objectives.Length == 0)
-            {
-                if (username != null)
-                {
-                    ev.AddLine(name == null
-                        ? Loc.GetString("blob-user-was-a-blob", ("user", username))
-                        : Loc.GetString("blob-user-was-a-blob-named", ("user", username), ("name", name)));
-                }
-                else if (name != null)
-                    ev.AddLine(Loc.GetString("blob-was-a-blob-named", ("name", name)));
-
-                continue;
-            }
-
-            if (username != null)
-            {
-                ev.AddLine(name == null
-                    ? Loc.GetString("blob-user-was-a-blob-with-objectives", ("user", username))
-                    : Loc.GetString("blob-user-was-a-blob-with-objectives-named", ("user", username), ("name", name)));
-            }
-            else if (name != null)
-                ev.AddLine(Loc.GetString("blob-was-a-blob-with-objectives-named", ("name", name)));
-
-            foreach (var objectiveGroup in objectives.GroupBy(o => Comp<ObjectiveComponent>(o).LocIssuer))
-            {
-                foreach (var objective in objectiveGroup)
-                {
-                    var info = _objectivesSystem.GetInfo(objective, mindId, mind);
-                    if (info == null)
-                        continue;
-
-                    var objectiveTitle = info.Value.Title;
-                    var progress = info.Value.Progress;
-
-                    ev.AddLine(progress > 0.99f
-                        ? "- " + Loc.GetString(
-                            "objective-condition-success",
-                            ("condition", objectiveTitle),
-                            ("markupColor", "green"))
-                        : "- " + Loc.GetString(
-                            "objective-condition-fail",
-                            ("condition", objectiveTitle),
-                            ("progress", (int) (progress * 100)),
-                            ("markupColor", "red")));
-                }
-            }
-        }
-
-        ev.AddLine("");
-    }
-
-    private string? GetBlobUsername(NetUserId? userId)
-    {
-        if (userId == null)
-            return null;
-
-        if (_player.TryGetSessionById(userId.Value, out var session))
-            return session.Name;
-
-        return _player.TryGetPlayerData(userId.Value, out var data)
-            ? data.UserName
-            : null;
-    }
-    // DS14-end
 }

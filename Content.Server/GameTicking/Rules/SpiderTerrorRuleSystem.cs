@@ -119,7 +119,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
 
                 if (IsSpiderTerrorVictory(uid, stationUid, component))
                 {
-                    args.AddLine(Loc.GetString("spider-terror-win")); // Тут можно добавить: захватили станцию (название станции), чтобы не было дублирования одного предложения.
+                    args.AddOutcome(Loc.GetString("spider-terror-win")); // DS14
 
                     // Статистика для дашборда
                     var winner = BiStatWinner.Antagonist;
@@ -137,7 +137,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
                 }
                 else
                 {
-                    args.AddLine(Loc.GetString("spider-terror-loose"));
+                    args.AddOutcome(Loc.GetString("spider-terror-loose")); // DS14
 
                     var winner = BiStatWinner.Crew;
                     _ = System.Threading.Tasks.Task.Run(async () =>
