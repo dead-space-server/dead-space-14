@@ -350,7 +350,7 @@ public sealed class StoryStageControl : Control
             return;
 
         var tile = Tile;
-        DrawBackground(handle, tile);
+        Safe(() => DrawBackground(renderHandle, tile));
 
         var drawables = new List<(float Y, int Order, Action Draw)>();
         var index = 0;
@@ -366,7 +366,7 @@ public sealed class StoryStageControl : Control
                 y = hover.Y;
             }
 
-            drawables.Add((y + (y < 1 ? -10f : 0.45f), order, () => DrawProp(handle, copy.Proto, x, y, copy.Dir, tile, Color.White)));
+            drawables.Add((y + (y < 1 ? -10f : 0.45f), order, () => DrawStageProp(renderHandle, copy, x, y, tile)));
         }
 
         foreach (var (id, figure) in _figures)
@@ -517,8 +517,9 @@ public sealed class StoryStageControl : Control
         }
     }
 
-    private void DrawBackground(DrawingHandleScreen handle, float tile)
+    private void DrawBackground(IRenderHandle renderHandle, float tile)
     {
+        var handle = renderHandle.DrawingHandleScreen;
         var location = _location!;
         if (_parallax != null)
         {
@@ -553,6 +554,13 @@ public sealed class StoryStageControl : Control
             }
         }
 
+        if (_story.StageWalls.Count > 0)
+        {
+            foreach (var (at, uid) in _story.StageWalls)
+                DrawStageEntity(renderHandle, uid, at.X, at.Y, Direction.South, tile);
+            return;
+        }
+
         if (!walled)
             return;
 
@@ -576,6 +584,23 @@ public sealed class StoryStageControl : Control
     {
         var topLeft = Screen(new Vector2(x, y));
         return UIBox2.FromDimensions(topLeft, new Vector2(tile + 0.5f, tile + 0.5f));
+    }
+
+    private void DrawStageProp(IRenderHandle renderHandle, StoryPropState prop, int x, int y, float tile)
+    {
+        if (_story.StageProp(prop.Id) is not { } uid || !DrawStageEntity(renderHandle, uid, x, y, prop.Dir, tile))
+            DrawProp(renderHandle.DrawingHandleScreen, prop.Proto, x, y, prop.Dir, tile, Color.White);
+    }
+
+    private bool DrawStageEntity(IRenderHandle renderHandle, EntityUid uid, int x, int y, Direction dir, float tile)
+    {
+        if (!_entities.TryGetComponent(uid, out SpriteComponent? sprite) || !_entities.TryGetComponent(uid, out TransformComponent? xform))
+            return false;
+
+        _sprites.ForceUpdate(uid);
+        renderHandle.DrawEntity(uid, Screen(new Vector2(x + 0.5f, y + 0.5f)), new Vector2(tile / EyeManager.PixelsPerMeter),
+            Angle.Zero, Angle.Zero, dir, sprite, xform, _transform);
+        return true;
     }
 
     private void DrawProp(DrawingHandleScreen handle, string proto, int x, int y, Direction dir, float tile, Color color)
@@ -687,11 +712,12 @@ public sealed class StoryStageControl : Control
         if (doll is { } uid && _entities.TryGetComponent(uid, out SpriteComponent? sprite) && _entities.TryGetComponent(uid, out TransformComponent? xform))
         {
             _sprites.ForceUpdate(uid);
+            _sprites.SetRotation((uid, sprite), Angle.FromDegrees(90 * lie));
             var world = renderHandle.DrawingHandleWorld;
             var old = world.Modulate;
             world.Modulate = old * color.WithAlpha(figure.Alpha);
-            renderHandle.DrawEntity(uid, Screen(position + offset), new Vector2(tile / EyeManager.PixelsPerMeter),
-                Angle.FromDegrees(90 * lie), Angle.Zero, direction, sprite, xform, _transform);
+            renderHandle.DrawEntity(uid, Screen(position + offset + new Vector2(0f, 0.15f * lie)), new Vector2(tile / EyeManager.PixelsPerMeter),
+                Angle.Zero, Angle.Zero, direction, sprite, xform, _transform);
             world.Modulate = old;
         }
         else

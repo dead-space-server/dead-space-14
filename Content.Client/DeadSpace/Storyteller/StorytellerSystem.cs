@@ -113,6 +113,7 @@ public sealed partial class StorytellerSystem : EntitySystem
     {
         var teller = _player.LocalEntity is { } local && GetNetEntity(local) == ev.Teller;
         SyncDolls(ev.Actors);
+        SyncStage(ev.Location, ev.Props);
 
         if (_window == null)
         {
@@ -222,6 +223,7 @@ public sealed partial class StorytellerSystem : EntitySystem
 
         _dolls.Clear();
         _held.Clear();
+        ClearStage();
     }
 
     private EntityUid? BuildDoll(StoryActorState actor)
