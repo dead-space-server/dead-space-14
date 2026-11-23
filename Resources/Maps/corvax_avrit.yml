@@ -50670,50 +50670,6 @@ entities:
     - type: Transform
       parent: 2
       pos: 20.5,-78.5
-- proto: PoweredLightSodium
-  entities:
-  - uid: 1543
-    components:
-    - type: Transform
-      parent: 2
-      rot: 1.5707963267948966 rad
-      pos: -31.5,7.5
-  - uid: 1544
-    components:
-    - type: Transform
-      parent: 2
-      rot: 1.5707963267948966 rad
-      pos: -31.5,11.5
-  - uid: 1545
-    components:
-    - type: Transform
-      parent: 2
-      pos: -25.5,13.5
-  - uid: 1546
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: -18.5,12.5
-  - uid: 1547
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: -18.5,6.5
-- proto: PoweredWallLight
-  entities:
-  - uid: 1548
-    components:
-    - type: Transform
-      parent: 2
-      rot: 1.5707963267948966 rad
-      pos: -90.5,27.5
-  - uid: 1549
-    components:
-    - type: Transform
-      parent: 2
-      pos: -69.5,76.5
 - proto: AmbrosiaVulgarisSeeds
   entities:
   - uid: 1550
@@ -299792,6 +299748,46 @@ entities:
       pos: -64.5,69.5
 - proto: PoweredlightSodium
   entities:
+  - uid: 1548
+    components:
+    - type: Transform
+      parent: 2
+      rot: 1.5707963267948966 rad
+      pos: -90.5,27.5
+  - uid: 1549
+    components:
+    - type: Transform
+      parent: 2
+      pos: -69.5,76.5
+  - uid: 1543
+    components:
+    - type: Transform
+      parent: 2
+      rot: 1.5707963267948966 rad
+      pos: -31.5,7.5
+  - uid: 1544
+    components:
+    - type: Transform
+      parent: 2
+      rot: 1.5707963267948966 rad
+      pos: -31.5,11.5
+  - uid: 1545
+    components:
+    - type: Transform
+      parent: 2
+      pos: -25.5,13.5
+  - uid: 1546
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: -18.5,12.5
+  - uid: 1547
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: -18.5,6.5
   - uid: 40571
     components:
     - type: Transform
