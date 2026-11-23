@@ -43,25 +43,25 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Psychiatry;
 
-public sealed class PsychiatryClientSystem : SharedPsychiatrySystem
+public sealed partial class PsychiatryClientSystem : SharedPsychiatrySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SpriteSystem _sprites = default!;
-    [Dependency] private readonly EmoteAnimationSystem _emotes = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IStateManager _state = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SpriteSystem _sprites = default!;
+    [Dependency] private EmoteAnimationSystem _emotes = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IStateManager _state = default!;
 
     private static readonly SoundPathSpecifier SfxFallback = new("/Audio/Magic/fireball.ogg");
 

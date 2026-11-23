@@ -17,6 +17,7 @@ using Content.Shared.DeadSpace.Administration;
 using Content.Shared.Ensnaring.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Silicons.Borgs.Components; // DS14
 using Content.Shared.Input;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
@@ -38,13 +39,13 @@ using Robust.Shared.Containers; //DS-14
 namespace Content.Client.Inventory
 {
     [UsedImplicitly]
-    public sealed class StrippableBoundUserInterface : BoundUserInterface
+    public sealed partial class StrippableBoundUserInterface : BoundUserInterface
     {
-        [Dependency] private readonly IPlayerManager _player = default!;
-        [Dependency] private readonly IUserInterfaceManager _ui = default!;
+        [Dependency] private IPlayerManager _player = default!;
+        [Dependency] private IUserInterfaceManager _ui = default!;
         // DS14-start - the current engine still uses the pre-source-generator IoC pattern.
-        [Dependency] private readonly IPrototypeManager _proto = default!;
-        [Dependency] private readonly IConfigurationManager _cvar = default!;
+        [Dependency] private IPrototypeManager _proto = default!;
+        [Dependency] private IConfigurationManager _cvar = default!;
         // DS14-end
 
         private readonly ExamineSystem _examine;
@@ -164,7 +165,9 @@ namespace Content.Client.Inventory
             // DS14-start: a stasis cocoon hides the entire inventory, not only hands.
             _disguiseView = EntMan.System<NinjaDisguiseClientSystem>().IsDisguised(Owner);
 
-            if (EntMan.TryGetComponent<HandsComponent>(Owner, out var targetHands) && !targetHands.CanBeStripped)
+            if (EntMan.TryGetComponent<HandsComponent>(Owner, out var targetHands) &&
+                !targetHands.CanBeStripped &&
+                !EntMan.HasComponent<BorgChassisComponent>(Owner))
                 return;
             // DS14-end
 

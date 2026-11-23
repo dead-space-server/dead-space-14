@@ -12,7 +12,7 @@ namespace Content.Server.GameTicking;
 
 public sealed partial class GameTicker
 {
-    [Dependency] private readonly DiscordWebhook _discord = default!;
+    [Dependency] private DiscordWebhook _discord = default!;
 
     private const int DiscordAttachmentsPerMessage = 10;
     private static readonly TimeZoneInfo? MoscowTimeZone =

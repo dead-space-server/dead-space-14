@@ -18,7 +18,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackReimon
   name: сумка Minaris
   description: Такие сумки носят офицеры-исследователи компании Minaris.
@@ -28,10 +28,6 @@
     sprite: _DeadSpace/Sponsor/Reimon/backpack.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Reimon/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingNeckReimon
@@ -60,7 +56,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltReimon
   name: поясная сумка Minaris
   description: Обычная поясная сумка, входит в стандартную экипировку офицера-исследователя Minaris.
@@ -70,11 +66,6 @@
     sprite: _DeadSpace/Sponsor/Reimon/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Reimon/belt.rsi
-  - type: Item
-    size: Huge
-  - type: Storage
-    grid:
-    - 0,0,7,1
   - type: StorageFill
     contents:
     - id: GasAnalyzerReimon
@@ -100,7 +91,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitReimon
   name: пустотный скафандр Minaris
   description: Пустотный скафандр офицера-исследователя компании Minaris Technical. Выполнен из дорогих материалов и экспериментальных сплавов.
@@ -112,8 +103,6 @@
     sprite: _DeadSpace/Sponsor/Reimon/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitReimon
-  - type: Item
-    size: Huge
   - type: ClothingSpeedModifier
     walkModifier: 1
     sprintModifier: 1
@@ -153,7 +142,7 @@
 
 # Helmet
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitReimon
   name: шлем пустотного скафандра Minaris
   description: Для защиты от космоса офицера-исследователя компании Minaris Technical. Выполнен из дорогих материалов и экспериментальных сплавов.
@@ -167,9 +156,6 @@
     color: "#d46f11"
     radius: 7
     energy: 8
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: Armor
     modifiers:
       coefficients:
@@ -399,13 +385,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-    - behavior: Prying
+    - behavior: [ Prying ]
       sprite:
         sprite: _DeadSpace/Sponsor/Reimon/tools_jawsoflife.rsi
         state: syn_jaws_pry
       useSound: /Audio/Items/jaws_pry.ogg
       changeSound: /Audio/Items/change_jaws.ogg
-    - behavior: Cutting
+    - behavior: [ Cutting ]
       sprite:
         sprite: _DeadSpace/Sponsor/Reimon/tools_jawsoflife.rsi
         state: syn_jaws_cutter
@@ -438,7 +424,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-    - behavior: Screwing
+    - behavior: [ Screwing ]
       sprite:
         sprite: _DeadSpace/Sponsor/Reimon/tools_powerdrill.rsi
         state: drill_screw
@@ -446,7 +432,7 @@
         path: /Audio/Items/drill_use.ogg
       changeSound:
         path: /Audio/Items/change_drill.ogg
-    - behavior: Anchoring
+    - behavior: [ Anchoring ]
       sprite:
         sprite: _DeadSpace/Sponsor/Reimon/tools_powerdrill.rsi
         state: drill_bolt

@@ -23,7 +23,6 @@
     FoodMeatPatty: 6 # DS14
     ADTReagentContainerCocoaSolid: 4 # ADT
     ADTFoodSausageRaw: 12 # ADT
-    FoodPickleJar: 10 # DS14
   contrabandInventory:
     EggBoxBroken: 1
     FoodBoxDonkpocket: 1

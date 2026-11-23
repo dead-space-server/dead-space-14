@@ -14,9 +14,9 @@ namespace Content.Client.DeadSpace.Administration.UI;
 [GenerateTypedNameReferences]
 public sealed partial class AutoMapVoteRoundControl : Control
 {
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IClientConsoleHost _console = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IClientConsoleHost _console = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
     private AutoMapVoteAdminState? _state;
     private RoundGameModeHistoryWindow? _gameModeHistoryWindow;
 

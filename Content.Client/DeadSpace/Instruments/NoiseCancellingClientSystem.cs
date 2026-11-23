@@ -12,11 +12,11 @@ using Robust.Shared.Audio.Components;
 
 namespace Content.Client.DeadSpace.Instruments;
 
-public sealed class NoiseCancellingClientSystem : EntitySystem
+public sealed partial class NoiseCancellingClientSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly InstrumentSystem _instrumentSystem = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private InstrumentSystem _instrumentSystem = default!;
 
     private const float MutedMultiplier = 0.5f;
     private const byte MidiVolumeBoost = 110;

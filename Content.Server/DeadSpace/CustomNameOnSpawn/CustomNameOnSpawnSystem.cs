@@ -11,13 +11,13 @@ using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.CustomNameOnSpawn;
 
-public sealed class CustomNameOnSpawnSystem : EntitySystem
+public sealed partial class CustomNameOnSpawnSystem : EntitySystem
 {
-    [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
-    [Dependency] private readonly MetaDataSystem _metaSystem = default!;
-    [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfgManager = default!;
+    [Dependency] private AntagSelectionSystem _antagSelection = default!;
+    [Dependency] private MetaDataSystem _metaSystem = default!;
+    [Dependency] private QuickDialogSystem _quickDialog = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IConfigurationManager _cfgManager = default!;
 
     public override void Initialize()
     {

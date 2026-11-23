@@ -1,7 +1,6 @@
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 
 namespace Content.Shared.Damage
 {
@@ -19,10 +18,10 @@ namespace Content.Shared.Damage
     [Virtual]
     public partial class DamageModifierSet
     {
-        [DataField("coefficients", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<float, DamageTypePrototype>))]
+        [DataField("coefficients")]
         public Dictionary<string, float> Coefficients = new();
 
-        [DataField("flatReductions", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<float, DamageTypePrototype>))]
+        [DataField("flatReductions")]
         public Dictionary<string, float> FlatReduction = new();
 
         // DS14-Start

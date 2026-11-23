@@ -11,13 +11,13 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.FireAxe;
 
-public sealed class FireAxeDeconstructSystem : EntitySystem
+public sealed partial class FireAxeDeconstructSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly TileSystem _tile = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private TileSystem _tile = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {

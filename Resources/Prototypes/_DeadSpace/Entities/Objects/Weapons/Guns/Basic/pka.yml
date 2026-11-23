@@ -179,7 +179,7 @@
           - KineticFlashlight
   - type: PointLight
     enabled: false
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
     radius: 6
   - type: Akimbo
@@ -314,7 +314,7 @@
           - KineticFlashlight
   - type: PointLight
     enabled: false
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
     radius: 6
   - type: AmmoCounter
@@ -443,7 +443,7 @@
           - KineticFlashlight
   - type: PointLight
     enabled: false
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
     radius: 6
   - type: Akimbo

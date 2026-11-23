@@ -17,7 +17,7 @@ public sealed partial class GroupedAccessLevelChecklist : BoxContainer
 {
     private static readonly ProtoId<AccessGroupPrototype> GeneralAccessGroup = "General";
 
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
 
     private bool _isMonotone;
     private string? _labelStyleClass;
@@ -379,7 +379,7 @@ public sealed partial class GroupedAccessLevelChecklist : BoxContainer
         return checkbox;
     }
 
-    private sealed class AccessLevelEntry : BoxContainer
+    private sealed partial class AccessLevelEntry : BoxContainer
     {
         public ProtoId<AccessLevelPrototype> AccessLevel;
         public readonly CheckBox CheckBox;
@@ -412,7 +412,7 @@ public sealed partial class GroupedAccessLevelChecklist : BoxContainer
         }
     }
 
-    private sealed class LineRenderer : Control
+    private sealed partial class LineRenderer : Control
     {
         /// <summary>
         /// List of lines to render (their start and end x-y coordinates).

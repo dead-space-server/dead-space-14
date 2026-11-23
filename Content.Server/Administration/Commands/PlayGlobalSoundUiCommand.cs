@@ -7,9 +7,9 @@ using Robust.Shared.Console;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class PlayGlobalSoundUiCommand : LocalizedEntityCommands
+public sealed partial class PlayGlobalSoundUiCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly EuiManager _euiManager = default!;
+    [Dependency] private EuiManager _euiManager = default!;
 
     public override string Command => "playglobalsoundui";
 

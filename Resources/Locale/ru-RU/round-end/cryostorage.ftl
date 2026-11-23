@@ -4,5 +4,5 @@ cryostorage-ui-window-title = Капсула криогенного сна
 cryostorage-ui-label-slot-name = [bold]{ CAPITALIZE($slot) }:[/bold]
 cryostorage-ui-button-remove = Снять
 cryostorage-ui-filler-hand = в руке
-cryostorage-ui-label-no-bodies = В криохранилище нет тел
+cryostorage-ui-label-no-bodies = В криохранилище ничего нет
 cryostorage-popup-access-denied = Доступ запрещён!

@@ -13,12 +13,12 @@ namespace Content.Client.Movement.Systems;
 /// <summary>
 /// Controls the switching of motion and standing still animation
 /// </summary>
-public sealed class ClientSpriteMovementSystem : SharedSpriteMovementSystem
+public sealed partial class ClientSpriteMovementSystem : SharedSpriteMovementSystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
     // DS14-start
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
     // DS14-end
 
     private EntityQuery<SpriteComponent> _spriteQuery;

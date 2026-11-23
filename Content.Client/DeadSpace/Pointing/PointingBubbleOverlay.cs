@@ -16,7 +16,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Pointing;
 
-public sealed class PointingBubbleOverlay : Overlay
+public sealed partial class PointingBubbleOverlay : Overlay
 {
     private static readonly SpriteSpecifier.Rsi BubbleSprite = new(new ResPath("/Textures/_DeadSpace/Interface/pointing_bubble.rsi"), "bubble");
     private static readonly Vector2 Tail = new(11.5f, 32f);
@@ -27,12 +27,12 @@ public sealed class PointingBubbleOverlay : Overlay
     private const float SettleTime = 0.08f;
     private const float FadeTime = 0.25f;
 
-    [Dependency] private readonly IEntityManager _ent = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _ent = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly PointingBubbleSystem _system;
     private readonly SpriteSystem _sprites;

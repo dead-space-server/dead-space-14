@@ -8,9 +8,9 @@ namespace Content.Server.Chat.Commands;
 
 [AdminCommand(AdminFlags.Server)] // DS14
 [AdminCommand(AdminFlags.ChatToggle)] // DS14
-public sealed class SetOOCCommand : LocalizedCommands
+public sealed partial class SetOOCCommand : LocalizedCommands
 {
-    [Dependency] private readonly IConfigurationManager _configManager = default!;
+    [Dependency] private IConfigurationManager _configManager = default!;
 
     public override string Command => "setooc";
 

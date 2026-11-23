@@ -54,4 +54,9 @@ public sealed partial class SalvageMagnetDataComponent : Component
     /// </summary>
     [DataField]
     public bool Announced;
+
+    // DS14-start
+    [DataField]
+    public bool ReleaseLocked;
+    // DS14-end
 }

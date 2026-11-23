@@ -450,4 +450,31 @@ public sealed class CCCCVars
 
     public static readonly CVarDef<float> PsychiatryRemapRadius =
         CVarDef.Create("deadspace.psychiatry_remap_radius", 12f, CVar.SERVER | CVar.REPLICATED);
+
+    public static readonly CVarDef<bool> CentCommEnabled =
+        CVarDef.Create("deadspace.centcomm.enabled", false, CVar.SERVERONLY);
+
+    public static readonly CVarDef<bool> RoundEndCreditsEnabled =
+        CVarDef.Create("deadspace.round_end_credits.enabled", true, CVar.SERVERONLY);
+
+    public static readonly CVarDef<bool> RoundEndLegacySummary =
+        CVarDef.Create("deadspace.round_end.legacy_summary", false, CVar.SERVER | CVar.REPLICATED);
+
+    public static readonly CVarDef<float> RoundEndCreditsShuttleDelay =
+        CVarDef.Create("deadspace.round_end_credits.shuttle_delay", 10f, CVar.SERVERONLY);
+
+    public static readonly CVarDef<float> RoundEndCreditsFadeTime =
+        CVarDef.Create("deadspace.round_end_credits.fade_time", 3f, CVar.SERVERONLY);
+
+    public static readonly CVarDef<float> RoundEndCreditsVoteTime =
+        CVarDef.Create("deadspace.round_end_credits.vote_time", 20f, CVar.SERVERONLY);
+
+    public static readonly CVarDef<int> RoundEndCreditsVoteNominations =
+        CVarDef.Create("deadspace.round_end_credits.vote_nominations", 3, CVar.SERVERONLY);
+
+    public static readonly CVarDef<float> RoundEndCreditsMaxTime =
+        CVarDef.Create("deadspace.round_end_credits.max_time", 300f, CVar.SERVERONLY);
+
+    public static readonly CVarDef<bool> RoundEndCreditsPauseMaps =
+        CVarDef.Create("deadspace.round_end_credits.pause_maps", true, CVar.SERVERONLY);
 }

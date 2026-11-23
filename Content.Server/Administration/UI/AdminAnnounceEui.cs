@@ -20,15 +20,15 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Administration.UI
 {
-    public sealed class AdminAnnounceEui : BaseEui
+    public sealed partial class AdminAnnounceEui : BaseEui
     {
-        [Dependency] private readonly IAdminManager _adminManager = default!;
-        [Dependency] private readonly IChatManager _chatManager = default!;
-        [Dependency] private readonly IResourceManager _resourceManager = default!;
+        [Dependency] private IAdminManager _adminManager = default!;
+        [Dependency] private IChatManager _chatManager = default!;
+        [Dependency] private IResourceManager _resourceManager = default!;
         // DS14-announce-start
-        [Dependency] private readonly IEntityManager _entityManager = default!;
-        [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
+        [Dependency] private IAdminLogManager _adminLogger = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
         // DS14-announce-end
 
         private readonly ChatSystem _chatSystem;

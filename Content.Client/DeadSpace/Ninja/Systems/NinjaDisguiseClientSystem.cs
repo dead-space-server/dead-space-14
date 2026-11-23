@@ -20,14 +20,14 @@ using System.Numerics;
 
 namespace Content.Client.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaDisguiseClientSystem : SharedNinjaDisguiseSystem
+public sealed partial class NinjaDisguiseClientSystem : SharedNinjaDisguiseSystem
 {
     private const float IntegrityCheckInterval = 0.5f;
 
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly ClientClothingSystem _clothing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private ClientClothingSystem _clothing = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private readonly HashSet<EntityUid> _disguisedWearers = new();
     private readonly Dictionary<EntityUid, HashSet<string>> _disguiseHiddenSlots = new();

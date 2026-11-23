@@ -13,7 +13,7 @@ namespace Content.Client.RCD;
 
 [UsedImplicitly]
 // DS14 - pre-v288 engine
-public sealed class RCDMenuBoundUserInterface : BoundUserInterface
+public sealed partial class RCDMenuBoundUserInterface : BoundUserInterface
 {
     private const string TopLevelActionCategory = "Main";
 
@@ -30,8 +30,8 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
         };
     // DS14-end
 
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
 
     private SimpleRadialMenu? _menu;
 

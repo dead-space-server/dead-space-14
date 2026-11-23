@@ -28,26 +28,26 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobObserverSystem : SharedBlobObserverSystem
+public sealed partial class BlobObserverSystem : SharedBlobObserverSystem
 {
-    [Dependency] private readonly ActionsSystem _action = default!;
-    [Dependency] private readonly BlobCoreSystem _blobCoreSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly RoleSystem _roleSystem = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly ISharedPlayerManager _actorSystem = default!;
-    [Dependency] private readonly ViewSubscriberSystem _viewSubscriberSystem = default!;
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private ActionsSystem _action = default!;
+    [Dependency] private BlobCoreSystem _blobCoreSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private MindSystem _mindSystem = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private RoleSystem _roleSystem = default!;
+    [Dependency] private PrisonSystem _prison = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private ISharedPlayerManager _actorSystem = default!;
+    [Dependency] private ViewSubscriberSystem _viewSubscriberSystem = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private HandsSystem _hands = default!;
 
     private EntityQuery<BlobTileComponent> _tileQuery;
 

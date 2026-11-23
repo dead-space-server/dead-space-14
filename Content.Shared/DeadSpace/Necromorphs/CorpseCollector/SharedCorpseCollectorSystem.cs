@@ -11,11 +11,11 @@ using Content.Shared.Mobs.Systems;
 
 namespace Content.Shared.DeadSpace.Necromorphs.CorpseCollector;
 
-public abstract class SharedCorpseCollectorSystem : EntitySystem
+public abstract partial class SharedCorpseCollectorSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     public override void Initialize()
     {

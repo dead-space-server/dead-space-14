@@ -13,13 +13,13 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// Moves the sprite of <see cref="LavalandSkyDropComponent"/> down from the sky, or up into it - always straight up
 /// the screen, however the thing is turned - or shrinks it away into a pit.
 /// </summary>
-public sealed class LavalandSkyDropSystem : EntitySystem
+public sealed partial class LavalandSkyDropSystem : EntitySystem
 {
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SpriteTreeSystem _spriteTree = default!;
 
     /// <summary>
     /// When this client first saw each drop start. The state comes in late, and a short rise would be mostly over by

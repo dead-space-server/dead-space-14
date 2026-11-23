@@ -5,9 +5,9 @@ using Robust.Client.Graphics;
 
 namespace Content.Client.DeadSpace.Lavaland;
 
-public sealed class LavalandBossRageAnnouncementSystem : EntitySystem
+public sealed partial class LavalandBossRageAnnouncementSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     private LavalandBossRageAnnouncementOverlay? _announcement;
 

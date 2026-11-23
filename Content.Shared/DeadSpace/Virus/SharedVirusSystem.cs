@@ -83,10 +83,10 @@ public struct BaseVirusSettings
 
 public abstract partial class SharedVirusSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private TagSystem _tag = default!;
     private ISawmill _sawmill = default!;
 
     /// <summary>

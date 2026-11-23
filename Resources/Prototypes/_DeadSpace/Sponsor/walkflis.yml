@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackwalkflis
   name: боевая сумка
   description: Сумка для выдающихся граждан СССП.
@@ -8,10 +8,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/walkflis/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingWebbingwalkflis
@@ -35,7 +31,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitwalkflis
   name: боевой скафандр
   description: Скафандр с биокодированием, обеспечивающий защиту в критических ситуациях.
@@ -47,8 +43,6 @@
     sprite: _DeadSpace/Sponsor/walkflis/hardsuit/hard.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitwalkflis
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -60,14 +54,11 @@
         Heat: 0.50
         Radiation: 0.50
         Caustic: 0.50
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons]
+  parent: [ClothingHeadHelmetHardsuitDominator, ShowMedicalIcons]
   id: ClothingHeadHelmetHardsuitwalkflis
   categories: [ HideSpawnMenu ]
   name: шлем боевого скафандра
@@ -79,9 +70,6 @@
     sprite: _DeadSpace/Sponsor/walkflis/hardsuit/helmet.rsi
   - type: PointLight
     color: "#ebebeb"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: ShowHealthBars
     damageContainers:
     - Biological
@@ -420,13 +408,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/walkflis/tools/jaws.rsi
           state: jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/walkflis/tools/jaws.rsi
           state: jaws_cutter
@@ -459,7 +447,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/walkflis/tools/drill.rsi
           state: drill_screw
@@ -467,7 +455,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/walkflis/tools/drill.rsi
           state: drill_bolt

@@ -1,6 +1,6 @@
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackMrGman
   name: сумка Interdyne Pharmaceutics
   description: Собственность интердайн.
@@ -8,10 +8,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/MrGman/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,15,10
   - type: StorageFill
     contents:
     - id: ClothingWebbingMrGman
@@ -37,7 +33,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitMrGman
   name: скафандр Interdyne Pharmaceutics
   description: Собственность интердайн.
@@ -49,8 +45,6 @@
     sprite: _DeadSpace/Sponsor/MrGman/hardsuit/hard.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitMrGman
-  - type: Item
-    size: Huge
   - type: HardsuitIdentification
     nonlethal: true
   - type: Armor
@@ -62,14 +56,11 @@
         Heat: 0.50
         Radiation: 0.50
         Caustic: 0.50
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons ]
+  parent: [ClothingHeadHelmetHardsuitDominator, ShowMedicalIcons]
   id: ClothingHeadHelmetHardsuitMrGman
   categories: [ HideSpawnMenu ]
   name: шлем Interdyne Pharmaceutics
@@ -81,9 +72,6 @@
     sprite: _DeadSpace/Sponsor/MrGman/hardsuit/helmet.rsi
   - type: PointLight
     color: pink
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
   - type: ShowHealthBars
     damageContainers:
     - Biological
@@ -439,13 +427,13 @@
     size: Normal
   - type: MultipleTool
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _DeadSpace/Sponsor/MrGman/tools/jaws.rsi
           state: jaws_pry
         useSound: /Audio/Items/jaws_pry.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
+      - behavior: [ Cutting ]
         sprite:
           sprite: _DeadSpace/Sponsor/MrGman/tools/jaws.rsi
           state: jaws_cutter
@@ -478,7 +466,7 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Screwing
+      - behavior: [ Screwing ]
         sprite:
           sprite: _DeadSpace/Sponsor/MrGman/tools/drill.rsi
           state: drill_screw
@@ -486,7 +474,7 @@
           path: /Audio/Items/drill_use.ogg
         changeSound:
           path: /Audio/Items/change_drill.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _DeadSpace/Sponsor/MrGman/tools/drill.rsi
           state: drill_bolt

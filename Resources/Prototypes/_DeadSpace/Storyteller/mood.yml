@@ -1,0 +1,198 @@
+- type: storyEmote
+  id: laugh
+  name: storyteller-emote-laugh
+  order: 0
+  stems: [ смеет, смеют, смеюс, смеял, засмея, хохоч, хохота, рассмея ]
+
+- type: storyEmote
+  id: cry
+  name: storyteller-emote-cry
+  order: 1
+  stems: [ плач, плака, заплака, рыда, всхлип ]
+
+- type: storyEmote
+  id: nod
+  name: storyteller-emote-nod
+  order: 2
+  stems: [ кива, кивну ]
+
+- type: storyEmote
+  id: wave
+  name: storyteller-emote-wave
+  order: 3
+  stems: [ машет, машу, помаха, махну ]
+
+- type: storyEmote
+  id: smile
+  name: storyteller-emote-smile
+  order: 4
+  stems: [ улыба, улыбну, ухмыля, ухмыльну ]
+
+- type: storyEmote
+  id: sigh
+  name: storyteller-emote-sigh
+  order: 5
+  stems: [ вздыха, вздохну ]
+
+- type: storyEmote
+  id: clap
+  name: storyteller-emote-clap
+  order: 6
+  stems: [ хлопа, аплодиру, похлопа ]
+
+- type: storyEmote
+  id: shrug
+  name: storyteller-emote-shrug
+  order: 7
+  stems: [ пожима, пожал ]
+
+- type: storyEmote
+  id: frown
+  name: storyteller-emote-frown
+  order: 8
+  stems: [ хмури, нахмури ]
+
+- type: storyEmote
+  id: yawn
+  name: storyteller-emote-yawn
+  order: 9
+  stems: [ зева, зевну ]
+
+- type: storyEmote
+  id: cough
+  name: storyteller-emote-cough
+  order: 10
+  stems: [ кашля, закашля, кашлян ]
+
+- type: storyEmote
+  id: sneeze
+  name: storyteller-emote-sneeze
+  order: 11
+  stems: [ чиха, чихну ]
+
+- type: storyEmote
+  id: growl
+  name: storyteller-emote-growl
+  order: 12
+  stems: [ рычи, зарыча, рыча ]
+
+- type: storyEmote
+  id: whistle
+  name: storyteller-emote-whistle
+  order: 13
+  stems: [ свисти, засвисте ]
+
+- type: storyEmote
+  id: blush
+  name: storyteller-emote-blush
+  order: 14
+  stems: [ краснее, покрасне ]
+
+- type: storyEmote
+  id: shiver
+  name: storyteller-emote-shiver
+  order: 15
+  stems: [ дрожи, дрожа, трясет ]
+
+- type: storyEmote
+  id: salute
+  name: storyteller-emote-salute
+  order: 16
+  stems: [ салютуе ]
+  phrases: [ "отдает честь", "отдал честь", "отдала честь" ]
+
+- type: storyEmote
+  id: pray
+  name: storyteller-emote-pray
+  order: 17
+  stems: [ молит, помоли ]
+
+- type: storyEmote
+  id: scream
+  name: storyteller-emote-scream
+  order: 18
+
+- type: storyLight
+  id: Default
+  name: storyteller-light-default
+  order: 0
+  phrases: [ "свет включ", "свет загор", "свет вернул" ]
+
+- type: storyLight
+  id: Day
+  name: storyteller-light-day
+  order: 1
+  darkness: 0
+  words: [ утро, утром, днем, день, светло, рассвет ]
+
+- type: storyLight
+  id: Evening
+  name: storyteller-light-evening
+  order: 2
+  darkness: 0.3
+  words: [ вечер, вечером, сумерки, сумерках ]
+
+- type: storyLight
+  id: Night
+  name: storyteller-light-night
+  order: 3
+  darkness: 0.55
+  words: [ ночь, ночью, ночи, полночь ]
+
+- type: storyLight
+  id: Dark
+  name: storyteller-light-dark
+  order: 4
+  darkness: 0.78
+  words: [ темно, темнота, темноте, мрак, мраке, полумрак, тьма ]
+  phrases: [ "свет погас", "свет выключ", "свет отруб" ]
+
+- type: storyLight
+  id: Alarm
+  name: storyteller-light-alarm
+  order: 5
+  darkness: 0.4
+  pulse: "#ff1a0d1f"
+  words: [ тревога, тревоги, сирена, сирены ]
+  stems: [ аварийн ]
+
+- type: storyTint
+  id: Default
+  name: storyteller-tint-default
+  order: 0
+
+- type: storyTint
+  id: Warm
+  name: storyteller-tint-warm
+  order: 2
+  color: "#ff9a402a"
+
+- type: storyTint
+  id: Cold
+  name: storyteller-tint-cold
+  order: 3
+  color: "#4a80ff26"
+
+- type: storyTint
+  id: Red
+  name: storyteller-tint-red
+  order: 4
+  color: "#ff202030"
+
+- type: storyTint
+  id: Green
+  name: storyteller-tint-green
+  order: 5
+  color: "#40ff6024"
+
+- type: storyTint
+  id: Purple
+  name: storyteller-tint-purple
+  order: 6
+  color: "#a040ff26"
+
+- type: storyTint
+  id: Sepia
+  name: storyteller-tint-sepia
+  order: 7
+  color: "#a0703038"

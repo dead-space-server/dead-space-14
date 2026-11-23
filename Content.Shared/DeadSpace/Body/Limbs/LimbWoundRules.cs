@@ -638,6 +638,8 @@ public static class LimbWoundRules
         {
             if (soft)
                 state.Flesh += blunt;
+            else
+                state.Bone += blunt;
             state.Health = MathF.Max(0f, state.Health - blunt * BlastBluntHealth);
         }
 
@@ -954,18 +956,27 @@ public static class LimbWoundRules
                     state.Flesh += amount * BehindArmorFlesh;
                     if (soft)
                         state.Flesh += strike.Amount * BehindArmorBone;
+                    else
+                        state.Bone += strike.Amount * BehindArmorBone;
                     break;
                 }
 
                 state.Flesh += amount;
                 if (strike.Projectile && strike.Roll < (strike.Aimed ? AimedEmbedChance : EmbedChance))
                     state.Embedded = true;
-                if (soft && strike.Projectile && strike.Aimed && strike.SecondaryRoll < AimedShatterChance)
-                    state.Flesh += amount;
+                if (strike.Projectile && strike.Aimed && strike.SecondaryRoll < AimedShatterChance)
+                {
+                    if (soft)
+                        state.Flesh += amount;
+                    else
+                        state.Bone += amount;
+                }
                 break;
             case LimbMark.Blunt:
                 if (soft)
                     state.Flesh += amount;
+                else
+                    state.Bone += amount;
                 break;
             case LimbMark.Heat:
                 state.Heat += amount;
@@ -983,8 +994,13 @@ public static class LimbWoundRules
         if (StripsSkin(strike.Pellet, strike.Distance, state.Skin, strike.Blast))
             state.SkinBare = true;
 
-        if (soft && strike.RoundBone > 0f)
-            state.Flesh += strike.RoundBone * strike.WoundMultiplier;
+        if (strike.RoundBone > 0f)
+        {
+            if (soft)
+                state.Flesh += strike.RoundBone * strike.WoundMultiplier;
+            else
+                state.Bone += strike.RoundBone * strike.WoundMultiplier;
+        }
 
         var bleedAdded = 0f;
         if (bleeds && !soft && strike.RoundBleed > 0f)

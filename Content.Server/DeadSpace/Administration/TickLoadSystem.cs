@@ -6,11 +6,12 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Log;
+using Robust.Shared.Physics;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Administration;
 
-public sealed class TickLoadSystem : EntitySystem
+public sealed partial class TickLoadSystem : EntitySystem
 {
     private const double MinAvgMs = 0.05;
     private const double MinSpikeMs = 1d;
@@ -35,8 +36,8 @@ public sealed class TickLoadSystem : EntitySystem
         "FinalStep",
     };
 
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private ISawmill _log = default!;
     private PropertyInfo? _sum;
@@ -284,6 +285,8 @@ public sealed class TickLoadSystem : EntitySystem
 
         var groups = new Dictionary<string, AwakeGroup>();
         var contacts = 0;
+        var still = 0;
+        var noSleep = 0;
         var places = new Dictionary<string, int>();
         foreach (var (uid, body, xform) in _physicsSystem.AwakeBodies)
         {
@@ -294,24 +297,45 @@ public sealed class TickLoadSystem : EntitySystem
             group.Contacts += body.ContactCount;
             if (body.LinearVelocity.LengthSquared() > 0.0001f || MathF.Abs(body.AngularVelocity) > 0.01f)
                 group.Moving++;
+            else
+                still++;
+            if (xform.Anchored)
+                group.Anchored++;
+            if (!body.SleepingAllowed)
+            {
+                group.NoSleep++;
+                noSleep++;
+            }
+
             group.Place ??= place;
+            if (!group.Sample.IsValid())
+            {
+                group.Sample = uid;
+                group.Body = body.BodyType;
+                group.Parent = !xform.ParentUid.IsValid() ? "nullspace"
+                    : xform.ParentUid == xform.GridUid || xform.ParentUid == xform.MapUid ? "on floor"
+                    : $"in {MetaData(xform.ParentUid).EntityPrototype?.ID ?? xform.ParentUid.ToString()}";
+            }
+
             groups[id] = group;
             contacts += body.ContactCount;
             places[place] = places.GetValueOrDefault(place) + 1;
         }
 
         var avgAwake = ticks > 0 ? (double) _awakeSum / ticks : 0d;
-        text.AppendLine($"awake bodies: avg {avgAwake:F0}, max {_awakeMax}, now {_physicsSystem.AwakeBodies.Count}, their contacts now {contacts}");
+        text.AppendLine($"awake bodies: avg {avgAwake:F0}, max {_awakeMax}, now {_physicsSystem.AwakeBodies.Count}, their contacts now {contacts}, " +
+                        $"not moving {still}, sleep not allowed {noSleep}");
 
         var top = new List<(string Id, AwakeGroup Group)>(groups.Count);
         foreach (var (id, group) in groups)
             top.Add((id, group));
 
         top.Sort(static (a, b) => b.Group.Bodies.CompareTo(a.Group.Bodies));
-        for (var i = 0; i < top.Count && i < 10; i++)
+        for (var i = 0; i < top.Count && i < 15; i++)
         {
             var group = top[i].Group;
-            text.AppendLine($"   {group.Bodies,6}  moving {group.Moving,4}  contacts {group.Contacts,5}  {top[i].Id}  on {group.Place}");
+            text.AppendLine($"   {group.Bodies,6}  moving {group.Moving,4}  contacts {group.Contacts,5}  anchored {group.Anchored,3}  no sleep {group.NoSleep,3}  " +
+                            $"{top[i].Id}  on {group.Place}  e.g. {group.Sample} {group.Body} {group.Parent}");
         }
 
         var placeList = new List<(string Place, int Count)>(places.Count);
@@ -341,7 +365,12 @@ public sealed class TickLoadSystem : EntitySystem
         public int Bodies;
         public int Moving;
         public int Contacts;
+        public int Anchored;
+        public int NoSleep;
         public string? Place;
+        public EntityUid Sample;
+        public BodyType Body;
+        public string? Parent;
     }
 
     private bool Bind(out string error)

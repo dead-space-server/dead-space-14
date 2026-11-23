@@ -22,16 +22,16 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// Wild ash whelps (<see cref="LavalandWildWhelpConfig"/>): now and then, and from hidden nests, unkillable whelps drop
 /// from the sky next to a player, spit a line of fire and fly away.
 /// </summary>
-public sealed class LavalandWildWhelpSystem : EntitySystem
+public sealed partial class LavalandWildWhelpSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     private static readonly TimeSpan NestCheckInterval = TimeSpan.FromSeconds(1);
 

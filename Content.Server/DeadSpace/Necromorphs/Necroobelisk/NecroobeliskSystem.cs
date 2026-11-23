@@ -27,16 +27,16 @@ using Content.Shared.Zombies;
 
 namespace Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 
-public sealed class NecroobeliskSystem : SharedNecroobeliskSystem
+public sealed partial class NecroobeliskSystem : SharedNecroobeliskSystem
 {
-    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly BeamSystem _beam = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
+    [Dependency] private Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private BeamSystem _beam = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
 
     public override void Initialize()
     {

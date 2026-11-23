@@ -19,18 +19,18 @@ namespace Content.Shared.DeadSpace.Lavaland;
 /// button goes down and up as predicted events, so the charge ring and the shot sound follow the button at once; the
 /// server alone spawns the mark bolt and deals the overcharge damage, like guns do.
 /// </summary>
-public abstract class SharedLavalandChargedMarkerSystem : EntitySystem
+public abstract partial class SharedLavalandChargedMarkerSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly SharedDamageMarkerSystem _marker = default!;
-    [Dependency] protected readonly SharedHandsSystem Hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private SharedDamageMarkerSystem _marker = default!;
+    [Dependency] protected SharedHandsSystem Hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

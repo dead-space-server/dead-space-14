@@ -6,9 +6,9 @@ using Robust.Shared.Enums;
 
 namespace Content.Client.DeadSpace.Lavaland;
 
-public sealed class LavalandSkyFlashSystem : EntitySystem
+public sealed partial class LavalandSkyFlashSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     private LavalandSkyFlashOverlay? _flash;
 
@@ -45,7 +45,7 @@ public sealed class LavalandSkyFlashSystem : EntitySystem
 }
 
 /// <summary>The whole screen white for a moment, fading out.</summary>
-public sealed class LavalandSkyFlashOverlay : Overlay
+public sealed partial class LavalandSkyFlashOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 

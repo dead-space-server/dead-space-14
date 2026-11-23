@@ -34,19 +34,19 @@ using Robust.Shared.Player;//DS14
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class ZombieBlobSystem : EntitySystem
+public sealed partial class ZombieBlobSystem : EntitySystem
 {
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IChatManager _chatMan = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!; // DS14 - PressureImmunity status effect migration
-    [Dependency] private readonly LanguageSystem _language = default!; // DS14
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IChatManager _chatMan = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!; // DS14 - PressureImmunity status effect migration
+    [Dependency] private LanguageSystem _language = default!; // DS14
 
     private const int ClimbingCollisionGroup = (int)(CollisionGroup.BlobImpassable);
 

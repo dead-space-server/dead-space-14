@@ -11,6 +11,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Medical.SuitSensor;
+using Content.Shared.Mind; //DS-14
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -25,21 +26,22 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Medical.SuitSensors;
 
-public abstract class SharedSuitSensorSystem : EntitySystem
+public abstract partial class SharedSuitSensorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedStationSystem _stationSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCardSystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedStationSystem _stationSystem = default!;
+    [Dependency] private MobStateSystem _mobStateSystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
+    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedIdCardSystem _idCardSystem = default!;
+    [Dependency] private SharedMindSystem _mind = default!; //DS-14
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private EntityQuery<SuitSensorComponent> _sensorQuery;
     public override void Initialize()
@@ -349,6 +351,9 @@ public abstract class SharedSuitSensorSystem : EntitySystem
 
         // check if sensor is enabled and worn by user
         if (sensor.Mode == SuitSensorMode.SensorOff || sensor.User == null || !HasComp<MobStateComponent>(sensor.User) || transform.GridUid == null)
+            return null;
+
+        if (!_mind.TryGetMind(sensor.User.Value, out _, out _)) //DS-14
             return null;
 
         // try to get mobs id from ID slot

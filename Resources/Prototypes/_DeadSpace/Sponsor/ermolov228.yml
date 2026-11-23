@@ -12,7 +12,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackErmolov228
   name: потрёпанная сумка
   description: Вместилище полезных и не очень вещей, ей явно уже не один десяток лет
@@ -44,7 +44,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltDominatorFilled
   id: ClothingBeltErmolov228
   name: пояс исследователя
   description: Универсальный пояс с множеством карманов и креплений, специально созданный для длительных экспедиций в бездне.
@@ -54,8 +54,6 @@
     sprite: _DeadSpace/Sponsor/ermolov228/belt.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/ermolov228/belt.rsi
-  - type: Item
-    size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
@@ -76,7 +74,7 @@
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitErmolov228
   name: купол Рассвета
   description: Герметичный костюм исследователя бездны, модифицированный для нахождения в открытом космосе.
@@ -94,8 +92,6 @@
       - state: smoke
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitErmolov228
-  - type: Item
-    size: Huge
   - type: ClothingSpeedModifier
     walkModifier: 0.8
     sprintModifier: 0.85
@@ -105,7 +101,7 @@
     hideOnToggle: true
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitErmolov228
   categories: [ HideSpawnMenu ]
   name: купол Рассвета
@@ -117,11 +113,7 @@
     sprite: _DeadSpace/Sponsor/ermolov228/helmet.rsi
   - type: PointLight
     color: "#db94ff"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
 
-# Whistle
 - type: entity
   parent: BaseWhistle
   id: WhistleErmolov228

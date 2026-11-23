@@ -10,9 +10,9 @@ namespace Content.Client.DeadSpace.Necromorphs.Unitology;
 /// <summary>
 /// Used for the client to get status icons from other unitologs.
 /// </summary>
-public sealed class UnitologySystem : SharedUnitologySystem
+public sealed partial class UnitologySystem : SharedUnitologySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

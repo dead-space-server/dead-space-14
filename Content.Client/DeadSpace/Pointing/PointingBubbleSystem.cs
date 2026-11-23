@@ -16,13 +16,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Pointing;
 
-public sealed class PointingBubbleSystem : EntitySystem
+public sealed partial class PointingBubbleSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private readonly List<PointingBubble> _bubbles = new();
     private PointingBubbleOverlay? _overlay;

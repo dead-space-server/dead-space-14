@@ -16,16 +16,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Surgery;
 
-public sealed class SurgeryOrganSystem : EntitySystem
+public sealed partial class SurgeryOrganSystem : EntitySystem
 {
     private const string Ethanol = "Ethanol";
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SatiationSystem _satiation = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private float _accumulator;
 

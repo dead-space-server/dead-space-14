@@ -9,9 +9,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._Donate.Emerald;
 
-public sealed class EmeraldShopButton : Control
+public sealed partial class EmeraldShopButton : Control
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const int BaseFontSize = 12;
 

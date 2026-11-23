@@ -10,9 +10,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class BlindableSymptom : VirusSymptomBase
+public sealed partial class BlindableSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     public override VirusSymptom Type => VirusSymptom.Blindable;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "BlindableSymptom";
     private float _eyeDamageProcent = 0.7f;

@@ -11,12 +11,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Players.RateLimiting;
 
-public sealed class PlayerRateLimitManager : SharedPlayerRateLimitManager
+public sealed partial class PlayerRateLimitManager : SharedPlayerRateLimitManager
 {
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     private readonly Dictionary<string, RegistrationData> _registrations = new();
     private readonly Dictionary<ICommonSession, Dictionary<string, RateLimitDatum>> _rateLimitData = new();
@@ -116,7 +116,7 @@ public sealed class PlayerRateLimitManager : SharedPlayerRateLimitManager
             _rateLimitData.Remove(e.Session);
     }
 
-    private sealed class RegistrationData
+    private sealed partial class RegistrationData
     {
         public required RateLimitRegistration Registration { get; init; }
         public TimeSpan LimitPeriod { get; set; }

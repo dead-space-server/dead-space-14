@@ -17,14 +17,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Psychiatry;
 
-public abstract class SharedPsychiatrySystem : EntitySystem
+public abstract partial class SharedPsychiatrySystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] protected readonly MobThresholdSystem Thresholds = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] protected MobThresholdSystem Thresholds = default!;
+    [Dependency] protected IGameTiming Timing = default!;
 
     public override void Initialize()
     {
@@ -35,11 +35,18 @@ public abstract class SharedPsychiatrySystem : EntitySystem
     public const string SpecialPillReagentId = "Schizotoxin";
     public const string ClarityReagentId = "NeuroClarity";
     public const string PositronicSpecies = "IPC";
+    public const string SkeletonSpecies = "Skeleton";
 
     public bool IsPositronic(EntityUid uid)
     {
         return TryComp<HumanoidAppearanceComponent>(uid, out var humanoid)
                && humanoid.Species == PositronicSpecies;
+    }
+
+    public bool IsSkeleton(EntityUid uid)
+    {
+        return TryComp<HumanoidAppearanceComponent>(uid, out var humanoid)
+               && humanoid.Species == SkeletonSpecies;
     }
 
     public bool IsAntagImmune(EntityUid uid, bool pillForced, bool gas = false)

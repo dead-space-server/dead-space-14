@@ -16,7 +16,7 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,11,5
+    - 0,0,15,10
   - type: StorageFill
     contents:
       - id: ClothingBeltDominatorFilled
@@ -48,12 +48,15 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingBeltStorageBase
   id: ClothingBeltDominatorFilled
   name: зелёный украшенный пояс
   description: Пояс окрашенный в зелёный цвет.
   categories: [ HideSpawnMenu ]
   components:
+  - type: Storage
+    grid:
+    - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/vjlados/belt.rsi
   - type: Clothing
@@ -110,6 +113,20 @@
     clothingPrototype: ClothingHeadHelmetHardsuitDominator
   - type: Item
     size: Huge
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
+        Heat: 0.5
+        Cold: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
+        Stun: 0.65
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
 
 - type: entity
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
@@ -127,6 +144,17 @@
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.65
+        Heat: 0.65
+        Shock: 0.65
+        Cold: 0.65
+        Caustic: 0.65
+        Radiation: 0.65
 
 # Head
 - type: entity
@@ -183,3 +211,17 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/vjlados/socks.rsi
+
+- type: entity
+  parent: ClothingMaskGas
+  id: ClothingMaskGasSponsor
+  components:
+  - type: Item
+    size: Tiny
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.95
+        Piercing: 0.95
+        Heat: 0.95

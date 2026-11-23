@@ -22,9 +22,9 @@ public sealed record VendingMachineKeypadEntry(
 [GenerateTypedNameReferences]
 public sealed partial class VendingMachineKeypadMenu : FancyWindow
 {
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private readonly List<VendingMachineSpiralSlot> _slots = new();
     private readonly List<VendingMachineKeypadEntry> _entries = new();

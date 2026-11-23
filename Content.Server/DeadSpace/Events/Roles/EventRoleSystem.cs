@@ -8,11 +8,11 @@ using Robust.Server.Player;
 
 namespace Content.Server.DeadSpace.Events.Roles;
 
-public sealed class AutoDeleteOnDeathSystem : EntitySystem
+public sealed partial class AutoDeleteOnDeathSystem : EntitySystem
 {
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     public override void Initialize()
     {

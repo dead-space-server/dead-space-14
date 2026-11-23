@@ -9,8 +9,8 @@ namespace Content.Server.DeadSpace.AntiAlcohol;
 
 public sealed partial class AntiAlcoholSystem : EntityEffectSystem<AntiAlcoholWatcherComponent, AntiAlcoholImplantEffect>
 {
-    [Dependency] private readonly VomitSystem _vomit = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
+    [Dependency] private VomitSystem _vomit = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
 
     protected override void Effect(Entity<AntiAlcoholWatcherComponent> entity, ref EntityEffectEvent<AntiAlcoholImplantEffect> args)
     {

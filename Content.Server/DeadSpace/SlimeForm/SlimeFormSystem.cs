@@ -19,21 +19,21 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.SlimeForm;
 
-public sealed class SlimeFormSystem : EntitySystem
+public sealed partial class SlimeFormSystem : EntitySystem
 {
     private static readonly ProtoId<PolymorphPrototype> SlimePolymorph = "SlimePersonForm";
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedCuffableSystem _cuffs = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedCuffableSystem _cuffs = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PolymorphSystem _polymorph = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

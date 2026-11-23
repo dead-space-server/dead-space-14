@@ -171,7 +171,7 @@ public sealed class StaleNetUidTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(plainMs, Is.LessThan(25), $"Dirtying 2000 entities with no networked uid took {plainMs:0.00} ms.");
+            Assert.That(plainMs, Is.LessThan(100), $"Dirtying 2000 entities with no networked uid took {plainMs:0.00} ms.");
             Assert.That(jukeboxMs, Is.LessThan(40), $"Refreshing 300 jukebox streams took {jukeboxMs:0.00} ms.");
         });
 

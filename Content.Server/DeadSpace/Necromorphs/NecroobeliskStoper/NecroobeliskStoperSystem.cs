@@ -10,12 +10,12 @@ using Content.Server.DeadSpace.Necromorphs.Necroobelisk.Components;
 
 namespace Content.Server.DeadSpace.Necromorphs.NecroobeliskStoper;
 
-public sealed class NecroobeliskStoperSystem : EntitySystem
+public sealed partial class NecroobeliskStoperSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly NecroobeliskSystem _necroobeliskSystem = default!;
-    [Dependency] private readonly SuperNecroobeliskSystem _superNecroobeliskSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private NecroobeliskSystem _necroobeliskSystem = default!;
+    [Dependency] private SuperNecroobeliskSystem _superNecroobeliskSystem = default!;
 
     public override void Initialize()
     {

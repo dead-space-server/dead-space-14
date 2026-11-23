@@ -3,9 +3,9 @@ using Robust.Client;
 
 namespace Content.Client.DeadSpace.AshWalkers;
 
-public sealed class AshWalkerLobbySystem : EntitySystem
+public sealed partial class AshWalkerLobbySystem : EntitySystem
 {
-    [Dependency] private readonly IBaseClient _client = default!;
+    [Dependency] private IBaseClient _client = default!;
 
     public bool Waiting { get; private set; }
     public event Action? StateChanged;

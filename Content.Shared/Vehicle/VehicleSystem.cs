@@ -54,7 +54,7 @@ public sealed partial class VehicleSystem : EntitySystem
     // DS14-start
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private INetManager _net = default!;
     // DS14-end
 
     private EntityQuery<VehicleComponent> _vehicleQuery;

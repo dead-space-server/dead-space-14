@@ -9,10 +9,10 @@ using Content.Shared.Actions;
 
 namespace Content.Server.DeadSpace.HardsuitSpeedBuff;
 
-public sealed class HardsuitSpeedBuffSystem : EntitySystem
+public sealed partial class HardsuitSpeedBuffSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly PowerCellSystem _cell = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private PowerCellSystem _cell = default!;
 
     public override void Initialize()
     {

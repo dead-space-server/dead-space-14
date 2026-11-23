@@ -29,7 +29,6 @@
   - type: MovementIgnoreGravity
   - type: Clickable
   - type: CantGetMagicOnSwap
-  - type: CameraArchiveIgnore
   - type: Sprite
     noRot: true
     overrideContainerOcclusion: true

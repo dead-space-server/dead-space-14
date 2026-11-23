@@ -9,9 +9,9 @@ using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.NetEntities;
 
-public sealed class StaleNetUidSystem : EntitySystem
+public sealed partial class StaleNetUidSystem : EntitySystem
 {
-    [Dependency] private readonly IComponentFactory _factory = default!;
+    [Dependency] private IComponentFactory _factory = default!;
 
     private readonly Dictionary<Type, MemberBinding[]> _bindings = new();
     private readonly Dictionary<EntityUid, List<Slot>> _byOwner = new();
@@ -286,7 +286,7 @@ public sealed class StaleNetUidSystem : EntitySystem
         return false;
     }
 
-    private sealed class Slot
+    private sealed partial class Slot
     {
         public readonly EntityUid Owner;
         public readonly EntityUid Target;
@@ -300,13 +300,13 @@ public sealed class StaleNetUidSystem : EntitySystem
         }
     }
 
-    private abstract class MemberBinding
+    private abstract partial class MemberBinding
     {
         public abstract void Collect(object component, HashSet<EntityUid> into);
         public abstract bool Clear(object component, EntityUid deleted);
     }
 
-    private sealed class UidBinding : MemberBinding
+    private sealed partial class UidBinding : MemberBinding
     {
         private readonly Func<object?, object?> _get;
         private readonly Action<object?, object?> _set;
@@ -335,7 +335,7 @@ public sealed class StaleNetUidSystem : EntitySystem
         }
     }
 
-    private sealed class CoordinatesBinding : MemberBinding
+    private sealed partial class CoordinatesBinding : MemberBinding
     {
         private readonly Func<object?, object?> _get;
         private readonly Action<object?, object?> _set;
@@ -364,7 +364,7 @@ public sealed class StaleNetUidSystem : EntitySystem
         }
     }
 
-    private sealed class HashSetBinding : MemberBinding
+    private sealed partial class HashSetBinding : MemberBinding
     {
         private readonly Func<object?, object?> _get;
 
@@ -391,7 +391,7 @@ public sealed class StaleNetUidSystem : EntitySystem
         }
     }
 
-    private sealed class ListBinding : MemberBinding
+    private sealed partial class ListBinding : MemberBinding
     {
         private readonly Func<object?, object?> _get;
         private readonly bool _nullable;
@@ -441,7 +441,7 @@ public sealed class StaleNetUidSystem : EntitySystem
         }
     }
 
-    private sealed class DictionaryBinding : MemberBinding
+    private sealed partial class DictionaryBinding : MemberBinding
     {
         private readonly Func<object?, object?> _get;
 

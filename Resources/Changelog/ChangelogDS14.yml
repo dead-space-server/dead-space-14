@@ -10533,3 +10533,157 @@ Entries:
   changes:
   - type: Fix
     message: небоьшой фикс ксеноборгов. мать шаттл улетает а игрок заходит он вылетает.
+- id: 1016
+  author: Manstari
+  time: '2026-11-18T08:33:41.922919+00:00'
+  pr: 2808
+  changes:
+  - type: Tweak
+    message: Из аплинка агента удалён имплант
+- id: 1017
+  author: HiAmaliz
+  time: '2026-11-18T08:38:22.336460+00:00'
+  pr: 2795
+  changes:
+  - type: Add
+    message: Хирургичка на аванпосте нюки
+  - type: Fix
+    message: Баги на картах
+- id: 1018
+  author: BlueDogDoc
+  time: '2026-11-18T09:25:03.580599+00:00'
+  pr: 2806
+  changes:
+  - type: Add
+    message: Анимированный манифест с MVP и тд
+- id: 1019
+  author: BlueDogDoc
+  time: '2026-11-18T15:39:03.173337+00:00'
+  pr: 2810
+  changes:
+  - type: Fix
+    message: Атмос на аванпосте ЯО
+- id: 1020
+  author: BlueDogDoc
+  time: '2026-11-18T15:44:48.070227+00:00'
+  pr: 2809
+  changes:
+  - type: Add
+    message: Кнопка пропуска титров
+  - type: Tweak
+    message: Убраны гост роли из титров
+  - type: Fix
+    message: Старый манифест на F9
+- id: 1021
+  author: TheZuTi
+  time: '2026-11-19T01:00:21.759947+00:00'
+  pr: 2745
+  changes:
+  - type: Tweak
+    message: Обновление движка до актуальной версии, должно помочь с лагами
+- id: 1022
+  author: BlueDogDoc
+  time: '2026-11-20T15:22:18.364668+00:00'
+  pr: 2829
+  changes:
+  - type: Tweak
+    message: Расчет ЭХО от наркотиков.
+- id: 1023
+  author: Manstari
+  time: '2026-11-21T05:06:28.155270+00:00'
+  pr: 2785
+  changes:
+  - type: Tweak
+    message: Условия цели Нейрон-Ультима
+- id: 1024
+  author: IvanKuvalda
+  time: '2026-11-21T05:13:40.889865+00:00'
+  pr: 2835
+  changes:
+  - type: Fix
+    message: Поправил разрыв органов
+- id: 1025
+  author: IvanKuvalda
+  time: '2026-11-21T05:16:46.537701+00:00'
+  pr: 2834
+  changes:
+  - type: Tweak
+    message: 'небольшая поправка отпуска обломков: отпускать их можно через раз'
+- id: 1026
+  author: Manstari
+  time: '2026-11-21T05:29:30.428145+00:00'
+  pr: 2820
+  changes:
+  - type: Fix
+    message: Шаттл теперь не тормозит быстрее нужного, при нажатии тормоза и кнопки
+      движения, противоположной движению шаттла
+- id: 1027
+  author: BlueDogDoc
+  time: '2026-11-21T15:58:53.327310+00:00'
+  pr: 2836
+  changes:
+  - type: Tweak
+    message: Окно факса для ЦКРП
+- id: 1028
+  author: BlueDogDoc
+  time: '2026-11-22T01:07:16.131721+00:00'
+  pr: 2839
+  changes:
+  - type: Remove
+    message: Механика Ферментации
+  - type: Remove
+    message: Механика Архива камер
+  - type: Remove
+    message: Замарозка карт мидраунд антагов
+- id: 1029
+  author: HiAmaliz
+  time: '2026-11-22T01:09:19.464494+00:00'
+  pr: 2837
+  changes:
+  - type: Tweak
+    message: Косметическая часть силли и пакета.
+  - type: Fix
+    message: Пару незначительных багов на шаттлах эвакуаций амбера и багеля.
+- id: 1030
+  author: BlueDogDoc
+  time: '2026-11-22T22:51:08.954635+00:00'
+  pr: 2848
+  changes:
+  - type: Fix
+    message: При попытке обыскать кокон, борга - не пишет, что это человек
+- id: 1031
+  author: BlueDogDoc
+  time: '2026-11-22T22:53:34.234895+00:00'
+  pr: 2847
+  changes:
+  - type: Tweak
+    message: Ревенант не может усыплять синтетиков (в тч и КПБ)
+- id: 1032
+  author: BlueDogDoc
+  time: '2026-11-22T22:56:21.450160+00:00'
+  pr: 2845
+  changes:
+  - type: Fix
+    message: Титры в окне переподключения
+- id: 1033
+  author: BlueDogDoc
+  time: '2026-11-22T23:01:42.330276+00:00'
+  pr: 2844
+  changes:
+  - type: Tweak
+    message: Отключено ЧМТ для скелета
+- id: 1034
+  author: BlueDogDoc
+  time: '2026-11-22T23:04:35.201577+00:00'
+  pr: 2843
+  changes:
+  - type: Tweak
+    message: Вещи игроков остаются внутри криокапсулы.
+- id: 1035
+  author: BlueDogDoc
+  time: '2026-11-22T23:07:22.117527+00:00'
+  pr: 2853
+  changes:
+  - type: Add
+    message: Скрытый бафф для библиотекаря и бармена (проверяйте на ПКМ будучи на
+      них)

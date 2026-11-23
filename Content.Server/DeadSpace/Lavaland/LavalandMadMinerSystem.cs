@@ -43,40 +43,40 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Shared.DeadSpace.Maps;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandMadMinerSystem : EntitySystem
+public sealed partial class LavalandMadMinerSystem : EntitySystem
 {
     private static readonly float[] ShotgunSpread = [-18f, -9f, 0f, 9f, 18f];
 
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly BlinkSystem _blink = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly GunSystem _gun = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly Content.Shared.Administration.Systems.RejuvenateSystem _rejuvenate = default!;
-    [Dependency] private readonly Content.Shared.Mobs.Systems.MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly Content.Shared.Movement.Systems.MovementSpeedModifierSystem _speedModifier = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly Content.Server.NPC.Systems.NPCSystem _npc = default!;
-    [Dependency] private readonly Content.Shared.Popups.SharedPopupSystem _popup = default!;
-    [Dependency] private readonly Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly LavalandMadMinerHookSystem _hook = default!;
-    [Dependency] private readonly Content.Shared.Throwing.ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private BlinkSystem _blink = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private GunSystem _gun = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private Content.Shared.Administration.Systems.RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private Content.Shared.Mobs.Systems.MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private Content.Shared.Movement.Systems.MovementSpeedModifierSystem _speedModifier = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private Content.Server.NPC.Systems.NPCSystem _npc = default!;
+    [Dependency] private Content.Shared.Popups.SharedPopupSystem _popup = default!;
+    [Dependency] private Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
+    [Dependency] private LavalandMadMinerHookSystem _hook = default!;
+    [Dependency] private Content.Shared.Throwing.ThrowingSystem _throwing = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private LavalandFaunaRaidSystem _raids = default!;
 
     private int _nextHudId = 100000;
 
@@ -127,7 +127,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         var position = _transform.GetWorldPosition(xform);
         var box = Box2.CenteredAround(position, new Vector2(OtherGridExclusion * 2f));
         var circle = new Circle(position, OtherGridExclusion);
-        foreach (var other in _mapManager.FindGridsIntersecting(xform.MapID, box))
+        foreach (var other in _map.GridsIntersecting(xform.MapID, box))
         {
             // The grid's bounds reach far past its tiles (a large outpost): only its real tiles nearby count.
             if (other.Owner != mapUid && _map.GetTilesIntersecting(other.Owner, other, circle).Any())
@@ -567,7 +567,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
 
     private bool IsOpenGround(MapCoordinates coordinates)
     {
-        if (!_mapManager.TryFindGridAt(coordinates, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
             return false;
 
         var tile = _map.TileIndicesFor(gridUid, grid, coordinates);

@@ -17,9 +17,9 @@ namespace Content.Client.Options.UI.Tabs;
 
 public sealed partial class PingTab : Control
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager prototypeManager = default!;
-    [Dependency] private readonly IConfigurationManager cfg = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager prototypeManager = default!;
+    [Dependency] private IConfigurationManager cfg = default!;
     private bool _isSaveNeeded = false;
     private string _searchText = string.Empty;
     private void AddCheckBox(ReceiveNotifySystem helper, string checkBoxName, string id, bool savedSelection)

@@ -9,10 +9,10 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaSpiritFormSystem : SharedNinjaSpiritFormSystem
+public sealed partial class NinjaSpiritFormSystem : SharedNinjaSpiritFormSystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
 
     private readonly Dictionary<EntityUid, Dictionary<string, int>> _originalMasks = new();
 

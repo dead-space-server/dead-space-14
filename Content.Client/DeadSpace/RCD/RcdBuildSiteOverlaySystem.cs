@@ -4,9 +4,9 @@ using Robust.Client.Graphics;
 
 namespace Content.Client.DeadSpace.RCD;
 
-public sealed class RcdBuildSiteOverlaySystem : EntitySystem
+public sealed partial class RcdBuildSiteOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
 
     public override void Initialize()
     {

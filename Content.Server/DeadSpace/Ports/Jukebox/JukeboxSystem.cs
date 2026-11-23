@@ -14,15 +14,15 @@ using Robust.Shared.ContentPack;
 
 namespace Content.Server.DeadSpace.Ports.Jukebox;
 
-public sealed class JukeboxSystem : EntitySystem
+public sealed partial class JukeboxSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] private readonly PvsOverrideSystem _pvsOverrideSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private PvsOverrideSystem _pvsOverrideSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IResourceManager _resources = default!;
 
     private readonly List<Entity<WhiteJukeboxComponent>> _playingJukeboxes = new() { };
 

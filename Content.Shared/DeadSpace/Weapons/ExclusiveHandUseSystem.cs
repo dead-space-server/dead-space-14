@@ -9,10 +9,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Weapons;
 
-public sealed class ExclusiveHandUseSystem : EntitySystem
+public sealed partial class ExclusiveHandUseSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

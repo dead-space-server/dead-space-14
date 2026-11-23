@@ -354,6 +354,28 @@ public sealed class PsychiatryTest : InteractionTest
     }
 
     [Test]
+    public async Task SkeletonDoesNotGetHeadTrauma()
+    {
+        EntityUid skeleton = default;
+        await Server.WaitPost(() =>
+        {
+            var coords = SEntMan.GetComponent<TransformComponent>(SPlayer).Coordinates;
+            skeleton = SEntMan.SpawnAtPosition("MobSkeletonPerson", coords);
+        });
+
+        await Server.WaitAssertion(() =>
+        {
+            var psych = SEntMan.System<PsychiatrySystem>();
+            Assert.That(psych.IsSkeleton(skeleton), Is.True);
+            Assert.That(psych.TryOnsetOrEscalate(skeleton, SchizophreniaStage.Acute, "blunt-head", ignoreCooldown: true, harm: true), Is.False);
+            Assert.That(psych.TryInhalePsychogen(skeleton), Is.False);
+            Assert.That(psych.TryStepStage(skeleton), Is.False);
+            psych.ApplyNew(skeleton, SchizophreniaStage.Acute, pillForced: true, "brain-rupture");
+            Assert.That(SEntMan.HasComponent<SchizophreniaComponent>(skeleton), Is.False);
+        });
+    }
+
+    [Test]
     public async Task OnsetScanSkipsNonPlayersAndUnplayableBodies()
     {
         await Server.WaitAssertion(() =>

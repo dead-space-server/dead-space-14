@@ -15,21 +15,21 @@ using Robust.Shared.Random;
 
 namespace Content.Client.DeadSpace.Audio;
 
-public sealed class LimbHearingClientSystem : EntitySystem
+public sealed partial class LimbHearingClientSystem : EntitySystem
 {
     private const float MuffleOcclusion = 3.5f;
     private const float DeafOcclusion = 20f;
 
     private static readonly SoundPathSpecifier Ringing = new("/Audio/_DeadSpace/Effects/Heartbeat/ear_ringing.ogg", AudioParams.Default.WithVolume(-8f));
 
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IAudioManager _audioManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly SpaceMufflingSystem _muffling = default!;
-    [Dependency] private readonly AreaEchoSystem _echo = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IAudioManager _audioManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private SpaceMufflingSystem _muffling = default!;
+    [Dependency] private AreaEchoSystem _echo = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
 
     private LimbHearingState _state = LimbHearingState.Healthy;
     private float _ringIn = 10f;

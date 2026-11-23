@@ -10,8 +10,8 @@ namespace Content.Shared.EntityEffects.Effects.Botany.PlantAttributes;
 public sealed partial class PlantAdjustPestToleranceEntityEffectSystem : EntityEffectSystem<PlantWeedPestComponent, PlantAdjustPestTolerance>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly PlantWeedPestSystem _plantWeedPest = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantWeedPestSystem _plantWeedPest = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantWeedPestComponent> entity, ref EntityEffectEvent<PlantAdjustPestTolerance> args)

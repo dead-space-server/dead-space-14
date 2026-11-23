@@ -21,16 +21,16 @@ namespace Content.Shared.Changeling.Systems;
 
 public sealed partial class RegenerativeStasisSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!; // DS14
-    [Dependency] private readonly ChangelingCocoonAbilitySystem _cocoon = default!; // DS14
-    [Dependency] private readonly SharedCuffableSystem _cuffs = default!; // DS14
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedHandsSystem _hands = default!; // DS14
+    [Dependency] private ChangelingCocoonAbilitySystem _cocoon = default!; // DS14
+    [Dependency] private SharedCuffableSystem _cuffs = default!; // DS14
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private MobStateSystem _mobs = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     // DS14-start: pre-v288 RobustToolbox has no action-event relay or subscription source generator.
     public override void Initialize()

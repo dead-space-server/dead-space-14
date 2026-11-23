@@ -10,12 +10,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Spiders.SpiderTerror;
 
-public sealed class SharedSpiderTerrorMagneticSystem : EntitySystem
+public sealed partial class SharedSpiderTerrorMagneticSystem : EntitySystem
 {
-    [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private ITileDefinitionManager _tileDef = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private ushort _vebTileId;
     private EntityQuery<SpiderWebObjectComponent> _webQuery;

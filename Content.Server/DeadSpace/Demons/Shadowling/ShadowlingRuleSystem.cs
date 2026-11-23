@@ -15,12 +15,12 @@ using Robust.Server.Player;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling;
 
-public sealed class ShadowlingRuleSystem : GameRuleSystem<ShadowlingRuleComponent>
+public sealed partial class ShadowlingRuleSystem : GameRuleSystem<ShadowlingRuleComponent>
 {
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     private const int MinPlayers = 50;
     private const int MaxPlayers = 75;

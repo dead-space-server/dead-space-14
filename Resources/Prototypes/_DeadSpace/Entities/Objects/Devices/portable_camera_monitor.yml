@@ -22,7 +22,6 @@
     transmitFrequencyId: SurveillanceCamera
   - type: WiredNetworkConnection
   - type: SurveillanceCameraMonitor
-  - type: CameraArchiveConsole
   - type: Tag
     tags:
     - HighRiskItem

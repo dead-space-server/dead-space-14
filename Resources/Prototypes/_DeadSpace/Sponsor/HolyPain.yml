@@ -1,6 +1,6 @@
 #Сумка
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpackDominator
   id: ClothingBackpackHolyPain
   name: блюспейс кристал HolyPain
   categories: [ HideSpawnMenu ]
@@ -99,7 +99,7 @@
 
 # RIG hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitSecurity
+  parent: ClothingOuterHardsuitDominator
   id: ClothingOuterHardsuitHolyPain
   name: доспех HolyPain
   description: Адский кузнец, по горло набитый чужими дугами, без устали бьёт молотом под непрестанные вопли слабых. Вопросы морали и судьбы его не интересуют. Совестью пусть мучаются те, кому больше нечем заняться.
@@ -111,11 +111,6 @@
     sprite: _DeadSpace/Sponsor/HolyPain/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitHolyPain
-  - type: Item
-    size: Huge
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: Armor
     modifiers:
       coefficients:
@@ -149,7 +144,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  parent: ClothingHeadHelmetHardsuitDominator
   id: ClothingHeadHelmetHardsuitHolyPain
   name: энергошлем HolyPain
   description: Если вы хотите познать секреты вселенной — мыслите единицами измерения энергии, частоты и вибрации...

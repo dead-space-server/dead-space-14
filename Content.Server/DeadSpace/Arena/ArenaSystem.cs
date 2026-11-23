@@ -41,29 +41,28 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.Arena;
 
-public sealed class ArenaSystem : EntitySystem
+public sealed partial class ArenaSystem : EntitySystem
 {
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPrototypeManager _protos = default!;
-    [Dependency] private readonly ITileDefinitionManager _tiles = default!;
-    [Dependency] private readonly MapLoaderSystem _loader = default!;
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly MindSystem _minds = default!;
-    [Dependency] private readonly GhostSystem _ghosts = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly IRobustRandom _luck = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly SharedStationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly IServerPreferencesManager _prefs = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly PrisonSystem _prison = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedArmorSystem _armor = default!;
-    [Dependency] private readonly SharedStorageSystem _storage = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _protos = default!;
+    [Dependency] private ITileDefinitionManager _tiles = default!;
+    [Dependency] private MapLoaderSystem _loader = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
+    [Dependency] private MindSystem _minds = default!;
+    [Dependency] private GhostSystem _ghosts = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private IRobustRandom _luck = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private SharedStationSpawningSystem _stationSpawning = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private PrisonSystem _prison = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedArmorSystem _armor = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private const string ArenaMapFile = "/Maps/_DeadSpace/arena.yml";
 
@@ -746,7 +745,7 @@ public sealed class ArenaSystem : EntitySystem
         var mapUid = _maps.CreateMap(out _);
         _arenaMap = mapUid;
 
-        var (platform, gridComp) = _mapManager.CreateGridEntity(mapUid);
+        var (platform, gridComp) = _maps.CreateGridEntity(mapUid);
         var tile = new Tile(_tiles["FloorSteel"].TileId);
         var tileList = new List<(Vector2i, Tile)>();
 

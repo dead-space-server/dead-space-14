@@ -15,9 +15,9 @@ using Robust.Shared.Prototypes;
 namespace Content.Client.Chemistry.EntitySystems;
 
 /// <inheritdoc/>
-public sealed class ChemistryGuideDataSystem : SharedChemistryGuideDataSystem
+public sealed partial class ChemistryGuideDataSystem : SharedChemistryGuideDataSystem
 {
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
 
     private static readonly ProtoId<MixingCategoryPrototype> DefaultMixingCategory = "DummyMix";
     private static readonly ProtoId<MixingCategoryPrototype> DefaultGrindCategory = "DummyGrind";
@@ -157,7 +157,7 @@ public sealed class ChemistryGuideDataSystem : SharedChemistryGuideDataSystem
 /// <summary>
 /// A generic class meant to hold information about a reagent source.
 /// </summary>
-public abstract class ReagentSourceData
+public abstract partial class ReagentSourceData
 {
     /// <summary>
     /// The mixing type that applies to this source.
@@ -183,7 +183,7 @@ public abstract class ReagentSourceData
 /// <summary>
 /// Used to store a reagent source that's an entity with a corresponding solution.
 /// </summary>
-public sealed class ReagentEntitySourceData : ReagentSourceData
+public sealed partial class ReagentEntitySourceData : ReagentSourceData
 {
     public readonly EntityPrototype SourceEntProto;
 
@@ -204,7 +204,7 @@ public sealed class ReagentEntitySourceData : ReagentSourceData
 /// <summary>
 /// Used to store a reagent source that comes from a reaction between multiple reagents.
 /// </summary>
-public sealed class ReagentReactionSourceData : ReagentSourceData
+public sealed partial class ReagentReactionSourceData : ReagentSourceData
 {
     public readonly ReactionPrototype ReactionPrototype;
 
@@ -226,7 +226,7 @@ public sealed class ReagentReactionSourceData : ReagentSourceData
 /// <summary>
 /// Used to store a reagent source that comes from gas condensation.
 /// </summary>
-public sealed class ReagentGasSourceData : ReagentSourceData
+public sealed partial class ReagentGasSourceData : ReagentSourceData
 {
     public readonly GasPrototype GasPrototype;
 

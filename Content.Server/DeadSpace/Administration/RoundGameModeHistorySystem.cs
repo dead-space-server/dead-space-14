@@ -11,13 +11,13 @@ using System.Linq;
 
 namespace Content.Server.DeadSpace.Administration;
 
-public sealed class RoundGameModeHistorySystem : EntitySystem
+public sealed partial class RoundGameModeHistorySystem : EntitySystem
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly ServerDbEntryManager _serverDbEntry = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly SecretRuleSystem _secret = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private ServerDbEntryManager _serverDbEntry = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private SecretRuleSystem _secret = default!;
 
     public override void Initialize()
     {

@@ -21,3 +21,7 @@ revenant-user-interface-title = Ability Shop
 revenant-user-interface-essence-amount = [color=plum]{$amount}[/color] Stolen Essence
 
 revenant-user-interface-cost = {$price} Essence
+
+#DS14-start
+revenant-sleep-silicon = Synthetics cannot be put to sleep.
+#DS14-end

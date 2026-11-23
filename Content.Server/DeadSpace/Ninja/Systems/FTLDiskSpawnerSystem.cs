@@ -5,11 +5,11 @@ using Content.Shared.Labels.EntitySystems;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class FTLDiskSpawnerSystem : EntitySystem
+public sealed partial class FTLDiskSpawnerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly LabelSystem _labelSystem = default!;
-    [Dependency] private readonly SharedStorageSystem _storageSystem = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private LabelSystem _labelSystem = default!;
+    [Dependency] private SharedStorageSystem _storageSystem = default!;
 
     public override void Initialize()
     {
