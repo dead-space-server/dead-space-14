@@ -12,9 +12,9 @@ namespace Content.Shared.DeadSpace.Dodge;
 
 public sealed partial class SharedDodgeSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSandevistanSystem _sandevistan = default!;
 
     public override void Initialize()
     {

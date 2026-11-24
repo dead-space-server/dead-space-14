@@ -6,7 +6,7 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 
 public sealed partial class LimbTargetBonusSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
+    [Dependency] private SharedSandevistanSystem _sandevistan = default!;
 
     public float GetChance(EntityUid uid)
     {

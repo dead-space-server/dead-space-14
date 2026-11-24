@@ -11,9 +11,9 @@ namespace Content.Shared.DeadSpace.Weapons;
 
 public sealed partial class SemiAutoFireRateSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSandevistanSystem _sandevistan = default!;
-    [Dependency] private readonly SharedGunSystem _guns = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private SharedSandevistanSystem _sandevistan = default!;
+    [Dependency] private SharedGunSystem _guns = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     private readonly Dictionary<EntityUid, bool> _activeStates = new();
 

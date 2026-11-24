@@ -8,8 +8,8 @@ namespace Content.Client.DeadSpace.Dodge;
 
 public sealed partial class DodgeVisualSystem : EntitySystem
 {
-    [Dependency] private readonly DeadSpaceAfterimageSystem _afterimages = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private DeadSpaceAfterimageSystem _afterimages = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
