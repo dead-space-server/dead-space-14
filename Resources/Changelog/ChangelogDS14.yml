@@ -10709,3 +10709,10 @@ Entries:
     message: Поведение объектов на сцене через книгу
   - type: Fix
     message: Упасть/Умереть действие
+- id: 1038
+  author: BlueDogDoc
+  time: '2026-11-24T13:12:17.199175+00:00'
+  pr: 2857
+  changes:
+  - type: Tweak
+    message: Дальность отрисовки иконки профессии.
