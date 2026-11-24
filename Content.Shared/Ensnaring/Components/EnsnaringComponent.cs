@@ -64,6 +64,12 @@ public sealed partial class EnsnaringComponent : Component
 
     [DataField]
     public SoundSpecifier? EnsnareSound = new SoundPathSpecifier("/Audio/Effects/snap.ogg");
+
+    /// <summary>
+    /// DS14: Ignore targets that are already lying down.
+    /// </summary>
+    [DataField]
+    public bool SkipDownedOrDead;
 }
 
 /// <summary>
