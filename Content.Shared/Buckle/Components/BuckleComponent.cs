@@ -66,6 +66,14 @@ public sealed partial class BuckleComponent : Component
     [DataField]
     public int Size = 100;
 
+    // DS14-start
+    /// <summary>
+    /// DS14: Slot index on the current strap, -1 means the strap's default BuckleOffset is used.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int BuckleSlot = -1;
+    // DS14-end
+
     /// <summary>
     /// Used for client rendering
     /// </summary>

@@ -72,6 +72,13 @@ public abstract partial class SharedBuckleSystem
         if (!Resolve(strapUid, ref strapComp, false))
             return false;
 
+        // DS14-start
+        if (strapComp.MaxCapacity > 0 && strapComp.BuckledEntities.Count >= strapComp.MaxCapacity)
+            return false;
+
+        if (strapComp.MaxCapacity > 1)
+            return true;
+        // DS14-end
         var avail = strapComp.Size;
         foreach (var buckle in strapComp.BuckledEntities)
         {

@@ -49,11 +49,18 @@ internal sealed partial class BuckleSystem : SharedBuckleSystem
         // Give some of the sprite rotations their own drawdepth, maybe as an offset within the rsi, or something like this
         // And we won't ever need to set the draw depth manually
 
-        if (args.NewRotation == args.OldRotation)
+        // DS14-start
+        var hasSlotDepths = component.MultiBuckleDrawDepths.Count > 0;
+        if (!hasSlotDepths && !component.ModifyBuckleDrawDepth)
             return;
 
-        if (!TryComp<SpriteComponent>(uid, out var strapSprite))
+        if (!hasSlotDepths && args.NewRotation == args.OldRotation)
             return;
+
+        SpriteComponent? strapSprite = null;
+        if (!hasSlotDepths && !TryComp<SpriteComponent>(uid, out strapSprite))
+            return;
+        // DS14-end
 
         var angle = _xformSystem.GetWorldRotation(uid) + _eye.CurrentEye.Rotation; // Get true screen position, or close enough
 
@@ -66,11 +73,20 @@ internal sealed partial class BuckleSystem : SharedBuckleSystem
             if (!TryComp<SpriteComponent>(buckledEntity, out var buckledSprite))
                 continue;
 
+            // DS14-start
+            if (component.MultiBuckleDrawDepths.TryGetValue(buckle.BuckleSlot, out var slotDepth))
+            {
+                buckle.OriginalDrawDepth ??= buckledSprite.DrawDepth;
+                _sprite.SetDrawDepth((buckledEntity, buckledSprite), slotDepth);
+                continue;
+            }
+            // DS14-end
+
             if (isNorth)
             {
                 // This will only assign if empty, it won't get overwritten by new depth on multiple calls, which do happen easily
                 buckle.OriginalDrawDepth ??= buckledSprite.DrawDepth;
-                _sprite.SetDrawDepth((buckledEntity, buckledSprite), strapSprite.DrawDepth - 1);
+                _sprite.SetDrawDepth((buckledEntity, buckledSprite), strapSprite!.DrawDepth - 1); // DS14
             }
             else if (buckle.OriginalDrawDepth.HasValue)
             {
@@ -86,11 +102,22 @@ internal sealed partial class BuckleSystem : SharedBuckleSystem
     /// </summary>
     private void OnBuckledEvent(Entity<BuckleComponent> ent, ref BuckledEvent args)
     {
-        if (!TryComp<SpriteComponent>(args.Strap, out var strapSprite))
-            return;
-
         if (!TryComp<SpriteComponent>(ent.Owner, out var buckledSprite))
             return;
+        // DS14-start
+        if (args.Strap.Comp.MultiBuckleDrawDepths.TryGetValue(ent.Comp.BuckleSlot, out var slotDepth))
+        {
+            ent.Comp.OriginalDrawDepth ??= buckledSprite.DrawDepth;
+            _sprite.SetDrawDepth((ent.Owner, buckledSprite), slotDepth);
+            return;
+        }
+
+        if (!args.Strap.Comp.ModifyBuckleDrawDepth)
+            return;
+
+        if (!TryComp<SpriteComponent>(args.Strap, out var strapSprite))
+            return;
+        // DS14-end
 
         var angle = _xformSystem.GetWorldRotation(args.Strap) + _eye.CurrentEye.Rotation; // Get true screen position, or close enough
 

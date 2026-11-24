@@ -43,3 +43,42 @@
   - type: Construction
     graph: BedWood
     node: bedWood
+
+- type: entity
+  parent: Bed
+  id: BunkBed
+  name: двухъярусная койка
+  description: РОТА, ПОДЪЁМ!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/bed.rsi
+    state: bunk_bed_bottom
+  - type: BunkBed
+    overlay: BunkBedTop
+  - type: Construction
+    graph: bed
+    node: bunkbed
+  - type: Strap
+    position: Down
+    rotation: -90
+    maxCapacity: 2
+    multiBuckleOffsets:
+      0: "0,0.18"
+      1: "0,-0.18"
+    modifyBuckleDrawDepth: false
+    multiBuckleDrawDepths:
+      0: 7
+      1: 5
+
+- type: entity
+  id: BunkBedTop
+  name: верхняя часть двухъярусной койки
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+  - type: BunkBedOverlay
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/bed.rsi
+    state: bunk_bed_top
+    noRot: true
+    drawdepth: Mobs
