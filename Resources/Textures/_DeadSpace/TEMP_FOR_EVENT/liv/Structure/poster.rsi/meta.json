@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "poster 'absk' by shaxid22 (discord) for Space Station 14 server Мёртвый Космос, poster 'meow' by chuiomoio (discord) for Space Station 14 server Мёртвый Космос, poster 'dies_liberatis' by milkywaynoway (discord) for Space Station 14 server Мёртвый Космос, 'hb2' by hq._.dishka (discord) for Space Station 14 server Мёртвый Космос, posters countrys and departments by Urani, pyfya (discord) for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "HM_Info"
+    },
+    {
+      "name": "HM_Leviathan"
+    },
+    {
+      "name": "HM_matros"
+    },
+    {
+      "name": "HM_Orion"
+    },
+    {
+      "name": "HM_Triadems"
+    }
+  ]
+}
