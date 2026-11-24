@@ -67,9 +67,6 @@
       path: /Audio/_DeadSpace/Necromorfs/marker_red.ogg
       params:
         volume: -8
-    cost:
-      types:
-        Cellular: 15
     heal:
     - Bleed
     - Fracture
@@ -210,7 +207,6 @@
         Slash: -15
         Piercing: -15
         Heat: -10
-        Cellular: 4
     heal:
     - Bleed
     - Fracture
@@ -270,7 +266,6 @@
         Blunt: -15
         Slash: -15
         Piercing: -15
-        Cellular: 12
     heal:
     - Bleed
     - Fracture
