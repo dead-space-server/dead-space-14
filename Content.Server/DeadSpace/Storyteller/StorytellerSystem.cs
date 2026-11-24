@@ -262,8 +262,18 @@ public sealed partial class StorytellerSystem : EntitySystem
         if (jobs.Count == 0)
             return true;
 
-        if (_idCards.TryFindIdCard(uid, out var card) && card.Comp.JobPrototype is { } cardJob && jobs.Contains(cardJob))
-            return true;
+        if (_idCards.TryFindIdCard(uid, out var card))
+        {
+            if (card.Comp.JobPrototype is { } cardJob)
+            {
+                if (jobs.Contains(cardJob))
+                    return true;
+            }
+            else if (jobs.Any(allowed => _prototypes.TryIndex(allowed, out var job) && job.Icon == card.Comp.JobIcon))
+            {
+                return true;
+            }
+        }
 
         return _mind.TryGetMind(uid, out var mindId, out _) &&
                _jobs.MindTryGetJobId(mindId, out var job) &&
@@ -311,6 +321,7 @@ public sealed partial class StorytellerSystem : EntitySystem
         story.ScriptIndex = 0;
         story.Title = data.Title;
         story.Caption = Loc.GetString("storyteller-book-opened", ("title", data.Title));
+        PlaySetup(story, true);
         SendScene(story);
         _admin.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):player} tells a story from {ToPrettyString(book)}");
     }
@@ -547,38 +558,44 @@ public sealed partial class StorytellerSystem : EntitySystem
         if (!TellerOf(args, out var story) || story.Script == null || !Ready(args.SenderSession, 3, 0.3f))
             return;
 
+        var script = story.Script;
         if (msg.Restart || msg.Back)
         {
-            var target = msg.Restart ? 0 : story.ScriptIndex - 1;
-            if (target < 0)
-                return;
-
-            ResetScene(story);
-            for (var i = 0; i < target; i++)
+            var target = 0;
+            if (msg.Back)
             {
-                var batch = new Batch();
-                foreach (var cue in story.Script[i].Cues.Take(StorytellerParser.MaxPageCues))
-                    Apply(story, cue, batch);
+                var current = script.FindLastIndex(Math.Max(0, story.ScriptIndex - 1), Math.Max(0, story.ScriptIndex), p => p.Caption.Length > 0);
+                if (story.ScriptIndex == 0 || current < 0)
+                    return;
 
-                story.Actors.RemoveAll(a => a.Pose == StoryPose.Gone);
-                story.Leaving.Clear();
+                target = current;
             }
 
-            story.Effects.Clear();
-            story.ScriptIndex = target;
-            story.Caption = target > 0
-                ? Summary(story.Script[target - 1].Caption)
+            ResetScene(story);
+            story.ScriptIndex = 0;
+            PlaySetup(story, true);
+            while (story.ScriptIndex < target)
+            {
+                PlayPage(story, script[story.ScriptIndex++], true);
+                PlaySetup(story, true);
+            }
+
+            var shown = story.ScriptIndex > 0 ? script.FindLastIndex(story.ScriptIndex - 1, p => p.Caption.Length > 0) : -1;
+            story.Caption = shown >= 0
+                ? Summary(script[shown].Caption)
                 : Loc.GetString("storyteller-book-opened", ("title", story.Title));
             SendScene(story);
             return;
         }
 
-        if (story.ScriptIndex >= story.Script.Count)
+        if (story.ScriptIndex >= script.Count)
             return;
 
-        var page = story.Script[story.ScriptIndex++];
+        var page = script[story.ScriptIndex++];
         story.Caption = Summary(page.Caption);
-        ApplyBatch(story, page.Cues, page.Caption);
+        PlayPage(story, page, false);
+        PlaySetup(story, false);
+        SendScene(story);
     }
 
     private void ResetScene(StorySession story)
@@ -586,6 +603,8 @@ public sealed partial class StorytellerSystem : EntitySystem
         story.Actors.Clear();
         story.Leaving.Clear();
         story.Effects.Clear();
+        story.NextId = 1;
+        story.NextProp = 0;
         story.Location = Settings.DefaultLocation;
         ResetProps(story);
         story.Light = "";
@@ -602,15 +621,66 @@ public sealed partial class StorytellerSystem : EntitySystem
     {
         var batch = new Batch();
         var applied = new List<StoryCue>();
+        var looks = new Dictionary<string, StoryLook>();
         foreach (var cue in cues.Take(StorytellerParser.MaxCues))
         {
-            if (Apply(story, cue, batch))
-                applied.Add(cue);
+            var recorded = cue;
+            if (cue.Kind is StoryCueKind.PropMove or StoryCueKind.PropTurn or StoryCueKind.PropRemove &&
+                story.Props.FirstOrDefault(p => p.Id == cue.Prop) is { Proto: not null } before)
+            {
+                recorded.Id = before.Proto;
+                recorded.Text = $"{before.X},{before.Y}";
+            }
+
+            var count = story.Actors.Count;
+            if (!Apply(story, cue, batch))
+                continue;
+
+            if (cue.Kind == StoryCueKind.Enter && story.Actors.Count > count)
+            {
+                var actor = story.Actors[^1];
+                recorded.Actor = actor.Name;
+                recorded.Text = "";
+                looks[actor.Name] = Snapshot(actor);
+            }
+            else if (cue.Kind == StoryCueKind.Look && Find(story, cue.Actor) is { } restyled)
+            {
+                looks[restyled.Name] = Snapshot(restyled);
+            }
+
+            applied.Add(recorded);
         }
 
         if (story.Script == null)
-            Record(story, caption, applied);
+            Record(story, caption, applied, looks);
         SendScene(story);
+    }
+
+    private void PlayPage(StorySession story, StoryPage page, bool silent)
+    {
+        story.ReplayLooks = page.Looks;
+        var batch = new Batch();
+        foreach (var cue in page.Cues.Take(StorytellerParser.MaxPageCues))
+            Apply(story, cue, batch);
+        story.ReplayLooks = null;
+
+        if (!silent)
+            return;
+
+        story.Actors.RemoveAll(a => a.Pose == StoryPose.Gone);
+        story.Leaving.Clear();
+        story.Effects.Clear();
+    }
+
+    private void PlaySetup(StorySession story, bool silent)
+    {
+        while (story.Script != null && story.ScriptIndex < story.Script.Count && story.Script[story.ScriptIndex].Caption.Length == 0)
+            PlayPage(story, story.Script[story.ScriptIndex++], silent);
+    }
+
+    private static StoryLook Snapshot(StoryActorState actor)
+    {
+        return new StoryLook(actor.Kind, actor.Role, actor.Sex, actor.Appearance, actor.Copy);
     }
 
     private static string Summary(string line)
@@ -649,21 +719,24 @@ public sealed partial class StorytellerSystem : EntitySystem
         return builder.ToString();
     }
 
-    private void Record(StorySession story, string caption, List<StoryCue> cues)
+    private void Record(StorySession story, string caption, List<StoryCue> cues, Dictionary<string, StoryLook> looks)
     {
         if (caption.Length == 0 && cues.Count == 0)
             return;
 
         if (caption.Length == 0 && story.Pages.Count > 0 && story.Pages[^1].Cues.Count + cues.Count <= StorytellerParser.MaxPageCues)
         {
-            story.Pages[^1].Cues.AddRange(cues);
+            var last = story.Pages[^1];
+            last.Cues.AddRange(cues);
+            foreach (var (name, look) in looks)
+                last.Looks[name] = look;
             return;
         }
 
         if (story.Pages.Count >= StorytellerParser.MaxPages)
             return;
 
-        story.Pages.Add(new StoryPage { Caption = caption, Cues = cues });
+        story.Pages.Add(new StoryPage { Caption = caption, Cues = cues, Looks = looks });
     }
 
     private bool Apply(StorySession story, StoryCue cue, Batch batch)
@@ -935,7 +1008,7 @@ public sealed partial class StorytellerSystem : EntitySystem
     private bool EditProp(StorySession story, StoryCue cue)
     {
         var settings = Settings;
-        var index = story.Props.FindIndex(p => p.Id == cue.Prop);
+        var index = FindProp(story, cue);
         switch (cue.Kind)
         {
             case StoryCueKind.PropAdd:
@@ -988,6 +1061,27 @@ public sealed partial class StorytellerSystem : EntitySystem
             default:
                 return false;
         }
+    }
+
+    private static int FindProp(StorySession story, StoryCue cue)
+    {
+        var index = story.Props.FindIndex(p => p.Id == cue.Prop);
+        if (cue.Id.Length == 0 || !TryOrigin(cue.Text, out var x, out var y))
+            return index;
+
+        if (index >= 0 && story.Props[index].Proto == cue.Id && story.Props[index].X == x && story.Props[index].Y == y)
+            return index;
+
+        var match = story.Props.FindIndex(p => p.Proto == cue.Id && p.X == x && p.Y == y);
+        return match >= 0 ? match : index >= 0 && story.Props[index].Proto == cue.Id ? index : -1;
+    }
+
+    private static bool TryOrigin(string text, out int x, out int y)
+    {
+        x = 0;
+        y = 0;
+        var comma = text.IndexOf(',');
+        return comma > 0 && int.TryParse(text.AsSpan(0, comma), out x) && int.TryParse(text.AsSpan(comma + 1), out y);
     }
 
     private bool InStage(int x, int y)
@@ -1066,6 +1160,14 @@ public sealed partial class StorytellerSystem : EntitySystem
             Kind = kind.ID,
         };
 
+        if (story.ReplayLooks != null && story.ReplayLooks.TryGetValue(name, out var stored))
+        {
+            Wear(actor, stored);
+            story.Actors.Add(actor);
+            EnterFromDoor(story, location, actor, cue.Move, batch);
+            return true;
+        }
+
         var source = self ? story.Teller : cue.Id.Length == 0 && role.Length == 0 ? FindPlayer(story.Teller, name) : null;
         if (source is { } body && BuildCopy(body) is { } copy)
         {
@@ -1093,10 +1195,26 @@ public sealed partial class StorytellerSystem : EntitySystem
         return true;
     }
 
+    private static void Wear(StoryActorState actor, StoryLook look)
+    {
+        actor.Kind = look.Kind;
+        actor.Role = look.Role;
+        actor.Sex = look.Sex;
+        actor.Appearance = look.Appearance;
+        actor.Copy = look.Copy;
+    }
+
     private bool Restyle(StorySession story, StoryCue cue)
     {
         if (Find(story, cue.Actor) is not { } actor)
             return false;
+
+        if (story.ReplayLooks != null && story.ReplayLooks.TryGetValue(actor.Name, out var stored))
+        {
+            Wear(actor, stored);
+            actor.Look = ++story.Look;
+            return true;
+        }
 
         var changed = false;
         if (cue.Id.Length > 0 && cue.Id != actor.Kind && _prototypes.TryIndex<StoryKindPrototype>(cue.Id, out var kind))
@@ -1590,8 +1708,9 @@ public sealed partial class StorytellerSystem : EntitySystem
             Effects = effects,
             Listeners = listeners,
             Pages = story.Pages.Count,
-            ScriptPage = story.Script == null ? 0 : story.ScriptIndex,
-            ScriptPages = story.Script?.Count ?? 0,
+            ScriptPage = story.Script == null ? 0 : story.Script.Take(story.ScriptIndex).Count(p => p.Caption.Length > 0),
+            ScriptPages = story.Script?.Count(p => p.Caption.Length > 0) ?? 0,
+            Reading = story.Script != null,
             Title = story.Title,
         };
 
@@ -1703,6 +1822,7 @@ public sealed partial class StorytellerSystem : EntitySystem
         public readonly List<StoryActorState> Actors = new();
         public readonly List<StoryPropState> Props = new();
         public readonly Dictionary<NetUserId, Dictionary<byte, ushort>> SentLooks = new();
+        public Dictionary<string, StoryLook>? ReplayLooks;
         public ushort NextProp;
         public readonly List<(byte Id, TimeSpan At)> Leaving = new();
         public readonly List<StoryEffect> Effects = new();

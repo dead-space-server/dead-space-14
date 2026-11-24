@@ -234,8 +234,8 @@ public static class StorytellerParser
     public const int MaxSayLength = 120;
     public const int MaxTitleLength = 40;
     public const int MaxCues = 10;
-    public const int MaxPages = 60;
-    public const int MaxPageCues = 16;
+    public const int MaxPages = 120;
+    public const int MaxPageCues = 64;
     public const int MaxIdLength = 64;
 
     private static readonly CultureInfo Ru = CultureInfo.GetCultureInfo("ru-RU");

@@ -1,6 +1,8 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.DeadSpace.RoundEnd;
 using Content.Shared.DeadSpace.Storyteller;
+using Content.Shared.Humanoid;
 
 namespace Content.Server.DeadSpace.Storyteller;
 
@@ -18,9 +20,17 @@ public sealed class StoryPage
 {
     public string Caption = "";
     public List<StoryCue> Cues = new();
+    public Dictionary<string, StoryLook> Looks = new();
 
     public StoryPage Clone()
     {
-        return new StoryPage { Caption = Caption, Cues = new List<StoryCue>(Cues) };
+        return new StoryPage
+        {
+            Caption = Caption,
+            Cues = new List<StoryCue>(Cues),
+            Looks = new Dictionary<string, StoryLook>(Looks),
+        };
     }
 }
+
+public sealed record StoryLook(string Kind, string Role, Sex Sex, HumanoidCharacterAppearance? Appearance, RoundEndDollData? Copy);

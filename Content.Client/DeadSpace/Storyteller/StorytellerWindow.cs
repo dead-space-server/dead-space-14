@@ -561,7 +561,7 @@ public sealed class StorytellerWindow : DefaultWindow
 
 
         _bookInfo.Text = Loc.GetString("storyteller-book-pages", ("count", scene.Pages));
-        SetReading(scene.ScriptPages > 0);
+        SetReading(scene.Reading);
         _scriptInfo.Text = Loc.GetString("storyteller-script-page",
             ("title", scene.Title), ("page", Math.Min(scene.ScriptPage + 1, scene.ScriptPages)), ("count", scene.ScriptPages));
         if (scene.ScriptPages > 0 && scene.ScriptPage >= scene.ScriptPages)

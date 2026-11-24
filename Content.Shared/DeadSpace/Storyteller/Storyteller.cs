@@ -221,6 +221,7 @@ public sealed class StorySceneEvent : EntityEventArgs
     public int Pages;
     public int ScriptPage;
     public int ScriptPages;
+    public bool Reading;
     public string Title = "";
 }
 
