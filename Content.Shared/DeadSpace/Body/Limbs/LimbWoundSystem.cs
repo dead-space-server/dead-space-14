@@ -2272,21 +2272,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return (uint) index < (uint) limbs.Organs.Count && limbs.Organs[index].Missing;
     }
 
-    private void ReleaseOrganDeath(EntityUid uid, LimbBodyComponent limbs)
-    {
-        if (!_net.IsServer || VitalGone(limbs) || InStasis(uid))
-            return;
-
-        var head = HeadHealth(limbs);
-        var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
-        var life = LimbWoundRules.Life(head, torso);
-        var state = life == LimbLife.Dead ? MobState.Dead : life == LimbLife.Crit ? MobState.Critical : MobState.Alive;
-        if (state == MobState.Dead && HasComp<SurgeryMannequinComponent>(uid))
-            state = MobState.Critical;
-        _thresholds.SetCurrentThresholdState(uid, state);
-        _mobs.ChangeMobState(uid, state);
-    }
-
     private void ApplyLife(EntityUid uid, LimbBodyComponent limbs)
     {
         if (!_net.IsServer)
@@ -2300,15 +2285,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         if (_mobs.IsDead(uid))
-        {
-            if (limbs.LimbDeath && !DeadByDamage(uid))
-            {
-                limbs.LimbDeath = false;
-                _mobs.UpdateMobState(uid);
-            }
-
             return;
-        }
 
         if (life == LimbLife.Crit)
         {
@@ -2350,14 +2327,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         limbs.LimbDeath = true;
         _mobs.ChangeMobState(uid, MobState.Dead);
-    }
-
-    private bool DeadByDamage(EntityUid uid)
-    {
-        return TryComp<MobThresholdsComponent>(uid, out var thresholds)
-            && TryComp<DamageableComponent>(uid, out var damage)
-            && (thresholds.CurrentThresholdState == MobState.Dead && !thresholds.AllowRevives
-                || _thresholds.TryGetThresholdForState(uid, MobState.Dead, out var dead, thresholds) && damage.TotalDamage >= dead.Value);
     }
 
     private void NoteFace(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike)
