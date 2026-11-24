@@ -1746,6 +1746,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * ent.Comp.Burn * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share, ent.Comp.Soft, ent.Comp.Bleeds))
                     changed = true;
 
+                // DS14: a blast is incoming damage like any hit - it can crack a worn limb, or break a cracked one
+                if (!ent.Comp.Soft && !zones[i].Severed && LimbWoundRules.RollCrack(ref zones[i], worn[i], _random.NextFloat()))
+                    changed = true;
+
                 if (caustic[i] > 0f || other[i] > 0f)
                 {
                     zones[i].Health = MathF.Max(0f, zones[i].Health - (caustic[i] + other[i]) * wound * share);
@@ -2582,6 +2586,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var pellet = false;
         var pelletSever = false;
         var roundBone = 0f;
+        float? roundEmbed = null;
         var roundOrgan = 1f;
         var roundBleed = 0f;
         if (tool is { } held)
@@ -2598,12 +2603,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 pellet = round.Pellet;
                 pelletSever = round.Sever;
                 roundBone = round.Bone;
+                roundEmbed = round.Embed;
                 roundOrgan = round.Organ;
                 roundBleed = round.Bleed;
             }
         }
 
-        return new LimbStrike(zone, mark, amount, _random.NextFloat(), pierce, projectile, cover.Face, cover.Grip, cover.Ricochet, cover.ShieldBlocked, multiplier, aimed, cover.BehindArmor, _random.NextFloat(), distance, _random.NextFloat(), cut, liquid, ThroughArmor: throughArmor, Called: called ?? zone, Sharp: sharp, Pellet: pellet, PelletSever: pelletSever, RoundBone: roundBone, RoundOrgan: roundOrgan, RoundBleed: roundBleed, SeverChance: severChance, Harm: harm);
+        return new LimbStrike(zone, mark, amount, _random.NextFloat(), pierce, projectile, cover.Face, cover.Grip, cover.Ricochet, cover.ShieldBlocked, multiplier, aimed, cover.BehindArmor, _random.NextFloat(), distance, _random.NextFloat(), cut, liquid, ThroughArmor: throughArmor, Called: called ?? zone, Sharp: sharp, Pellet: pellet, PelletSever: pelletSever, RoundBone: roundBone, RoundEmbed: roundEmbed, RoundOrgan: roundOrgan, RoundBleed: roundBleed, SeverChance: severChance, Harm: harm);
     }
 
     private LimbCover Cover(EntityUid target, EntityUid attacker, LimbZone zone)
