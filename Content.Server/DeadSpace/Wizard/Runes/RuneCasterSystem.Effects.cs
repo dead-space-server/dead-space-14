@@ -351,6 +351,9 @@ public sealed partial class RuneCasterSystem
             case RuneRecallEffect:
                 ApplyRecall(ctx);
                 break;
+            case RuneMirrorCrowdEffect mirror:
+                ApplyMirrorCrowd(ctx, mirror);
+                break;
             case RuneChargeEffect charge:
                 ApplyCharge(ctx, charge);
                 break;
@@ -531,7 +534,7 @@ public sealed partial class RuneCasterSystem
 
             ScaleProjectilePayload(ent, power);
 
-            TagSource(ent, ctx, effect.OnHit, power / MathF.Max(0.01f, ctx.Power) * ctx.PowerScale);
+            TagSource(ent, ctx, effect.OnHit, power / MathF.Max(0.01f, ctx.Power) * ctx.PowerScale, effect.OnLand);
             _gun.ShootProjectile(ent, shot, velocity, ctx.Caster, ctx.Caster, effect.Speed);
         }
     }
@@ -566,14 +569,16 @@ public sealed partial class RuneCasterSystem
             if (blocked && effect.SkipBlocked)
                 continue;
 
-            var ent = Spawn(effect.Prototype, coords);
-            ScaleLifetime(ctx, ent, effect.Lifetime);
-            ScaleSpawned(ctx, ent);
+            SpawnSummoned(ctx, effect.Prototype, coords, ent =>
+            {
+                ScaleLifetime(ctx, ent, effect.Lifetime);
+                ScaleSpawned(ctx, ent);
 
-            if (effect.PassableByCaster)
-                EnsureComp<PreventCollideComponent>(ent).Uid = ctx.Caster;
+                if (effect.PassableByCaster)
+                    EnsureComp<PreventCollideComponent>(ent).Uid = ctx.Caster;
 
-            BindSpawned(ctx, ent);
+                BindSpawned(ctx, ent);
+            });
         }
     }
 
@@ -633,6 +638,8 @@ public sealed partial class RuneCasterSystem
 
         if (MathF.Abs(ctx.DurationScale - 1f) > 0.01f && TryComp<TimedDespawnComponent>(ent, out var despawn))
             despawn.Lifetime *= ctx.DurationScale;
+
+        ScaleBlaze(ent, ctx.DurationScale);
     }
 
     private void ApplySpawnRandom(RuneCastContext ctx, RuneSpawnRandomEffect effect)
@@ -652,21 +659,56 @@ public sealed partial class RuneCasterSystem
         for (var i = 0; i < count; i++)
         {
             var (coords, _) = effect.PerTile ? positions[i] : _random.Pick(positions);
-            var ent = Spawn(_random.Pick(effect.Prototypes), coords);
             float? lifetime = effect.LifetimeMax > effect.LifetimeMin
                 ? _random.NextFloat(effect.LifetimeMin, effect.LifetimeMax)
                 : effect.Lifetime;
-            ScaleLifetime(ctx, ent, lifetime);
-            ScaleSpawned(ctx, ent);
-
-            if (effect.NoGhostRole)
+            SpawnSummoned(ctx, _random.Pick(effect.Prototypes), coords, ent =>
             {
-                RemComp<GhostRoleComponent>(ent);
-                RemComp<GhostTakeoverAvailableComponent>(ent);
-            }
+                ScaleLifetime(ctx, ent, lifetime);
+                ScaleSpawned(ctx, ent);
 
-            BindSpawned(ctx, ent);
+                if (effect.NoGhostRole)
+                {
+                    RemComp<GhostRoleComponent>(ent);
+                    RemComp<GhostTakeoverAvailableComponent>(ent);
+                }
+
+                BindSpawned(ctx, ent);
+            });
         }
+    }
+
+    private void SpawnSummoned(RuneCastContext ctx, EntProtoId prototype, EntityCoordinates coords, Action<EntityUid> setup)
+    {
+        var form = ctx.Composition?.Form;
+        if (form?.SpawnPortal is not { } portalProto)
+        {
+            setup(Spawn(prototype, coords));
+            return;
+        }
+
+        var map = _transform.ToMapCoordinates(coords);
+        var portal = Spawn(portalProto, map);
+        var color = ctx.Composition!.Element.Color;
+        var tint = EnsureComp<RuneTintComponent>(portal);
+        tint.Color = color;
+        tint.Strength = 0.85f;
+        Dirty(portal, tint);
+        _pointLight.SetColor(portal, color);
+        Track(ctx, portal, RuneTrack.Exists);
+
+        var vanish = form.VanishOnCrit;
+        Robust.Shared.Timing.Timer.Spawn(TimeSpan.FromSeconds(SummonPortalDelay), () =>
+        {
+            if (TerminatingOrDeleted(ctx.Caster))
+                return;
+
+            var ent = Spawn(prototype, map);
+            if (vanish && HasComp<MobStateComponent>(ent))
+                EnsureComp<RuneVanishOnCritComponent>(ent);
+
+            setup(ent);
+        });
     }
 
     private List<(EntityCoordinates Coords, bool Blocked)> Positions(RuneCastContext ctx, RuneSpawnPattern pattern, int size, int rows = 1)
@@ -947,6 +989,10 @@ public sealed partial class RuneCasterSystem
         copy.StrainChanged = source.StrainChanged;
         copy.Home = source.Home;
         copy.UltimateReady = source.UltimateReady;
+        copy.Cooldowns = new Dictionary<string, RuneCooldown>(source.Cooldowns);
+        copy.LastElement = source.LastElement;
+        copy.LastSecond = source.LastSecond;
+        copy.ElementStreak = source.ElementStreak;
         Dirty(to, copy);
         RemComp<RuneCasterComponent>(from);
     }

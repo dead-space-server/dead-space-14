@@ -10,6 +10,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Standing;
 using Robust.Shared.Map;
+using Robust.Shared.Spawners;
 
 namespace Content.Server.DeadSpace.Wizard.Runes;
 
@@ -25,6 +26,10 @@ public sealed partial class RuneSpellSourceComponent : Component
     public float PowerScale = 1f;
 
     public List<RuneSpellEffect> OnHit = new();
+
+    public bool OnLand;
+
+    public bool Spent;
 }
 
 public sealed partial class RuneCasterSystem
@@ -37,6 +42,7 @@ public sealed partial class RuneCasterSystem
     {
         SubscribeLocalEvent<RuneMarkComponent, DamageModifyEvent>(OnMarkedDamage);
         SubscribeLocalEvent<RuneSpellSourceComponent, BeforeProjectileHitEvent>(OnSourceHit);
+        SubscribeLocalEvent<RuneSpellSourceComponent, TimedDespawnEvent>(OnSourceLand);
         SubscribeLocalEvent<MobStateComponent, HitByLightningEvent>(OnLightningHit);
     }
 
@@ -125,14 +131,28 @@ public sealed partial class RuneCasterSystem
         if (args.Target == ent.Comp.Caster || ent.Comp.Caster is not { } caster || TerminatingOrDeleted(caster))
             return;
 
-        var ctx = new RuneCastContext(caster, Transform(args.Target).Coordinates, args.Target, ent.Comp.Composition, ent.Comp.PowerScale);
-        if (HasComp<MobStateComponent>(args.Target))
+        var mob = HasComp<MobStateComponent>(args.Target);
+        var at = mob || !ent.Comp.OnLand ? Transform(args.Target).Coordinates : Transform(ent).Coordinates;
+        var ctx = new RuneCastContext(caster, at, args.Target, ent.Comp.Composition, ent.Comp.PowerScale);
+        if (mob)
         {
             var scale = ctx.Element != null ? Touch(ctx, args.Target) : ApplyMark(args.Target, ent.Comp.Element);
             if (MathF.Abs(scale - 1f) > 0.01f)
                 args.Damage *= scale;
         }
 
+        ent.Comp.Spent = true;
+        foreach (var effect in ent.Comp.OnHit)
+            Apply(ctx, effect);
+    }
+
+    private void OnSourceLand(Entity<RuneSpellSourceComponent> ent, ref TimedDespawnEvent args)
+    {
+        if (!ent.Comp.OnLand || ent.Comp.Spent || ent.Comp.Caster is not { } caster || TerminatingOrDeleted(caster))
+            return;
+
+        ent.Comp.Spent = true;
+        var ctx = new RuneCastContext(caster, Transform(ent).Coordinates, null, ent.Comp.Composition, ent.Comp.PowerScale);
         foreach (var effect in ent.Comp.OnHit)
             Apply(ctx, effect);
     }
@@ -143,7 +163,7 @@ public sealed partial class RuneCasterSystem
             Touch(_scope, ent);
     }
 
-    private void TagSource(EntityUid uid, RuneCastContext ctx, List<RuneSpellEffect>? onHit = null, float powerScale = 1f)
+    private void TagSource(EntityUid uid, RuneCastContext ctx, List<RuneSpellEffect>? onHit = null, float powerScale = 1f, bool onLand = false)
     {
         if (ctx.Element is not { } element)
             return;
@@ -153,6 +173,7 @@ public sealed partial class RuneCasterSystem
         source.Caster = ctx.Caster;
         source.Composition = ctx.Composition;
         source.PowerScale = powerScale;
+        source.OnLand = onLand;
         if (onHit != null)
             source.OnHit = onHit;
     }

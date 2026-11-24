@@ -144,6 +144,9 @@ public sealed partial class RuneProjectileEffect : RuneSpellEffect
 
     [DataField]
     public List<RuneSpellEffect> OnHit = new();
+
+    [DataField]
+    public bool OnLand;
 }
 
 public sealed partial class RuneSpawnEffect : RuneSpellEffect
@@ -394,6 +397,21 @@ public sealed partial class RuneParalyzeEffect : RuneTargetedEffect
 
 public sealed partial class RuneRecallEffect : RuneSpellEffect
 {
+}
+
+public sealed partial class RuneMirrorCrowdEffect : RuneSpellEffect
+{
+    [DataField]
+    public float Radius = 7f;
+
+    [DataField]
+    public float Duration = 10f;
+
+    [DataField]
+    public float StayChance = 0.25f;
+
+    [DataField]
+    public EntProtoId Smoke = "RuneMirrorSmoke";
 }
 
 public sealed partial class RuneOrbitShieldEffect : RuneSpellEffect

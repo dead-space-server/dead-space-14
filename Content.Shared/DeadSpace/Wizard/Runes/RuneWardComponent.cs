@@ -15,3 +15,10 @@ public sealed partial class RuneWardComponent : Component
     [DataField, AutoNetworkedField]
     public float Strength = 1f;
 }
+
+[RegisterComponent]
+public sealed partial class RuneHeatCapComponent : Component
+{
+    [DataField]
+    public float MaxTemperature = 373.15f;
+}

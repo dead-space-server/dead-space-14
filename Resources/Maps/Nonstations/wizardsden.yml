@@ -6560,8 +6560,6 @@ entities:
       inSlot: outerClothing
     - type: Physics
       canCollide: False
-    missingComponents:
-    - Armor
 - proto: ClothingOuterArmorMagusred
   entities:
   - uid: 937
@@ -6573,8 +6571,6 @@ entities:
       inSlot: outerClothing
     - type: Physics
       canCollide: False
-    missingComponents:
-    - Armor
 - proto: ClothingOuterCoat3eilado
   entities:
   - uid: 978
@@ -6605,8 +6601,6 @@ entities:
       rot: -0.47934451699256897 rad
       pos: -6.211337,-5.438344
       parent: 2
-    missingComponents:
-    - Armor
 - proto: ClothingOuterSuitCarp
   entities:
   - uid: 982

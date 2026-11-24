@@ -30,7 +30,7 @@ public sealed class RuneDrawnMessage : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
-public record struct RuneCooldown(TimeSpan Ready, float Length, string Name);
+public record struct RuneCooldown(TimeSpan Ready, float Length, string Name, TimeSpan Active = default, float ActiveLength = 0f);
 
 [Serializable, NetSerializable]
 public sealed class RuneFizzleMessage : EntityEventArgs

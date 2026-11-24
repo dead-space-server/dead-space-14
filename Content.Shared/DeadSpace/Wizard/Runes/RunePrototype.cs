@@ -117,4 +117,10 @@ public sealed partial class RunePrototype : IPrototype
 
     [DataField]
     public SpriteSpecifier? Icon;
+
+    [DataField]
+    public EntProtoId? SpawnPortal;
+
+    [DataField]
+    public bool VanishOnCrit;
 }

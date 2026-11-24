@@ -111,21 +111,34 @@ public sealed partial class RuneCasterSystem
         if (!TryComp<LimbBodyComponent>(target, out var limbs))
             return;
 
-        var amount = heal * LimbMendShare;
-        for (var i = 0; i < limbs.Zones.Count && i < LimbWoundRules.BodyZoneCount; i++)
+        var count = Math.Min(limbs.Zones.Count, LimbWoundRules.BodyZoneCount);
+        var total = 0f;
+        for (var i = 0; i < count; i++)
         {
-            if (limbs.Zones[i].Severed)
-                continue;
+            if (!limbs.Zones[i].Severed)
+                total += Wound(limbs.Zones[i]);
+        }
 
-            var edit = new LimbEdit
+        if (total > 0f)
+        {
+            var budget = heal * LimbMendShare;
+            for (var i = 0; i < count; i++)
             {
-                Flesh = -amount,
-                Bone = -amount,
-                Skin = -amount,
-                Bleed = -amount * 0.2f,
-                Health = amount,
-            };
-            _limbs.ApplyEdit(target, (LimbZone) i, edit);
+                var state = limbs.Zones[i];
+                var wound = Wound(state);
+                if (state.Severed || wound <= 0f)
+                    continue;
+
+                var amount = budget * wound / total;
+                var edit = new LimbEdit
+                {
+                    Flesh = -amount,
+                    Bone = -amount,
+                    Skin = -amount,
+                    Bleed = -amount * 0.2f,
+                };
+                _limbs.ApplyEdit(target, (LimbZone) i, edit);
+            }
         }
 
         if (!deep)
@@ -141,6 +154,11 @@ public sealed partial class RuneCasterSystem
             };
             _limbs.ApplyOrganEdit(target, organ, edit);
         }
+    }
+
+    private static float Wound(LimbZoneState state)
+    {
+        return MathF.Max(0f, state.Flesh) + MathF.Max(0f, state.Bone) + MathF.Max(0f, state.Skin) + MathF.Max(0f, state.Bleed);
     }
 
     private void StartRegeneration(EntityUid target, RuneRegenerationEntry entry)

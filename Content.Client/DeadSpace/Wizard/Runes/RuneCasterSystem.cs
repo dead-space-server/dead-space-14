@@ -2,6 +2,10 @@
 
 using System.Linq;
 using System.Numerics;
+using Content.Client.UserInterface.Systems.Alerts.Widgets;
+using Content.Client.UserInterface.Systems.Hotbar.Widgets;
+using Content.Client.UserInterface.Systems.Inventory.Widgets;
+using Content.Client.UserInterface.Systems.Storage.Controls;
 using Content.Client.Viewport;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Item;
@@ -77,6 +81,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         });
         SubscribeNetworkEvent<RuneQuillOpenEvent>(OnQuillOpen);
         SubscribeNetworkEvent<RuneCastResultEvent>(OnCastResult);
+        SubscribeNetworkEvent<RuneChainResetEvent>(OnChainReset);
         _outlineIn = Proto.Index(OutlineInRange).InstanceUnique();
         _outlineOut = Proto.Index(OutlineOutOfRange).InstanceUnique();
     }
@@ -146,6 +151,13 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         Refresh();
     }
 
+    private void OnChainReset(RuneChainResetEvent ev)
+    {
+        _chain.Clear();
+        _quickLeft = null;
+        Refresh();
+    }
+
     private RuneAim? ComputeAim()
     {
         if (_circle == null || _caster is not { } caster || TerminatingOrDeleted(caster) ||
@@ -193,15 +205,25 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         if (to.MapId != from.MapId)
             return;
 
-        RuneSpawnEffect? wall = null;
+        (int Size, int Rows, bool SkipBlocked)? wall = null;
         foreach (var effect in spell.Effects)
         {
-            if (effect is RuneSpawnEffect { Pattern: RuneSpawnPattern.LineAtPoint } line &&
-                (wall == null || line.Size * line.Rows > wall.Size * wall.Rows))
-                wall = line;
+            (int Size, int Rows, bool SkipBlocked, RuneSpawnPattern Pattern)? line = effect switch
+            {
+                RuneSpawnEffect spawn => (spawn.Size, spawn.Rows, spawn.SkipBlocked, spawn.Pattern),
+                RuneSpawnRandomEffect { PerTile: true } random => (random.Size, 1, random.SkipBlocked, random.Pattern),
+                _ => null,
+            };
+
+            if (line is not { } found)
+                continue;
+
+            var pattern = found.Pattern == RuneSpawnPattern.Auto ? composition.Form.AutoPattern : found.Pattern;
+            if (pattern == RuneSpawnPattern.LineAtPoint && (wall == null || found.Size * found.Rows > wall.Value.Size * wall.Value.Rows))
+                wall = (found.Size, found.Rows, found.SkipBlocked);
         }
 
-        if (wall == null)
+        if (wall is not { } shape)
             return;
 
         var direction = to.Position - from.Position;
@@ -212,8 +234,8 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             ? new Vector2(MathF.Sign(direction.X), 0f)
             : new Vector2(0f, MathF.Sign(direction.Y));
         var side = new Vector2(-forward.Y, forward.X);
-        var half = Math.Max(0, wall.Size + composition.Extra * 2 - 1) / 2;
-        var depth = Math.Max(0, wall.Rows - 1) / 2;
+        var half = Math.Max(0, shape.Size + composition.Extra * 2 - 1) / 2;
+        var depth = Math.Max(0, shape.Rows - 1) / 2;
 
         for (var row = -depth; row <= depth; row++)
         for (var i = -half; i <= half; i++)
@@ -226,7 +248,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             }
 
             var tile = _map.CoordinatesToTile(gridUid, grid, map);
-            var blocked = wall.SkipBlocked && _turf.IsTileBlocked(gridUid, tile, CollisionGroup.Impassable, grid);
+            var blocked = shape.SkipBlocked && _turf.IsTileBlocked(gridUid, tile, CollisionGroup.Impassable, grid);
             aim.Ghost.Add((_map.GridTileToWorldPos(gridUid, grid, tile), _transform.GetWorldRotation(gridUid), blocked));
         }
     }
@@ -328,9 +350,9 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             !TryCompose(_chain, out var composition) || composition.Spell == null)
             return true;
 
-        if (TryGetCooldown(comp, composition.Key, out var left, out _) && left > 0f)
+        if (TryGetCooldown(comp, composition.Key, out var left, out _, out var active) && left > 0f)
         {
-            _circle.Warn(Loc.GetString("rune-cast-cooldown", ("seconds", (int) MathF.Ceiling(left))));
+            _circle.Warn(Loc.GetString(active ? "rune-cast-active" : "rune-cast-cooldown", ("seconds", (int) MathF.Ceiling(left))));
             return false;
         }
 
@@ -459,10 +481,11 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
             Cooldown = CurrentCooldown,
             ActiveCooldowns = () => _caster is { } caster && TryComp<RuneCasterComponent>(caster, out var comp)
                 ? ActiveCooldowns(comp)
-                : new List<(string Name, float Left, float Fraction)>(),
+                : new List<(string Name, float Left, float Fraction, bool Active)>(),
             UltimateCooldown = () => _caster is { } caster && TryComp<RuneCasterComponent>(caster, out var comp) && TryGetUltimateCooldown(comp, out var left, out var fraction)
                 ? (left, fraction)
                 : null,
+            PassThrough = OverHud,
         };
         RebuildKnown(ent.Comp);
 
@@ -478,6 +501,41 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         _ui.PopupRoot.AddChild(_circle);
         LayoutContainer.SetAnchorAndMarginPreset(_circle, LayoutContainer.LayoutPreset.Wide);
         Refresh();
+    }
+
+    private bool OverHud(Vector2 pixel)
+    {
+        if (Hits(_ui.GetActiveUIWidgetOrNull<HotbarGui>(), pixel) ||
+            Hits(_ui.GetActiveUIWidgetOrNull<InventoryGui>(), pixel) ||
+            Hits(_ui.GetActiveUIWidgetOrNull<AlertsUI>(), pixel))
+            return true;
+
+        foreach (var window in _ui.WindowRoot.Children)
+        {
+            if (window is StorageWindow && Hits(window, pixel))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static bool Hits(Control? control, Vector2 pixel)
+    {
+        if (control == null || !control.Visible)
+            return false;
+
+        var position = (Vector2) control.GlobalPixelPosition;
+        if (control.MouseFilter != Control.MouseFilterMode.Ignore &&
+            new UIBox2(position, position + control.PixelSize).Contains(pixel))
+            return true;
+
+        foreach (var child in control.Children)
+        {
+            if (Hits(child, pixel))
+                return true;
+        }
+
+        return false;
     }
 
     private void ClearChain()
@@ -584,17 +642,17 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
         Refresh();
     }
 
-    private (float Left, float Fraction)? CurrentCooldown()
+    private (float Left, float Fraction, bool Active)? CurrentCooldown()
     {
         if (_caster is not { } caster || !TryComp<RuneCasterComponent>(caster, out var comp) || !TryCompose(_chain, out var composition))
             return null;
 
-        (float Left, float Fraction)? result = null;
-        if (TryGetCooldown(comp, composition.Key, out var left, out var fraction))
-            result = (left, fraction);
+        (float Left, float Fraction, bool Active)? result = null;
+        if (TryGetCooldown(comp, composition.Key, out var left, out var fraction, out var active))
+            result = (left, fraction, active);
 
         if (composition.Form.Ultimate && TryGetUltimateCooldown(comp, out var ultimateLeft, out var ultimateFraction) && ultimateLeft > (result?.Left ?? 0f))
-            result = (ultimateLeft, ultimateFraction);
+            result = (ultimateLeft, ultimateFraction, false);
 
         return result;
     }

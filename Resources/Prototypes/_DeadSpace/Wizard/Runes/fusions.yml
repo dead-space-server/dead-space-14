@@ -16,6 +16,11 @@
         Heat: 8
         Cold: 8
         Structural: 40
+  - !type:RuneDecayEffect
+    radius: 1.5
+    damage:
+      types:
+        Structural: 100
   - !type:RuneKnockdownEffect
     target: Auto
     radius: 2
@@ -361,7 +366,8 @@
   first: RuneElementEarth
   second: RuneElementVoid
   strain: 18
-  cooldown: 180
+  formCooldowns:
+    RuneFormSelf: 180
   loudness: 2
   effects:
   - !type:RunePushEffect
@@ -532,6 +538,8 @@
   first: RuneElementVoid
   second: RuneElementChaos
   strain: 12
+  formCooldowns:
+    RuneFormTouch: 180
   absurdity: 2
   effects:
   - !type:RuneTeleportEffect
@@ -658,7 +666,7 @@
   name: rune-fusion-whirlpool
   first: RuneElementWater
   second: RuneElementVoid
-  strain: 18
+  strain: 8
   loudness: 2
   effects:
   - !type:RunePushEffect
@@ -807,6 +815,7 @@
   first: RuneElementAir
   second: RuneElementLightning
   strain: 24
+  cooldown: 75
   loudness: 3
   effects:
   - !type:RuneSpawnEffect

@@ -22,6 +22,11 @@ public sealed class RuneSigilClearMessage : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
+public sealed class RuneChainResetEvent : EntityEventArgs
+{
+}
+
+[Serializable, NetSerializable]
 public sealed class RuneSigilUndoMessage : EntityEventArgs
 {
     public readonly List<string> Chain;

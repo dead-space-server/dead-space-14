@@ -87,6 +87,7 @@
   strain: 14
   cooldown: 30
   loudness: 1
+  holdCooldown: false
   effects:
   - !type:RuneDamageEffect
     target: Caster

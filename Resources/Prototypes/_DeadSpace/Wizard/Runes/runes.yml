@@ -38,6 +38,8 @@
   autoPattern: LineAtPoint
   holdCooldown: true
   fusable: false
+  forbids:
+  - RuneModifierPower
   color: "#c9b59a"
   strain: 4
   order: 1
@@ -120,6 +122,8 @@
   forbids:
   - RuneModifierSwarm
   - RuneModifierRange
+  - RuneModifierPower
+  - RuneModifierEcho
   color: "#f5f5ff"
   strain: 3
   order: 4
@@ -198,6 +202,8 @@
   autoPattern: AtPoint
   holdCooldown: true
   fusable: false
+  spawnPortal: RuneSummonPortal
+  vanishOnCrit: true
   forbids:
   - RuneModifierPower
   - RuneModifierEcho

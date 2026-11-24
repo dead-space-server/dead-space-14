@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
+using Content.Server.Spawners.Components;
 using Content.Server.Temperature.Systems;
 using Content.Shared.Atmos;
 using Content.Shared.Body.Components;
@@ -79,6 +80,12 @@ public sealed partial class RuneBlazeComponent : Component
     public TimeSpan End;
 }
 
+[RegisterComponent]
+public sealed partial class RuneBlazeSeedComponent : Component
+{
+    public float Scale = 1f;
+}
+
 public sealed partial class RuneCasterSystem
 {
     [Dependency] private readonly TemperatureSystem _temperature = default!;
@@ -97,6 +104,28 @@ public sealed partial class RuneCasterSystem
         SubscribeLocalEvent<RuneVacuumComponent, SpeakAttemptEvent>(OnVacuumSpeak);
         SubscribeLocalEvent<RuneVacuumComponent, InhaleLocationEvent>(OnVacuumInhale, after: new[] { typeof(InternalsSystem) });
         SubscribeLocalEvent<RuneBlazeComponent, MapInitEvent>(OnBlazeInit);
+        SubscribeLocalEvent<RuneHeatCapComponent, BeforeDamageChangedEvent>(OnHeatCapDamage);
+    }
+
+    private void OnHeatCapDamage(Entity<RuneHeatCapComponent> ent, ref BeforeDamageChangedEvent args)
+    {
+        if (args.Origin != null)
+            return;
+
+        var heat = false;
+        foreach (var (type, value) in args.Damage.DamageDict)
+        {
+            if (value <= FixedPoint2.Zero)
+                continue;
+
+            if (type != "Heat")
+                return;
+
+            heat = true;
+        }
+
+        if (heat)
+            args.Cancelled = true;
     }
 
     private void OnVacuumInhale(Entity<RuneVacuumComponent> ent, ref InhaleLocationEvent args)
@@ -106,17 +135,42 @@ public sealed partial class RuneCasterSystem
 
     private void OnBlazeInit(Entity<RuneBlazeComponent> ent, ref MapInitEvent args)
     {
-        ent.Comp.End = Timing.CurTime + TimeSpan.FromSeconds(ent.Comp.Lifetime);
-        foreach (var other in _lookup.GetEntitiesInRange<RuneBlazeComponent>(_transform.GetMapCoordinates(ent), 1.5f))
+        var at = _transform.GetMapCoordinates(ent);
+        TimeSpan? inherited = null;
+        foreach (var other in _lookup.GetEntitiesInRange<RuneBlazeComponent>(at, 1.5f))
         {
-            if (other.Owner != ent.Owner && other.Comp.End > TimeSpan.Zero && other.Comp.End < ent.Comp.End)
-                ent.Comp.End = other.Comp.End;
+            if (other.Owner != ent.Owner && other.Comp.End > TimeSpan.Zero && (inherited == null || other.Comp.End < inherited))
+                inherited = other.Comp.End;
         }
+
+        var scale = 1f;
+        foreach (var seed in _lookup.GetEntitiesInRange<RuneBlazeSeedComponent>(at, 0.5f))
+            scale = MathF.Max(scale, seed.Comp.Scale);
+
+        ent.Comp.End = inherited ?? Timing.CurTime + TimeSpan.FromSeconds(ent.Comp.Lifetime * scale);
+    }
+
+    private void ScaleBlaze(EntityUid uid, float durationScale)
+    {
+        if (MathF.Abs(durationScale - 1f) <= 0.01f)
+            return;
+
+        if (TryComp<RuneBlazeComponent>(uid, out var blaze))
+            blaze.End = Timing.CurTime + TimeSpan.FromSeconds(blaze.Lifetime * durationScale);
+        else if (HasComp<SpawnOnDespawnComponent>(uid))
+            EnsureComp<RuneBlazeSeedComponent>(uid).Scale = durationScale;
     }
 
     private void UpdateHazards()
     {
         var now = Timing.CurTime;
+
+        var capped = EntityQueryEnumerator<RuneHeatCapComponent, TemperatureComponent>();
+        while (capped.MoveNext(out var uid, out var cap, out var temperature))
+        {
+            if (temperature.CurrentTemperature > cap.MaxTemperature)
+                _temperature.ForceChangeTemperature(uid, cap.MaxTemperature, temperature);
+        }
 
         var blazes = EntityQueryEnumerator<RuneBlazeComponent>();
         while (blazes.MoveNext(out var uid, out var blaze))

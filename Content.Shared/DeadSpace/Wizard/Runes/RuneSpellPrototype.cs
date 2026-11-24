@@ -60,6 +60,9 @@ public sealed partial class RuneSpellPrototype : IPrototype
     [DataField]
     public List<ProtoId<RunePrototype>> Allows = new();
 
+    [DataField]
+    public bool? HoldCooldown;
+
     [DataField(required: true)]
     public List<RuneSpellEffect> Effects = new();
 }
@@ -67,6 +70,7 @@ public sealed partial class RuneSpellPrototype : IPrototype
 public sealed class RuneSpell
 {
     public string ID = string.Empty;
+    public string? CooldownKey;
     public LocId Name;
     public ProtoId<RunePrototype> Form;
     public ProtoId<RunePrototype> Element;
@@ -121,7 +125,7 @@ public sealed class RuneSpell
             RequiresWounded = proto.RequiresWounded,
             OncePerRound = proto.OncePerRound,
             Effects = proto.Effects,
-            HoldCooldown = form?.HoldCooldown ?? false,
+            HoldCooldown = proto.HoldCooldown ?? form?.HoldCooldown ?? false,
             MaxActive = form?.MaxActive ?? 0,
         };
     }
@@ -130,6 +134,9 @@ public sealed class RuneSpell
     {
         if (form.Ultimate)
             return fusion.Cooldown ?? form.SpellCooldown;
+
+        if (fusion.FormCooldowns.TryGetValue(form.ID, out var own))
+            return own;
 
         var rule = FusionCooldown;
         if (fusion.First == LifeElement || fusion.Second == LifeElement)
@@ -151,6 +158,7 @@ public sealed class RuneSpell
         return new RuneSpell
         {
             ID = form.ID + "+" + fusion.ID,
+            CooldownKey = form.Ultimate ? null : fusion.ID,
             Name = fusion.Name,
             Form = form.ID,
             Element = fusion.First,
@@ -185,6 +193,9 @@ public sealed partial class RuneFusionPrototype : IPrototype
 
     [DataField]
     public float? Cooldown;
+
+    [DataField]
+    public Dictionary<ProtoId<RunePrototype>, float> FormCooldowns = new();
 
     [DataField]
     public int Loudness;

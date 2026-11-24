@@ -90,7 +90,7 @@ public sealed class RuneComposition
         }
     }
 
-    public string Key => Spell?.ID ?? Form.ID + Element.ID;
+    public string Key => Spell?.CooldownKey ?? Spell?.ID ?? Form.ID + Element.ID;
 }
 
 public abstract class SharedRuneCasterSystem : EntitySystem
@@ -195,27 +195,36 @@ public abstract class SharedRuneCasterSystem : EntitySystem
         return caster.MaxStrain <= 0f ? 0f : GetStrain(caster) / caster.MaxStrain;
     }
 
-    public bool TryGetCooldown(RuneCasterComponent caster, string key, out float left, out float fraction)
+    public bool TryGetCooldown(RuneCasterComponent caster, string key, out float left, out float fraction, out bool active)
     {
         left = 0f;
         fraction = 0f;
+        active = false;
         if (!caster.Cooldowns.TryGetValue(key, out var cooldown))
             return false;
 
-        return Remaining(cooldown.Ready, cooldown.Length, out left, out fraction);
+        return Phase(cooldown, out left, out fraction, out active);
     }
 
-    public List<(string Name, float Left, float Fraction)> ActiveCooldowns(RuneCasterComponent caster)
+    private bool Phase(RuneCooldown cooldown, out float left, out float fraction, out bool active)
     {
-        var list = new List<(string Name, float Left, float Fraction)>();
+        active = cooldown.Active > Timing.CurTime;
+        return active
+            ? Remaining(cooldown.Active, cooldown.ActiveLength, out left, out fraction)
+            : Remaining(cooldown.Ready, cooldown.Length, out left, out fraction);
+    }
+
+    public List<(string Name, float Left, float Fraction, bool Active)> ActiveCooldowns(RuneCasterComponent caster)
+    {
+        var list = new List<(string Name, float Left, float Fraction, bool Active)>();
         foreach (var cooldown in caster.Cooldowns.Values)
         {
-            if (Remaining(cooldown.Ready, cooldown.Length, out var left, out var fraction))
-                list.Add((Loc.GetString(cooldown.Name), left, fraction));
+            if (Phase(cooldown, out var left, out var fraction, out var active))
+                list.Add((Loc.GetString(cooldown.Name), left, fraction, active));
         }
 
         if (Remaining(caster.UltimateReady, caster.UltimateCooldown, out var ultimateLeft, out var ultimateFraction))
-            list.Add((Loc.GetString("rune-circle-ultimate-cooldown"), ultimateLeft, ultimateFraction));
+            list.Add((Loc.GetString("rune-circle-ultimate-cooldown"), ultimateLeft, ultimateFraction, false));
 
         list.Sort((a, b) => a.Left.CompareTo(b.Left));
         return list;

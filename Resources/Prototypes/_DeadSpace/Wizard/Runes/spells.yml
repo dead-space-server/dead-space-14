@@ -108,6 +108,8 @@
   strain: 20
   cooldown: 10
   absurdity: 1
+  forbids:
+  - RuneModifierPower
   effects:
   - !type:RuneRandomEffect
     options:
@@ -122,18 +124,30 @@
         sprite:
           sprite: Objects/Fun/ducky.rsi
           state: icon
-    - !type:RuneSpawnRandomEffect
-      prototypes:
-      - RuneChaosBanana
-      pattern: AreaAtPoint
-      size: 2
-      count: 6
-    - !type:RuneSpawnRandomEffect
-      prototypes:
-      - RuneChaosPie
-      pattern: AreaAtPoint
-      size: 1
-      count: 3
+    - !type:RuneProjectileEffect
+      prototype: RuneProjectileChaosBanana
+      speed: 14
+      onLand: true
+      onHit:
+      - !type:RuneSpawnRandomEffect
+        prototypes:
+        - RuneChaosBanana
+        pattern: AreaAtPoint
+        size: 2
+        count: 6
+        skipBlocked: true
+    - !type:RuneProjectileEffect
+      prototype: RuneProjectileChaosPie
+      speed: 14
+      onLand: true
+      onHit:
+      - !type:RuneSpawnRandomEffect
+        prototypes:
+        - RuneChaosPie
+        pattern: AreaAtPoint
+        size: 1
+        count: 3
+        skipBlocked: true
 
 # Стена
 
@@ -535,7 +549,7 @@
   element: RuneElementVoid
   targeting: Entity
   range: 2
-  strain: 80
+  strain: 60
   cooldown: 180
   loudness: 4
   requiresClothes: true
@@ -553,7 +567,7 @@
   element: RuneElementChaos
   targeting: Entity
   range: 2
-  strain: 84
+  strain: 64
   cooldown: 150
   absurdity: 2
   requiresClothes: true
@@ -690,7 +704,8 @@
   element: RuneElementVoid
   targeting: Self
   strain: 22
-  cooldown: 30
+  cooldown: 40
+  holdCooldown: false
   effects:
   - !type:RunePolymorphEffect
     target: Caster
@@ -706,46 +721,12 @@
   strain: 14
   cooldown: 30
   absurdity: 2
+  holdCooldown: false
   effects:
-  - !type:RuneRandomEffect
-    options:
-    - !type:RuneComponentsEffect
-      target: Caster
-      template: RunePhoenixTemplate
-      duration: 20
-      alert: RuneAlertPhoenix
-    - !type:RuneComponentsEffect
-      target: Caster
-      template: RuneIceArmorTemplate
-      duration: 20
-      alert: RuneAlertIceArmor
-    - !type:RuneOrbitShieldEffect
-      count: 3
-      duration: 20
-      alert: RuneAlertStoneShields
-    - !type:RuneComponentsEffect
-      target: Caster
-      template: RuneLightningRodTemplate
-      duration: 15
-      alert: RuneAlertLightningRod
-    - !type:RuneRegenerationEffect
-      target: Caster
-      duration: 15
-      alert: RuneAlertRegeneration
-      healPerSecond: 3
-    - !type:RuneComponentsEffect
-      target: Caster
-      template: RuneWaterBubbleTemplate
-      duration: 30
-      alert: RuneAlertWaterBubble
-    - !type:RuneComponentsEffect
-      target: Caster
-      template: RuneViperBloodTemplate
-      duration: 30
-      alert: RuneAlertViperBlood
-    - !type:RuneTeleportEffect
-      mode: ScatterCaster
-      radius: 6
+  - !type:RuneMirrorCrowdEffect
+    radius: 7
+    duration: 10
+    stayChance: 0.25
 
 # Призыв
 

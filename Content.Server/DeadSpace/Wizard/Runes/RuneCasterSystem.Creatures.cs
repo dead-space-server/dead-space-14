@@ -12,6 +12,7 @@ using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Item;
 using Content.Shared.Magic.Events;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
@@ -22,6 +23,7 @@ using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
@@ -214,10 +216,19 @@ public sealed partial class RuneHealOrbComponent : Component
     public float Amount;
 }
 
+[RegisterComponent]
+public sealed partial class RuneVanishOnCritComponent : Component
+{
+}
+
 public sealed partial class RuneCasterSystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
+    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
+
+    private const float SummonPortalDelay = 1f;
+    private static readonly EntProtoId SummonVanishSmoke = "RuneMirrorSmoke";
 
     private const float AnimateMinDamage = 0.5f;
     private const float AnimateMaxDamage = 1.5f;
@@ -234,6 +245,16 @@ public sealed partial class RuneCasterSystem
     {
         SubscribeLocalEvent<RuneAnimateStrikeComponent, MeleeHitEvent>(OnAnimateStrike);
         SubscribeLocalEvent<RuneStoneFistsComponent, MeleeHitEvent>(OnStoneFistsHit);
+        SubscribeLocalEvent<RuneVanishOnCritComponent, MobStateChangedEvent>(OnSummonState);
+    }
+
+    private void OnSummonState(Entity<RuneVanishOnCritComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (args.NewMobState is not (MobState.Critical or MobState.Dead) || TerminatingOrDeleted(ent))
+            return;
+
+        Spawn(SummonVanishSmoke, Transform(ent).Coordinates);
+        QueueDel(ent);
     }
 
     private void OnStoneFistsHit(Entity<RuneStoneFistsComponent> ent, ref MeleeHitEvent args)

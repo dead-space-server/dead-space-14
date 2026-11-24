@@ -5,7 +5,6 @@ using System.Numerics;
 using Content.Client.Stylesheets;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Input;
-using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -29,14 +28,17 @@ public sealed class RuneCircleControl : LayoutContainer
     public bool SecondElement;
     public Func<float>? Strain;
 
-    public Func<(float Left, float Fraction)?>? Cooldown;
+    public Func<(float Left, float Fraction, bool Active)?>? Cooldown;
 
     public Func<(float Left, float Fraction)?>? UltimateCooldown;
 
-    public Func<List<(string Name, float Left, float Fraction)>>? ActiveCooldowns;
+    public Func<List<(string Name, float Left, float Fraction, bool Active)>>? ActiveCooldowns;
+
+    public Func<Vector2, bool>? PassThrough;
 
     private static readonly Color Ink = Color.FromHex("#b89cff");
     private static readonly Color CooldownColor = Color.FromHex("#7fc8ff");
+    private static readonly Color ActiveColor = Color.FromHex("#c06cff");
     private static readonly Color Ember = Color.FromHex("#ffa24a");
     private static readonly Color Danger = Color.FromHex("#ff3b4a");
     private static readonly Color Night = Color.FromHex("#0b0614");
@@ -52,7 +54,6 @@ public sealed class RuneCircleControl : LayoutContainer
     private const float BurstTime = 0.7f;
 
     private readonly IClyde _clyde;
-    private readonly SpriteSystem _sprite;
     private readonly List<Vector2> _stroke = new();
     private List<Vector2> _last = new();
     private Color _lastColor = Good;
@@ -133,7 +134,6 @@ public sealed class RuneCircleControl : LayoutContainer
     {
         MouseFilter = MouseFilterMode.Stop;
         _clyde = IoCManager.Resolve<IClyde>();
-        _sprite = IoCManager.Resolve<IEntityManager>().System<SpriteSystem>();
         var cache = IoCManager.Resolve<IResourceCache>();
         _font = cache.NotoStack(variation: "Bold", size: 12);
         _small = cache.NotoStack(size: 9);
@@ -268,6 +268,15 @@ public sealed class RuneCircleControl : LayoutContainer
         }
 
         return height;
+    }
+
+    protected override bool HasPoint(Vector2 point)
+    {
+        if (_drawing || _dragging || PassThrough == null ||
+            point.X >= PanelX && point.X <= PanelX + PanelWidth && point.Y >= PanelY && point.Y <= PanelY + PanelHeight)
+            return base.HasPoint(point);
+
+        return !PassThrough(GlobalPixelPosition + point * UIScale) && base.HasPoint(point);
     }
 
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
@@ -420,7 +429,7 @@ public sealed class RuneCircleControl : LayoutContainer
         var dim = Chain.Exists(r => r.ID == WhisperRune) ? 0.5f : 1f;
 
         DrawPanel(handle, tint, scale);
-        var cooldowns = ActiveCooldowns?.Invoke() ?? new List<(string Name, float Left, float Fraction)>();
+        var cooldowns = ActiveCooldowns?.Invoke() ?? new List<(string Name, float Left, float Fraction, bool Active)>();
         if (cooldowns.Count > MaxCooldownRows)
             cooldowns.RemoveRange(MaxCooldownRows, cooldowns.Count - MaxCooldownRows);
         var listHeight = cooldowns.Count == 0 ? 0f : MathF.Min(_listHeight, 22f + cooldowns.Count * 18f);
@@ -525,40 +534,10 @@ public sealed class RuneCircleControl : LayoutContainer
 
         var top = c + new Vector2(0f, -r);
         var medal = 17f * scale;
-        Texture(handle, RuneCircleArt.Glow(_clyde), top, medal * 4f, 0f, form.Color.WithAlpha(0.35f * dim));
-        if (DrawIcon(handle, form, top, medal * 2.4f, dim))
-            return;
-
         handle.DrawCircle(top, medal, Night);
+        Texture(handle, RuneCircleArt.Glow(_clyde), top, medal * 4f, 0f, form.Color.WithAlpha(0.35f * dim));
         Texture(handle, RuneCircleArt.Ring(_clyde, 2f * scale * RuneCircleArt.RingSize / RuneCircleArt.RingDiameter(medal)), top, RuneCircleArt.RingDiameter(medal), 0f, form.Color.WithAlpha(dim));
         DrawGlyph(handle, form.Stroke, UIBox2.FromDimensions(top - new Vector2(medal * 0.8f), new Vector2(medal * 1.6f)), form.Color.WithAlpha(dim), 1.8f * scale);
-    }
-
-    private void DrawElementMedals(DrawingHandleScreen handle, Vector2 c, float r, RunePrototype first, RunePrototype? second, float scale, float dim)
-    {
-        var medal = 14f * scale;
-        var spread = second != null ? medal * 1.25f : 0f;
-        DrawElementMedal(handle, first, c + new Vector2(-spread, r), medal, dim);
-        if (second != null)
-            DrawElementMedal(handle, second, c + new Vector2(spread, r), medal, dim);
-    }
-
-    private void DrawElementMedal(DrawingHandleScreen handle, RunePrototype element, Vector2 at, float medal, float dim)
-    {
-        if (element.Icon == null)
-            return;
-
-        Texture(handle, RuneCircleArt.Glow(_clyde), at, medal * 3.5f, 0f, element.Color.WithAlpha(0.3f * dim));
-        DrawIcon(handle, element, at, medal * 2.4f, dim);
-    }
-
-    private bool DrawIcon(DrawingHandleScreen handle, RunePrototype rune, Vector2 center, float size, float alpha)
-    {
-        if (rune.Icon is not { } icon)
-            return false;
-
-        handle.DrawTextureRect(_sprite.Frame0(icon), UIBox2.FromDimensions(center - new Vector2(size / 2f), new Vector2(size)), Color.White.WithAlpha(alpha));
-        return true;
     }
 
     private void DrawElementBand(DrawingHandleScreen handle, Vector2 c, float big, float scale, float dim)
@@ -593,7 +572,6 @@ public sealed class RuneCircleControl : LayoutContainer
         Texture(handle, RuneCircleArt.Comet(_clyde, width * 0.9f * texel), c, diameter, _time * speed + MathF.PI, sheen.WithAlpha(sheen.A * 0.6f));
 
         DrawMotes(handle, c, r, width, first, second, scale, dim);
-        DrawElementMedals(handle, c, r, first, second, scale, dim);
     }
 
     private Color ElementTint(RunePrototype element, float offset)
@@ -844,12 +822,13 @@ public sealed class RuneCircleControl : LayoutContainer
         var captionColor = Preview != null ? Color.InterpolateBetween(Color.White, tint, 0.3f) : Color.White.WithAlpha(0.5f);
         Centered(handle, Preview != null ? _font : _small, caption, new Vector2((left + right) / 2f, top), captionColor);
         if (Preview != null && Cooldown?.Invoke() is { } cooldown)
-            DrawCooldownBar(handle, new Vector2((left + right) / 2f, top + 20f * scale), right - left - 40f * scale, cooldown.Left, cooldown.Fraction, scale);
+            DrawCooldownBar(handle, new Vector2((left + right) / 2f, top + 20f * scale), right - left - 40f * scale, cooldown.Left, cooldown.Fraction, cooldown.Active, scale);
     }
 
-    private void DrawCooldownBar(DrawingHandleScreen handle, Vector2 top, float width, float left, float fraction, float scale)
+    private void DrawCooldownBar(DrawingHandleScreen handle, Vector2 top, float width, float left, float fraction, bool active, float scale)
     {
-        var text = Loc.GetString("rune-circle-cooldown", ("time", FormatSeconds(left)));
+        var color = active ? ActiveColor : CooldownColor;
+        var text = Loc.GetString(active ? "rune-circle-active" : "rune-circle-cooldown", ("time", FormatSeconds(left)));
         var textWidth = TextWidth(_small, text);
         var gap = 8f * scale;
         var barWidth = MathF.Max(20f * scale, width - textWidth - gap);
@@ -857,9 +836,9 @@ public sealed class RuneCircleControl : LayoutContainer
         var mid = top.Y + 7f * scale;
 
         Quad(handle, new Vector2(start, mid), new Vector2(start + barWidth, mid), 4f * scale, Night.WithAlpha(0.9f));
-        Quad(handle, new Vector2(start, mid), new Vector2(start + barWidth * fraction, mid), 3f * scale, CooldownColor);
-        Texture(handle, RuneCircleArt.Glow(_clyde), new Vector2(start + barWidth * fraction, mid), 12f * scale, 0f, CooldownColor);
-        handle.DrawString(_small, new Vector2(start + barWidth + gap, top.Y), text, CooldownColor);
+        Quad(handle, new Vector2(start, mid), new Vector2(start + barWidth * fraction, mid), 3f * scale, color);
+        Texture(handle, RuneCircleArt.Glow(_clyde), new Vector2(start + barWidth * fraction, mid), 12f * scale, 0f, color);
+        handle.DrawString(_small, new Vector2(start + barWidth + gap, top.Y), text, color);
     }
 
     private void DrawCooldownDial(DrawingHandleScreen handle, Vector2 center, float radius, float left, float fraction, float scale)
@@ -926,7 +905,7 @@ public sealed class RuneCircleControl : LayoutContainer
         Centered(handle, _small, Loc.GetString("rune-circle-guide", ("rune", Loc.GetString(rune.Name))), new Vector2(c.X, rect.Bottom - 2f * scale), rune.Color.WithAlpha(0.85f));
     }
 
-    private void DrawCooldownList(DrawingHandleScreen handle, List<(string Name, float Left, float Fraction)> cooldowns, float x, float width, float top, float scale)
+    private void DrawCooldownList(DrawingHandleScreen handle, List<(string Name, float Left, float Fraction, bool Active)> cooldowns, float x, float width, float top, float scale)
     {
         if (cooldowns.Count == 0)
             return;
@@ -935,8 +914,9 @@ public sealed class RuneCircleControl : LayoutContainer
         Line(handle, new Vector2(x, top + 15f) * scale, new Vector2(x + width, top + 15f) * scale, 1f * scale, CooldownColor.WithAlpha(0.2f));
 
         var y = top + 22f;
-        foreach (var (name, left, fraction) in cooldowns)
+        foreach (var (name, left, fraction, active) in cooldowns)
         {
+            var color = active ? ActiveColor : CooldownColor;
             var time = FormatSeconds(left);
             var timeWidth = TextWidth(_small, time);
             var barStart = (x + width * 0.55f) * scale;
@@ -945,8 +925,8 @@ public sealed class RuneCircleControl : LayoutContainer
 
             handle.DrawString(_small, new Vector2(x, y) * scale, Fit(_small, name, width * 0.55f * scale - 6f * scale), Color.White.WithAlpha(0.8f));
             Quad(handle, new Vector2(barStart, mid), new Vector2(barEnd, mid), 4f * scale, Night.WithAlpha(0.9f));
-            Quad(handle, new Vector2(barStart, mid), new Vector2(barStart + (barEnd - barStart) * fraction, mid), 3f * scale, CooldownColor);
-            handle.DrawString(_small, new Vector2((x + width) * scale - timeWidth, y * scale), time, CooldownColor);
+            Quad(handle, new Vector2(barStart, mid), new Vector2(barStart + (barEnd - barStart) * fraction, mid), 3f * scale, color);
+            handle.DrawString(_small, new Vector2((x + width) * scale - timeWidth, y * scale), time, color);
             y += 18f;
         }
     }
@@ -1070,7 +1050,7 @@ public sealed class RuneCircleControl : LayoutContainer
             Centered(handle, _big, Preview, new Vector2(c.X + 1f * scale, y + 1f * scale), Night);
             Centered(handle, _big, Preview, new Vector2(c.X, y), Color.InterpolateBetween(Color.White, glow, 0.3f));
             if (Cooldown?.Invoke() is { } cooldown)
-                DrawCooldownBar(handle, new Vector2(c.X, y + 30f * scale), 150f * scale, cooldown.Left, cooldown.Fraction, scale);
+                DrawCooldownBar(handle, new Vector2(c.X, y + 30f * scale), 150f * scale, cooldown.Left, cooldown.Fraction, cooldown.Active, scale);
             return;
         }
 
@@ -1129,15 +1109,12 @@ public sealed class RuneCircleControl : LayoutContainer
                 if (hovered)
                     _hover = rune;
                 var alpha = active || hovered ? 1f : 0.35f;
+                var diameter = RuneCircleArt.RingDiameter(box / 2f);
+                handle.DrawCircle(center, box / 2f, Night);
+                Texture(handle, RuneCircleArt.Ring(_clyde, 1.3f * scale * RuneCircleArt.RingSize / diameter), center, diameter, 0f, rune.Color.WithAlpha(0.7f * alpha));
                 if (active)
                     Texture(handle, RuneCircleArt.Glow(_clyde), center, box * 1.8f, 0f, rune.Color.WithAlpha(0.12f));
-                if (!DrawIcon(handle, rune, center, box * 1.3f, alpha))
-                {
-                    var diameter = RuneCircleArt.RingDiameter(box / 2f);
-                    handle.DrawCircle(center, box / 2f, Night);
-                    Texture(handle, RuneCircleArt.Ring(_clyde, 1.3f * scale * RuneCircleArt.RingSize / diameter), center, diameter, 0f, rune.Color.WithAlpha(0.7f * alpha));
-                    DrawGlyph(handle, rune.Stroke, UIBox2.FromDimensions(center - new Vector2(box * 0.42f), new Vector2(box * 0.84f)), rune.Color.WithAlpha(alpha), 1.4f * scale);
-                }
+                DrawGlyph(handle, rune.Stroke, UIBox2.FromDimensions(center - new Vector2(box * 0.42f), new Vector2(box * 0.84f)), rune.Color.WithAlpha(alpha), 1.4f * scale);
                 var name = Loc.GetString(rune.Name);
                 var room = cell - 4f * scale;
                 var nameFont = TextWidth(_small, name) <= room ? _small : _tiny;

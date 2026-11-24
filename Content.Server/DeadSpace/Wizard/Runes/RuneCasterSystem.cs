@@ -43,6 +43,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
+    [Dependency] private readonly RotateToFaceSystem _rotateTo = default!;
 
     private static readonly ProtoId<RuneSurgePrototype> MisfireSurge = "WizardRuneSurge";
     private const string BloodDamage = "Slash";
@@ -77,6 +78,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         InitializeCreatures();
         InitializeDoom();
         InitializeActive();
+        InitializeSlip();
     }
 
     public override void Update(float frameTime)
@@ -97,6 +99,8 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         UpdateDoom();
         UpdateScrollHats();
         UpdateActive();
+        UpdateSlip();
+        UpdateMirrors();
     }
 
     private void OnMapInit(Entity<RuneCasterComponent> ent, ref MapInitEvent args)
@@ -302,6 +306,12 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
 
         if (caster.Comp.Cooldowns.TryGetValue(composition.Key, out var cooldown) && Timing.CurTime < cooldown.Ready)
         {
+            if (Timing.CurTime < cooldown.Active)
+            {
+                var running = (int) MathF.Ceiling((float) (cooldown.Active - Timing.CurTime).TotalSeconds);
+                return Fail(caster, Loc.GetString("rune-cast-active", ("seconds", running)));
+            }
+
             var left = (int) MathF.Ceiling((float) (cooldown.Ready - Timing.CurTime).TotalSeconds);
             return Fail(caster, Loc.GetString("rune-cast-cooldown", ("seconds", left)));
         }
@@ -318,6 +328,9 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
             {
                 return Fail(caster, Loc.GetString("rune-cast-range"));
             }
+
+            if ((to.Position - from.Position).LengthSquared() > 0.01f)
+                _rotateTo.TryFaceCoordinates(caster, to.Position);
         }
 
         var entity = FindTarget(caster, target, spell.Targeting == RuneTargeting.EntityOrSelf);

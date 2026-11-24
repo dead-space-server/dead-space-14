@@ -81,9 +81,9 @@ public sealed partial class RuneCasterSystem
             return;
         }
 
-        entry.Length = remaining + entry.Cooldown;
+        entry.Length = remaining;
         EnsureComp<RuneActiveSpellsComponent>(caster).Spells.Add(entry);
-        SetCooldown(caster, entry.Key, remaining + entry.Cooldown, entry.Length, entry.Name);
+        SetCooldown(caster, entry.Key, remaining + entry.Cooldown, entry.Cooldown, entry.Name, remaining, entry.Length);
     }
 
     private void Track(RuneCastContext ctx, EntityUid uid, RuneTrack kind)
@@ -132,8 +132,8 @@ public sealed partial class RuneCasterSystem
                 if (!caster.Cooldowns.TryGetValue(entry.Key, out var cooldown) ||
                     Math.Abs((cooldown.Ready - ready).TotalSeconds) > CooldownDrift)
                 {
-                    entry.Length = MathF.Max(entry.Length, remaining + entry.Cooldown);
-                    caster.Cooldowns[entry.Key] = new RuneCooldown(ready, entry.Length, entry.Name);
+                    entry.Length = MathF.Max(entry.Length, remaining);
+                    caster.Cooldowns[entry.Key] = new RuneCooldown(ready, entry.Cooldown, entry.Name, now + TimeSpan.FromSeconds(remaining), entry.Length);
                     Dirty(uid, caster);
                 }
             }
@@ -299,7 +299,7 @@ public sealed partial class RuneCasterSystem
         SetCooldown(caster, entry.Key, entry.Cooldown, entry.Cooldown, entry.Name);
     }
 
-    private void SetCooldown(Entity<RuneCasterComponent> caster, string key, float seconds, float length, string name)
+    private void SetCooldown(Entity<RuneCasterComponent> caster, string key, float seconds, float length, string name, float active = 0f, float activeLength = 0f)
     {
         var now = Timing.CurTime;
         foreach (var (old, cooldown) in caster.Comp.Cooldowns.ToArray())
@@ -308,7 +308,7 @@ public sealed partial class RuneCasterSystem
                 caster.Comp.Cooldowns.Remove(old);
         }
 
-        caster.Comp.Cooldowns[key] = new RuneCooldown(now + TimeSpan.FromSeconds(seconds), length, name);
+        caster.Comp.Cooldowns[key] = new RuneCooldown(now + TimeSpan.FromSeconds(seconds), length, name, now + TimeSpan.FromSeconds(active), activeLength);
         Dirty(caster);
     }
 }

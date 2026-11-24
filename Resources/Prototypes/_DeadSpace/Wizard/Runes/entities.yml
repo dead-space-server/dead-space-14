@@ -272,6 +272,64 @@
     damage: 8
 
 - type: entity
+  id: RuneSummonPortal
+  name: призывной портал
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/Effects/portal.rsi
+    drawdepth: Effects
+    layers:
+    - state: portal-artifact
+      shader: unshaded
+  - type: PointLight
+    radius: 2.5
+    energy: 1.5
+  - type: TimedDespawn
+    lifetime: 1.3
+
+- type: entity
+  parent: Smoke
+  id: RuneMirrorSmoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Smoke
+    spreadAmount: 0
+  - type: TimedDespawn
+    lifetime: 2
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileChaosBanana
+  name: летящая кожура
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/banana.rsi
+    layers:
+    - state: peel
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 1
+
+- type: entity
+  parent: BaseBullet
+  id: RuneProjectileChaosPie
+  name: летящий пирог
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Consumable/Food/Baked/pie.rsi
+    layers:
+    - state: tin
+    - state: plain
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 1
+
+- type: entity
   parent: TrashBananaPeel
   id: RuneChaosBanana
   suffix: Маг, хаос
@@ -495,6 +553,7 @@
   components:
   - type: RuneWard
     modifier: RunePhoenix
+  - type: RuneHeatCap
 
 - type: entity
   id: RuneLightningRodTemplate

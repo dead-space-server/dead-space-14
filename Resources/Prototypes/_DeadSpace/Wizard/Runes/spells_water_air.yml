@@ -234,6 +234,7 @@
   targeting: Self
   strain: 6
   cooldown: 7
+  holdCooldown: false
   effects:
   - !type:RuneRecallEffect
 
