@@ -253,40 +253,47 @@ internal sealed class RoundEndDiscordManifest
     {
         var configuration = Configuration.Default.Clone();
         configuration.MaxDegreeOfParallelism = 1;
-        using var image = new Image<Rgb24>(configuration, Width, height);
-        var random = new Random(unchecked(RoundId * 31 + number));
-        for (var i = 0; i < 180; i++)
+        var image = new Image<Rgb24>(configuration, Width, height);
+        try
         {
-            var x = random.Next(Width - 1);
-            var y = random.Next(height - 1);
-            var luminance = random.Next(16, 111);
-            var star = new Rgb24((byte) (luminance * 0.87), (byte) (luminance * 0.94), (byte) luminance);
-            image[x, y] = star;
-            if (i % 5 == 0)
+            var random = new Random(unchecked(RoundId * 31 + number));
+            for (var i = 0; i < 180; i++)
             {
-                image[x + 1, y] = star;
-                image[x, y + 1] = star;
-            }
-        }
-
-        image.Mutate(context =>
-        {
-            foreach (var (block, x, y) in page)
-            {
-                foreach (var line in block.Lines)
+                var x = random.Next(Width - 1);
+                var y = random.Next(height - 1);
+                var luminance = random.Next(16, 111);
+                var star = new Rgb24((byte) (luminance * 0.87), (byte) (luminance * 0.94), (byte) luminance);
+                image[x, y] = star;
+                if (i % 5 == 0)
                 {
-                    line.Options.Origin = new PointF(x, y + line.Y);
-                    context.DrawText(line.Options, line.Text, line.Color);
+                    image[x + 1, y] = star;
+                    image[x, y + 1] = star;
                 }
-
-                if (block.Underline is { } color)
-                    context.Fill(color.WithAlpha(0.6f), new Rectangle((Width - 120) / 2, y + block.Height - 2, 120, 2));
             }
-        });
 
-        using var stream = new MemoryStream();
-        image.SaveAsPng(stream, new PngEncoder { CompressionLevel = PngCompressionLevel.Level1 });
-        return new WebhookAttachment($"round-{RoundId}-manifest-{number}.png", "image/png", stream.ToArray());
+            image.Mutate(context =>
+            {
+                foreach (var (block, x, y) in page)
+                {
+                    foreach (var line in block.Lines)
+                    {
+                        line.Options.Origin = new PointF(x, y + line.Y);
+                        context.DrawText(line.Options, line.Text, line.Color);
+                    }
+
+                    if (block.Underline is { } color)
+                        context.Fill(color.WithAlpha(0.6f), new Rectangle((Width - 120) / 2, y + block.Height - 2, 120, 2));
+                }
+            });
+
+            using var stream = new MemoryStream();
+            image.SaveAsPng(stream, new PngEncoder { CompressionLevel = PngCompressionLevel.Level1 });
+            return new WebhookAttachment($"round-{RoundId}-manifest-{number}.png", "image/png", stream.ToArray());
+        }
+        finally
+        {
+            image.Dispose();
+        }
     }
 
     private readonly record struct Label(string Text, ImageColor Color, int Size, bool Bold = false);

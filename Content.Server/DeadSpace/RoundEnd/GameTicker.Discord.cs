@@ -3,6 +3,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Content.Server.DeadSpace.RoundEnd;
 using Content.Server.Discord;
@@ -139,7 +140,7 @@ public sealed partial class GameTicker
             var posted = await PostRoundDiscordMessageAsync(identifier, payload, pages.FirstOrDefault()).ConfigureAwait(false);
             if (!posted && pages.Length > 0)
             {
-                await PostRoundDiscordMessageAsync(identifier, payload).ConfigureAwait(false);
+                posted = await PostRoundDiscordMessageAsync(identifier, payload).ConfigureAwait(false);
             }
 
             if (ping != null)
@@ -169,19 +170,27 @@ public sealed partial class GameTicker
         WebhookPayload payload,
         WebhookAttachment[]? attachments = null)
     {
-        for (var attempt = 0; ; attempt++)
+        try
         {
-            using var response = attachments == null
-                ? await _discord.CreateMessage(identifier, payload).ConfigureAwait(false)
-                : await _discord.CreateMessage(identifier, payload, attachments).ConfigureAwait(false);
-
-            if (response.StatusCode != HttpStatusCode.TooManyRequests || attempt == 1 ||
-                response.Headers.RetryAfter?.Delta is not { } retryAfter)
+            for (var attempt = 0; ; attempt++)
             {
-                return response.IsSuccessStatusCode;
-            }
+                using var response = attachments == null
+                    ? await _discord.CreateMessage(identifier, payload).ConfigureAwait(false)
+                    : await _discord.CreateMessage(identifier, payload, attachments).ConfigureAwait(false);
 
-            await Task.Delay(retryAfter).ConfigureAwait(false);
+                if (response.StatusCode != HttpStatusCode.TooManyRequests || attempt == 1 ||
+                    response.Headers.RetryAfter?.Delta is not { } retryAfter)
+                {
+                    return response.IsSuccessStatusCode;
+                }
+
+                await Task.Delay(retryAfter).ConfigureAwait(false);
+            }
+        }
+        catch (Exception e) when (e is HttpRequestException or OperationCanceledException)
+        {
+            Log.Error($"Error while posting Discord round status: {e}");
+            return false;
         }
     }
 }
