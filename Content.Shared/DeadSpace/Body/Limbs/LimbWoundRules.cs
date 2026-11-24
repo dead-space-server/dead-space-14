@@ -44,8 +44,11 @@ public static class LimbWoundRules
     public const float DropBlunt = 10f;
     public const float CrackShare = 0.5f;
     public const float CrackHeavyShare = 0.8f;
-    public const float CrackLightChance = 0.05f;
-    public const float CrackHeavyChance = 0.1f;
+    public const float CrackLightChance = 0.025f;
+    public const float CrackHeavyChance = 0.05f;
+
+    /// <summary>How far below the next bone stage direct damage stops: the stage itself only comes from a crack roll.</summary>
+    public const float BoneStageGap = 0.01f;
     public const float EmbedChance = 0.08f;
     public const float AimedEmbedChance = 0.18f;
     public const float AimedShatterChance = 0.12f;
@@ -247,6 +250,19 @@ public static class LimbWoundRules
         state.Bone = MathF.Max(state.Bone, state.Bone >= StrainBone ? BreakBone : StrainBone);
         state.Splinted = false;
         return true;
+    }
+
+    /// <summary>
+    /// Damage bruises the bone, but never past the next stage: a crack and then a fracture only come from
+    /// <see cref="RollCrack"/>.
+    /// </summary>
+    public static void BruiseBone(ref LimbZoneState state, float amount)
+    {
+        if (amount <= 0f || state.Bone >= BreakBone)
+            return;
+
+        var cap = (state.Bone >= StrainBone ? BreakBone : StrainBone) - BoneStageGap;
+        state.Bone = MathF.Max(state.Bone, MathF.Min(state.Bone + amount, cap));
     }
 
     public static bool Spend(ref LimbZoneState state, float loss)
@@ -639,7 +655,7 @@ public static class LimbWoundRules
             if (soft)
                 state.Flesh += blunt;
             else
-                state.Bone += blunt;
+                BruiseBone(ref state, blunt);
             state.Health = MathF.Max(0f, state.Health - blunt * BlastBluntHealth);
         }
 
@@ -957,26 +973,26 @@ public static class LimbWoundRules
                     if (soft)
                         state.Flesh += strike.Amount * BehindArmorBone;
                     else
-                        state.Bone += strike.Amount * BehindArmorBone;
+                        BruiseBone(ref state, strike.Amount * BehindArmorBone);
                     break;
                 }
 
                 state.Flesh += amount;
-                if (strike.Projectile && strike.Roll < (strike.Aimed ? AimedEmbedChance : EmbedChance))
+                if (strike.Projectile && strike.Roll < (strike.RoundEmbed ?? (strike.Aimed ? AimedEmbedChance : EmbedChance)))
                     state.Embedded = true;
                 if (strike.Projectile && strike.Aimed && strike.SecondaryRoll < AimedShatterChance)
                 {
                     if (soft)
                         state.Flesh += amount;
                     else
-                        state.Bone += amount;
+                        BruiseBone(ref state, amount);
                 }
                 break;
             case LimbMark.Blunt:
                 if (soft)
                     state.Flesh += amount;
                 else
-                    state.Bone += amount;
+                    BruiseBone(ref state, amount);
                 break;
             case LimbMark.Heat:
                 state.Heat += amount;
@@ -999,7 +1015,7 @@ public static class LimbWoundRules
             if (soft)
                 state.Flesh += strike.RoundBone * strike.WoundMultiplier;
             else
-                state.Bone += strike.RoundBone * strike.WoundMultiplier;
+                BruiseBone(ref state, strike.RoundBone * strike.WoundMultiplier);
         }
 
         var bleedAdded = 0f;
@@ -1349,6 +1365,7 @@ public readonly record struct LimbStrike(
     bool Pellet = false,
     bool PelletSever = false,
     float RoundBone = 0f,
+    float? RoundEmbed = null,
     float RoundOrgan = 1f,
     float RoundBleed = 0f,
     float SeverChance = 1f,
