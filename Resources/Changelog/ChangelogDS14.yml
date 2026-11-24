@@ -10716,3 +10716,12 @@ Entries:
   changes:
   - type: Tweak
     message: Дальность отрисовки иконки профессии.
+- id: 1039
+  author: CyberBobeks
+  time: '2026-11-24T13:16:03.375533+00:00'
+  pr: 2854
+  changes:
+  - type: Add
+    message: Мини-вариант манифеста в сообщение об окончании раунда в Discord.
+  - type: Tweak
+    message: Сообщения webhook'а о статусе раунда в Discord.
