@@ -2284,8 +2284,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return;
         }
 
-        // DS14: мёртвое тело не оживает от конечностей и возврата органов —
-        // оживление только через дефибриллятор и подобные системы.
         if (_mobs.IsDead(uid))
             return;
 
