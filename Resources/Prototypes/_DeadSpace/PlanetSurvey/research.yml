@@ -1,0 +1,158 @@
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: SurveySiteBase
+  components:
+  - type: InteractionOutline
+  - type: SurveyResearchSite
+
+- type: entity
+  parent: SurveySiteBase
+  id: SurveySiteObelisk
+  name: чёрный обелиск
+  description: Он не отражает свет. Рядом тихо, слишком тихо. Учёным хватит одного взгляда, чтобы захотеть ещё.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/blackobelisk.rsi
+    state: unactive
+    offset: 0,1.5
+  - type: SurveyResearchSite
+    points: 7000
+    time: 18
+
+- type: entity
+  parent: SurveySiteBase
+  id: SurveySiteProbe
+  name: обломок зонда
+  description: Чужой зонд, вросший в землю. Его память ещё пишет.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Xenoarchaeology/xeno_artifacts.rsi
+    state: ano05
+  - type: SurveyResearchSite
+    points: 3500
+    time: 12
+
+- type: entity
+  parent: SurveySiteBase
+  id: SurveySiteCrystal
+  name: поющий кристалл
+  description: Звенит на одной ноте, когда к нему подходят. Каждый раз на другой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Structures/anomalous_crystal.rsi
+    state: crystal
+  - type: PointLight
+    radius: 2.5
+    energy: 1.5
+    color: "#8fd3ff"
+  - type: SurveyResearchSite
+    points: 4500
+    time: 14
+
+- type: entity
+  parent: SurveySiteBase
+  id: SurveyDenClutch
+  name: кладка выводка
+  description: Здесь растёт следующее поколение. Стая будет её защищать.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/egg.rsi
+    state: large_egg
+  - type: SurveyResearchSite
+    points: 2500
+    time: 10
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: SurveyRelicBase
+  components:
+  - type: Item
+    size: Small
+  - type: SurveyRelic
+
+- type: entity
+  parent: SurveyRelicBase
+  id: SurveyRelicEmpty
+  name: пустышка
+  description: Две медные пластины, а между ними ничего. Совсем ничего. Скупщики дадут за неё любые деньги.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Xenoarchaeology/item_artifacts.rsi
+    state: ano01
+  - type: Item
+    size: Small
+    heldPrefix: ano01
+  - type: StaticPrice
+    price: 6000
+
+- type: entity
+  parent: SurveyRelicBase
+  id: SurveyRelicBattery
+  name: батарейка
+  description: Тёплая. Пока держишь, раны затягиваются. Счётчик Гейгера рядом нервничает.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Xenoarchaeology/item_artifacts.rsi
+    state: ano03
+  - type: Item
+    size: Small
+    heldPrefix: ano03
+  - type: SurveyRelic
+    effect: Regen
+  - type: RadiationSource
+    intensity: 0.4
+  - type: StaticPrice
+    price: 2500
+
+- type: entity
+  parent: SurveyRelicBase
+  id: SurveyRelicBloom
+  name: мерцающий цветок
+  description: Лепестки переливаются, как бензин на воде. Сожми в ладони, и раны закроются. Что-то в теле при этом меняется.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/flowers.rsi
+    state: dark_flower
+  - type: SurveyRelic
+    effect: Bloom
+    charges: 3
+  - type: StaticPrice
+    price: 1500
+
+- type: entity
+  parent: SurveyRelicBase
+  id: SurveyRelicEgg
+  name: тёплое яйцо
+  description: Внутри что-то ворочается. Учёные просят принести. Лучше бы изучили побыстрее.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/egg.rsi
+    state: large_egg
+  - type: Item
+    size: Normal
+  - type: SurveyRelic
+    effect: Hatch
+    spawn: MobGiantSpiderAngry
+    hatchMinutes: 12
+  - type: SurveyResearchSite
+    points: 9000
+    time: 20
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  parent: SurveyRelicBase
+  id: SurveyRelicIdol
+  name: шепчущий шар
+  description: Стоит очень дорого. В тишине слышно, как он зовёт кого-то по имени.
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/pondering_orb.rsi
+    state: icon
+  - type: SurveyRelic
+    effect: Idol
+    spawn: MobGiantSpiderAngry
+  - type: StaticPrice
+    price: 9000

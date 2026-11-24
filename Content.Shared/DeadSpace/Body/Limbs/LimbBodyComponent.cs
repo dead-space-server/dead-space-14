@@ -154,6 +154,9 @@ public sealed partial class LimbAimComponent : Component
 
     [DataField, AutoNetworkedField]
     public LimbZone CalledZone = LimbZone.Torso;
+
+    [DataField]
+    public bool Assisted;
 }
 
 [ByRefEvent]

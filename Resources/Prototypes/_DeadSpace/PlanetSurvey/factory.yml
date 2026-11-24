@@ -1,0 +1,391 @@
+- type: entity
+  parent: BaseStructure
+  id: SurveyFactoryCore
+  name: ядро завода
+  description: Злой центр всего цеха. Пока оно думает, штампы печатают, а формы собираются.
+  components:
+  - type: Sprite
+    sprite: Mobs/Silicon/mothership_core.rsi
+    layers:
+    - state: core-active
+      shader: unshaded
+    scale: 2,2
+  - type: InteractionOutline
+  - type: PointLight
+    radius: 6
+    energy: 2.5
+    color: "#ff2a2a"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.9,-0.9,0.9,0.9"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        - HighImpassable
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+  - type: SurveyFactoryCore
+
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: SurveyFactoryMachineBase
+  components:
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 3
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryAssembler
+  name: сборочный стенд
+  description: Здесь из чужих деталей собирают новые формы.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/exosuit_fabricator.rsi
+    state: fab-active
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#ff8a3a"
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryLathe
+  name: станок цеха
+  description: Точит детали без остановки.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/protolathe.rsi
+    layers:
+    - state: icon
+    - state: unlit
+      shader: unshaded
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryVat
+  name: чан переработки
+  description: Ядро перерабатывает здесь биомассу. Лучше не заглядывать.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/biofabricator.rsi
+    layers:
+    - state: icon
+    - state: unlit
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#7aff6a"
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryFurnace
+  name: плавильня
+  description: Переплавляет всё, что приносят дроны. Внутри до сих пор что-то шевелится.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/ore_processor_industrial.rsi
+    layers:
+    - state: icon
+    - state: unlit
+      shader: unshaded
+  - type: PointLight
+    radius: 2.5
+    energy: 1.6
+    color: "#ff7a2a"
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryPress
+  name: штамповочный пресс
+  description: Выбивает пластины брони для новых форм.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/cuttermachine.rsi
+    layers:
+    - state: icon
+    - state: unlit
+      shader: unshaded
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactorySheeter
+  name: прокатный стан
+  description: Раскатывает переплавленный металл в листы.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/sheetifier.rsi
+    layers:
+    - state: base_machine_processing
+    - state: buttons_on
+      shader: unshaded
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryCrusher
+  name: переработчик биомассы
+  description: Ядру не нужны пленники. Ему нужна биомасса.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/body_crusher.rsi
+    layers:
+    - state: base
+    - state: piston-push
+    - state: glass
+    - state: lights
+      shader: unshaded
+  - type: PointLight
+    radius: 1.8
+    energy: 1.2
+    color: "#9aff5a"
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryServer
+  name: стойка ядра
+  description: Здесь ядро думает. Тепло и гул чувствуются через ботинки.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/server.rsi
+    layers:
+    - state: server
+    - state: server-on
+      shader: unshaded
+  - type: PointLight
+    radius: 1.2
+    energy: 0.8
+    color: "#ff3a3a"
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryRelay
+  name: ретранслятор цеха
+  description: Передаёт приказы ядра каждой форме на заводе.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/telecomms.rsi
+    state: telecom-on
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactorySilo
+  name: бункер сырья
+  description: Доверху забит рудой, ломом и тем, что раньше было людьми.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/silo.rsi
+    layers:
+    - state: silo
+    - state: overlay_active
+      shader: unshaded
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactorySmes
+  name: накопитель цеха
+  description: Держит заряд для всего крыла.
+  components:
+  - type: Sprite
+    sprite: Structures/Power/smes.rsi
+    layers:
+    - state: smes
+    - state: static
+      shader: unshaded
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryReactor
+  name: реактор цеха
+  description: Сердце энергосети завода. Гудит так, что дрожат стены.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/gravity_generator_core.rsi
+    layers:
+    - state: activated
+      shader: unshaded
+  - type: PointLight
+    radius: 3
+    energy: 2
+    color: "#5aa8ff"
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryCondenser
+  name: охладитель
+  description: Гоняет хладагент по трубам завода.
+  components:
+  - type: Sprite
+    sprite: Structures/Piping/Atmospherics/hellfirethermomachine.rsi
+    state: freezerOn
+
+- type: entity
+  abstract: true
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryShellBase
+  name: недособранная форма
+  description: Корпус на стапеле. Ядру осталось вставить мозг.
+  components:
+  - type: Sprite
+    sprite: Mobs/Silicon/chassis.rsi
+
+- type: entity
+  parent: SurveyFactoryShellBase
+  id: SurveyFactoryShellHeavy
+  components:
+  - type: Sprite
+    state: xenoborg_heavy
+
+- type: entity
+  parent: SurveyFactoryShellBase
+  id: SurveyFactoryShellScout
+  components:
+  - type: Sprite
+    state: xenoborg_scout
+
+- type: entity
+  parent: SurveyFactoryShellBase
+  id: SurveyFactoryShellSec
+  components:
+  - type: Sprite
+    state: synd_sec_derelict
+
+- type: entity
+  parent: SurveyFactoryShellBase
+  id: SurveyFactoryShellEngi
+  components:
+  - type: Sprite
+    state: engineer_derelict
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyRepairBay
+  name: ремонтный стапель
+  description: Форма ложится сюда и встаёт как новая. Сломай его, и ремонт кончится.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/stasis_bed.rsi
+    layers:
+    - state: icon
+    - state: unlit
+      shader: unshaded
+  - type: PointLight
+    radius: 1.8
+    energy: 1.2
+    color: "#6affc8"
+  - type: SurveyAutodoc
+    heal: 12
+    robots: true
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyAutodoc
+  name: полевой автодок
+  description: Туземцы ложатся в него с дырками, а встают целыми. Сломай его, и раненые будут умирать.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/Medical/cryopod.rsi
+    layers:
+    - state: pod-on
+    - state: cover-on
+  - type: PointLight
+    radius: 1.8
+    energy: 1.2
+    color: "#6ad8ff"
+  - type: SurveyAutodoc
+    heal: 10
+
+- type: entity
+  parent: SurveyBaseLamp
+  id: SurveyFactoryLamp
+  name: прожектор цеха
+  description: Натриевый свет завода. Гаснет вместе с энергоузлом.
+  components:
+  - type: PointLight
+    radius: 7
+    energy: 1.6
+    color: "#ffab5a"
+
+- type: entity
+  parent: AlwaysPoweredWallLight
+  id: SurveyFactoryWallLight
+  name: лампа цеха
+  description: Заводской светильник. Гаснет вместе с энергоузлом.
+  suffix: Survey
+  components:
+  - type: PointLight
+    color: "#ffc48a"
+    energy: 1
+    radius: 8
+    softness: 1
+    offset: "0, -0.5"
+  - type: SurveyBaseLamp
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryConsole
+  name: пульт цеха
+  description: Отсюда ядро следит за линией. Экран показывает чертежи новых форм.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/computers.rsi
+    layers:
+    - state: computer
+    - state: generic_keyboard
+    - state: aiupload
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+    energy: 0.8
+    color: "#ff5a5a"
+
+- type: entity
+  parent: SurveyFactoryMachineBase
+  id: SurveyFactoryPowerConsole
+  name: пульт энергосети
+  description: Показывает нагрузку на каждый цех.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/computers.rsi
+    layers:
+    - state: computer
+    - state: generic_keyboard
+    - state: power_monitor
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+    energy: 0.8
+    color: "#ffd35a"

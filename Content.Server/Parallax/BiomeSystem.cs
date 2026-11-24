@@ -414,6 +414,24 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
         }
     }
 
+    //DS-14 start
+    public bool BakeChunk(EntityUid uid, BiomeComponent component, MapGridComponent grid, Vector2i chunkOrigin)
+    {
+        if (!component.LoadedChunks.Add(chunkOrigin))
+            return false;
+
+        LoadChunk(component, uid, grid, chunkOrigin, component.Seed);
+        return true;
+    }
+
+    public static Vector2i BakeChunkOrigin(Vector2i tile)
+    {
+        return new Vector2i((int) MathF.Floor(tile.X / (float) ChunkSize) * ChunkSize, (int) MathF.Floor(tile.Y / (float) ChunkSize) * ChunkSize);
+    }
+
+    public static int BakeChunkSize => ChunkSize;
+    //DS-14 end
+
     private bool CanLoad(EntityUid uid)
     {
         return !_ghostQuery.HasComp(uid) || _tags.HasTag(uid, AllowBiomeLoadingTag);

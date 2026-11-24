@@ -1,4 +1,5 @@
 using Content.Client.Shuttles.UI;
+using Content.Shared.DeadSpace.PlanetSurvey; //DS-14
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
 using JetBrains.Annotations;
@@ -39,6 +40,9 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
                 SendMessage(new ShuttleConsoleSignalButtonPressedMessage());
             };
         }
+
+        if (FindChildByType<MapScreen>(_window) is { } mapScreen)
+            mapScreen.RequestScan += () => SendMessage(new SurveyScanMessage());
         // DS14-end
     }
 

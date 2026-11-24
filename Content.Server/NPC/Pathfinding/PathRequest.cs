@@ -21,6 +21,7 @@ public abstract class PathRequest
 
     public bool Started = false;
     public readonly DateTime EnqueuedAtUtc = DateTime.UtcNow; // DS14 Edit: used to prune stale pathfinding requests.
+    public int Expanded; //DS-14
 
     #region Pathfinding state
 

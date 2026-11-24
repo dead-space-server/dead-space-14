@@ -2878,6 +2878,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!aiming || aim == null)
             return natural;
 
+        if (aim.Assisted)
+            return aim.CalledZone;
+
         return LimbWoundRules.Pick(true, aim.CalledZone, natural);
     }
 

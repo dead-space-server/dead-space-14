@@ -1,0 +1,159 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: SurveyCargoBase
+  components:
+  - type: Item
+    size: Huge
+  - type: HeldSpeedModifier
+    walkModifier: 0.85
+    sprintModifier: 0.85
+    mirrorClothingModifier: false
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: StaticPrice
+    price: 750
+
+- type: entity
+  parent: SurveyCargoBase
+  id: SurveyCargoData
+  name: накопитель экспедиции
+  description: Чужие измерения за много лет. Науке нужен целым.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Research/researchdisk.rsi
+    state: icon
+    scale: 1.4, 1.4
+  - type: SurveyCargo
+    need: survey-need-science
+    money: 1500
+    payload:
+    - ResearchDisk
+    - ResearchDisk
+
+- type: entity
+  parent: SurveyCargoBase
+  id: SurveyCargoBlueprint
+  name: ядро чертежа
+  description: Пульсирует схемой, которую никто на станции не рисовал.
+  components:
+  - type: Sprite
+    sprite: Structures/Specific/Anomalies/Cores/tech_core.rsi
+    layers:
+    - state: core
+    - state: pulse
+      shader: unshaded
+  - type: SurveyCargo
+    need: survey-need-command
+    money: 2500
+    payload:
+    - ResearchDisk10000
+
+- type: entity
+  parent: SurveyCargoBase
+  id: SurveyCargoEnergy
+  name: чужой микрореактор
+  description: Тёплый. Инженеры отдали бы за него смену.
+  components:
+  - type: Sprite
+    sprite: Objects/Power/power_cells.rsi
+    state: microreactor
+    scale: 1.4, 1.4
+  - type: SurveyCargo
+    need: survey-need-engineering
+    money: 2000
+    payload:
+    - SheetPlasma
+    - SheetPlasteel
+
+- type: entity
+  parent: SurveyCargoBase
+  id: SurveyCargoMedicine
+  name: ящик с лекарством
+  description: Ампулы без маркировки. Медики разберутся.
+  components:
+  - type: Sprite
+    sprite: Structures/Storage/Crates/medicalcrate_secure.rsi
+    state: icon
+  - type: SurveyCargo
+    need: survey-need-medical
+    money: 1500
+    payload:
+    - MedkitAdvancedFilled
+    - MedkitAdvancedFilled
+
+- type: entity
+  parent: SurveyCargoBase
+  id: SurveyCargoEvidence
+  name: опечатанный кейс
+  description: Внутри чьи-то записи. Охрана и командование захотят прочесть.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Storage/briefcase_secure.rsi
+    state: locked
+  - type: SurveyCargo
+    need: survey-need-security
+    money: 3000
+
+- type: entity
+  parent: SurveyCargoBase
+  id: SurveyCargoSupply
+  name: ящик снабжения
+  description: Тяжёлый. Снабжение продаст или пустит в дело.
+  components:
+  - type: Sprite
+    sprite: Structures/Storage/Crates/engicrate_secure.rsi
+    state: icon
+  - type: SurveyCargo
+    need: survey-need-cargo
+    money: 2500
+    payload:
+    - IngotGold
+    - SheetPlasteel
+
+- type: entity
+  parent: BaseStructure
+  id: SurveyPirateStash
+  name: пиратский сундук
+  description: Сюда кладут дань. Пираты считают каждую.
+  components:
+  - type: Sprite
+    sprite: Structures/Storage/Crates/piratechest.rsi
+    state: crate_icon
+  - type: InteractionOutline
+
+- type: entity
+  parent: BaseStructure
+  id: SurveyStamp
+  name: штамп
+  description: Фабрикатор печатает дронов, пока цел. Сломай его, и очередь кончится.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/exosuit_fabricator.rsi
+    state: fab-active
+    snapCardinals: true
+  - type: InteractionOutline
+  - type: PointLight
+    radius: 2
+    energy: 1.2
+    color: "#e8662a"
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 2
+            max: 4
+  - type: SurveyStamp

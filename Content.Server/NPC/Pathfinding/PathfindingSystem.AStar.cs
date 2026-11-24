@@ -79,6 +79,11 @@ public sealed partial class PathfindingSystem
 
             count++;
 
+            //DS-14 start
+            if (++request.Expanded > MaxExpansions)
+                return PathResult.NoPath;
+            //DS-14 end
+
             // Actual pathfinding here
             (_, currentNode) = request.Frontier.Take();
 

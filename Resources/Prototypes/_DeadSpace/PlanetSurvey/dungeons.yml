@@ -1,0 +1,202 @@
+- type: dungeonPreset
+  id: SurveyBase
+  roomPacks:
+    - 0,0,17,17
+    - 20,0,37,17
+    - 0,20,17,37
+    - 20,20,37,37
+
+- type: entityTable
+  id: SurveyCorridorJunk
+  table: !type:GroupSelector
+    children:
+    - id: Girder
+    - id: SurveyCrateLoot
+    - id: Rack
+    - id: TableFrame
+    - id: MachineFrameDestroyed
+    - id: Barricade
+    - id: ChairOfficeDark
+    - id: SteelBench
+
+- type: dungeonConfig
+  id: SurveyTown
+  layers:
+  - !type:PrefabDunGen
+    roomWhitelist:
+      tags:
+      - SalvageExperiment
+    presets:
+    - SurveyBase
+  - !type:CorridorDunGen
+    width: 3
+    tile: FloorSteel
+  - !type:DungeonEntranceDunGen
+    count: 3
+    tile: FloorSteel
+    contents: SurveyNativeAirlock
+  - !type:RoomEntranceDunGen
+    tile: FloorSteel
+    contents: SurveyNativeAirlock
+  - !type:EntranceFlankDunGen
+    tile: FloorSteel
+    contents: BaseWindow
+  - !type:ExternalWindowDunGen
+    tile: FloorSteel
+    contents: BaseWindow
+  - !type:WallMountDunGen
+    contents: ScienceLabsWalls
+    tile: FloorSteel
+  - !type:BoundaryWallDunGen
+    wall: WallSolid
+    cornerWall: WallReinforced
+    tile: FloorSteel
+  - !type:JunctionDunGen
+    width: 1
+    tile: FloorSteel
+    contents: SurveyNativeAirlock
+  - !type:JunctionDunGen
+    width: 3
+    tile: FloorSteel
+    contents: SurveyNativeAirlock
+  - !type:AutoCablingDunGen
+    entity: CableApcExtension
+  - !type:CornerClutterDunGen
+    contents: BaseClutter
+  - !type:EntityTableDunGen
+    minCount: 14
+    maxCount: 22
+    table: !type:NestedSelector
+      tableId: SalvageTreasureSpawnerCommon
+  - !type:EntityTableDunGen
+    minCount: 2
+    maxCount: 4
+    table: !type:NestedSelector
+      tableId: SalvageTreasureSpawnerValuable
+  - !type:CorridorClutterDunGen
+    chance: 0.14
+    contents: SurveyCorridorJunk
+
+- type: dungeonConfig
+  id: SurveyHideout
+  layers:
+  - !type:PrefabDunGen
+    roomWhitelist:
+      tags:
+      - Mineshaft
+    presets:
+    - SurveyBase
+  - !type:CorridorDunGen
+    width: 3
+    tile: FloorWood
+  - !type:DungeonEntranceDunGen
+    count: 2
+    tile: FloorWood
+    contents: SurveyNativeAirlock
+  - !type:RoomEntranceDunGen
+    tile: FloorWood
+    contents: SurveyNativeAirlock
+  - !type:WallMountDunGen
+    contents: MineshaftWalls
+    tile: FloorWood
+  - !type:BoundaryWallDunGen
+    wall: WallWood
+    tile: FloorWood
+  - !type:JunctionDunGen
+    width: 3
+    tile: FloorWood
+    contents: SurveyNativeAirlock
+  - !type:CornerClutterDunGen
+    contents: MineshaftClutter
+  - !type:EntityTableDunGen
+    minCount: 10
+    maxCount: 16
+    table: !type:NestedSelector
+      tableId: SalvageTreasureSpawnerCommon
+  - !type:EntityTableDunGen
+    minCount: 2
+    maxCount: 3
+    table: !type:NestedSelector
+      tableId: SalvageTreasureSpawnerValuable
+  - !type:CorridorClutterDunGen
+    chance: 0.14
+    contents: SurveyCorridorJunk
+
+- type: dungeonConfig
+  id: SurveyWorkshop
+  layers:
+  - !type:PrefabDunGen
+    roomWhitelist:
+      tags:
+      - SalvageExperiment
+    presets:
+    - SurveyBase
+  - !type:CorridorDunGen
+    width: 3
+    tile: FloorDark
+  - !type:DungeonEntranceDunGen
+    count: 2
+    tile: FloorDark
+    contents: SurveyNativeAirlock
+  - !type:RoomEntranceDunGen
+    tile: FloorDark
+    contents: SurveyNativeAirlock
+  - !type:WallMountDunGen
+    contents: ScienceLabsWalls
+    tile: FloorDark
+  - !type:BoundaryWallDunGen
+    wall: WallReinforced
+    tile: FloorDark
+  - !type:JunctionDunGen
+    width: 3
+    tile: FloorDark
+    contents: SurveyNativeAirlock
+  - !type:AutoCablingDunGen
+    entity: CableApcExtension
+  - !type:CornerClutterDunGen
+    contents: BaseClutter
+  - !type:EntityTableDunGen
+    minCount: 8
+    maxCount: 12
+    table: !type:NestedSelector
+      tableId: SalvageTreasureSpawnerCommon
+  - !type:CorridorClutterDunGen
+    chance: 0.14
+    contents: SurveyCorridorJunk
+
+- type: dungeonConfig
+  id: SurveyShelter
+  layers:
+  - !type:PrefabDunGen
+    roomWhitelist:
+      tags:
+      - SnowyLabs
+    presets:
+    - SurveyBase
+  - !type:CorridorDunGen
+    width: 3
+    tile: FloorGrayConcrete
+  - !type:DungeonEntranceDunGen
+    count: 2
+    tile: FloorGrayConcrete
+    contents: TheCircleAirLock
+  - !type:RoomEntranceDunGen
+    tile: FloorGrayConcrete
+    contents: TheCircleAirLock
+  - !type:WallMountDunGen
+    contents: SnowyLabsWalls
+    tile: FloorGrayConcrete
+  - !type:BoundaryWallDunGen
+    wall: WallPlastitanium
+    tile: FloorGrayConcrete
+  - !type:JunctionDunGen
+    width: 3
+    tile: FloorGrayConcrete
+    contents: TheCircleAirLock
+  - !type:CornerClutterDunGen
+    contents: BaseClutter
+  - !type:EntityTableDunGen
+    minCount: 6
+    maxCount: 10
+    table: !type:NestedSelector
+      tableId: SalvageTreasureSpawnerCommon

@@ -1,0 +1,377 @@
+- type: entity
+  abstract: true
+  parent: BaseMobHuman
+  id: SurveyMobHumanBase
+  components:
+  - type: InputMover
+  - type: MobMover
+  - type: RandomHumanoidAppearance
+    randomizeName: true
+  - type: NpcFactionMember
+    factions:
+    - Syndicate
+  - type: Access
+    tags:
+    - SurveyNative
+  - type: PointLight
+    radius: 3.5
+    energy: 0.9
+    color: "#ffc278"
+  - type: SurveyMember
+    native: false
+    voice: raider
+    medkits: 1
+    stims: [ speed ]
+  - type: HTN
+    rootTask:
+      task: SurveyRaiderCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavClimb: !type:Bool
+        true
+      VisionRadius: !type:Single
+        12
+      AggroVisionRadius: !type:Single
+        14
+      IdleRange: !type:Single
+        4
+      SurveyFireRange: !type:Single
+        12
+      SurveyAmbushRange: !type:Single
+        10
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyErrandRange: !type:Single
+        1.2
+      SurveyErrandWait: !type:Single
+        1
+      SurveyHomeRange: !type:Single
+        8
+      SurveyMeleeReach: !type:Single
+        2.5
+      SurveyBlockRange: !type:Single
+        6
+      SurveyWaitMin: !type:Single
+        1
+      SurveyWaitMax: !type:Single
+        3
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaider
+  name: рейдер
+  description: Живёт в развалинах города и стреляет первым.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyRaiderGear
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderShotgun
+  name: рейдер с обрезом
+  description: Держит угол и ждёт, когда подойдут поближе.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyRaiderShotgunGear
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobPirate
+  name: пират
+  description: Торгуется, пока выгодно. Стреляет, когда выгодно.
+  components:
+  - type: SurveyMember
+    native: false
+    voice: pirate
+    medkits: 1
+    stims: [ speed ]
+  - type: HTN
+    rootTask:
+      task: SurveyPirateCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavClimb: !type:Bool
+        true
+      VisionRadius: !type:Single
+        12
+      AggroVisionRadius: !type:Single
+        14
+      IdleRange: !type:Single
+        4
+      SurveyFireRange: !type:Single
+        12
+      SurveyAmbushRange: !type:Single
+        10
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyErrandRange: !type:Single
+        1.2
+      SurveyErrandWait: !type:Single
+        1
+      SurveyHomeRange: !type:Single
+        8
+      SurveyMeleeReach: !type:Single
+        2.5
+      SurveyBlockRange: !type:Single
+        6
+      SurveyWaitMin: !type:Single
+        1
+      SurveyWaitMax: !type:Single
+        3
+  - type: Loadout
+    prototypes:
+    - SurveyPirateGear
+
+- type: entity
+  parent: SurveyMobPirate
+  id: SurveyMobPirateCaptain
+  name: пиратский капитан
+  description: Говорит за всех. За всех и решает.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyPirateCaptainGear
+  - type: SurveyMember
+    medkits: 2
+    stims: [ speed, tough ]
+    grenades: [ ExGrenade, SmokeGrenade ]
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderRifleman
+  name: рейдер-автоматчик
+  description: Основная сила банды. Держит сектор и не жалеет патронов.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyRaiderRiflemanGear
+  - type: SurveyMember
+    grenades: [ SmokeGrenade ]
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderGunner
+  name: рейдер-пулемётчик
+  description: Прижимает огнём, пока остальные заходят сбоку.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyRaiderGunnerGear
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderBreacher
+  name: рейдер-штурмовик
+  description: Первым идёт в дверь. Сначала граната, потом дробь.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyRaiderBreacherGear
+  - type: SurveyMember
+    stims: [ tough, speed ]
+    grenades: [ GrenadeFlashBang, GrenadeStinger ]
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderMarksman
+  name: рейдер-марксман
+  description: Сидит подальше и бьёт точно.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyRaiderMarksmanGear
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderGrenadier
+  name: рейдер-гранатомётчик
+  description: Выкуривает из укрытий. Держись от него подальше.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyRaiderGrenadierGear
+  - type: SurveyMember
+    grenades: [ ExGrenade, ExGrenade, GrenadeIncendiary, SmokeGrenade ]
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderMedic
+  name: рейдер-медик
+  description: Вытаскивает своих из-под огня и ставит на ноги. Убей его первым.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyRaiderMedicGear
+  - type: SurveyMember
+    medic: true
+    medkits: 3
+    sidearm: SurveyNpcC20r
+    grenades: [ SmokeGrenade, SmokeGrenade ]
+
+- type: entity
+  parent: SurveyMobPirate
+  id: SurveyMobPirateBoarder
+  name: пират-абордажник
+  description: Короткий ствол, быстрые ноги, осколочная в кармане.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyPirateBoarderGear
+  - type: SurveyMember
+    grenades: [ GrenadeShrapnel ]
+
+- type: entity
+  parent: SurveyMobPirate
+  id: SurveyMobPirateGunner
+  name: пират-пулемётчик
+  description: Держит палубу под огнём.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyPirateGunnerGear
+
+- type: entity
+  parent: SurveyMobPirate
+  id: SurveyMobPirateBreacher
+  name: пират-штурмовик
+  description: Вышибает двери и всех, кто за ними.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyPirateBreacherGear
+  - type: SurveyMember
+    grenades: [ GrenadeFlashBang ]
+
+- type: entity
+  parent: SurveyMobPirate
+  id: SurveyMobPirateMedic
+  name: корабельный лекарь
+  description: Штопает команду прямо в бою. Без него пираты быстро кончаются.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyPirateMedicGear
+  - type: SurveyMember
+    medic: true
+    medkits: 3
+    sidearm: SurveyNpcCobra
+    grenades: [ SmokeGrenade ]
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderVeteran
+  name: рейдер подмоги
+  description: Его зовут, когда своих уже не хватает. Бронирован и при хорошем стволе.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyVeteranGear
+  - type: SurveyMember
+    medkits: 2
+    stims: [ speed, tough, adrenal ]
+    grenades: [ ExGrenade, SmokeGrenade ]
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderVeteranGunner
+  name: пулемётчик подмоги
+  description: Тяжёлая броня и пулемёт. Подмога пришла всерьёз.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyVeteranGunnerGear
+
+- type: entity
+  parent: SurveyMobHumanBase
+  id: SurveyMobRaiderVeteranBreacher
+  name: штурмовик подмоги
+  description: Щитовая броня, дробовик и светошумовые. Идёт выносить двери.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyVeteranBreacherGear
+  - type: SurveyMember
+    medkits: 2
+    stims: [ tough, adrenal ]
+    grenades: [ GrenadeFlashBang, ExGrenade ]
+
+- type: entity
+  parent: SurveyMobPirate
+  id: SurveyMobPirateVeteran
+  name: абордажник
+  description: Пират с нормальным оружием и в броне. Приходит, когда остальные уже не справились.
+  components:
+  - type: Loadout
+    prototypes:
+    - SurveyPirateVeteranGear
+  - type: SurveyMember
+    medkits: 2
+    stims: [ speed, tough, adrenal ]
+    grenades: [ GrenadeShrapnel, SmokeGrenade ]
+
+- type: entity
+  parent: SurveyRobotBase
+  id: SurveyMobRaiderScout
+  name: разведдрон
+  description: Висит над крышами и сдаёт тебя всей банде. Хрупкий, если успеешь.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Mobs/Silicon/drone.rsi
+    color: "#ff9a9a"
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: drone
+  - type: NpcFactionMember
+    factions:
+    - Syndicate
+  - type: SurveyMember
+    robot: false
+    scout: true
+    sight: 16
+  - type: HTN
+    rootTask:
+      task: SurveyScoutCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      IdleRange: !type:Single
+        6
+      SurveyErrandRange: !type:Single
+        1.5
+      SurveyErrandWait: !type:Single
+        1
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      35: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 4.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 40
+        mask:
+        - FlyingMobMask
+        layer:
+        - FlyingMobLayer
+  - type: PointLight
+    radius: 5
+    energy: 1.6
+    color: "#ff5a5a"
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 0

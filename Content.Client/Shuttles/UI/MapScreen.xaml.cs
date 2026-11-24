@@ -55,6 +55,7 @@ public sealed partial class MapScreen : BoxContainer
 
     public event Action<MapCoordinates, Angle>? RequestFTL;
     public event Action<NetEntity, Angle>? RequestBeaconFTL;
+    public event Action? RequestScan; //DS-14
 
     private readonly Dictionary<MapId, BoxContainer> _mapHeadings = new();
     private readonly Dictionary<MapId, List<IMapObject>> _mapObjects = new();
@@ -229,6 +230,7 @@ public sealed partial class MapScreen : BoxContainer
 
     private void MapRebuildPressed(BaseButton.ButtonEventArgs obj)
     {
+        RequestScan?.Invoke(); //DS-14
         PingMap();
     }
 

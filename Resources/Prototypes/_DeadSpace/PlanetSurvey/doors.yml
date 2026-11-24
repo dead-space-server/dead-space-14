@@ -1,0 +1,29 @@
+- type: accessLevel
+  id: SurveyNative
+  name: id-card-access-level-survey-native
+
+- type: entity
+  parent: DoorElectronics
+  id: DoorElectronicsSurveyNative
+  suffix: Survey, Locked
+  components:
+  - type: AccessReader
+    access: [["SurveyNative"]]
+
+- type: entity
+  parent: AirlockGlass
+  id: SurveyAirlockNative
+  suffix: Survey, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSurveyNative ]
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: SurveyNativeDoor
+
+- type: entityTable
+  id: SurveyNativeAirlock
+  table: !type:GroupSelector
+    children:
+    - id: SurveyAirlockNative

@@ -1,0 +1,149 @@
+- type: dungeonPreset
+  id: SurveyOutpost
+  roomPacks:
+    - 0,0,17,17
+    - 20,0,37,17
+
+- type: dungeonConfig
+  id: SurveyOutpostTown
+  layers:
+  - !type:PrefabDunGen
+    roomWhitelist:
+      tags:
+      - SalvageExperiment
+    presets:
+    - SurveyOutpost
+  - !type:CorridorDunGen
+    width: 3
+    tile: FloorSteel
+  - !type:DungeonEntranceDunGen
+    count: 2
+    tile: FloorSteel
+    contents: SurveyNativeAirlock
+  - !type:RoomEntranceDunGen
+    tile: FloorSteel
+    contents: SurveyNativeAirlock
+  - !type:BoundaryWallDunGen
+    wall: WallSolid
+    cornerWall: WallReinforced
+    tile: FloorSteel
+  - !type:CornerClutterDunGen
+    contents: BaseClutter
+  - !type:CorridorClutterDunGen
+    chance: 0.14
+    contents: SurveyCorridorJunk
+  - !type:EntityTableDunGen
+    minCount: 3
+    maxCount: 5
+    table: !type:NestedSelector
+      tableId: SalvageTreasureSpawnerCommon
+
+- type: dungeonConfig
+  id: SurveyOutpostShelter
+  layers:
+  - !type:PrefabDunGen
+    roomWhitelist:
+      tags:
+      - SnowyLabs
+    presets:
+    - SurveyOutpost
+  - !type:CorridorDunGen
+    width: 3
+    tile: FloorGrayConcrete
+  - !type:DungeonEntranceDunGen
+    count: 2
+    tile: FloorGrayConcrete
+    contents: TheCircleAirLock
+  - !type:RoomEntranceDunGen
+    tile: FloorGrayConcrete
+    contents: TheCircleAirLock
+  - !type:BoundaryWallDunGen
+    wall: WallPlastitanium
+    tile: FloorGrayConcrete
+  - !type:CornerClutterDunGen
+    contents: BaseClutter
+  - !type:EntityTableDunGen
+    minCount: 2
+    maxCount: 4
+    table: !type:NestedSelector
+      tableId: SalvageTreasureSpawnerCommon
+
+- type: entity
+  parent: BaseStructure
+  id: SurveyPowerNode
+  name: энергоузел
+  description: Отсюда идёт кабель на главную базу. Перережь его, и там станет темно.
+  components:
+  - type: Sprite
+    sprite: Structures/Power/substation.rsi
+    state: substation
+  - type: InteractionOutline
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#ffd35a"
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+  - type: SurveyDevice
+    role: Power
+    time: 10
+
+- type: entity
+  parent: BaseStructure
+  id: SurveyCommsMast
+  name: мачта связи
+  description: Через неё база зовёт подмогу и поднимает тревогу. Без неё каждый сам за себя.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/telecomms.rsi
+    state: telecom-on
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+  - type: SurveyDevice
+    role: Comms
+    time: 8
+
+- type: entity
+  id: SurveyBaseLamp
+  name: фонарь базы
+  description: Горит, пока работает энергоузел.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    sprite: Objects/Tools/lantern.rsi
+    state: lantern-on
+    drawdepth: SmallObjects
+  - type: PointLight
+    radius: 6
+    energy: 1.4
+    color: "#ffe2a8"
+  - type: SurveyBaseLamp

@@ -1,0 +1,185 @@
+- type: startingGear
+  id: SurveyRaiderGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    head: ClothingHeadBandRed
+    mask: ClothingMaskBandBlack
+    shoes: ClothingShoesBootsWork
+  inhand:
+  - SurveyNpcPistol
+
+- type: startingGear
+  id: SurveyRaiderShotgunGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    head: ClothingHeadBandGreen
+    shoes: ClothingShoesBootsWork
+    outerClothing: ClothingOuterCoatJensen
+  inhand:
+  - SurveyNpcShotgun
+
+- type: startingGear
+  id: SurveyRaiderRiflemanGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    head: ClothingHeadBandRed
+    mask: ClothingMaskBandBlack
+    shoes: ClothingShoesBootsWork
+    outerClothing: ClothingOuterVestWeb
+  inhand:
+  - SurveyNpcAk
+
+- type: startingGear
+  id: SurveyRaiderGunnerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    head: ClothingHeadHelmetBasic
+    shoes: ClothingShoesBootsWork
+    outerClothing: ClothingOuterArmorBulletproof
+  inhand:
+  - SurveyNpcLmg
+
+- type: startingGear
+  id: SurveyRaiderBreacherGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    head: ClothingHeadHelmetRiot
+    mask: ClothingMaskGas
+    shoes: ClothingShoesBootsWork
+    outerClothing: ClothingOuterArmorRiot
+  inhand:
+  - SurveyNpcBulldog
+
+- type: startingGear
+  id: SurveyRaiderMarksmanGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    head: ClothingHeadHatBeret
+    mask: ClothingMaskBandBlack
+    shoes: ClothingShoesBootsWork
+    outerClothing: ClothingOuterVestWeb
+  inhand:
+  - SurveyNpcMarksman
+
+- type: startingGear
+  id: SurveyRaiderGrenadierGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    head: ClothingHeadBandGreen
+    mask: ClothingMaskGas
+    shoes: ClothingShoesBootsWork
+    outerClothing: ClothingOuterVestWebMerc
+  inhand:
+  - SurveyNpcCarbine
+
+- type: startingGear
+  id: SurveyRaiderMedicGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitParamedic
+    head: ClothingHeadBandRed
+    shoes: ClothingShoesBootsWork
+    back: ClothingBackpackDuffelMedical
+  inhand:
+  - SurveyNpcC20r
+
+- type: startingGear
+  id: SurveyPirateGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitPirate
+    head: ClothingHeadBandBlack
+    shoes: ClothingShoesBootsLaceup
+  inhand:
+  - SurveyNpcRevolver
+
+- type: startingGear
+  id: SurveyPirateCaptainGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitPirate
+    head: ClothingHeadHatPirate
+    shoes: ClothingShoesBootsLaceup
+    outerClothing: ClothingOuterCoatPirate
+  inhand:
+  - SurveyNpcSmg
+
+- type: startingGear
+  id: SurveyPirateBoarderGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitPirate
+    head: ClothingHeadHelmetMerc
+    shoes: ClothingShoesBootsLaceup
+    outerClothing: ClothingOuterVestWebMerc
+  inhand:
+  - SurveyNpcVector
+
+- type: startingGear
+  id: SurveyPirateGunnerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitPirate
+    head: ClothingHeadBandBlack
+    shoes: ClothingShoesBootsLaceup
+    outerClothing: ClothingOuterArmorBulletproof
+  inhand:
+  - SurveyNpcLmg
+
+- type: startingGear
+  id: SurveyPirateBreacherGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitPirate
+    head: ClothingHeadHelmetBasic
+    shoes: ClothingShoesBootsLaceup
+    outerClothing: ClothingOuterArmorBasic
+  inhand:
+  - SurveyNpcBulldog
+
+- type: startingGear
+  id: SurveyPirateMedicGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitPirate
+    head: ClothingHeadBandBlack
+    shoes: ClothingShoesBootsLaceup
+    back: ClothingBackpackDuffelMedical
+  inhand:
+  - SurveyNpcCobra
+
+- type: startingGear
+  id: SurveyVeteranGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    head: ClothingHeadHelmetSwat
+    outerClothing: ClothingOuterArmorBulletproof
+    mask: ClothingMaskGasSyndicate
+    shoes: ClothingShoesBootsWork
+  inhand:
+  - SurveyNpcAk
+
+- type: startingGear
+  id: SurveyVeteranGunnerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    head: ClothingHeadHelmetSwat
+    outerClothing: ClothingOuterArmorRaid
+    mask: ClothingMaskGasSyndicate
+    shoes: ClothingShoesBootsWork
+  inhand:
+  - SurveyNpcLmg
+
+- type: startingGear
+  id: SurveyVeteranBreacherGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    head: ClothingHeadHelmetRiot
+    outerClothing: ClothingOuterArmorRiot
+    mask: ClothingMaskGasSyndicate
+    shoes: ClothingShoesBootsWork
+  inhand:
+  - SurveyNpcBulldog
+
+- type: startingGear
+  id: SurveyPirateVeteranGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitPirate
+    head: ClothingHeadHelmetMerc
+    outerClothing: ClothingOuterArmorBulletproof
+    shoes: ClothingShoesBootsLaceup
+  inhand:
+  - SurveyNpcVector

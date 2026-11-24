@@ -1,0 +1,35 @@
+- type: radioChannel
+  id: SurveyNative
+  name: chat-radio-survey-native
+  keycode: 'ш'
+  frequency: 1442
+  color: "#d1773a"
+  longRange: true
+
+- type: entity
+  parent: EncryptionKey
+  id: EncryptionKeySurveyNative
+  name: ключ туземной частоты
+  description: Чип из рации туземцев. Вставь в гарнитуру, и услышишь, как они переговариваются и где тебя ищут.
+  components:
+  - type: EncryptionKey
+    channels:
+    - SurveyNative
+    defaultChannel: SurveyNative
+  - type: Sprite
+    layers:
+    - state: crypt_red
+    - state: synd_label
+  - type: StaticPrice
+    price: 250
+
+- type: entity
+  parent: EncryptionKey
+  id: EncryptionKeySurveyNativeBurnt
+  name: выжженный ключ туземной частоты
+  description: Туземцы сменили шифр. Этот чип больше ничего не ловит.
+  components:
+  - type: EncryptionKey
+  - type: Sprite
+    layers:
+    - state: crypt_gray
