@@ -121,7 +121,7 @@ public sealed partial class NinjaHackBeaconSystem : EntitySystem
                 continue;
             }
 
-            var withdrawn = AnnounceAndWithdraw(station.Value, comp.MineAtOnce);
+            var withdrawn = AnnounceAndWithdraw(uid, station.Value, comp.MineAtOnce);
             if (withdrawn <= 0)
                 continue;
 
@@ -180,6 +180,7 @@ public sealed partial class NinjaHackBeaconSystem : EntitySystem
     }
 
     private int AnnounceAndWithdraw(
+    EntityUid uid,
     Entity<StationBankAccountComponent?> station,
     int amount,
     bool dirty = true)
@@ -227,7 +228,7 @@ public sealed partial class NinjaHackBeaconSystem : EntitySystem
         if (total <= 0)
             return 0;
 
-        AnnounceTransfers(station, plan);
+        AnnounceTransfers(uid, station, plan);
 
         foreach (var (account, taken) in plan)
         {
@@ -244,6 +245,7 @@ public sealed partial class NinjaHackBeaconSystem : EntitySystem
     }
 
     private void AnnounceTransfers(
+    EntityUid beacon,
     EntityUid station,
     Dictionary<ProtoId<CargoAccountPrototype>, int> plan)
     {
@@ -281,7 +283,7 @@ public sealed partial class NinjaHackBeaconSystem : EntitySystem
                 ("amount", taken),
                 ("name", Loc.GetString(account.Name)),
                 ("code", Loc.GetString(account.Code)),
-                ("position", GenerateGarbage(_navMap.GetNearestBeaconString(console))));
+                ("position", GenerateGarbage(_navMap.GetNearestBeaconString(beacon))));
 
             _radio.SendRadioMessage(console, msg, account.RadioChannel, console, escapeMarkup: false);
         }

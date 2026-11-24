@@ -185,6 +185,29 @@
       sprite: _DeadSpace/Objects/Devices/pinpointer.rsi
       state: pinpointer-black
   - type: NinjaInfoCondition
+    filters: 
+    - !type:BlacklistedJobsMindFilter
+      blacklist:
+      - Passenger
+      - TaipanAtmosphericsEngineer
+      - TaipanBotanist
+      - TaipanCargotech
+      - TaipanChef
+      - TaipanCommunicationsOfficer
+      - TaipanMedic
+      - TaipanParamedic
+      - TaipanRecruit
+      - TaipanResearchDirector
+      - TaipanResearcher
+      - TaipanTechnician
+      - TaipanTechnicalOperationsSupervisor
+      - CentralCommandOperator
+      - CentralCommandSpecialOperationsOfficer
+      - CentralCommandOfficer
+      - CentralCommandOfficerAlt
+      - CentralCommandOfficerArmored
+      - CentralCommandAdministrator
+      - Magistrat
 
 - type: entity
   parent: [BaseNinjaObjective]
