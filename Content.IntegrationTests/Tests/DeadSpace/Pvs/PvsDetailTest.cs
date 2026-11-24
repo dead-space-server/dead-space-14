@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.GameTicking;
 using Content.Shared.Body.Systems;
+using Content.Shared.PDA;
 using Content.Shared.CCVar;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Light.Components;
@@ -104,6 +105,7 @@ public sealed class PvsDetailTest
         NetEntity netPart = default;
         NetEntity netMagazine = default;
         NetEntity netCell = default;
+        NetEntity netCard = default;
         await server.WaitPost(() =>
         {
             var tools = server.System<SharedContainerSystem>().GetContainer(belt, StorageComponent.ContainerId);
@@ -120,6 +122,12 @@ public sealed class PvsDetailTest
             Assert.That(cell, Is.Not.Null, "The lantern has no cell.");
             netMagazine = sEntMan.GetNetEntity(magazine.Value);
             netCell = sEntMan.GetNetEntity(cell.Value);
+
+            var pda = sEntMan.SpawnAttachedTo("PassengerPDA", near);
+            var card = sEntMan.GetComponent<PdaComponent>(pda).ContainedId;
+            Assert.That(card, Is.Not.Null, "The PDA has no ID card.");
+            Assert.That(sEntMan.GetComponent<MetaDataComponent>(card.Value).Flags & MetaDataFlags.PvsDetail, Is.EqualTo((MetaDataFlags) 0));
+            netCard = sEntMan.GetNetEntity(card.Value);
         });
 
         await pair.RunTicksSync(90);
@@ -142,6 +150,7 @@ public sealed class PvsDetailTest
         Assert.That(Seen(cEntMan, netPart), Is.False, "Body parts were sent from far away.");
         Assert.That(Seen(cEntMan, netMagazine), Is.False, "The magazine was sent from far away.");
         Assert.That(Seen(cEntMan, netCell), Is.False, "The cell was sent from far away.");
+        Assert.That(Seen(cEntMan, netCard), Is.True, "The ID card was not sent from far away.");
         Assert.That(BeltLayers(cEntMan, netBelt), Is.EqualTo(beltLayers), "The belt looks different from far away.");
         Assert.That(Look(cEntMan, netGun, AmmoVisuals.MagLoaded), Is.EqualTo(gunLook), "The pistol looks different from far away.");
         Assert.That(Look(cEntMan, netLantern, HandheldLightVisuals.Power), Is.EqualTo(lanternLook), "The lantern looks different from far away.");
