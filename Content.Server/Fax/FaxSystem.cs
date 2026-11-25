@@ -601,7 +601,7 @@ public sealed partial class FaxSystem : EntitySystem
     ///     Accepts a new message and adds it to the queue to print
     ///     If has parameter "notifyAdmins" also output a special message to admin chat.
     /// </summary>
-    public void Receive(EntityUid uid, FaxPrintout printout, string? fromAddress = null, FaxMachineComponent? component = null)
+    public void Receive(EntityUid uid, FaxPrintout printout, string? fromAddress = null, FaxMachineComponent? component = null, bool recordInbox = true) //DS-14
     {
         if (!Resolve(uid, ref component))
             return;
@@ -615,7 +615,7 @@ public sealed partial class FaxSystem : EntitySystem
 
         if (component.NotifyAdmins)
             NotifyAdmins(faxName);
-        if (component.NotifyAdmins) // DS14
+        if (component.NotifyAdmins && recordInbox) // DS14
             _centCommFax.Record(_centCommFax.FindFax(fromAddress), faxName, printout, notify: false); // DS14
         // DS14-start FaxHistory
         if (component.FaxHistory.Count >= 20)
