@@ -1,0 +1,56 @@
+{
+	"version": 1,
+	"license": "CC-BY-SA-3.0",
+	"copyright": "Surgical omnitool gloves textures for DeadSpace (kuvalda-space-14)",
+	"size": {
+		"x": 32,
+		"y": 32
+	},
+	"states": [
+		{
+			"name": "Omnihand-med_icon"
+		},
+		{
+			"name": "Omnihand-med-left"
+		},
+		{
+			"name": "Omnihand-med_right"
+		},
+		{
+			"name": "Omnihand-med_empty",
+			"directions": 4
+		},
+		{
+			"name": "Omnihand-med_scalpel",
+			"directions": 4
+		},
+		{
+			"name": "Omnihand-med_saw",
+			"directions": 4
+		},
+		{
+			"name": "Omnihand-med_cautery",
+			"directions": 4
+		},
+		{
+			"name": "Omnihand-med_hemostat",
+			"directions": 4
+		},
+		{
+			"name": "Omnihand-med_retractor",
+			"directions": 4
+		},
+		{
+			"name": "Omnihand-med_bone-gel",
+			"directions": 4
+		},
+		{
+			"name": "Omnihand-med_dion-gel",
+			"directions": 4
+		},
+		{
+			"name": "Omnihand-med_slime-gel",
+			"directions": 4
+		}
+	]
+}

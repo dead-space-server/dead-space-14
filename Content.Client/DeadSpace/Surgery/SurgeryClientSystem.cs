@@ -6,6 +6,7 @@ using Content.Shared.Atmos.Rotting;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Camera;
 using Content.Shared.DeadSpace.Body.Limbs;
@@ -72,6 +73,7 @@ public sealed partial class SurgeryClientSystem : EntitySystem
     [Dependency] private LimbImplantSystem _implants = default!;
     [Dependency] private ItemToggleSystem _toggle = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SurgeryOmnitoolSystem _omnitool = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
@@ -149,6 +151,7 @@ public sealed partial class SurgeryClientSystem : EntitySystem
         SubscribeLocalEvent<ContentEyeComponent, GetEyeOffsetEvent>(OnEye);
         SubscribeLocalEvent<LimbBodyComponent, CanDragEvent>(OnCanDrag, after: [typeof(SharedBodySystem)]);
         SubscribeLocalEvent<LimbBodyComponent, InteractUsingEvent>(OnUse);
+        SubscribeLocalEvent<LimbBodyComponent, InteractHandEvent>(OnHandInteractDuringSurgery, before: [typeof(SharedBuckleSystem)]);
         SubscribeLocalEvent<LimbBodyComponent, TargetBeforeInjectEvent>(OnBeforeInject);
         SubscribeLocalEvent<LimbBodyComponent, InjectorUseAttemptEvent>(OnInjectorUse);
         SubscribeLocalEvent<SurgerySiteComponent, AfterAutoHandleStateEvent>(OnSite);
@@ -167,11 +170,17 @@ public sealed partial class SurgeryClientSystem : EntitySystem
             .Register<SurgeryClientSystem>();
     }
 
+    private void OnHandInteractDuringSurgery(Entity<LimbBodyComponent> ent, ref InteractHandEvent args)
+    {
+        if (_omnitool.Equipped(args.User) != null)
+            args.Handled = true;
+    }
+
     private bool OnWorldClick(in PointerInputCmdHandler.PointerInputCmdArgs args)
     {
         if (args.State != BoundKeyState.Down
             || _board == null || _patient is not { } patient || _tool == null || args.EntityUid == patient || !Exists(patient)
-            || _players.LocalEntity is not { } user || !_hands.TryGetActiveItem(user, out var held) || held != _tool)
+            || _players.LocalEntity is not { } user || HeldTool(user, patient) != _tool)
             return false;
 
         if (args.EntityUid.IsValid()
@@ -413,11 +422,7 @@ public sealed partial class SurgeryClientSystem : EntitySystem
             return;
         }
 
-        _tool = _hands.TryGetActiveItem(user, out var held)
-                && (HasComp<SurgeryToolComponent>(held) || GraftMaterial(patient.Value, held.Value) || HasComp<BodyPartComponent>(held) || HasComp<SurgeryAppendageComponent>(held)
-                    || Wraps(held.Value) || HasComp<SolutionContainerManagerComponent>(held))
-            ? held
-            : null;
+        _tool = HeldTool(user, patient.Value);
         if (_board != null && _board.StepVerb != 255)
         {
             var step = (SurgeryVerbKind) _board.StepVerb;
@@ -434,11 +439,11 @@ public sealed partial class SurgeryClientSystem : EntitySystem
                 _verb = close;
             else if (_tool != null && FewOrgans() && ToolHas(SurgeryVerbKind.Extract))
                 _verb = SurgeryVerbKind.Extract;
-            else if (held != null && step == SurgeryVerbKind.Seat
+            else if (_tool != null && step == SurgeryVerbKind.Seat
                      && _board is { } seatBoard
                      && Has(seatBoard.Verbs, SurgeryVerbKind.Seat))
                 _verb = step;
-            else if (held == null && step == SurgeryVerbKind.SetBone)
+            else if (_tool == null && step == SurgeryVerbKind.SetBone)
                 _verb = step;
             else
                 _verb = SurgeryVerbKind.Inspect;
@@ -491,6 +496,21 @@ public sealed partial class SurgeryClientSystem : EntitySystem
         Paint(patient.Value, VisualAmount());
         WorkUi();
         PlaceMap(patient.Value);
+    }
+
+    private EntityUid? HeldTool(EntityUid user, EntityUid patient)
+    {
+        if (_hands.TryGetActiveItem(user, out var held)
+            && (HasComp<SurgeryToolComponent>(held)
+                || GraftMaterial(patient, held.Value)
+                || HasComp<BodyPartComponent>(held)
+                || HasComp<OrganComponent>(held)
+                || HasComp<SurgeryAppendageComponent>(held)
+                || Wraps(held.Value)
+                || HasComp<SolutionContainerManagerComponent>(held)))
+            return held;
+
+        return _omnitool.Equipped(user);
     }
 
     private void OnCanDrag(Entity<LimbBodyComponent> ent, ref CanDragEvent args)
@@ -632,7 +652,7 @@ public sealed partial class SurgeryClientSystem : EntitySystem
 
         _board = message;
         _patient = patient;
-        _tool = _hands.TryGetActiveItem(user, out var held) ? held : null;
+        _tool = HeldTool(user, patient.Value);
         _organ = message.Organs.Length > 0 ? message.Organs[0] : (byte) 255;
         var verb = StepOf(message);
         _step = message.StepVerb == 255 ? verb : (SurgeryVerbKind) message.StepVerb;
@@ -1821,7 +1841,10 @@ public sealed partial class SurgeryClientSystem : EntitySystem
     private bool CanMark(EntityUid user, EntityUid patient)
     {
         if (!_hands.TryGetActiveItem(user, out var held))
-            return false;
+            return _omnitool.Equipped(user) != null;
+
+        if (_omnitool.Is(held))
+            return true;
 
         var machine = MachineBody(patient);
         if (TryComp<SurgeryToolComponent>(held, out var tool) && tool.Probe)
@@ -1835,7 +1858,10 @@ public sealed partial class SurgeryClientSystem : EntitySystem
         thick = true;
         ink = FleshInk;
         if (!_hands.TryGetActiveItem(user, out var held))
-            return false;
+            return _omnitool.Equipped(user) != null;
+
+        if (_omnitool.Is(held))
+            return true;
 
         if (TryComp<SurgeryToolComponent>(held, out var tool) && tool.Probe)
         {

@@ -16,6 +16,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction;
@@ -61,6 +62,7 @@ public sealed partial class SurgerySystem : EntitySystem
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private MobStateSystem _mobs = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SurgeryOmnitoolSystem _omnitool = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private LimbWoundSystem _limbs = default!;
@@ -188,6 +190,15 @@ public sealed partial class SurgerySystem : EntitySystem
     {
         if (args.Handled || !CanOperate(ent.Owner) || !Near(args.User, ent.Owner))
             return;
+
+        var omnitool = _omnitool.Equipped(args.User);
+        if (omnitool != null)
+        {
+            args.Handled = true;
+            if (TryComp<SurgerySiteComponent>(ent.Owner, out var openSite) && !openSite.Done && WoundOpen(openSite))
+                Send(ent.Owner, args.User, openSite, omnitool, string.Empty, true);
+            return;
+        }
 
         if (!TryComp<SurgerySiteComponent>(ent.Owner, out var site) || site.Done || !WoundOpen(site))
             return;
@@ -383,6 +394,15 @@ public sealed partial class SurgerySystem : EntitySystem
             focus.Held = true;
         }
 
+        if (TryComp<HandsComponent>(user, out var hands)
+            && hands.ActiveHandId != null
+            && !HasComp<SurgeryHandBusyComponent>(user))
+        {
+            var busy = AddComp<SurgeryHandBusyComponent>(user);
+            busy.Hand = hands.ActiveHandId;
+            Dirty(user, busy);
+        }
+
         _eyes.SetZoom(user, SharedContentEyeSystem.MinZoom, eye: eye);
     }
 
@@ -395,6 +415,7 @@ public sealed partial class SurgerySystem : EntitySystem
             _eyes.SetZoom(user, focus.Prior, eye: eye);
 
         RemComp<SurgeryFocusComponent>(user);
+        RemComp<SurgeryHandBusyComponent>(user);
     }
 
     private void OnCancel(SurgeryCancelMessage message, EntitySessionEventArgs args)
@@ -2656,7 +2677,10 @@ public sealed partial class SurgerySystem : EntitySystem
 
     private EntityUid? Held(EntityUid user)
     {
-        return _hands.TryGetActiveItem(user, out var item) ? item : null;
+        if (_hands.TryGetActiveItem(user, out var item))
+            return item;
+
+        return _omnitool.Equipped(user);
     }
 
     private bool CanMark(EntityUid user, EntityUid patient)
@@ -2664,6 +2688,9 @@ public sealed partial class SurgerySystem : EntitySystem
         var held = Held(user);
         if (held == null)
             return false;
+
+        if (_omnitool.Is(held.Value))
+            return true;
 
         var machine = Machine(patient);
         if (TryComp<SurgeryToolComponent>(held.Value, out var tool) && tool.Probe)
