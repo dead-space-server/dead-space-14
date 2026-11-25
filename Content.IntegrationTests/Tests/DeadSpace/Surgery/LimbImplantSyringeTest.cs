@@ -18,6 +18,9 @@ namespace Content.IntegrationTests.Tests.DeadSpace.Surgery;
 [TestFixture]
 public sealed class LimbImplantSyringeTest
 {
+    private static readonly EntProtoId KerenskyImplant = "KerenskyImplant";
+    private static readonly EntProtoId KerenskyImplanter = "KerenskyImplanter";
+
     [TestCase("SandevistanLoneImplanter", "Back")]
     [TestCase("MantisBladesLoneImplanter", "ArmLeft")]
     [TestCase("MonowireLoneImplanter", "ArmLeft")]
@@ -65,8 +68,8 @@ public sealed class LimbImplantSyringeTest
                     Assert.That(entMan.GetComponent<DodgeComponent>(human).GuaranteedStaminaCost, Is.EqualTo(6f));
                     Assert.That(entMan.GetComponent<SemiAutoFireRateComponent>(human).OnlyWhileActive, Is.True);
                     Assert.That(entMan.GetComponent<NearbyCriticalShoutComponent>(human).Cooldown, Is.EqualTo(5f));
-                    Assert.That(server.ResolveDependency<IPrototypeManager>().Index<EntityPrototype>("KerenskyImplant").HideSpawnMenu, Is.False);
-                    Assert.That(server.ResolveDependency<IPrototypeManager>().Index<EntityPrototype>("KerenskyImplanter").HideSpawnMenu, Is.False);
+                    Assert.That(server.ResolveDependency<IPrototypeManager>().Index<EntityPrototype>(KerenskyImplant).HideSpawnMenu, Is.False);
+                    Assert.That(server.ResolveDependency<IPrototypeManager>().Index<EntityPrototype>(KerenskyImplanter).HideSpawnMenu, Is.False);
                 });
             }
         });
