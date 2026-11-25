@@ -10818,3 +10818,15 @@ Entries:
   changes:
   - type: Add
     message: Цель станции во вкладке "Факс ЦК"
+- id: 1049
+  author: Atickov
+  time: '2026-11-25T14:25:25.938039+00:00'
+  pr: 2742
+  changes:
+  - type: Tweak
+    message: 'Амбер: фулл ремап станции, пересмотрена задумка. by soda640'
+  - type: Tweak
+    message: 'Багель: изменены обзие коридоры, добавлена хирургичка, исправлены некоторые
+      баги. by soda640'
+  - type: Tweak
+    message: 'Луп: добавлена хирургичка. by soda640'
