@@ -22,7 +22,7 @@ public sealed class LimbAimView : Control
     public LimbAimView()
     {
         MouseFilter = MouseFilterMode.Stop;
-        MinSize = new Vector2(32, 32);
+        MinSize = new Vector2(64, 64);
         MaxSize = MinSize;
     }
 
