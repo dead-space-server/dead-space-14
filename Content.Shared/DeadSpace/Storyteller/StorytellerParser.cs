@@ -15,6 +15,7 @@ public sealed class StoryLexicon
     public readonly List<(string Key, string Id)> Locations = new();
     public readonly List<(string Key, string Id)> Kinds = new();
     public readonly List<(string Key, string Id)> Roles = new();
+    public readonly Dictionary<string, (string Stem, string Id)> Leads = new();
     public readonly List<(string Key, string Id)> Items = new();
 
     internal readonly List<(string Stem, string Id)> EmoteStems = new();
@@ -75,7 +76,11 @@ public sealed class StoryLexicon
         foreach (var proto in prototypes.EnumeratePrototypes<StoryKindPrototype>())
             lexicon.Add(lexicon.Kinds, proto.Keywords, proto.ID);
         foreach (var proto in prototypes.EnumeratePrototypes<StoryRolePrototype>())
+        {
             lexicon.Add(lexicon.Roles, proto.Keywords, proto.ID);
+            if (!string.IsNullOrEmpty(proto.Lead) && !string.IsNullOrEmpty(proto.LeadStem))
+                lexicon.Leads[proto.Lead] = (StorytellerParser.Fold(proto.LeadStem), proto.ID);
+        }
         foreach (var proto in prototypes.EnumeratePrototypes<StoryItemPrototype>())
             lexicon.Add(lexicon.Items, proto.Keywords, proto.ID);
         foreach (var proto in prototypes.EnumeratePrototypes<StoryEmotePrototype>())
@@ -1145,7 +1150,7 @@ public static class StorytellerParser
 
             if (Match(low, lexicon.Roles) is { } role)
             {
-                who.Role = role;
+                who.Role = LeadRole(clause, i, used, role, lexicon);
                 used.Add(i);
                 found = true;
                 continue;
@@ -1301,7 +1306,7 @@ public static class StorytellerParser
             if (who.Kind.Length == 0 && Match(low, lexicon.Kinds) is { } kind)
                 who.Kind = kind;
             else if (who.Role.Length == 0 && Match(low, lexicon.Roles) is { } role)
-                who.Role = role;
+                who.Role = LeadRole(clause, i, used, role, lexicon);
             else if (lexicon.FemaleWords.Contains(low))
                 who.Sex = Sex.Female;
             else if (lexicon.MaleWords.Contains(low))
@@ -1382,6 +1387,19 @@ public static class StorytellerParser
         }
 
         return found;
+    }
+
+    private static string LeadRole(List<Token> clause, int index, HashSet<int> used, string role, StoryLexicon lexicon)
+    {
+        if (index > 0 && !used.Contains(index - 1) &&
+            lexicon.Leads.TryGetValue(role, out var lead) &&
+            clause[index - 1].Low.StartsWith(lead.Stem, StringComparison.Ordinal))
+        {
+            used.Add(index - 1);
+            return lead.Id;
+        }
+
+        return role;
     }
 
     private static string? Match(string low, List<(string Key, string Id)> list)

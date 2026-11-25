@@ -454,8 +454,40 @@
   keywords: [ маг, мага, волшебник, волшебника, колдун ]
 
 - type: storyRole
-  id: DeathSquad
-  name: storyteller-role-DeathSquad
+  id: Brigmedic
+  name: storyteller-role-Brigmedic
   order: 36
-  gear: DeathSquadGear
-  keywords: [ эскадронщик, ликвидатор, ликвидатора ]
+  job: Brigmedic
+  keywords: [ бригмедик, бригмедика ]
+
+- type: storyRole
+  id: SeniorPhysician
+  name: storyteller-role-SeniorPhysician
+  order: 37
+  job: SeniorPhysician
+  lead: Doctor
+  leadStem: ведущ
+
+- type: storyRole
+  id: SeniorEngineer
+  name: storyteller-role-SeniorEngineer
+  order: 38
+  job: SeniorEngineer
+  lead: Engineer
+  leadStem: ведущ
+
+- type: storyRole
+  id: SeniorResearcher
+  name: storyteller-role-SeniorResearcher
+  order: 39
+  job: SeniorResearcher
+  lead: Scientist
+  leadStem: ведущ
+
+- type: storyRole
+  id: SeniorSalvage
+  name: storyteller-role-SeniorSalvage
+  order: 40
+  job: SeniorSalvageSpecialist
+  lead: Salvage
+  leadStem: ведущ

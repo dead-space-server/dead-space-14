@@ -256,6 +256,12 @@ public sealed partial class StoryRolePrototype : IPrototype
 
     [DataField]
     public ProtoId<StartingGearPrototype>? Gear;
+
+    [DataField]
+    public string? Lead;
+
+    [DataField]
+    public string? LeadStem;
 }
 
 public enum StoryItemUse : byte
