@@ -10811,3 +10811,10 @@ Entries:
     message: Ведущие профессии и бригмед в истории
   - type: Remove
     message: ЭС из историй
+- id: 1048
+  author: BlueDogDoc
+  time: '2026-11-25T14:23:22.408993+00:00'
+  pr: 2861
+  changes:
+  - type: Add
+    message: Цель станции во вкладке "Факс ЦК"
