@@ -48,6 +48,7 @@
     canThrowTrigger: true
     canMoveBreakout: true
     maxEnsnares: 1
+    skipDownedOrDead: true # DS14
   - type: LandAtCursor
   - type: Fixtures
     fixtures:

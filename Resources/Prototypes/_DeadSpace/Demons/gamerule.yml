@@ -24,4 +24,4 @@
     reoccurrenceDelay: 60
     minimumPlayers: 30
   - type: RandomSpawnRule
-    prototype: MobGhostShadowDemon
+    prototype: SpawnPointGhostShadowDemon

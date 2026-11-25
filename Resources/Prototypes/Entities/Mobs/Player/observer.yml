@@ -79,7 +79,6 @@
   - type: Examiner
     skipChecks: true
   - type: Ghost
-  - type: CameraArchiveIgnore
   - type: GhostSpriteState
     damageMap:
       Blunt: 3

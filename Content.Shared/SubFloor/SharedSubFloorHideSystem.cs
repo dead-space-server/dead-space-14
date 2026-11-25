@@ -24,6 +24,7 @@ namespace Content.Shared.SubFloor
         [Dependency] protected SharedMapSystem Map = default!;
         [Dependency] protected SharedAppearanceSystem Appearance = default!;
         [Dependency] private SharedVisibilitySystem _visibility = default!;
+        [Dependency] private MetaDataSystem _meta = default!; //DS-14
         [Dependency] protected SharedPopupSystem _popup = default!;
 
         private EntityQuery<SubFloorHideComponent> _hideQuery;
@@ -161,6 +162,7 @@ namespace Content.Shared.SubFloor
             var hiddenLayer = value && entity.Comp.VisibleLayers.Count == 0; //DS-14
             var layer = hiddenLayer ? SubfloorViewLayers.ToFlag(entity.Comp.ViewLayer) : VisibilityFlags.Normal; //DS-14
             _visibility.SetLayer(entity.Owner, (ushort) layer); //DS-14
+            _meta.SetFlag(entity.Owner, MetaDataFlags.PvsDetail, hiddenLayer); //DS-14
 
             if (entity.Comp.IsUnderCover == value)
                 return;

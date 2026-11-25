@@ -7,6 +7,7 @@
     bone: 30
     organ: 1.3
     bleed: 0.16
+    embed: 0.05
   - type: HitscanBasicDamage
     damage:
       types:

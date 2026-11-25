@@ -4,6 +4,8 @@
   categories: [ HideSpawnMenu ]
   name: патрон (9x19 мм Smart™)
   components:
+  - type: LimbRound
+    embed: 0.0025
   - type: Projectile
     damage:
       types:

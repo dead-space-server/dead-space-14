@@ -17,7 +17,16 @@
     <PackageReference Include="Serilog" />
     <PackageReference Include="VorbisPizza" PrivateAssets="All" /> <!-- DS14 -->
     <PackageReference Include="OggVorbisEncoder" PrivateAssets="All" /> <!-- DS14 -->
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" /> <!-- DS14 -->
   </ItemGroup>
+  <!-- DS14-start -->
+  <ItemGroup>
+    <EmbeddedResource Include="../Resources/Fonts/NotoSans/NotoSans-Regular.ttf" LogicalName="NotoSans-Regular.ttf" />
+    <EmbeddedResource Include="../Resources/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf" LogicalName="NotoSansDisplay-Bold.ttf" />
+    <EmbeddedResource Include="../Resources/Fonts/NotoSans/LICENSE.txt" LogicalName="NotoSans-LICENSE.txt" />
+    <EmbeddedResource Include="../Resources/Fonts/NotoSansDisplay/LICENSE_OFL.txt" LogicalName="NotoSansDisplay-LICENSE.txt" />
+  </ItemGroup>
+  <!-- DS14-end -->
   <ItemGroup>
     <ProjectReference Include="..\Content.Packaging\Content.Packaging.csproj" />
     <ProjectReference Include="..\Content.Server.Database\Content.Server.Database.csproj" />

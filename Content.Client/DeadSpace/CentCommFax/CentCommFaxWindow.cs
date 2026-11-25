@@ -3,6 +3,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Client.Message;
+using Content.Client.Paper.UI;
 using Content.Shared.DeadSpace.CentCommFax;
 using Content.Shared.DeadSpace.Photocopier;
 using Content.Shared.Paper;
@@ -37,6 +38,8 @@ public sealed class CentCommFaxWindow : DefaultWindow
     };
 
     public event Action<CentCommFaxEuiMsg.Reply>? OnReply;
+    public event Action<CentCommFaxEuiMsg.Reply>? OnPrint;
+    public event Action? OnLoad;
     public event Action<string, NetEntity?>? OnTemplateRequested;
     public event Action<NetEntity>? OnFollow;
 
@@ -45,6 +48,7 @@ public sealed class CentCommFaxWindow : DefaultWindow
     private readonly Label _viewTitle;
     private readonly Label _viewMeta;
     private readonly RichTextLabel _viewContent;
+    private readonly StampCollection _stampDisplay;
     private readonly Label _viewStamps;
     private readonly Button _followSender;
     private readonly OptionButton _targetSelector;
@@ -56,6 +60,7 @@ public sealed class CentCommFaxWindow : DefaultWindow
     private readonly OptionButton _colorSelector;
     private readonly CheckBox _lockBox;
     private readonly CheckBox _returnBox;
+    private readonly TextEdit _commentEdit;
     private readonly Label _stampListLabel;
     private readonly Button _sendButton;
     private readonly Label _status;
@@ -70,6 +75,7 @@ public sealed class CentCommFaxWindow : DefaultWindow
     private int _selected = -1;
     private int _targetIndex = -1;
     private string? _paperPrototype;
+    private CentCommFaxEuiMsg.PaperLoaded? _loaded;
 
     public CentCommFaxWindow(IPrototypeManager prototypes, IComponentFactory factory)
     {
@@ -140,19 +146,42 @@ public sealed class CentCommFaxWindow : DefaultWindow
             },
         };
         var paperScroll = new ScrollContainer { HScrollEnabled = false, VerticalExpand = true };
+        var paperBody = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            HorizontalExpand = true,
+        };
         _viewContent = new RichTextLabel { HorizontalExpand = true };
-        paperScroll.AddChild(_viewContent);
+        _stampDisplay = new StampCollection
+        {
+            HorizontalExpand = true,
+            MinSize = Vector2.Zero,
+            MouseFilter = MouseFilterMode.Ignore,
+            Margin = new Thickness(0, 8, 0, 8),
+        };
+        _viewStamps = new Label { StyleClasses = { "LabelSubText" } };
+        paperBody.AddChild(_viewContent);
+        paperBody.AddChild(_stampDisplay);
+        paperBody.AddChild(_viewStamps);
+        paperScroll.AddChild(paperBody);
         paper.AddChild(paperScroll);
         right.AddChild(paper);
-
-        _viewStamps = new Label { StyleClasses = { "LabelSubText" }, ClipText = true };
-        right.AddChild(_viewStamps);
 
         right.AddChild(new Label { Text = Loc.GetString("centcomm-fax-reply-header"), StyleClasses = { "LabelHeading" } });
 
         _returnBox = new CheckBox { Text = Loc.GetString("centcomm-fax-return-original"), Disabled = true };
         _returnBox.OnToggled += args => SetReturnOriginal(args.Pressed);
         right.AddChild(_returnBox);
+
+        _commentEdit = new TextEdit
+        {
+            HorizontalExpand = true,
+            MinHeight = 70,
+            Editable = false,
+        };
+        _commentEdit.Placeholder = new Rope.Leaf(Loc.GetString("centcomm-fax-comment-placeholder"));
+        _commentEdit.OnTextChanged += _ => UpdatePaperView();
+        right.AddChild(_commentEdit);
 
         _targetSelector = new OptionButton { HorizontalExpand = true };
         _targetSelector.OnItemSelected += args =>
@@ -206,9 +235,15 @@ public sealed class CentCommFaxWindow : DefaultWindow
 
         var sendRow = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 8 };
         _status = new Label { HorizontalExpand = true, StyleClasses = { "LabelSubText" } };
+        var printButton = new Button { Text = Loc.GetString("centcomm-fax-print"), MinWidth = 120 };
+        printButton.OnPressed += _ => Print();
+        var loadButton = new Button { Text = Loc.GetString("centcomm-fax-load"), MinWidth = 120 };
+        loadButton.OnPressed += _ => OnLoad?.Invoke();
         _sendButton = new Button { Text = Loc.GetString("centcomm-fax-send"), MinWidth = 180 };
         _sendButton.OnPressed += _ => Send();
         sendRow.AddChild(_status);
+        sendRow.AddChild(printButton);
+        sendRow.AddChild(loadButton);
         sendRow.AddChild(_sendButton);
         right.AddChild(sendRow);
 
@@ -283,10 +318,22 @@ public sealed class CentCommFaxWindow : DefaultWindow
 
     public void ApplyTemplate(CentCommFaxEuiMsg.TemplateLoaded template)
     {
+        _loaded = null;
         _titleEdit.Text = template.Title;
         _contentEdit.TextRope = new Rope.Leaf(template.Content);
         _paperPrototype = template.PaperPrototype;
         _status.Text = Loc.GetString("centcomm-fax-status-template", ("template", template.Title));
+        SetReturnOriginal(_returnBox.Pressed);
+    }
+
+    public void ApplyLoaded(CentCommFaxEuiMsg.PaperLoaded paper)
+    {
+        _loaded = paper;
+        _titleEdit.Text = paper.Title;
+        _contentEdit.TextRope = new Rope.Leaf(paper.Content);
+        _commentEdit.TextRope = new Rope.Leaf(string.Empty);
+        _paperPrototype = paper.PaperPrototype;
+        SetReturnOriginal(_returnBox.Pressed);
     }
 
     private void SelectEntry(int index)
@@ -332,13 +379,8 @@ public sealed class CentCommFaxWindow : DefaultWindow
             ("sender", entry.Sender),
             ("station", string.IsNullOrEmpty(entry.Station) ? Loc.GetString("centcomm-fax-none") : entry.Station),
             ("time", entry.Time));
-        _viewContent.SetMarkupPermissive($"[color=#1a1a1a]{entry.Content}[/color]");
-
-        var stamps = entry.Stamps.Select(s => LocalizeOrRaw(s.StampedName)).ToList();
-        _viewStamps.Text = Loc.GetString("centcomm-fax-stamps",
-            ("stamps", stamps.Count == 0 ? Loc.GetString("centcomm-fax-none") : string.Join(", ", stamps)),
-            ("signatures", entry.Signatures.Count == 0 ? Loc.GetString("centcomm-fax-none") : string.Join(", ", entry.Signatures)));
         _followSender.Disabled = entry.SenderFax == null;
+        UpdatePaperView();
     }
 
     private void SelectTarget(NetEntity fax)
@@ -376,7 +418,9 @@ public sealed class CentCommFaxWindow : DefaultWindow
 
     private void SelectTemplate(int id)
     {
+        _loaded = null;
         _templateSelector.SelectId(id);
+        SetReturnOriginal(_returnBox.Pressed);
         if (id <= 0 || id >= _templates.Count)
         {
             _paperPrototype = null;
@@ -457,58 +501,136 @@ public sealed class CentCommFaxWindow : DefaultWindow
     /// <summary>Returning the received paper itself: its text is kept, only stamps and the receiver are picked.</summary>
     private void SetReturnOriginal(bool value)
     {
-        _titleEdit.Editable = !value;
-        _contentEdit.Editable = !value;
-        _templateSelector.Disabled = value;
+        var composing = !value && _loaded == null;
+        _titleEdit.Editable = composing;
+        _contentEdit.Editable = composing;
+        _templateSelector.Disabled = !composing;
+        _commentEdit.Editable = value || _loaded != null;
 
         if (value && _selected >= 0 && _selected < _inbox.Count && _inbox[_selected].SenderFax is { } senderFax)
             SelectTarget(senderFax);
+
+        UpdatePaperView();
+    }
+
+    private void UpdatePaperView()
+    {
+        string body;
+        IReadOnlyList<StampDisplayInfo> stamps;
+        IReadOnlyList<string> signatures;
+        if (_loaded != null)
+        {
+            _viewTitle.Text = _loaded.Title;
+            body = _loaded.Content;
+            stamps = _loaded.Stamps;
+            signatures = _loaded.Signatures;
+        }
+        else if (_selected >= 0 && _selected < _inbox.Count)
+        {
+            var entry = _inbox[_selected];
+            body = entry.Content;
+            stamps = entry.Stamps;
+            signatures = entry.Signatures;
+        }
+        else
+        {
+            _viewContent.SetMessage(string.Empty);
+            _viewStamps.Text = string.Empty;
+            _stampDisplay.RemoveStamps();
+            _stampDisplay.Visible = false;
+            return;
+        }
+
+        var comment = _commentEdit.Editable ? Rope.Collapse(_commentEdit.TextRope).Trim() : string.Empty;
+        var markup = $"[color=#1a1a1a]{body}[/color]";
+        if (comment.Length > 0)
+            markup += "\n\n" + comment;
+        _viewContent.SetMarkupPermissive(markup);
+
+        _stampDisplay.RemoveStamps();
+        foreach (var stamp in stamps)
+            _stampDisplay.AddStamp(new StampWidget { StampInfo = stamp });
+        _stampDisplay.Visible = stamps.Count > 0;
+
+        var stampNames = stamps.Select(s => LocalizeOrRaw(s.StampedName)).ToList();
+        _viewStamps.Text = Loc.GetString("centcomm-fax-stamps",
+            ("stamps", stampNames.Count == 0 ? Loc.GetString("centcomm-fax-none") : string.Join(", ", stampNames)),
+            ("signatures", signatures.Count == 0 ? Loc.GetString("centcomm-fax-none") : string.Join(", ", signatures)));
     }
 
     private void Send()
     {
-        if (GetTarget() is not { } target)
-        {
-            _status.Text = Loc.GetString("centcomm-fax-status-no-target");
+        if (BuildSheet(requireTarget: true, implicitStamp: true, fromInbox: false) is not { } sheet || GetTarget() is not { } target)
             return;
-        }
 
-        var returnOriginal = _returnBox.Pressed && _selected >= 0 && _selected < _inbox.Count;
-        var content = Rope.Collapse(_contentEdit.TextRope);
-        if (!returnOriginal && (string.IsNullOrWhiteSpace(_titleEdit.Text) || string.IsNullOrWhiteSpace(content)))
-        {
-            _status.Text = Loc.GetString("centcomm-fax-status-empty");
-            return;
-        }
-
-        // The list of added stamps, or just the one picked in the selector if none were added.
-        var stamps = new List<CentCommFaxStamp>(_pendingStamps);
-        if (stamps.Count == 0 && SelectedStamp() is { } single)
-            stamps.Add(single);
-
-        OnReply?.Invoke(new CentCommFaxEuiMsg.Reply
-        {
-            ReplyTo = _selected >= 0 && _selected < _inbox.Count ? _inbox[_selected].Id : -1,
-            Target = target.Fax,
-            Title = _titleEdit.Text,
-            From = _fromEdit.Text,
-            Content = content,
-            Stamps = stamps,
-            Locked = _lockBox.Pressed,
-            PaperPrototype = _paperPrototype,
-            ReturnOriginal = returnOriginal,
-        });
-
+        OnReply?.Invoke(sheet);
         _status.Text = Loc.GetString("centcomm-fax-status-sent", ("target", target.Name));
         _pendingStamps.Clear();
         UpdateStampList();
-        if (returnOriginal)
+        if (sheet.ReturnOriginal || sheet.UseLoaded)
             return;
 
         _contentEdit.TextRope = new Rope.Leaf(string.Empty);
         _titleEdit.Text = string.Empty;
         _paperPrototype = null;
         _templateSelector.SelectId(0);
+    }
+
+    private void Print()
+    {
+        if (BuildSheet(requireTarget: false, implicitStamp: false, fromInbox: true) is not { } sheet)
+            return;
+
+        OnPrint?.Invoke(sheet);
+    }
+
+    private CentCommFaxEuiMsg.Reply? BuildSheet(bool requireTarget, bool implicitStamp, bool fromInbox)
+    {
+        var target = GetTarget();
+        if (requireTarget && target == null)
+        {
+            _status.Text = Loc.GetString("centcomm-fax-status-no-target");
+            return null;
+        }
+
+        var hasInbox = _selected >= 0 && _selected < _inbox.Count;
+        var fromIncoming = fromInbox && hasInbox;
+        var returnOriginal = fromIncoming || (_returnBox.Pressed && hasInbox);
+        var content = _loaded?.Content ?? Rope.Collapse(_contentEdit.TextRope);
+        if (!returnOriginal && _loaded == null && (string.IsNullOrWhiteSpace(_titleEdit.Text) || string.IsNullOrWhiteSpace(content)))
+        {
+            _status.Text = Loc.GetString("centcomm-fax-status-empty");
+            return null;
+        }
+
+        var comment = !fromIncoming && _commentEdit.Editable ? Rope.Collapse(_commentEdit.TextRope).Trim() : string.Empty;
+        if (comment.Length > 4000)
+            comment = comment[..4000];
+        if (content.Length > 10000)
+            content = content[..10000];
+
+        var stamps = fromIncoming ? new List<CentCommFaxStamp>() : new List<CentCommFaxStamp>(_pendingStamps);
+        if (implicitStamp && stamps.Count == 0 && SelectedStamp() is { } single)
+            stamps.Add(single);
+
+        return new CentCommFaxEuiMsg.Reply
+        {
+            ReplyTo = _selected >= 0 && _selected < _inbox.Count ? _inbox[_selected].Id : -1,
+            Target = target?.Fax ?? default,
+            Title = _loaded?.Title ?? _titleEdit.Text,
+            From = _fromEdit.Text,
+            Content = content,
+            Stamps = stamps,
+            Locked = _lockBox.Pressed,
+            PaperPrototype = _loaded?.PaperPrototype ?? _paperPrototype,
+            ReturnOriginal = returnOriginal,
+            Comment = comment,
+            UseLoaded = !fromIncoming && _loaded != null,
+            LoadedLabel = _loaded?.Label,
+            LoadedStampState = _loaded?.StampState,
+            LoadedStamps = _loaded == null ? new List<StampDisplayInfo>() : new List<StampDisplayInfo>(_loaded.Stamps),
+            LoadedSignatures = _loaded == null ? new List<string>() : new List<string>(_loaded.Signatures),
+        };
     }
 
     private CentCommFaxTarget? GetTarget()

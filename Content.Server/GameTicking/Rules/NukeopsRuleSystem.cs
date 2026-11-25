@@ -113,7 +113,7 @@ public sealed partial class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleCompon
         ref RoundEndTextAppendEvent args)
     {
         var winText = Loc.GetString($"nukeops-{component.WinType.ToString().ToLower()}");
-        args.AddLine(winText);
+        args.AddOutcome(winText); // DS14
 
         foreach (var cond in component.WinConditions)
         {
@@ -141,24 +141,6 @@ public sealed partial class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleCompon
             }
         });
     }
-
-    // DS14-start
-    protected override void AppendRoundEndDiscordText(EntityUid uid,
-        NukeopsRuleComponent component,
-        GameRuleComponent gameRule,
-        ref RoundEndDiscordTextAppendEvent args)
-    {
-        args.AddLine(Loc.GetString("nukeops-list-start"));
-
-        var antags = _antag.GetAntagIdentifiers(uid);
-        foreach (var (_, sessionData, name) in antags)
-        {
-            args.AddLine(Loc.GetString("nukeops-list-name-user", ("name", name), ("user", sessionData.UserName)));
-        }
-
-        args.AddLine("");
-    }
-    // DS14-end
 
     private void OnNukeExploded(NukeExplodedEvent ev)
     {

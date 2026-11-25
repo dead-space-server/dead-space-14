@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from https://github.com/tgstation/tgstation/commit/42e0275d860551197687c571c689c270ff423288",
+  "size": {
+    "x": 32,
+    "y": 960
+  },
+  "states": [
+    {
+      "name": "Animation_OrbitalEMSStrike",
+      "delays": [
+        [
+          0.20,
+          0.20,
+          0.20,
+          0.20,
+          0.20,
+          2.19,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01
+        ]
+      ]
+    },
+    {
+      "name": "icon"
+    },
+    {
+      "name": "primed"
+    },
+    {
+      "name": "inhand-left"
+    },
+    {
+      "name": "inhand-right"
+    }
+  ]
+}

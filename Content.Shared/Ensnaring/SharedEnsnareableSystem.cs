@@ -7,9 +7,11 @@ using Content.Shared.DoAfter;
 using Content.Shared.Ensnaring.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Mobs.Systems; // DS14-downed-bola
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Stunnable; // DS14-downed-bola
 using Content.Shared.Strip.Components;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
@@ -37,6 +39,7 @@ public abstract partial class SharedEnsnareableSystem : EntitySystem
     [Dependency] protected SharedPopupSystem Popup = default!;
     [Dependency] private   SharedStaminaSystem _stamina = default!;
     [Dependency] private   IGameTiming _timing = default!; // DS14
+    [Dependency] private   MobStateSystem _mobState = default!; // DS14-downed-bola
 
     public override void Initialize()
     {
@@ -261,6 +264,12 @@ public abstract partial class SharedEnsnareableSystem : EntitySystem
         if (HasComp<LubedComponent>(ensnare))
             return false;
         // DS14-hotfix-lubed-bola-end
+
+        // DS14-downed-bola-start
+        if (component.SkipDownedOrDead &&
+            (HasComp<KnockedDownComponent>(target) || _mobState.IsDead(target)))
+            return false;
+        // DS14-downed-bola-end
 
         //Don't do anything if they don't have the ensnareable component.
         if (!TryComp<EnsnareableComponent>(target, out var ensnareable))

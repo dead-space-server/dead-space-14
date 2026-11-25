@@ -5,6 +5,6 @@ cryostorage-ui-window-title = Cryogenic Sleep Unit
 cryostorage-ui-label-slot-name = [bold]{CAPITALIZE($slot)}:[/bold]
 cryostorage-ui-button-remove = Remove
 cryostorage-ui-filler-hand = inhand
-cryostorage-ui-label-no-bodies = No bodies in cryostorage
+cryostorage-ui-label-no-bodies = Nothing stored in cryostorage
 
 cryostorage-popup-access-denied = Access denied!

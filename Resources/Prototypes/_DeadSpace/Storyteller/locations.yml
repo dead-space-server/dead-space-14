@@ -1,0 +1,356 @@
+- type: storyLocation
+  id: Corridor
+  name: storyteller-location-Corridor
+  order: 0
+  keywords: [ коридор, холл, проход, станция, станции, отсек, палуба, палубе ]
+  floor: FloorSteel
+  darkness: 0.12
+  props:
+  - { proto: AirAlarm, pos: "4,0" }
+  - { proto: FireAlarm, pos: "10,0" }
+  - { proto: DisposalUnit, pos: "2,1" }
+  - { proto: VendingMachineCola, pos: "6,1" }
+  - { proto: VendingMachineSnack, pos: "7,1" }
+  - { proto: VendingMachineCoffee, pos: "8,1" }
+  - { proto: WaterCooler, pos: "12,1" }
+  - { proto: PottedPlant10, pos: "13,1" }
+  - { proto: FirelockGlass, pos: "10,6" }
+  - { proto: PottedPlant1, pos: "13,9" }
+
+- type: storyLocation
+  id: Bar
+  name: storyteller-location-Bar
+  order: 1
+  keywords: [ бар, кабак, таверна, паб, забегаловка, распивочная ]
+  floor: FloorBar
+  door: AirlockGlass
+  darkness: 0.3
+  props:
+  - { proto: SignBar, pos: "7,0" }
+  - { proto: VendingMachineBooze, pos: "2,1" }
+  - { proto: TableCounterWood, pos: "3,1" }
+  - { proto: BoozeDispenser, pos: "3,1" }
+  - { proto: TableCounterWood, pos: "4,1" }
+  - { proto: SodaDispenser, pos: "4,1" }
+  - { proto: VendingMachineCigs, pos: "5,1" }
+  - { proto: Jukebox, pos: "12,1" }
+  - { proto: PottedPlant10, pos: "13,1" }
+  - { proto: TableCounterWood, pos: "3,3" }
+  - { proto: TableCounterWood, pos: "4,3" }
+  - { proto: TableCounterWood, pos: "5,3" }
+  - { proto: TableCounterWood, pos: "6,3" }
+  - { proto: TableCounterWood, pos: "7,3" }
+  - { proto: TableCounterWood, pos: "8,3" }
+  - { proto: StoolBar, pos: "3,4", dir: North }
+  - { proto: StoolBar, pos: "5,4", dir: North }
+  - { proto: StoolBar, pos: "7,4", dir: North }
+  - { proto: TableWood, pos: "11,6" }
+  - { proto: ChairWood, pos: "10,6", dir: East }
+  - { proto: ChairWood, pos: "12,6", dir: West }
+  - { proto: TableWood, pos: "4,7" }
+  - { proto: ChairWood, pos: "3,7", dir: East }
+  - { proto: ChairWood, pos: "5,7", dir: West }
+  - { proto: SpaceVillainArcade, pos: "10,1" }
+  - { proto: BlockGameArcade, pos: "11,1" }
+
+- type: storyLocation
+  id: Medbay
+  name: storyteller-location-Medbay
+  order: 2
+  keywords: [ медотсек, медбей, медблок, лазарет, больница, госпиталь, медпункт, клиника, медицинский ]
+  floor: FloorWhite
+  door: AirlockMedicalGlass
+  darkness: 0.04
+  props:
+  - { proto: SignMedical, pos: "7,0" }
+  - { proto: VendingMachineMedical, pos: "2,1" }
+  - { proto: LockerMedical, pos: "3,1" }
+  - { proto: ChemDispenser, pos: "6,1" }
+  - { proto: ChemMaster, pos: "7,1" }
+  - { proto: MedicalScanner, pos: "10,1" }
+  - { proto: CryoPod, pos: "12,1" }
+  - { proto: WaterCooler, pos: "13,1" }
+  - { proto: MedicalBed, pos: "2,4" }
+  - { proto: MedicalBed, pos: "2,6" }
+  - { proto: MedicalBed, pos: "2,8" }
+  - { proto: OperatingTable, pos: "9,6" }
+  - { proto: StasisBed, pos: "12,5" }
+  - { proto: StasisBed, pos: "12,7" }
+  - { proto: PottedPlant1, pos: "13,9" }
+
+- type: storyLocation
+  id: Bridge
+  name: storyteller-location-Bridge
+  order: 3
+  keywords: [ мостик, мостике, рубка, рубке, командный, капитанский ]
+  floor: FloorDark
+  wall: WallReinforced
+  door: AirlockCommandGlass
+  darkness: 0.2
+  props:
+  - { proto: SignBridge, pos: "2,0" }
+  - { proto: ComputerId, pos: "3,1" }
+  - { proto: ComputerComms, pos: "5,1" }
+  - { proto: ComputerShuttle, pos: "7,1" }
+  - { proto: ComputerCrewMonitoring, pos: "9,1" }
+  - { proto: ComputerAlert, pos: "11,1" }
+  - { proto: LockerCaptain, pos: "13,1" }
+  - { proto: ChairOfficeDark, pos: "5,2", dir: North }
+  - { proto: ChairPilotSeat, pos: "7,2", dir: North }
+  - { proto: ChairOfficeDark, pos: "9,2", dir: North }
+  - { proto: TableReinforced, pos: "6,6" }
+  - { proto: TableReinforced, pos: "7,6" }
+  - { proto: TableReinforced, pos: "8,6" }
+  - { proto: ComfyChair, pos: "7,7", dir: North }
+  - { proto: PottedPlant10, pos: "1,9" }
+  - { proto: PottedPlant10, pos: "13,9" }
+
+- type: storyLocation
+  id: Security
+  name: storyteller-location-Security
+  order: 4
+  keywords: [ бриг, брига, бриге, тюрьма, тюрьме, участок, безопасности, допросная ]
+  floor: FloorDark
+  wall: WallReinforced
+  door: AirlockSecurityGlass
+  darkness: 0.18
+  props:
+  - { proto: SignSecurity, pos: "7,0" }
+  - { proto: LockerSecurity, pos: "2,1" }
+  - { proto: LockerSecurity, pos: "3,1" }
+  - { proto: VendingMachineSec, pos: "5,1" }
+  - { proto: SecurityTechFab, pos: "6,1" }
+  - { proto: ComputerCriminalRecords, pos: "8,1" }
+  - { proto: ComputerSurveillanceCameraMonitor, pos: "9,1" }
+  - { proto: TableReinforced, pos: "6,5" }
+  - { proto: ChairOfficeDark, pos: "6,6", dir: North }
+  - { proto: ChairOfficeDark, pos: "6,4", dir: South }
+  - { proto: ReinforcedWindow, pos: "11,3" }
+  - { proto: ReinforcedWindow, pos: "11,4" }
+  - { proto: ReinforcedWindow, pos: "11,5" }
+  - { proto: ReinforcedWindow, pos: "11,7" }
+  - { proto: ReinforcedWindow, pos: "11,8" }
+  - { proto: ReinforcedWindow, pos: "11,9" }
+  - { proto: AirlockSecurityGlass, pos: "11,6" }
+  - { proto: Bed, pos: "13,8" }
+
+- type: storyLocation
+  id: Engineering
+  name: storyteller-location-Engineering
+  order: 5
+  keywords: [ инженерный, инженерном, инженерка, инженерке, двигатель, двигателя, двигателе, техотсек, атмосия ]
+  floor: FloorTechMaint
+  door: AirlockEngineeringGlass
+  darkness: 0.28
+  props:
+  - { proto: SignEngineering, pos: "7,0" }
+  - { proto: SubstationBasic, pos: "2,1" }
+  - { proto: SMESBasic, pos: "4,1" }
+  - { proto: SMESBasic, pos: "5,1" }
+  - { proto: VendingMachineEngivend, pos: "7,1" }
+  - { proto: Autolathe, pos: "9,1" }
+  - { proto: ComputerPowerMonitoring, pos: "11,1" }
+  - { proto: GeneratorRTG, pos: "4,7" }
+  - { proto: Emitter, pos: "8,7", dir: East }
+  - { proto: Rack, pos: "2,8" }
+  - { proto: AirCanister, pos: "12,6" }
+  - { proto: PlasmaCanister, pos: "13,6" }
+  - { proto: OxygenCanister, pos: "13,7" }
+
+- type: storyLocation
+  id: Science
+  name: storyteller-location-Science
+  order: 6
+  keywords: [ научный, научном, научка, научке, рнд, лаборатория, лаборатории, исследовательский ]
+  floor: FloorWhite
+  door: AirlockScienceGlass
+  darkness: 0.08
+  props:
+  - { proto: SignScience, pos: "7,0" }
+  - { proto: Protolathe, pos: "2,1" }
+  - { proto: CircuitImprinter, pos: "4,1" }
+  - { proto: ComputerResearchAndDevelopment, pos: "6,1" }
+  - { proto: ResearchAndDevelopmentServer, pos: "9,1" }
+  - { proto: ComputerAnalysisConsole, pos: "11,1" }
+  - { proto: TableGlass, pos: "5,5" }
+  - { proto: TableGlass, pos: "6,5" }
+  - { proto: ChairOfficeLight, pos: "5,6", dir: North }
+  - { proto: ChairOfficeLight, pos: "6,6", dir: North }
+  - { proto: PottedPlant1, pos: "13,9" }
+
+- type: storyLocation
+  id: Cargo
+  name: storyteller-location-Cargo
+  order: 7
+  keywords: [ карго, склад, складе, снабжение, снабжении, грузовой, грузовом ]
+  floor: FloorSteel
+  door: AirlockCargoGlass
+  darkness: 0.2
+  props:
+  - { proto: SignCargo, pos: "7,0" }
+  - { proto: ComputerCargoOrders, pos: "6,1" }
+  - { proto: ComputerSalvageExpedition, pos: "8,1" }
+  - { proto: SalvageMagnet, pos: "12,1" }
+  - { proto: CrateGeneric, pos: "2,5" }
+  - { proto: CrateGeneric, pos: "3,5" }
+  - { proto: CrateGeneric, pos: "2,6" }
+  - { proto: OreBox, pos: "3,8" }
+  - { proto: ConveyorBelt, pos: "10,4", dir: East }
+  - { proto: ConveyorBelt, pos: "11,4", dir: East }
+  - { proto: ConveyorBelt, pos: "12,4", dir: East }
+  - { proto: ConveyorBelt, pos: "13,4", dir: East }
+
+- type: storyLocation
+  id: Kitchen
+  name: storyteller-location-Kitchen
+  order: 8
+  keywords: [ кухня, кухне, кухню, столовая, столовой, камбуз ]
+  floor: FloorKitchen
+  darkness: 0.1
+  props:
+  - { proto: SignKitchen, pos: "7,0" }
+  - { proto: TableCounterMetal, pos: "2,1" }
+  - { proto: KitchenMicrowave, pos: "2,1" }
+  - { proto: TableCounterMetal, pos: "3,1" }
+  - { proto: KitchenReagentGrinder, pos: "3,1" }
+  - { proto: KitchenElectricGrill, pos: "5,1" }
+  - { proto: SmartFridge, pos: "9,1" }
+  - { proto: VendingMachineChefvend, pos: "11,1" }
+  - { proto: TableCounterMetal, pos: "5,5" }
+  - { proto: TableCounterMetal, pos: "6,5" }
+  - { proto: TableCounterMetal, pos: "7,5" }
+  - { proto: TableCounterMetal, pos: "8,5" }
+  - { proto: KitchenSpike, pos: "13,7" }
+
+- type: storyLocation
+  id: Chapel
+  name: storyteller-location-Chapel
+  order: 9
+  keywords: [ часовня, часовне, церковь, церкви, храм, храме, алтарь ]
+  floor: FloorDark
+  door: AirlockGlass
+  darkness: 0.42
+  props:
+  - { proto: SignChapel, pos: "7,0" }
+  - { proto: AltarNanotrasen, pos: "7,2" }
+  - { proto: VendingMachineChapel, pos: "13,1" }
+  - { proto: ChairWood, pos: "4,5", dir: North }
+  - { proto: ChairWood, pos: "5,5", dir: North }
+  - { proto: ChairWood, pos: "9,5", dir: North }
+  - { proto: ChairWood, pos: "10,5", dir: North }
+  - { proto: ChairWood, pos: "4,7", dir: North }
+  - { proto: ChairWood, pos: "5,7", dir: North }
+  - { proto: ChairWood, pos: "9,7", dir: North }
+  - { proto: ChairWood, pos: "10,7", dir: North }
+
+- type: storyLocation
+  id: Dorms
+  name: storyteller-location-Dorms
+  order: 10
+  keywords: [ каюта, каюте, каюту, общежитие, спальня, спальне, дормитории, комната, комнате ]
+  floor: FloorWood
+  door: AirlockGlass
+  darkness: 0.32
+  props:
+  - { proto: Mirror, pos: "9,0" }
+  - { proto: Dresser, pos: "2,1" }
+  - { proto: Bookshelf, pos: "12,1" }
+  - { proto: Bookshelf, pos: "13,1" }
+  - { proto: Bed, pos: "2,4" }
+  - { proto: Bed, pos: "2,7" }
+  - { proto: TableWood, pos: "5,3" }
+  - { proto: LampGold, pos: "5,3" }
+  - { proto: ComfyChair, pos: "11,5", dir: South }
+  - { proto: TableFancyRed, pos: "11,6" }
+  - { proto: PottedPlant1, pos: "13,9" }
+
+- type: storyLocation
+  id: Maintenance
+  name: storyteller-location-Maintenance
+  order: 11
+  keywords: [ техи, техах, тех, техтоннели, техтоннелях, мейнты, подсобка, подсобке, трущобы ]
+  floor: FloorSteelDirty
+  wall: WallSolidRust
+  door: AirlockMaint
+  darkness: 0.55
+  props:
+  - { proto: Rack, pos: "10,1" }
+  - { proto: CrateGeneric, pos: "12,1" }
+  - { proto: Grille, pos: "3,3" }
+  - { proto: Girder, pos: "5,8" }
+  - { proto: ShardGlass, pos: "8,6" }
+  - { proto: PuddleBlood, pos: "10,7" }
+  - { proto: Catwalk, pos: "6,4" }
+  - { proto: Catwalk, pos: "7,4" }
+  - { proto: Catwalk, pos: "8,4" }
+
+- type: storyLocation
+  id: Morgue
+  name: storyteller-location-Morgue
+  order: 12
+  keywords: [ морг, морге, морга, крематорий, крематории ]
+  floor: FloorWhite
+  door: AirlockMedicalGlass
+  darkness: 0.5
+  props:
+  - { proto: SignMorgue, pos: "7,0" }
+  - { proto: Morgue, pos: "2,1" }
+  - { proto: Morgue, pos: "3,1" }
+  - { proto: Morgue, pos: "4,1" }
+  - { proto: Morgue, pos: "5,1" }
+  - { proto: Crematorium, pos: "11,1" }
+  - { proto: MedicalBed, pos: "7,6" }
+
+- type: storyLocation
+  id: Botany
+  name: storyteller-location-Botany
+  order: 13
+  keywords: [ гидропоника, гидропонике, оранжерея, оранжерее, ботанический, ботаническом ]
+  floor: FloorHydro
+  door: AirlockGlass
+  darkness: 0.1
+  props:
+  - { proto: SignHydro1, pos: "7,0" }
+  - { proto: SeedExtractor, pos: "10,1" }
+  - { proto: VendingMachineSeeds, pos: "11,1" }
+  - { proto: VendingMachineNutri, pos: "12,1" }
+  - { proto: hydroponicsTray, pos: "3,3" }
+  - { proto: hydroponicsTray, pos: "5,3" }
+  - { proto: hydroponicsTray, pos: "7,3" }
+  - { proto: hydroponicsTray, pos: "3,6" }
+  - { proto: hydroponicsTray, pos: "5,6" }
+  - { proto: hydroponicsTray, pos: "7,6" }
+  - { proto: PottedPlant10, pos: "13,9" }
+
+- type: storyLocation
+  id: Space
+  name: storyteller-location-Space
+  order: 14
+  keywords: [ космос, космосе, космоса, орбита, орбите, вакуум, вакууме, пустота, пустоте, обшивка, обшивке ]
+  floor: FloorReinforced
+  floorFrom: 0,6
+  floorTo: 14,9
+  wall: null
+  door: null
+  parallax: /Textures/Parallaxes/Asteroids.png
+  darkness: 0.08
+  props:
+  - { proto: Thruster, pos: "2,9", dir: South }
+  - { proto: Gyroscope, pos: "7,9" }
+  - { proto: Thruster, pos: "12,9", dir: South }
+
+- type: storyLocation
+  id: Lavaland
+  name: storyteller-location-Lavaland
+  order: 15
+  keywords: [ лаваленд, лаваленде, пустошь, пустоши, астероид, астероиде, шахта, шахте ]
+  floor: FloorBasalt
+  wall: WallRock
+  door: null
+  darkness: 0.25
+  props:
+  - { proto: AsteroidRock, pos: "3,3" }
+  - { proto: AsteroidRock, pos: "4,3" }
+  - { proto: AsteroidRock, pos: "12,8" }
+  - { proto: AsteroidRock, pos: "11,2" }
+  - { proto: OreBox, pos: "8,8" }

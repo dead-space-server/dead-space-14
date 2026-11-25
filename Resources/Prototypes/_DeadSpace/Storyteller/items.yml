@@ -1,0 +1,232 @@
+- type: storyItem
+  id: Pistol
+  name: storyteller-item-Pistol
+  order: 0
+  item: WeaponPistolViper
+  use: Bullet
+  keywords: [ пистолет, пистолета, пистолетом, ствол, ствола, револьвер, револьвера ]
+
+- type: storyItem
+  id: Rifle
+  name: storyteller-item-Rifle
+  order: 1
+  item: WeaponRifleAk
+  use: Bullet
+  keywords: [ автомат, автомата, автоматом, винтовка, винтовку, винтовки, калаш ]
+
+- type: storyItem
+  id: Laser
+  name: storyteller-item-Laser
+  order: 2
+  item: WeaponLaserCarbine
+  use: Laser
+  keywords: [ лазер, лазера, лазером, бластер, бластера, карабин ]
+
+- type: storyItem
+  id: Knife
+  name: storyteller-item-Knife
+  order: 3
+  item: KitchenKnife
+  use: Melee
+  keywords: [ нож, ножа, ножом, ножик ]
+
+- type: storyItem
+  id: Baton
+  name: storyteller-item-Baton
+  order: 4
+  item: Stunbaton
+  use: Melee
+  keywords: [ дубинка, дубинку, дубинкой, шокер, шокера ]
+
+- type: storyItem
+  id: Crowbar
+  name: storyteller-item-Crowbar
+  order: 5
+  item: Crowbar
+  use: Melee
+  keywords: [ лом, лома, ломом, монтировка, монтировку ]
+
+- type: storyItem
+  id: Wrench
+  name: storyteller-item-Wrench
+  order: 6
+  item: Wrench
+  use: Melee
+  keywords: [ ключ, ключом ]
+
+- type: storyItem
+  id: Toolbox
+  name: storyteller-item-Toolbox
+  order: 7
+  item: ToolboxMechanicalFilled
+  use: Melee
+  keywords: [ тулбокс, тулбоксом, ящик, ящиком, инструменты ]
+
+- type: storyItem
+  id: Extinguisher
+  name: storyteller-item-Extinguisher
+  order: 8
+  item: FireExtinguisher
+  use: Melee
+  keywords: [ огнетушитель, огнетушителем ]
+
+- type: storyItem
+  id: Cuffs
+  name: storyteller-item-Cuffs
+  order: 9
+  item: Handcuffs
+  keywords: [ наручники, наручниками ]
+
+- type: storyItem
+  id: Flower
+  name: storyteller-item-Flower
+  order: 10
+  item: FoodPoppy
+  keywords: [ цветок, цветы, цветочек, мак, роза, розу ]
+
+- type: storyItem
+  id: Beer
+  name: storyteller-item-Beer
+  order: 11
+  item: DrinkBeerBottleFull
+  keywords: [ пиво, пива, пивко ]
+
+- type: storyItem
+  id: Whiskey
+  name: storyteller-item-Whiskey
+  order: 12
+  item: DrinkWhiskeyBottleFull
+  keywords: [ виски ]
+
+- type: storyItem
+  id: Vodka
+  name: storyteller-item-Vodka
+  order: 13
+  item: DrinkVodkaBottleFull
+  keywords: [ водка, водку, водки ]
+
+- type: storyItem
+  id: Glass
+  name: storyteller-item-Glass
+  order: 14
+  item: DrinkGlass
+  keywords: [ стакан, стакана, бокал, бокала ]
+
+- type: storyItem
+  id: Coffee
+  name: storyteller-item-Coffee
+  order: 15
+  item: DrinkCoffee
+  keywords: [ кофе ]
+
+- type: storyItem
+  id: Donut
+  name: storyteller-item-Donut
+  order: 16
+  item: FoodDonutPink
+  keywords: [ пончик, пончика ]
+
+- type: storyItem
+  id: Pizza
+  name: storyteller-item-Pizza
+  order: 17
+  item: FoodPizzaMargherita
+  keywords: [ пицца, пиццу, пиццы ]
+
+- type: storyItem
+  id: Cake
+  name: storyteller-item-Cake
+  order: 18
+  item: FoodCakeBirthday
+  keywords: [ торт, торта ]
+
+- type: storyItem
+  id: Bread
+  name: storyteller-item-Bread
+  order: 19
+  item: FoodBreadPlain
+  keywords: [ хлеб, хлеба, буханку ]
+
+- type: storyItem
+  id: Bible
+  name: storyteller-item-Bible
+  order: 20
+  item: Bible
+  keywords: [ библия, библию, писание ]
+
+- type: storyItem
+  id: Paper
+  name: storyteller-item-Paper
+  order: 21
+  item: Paper
+  keywords: [ бумага, бумагу, записка, записку, письмо, документ, документы ]
+
+- type: storyItem
+  id: Pen
+  name: storyteller-item-Pen
+  order: 22
+  item: Pen
+  keywords: [ ручка, ручку ]
+
+- type: storyItem
+  id: Cigarette
+  name: storyteller-item-Cigarette
+  order: 23
+  item: Cigarette
+  keywords: [ сигарета, сигарету, сигареты ]
+
+- type: storyItem
+  id: Lighter
+  name: storyteller-item-Lighter
+  order: 24
+  item: Lighter
+  keywords: [ зажигалка, зажигалку ]
+
+- type: storyItem
+  id: Cash
+  name: storyteller-item-Cash
+  order: 25
+  item: SpaceCash100
+  keywords: [ деньги, денег, кредиты, кредитов, наличку, наличные, взятку ]
+
+- type: storyItem
+  id: Syringe
+  name: storyteller-item-Syringe
+  order: 26
+  item: Syringe
+  keywords: [ шприц, шприца, укол ]
+
+- type: storyItem
+  id: Analyzer
+  name: storyteller-item-Analyzer
+  order: 27
+  item: HandheldHealthAnalyzer
+  keywords: [ анализатор, анализатора, сканер, сканера ]
+
+- type: storyItem
+  id: Medkit
+  name: storyteller-item-Medkit
+  order: 28
+  item: Brutepack
+  keywords: [ бинт, бинты, аптечка, аптечку ]
+
+- type: storyItem
+  id: Horn
+  name: storyteller-item-Horn
+  order: 29
+  item: BikeHorn
+  keywords: [ гудок, гудка, клаксон, клаксона ]
+
+- type: storyItem
+  id: Plush
+  name: storyteller-item-Plush
+  order: 30
+  item: PlushieCarp
+  keywords: [ игрушка, игрушку, плюшка, плюшку ]
+
+- type: storyItem
+  id: Flashlight
+  name: storyteller-item-Flashlight
+  order: 31
+  item: FlashlightLantern
+  keywords: [ фонарь, фонарик, фонарика ]
