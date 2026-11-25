@@ -222,7 +222,11 @@ storyteller-role-Zookeeper = Zookeeper
 storyteller-role-Syndicate = Nuclear operative
 storyteller-role-Pirate = Pirate
 storyteller-role-Wizard = Wizard
-storyteller-role-DeathSquad = Death squad
+storyteller-role-Brigmedic = Brig medic
+storyteller-role-SeniorPhysician = Senior physician
+storyteller-role-SeniorEngineer = Senior engineer
+storyteller-role-SeniorResearcher = Senior researcher
+storyteller-role-SeniorSalvage = Senior salvage specialist
 
 storyteller-item-Pistol = pistol
 storyteller-item-Rifle = rifle

@@ -222,7 +222,11 @@ storyteller-role-Zookeeper = Зоотехник
 storyteller-role-Syndicate = Ядерный оперативник
 storyteller-role-Pirate = Пират
 storyteller-role-Wizard = Волшебник
-storyteller-role-DeathSquad = Эскадрон смерти
+storyteller-role-Brigmedic = Бригмедик
+storyteller-role-SeniorPhysician = Ведущий врач
+storyteller-role-SeniorEngineer = Ведущий инженер
+storyteller-role-SeniorResearcher = Ведущий учёный
+storyteller-role-SeniorSalvage = Ведущий утилизатор
 
 storyteller-item-Pistol = пистолет
 storyteller-item-Rifle = автомат
