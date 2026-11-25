@@ -840,6 +840,15 @@ public sealed partial class LimbWoundSystem : EntitySystem
             }
         }
 
+        var thermal = HeatOf(args.DamageDelta) * limbs.Burn + ColdOf(args.DamageDelta);
+        if (!fromStrike && !AnyFire(limbs) && thermal > 0f
+            && ThermalDamage(args.Damageable) >= LimbWoundRules.ThermalBurnThreshold)
+        {
+            changed |= MirrorThermalBurn(uid, zone, thermal, limbs);
+            foreach (var next in LimbWoundRules.Neighbors(zone))
+                changed |= MirrorThermalBurn(uid, next, thermal * LimbWoundRules.ScorchNeighbor, limbs);
+        }
+
         if (healed && args.Damageable.TotalDamage <= FixedPoint2.New(0.5))
             changed |= RestoreZones(limbs);
 
@@ -850,6 +859,46 @@ public sealed partial class LimbWoundSystem : EntitySystem
     private static float HeatOf(DamageSpecifier delta)
     {
         return delta.DamageDict.TryGetValue("Heat", out var value) && value > 0 ? value.Float() : 0f;
+    }
+
+    private static float ColdOf(DamageSpecifier delta)
+    {
+        return delta.DamageDict.TryGetValue("Cold", out var value) && value > 0 ? value.Float() : 0f;
+    }
+
+    public static float ThermalDamage(DamageableComponent damageable)
+    {
+        var total = 0f;
+        if (damageable.Damage.DamageDict.TryGetValue("Heat", out var heat))
+            total += heat.Float();
+        if (damageable.Damage.DamageDict.TryGetValue("Cold", out var cold))
+            total += cold.Float();
+
+        return total;
+    }
+
+    public bool MirrorThermalBurn(EntityUid uid, LimbZone zone, float amount, LimbBodyComponent? limbs = null)
+    {
+        if (!LimbTuning.Enabled || amount <= 0f || !Resolve(uid, ref limbs, false))
+            return false;
+
+        EnsureZones(limbs);
+        var zones = CollectionsMarshal.AsSpan(limbs.Zones);
+        var index = LimbWoundRules.Index(zone);
+        if ((uint) index >= (uint) zones.Length || zones[index].Severed)
+            return false;
+
+        var skin = LimbWoundRules.GraftableSkin(amount);
+        ref var state = ref zones[index];
+        if (state.Skin >= skin && (skin < LimbTuning.BurnThird || state.SkinBare))
+            return false;
+
+        state.Skin = MathF.Max(state.Skin, skin);
+        if (skin >= LimbTuning.BurnThird)
+            state.SkinBare = true;
+
+        Dirty(uid, limbs);
+        return true;
     }
 
     private bool SpreadHeal(Span<LimbZoneState> zones, DamageSpecifier delta, LimbBodyComponent limbs)

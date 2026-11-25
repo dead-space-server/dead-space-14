@@ -2737,8 +2737,19 @@ public sealed partial class SurgerySystem : EntitySystem
 
         var heal = new DamageSpecifier();
         heal.DamageDict["Heat"] = -amount;
+        heal.DamageDict["Cold"] = -amount;
         _damage.TryChangeDamage(patient, heal, true, false);
         _limbs.ApplyEdit(patient, zone, new LimbEdit { Skin = -1000f, ClearBurn = true });
+
+        var remaining = TryComp<DamageableComponent>(patient, out var damageable)
+            ? LimbWoundSystem.ThermalDamage(damageable)
+            : 0f;
+        if (remaining >= LimbWoundRules.ThermalBurnThreshold)
+        {
+            _limbs.MirrorThermalBurn(patient, zone, remaining);
+            foreach (var next in LimbWoundRules.Neighbors(zone))
+                _limbs.MirrorThermalBurn(patient, next, remaining * LimbWoundRules.ScorchNeighbor);
+        }
     }
 
     private bool Tooth(SurgerySiteComponent site)
