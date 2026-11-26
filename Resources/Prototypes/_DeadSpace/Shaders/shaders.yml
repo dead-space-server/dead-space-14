@@ -38,3 +38,8 @@
   id: ArchitectMvpAdditive
   kind: canvas
   blend_mode: Add
+
+- type: shader
+  id: CardinalScream
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/cardinal_scream.swsl"

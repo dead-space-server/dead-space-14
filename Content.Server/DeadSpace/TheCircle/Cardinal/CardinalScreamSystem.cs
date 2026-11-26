@@ -32,7 +32,7 @@ public sealed partial class CardinalScreamSystem : EntitySystem
 {
     private static readonly Color RallyColor = Color.FromHex("#ff3030");
     private static readonly Color HuntColor = Color.FromHex("#40ff60");
-    private static readonly TimeSpan OverrideInterval = TimeSpan.FromSeconds(0.5);
+    private static readonly TimeSpan OverrideInterval = TimeSpan.FromSeconds(0.25);
     private static readonly float[] ShakeSteps = [0f, 0.12f, 0.24f, 0.36f, 0.5f];
 
     [Dependency] private SharedActionsSystem _actions = default!;
@@ -64,12 +64,12 @@ public sealed partial class CardinalScreamSystem : EntitySystem
 
         SubscribeLocalEvent<CardinalScreamComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CardinalScreamComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<CardinalScreamComponent, CardinalRallyScreamActionEvent>(OnRally);
-        SubscribeLocalEvent<CardinalScreamComponent, CardinalHuntScreamActionEvent>(OnHunt);
+        SubscribeLocalEvent<CardinalScreamComponent, CardinalScreamActionEvent>(OnAction);
+        SubscribeNetworkEvent<CardinalScreamChoiceEvent>(OnChoice);
 
         SubscribeLocalEvent<CardinalRallyComponent, DidEquipHandEvent>(OnRallyEquip);
         SubscribeLocalEvent<CardinalRallyComponent, DidUnequipHandEvent>(OnRallyUnequip);
-        SubscribeLocalEvent<CardinalRallyComponent, ComponentShutdown>(OnRallyShutdown);
+        SubscribeLocalEvent<CardinalRallyComponent, ComponentRemove>(OnRallyRemove); // shutdown is taken by the shared system
         SubscribeLocalEvent<CardinalHuntComponent, ComponentShutdown>(OnHuntShutdown);
         SubscribeLocalEvent<CardinalMarkedComponent, ComponentShutdown>(OnMarkedShutdown);
 
@@ -78,15 +78,13 @@ public sealed partial class CardinalScreamSystem : EntitySystem
 
     private void OnMapInit(Entity<CardinalScreamComponent> ent, ref MapInitEvent args)
     {
-        _actions.AddAction(ent, ref ent.Comp.RallyActionEntity, ent.Comp.RallyAction);
-        _actions.AddAction(ent, ref ent.Comp.HuntActionEntity, ent.Comp.HuntAction);
+        _actions.AddAction(ent, ref ent.Comp.ActionEntity, ent.Comp.Action);
         Dirty(ent);
     }
 
     private void OnShutdown(Entity<CardinalScreamComponent> ent, ref ComponentShutdown args)
     {
-        _actions.RemoveAction(ent.Owner, ent.Comp.RallyActionEntity);
-        _actions.RemoveAction(ent.Owner, ent.Comp.HuntActionEntity);
+        _actions.RemoveAction(ent.Owner, ent.Comp.ActionEntity);
     }
 
     private void OnWaveInit(Entity<CardinalScreamWaveComponent> ent, ref MapInitEvent args)
@@ -95,25 +93,55 @@ public sealed partial class CardinalScreamSystem : EntitySystem
         Dirty(ent);
     }
 
-    private void OnRally(Entity<CardinalScreamComponent> ent, ref CardinalRallyScreamActionEvent args)
+    /// <summary>
+    /// The action only opens the menu on the cardinal's client; here it opens the short window in which a pick counts.
+    /// </summary>
+    private void OnAction(Entity<CardinalScreamComponent> ent, ref CardinalScreamActionEvent args)
     {
-        if (args.Handled || !TryScream(ent, ent.Comp.RallyWave, ent.Comp.RallySound, RallyColor))
+        if (args.Handled)
             return;
 
         args.Handled = true;
-        var end = _timing.CurTime + ent.Comp.RallyDuration;
-        foreach (var fighter in Squad(ent))
+        ent.Comp.ChoiceExpires = _timing.CurTime + TimeSpan.FromSeconds(10);
+    }
+
+    private void OnChoice(CardinalScreamChoiceEvent msg, EntitySessionEventArgs args)
+    {
+        var uid = GetEntity(msg.Cardinal);
+        if (args.SenderSession.AttachedEntity != uid || !TryComp<CardinalScreamComponent>(uid, out var scream) ||
+            scream.ChoiceExpires is not { } expires || _timing.CurTime > expires)
+            return;
+
+        scream.ChoiceExpires = null;
+        var ent = (uid, scream);
+        switch (msg.Kind)
         {
-            Rally(fighter, ent.Comp, end);
+            case CardinalScreamKind.Rally:
+                Rally(ent);
+                break;
+            case CardinalScreamKind.Hunt:
+                Hunt(ent);
+                break;
         }
     }
 
-    private void OnHunt(Entity<CardinalScreamComponent> ent, ref CardinalHuntScreamActionEvent args)
+    private void Rally(Entity<CardinalScreamComponent> ent)
     {
-        if (args.Handled || !TryScream(ent, ent.Comp.HuntWave, ent.Comp.HuntSound, HuntColor))
+        if (!TryScream(ent, ent.Comp.RallyWave, ent.Comp.RallySound, RallyColor))
             return;
 
-        args.Handled = true;
+        var end = _timing.CurTime + ent.Comp.RallyDuration;
+        foreach (var fighter in Squad(ent))
+        {
+            RallyFighter(fighter, ent.Comp, end);
+        }
+    }
+
+    private void Hunt(Entity<CardinalScreamComponent> ent)
+    {
+        if (!TryScream(ent, ent.Comp.HuntWave, ent.Comp.HuntSound, HuntColor))
+            return;
+
         var now = _timing.CurTime;
         var hunters = Squad(ent);
         if (!hunters.Contains(ent.Owner))
@@ -185,8 +213,8 @@ public sealed partial class CardinalScreamSystem : EntitySystem
             return false;
 
         ent.Comp.NextScream = now + ent.Comp.Cooldown;
-        _actions.SetCooldown(ent.Comp.RallyActionEntity, now, ent.Comp.NextScream);
-        _actions.SetCooldown(ent.Comp.HuntActionEntity, now, ent.Comp.NextScream);
+        Dirty(ent);
+        _actions.SetCooldown(ent.Comp.ActionEntity, now, ent.Comp.NextScream);
 
         _audio.PlayPvs(sound, ent);
         var spawned = SpawnAttachedTo(wave, new EntityCoordinates(ent, Vector2.Zero));
@@ -249,7 +277,7 @@ public sealed partial class CardinalScreamSystem : EntitySystem
         return list;
     }
 
-    private void Rally(EntityUid fighter, CardinalScreamComponent scream, TimeSpan end)
+    private void RallyFighter(EntityUid fighter, CardinalScreamComponent scream, TimeSpan end)
     {
         var rally = EnsureComp<CardinalRallyComponent>(fighter);
         rally.EndsAt = Later(rally.EndsAt, end);
@@ -297,7 +325,7 @@ public sealed partial class CardinalScreamSystem : EntitySystem
             UnboostGun(args.Unequipped);
     }
 
-    private void OnRallyShutdown(Entity<CardinalRallyComponent> ent, ref ComponentShutdown args)
+    private void OnRallyRemove(Entity<CardinalRallyComponent> ent, ref ComponentRemove args)
     {
         foreach (var gun in ent.Comp.BoostedGuns)
         {
@@ -384,14 +412,23 @@ public sealed partial class CardinalScreamSystem : EntitySystem
     private void UpdateOverrides()
     {
         _wanted.Clear();
-        var hunts = EntityQueryEnumerator<CardinalHuntComponent, ActorComponent>();
-        while (hunts.MoveNext(out _, out _, out var actor))
+        var hunts = EntityQueryEnumerator<CardinalHuntComponent, TransformComponent>();
+        while (hunts.MoveNext(out var hunter, out var hunt, out var hunterXform))
         {
-            var marks = EntityQueryEnumerator<CardinalMarkedComponent>();
-            while (marks.MoveNext(out var marked, out _))
+            hunt.Targets.Clear();
+            hunt.TargetsMap = GetNetEntity(hunterXform.MapUid) ?? NetEntity.Invalid;
+            TryComp<ActorComponent>(hunter, out var actor);
+            var marks = EntityQueryEnumerator<CardinalMarkedComponent, TransformComponent>();
+            while (marks.MoveNext(out var marked, out _, out var markedXform))
             {
-                _wanted.Add((marked, actor.PlayerSession));
+                if (actor != null)
+                    _wanted.Add((marked, actor.PlayerSession));
+
+                if (markedXform.MapID == hunterXform.MapID)
+                    hunt.Targets.Add(_transform.GetWorldPosition(markedXform));
             }
+
+            Dirty(hunter, hunt);
         }
 
         foreach (var pair in _overrides)

@@ -2,37 +2,18 @@
 
 - type: entity
   parent: BaseAction
-  id: ActionCardinalRallyScream
+  id: ActionCardinalScream
   name: Клич Кардинала
-  description: "Красный клич, что разносится на семь тайлов. Семь секунд бойцы Круга рядом двигаются на 10% быстрее, стреляют чаще и на 10% меньше вязнут в болах. Лампы вокруг мигают, а земля дрожит. Перезарядка общая с охотничьим кличем."
+  description: "Клич, что разносится на семь тайлов. Красный на семь секунд ускоряет бойцов Круга рядом, учащает их стрельбу и ослабляет хватку бол. Зелёный на пятнадцать секунд показывает им живых сквозь стены и метит каждого чужака, что попал в поле зрения Кардинала или этих бойцов. Лампы вокруг мигают, а земля дрожит."
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
-    useDelay: 30
     icon:
       sprite: Interface/Actions/changeling2.rsi
       state: screech
-    iconColor: "#ff4040"
     itemIconStyle: BigAction
   - type: InstantAction
-    event: !type:CardinalRallyScreamActionEvent
-
-- type: entity
-  parent: BaseAction
-  id: ActionCardinalHuntScream
-  name: Охотничий клич
-  description: "Зелёный клич, что разносится на семь тайлов. Пятнадцать секунд бойцы Круга рядом видят живых сквозь стены, а каждый чужак, что попал в поле зрения Кардинала или этих бойцов, помечен: его видно, даже если он сбежит далеко. Перезарядка общая с кличем Кардинала."
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    useDelay: 30
-    icon:
-      sprite: Interface/Actions/changeling2.rsi
-      state: screech
-    iconColor: "#40ff60"
-    itemIconStyle: BigAction
-  - type: InstantAction
-    event: !type:CardinalHuntScreamActionEvent
+    event: !type:CardinalScreamActionEvent
 
 - type: alert
   id: CardinalRally
@@ -64,7 +45,6 @@
   components:
   - type: TimedDespawn
     lifetime: 3.2
-  - type: ScreechShockWave
   - type: CardinalScreamWave
     color: "#ff3030"
   - type: EffectVisuals

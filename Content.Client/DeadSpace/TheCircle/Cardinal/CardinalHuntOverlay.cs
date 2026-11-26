@@ -30,7 +30,7 @@ public sealed class CardinalHuntOverlay : Overlay
     private readonly SharedTransformSystem _transform;
     private readonly HashSet<Entity<ThermalVisibleComponent>> _bodies = new();
 
-    public override OverlaySpace Space => OverlaySpace.WorldSpace | OverlaySpace.ScreenSpace;
+    public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
     public CardinalHuntOverlay(IEntityManager entities, IPlayerManager player, IGameTiming timing,
         EntityLookupSystem lookup, SpriteSystem sprite, SharedTransformSystem transform)
@@ -53,10 +53,8 @@ public sealed class CardinalHuntOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        if (args.Space == OverlaySpace.ScreenSpace)
-            DrawArrows(args);
-        else
-            DrawBodies(args);
+        DrawBodies(args);
+        DrawArrows(args);
     }
 
     private void DrawBodies(in OverlayDrawArgs args)
@@ -106,54 +104,58 @@ public sealed class CardinalHuntOverlay : Overlay
         return false;
     }
 
+    /// <summary>
+    /// An arrow just inside the edge of the view towards every marked outsider beyond it. Drawn in the world, so it
+    /// needs nothing but the view's own bounds; the positions come from the server, however far the marked have run.
+    /// </summary>
     private void DrawArrows(in OverlayDrawArgs args)
     {
-        var handle = args.ScreenHandle;
-        UIBox2 bounds = args.ViewportBounds;
-        var margin = 36f;
-        var inner = new UIBox2(bounds.Left + margin, bounds.Top + margin, bounds.Right - margin, bounds.Bottom - margin);
-        if (inner.Width <= 0f || inner.Height <= 0f)
+        if (_player.LocalEntity is not { } local ||
+            !_entities.TryGetComponent<CardinalHuntComponent>(local, out var hunt) || hunt.Targets.Count == 0 ||
+            !_entities.TryGetComponent<TransformComponent>(local, out var localXform) ||
+            _entities.GetEntity(hunt.TargetsMap) != localXform.MapUid)
             return;
 
-        var centre = inner.Center;
+        var handle = args.WorldHandle;
+        var view = args.WorldBounds;
+        var centre = view.Box.Center;
+        var half = view.Box.Size / 2f - new Vector2(ArrowMargin);
+        if (half.X <= 0f || half.Y <= 0f)
+            return;
+
+        var rotation = view.Rotation;
         var pulse = 0.7f + 0.3f * MathF.Sin((float) _timing.RealTime.TotalSeconds * 5f);
-        var query = _entities.EntityQueryEnumerator<CardinalMarkedComponent, TransformComponent>();
-        while (query.MoveNext(out _, out _, out var xform))
+        foreach (var target in hunt.Targets)
         {
-            if (xform.MapID != args.MapId)
+            var offset = (-rotation).RotateVec(target - centre);
+            if (MathF.Abs(offset.X) <= half.X + ArrowMargin && MathF.Abs(offset.Y) <= half.Y + ArrowMargin)
                 continue;
 
-            var screen = args.ViewportControl!.WorldToScreen(_transform.GetWorldPosition(xform));
-            if (bounds.Contains(screen))
-                continue;
-
-            var dir = screen - centre;
-            if (dir.LengthSquared() < 1f)
-                continue;
-
-            dir = Vector2.Normalize(dir);
-            // Where the line from the centre towards the target leaves the inner box.
-            var sx = dir.X != 0f ? (dir.X > 0 ? inner.Right - centre.X : inner.Left - centre.X) / dir.X : float.MaxValue;
-            var sy = dir.Y != 0f ? (dir.Y > 0 ? inner.Bottom - centre.Y : inner.Top - centre.Y) / dir.Y : float.MaxValue;
-            var tip = centre + dir * MathF.Min(sx, sy);
+            var scale = MathF.Min(
+                offset.X != 0f ? half.X / MathF.Abs(offset.X) : float.MaxValue,
+                offset.Y != 0f ? half.Y / MathF.Abs(offset.Y) : float.MaxValue);
+            var tip = centre + rotation.RotateVec(offset * scale);
+            var dir = Vector2.Normalize(target - centre);
             DrawArrow(handle, tip, dir, MarkColor.WithAlpha(pulse));
         }
     }
+
+    private const float ArrowMargin = 0.9f;
 
     // Reused buffers: stackalloc does not pass the client sandbox's IL verification.
     private readonly Vector2[] _head = new Vector2[3];
     private readonly Vector2[] _outline = new Vector2[3];
 
-    private void DrawArrow(DrawingHandleScreen handle, Vector2 tip, Vector2 dir, Color color)
+    private void DrawArrow(DrawingHandleWorld handle, Vector2 tip, Vector2 dir, Color color)
     {
         var side = new Vector2(-dir.Y, dir.X);
-        var back = tip - dir * 22f;
+        var back = tip - dir * 0.75f;
         _head[0] = tip;
-        _head[1] = back + side * 13f;
-        _head[2] = back - side * 13f;
-        _outline[0] = tip + dir * 3f;
-        _outline[1] = back + side * 16f - dir * 2f;
-        _outline[2] = back - side * 16f - dir * 2f;
+        _head[1] = back + side * 0.42f;
+        _head[2] = back - side * 0.42f;
+        _outline[0] = tip + dir * 0.1f;
+        _outline[1] = back + side * 0.52f - dir * 0.07f;
+        _outline[2] = back - side * 0.52f - dir * 0.07f;
         handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, _outline, Color.Black.WithAlpha(color.A * 0.6f));
         handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, _head, color);
     }

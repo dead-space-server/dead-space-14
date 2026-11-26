@@ -6,6 +6,7 @@ using Content.Shared.Alert;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.TheCircle.Cardinal;
 
@@ -22,17 +23,23 @@ public sealed partial class CircleSquadComponent : Component;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CardinalScreamComponent : Component
 {
+    /// <summary>
+    /// The one action: it opens the choice between the two screams.
+    /// </summary>
     [DataField]
-    public EntProtoId RallyAction = "ActionCardinalRallyScream";
-
-    [DataField]
-    public EntProtoId HuntAction = "ActionCardinalHuntScream";
+    public EntProtoId Action = "ActionCardinalScream";
 
     [DataField, AutoNetworkedField]
-    public EntityUid? RallyActionEntity;
+    public EntityUid? ActionEntity;
+
+    /// <summary>
+    /// Until when a pick from the scream menu is accepted. Set only by using the action on the server.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? ChoiceExpires;
 
     [DataField, AutoNetworkedField]
-    public EntityUid? HuntActionEntity;
+    public TimeSpan NextScream;
 
     /// <summary>
     /// Fighters this close to the cardinal are caught by a scream, and lamps this close blink.
@@ -45,9 +52,6 @@ public sealed partial class CardinalScreamComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan Cooldown = TimeSpan.FromSeconds(30);
-
-    [ViewVariables]
-    public TimeSpan NextScream;
 
     [DataField]
     public TimeSpan RallyDuration = TimeSpan.FromSeconds(7);
@@ -150,6 +154,15 @@ public sealed partial class CardinalHuntComponent : Component
 
     [DataField]
     public ProtoId<AlertPrototype> Alert = "CardinalHunt";
+
+    /// <summary>
+    /// Where the marked outsiders are, sent by the server so the arrows do not depend on the hunter receiving them.
+    /// </summary>
+    [AutoNetworkedField]
+    public List<Vector2> Targets = new();
+
+    [AutoNetworkedField]
+    public NetEntity TargetsMap;
 }
 
 /// <summary>
@@ -184,6 +197,21 @@ public sealed partial class CardinalScreamWaveComponent : Component
     public TimeSpan InitTime;
 }
 
-public sealed partial class CardinalRallyScreamActionEvent : InstantActionEvent;
+public sealed partial class CardinalScreamActionEvent : InstantActionEvent;
 
-public sealed partial class CardinalHuntScreamActionEvent : InstantActionEvent;
+[Serializable, NetSerializable]
+public enum CardinalScreamKind : byte
+{
+    Rally,
+    Hunt,
+}
+
+/// <summary>
+/// The cardinal's pick from the scream menu.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CardinalScreamChoiceEvent(NetEntity cardinal, CardinalScreamKind kind) : EntityEventArgs
+{
+    public NetEntity Cardinal = cardinal;
+    public CardinalScreamKind Kind = kind;
+}

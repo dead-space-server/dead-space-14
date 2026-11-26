@@ -1,0 +1,77 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+// The cardinal's scream: a wave of sound rolling out, bending the picture under its crest and two weaker echoes
+// behind it, with a ragged, trembling edge and a coloured glow.
+
+light_mode unshaded;
+
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp vec2 renderScale;
+uniform lowp int count;
+
+// Up to four screams at once; the overlay fills these.
+uniform highp vec2[4] centers;
+uniform highp float[4] radii;
+uniform highp float[4] widths;
+uniform highp float[4] strengths;
+uniform highp float[4] times;
+uniform highp vec4[4] colors;
+
+void fragment()
+{
+    highp vec2 coords = FRAGCOORD.xy;
+    highp vec2 offset = vec2(0.0);
+    highp vec3 glow = vec3(0.0);
+    highp float tint = 0.0;
+
+    for (int i = 0; i < 4 && i < count; i++)
+    {
+        // Distance in tiles: 32 pixels a tile at scale one.
+        highp vec2 delta = (coords - centers[i]) / renderScale;
+        highp float d = length(delta) / 32.0;
+        if (d > 0.001)
+        {
+            highp vec2 dir = delta / (d * 32.0);
+            highp float s = strengths[i];
+            highp float w = widths[i];
+            highp float angle = atan(delta.y, delta.x);
+            highp float ragged = sin(angle * 13.0 + times[i] * 9.0) * 0.6 + sin(angle * 29.0 - times[i] * 14.0) * 0.4;
+
+            highp float band = 0.0;
+            highp float bend = 0.0;
+            for (int k = 0; k < 3; k++)
+            {
+                highp float r = radii[i] - float(k) * w * 2.4;
+                if (r > 0.05)
+                {
+                    highp float amp = 1.0 / (1.0 + float(k) * 1.2);
+                    highp float x = (d - r - ragged * w * 0.35) / w;
+                    highp float crest = exp(-x * x * 2.5);
+                    band += crest * amp;
+                    // Ahead of the crest the picture is pushed out, behind it pulled in: a lens of sound.
+                    bend += -x * exp(-x * x * 1.6) * amp;
+                }
+            }
+
+            offset += dir * bend * s * 9.0 * renderScale;
+            glow += colors[i].rgb * band * s;
+            tint += band * s;
+
+            // A faint haze over everything the wave has already passed.
+            highp float inside = (1.0 - smoothstep(0.0, radii[i], d)) * s * 0.12;
+            glow += colors[i].rgb * inside;
+            tint += inside;
+        }
+    }
+
+    tint = clamp(tint, 0.0, 1.0);
+    highp vec2 uv = (coords + offset) * SCREEN_PIXEL_SIZE;
+    // A slight colour split along the crest, as if the air itself shakes.
+    highp vec2 split = offset * SCREEN_PIXEL_SIZE * 0.35;
+    highp vec4 base = zTextureSpec(SCREEN_TEXTURE, uv);
+    highp float red = zTextureSpec(SCREEN_TEXTURE, uv + split).r;
+    highp float blue = zTextureSpec(SCREEN_TEXTURE, uv - split).b;
+    highp vec3 picture = vec3(red, base.g, blue);
+
+    highp vec3 col = mix(picture, picture * 0.55 + glow * 0.9, tint * 0.55) + glow * 0.3;
+    COLOR = vec4(col, 1.0);
+}
