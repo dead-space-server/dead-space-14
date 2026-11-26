@@ -140,23 +140,21 @@ public sealed class CardinalHuntOverlay : Overlay
         }
     }
 
-    private static void DrawArrow(DrawingHandleScreen handle, Vector2 tip, Vector2 dir, Color color)
+    // Reused buffers: stackalloc does not pass the client sandbox's IL verification.
+    private readonly Vector2[] _head = new Vector2[3];
+    private readonly Vector2[] _outline = new Vector2[3];
+
+    private void DrawArrow(DrawingHandleScreen handle, Vector2 tip, Vector2 dir, Color color)
     {
         var side = new Vector2(-dir.Y, dir.X);
         var back = tip - dir * 22f;
-        Span<Vector2> head = stackalloc Vector2[]
-        {
-            tip,
-            back + side * 13f,
-            back - side * 13f,
-        };
-        Span<Vector2> outline = stackalloc Vector2[]
-        {
-            tip + dir * 3f,
-            back + side * 16f - dir * 2f,
-            back - side * 16f - dir * 2f,
-        };
-        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, outline, Color.Black.WithAlpha(color.A * 0.6f));
-        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, head, color);
+        _head[0] = tip;
+        _head[1] = back + side * 13f;
+        _head[2] = back - side * 13f;
+        _outline[0] = tip + dir * 3f;
+        _outline[1] = back + side * 16f - dir * 2f;
+        _outline[2] = back - side * 16f - dir * 2f;
+        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, _outline, Color.Black.WithAlpha(color.A * 0.6f));
+        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, _head, color);
     }
 }
