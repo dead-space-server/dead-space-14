@@ -327,10 +327,6 @@
   - type: EyeProtection
   - type: IdentityBlocker
     coverage: EYES
-  - type: PointLight
-    enabled: true
-    radius: 10
-    color: "#66CCFF"
   - type: Tag
     tags: []
 
