@@ -128,6 +128,7 @@ public struct SurgeryRequest
     public bool Embedded;
     public int Scar;
     public bool Implant;
+    public bool Dead;
 }
 
 public sealed partial class SurgeryBitePillEvent : InstantActionEvent
