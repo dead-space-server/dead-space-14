@@ -407,7 +407,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var index = LimbWoundRules.Index(strike.Zone);
         ref var state = ref span[index];
         var boneBefore = state.Bone;
+        var deadBefore = LimbWoundRules.DeadLimb(strike.Zone, state);
         var result = LimbWoundRules.Apply(ref state, strike, limbs.Soft, limbs.Bleeds);
+        if (!deadBefore && LimbWoundRules.DeadLimb(strike.Zone, state))
+        {
+            limbs.KilledZone = strike.Zone;
+            limbs.KilledTime = _timing.CurTime;
+        }
         ApplyOrgans(uid, limbs, strike, result, ready);
         var pelletSevered = ApplyPelletSever(uid, limbs, strike);
         Dirty(uid, limbs);
@@ -1184,6 +1190,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         EnsureZones(limbs);
         var index = LimbWoundRules.Index(zone);
         if ((uint) index >= (uint) limbs.Zones.Count || !LimbWoundRules.DeadLimb(zone, limbs.Zones[index]))
+            return;
+
+        // The blow that killed the limb still lands on the body; only hits on an already dead limb are absorbed.
+        if (limbs.KilledZone == zone && limbs.KilledTime == _timing.CurTime)
             return;
 
         var kept = new DamageSpecifier();

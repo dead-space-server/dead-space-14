@@ -1,0 +1,81 @@
+## Крики Кардинала
+
+- type: entity
+  parent: BaseAction
+  id: ActionCardinalRallyScream
+  name: Клич Кардинала
+  description: Красный клич, что разносится на семь тайлов. Семь секунд бойцы Круга рядом двигаются на 10% быстрее, стреляют чаще и на 10% меньше вязнут в болах. Лампы вокруг мигают, а земля дрожит. Перезарядка общая с охотничьим кличем.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 30
+    icon:
+      sprite: Interface/Actions/changeling2.rsi
+      state: screech
+    iconColor: "#ff4040"
+    itemIconStyle: BigAction
+  - type: InstantAction
+    event: !type:CardinalRallyScreamActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionCardinalHuntScream
+  name: Охотничий клич
+  description: Зелёный клич, что разносится на семь тайлов. Пятнадцать секунд бойцы Круга рядом видят живых сквозь стены, а каждый чужак, что попал в поле зрения Кардинала или этих бойцов, помечен: его видно, даже если он сбежит далеко. Перезарядка общая с кличем Кардинала.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 30
+    icon:
+      sprite: Interface/Actions/changeling2.rsi
+      state: screech
+    iconColor: "#40ff60"
+    itemIconStyle: BigAction
+  - type: InstantAction
+    event: !type:CardinalHuntScreamActionEvent
+
+- type: alert
+  id: CardinalRally
+  icons:
+  - sprite: /Textures/Interface/Actions/changeling2.rsi
+    state: screech
+  name: Клич Кардинала
+  description: Вы быстрее двигаетесь и стреляете, а болы держат слабее.
+
+- type: alert
+  id: CardinalHunt
+  icons:
+  - sprite: /Textures/Interface/Actions/changeling2.rsi
+    state: screech
+  name: Охотничий клич
+  description: Вы видите живых сквозь стены и всех помеченных чужаков.
+
+- type: alert
+  id: CardinalMarked
+  icons:
+  - sprite: /Textures/Interface/Actions/changeling2.rsi
+    state: screech
+  name: Метка Кардинала
+  description: Крик Кардинала пометил вас. Отряд Круга видит вас, куда бы вы ни бежали.
+
+- type: entity
+  id: EffectCardinalRallyScream
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 3.2
+  - type: ScreechShockWave
+  - type: CardinalScreamWave
+    color: "#ff3030"
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: EffectCardinalRallyScream
+  id: EffectCardinalHuntScream
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CardinalScreamWave
+    color: "#40ff60"

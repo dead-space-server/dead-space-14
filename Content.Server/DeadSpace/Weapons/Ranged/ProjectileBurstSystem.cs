@@ -35,6 +35,10 @@ public sealed partial class ProjectileBurstSystem : EntitySystem
         var query = EntityQueryEnumerator<ProjectileBurstComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var burst, out var xform))
         {
+            // A slug that already hit something this tick is spent: it must not also burst on the same target.
+            if (TerminatingOrDeleted(uid) || CompOrNull<ProjectileComponent>(uid)?.ProjectileSpent == true)
+                continue;
+
             if (xform.MapID != burst.OriginMap ||
                 (_transform.GetWorldPosition(xform) - burst.Origin).LengthSquared() < burst.Distance * burst.Distance)
             {
@@ -58,6 +62,11 @@ public sealed partial class ProjectileBurstSystem : EntitySystem
             : _transform.GetWorldRotation(uid);
 
         var projectile = CompOrNull<ProjectileComponent>(uid);
+        // The slug is gone the moment it bursts: it must not also collide later this tick before deletion.
+        if (projectile != null)
+            projectile.ProjectileSpent = true;
+        RemComp<ProjectileBurstComponent>(uid);
+
         var gun = projectile?.Weapon ?? projectile?.Shooter ?? uid;
         var from = Transform(uid).Coordinates;
 

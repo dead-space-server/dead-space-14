@@ -148,6 +148,33 @@
           sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
         components:
         - type: SeraphimBond
+    - roles:
+      - CircleFighterLight
+      gear:
+      - name: antag-gear-selector-herald-dash-name
+        description: antag-gear-selector-herald-dash-description
+        spritePrototype: ClothingOuterHardsuitUnitologyLight
+        startingGear: TheCircleLightGear
+        roleLoadout: RoleSurvivalTheCircle
+        briefing:
+          text: roles-antag-thecircle-light-start
+          color: CornflowerBlue
+          sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
+        components:
+        - type: BlinkStyle
+          style: Dash
+      - name: antag-gear-selector-herald-teleport-name
+        description: antag-gear-selector-herald-teleport-description
+        spritePrototype: ClothingOuterHardsuitUnitologyLight
+        startingGear: TheCircleLightGear
+        roleLoadout: RoleSurvivalTheCircle
+        briefing:
+          text: roles-antag-thecircle-light-start
+          color: CornflowerBlue
+          sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
+        components:
+        - type: BlinkStyle
+          style: Teleport
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/ds_thecircle_outpost_docked.yml
   - type: AntagSelection
@@ -179,6 +206,8 @@
         textDelay: 0.8
         charactersPerSecond: 50
       - type: ObeliskActivateAbility
+      - type: CircleSquad
+      - type: CardinalScream
       - type: IntrinsicRadioTransmitter
         channels:
         - Unitolog
@@ -233,6 +262,7 @@
         textDelay: 0.8
         charactersPerSecond: 50
       - type: ObeliskActivateAbility
+      - type: CircleSquad
       - type: InstantCriticalCarry
       - type: IntrinsicRadioTransmitter
         channels:
@@ -290,6 +320,7 @@
       - type: CircleDeacon
       - type: NecroOrganRegrowth
       - type: ObeliskActivateAbility
+      - type: CircleSquad
       - type: IntrinsicRadioTransmitter
         channels:
         - Unitolog
@@ -343,6 +374,7 @@
         textDelay: 0.8
         charactersPerSecond: 50
       - type: ObeliskActivateAbility
+      - type: CircleSquad
       - type: IntrinsicRadioTransmitter
         channels:
         - Unitolog
@@ -398,6 +430,7 @@
       - type: CircleDeacon
       - type: NecroOrganRegrowth
       - type: ObeliskActivateAbility
+      - type: CircleSquad
       - type: IntrinsicRadioTransmitter
         channels:
         - Unitolog
@@ -451,6 +484,7 @@
         textDelay: 0.8
         charactersPerSecond: 50
       - type: ObeliskActivateAbility
+      - type: CircleSquad
       - type: IntrinsicRadioTransmitter
         channels:
         - Unitolog
@@ -504,6 +538,7 @@
         textDelay: 0.8
         charactersPerSecond: 50
       - type: ObeliskActivateAbility
+      - type: CircleSquad
       - type: AutoImplant
         implants:
         - ArchitectIntegratedArmImplant
@@ -558,6 +593,7 @@
         textDelay: 0.8
         charactersPerSecond: 50
       - type: ObeliskActivateAbility
+      - type: CircleSquad
       - type: AutoImplant
         implants:
         - DeathAcidifierImplant

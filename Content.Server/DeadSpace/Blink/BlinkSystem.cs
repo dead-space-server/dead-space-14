@@ -10,7 +10,11 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Blink;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Examine;
 using Content.Shared.Inventory;
+using Content.Shared.Maps;
+using Content.Shared.Movement.Pulling.Components;
+using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Physics;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
@@ -35,6 +39,9 @@ public sealed partial class BlinkSystem : SharedBlinkSystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private TagSystem _tags = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private TurfSystem _turf = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -52,6 +59,10 @@ public sealed partial class BlinkSystem : SharedBlinkSystem
     private void OnDamage(Entity<DamageableComponent> ent, ref DamageChangedEvent args)
     {
         if (!args.DamageIncreased || args.Origin == null || args.Origin == ent.Owner)
+            return;
+
+        // The herald's dash pick shrugs off hits.
+        if (TryComp<BlinkStyleComponent>(ent, out var style) && style.Style == BlinkStyle.Dash)
             return;
 
         var query = EntityQueryEnumerator<BlinkItemComponent>();
@@ -88,18 +99,53 @@ public sealed partial class BlinkSystem : SharedBlinkSystem
         var targetMap = _transform.ToMapCoordinates(target);
         var damage = EnsureComp<BlinkUserComponent>(user);
         var now = _timing.CurTime;
+        TryComp<BlinkStyleComponent>(user, out var style);
+        var lockout = style is not { Style: BlinkStyle.Dash };
 
-        if (now < blink.NextUse || now < damage.LastDamaged + blink.DamageLockout ||
-            origin.MapId != targetMap.MapId)
+        if (now < blink.NextUse || lockout && now < damage.LastDamaged + blink.DamageLockout ||
+            origin.MapId != targetMap.MapId || !_transform.IsValid(target))
             return;
 
-        if (Vector2.Distance(origin.Position, targetMap.Position) > blink.Range ||
-            !TryStartDash(user, targetMap, blink.DashSpeed, blink.DashTimeout, blink.DashStallTimeout, blink.DashSound))
+        if (Vector2.Distance(origin.Position, targetMap.Position) > blink.Range)
+            return;
+
+        if (style is { Style: BlinkStyle.Teleport })
+        {
+            if (!TryTeleport(user, target, origin, targetMap, style))
+                return;
+        }
+        else if (!TryStartDash(user, targetMap, blink.DashSpeed, blink.DashTimeout, blink.DashStallTimeout, blink.DashSound))
             return;
 
         blink.NextUse = now + blink.Cooldown;
         Dirty(item, blink);
         _alerts.ShowAlert(user, blink.CooldownAlert, cooldown: (now, blink.NextUse), autoRemove: false);
+    }
+
+    /// <summary>
+    /// Jumps straight to a point the user can see, as long as nothing solid stands there.
+    /// </summary>
+    private bool TryTeleport(EntityUid user, EntityCoordinates target, MapCoordinates origin, MapCoordinates targetMap,
+        BlinkStyleComponent style)
+    {
+        if (HasComp<ActiveBlinkDashComponent>(user) ||
+            !_examine.InRangeUnOccluded(origin, targetMap, Vector2.Distance(origin.Position, targetMap.Position) + 0.5f, null) ||
+            _turf.GetTileRef(target) is not { } tile || _turf.IsTileBlocked(tile, CollisionGroup.Impassable))
+            return false;
+
+        if (TryComp<PullableComponent>(user, out var pullable) && _pulling.IsPulled(user, pullable))
+            _pulling.TryStopPull(user, pullable);
+
+        if (TryComp<PullerComponent>(user, out var puller) && puller.Pulling is { } pulled &&
+            TryComp<PullableComponent>(pulled, out var pulledComp))
+            _pulling.TryStopPull(pulled, pulledComp);
+
+        var xform = Transform(user);
+        _audio.PlayPvs(style.TeleportSound, xform.Coordinates);
+        _transform.SetCoordinates(user, xform, target);
+        _transform.AttachToGridOrMap(user, xform);
+        _audio.PlayPvs(style.TeleportSound, user);
+        return true;
     }
 
     public bool TryStartDash(

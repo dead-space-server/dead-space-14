@@ -33,7 +33,6 @@
     - UniPhoneUplinkGear
     - UniPhoneUplinkImplants
     - UniPhoneUplinkGrenade
-    - UniPhoneUplinkOther
     currencyWhitelist:
     - Telecrystal
     balance:
@@ -68,11 +67,6 @@
   id: UniPhoneUplinkGrenade
   name: Гранаты
   priority: 6
-
-- type: storeCategory
-  id: UniPhoneUplinkOther
-  name: Разное
-  priority: 7
 
 
 ### Вооружение
@@ -669,63 +663,6 @@
   categories:
     - UniPhoneUplinkGrenade
 
-# Прочее
-
-- type: listing
-  id: UniPhoneSyringeNecromorphMutagenBruteList
-  name: Шприц с мутагеном некроморфа зверя
-  description: Вводите 5 ед. вещества в животное. После заражения он станет зверем.
-  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
-  productEntity: SyringeNecromorphMutagenBrute
-  cost:
-    Telecrystal: 10
-  categories:
-    - UniPhoneUplinkOther
-
-- type: listing
-  id: UniPhonePukerNecroList
-  name: Некроморф выделитель газа
-  description: Некроморф.
-  icon: { sprite: _DeadSpace/Necromorfs/puker.rsi, state: running }
-  productEntity: PukerNecro
-  cost:
-    Telecrystal: 10
-  categories:
-    - UniPhoneUplinkOther
-
-- type: listing
-  id: UniPhoneLauncherSyringeList
-  name: Шприцемёт
-  description: Стреляет шприцами.
-  icon: { sprite: Objects/Weapons/Guns/Cannons/syringe_gun.rsi, state: syringe_gun }
-  productEntity: LauncherSyringe
-  cost:
-    Telecrystal: 5
-  categories:
-    - UniPhoneUplinkOther
-
-- type: listing
-  id: UniPhoneMiniSyringeList
-  name: Мини-шприц
-  description: Патрон для шприцемёта.
-  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: minisyringe1 }
-  productEntity: MiniSyringe
-  cost:
-    Telecrystal: 1
-  categories:
-    - UniPhoneUplinkOther
-
-- type: listing
-  id: UniPhoneInfectionDeadList
-  name: Экстракт заразителя
-  description: Шприц с экстрактом заразителя на 15 единиц.
-  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
-  productEntity: SyringeExtractInfectorDead
-  cost:
-    Telecrystal: 16
-  categories:
-    - UniPhoneUplinkOther
-
 ### Специализированный аплинк Гейста
 - type: entity
   id: UniPhoneGeistUplink
@@ -807,16 +744,6 @@
   id: UniPhoneGeistUplinkTripwireExplosiveGrenade
   name: Граната для растяжки
   productEntity: TripwireExplosiveGrenade
-  cost:
-    Telecrystal: 2
-  categories:
-  - UniPhoneGeistUplinkTraps
-
-- type: listing
-  id: UniPhoneGeistUplinkTripwireNecroGasGrenade
-  name: Газовый заряд для растяжки (некрогаз)
-  description: Срабатывает только от растяжки и заполняет некрогазом около десяти тайлов.
-  productEntity: TripwireNecroGasGrenade
   cost:
     Telecrystal: 2
   categories:

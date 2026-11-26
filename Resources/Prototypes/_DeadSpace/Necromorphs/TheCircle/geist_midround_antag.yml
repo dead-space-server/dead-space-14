@@ -166,6 +166,17 @@
   - !type:ListingLimitedStockCondition
     stock: 5
 
+# Only the midround Geist may infect before the obelisk; the siege Geist's trap uplink has no necro gas.
+- type: listing
+  id: UniPhoneGeistUplinkTripwireNecroGasGrenade
+  name: Газовый заряд для растяжки (некрогаз)
+  description: Срабатывает только от растяжки и заполняет некрогазом около десяти тайлов.
+  productEntity: TripwireNecroGasGrenade
+  cost:
+    Telecrystal: 2
+  categories:
+  - UniPhoneGeistMidroundUplinkSupply
+
 - type: listing
   id: UniPhoneGeistMidroundUplinkRSh12
   name: РШ-12
