@@ -365,6 +365,10 @@
   - type: Speech
     speechVerb: Ghost
   - type: LeviathanGhost
+  - type: NightVision
+    animation: true
+    color: "#6E000011"
+    transitionSpeed: 100
   - type: CustomSpawnPoint
     duration: 1
     spawnPointAction: ActionSpawnPoint
