@@ -73659,10 +73659,9 @@ entities:
       parent: 2
       pos: 58.5,9.5
     - type: ArtifactAnalyzer
-      currentArtifact: invalid
+      currentArtifact: null
     - type: ItemPlacer
       placedEntities:
-      - invalid
 - proto: MachineCentrifuge
   entities:
   - uid: 9758
