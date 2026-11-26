@@ -5,7 +5,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeadSpace.Kitchen.Components;
-using Content.Shared.PDA;
+using Content.Shared.PDA; // DS14
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Containers;
@@ -43,7 +43,7 @@ public sealed partial class PvsDetailSystem : EntitySystem
 
             foreach (var contained in container.ContainedEntities)
             {
-                if (!IsPdaIdCard(container, contained))
+                if (!IsPdaIdCard(container, contained)) // DS14
                     _meta.AddFlag(contained, MetaDataFlags.PvsDetail);
             }
         }
@@ -61,12 +61,14 @@ public sealed partial class PvsDetailSystem : EntitySystem
             _meta.RemoveFlag(args.Entity, MetaDataFlags.PvsDetail);
     }
 
+    // DS14-Start
     private bool IsPdaIdCard(BaseContainer container, EntityUid entity)
     {
         return HasComp<IdCardComponent>(entity) &&
                container.ID == PdaComponent.PdaIdSlotId &&
                HasComp<PdaComponent>(container.Owner);
     }
+    // DS14-End
 
     private bool IsHidden(BaseContainer container)
     {
