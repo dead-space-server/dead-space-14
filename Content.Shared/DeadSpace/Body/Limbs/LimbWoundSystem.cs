@@ -1747,6 +1747,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * ent.Comp.Burn * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share, ent.Comp.Soft, ent.Comp.Bleeds))
                     changed = true;
 
+                // DS14: a blast is incoming damage like any hit - it can crack a worn limb, or break a cracked one
+                if (!ent.Comp.Soft && !zones[i].Severed && LimbWoundRules.RollCrack(ref zones[i], worn[i], _random.NextFloat()))
+                    changed = true;
+
                 if (caustic[i] > 0f || other[i] > 0f)
                 {
                     zones[i].Health = MathF.Max(0f, zones[i].Health - (caustic[i] + other[i]) * wound * share);
@@ -2274,21 +2278,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return (uint) index < (uint) limbs.Organs.Count && limbs.Organs[index].Missing;
     }
 
-    private void ReleaseOrganDeath(EntityUid uid, LimbBodyComponent limbs)
-    {
-        if (!_net.IsServer || VitalGone(limbs) || InStasis(uid))
-            return;
-
-        var head = HeadHealth(limbs);
-        var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
-        var life = LimbWoundRules.Life(head, torso);
-        var state = life == LimbLife.Dead ? MobState.Dead : life == LimbLife.Crit ? MobState.Critical : MobState.Alive;
-        if (state == MobState.Dead && HasComp<SurgeryMannequinComponent>(uid))
-            state = MobState.Critical;
-        _thresholds.SetCurrentThresholdState(uid, state);
-        _mobs.ChangeMobState(uid, state);
-    }
-
     private void ApplyLife(EntityUid uid, LimbBodyComponent limbs)
     {
         if (!_net.IsServer)
@@ -2302,15 +2291,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         if (_mobs.IsDead(uid))
-        {
-            if (limbs.LimbDeath && !DeadByDamage(uid))
-            {
-                limbs.LimbDeath = false;
-                _mobs.UpdateMobState(uid);
-            }
-
             return;
-        }
 
         if (life == LimbLife.Crit)
         {
@@ -2352,14 +2333,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         limbs.LimbDeath = true;
         _mobs.ChangeMobState(uid, MobState.Dead);
-    }
-
-    private bool DeadByDamage(EntityUid uid)
-    {
-        return TryComp<MobThresholdsComponent>(uid, out var thresholds)
-            && TryComp<DamageableComponent>(uid, out var damage)
-            && (thresholds.CurrentThresholdState == MobState.Dead && !thresholds.AllowRevives
-                || _thresholds.TryGetThresholdForState(uid, MobState.Dead, out var dead, thresholds) && damage.TotalDamage >= dead.Value);
     }
 
     private void NoteFace(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike)
@@ -2615,6 +2588,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var pellet = false;
         var pelletSever = false;
         var roundBone = 0f;
+        float? roundEmbed = null;
         var roundOrgan = 1f;
         var roundBleed = 0f;
         if (tool is { } held)
@@ -2631,12 +2605,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 pellet = round.Pellet;
                 pelletSever = round.Sever;
                 roundBone = round.Bone;
+                roundEmbed = round.Embed;
                 roundOrgan = round.Organ;
                 roundBleed = round.Bleed;
             }
         }
 
-        return new LimbStrike(zone, mark, amount, _random.NextFloat(), pierce, projectile, cover.Face, cover.Grip, cover.Ricochet, cover.ShieldBlocked, multiplier, aimed, cover.BehindArmor, _random.NextFloat(), distance, _random.NextFloat(), cut, liquid, ThroughArmor: throughArmor, Called: called ?? zone, Sharp: sharp, Pellet: pellet, PelletSever: pelletSever, RoundBone: roundBone, RoundOrgan: roundOrgan, RoundBleed: roundBleed, SeverChance: severChance, Harm: harm);
+        return new LimbStrike(zone, mark, amount, _random.NextFloat(), pierce, projectile, cover.Face, cover.Grip, cover.Ricochet, cover.ShieldBlocked, multiplier, aimed, cover.BehindArmor, _random.NextFloat(), distance, _random.NextFloat(), cut, liquid, ThroughArmor: throughArmor, Called: called ?? zone, Sharp: sharp, Pellet: pellet, PelletSever: pelletSever, RoundBone: roundBone, RoundEmbed: roundEmbed, RoundOrgan: roundOrgan, RoundBleed: roundBleed, SeverChance: severChance, Harm: harm);
     }
 
     private LimbCover Cover(EntityUid target, EntityUid attacker, LimbZone zone)

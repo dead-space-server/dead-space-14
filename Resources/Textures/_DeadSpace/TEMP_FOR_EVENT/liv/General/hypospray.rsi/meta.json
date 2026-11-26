@@ -1,0 +1,26 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/23601a50d2c733122dc76e188984ed3e57aaa470, modified with fill sprites by SlamBamActionman (github), equipped-BELT, hypo, hypo_fill1, hypo_fill2, hypo_fill3, hypo_fill4, hypo_fill5, hypo_fill6, inhand-left, inhand-right states resprited by pyfya (discord) for Space Station 14 server РњС‘СЂС‚РІС‹Р№ РљРѕСЃРјРѕСЃ Taken from vgstation at commit https://github.com/vgstation-coders/vgstation13/commit/1cdfb0230cc96d0ba751fa002d04f8aa2f25ad7d, modified with fill sprites by SlamBamActionman (github), borghypo  fill sprites by SirWarock (Github)",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "hypo"
+        },
+        {
+            "name": "inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "equipped-BELT",
+            "directions": 4
+        }
+    ]
+}

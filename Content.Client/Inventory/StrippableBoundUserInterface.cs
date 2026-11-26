@@ -17,6 +17,7 @@ using Content.Shared.DeadSpace.Administration;
 using Content.Shared.Ensnaring.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Silicons.Borgs.Components; // DS14
 using Content.Shared.Input;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
@@ -164,7 +165,9 @@ namespace Content.Client.Inventory
             // DS14-start: a stasis cocoon hides the entire inventory, not only hands.
             _disguiseView = EntMan.System<NinjaDisguiseClientSystem>().IsDisguised(Owner);
 
-            if (EntMan.TryGetComponent<HandsComponent>(Owner, out var targetHands) && !targetHands.CanBeStripped)
+            if (EntMan.TryGetComponent<HandsComponent>(Owner, out var targetHands) &&
+                !targetHands.CanBeStripped &&
+                !EntMan.HasComponent<BorgChassisComponent>(Owner))
                 return;
             // DS14-end
 

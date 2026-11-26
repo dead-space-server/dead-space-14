@@ -18,7 +18,7 @@
     key: enum.StoreUiKey.Key
   - type: Store
     balance:
-      Telecrystal: 700
+      Telecrystal: 750
 
 - type: entity
   id: UniPhonePresetUplink

@@ -1,6 +1,5 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Content.Server.Antag;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.Prototypes;
 using Content.Shared.Cargo.Prototypes;
@@ -31,7 +30,6 @@ namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
 public sealed partial class CircleOpsRuleSystem : GameRuleSystem<CircleOpsRuleComponent>
 {
-    [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private TimedWindowSystem _timedWindow = default!;
@@ -62,7 +60,7 @@ public sealed partial class CircleOpsRuleSystem : GameRuleSystem<CircleOpsRuleCo
         ref RoundEndTextAppendEvent args)
     {
         var winText = Loc.GetString($"thecircle-{(component.State == CircleOpsState.Convergence ? "opsmajor" : "crewmajor")}");
-        args.AddLine(winText);
+        args.AddOutcome(winText);
 
         var winner = component.State == CircleOpsState.Convergence
             ? BiStatWinner.Antagonist
@@ -79,22 +77,6 @@ public sealed partial class CircleOpsRuleSystem : GameRuleSystem<CircleOpsRuleCo
 
             }
         });
-    }
-
-    protected override void AppendRoundEndDiscordText(EntityUid uid,
-        CircleOpsRuleComponent component,
-        GameRuleComponent gameRule,
-        ref RoundEndDiscordTextAppendEvent args)
-    {
-        args.AddLine(Loc.GetString("thecircle-list-start"));
-
-        var antags = _antag.GetAntagIdentifiers(uid);
-        foreach (var (_, sessionData, name) in antags)
-        {
-            args.AddLine(Loc.GetString("thecircle-initial-name", ("name", name), ("user", sessionData.UserName)));
-        }
-
-        args.AddLine("");
     }
 
     protected override void AppendAdminStatus(EntityUid uid,

@@ -11,13 +11,13 @@ public sealed partial class CryostorageEntryControl : BoxContainer
     public event Action<string>? SlotRemoveButtonPressed;
     public event Action<string>? HandRemoveButtonPressed;
 
-    public NetEntity Entity;
+    public int EntryId; //DS-14
     public bool LastOpenState;
 
     public CryostorageEntryControl(CryostorageContainedPlayerData data)
     {
         RobustXamlLoader.Load(this);
-        Entity = data.PlayerEnt;
+        EntryId = data.EntryId; //DS-14
         Update(data);
     }
 
@@ -25,7 +25,7 @@ public sealed partial class CryostorageEntryControl : BoxContainer
     {
         LastOpenState = Collapsible.BodyVisible;
         Heading.Title = data.PlayerName;
-        Body.Visible = data.ItemSlots.Count != 0 && data.HeldItems.Count != 0;
+        Body.Visible = data.ItemSlots.Count != 0 || data.HeldItems.Count != 0; //DS-14
 
         ItemsContainer.Children.Clear();
         foreach (var (name, itemName) in data.ItemSlots)

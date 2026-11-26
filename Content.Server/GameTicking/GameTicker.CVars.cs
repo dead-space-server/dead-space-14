@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Content.Server.Discord;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
@@ -24,7 +25,7 @@ namespace Content.Server.GameTicking
         [ViewVariables]
         private string? DiscordRoundEndRole { get; set; }
 
-        private WebhookIdentifier? _webhookIdentifier;
+        private Task<WebhookData?>? _roundWebhook; // DS14
 
         [ViewVariables]
         private string? RoundEndSoundCollection { get; set; }
@@ -58,10 +59,7 @@ namespace Content.Server.GameTicking
             }, true);
             Subs.CVar(_cfg, CCVars.DiscordRoundUpdateWebhook, value =>
             {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    _discord.GetWebhook(value, data => _webhookIdentifier = data.ToIdentifier());
-                }
+                _roundWebhook = string.IsNullOrWhiteSpace(value) ? null : _discord.GetWebhook(value); // DS14
             }, true);
             Subs.CVar(_cfg, CCVars.DiscordRoundEndRoleWebhook, value =>
             {
