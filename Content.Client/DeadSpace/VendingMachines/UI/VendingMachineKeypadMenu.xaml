@@ -1,46 +1,55 @@
 <controls:FancyWindow
     xmlns="https://spacestation14.io"
-    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-    MinSize="440 520"
-    SetSize="660 640">
+    xmlns:hologram="clr-namespace:Content.Client.DeadSpace.UserInterface.Hologram.Vending"
+    MinSize="560 420"
+    SetSize="900 600">
     <BoxContainer Orientation="Vertical" Margin="4">
-        <LineEdit Name="SearchBar"
-                  PlaceHolder="{Loc 'vending-machine-keypad-search'}"
-                  HorizontalExpand="True"
-                  Margin="0 0 0 4" />
-        <PanelContainer VerticalExpand="True">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#0b1418" BorderColor="#4a6a78" BorderThickness="2" />
-            </PanelContainer.PanelOverride>
-            <ScrollContainer Name="SpiralScroll" HScrollEnabled="False" VerticalExpand="True" Margin="4">
-                <BoxContainer Orientation="Vertical">
-                    <GridContainer Name="SpiralGrid" HorizontalAlignment="Stretch" HorizontalExpand="True" />
-                    <Label Name="EmptyLabel"
-                           Visible="False"
-                           HorizontalAlignment="Center"
-                           Text="{Loc 'vending-machine-component-try-eject-out-of-stock'}" />
-                </BoxContainer>
-            </ScrollContainer>
-        </PanelContainer>
+        <!-- Goods on the left, code display and keypad on the right. The grid takes whatever width is left
+             and drops columns when the window narrows; the side column has a fixed width. -->
+        <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="10">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="6">
+                <LineEdit Name="SearchBar"
+                          PlaceHolder="{Loc 'vending-machine-keypad-search'}"
+                          HorizontalExpand="True" />
+                <PanelContainer Name="SpiralPanel" VerticalExpand="True">
+                    <ScrollContainer HScrollEnabled="False" VerticalExpand="True" Margin="4">
+                        <BoxContainer Orientation="Vertical">
+                            <hologram:HologramCardGrid Name="SpiralGrid" HorizontalExpand="True" Margin="0 0 4 0" />
+                            <Label Name="EmptyLabel"
+                                   Visible="False"
+                                   HorizontalAlignment="Center"
+                                   Text="{Loc 'vending-machine-component-try-eject-out-of-stock'}" />
+                        </BoxContainer>
+                    </ScrollContainer>
+                </PanelContainer>
+            </BoxContainer>
 
-        <BoxContainer Orientation="Horizontal" Margin="0 6 0 0" SeparationOverride="8">
-            <PanelContainer HorizontalExpand="True" VerticalAlignment="Top">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#001c00" BorderColor="#1f4a1f" BorderThickness="1" />
-                </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Vertical" Margin="6 4">
-                    <Label Name="CodeDisplay" FontColorOverride="#4cff4c" />
-                    <Label Name="StatusDisplay" FontColorOverride="#4cff4c" ClipText="True" />
-                    <Label Name="BalanceDisplay" FontColorOverride="#e8c547" ClipText="True" Visible="False" />
-                    <Button Name="WithdrawButton"
-                            Text="{Loc 'vending-machine-keypad-withdraw'}"
-                            HorizontalAlignment="Left"
-                            Margin="0 4 0 0"
-                            Visible="False" />
+            <BoxContainer Orientation="Vertical" SetWidth="240" SeparationOverride="8">
+                <PanelContainer Name="DisplayPanel">
+                    <BoxContainer Orientation="Vertical" Margin="10 8">
+                        <Label Name="CodeCaption"
+                               Text="{Loc 'hologram-vending-code-title'}"
+                               Visible="False" />
+                        <Label Name="CodeDisplay" ClipText="True" />
+                        <Label Name="StatusDisplay" ClipText="True" />
+                    </BoxContainer>
+                </PanelContainer>
+                <GridContainer Name="KeypadGrid" Columns="3" HorizontalExpand="True" />
+                <BoxContainer Name="BalanceRow" Orientation="Horizontal" Visible="False">
+                    <Label Name="BalanceCaption"
+                           Text="{Loc 'hologram-vending-balance'}"
+                           VerticalAlignment="Center" />
+                    <Label Name="BalanceDisplay"
+                           HorizontalExpand="True"
+                           Align="Right"
+                           ClipText="True" />
                 </BoxContainer>
-            </PanelContainer>
-            <GridContainer Name="KeypadGrid" Columns="3" />
+                <Button Name="WithdrawButton"
+                        Text="{Loc 'vending-machine-keypad-withdraw'}"
+                        HorizontalAlignment="Stretch"
+                        Visible="False" />
+            </BoxContainer>
         </BoxContainer>
 
         <BoxContainer Orientation="Vertical" Margin="0 4 0 0">

@@ -79,6 +79,13 @@ namespace Content.Client.PDA
             {
                 SendMessage(new PdaToggleSilentModeMessage());
             };
+
+            _menu.RingtoneButton.OnPressed += _ =>
+            {
+                SendMessage(new PdaShowRingtoneMessage());
+            };
+
+            _menu.PdaEntity = Owner;
             // DS14-End
 
             _menu.OnProgramItemPressed += ActivateCartridge;

@@ -20,10 +20,13 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
     {
         // Keep geometry constant and distinguish ordinary button states through fill and text.
         // Only transient hover/focus feedback uses an outline.
+        // The hologram style frames every button with a thin projected edge.
         var normalBorder = DeadSpaceStylePalette.ClassicChrome
             ? DeadSpaceStylePalette.BorderControl
-            : Color.Transparent;
-        var disabledBorder = DeadSpaceStylePalette.ClassicChrome
+            : DeadSpaceStylePalette.Hologram
+                ? DeadSpaceStylePalette.BorderDark
+                : Color.Transparent;
+        var disabledBorder = DeadSpaceStylePalette.ClassicChrome || DeadSpaceStylePalette.Hologram
             ? DeadSpaceStylePalette.BorderDisabled
             : Color.Transparent;
 
@@ -182,8 +185,13 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
             new Thickness(1),
             7,
             6);
-        var chatPanel = DeadSpaceStyleBoxes.Flat(
-            DeadSpaceStylePalette.SurfaceTranscript.WithAlpha(221f / 255f));
+        StyleBox chatPanel = DeadSpaceStylePalette.Hologram
+            ? DeadSpaceStyleBoxes.Holo(
+                DeadSpaceStylePalette.SurfaceTranscript.WithAlpha(221f / 255f),
+                DeadSpaceStylePalette.BorderDark,
+                bracket: 12f,
+                chamfer: 0f)
+            : DeadSpaceStyleBoxes.Flat(DeadSpaceStylePalette.SurfaceTranscript.WithAlpha(221f / 255f));
 
         var rules = new List<StyleRule>
         {
@@ -263,7 +271,7 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
                 E<SwitchButton>().PseudoPressed().Box(switchBackground).Modulate(Color.White),
                 E<SwitchButton>().PseudoDisabled().Box(switchBackground).Modulate(Color.White),
             ]);
-            AddButtonRules(rules, null, baseControl, baseControlHover, baseControlPressed, baseControlDisabled);
+            AddButtonRules(rules, null, Holo(baseControl), Holo(baseControlHover), Holo(baseControlPressed), Holo(baseControlDisabled));
             // Form dropdowns share the input surface and geometry of their neighboring text fields.
             rules.AddRange(
             [
@@ -280,7 +288,7 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
             rules.AddRange(
             [
                 Button(DeadSpaceStyleClass.LockedSelected).Class(ContainerButton.StyleClassButton)
-                    .PseudoDisabled().Box(lockedSelected).Modulate(Color.White),
+                    .PseudoDisabled().Box(Holo(lockedSelected)).Modulate(Color.White),
                 Button(DeadSpaceStyleClass.LockedSelected).Class(ContainerButton.StyleClassButton)
                     .PseudoDisabled().ParentOf(E<Label>()).FontColor(DeadSpaceStylePalette.TextInactive),
             ]);
@@ -288,15 +296,21 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
 
         if (!DeadSpaceStylePalette.ClassicChrome)
         {
-            AddButtonRules(rules, DeadSpaceStyleClass.Action, action, actionHover, actionPressed, actionDisabled);
-            AddButtonRules(rules, DeadSpaceStyleClass.TopAction, topAction, topActionHover, topActionPressed, topActionDisabled);
+            AddButtonRules(rules, DeadSpaceStyleClass.Action, Holo(action), Holo(actionHover), Holo(actionPressed), Holo(actionDisabled));
+            AddButtonRules(
+                rules,
+                DeadSpaceStyleClass.TopAction,
+                Holo(topAction),
+                Holo(topActionHover),
+                Holo(topActionPressed),
+                Holo(topActionDisabled));
             AddButtonRules(
                 rules,
                 DeadSpaceStyleClass.ControlDanger,
-                dangerControl,
-                dangerControlHover,
-                dangerControlPressed,
-                dangerControlDisabled);
+                Holo(dangerControl),
+                Holo(dangerControlHover),
+                Holo(dangerControlPressed),
+                Holo(dangerControlDisabled));
             AddButtonRules(rules, DeadSpaceStyleClass.ListItem, listItem, listItemHover, listItemPressed, listItemDisabled);
             AddButtonRules(rules, DeadSpaceStyleClass.ListItemAlternate, listItemAlternate, listItemHover, listItemPressed, listItemDisabled);
             AddButtonRules(rules,
@@ -308,6 +322,31 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
         }
 
         return rules.ToArray();
+    }
+
+    /// <summary>Cut of a hologram button's lower-right corner, in UI units.</summary>
+    private const float ButtonChamfer = 0f;
+
+    /// <summary>
+    /// In the hologram style a flat button box becomes a projected one with the same fill, frame and margins and a cut
+    /// corner; otherwise the box is used as is.
+    /// </summary>
+    private static StyleBox Holo(StyleBoxFlat flat)
+    {
+        if (!DeadSpaceStylePalette.Hologram)
+            return flat;
+
+        return new DeadSpaceHoloStyleBox
+        {
+            BackgroundColor = flat.BackgroundColor,
+            BorderColor = flat.BorderColor,
+            BorderThickness = flat.BorderThickness,
+            Chamfer = ButtonChamfer,
+            ContentMarginLeftOverride = flat.ContentMarginLeftOverride,
+            ContentMarginRightOverride = flat.ContentMarginRightOverride,
+            ContentMarginTopOverride = flat.ContentMarginTopOverride,
+            ContentMarginBottomOverride = flat.ContentMarginBottomOverride,
+        };
     }
 
     private static void AddButtonRules(

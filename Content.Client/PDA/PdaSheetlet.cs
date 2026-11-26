@@ -164,6 +164,18 @@ public sealed class PdaSheetlet : Sheetlet<NanotrasenStylesheet>
             Color.Transparent,
             horizontalMargin: 6,
             verticalMargin: 3);
+        // The "Dead Space" style projects settings and program rows like its buttons: a thin frame, square corners.
+        var settingsNormalBox = Holo(settingsNormal);
+        var settingsHoverBox = Holo(settingsHover);
+        var settingsPressedBox = Holo(settingsPressed);
+        var settingsDisabledBox = Holo(settingsDisabled);
+        var settingsPositiveBox = Holo(settingsPositive, DeadSpaceStylePalette.PositiveBorder);
+        var settingsPositiveHoverBox = Holo(settingsPositiveHover, DeadSpaceStylePalette.PositiveBorderHover);
+        var settingsPositivePressedBox = Holo(settingsPositivePressed, DeadSpaceStylePalette.PositiveBorderPressed);
+        var programNormalBox = Holo(programNormal);
+        var programHoverBox = Holo(programHover);
+        var programPressedBox = Holo(programPressed);
+        var programDisabledBox = Holo(programDisabled);
         // DS14-end
 
         return
@@ -198,34 +210,34 @@ public sealed class PdaSheetlet : Sheetlet<NanotrasenStylesheet>
             // DS14-start
             E<PdaSettingsButton>()
                 .Pseudo(ContainerButton.StylePseudoClassNormal)
-                .Box(settingsNormal),
+                .Box(settingsNormalBox),
 
             E<PdaSettingsButton>()
                 .Pseudo(ContainerButton.StylePseudoClassHover)
-                .Box(settingsHover),
+                .Box(settingsHoverBox),
 
             E<PdaSettingsButton>()
                 .Pseudo(ContainerButton.StylePseudoClassPressed)
-                .Box(settingsPressed),
+                .Box(settingsPressedBox),
 
             E<PdaSettingsButton>()
                 .Pseudo(ContainerButton.StylePseudoClassDisabled)
-                .Box(settingsDisabled),
+                .Box(settingsDisabledBox),
 
             E<PdaSettingsButton>()
                 .Class(DeadSpaceStyleClass.ControlPositive)
                 .Pseudo(ContainerButton.StylePseudoClassNormal)
-                .Box(settingsPositive),
+                .Box(settingsPositiveBox),
 
             E<PdaSettingsButton>()
                 .Class(DeadSpaceStyleClass.ControlPositive)
                 .Pseudo(ContainerButton.StylePseudoClassHover)
-                .Box(settingsPositiveHover),
+                .Box(settingsPositiveHoverBox),
 
             E<PdaSettingsButton>()
                 .Class(DeadSpaceStyleClass.ControlPositive)
                 .Pseudo(ContainerButton.StylePseudoClassPressed)
-                .Box(settingsPositivePressed),
+                .Box(settingsPositivePressedBox),
 
             E<PdaSettingsButton>()
                 .Pseudo(ContainerButton.StylePseudoClassNormal)
@@ -274,19 +286,19 @@ public sealed class PdaSheetlet : Sheetlet<NanotrasenStylesheet>
 
             E<PdaProgramItem>()
                 .Pseudo(ContainerButton.StylePseudoClassNormal)
-                .Box(programNormal),
+                .Box(programNormalBox),
 
             E<PdaProgramItem>()
                 .Pseudo(ContainerButton.StylePseudoClassHover)
-                .Box(programHover),
+                .Box(programHoverBox),
 
             E<PdaProgramItem>()
                 .Pseudo(ContainerButton.StylePseudoClassPressed)
-                .Box(programPressed),
+                .Box(programPressedBox),
 
             E<PdaProgramItem>()
                 .Pseudo(ContainerButton.StylePseudoClassDisabled)
-                .Box(programDisabled),
+                .Box(programDisabledBox),
 
             E<BoxContainer>()
                 .Class("PdaHomeSummary")
@@ -321,4 +333,27 @@ public sealed class PdaSheetlet : Sheetlet<NanotrasenStylesheet>
                 .Prop(Label.StylePropertyFontColor, windowFooterColor), // DS14
         ];
     }
+
+    // DS14-start
+    /// <summary>
+    /// In the "Dead Space" style a flat PDA row becomes a projected one with the same fill and margins and a thin
+    /// frame; otherwise the box is used as is.
+    /// </summary>
+    private static StyleBox Holo(StyleBoxFlat flat, Color? border = null)
+    {
+        if (!DeadSpaceStylePalette.Hologram)
+            return flat;
+
+        return new DeadSpaceHoloStyleBox
+        {
+            BackgroundColor = flat.BackgroundColor,
+            BorderColor = border ?? (flat.BorderColor.A > 0f ? flat.BorderColor : DeadSpaceStylePalette.BorderDark),
+            BorderThickness = new Thickness(1),
+            ContentMarginLeftOverride = flat.ContentMarginLeftOverride,
+            ContentMarginRightOverride = flat.ContentMarginRightOverride,
+            ContentMarginTopOverride = flat.ContentMarginTopOverride,
+            ContentMarginBottomOverride = flat.ContentMarginBottomOverride,
+        };
+    }
+    // DS14-end
 }

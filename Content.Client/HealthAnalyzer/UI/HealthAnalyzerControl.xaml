@@ -1,5 +1,6 @@
 <BoxContainer
     xmlns="https://spacestation14.io"
+    xmlns:medical="clr-namespace:Content.Client.DeadSpace.UserInterface.Hologram.Medical"
     VerticalExpand="True"
     HorizontalExpand="True"
     Orientation="Vertical">
@@ -13,113 +14,73 @@
         Orientation="Horizontal"
         HorizontalExpand="True"
         VerticalExpand="True"
-        SeparationOverride="10">
+        SeparationOverride="18">
 
-        <BoxContainer Orientation="Vertical" MinWidth="340" SeparationOverride="8">
-            <RichTextLabel Name="NameLabel" HorizontalAlignment="Center" Margin="0 4 0 2" />
-            <Label Name="SpeciesLabel" HorizontalAlignment="Center" StyleClasses="LabelSubText" Margin="0 0 0 2" />
-            <LayoutContainer Name="Portrait" MinSize="64 64" SetSize="64 64" HorizontalAlignment="Center" Margin="0 0 0 4">
-                <SpriteView OverrideDirection="South" Scale="2 2" Stretch="None" Name="SpriteView" Access="Public" SetSize="64 64" />
+        <!-- Patient card: body doll, name, overall condition and warnings. -->
+        <BoxContainer Orientation="Vertical" MinWidth="250" SeparationOverride="4">
+            <LayoutContainer Name="Portrait" MinSize="128 128" SetSize="128 128" HorizontalAlignment="Center" Margin="0 6 0 6">
+                <SpriteView OverrideDirection="South" Scale="4 4" Stretch="None" Name="SpriteView" Access="Public" SetSize="128 128" />
+                <TextureRect Name="NoDataTex" Access="Public" SetSize="128 128" Visible="false" Stretch="KeepAspectCentered" TexturePath="/Textures/Interface/Misc/health_analyzer_out_of_range.png"/>
             </LayoutContainer>
-            <TextureRect Name="NoDataTex" Access="Public" SetSize="64 64" Visible="false" HorizontalAlignment="Center" Stretch="KeepAspectCentered" TexturePath="/Textures/Interface/Misc/health_analyzer_out_of_range.png"/>
 
-            <PanelContainer Name="AlertsDivider" Visible="False" StyleClasses="PanelDark">
+            <RichTextLabel Name="NameLabel" HorizontalAlignment="Center" Margin="0 2 0 0" StyleClasses="DeadSpaceTitle" />
+            <Label Name="SpeciesLabel" HorizontalAlignment="Center" StyleClasses="DeadSpaceSubtitle" />
+
+            <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" SeparationOverride="10" Margin="0 10 0 0">
+                <medical:HoloSegmentMeter Name="HealthSpine" VerticalAlignment="Bottom" />
+                <BoxContainer Orientation="Vertical" VerticalAlignment="Bottom" SeparationOverride="2">
+                    <Label Name="ConditionCaption" Text="{Loc 'hologram-medical-overall'}" StyleClasses="DeadSpaceSubtitle" />
+                    <Label Name="StatusLabel" StyleClasses="DeadSpaceTitle" />
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                        <Label Name="HealthTitle" Text="{Loc 'health-analyzer-meter-health'}" StyleClasses="DeadSpaceSubtitle" />
+                        <Label Name="HealthReadout" StyleClasses="DeadSpaceSubtitle" />
+                    </BoxContainer>
+                </BoxContainer>
+            </BoxContainer>
+
+            <PanelContainer Name="AlertsDivider" Visible="False" StyleClasses="PanelDark" Margin="0 10 0 0">
                 <BoxContainer Name="AlertsContainer" Visible="False" Margin="8 4 8 4" Orientation="Vertical" />
             </PanelContainer>
-
-            <BoxContainer Orientation="Vertical" SeparationOverride="6">
-                <Label Text="{Loc 'health-analyzer-section-status'}" FontColorOverride="#d7b56d" Margin="0 0 0 4" />
-                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-                    <PanelContainer StyleClasses="PanelDark" HorizontalExpand="True">
-                        <BoxContainer Orientation="Horizontal">
-                            <PanelContainer Name="HealthStripe" MinWidth="3" />
-                            <BoxContainer Orientation="Vertical" Margin="8 6 8 6" HorizontalExpand="True">
-                                <Label Name="HealthTitle" Text="{Loc 'health-analyzer-meter-health'}" />
-                                <Label Name="HealthReadout" Margin="0 0 0 4" />
-                                <ProgressBar Name="HealthBar" MinValue="0" MaxValue="100" SetHeight="10" HorizontalExpand="True" />
-                            </BoxContainer>
-                        </BoxContainer>
-                    </PanelContainer>
-                    <PanelContainer StyleClasses="PanelDark" HorizontalExpand="True">
-                        <BoxContainer Orientation="Horizontal">
-                            <PanelContainer Name="BloodStripe" MinWidth="3" />
-                            <BoxContainer Orientation="Vertical" Margin="8 6 8 6" HorizontalExpand="True">
-                                <Label Text="{Loc 'health-analyzer-meter-blood'}" />
-                                <Label Name="BloodLabel" Margin="0 0 0 4" />
-                                <ProgressBar Name="BloodBar" MinValue="0" MaxValue="100" SetHeight="10" HorizontalExpand="True" />
-                            </BoxContainer>
-                        </BoxContainer>
-                    </PanelContainer>
-                </BoxContainer>
-                <GridContainer Columns="2">
-                    <PanelContainer StyleClasses="PanelDark" Margin="0 0 3 3" HorizontalExpand="True">
-                        <BoxContainer Orientation="Horizontal">
-                            <PanelContainer Name="TempStripe" MinWidth="3" />
-                            <BoxContainer Orientation="Vertical" Margin="8 4 8 4" HorizontalExpand="True">
-                                <Label Text="{Loc 'health-analyzer-window-entity-temperature-text'}" />
-                                <Label Name="TemperatureLabel" />
-                            </BoxContainer>
-                        </BoxContainer>
-                    </PanelContainer>
-                    <PanelContainer StyleClasses="PanelDark" Margin="3 0 0 3" HorizontalExpand="True">
-                        <BoxContainer Orientation="Horizontal">
-                            <PanelContainer Name="StateStripe" MinWidth="3" />
-                            <BoxContainer Orientation="Vertical" Margin="8 4 8 4" HorizontalExpand="True">
-                                <Label Text="{Loc 'health-analyzer-window-entity-status-text'}" />
-                                <Label Name="StatusLabel" />
-                            </BoxContainer>
-                        </BoxContainer>
-                    </PanelContainer>
-                    <PanelContainer StyleClasses="PanelDark" Margin="0 3 3 0" HorizontalExpand="True">
-                        <BoxContainer Orientation="Horizontal">
-                            <PanelContainer Name="ScanStripe" MinWidth="3" />
-                            <BoxContainer Orientation="Vertical" Margin="8 4 8 4" HorizontalExpand="True">
-                                <Label Text="{Loc 'health-analyzer-window-scan-mode-text'}" />
-                                <Label Name="ScanModeLabel" Text="{Loc 'health-analyzer-window-entity-unknown-text'}" />
-                            </BoxContainer>
-                        </BoxContainer>
-                    </PanelContainer>
-                    <PanelContainer StyleClasses="PanelDark" Margin="3 3 0 0" HorizontalExpand="True">
-                        <BoxContainer Orientation="Horizontal">
-                            <PanelContainer Name="HurtStripe" MinWidth="3" />
-                            <BoxContainer Orientation="Vertical" Margin="8 4 8 4" HorizontalExpand="True">
-                                <Label Name="DamageTitleLabel" Text="{Loc 'health-analyzer-window-entity-damage-total-text'}" />
-                                <Label Name="DamageLabel" />
-                            </BoxContainer>
-                        </BoxContainer>
-                    </PanelContainer>
-                </GridContainer>
-                <PanelContainer Name="RotPanel" Visible="False" StyleClasses="PanelDark" Margin="0 3 0 0" HorizontalExpand="True">
-                    <BoxContainer Orientation="Horizontal">
-                        <PanelContainer Name="RotStripe" MinWidth="3" />
-                        <BoxContainer Orientation="Vertical" Margin="8 4 8 4" HorizontalExpand="True">
-                            <Label Text="{Loc 'health-analyzer-rot'}" />
-                            <Label Name="RotLabel" />
-                        </BoxContainer>
-                    </BoxContainer>
-                </PanelContainer>
-            </BoxContainer>
         </BoxContainer>
 
-        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
-            <PanelContainer StyleClasses="PanelDark" HorizontalExpand="True">
-                <BoxContainer Orientation="Vertical" Margin="10 8 10 8">
-                    <Label Text="{Loc 'health-analyzer-section-damage'}" FontColorOverride="#d7b56d" Margin="0 0 0 4" />
-                    <BoxContainer Name="GroupsContainer" Orientation="Vertical" />
+        <!-- Findings: limbs, vital signs, damage and reagents. -->
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" MinWidth="420" SeparationOverride="4">
+            <BoxContainer Name="LimbsDivider" Visible="False" Orientation="Vertical" Margin="0 0 0 8">
+                <medical:HoloSectionHeader Text="{Loc 'health-analyzer-section-limbs'}" />
+                <BoxContainer Name="LimbsContainer" Visible="False" Orientation="Vertical" />
+            </BoxContainer>
+
+            <medical:HoloSectionHeader Text="{Loc 'health-analyzer-section-conditions'}" />
+            <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="4 4 4 8">
+                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                    <Label Name="BloodTitle" Text="{Loc 'health-analyzer-meter-blood'}" MinWidth="130" StyleClasses="DeadSpaceSubtitle" VerticalAlignment="Center" />
+                    <ProgressBar Name="BloodBar" MinValue="0" MaxValue="100" SetHeight="8" HorizontalExpand="True" VerticalAlignment="Center" />
+                    <Label Name="BloodLabel" MinWidth="64" Align="Right" VerticalAlignment="Center" />
                 </BoxContainer>
-            </PanelContainer>
-
-            <PanelContainer Name="LimbsDivider" Visible="False" StyleClasses="PanelDark" HorizontalExpand="True">
-                <BoxContainer Orientation="Vertical" Margin="10 8 10 8">
-                    <Label Text="{Loc 'health-analyzer-section-limbs'}" FontColorOverride="#d7b56d" Margin="0 0 0 4" />
-                    <BoxContainer Name="LimbsContainer" Visible="False" Orientation="Vertical" />
+                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                    <Label Name="TemperatureTitle" Text="{Loc 'health-analyzer-window-entity-temperature-text'}" MinWidth="130" StyleClasses="DeadSpaceSubtitle" VerticalAlignment="Center" />
+                    <Label Name="TemperatureLabel" VerticalAlignment="Center" />
+                    <medical:HoloTag Name="TemperatureTag" Visible="False" />
                 </BoxContainer>
-            </PanelContainer>
+                <GridContainer Columns="4" HSeparationOverride="8" VSeparationOverride="4">
+                    <Label Name="ScanTitle" Text="{Loc 'health-analyzer-window-scan-mode-text'}" MinWidth="130" StyleClasses="DeadSpaceSubtitle" VerticalAlignment="Center" />
+                    <Label Name="ScanModeLabel" Text="{Loc 'health-analyzer-window-entity-unknown-text'}" MinWidth="90" VerticalAlignment="Center" />
+                    <Label Name="DamageTitleLabel" Text="{Loc 'health-analyzer-window-entity-damage-total-text'}" MinWidth="110" StyleClasses="DeadSpaceSubtitle" VerticalAlignment="Center" />
+                    <Label Name="DamageLabel" VerticalAlignment="Center" />
+                </GridContainer>
+                <BoxContainer Name="RotPanel" Visible="False" Orientation="Horizontal" SeparationOverride="8">
+                    <Label Name="RotTitle" Text="{Loc 'health-analyzer-rot'}" MinWidth="130" StyleClasses="DeadSpaceSubtitle" VerticalAlignment="Center" />
+                    <Label Name="RotLabel" VerticalAlignment="Center" />
+                </BoxContainer>
+            </BoxContainer>
 
-            <PanelContainer Name="ReagentsDivider" Visible="False" StyleClasses="PanelDark" HorizontalExpand="True">
-                <BoxContainer Name="ReagentsContainer" Visible="False" Margin="10 8 10 8" Orientation="Vertical" />
-            </PanelContainer>
+            <medical:HoloSectionHeader Name="DamageHeader" Text="{Loc 'health-analyzer-section-damage'}" />
+            <GridContainer Name="GroupsContainer" Columns="2" HSeparationOverride="16" VSeparationOverride="2" Margin="4 0 4 8" />
 
+            <BoxContainer Name="ReagentsDivider" Visible="False" Orientation="Vertical">
+                <medical:HoloSectionHeader Text="{Loc 'hologram-medical-reagents'}" />
+                <BoxContainer Name="ReagentsContainer" Visible="False" Margin="4 4 4 4" Orientation="Vertical" />
+            </BoxContainer>
         </BoxContainer>
     </BoxContainer>
     <!-- DS14-end -->

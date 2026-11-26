@@ -188,12 +188,74 @@ public sealed class CCCCVars
     public const string InterfaceStyleDark = "Dark";
     public const string InterfaceStyleLight = "Light";
     public const string InterfaceStyleClassic = "Classic";
+    public const string InterfaceStyleDeadSpace = "DeadSpace";
 
     /// <summary>
     /// Visual style used by ordinary game windows and menus. This is separate from the HUD resource theme.
     /// </summary>
     public static readonly CVarDef<string> InterfaceStyle =
         CVarDef.Create("ui.style_theme", InterfaceStyleDark, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Strength (0-1) of the hologram effects of the "Dead Space" interface style: the projection sweep and flicker
+    /// when a window opens, the crawling scanline and the rare dim flicker after. 0 turns them off.
+    /// </summary>
+    public static readonly CVarDef<float> HologramEffects =
+        CVarDef.Create("ui.hologram_effects", 0.6f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>How long a window takes to project in, in milliseconds.</summary>
+    public static readonly CVarDef<int> HologramOpenTime =
+        CVarDef.Create("ui.hologram_open_ms", 350, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>How long a closed window's projection takes to go out, in milliseconds.</summary>
+    public static readonly CVarDef<int> HologramCloseTime =
+        CVarDef.Create("ui.hologram_close_ms", 260, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Projection colour of the "Dead Space" style. The whole palette - frames, selection, controls, effects - is
+    /// re-tinted to it; warning, positive and negative colours keep their meaning.
+    /// </summary>
+    public static readonly CVarDef<string> HologramColor =
+        CVarDef.Create("ui.hologram_color", "#62D6FFFF", CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>Opacity (0.3-1) of the "Dead Space" window backgrounds.</summary>
+    public static readonly CVarDef<float> HologramOpacity =
+        CVarDef.Create("ui.hologram_opacity", 0.97f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>Tighter window margins in the "Dead Space" style.</summary>
+    public static readonly CVarDef<bool> HologramCompact =
+        CVarDef.Create("ui.hologram_compact", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>The faint scanline crawling over open windows.</summary>
+    public static readonly CVarDef<bool> HologramScanline =
+        CVarDef.Create("ui.hologram_scanline", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>The rare dim flicker of open windows.</summary>
+    public static readonly CVarDef<bool> HologramFlicker =
+        CVarDef.Create("ui.hologram_flicker", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Hologram sounds of the "Dead Space" style: its own button click and hover sounds and a chirp when a window
+    /// opens or closes. Off keeps the stock interface sounds.
+    /// </summary>
+    public static readonly CVarDef<bool> HologramSounds =
+        CVarDef.Create("ui.hologram_sounds", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>The "Dead Space" style's mouse cursor, painted in the projection colour. Off keeps the system cursor.</summary>
+    public static readonly CVarDef<bool> HologramCursor =
+        CVarDef.Create("ui.hologram_cursor", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>Size of the "Dead Space" cursor (0.5-3) on top of the interface scale; 1 is the drawn size.</summary>
+    public static readonly CVarDef<float> HologramCursorScale =
+        CVarDef.Create("ui.hologram_cursor_scale", 1f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>The projected frame, header strip and corner brackets of the HUD chat in the "Dead Space" style.</summary>
+    public static readonly CVarDef<bool> HologramChatFrame =
+        CVarDef.Create("ui.hologram_chat_frame", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>The "Dead Space" lobby: the shuttle cabin scene, or the classic hologram with the light waves.</summary>
+    public static readonly CVarDef<bool> HologramLobbyCabin =
+        CVarDef.Create("ui.hologram_lobby_cabin", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /*
     * Player Count Mode

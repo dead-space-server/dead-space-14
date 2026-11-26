@@ -5,8 +5,10 @@
     Orientation="Horizontal">
     <cc:ProgressTextureRect Name="ProgressTexture" VerticalAlignment="Top" Access="Public" Margin="0 8 0 0"/>
     <Control MinSize="10 0"/>
-    <BoxContainer Orientation="Vertical">
-        <RichTextLabel Name="Title" Access="Public" SetWidth="325" HorizontalAlignment="Left"/>
-        <RichTextLabel Name="Description" Access="Public" SetWidth="325" HorizontalAlignment="Left"/>
+    <!-- DS14-start: the text takes the free width, a status tag can follow it on the right -->
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+        <RichTextLabel Name="Title" Access="Public" HorizontalExpand="True"/>
+        <RichTextLabel Name="Description" Access="Public" HorizontalExpand="True"/>
     </BoxContainer>
+    <!-- DS14-end -->
 </controls:ObjectiveConditionsControl>

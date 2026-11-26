@@ -1,0 +1,53 @@
+<BoxContainer xmlns="https://spacestation14.io"
+              xmlns:loadout="clr-namespace:Content.Client.DeadSpace.UserInterface.Hologram.Loadout"
+              xmlns:hologram="clr-namespace:Content.Client.DeadSpace.UserInterface.Hologram"
+              Orientation="Horizontal"
+              VerticalExpand="True"
+              HorizontalExpand="True"
+              Margin="4"
+              SeparationOverride="6">
+    <!-- The character's basic fields: species, age, sex, pronouns, clothing, spawn priority, voice. -->
+    <PanelContainer Name="BasicPanel" SetWidth="320">
+        <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+            <BoxContainer Name="BasicHost" Orientation="Vertical" HorizontalExpand="True"/>
+        </ScrollContainer>
+    </PanelContainer>
+    <!-- Character preview between two columns of appearance slots, extra slots under it. -->
+    <PanelContainer Name="DollPanel" HorizontalExpand="True">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="8">
+                <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" SeparationOverride="8">
+                    <BoxContainer Name="LeftSlots" Orientation="Vertical" VerticalAlignment="Center" MinWidth="92"/>
+                    <BoxContainer Orientation="Vertical" VerticalAlignment="Center" SeparationOverride="6">
+                        <loadout:LoadoutPreviewFrame Name="PreviewFrame" SetSize="150 200">
+                            <SpriteView Name="PreviewSprite"
+                                        Scale="5 5"
+                                        Stretch="Fit"
+                                        OverrideDirection="South"
+                                        HorizontalExpand="True"
+                                        VerticalExpand="True"/>
+                        </loadout:LoadoutPreviewFrame>
+                        <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" SeparationOverride="4">
+                            <Button Name="RotateLeftButton" Text="◀"/>
+                            <Button Name="RotateRightButton" Text="▶"/>
+                        </BoxContainer>
+                    </BoxContainer>
+                    <BoxContainer Name="RightSlots" Orientation="Vertical" VerticalAlignment="Center" MinWidth="92"/>
+                </BoxContainer>
+                <PanelContainer Name="BottomDivider" StyleClasses="LowDivider" MinHeight="1" Visible="False"/>
+                <GridContainer Name="BottomSlots" Columns="4" HorizontalAlignment="Center" Visible="False"/>
+            </BoxContainer>
+        </ScrollContainer>
+        <hologram:HologramInterference Subtle="True"/>
+    </PanelContainer>
+    <!-- The profile editor's own pickers for the selected slot. -->
+    <PanelContainer Name="OptionsPanel" SetWidth="330">
+        <BoxContainer Orientation="Vertical" VerticalExpand="True">
+            <Label Name="OptionsTitle" StyleClasses="DeadSpaceSectionTitle" ClipText="True" Margin="2 0 2 4"/>
+            <PanelContainer StyleClasses="LowDivider" MinHeight="1" Margin="0 0 0 4"/>
+            <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                <BoxContainer Name="OptionsHost" Orientation="Vertical" HorizontalExpand="True"/>
+            </ScrollContainer>
+        </BoxContainer>
+    </PanelContainer>
+</BoxContainer>

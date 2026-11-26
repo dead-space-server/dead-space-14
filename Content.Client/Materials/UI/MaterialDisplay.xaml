@@ -13,6 +13,13 @@
                    HorizontalExpand="True"
                    ClipText="True"
                    Margin="4 4 4 4"/>
+            <!-- DS14-start: amount as a bar and a number in the Dead Space style -->
+            <BoxContainer Name="HologramRow" Orientation="Horizontal" Visible="False" Margin="4 0 4 4" SeparationOverride="8">
+                <ProgressBar Name="AmountBar" HorizontalExpand="True" VerticalAlignment="Center"
+                             MinHeight="8" MinValue="0" MaxValue="1" Value="0" />
+                <Label Name="AmountValue" MinWidth="48" Align="Right" />
+            </BoxContainer>
+            <!-- DS14-end -->
         </BoxContainer>
         <BoxContainer Name="Content"
                       Orientation="Horizontal"

@@ -92,6 +92,14 @@ public sealed partial class MaterialStorageControl : ScrollContainer
             MaterialList.AddChild(new MaterialDisplay(_owner.Value, mat, volume, canEject));
         }
 
+        // DS14-start: bars of the Dead Space style, against the storage limit or the largest stack.
+        var reference = (float) (materialStorage.StorageLimit ?? Math.Max(1, mats.Values.DefaultIfEmpty(0).Max()));
+        foreach (var display in MaterialList.Children.OfType<MaterialDisplay>())
+        {
+            display.UpdateHologram(mats.TryGetValue(display.Material, out var amount) ? amount / reference : 0f);
+        }
+        // DS14-end
+
         _currentMaterials = mats;
         NoMatsLabel.Visible = MaterialList.ChildCount == 1;
         SiloLinkedLabel.Visible = _entityManager.TryGetComponent<OreSiloClientComponent>(_owner.Value, out var client) && client.Silo != null;

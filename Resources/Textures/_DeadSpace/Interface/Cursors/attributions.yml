@@ -1,0 +1,9 @@
+- files: ["arrow.png", "arrow_large.png"]
+  license: "CC0-1.0"
+  copyright: "Kenney (www.kenney.nl), Cursor Pack 1.1, PNG/Outline/Default and PNG/Outline/Double pointer_scifi_a.png, renamed"
+  source: "https://kenney.nl/assets/cursor-pack"
+
+- files: ["hand.png", "hand_large.png"]
+  license: "CC0-1.0"
+  copyright: "Kenney (www.kenney.nl), Cursor Pack 1.1, PNG/Outline/Default and PNG/Outline/Double hand_thin_point.png, renamed"
+  source: "https://kenney.nl/assets/cursor-pack"

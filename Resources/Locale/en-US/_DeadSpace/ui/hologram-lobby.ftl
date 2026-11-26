@@ -1,0 +1,16 @@
+hologram-lobby-title = Dead Space
+hologram-lobby-round-panel = Round
+hologram-lobby-round-number = Round number
+hologram-lobby-round-mode = Mode
+hologram-lobby-round-map = Station
+hologram-lobby-round-players = Players
+hologram-lobby-players-ready = { $players } · { $ready } ready
+hologram-lobby-ready-panel = Readiness
+hologram-lobby-character = { $name } · { $job }
+hologram-lobby-no-job = no job selected
+hologram-lobby-chat-panel = Lobby chat
+hologram-lobby-server-tab = Server
+hologram-lobby-unknown = —
+hologram-lobby-arrival = Shuttle to «{ $station }» · arrival in { $time }
+hologram-lobby-shuttle = Shuttle to «{ $station }»
+hologram-lobby-players = Players on the server

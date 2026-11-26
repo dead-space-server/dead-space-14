@@ -34,4 +34,44 @@ internal static class DeadSpaceStyleBoxes
 
         return box;
     }
+
+    /// <summary>
+    /// A projected panel of the "Dead Space" style. <paramref name="bracket"/> - corner bracket arm length,
+    /// <paramref name="chamfer"/> - cut of the lower-right corner.
+    /// </summary>
+    public static DeadSpaceHoloStyleBox Holo(
+        Color background,
+        Color border,
+        float bracket = 0,
+        float chamfer = 0,
+        float horizontalMargin = 0,
+        float verticalMargin = 0,
+        HoloBrackets brackets = HoloBrackets.All,
+        Thickness? thickness = null)
+    {
+        var box = new DeadSpaceHoloStyleBox
+        {
+            BackgroundColor = background,
+            BorderColor = border,
+            BorderThickness = thickness ?? new Thickness(1),
+            BracketColor = DeadSpaceStylePalette.BorderHeader,
+            BracketLength = bracket,
+            Brackets = brackets,
+            Chamfer = chamfer,
+        };
+
+        if (horizontalMargin != 0)
+        {
+            box.ContentMarginLeftOverride = horizontalMargin;
+            box.ContentMarginRightOverride = horizontalMargin;
+        }
+
+        if (verticalMargin != 0)
+        {
+            box.ContentMarginTopOverride = verticalMargin;
+            box.ContentMarginBottomOverride = verticalMargin;
+        }
+
+        return box;
+    }
 }

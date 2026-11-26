@@ -55,6 +55,7 @@ namespace Content.Client.Stylesheets
 
             Stylesheets = new Dictionary<string, Stylesheet>();
             // DS14-start
+            ConfigureHologram();
             SelectInterfaceStyle(_configuration.GetCVar(CCCCVars.InterfaceStyle));
             // DS14-end
             SheetNanotrasen = Init(new NanotrasenStylesheet(new BaseStylesheet.NoConfig(), this));
@@ -65,7 +66,12 @@ namespace Content.Client.Stylesheets
             _userInterfaceManager.Stylesheet = SheetNanotrasen;
             ApplyDebugConsoleTheme(_userInterfaceManager.RootControl); // DS14
             _userInterfaceManager.WindowRoot.OnChildAdded += ApplyDebugConsoleTheme; // DS14
-            _configuration.OnValueChanged(CCCCVars.InterfaceStyle, OnInterfaceStyleChanged); // DS14
+            // DS14-start
+            _configuration.OnValueChanged(CCCCVars.InterfaceStyle, OnInterfaceStyleChanged);
+            _configuration.OnValueChanged(CCCCVars.HologramColor, _ => OnHologramStyleChanged());
+            _configuration.OnValueChanged(CCCCVars.HologramOpacity, _ => OnHologramStyleChanged());
+            _configuration.OnValueChanged(CCCCVars.HologramCompact, _ => OnHologramStyleChanged());
+            // DS14-end
 
             // warn about unused sheetlets
             if (UnusedSheetlets.Count > 0)
@@ -83,6 +89,21 @@ namespace Content.Client.Stylesheets
         private int _styleRuleCount;
 
         // DS14-start
+        private void ConfigureHologram()
+        {
+            DeadSpaceStylePalette.ConfigureHologram(
+                Color.FromHex(_configuration.GetCVar(CCCCVars.HologramColor), DeadSpaceStylePalette.DefaultHologramColor),
+                _configuration.GetCVar(CCCCVars.HologramOpacity),
+                _configuration.GetCVar(CCCCVars.HologramCompact));
+        }
+
+        private void OnHologramStyleChanged()
+        {
+            ConfigureHologram();
+            if (DeadSpaceStylePalette.Hologram)
+                OnInterfaceStyleChanged(_configuration.GetCVar(CCCCVars.InterfaceStyle));
+        }
+
         private void OnInterfaceStyleChanged(string theme)
         {
             SelectInterfaceStyle(theme);

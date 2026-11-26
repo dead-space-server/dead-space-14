@@ -1,0 +1,4 @@
+Play by Jonas Hecksher (Playtypes, e-types AS).
+Source: https://github.com/google/fonts/tree/main/ofl/play
+License: SIL Open Font License 1.1, see LICENSE.txt.
+Used as the interface font of the "Dead Space" interface style.

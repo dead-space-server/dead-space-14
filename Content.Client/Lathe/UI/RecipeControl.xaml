@@ -12,7 +12,13 @@
                 VerticalAlignment="Center"
                 MinSize="32 32"
                 />
-            <Label Name="RecipeName" HorizontalExpand="True" />
+            <Label Name="RecipeName" HorizontalExpand="True" ClipText="True" /> <!-- DS14: long names clip instead of widening the window -->
+            <!-- DS14-start: materials and an add marker in the Dead Space style -->
+            <Label Name="CostLabel" Visible="False" VerticalAlignment="Center" Margin="8 0" />
+            <PanelContainer Name="AddBadge" Visible="False" VerticalAlignment="Center" Margin="0 0 4 0">
+                <Label Name="AddLabel" Text="+" Margin="7 0" />
+            </PanelContainer>
+            <!-- DS14-end -->
         </BoxContainer>
     </Button>
 </Control>

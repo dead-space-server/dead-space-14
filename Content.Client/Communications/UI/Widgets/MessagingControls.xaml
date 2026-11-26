@@ -3,8 +3,8 @@
     <BoxContainer Orientation="Vertical" VerticalExpand="True"
         TabContainer.TabTitle="{Loc 'comms-console-announce-tab-title'}">
         <!-- DS14-start -->
-        <Label StyleClasses="DeadSpaceSectionTitle" Align="Center" VAlign="Top"
-            VerticalAlignment="Top"
+        <Label StyleClasses="DeadSpaceSectionTitle" Align="Left" VAlign="Top"
+            VerticalAlignment="Top" Margin="10 0 0 0"
             Text="{Loc 'comms-console-station-announcements-header'}" />
         <PanelContainer StyleClasses="DeadSpaceTextField" Margin="10 6 6 6"
             HorizontalExpand="True" VerticalExpand="True">
@@ -12,21 +12,24 @@
                 HorizontalExpand="True" VerticalExpand="True" />
         </PanelContainer>
         <!-- DS14-end -->
+        <!-- DS14-start: the character count on the left, a compact primary action on the right -->
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-            <Label Name="AnnounceCharLimitLabel" Margin="10 0 0 0"
+            <Label Name="AnnounceCharLimitLabel" Margin="10 0 0 0" HorizontalExpand="True"
                 StyleClasses="CommsConsoleCharLimit" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            <Button Name="AnnounceButton" HorizontalExpand="True" Margin="6 6 6 6"
+            <Button Name="AnnounceButton" Margin="6 6 6 6" MinWidth="140"
+                StyleClasses="DeadSpaceCommsPrimary"
                 Text="{Loc 'comms-console-menu-announcement-button'}"
                 ToolTip="{Loc 'comms-console-menu-announcement-button-tooltip'}" />
         </BoxContainer>
+        <!-- DS14-end -->
     </BoxContainer>
 
     <!-- Controls for putting messages on station screens (aka broadcasting) -->
     <BoxContainer Orientation="Vertical" VerticalExpand="True"
         TabContainer.TabTitle="{Loc 'comms-console-broadcast-tab-title'}">
         <!-- DS14-start -->
-        <Label StyleClasses="DeadSpaceSectionTitle" Align="Center" VAlign="Top"
-            VerticalAlignment="Top"
+        <Label StyleClasses="DeadSpaceSectionTitle" Align="Left" VAlign="Top"
+            VerticalAlignment="Top" Margin="10 0 0 0"
             Text="{Loc 'comms-console-station-broadcast-header'}" />
         <!-- DS14-end -->
         <!-- DS14-start -->
@@ -47,9 +50,13 @@
         </PanelContainer>
         <!-- DS14-end -->
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True"> <!-- Ensures consistent button placement vs. announcements -->
-            <Button Name="BroadcastButton" HorizontalExpand="True" Margin="10 6 6 6"
+            <!-- DS14-start -->
+            <Control HorizontalExpand="True" />
+            <Button Name="BroadcastButton" Margin="10 6 6 6" MinWidth="140"
+                StyleClasses="DeadSpaceCommsPrimary"
                 Text="{Loc 'comms-console-menu-broadcast-button'}"
                 ToolTip="{Loc 'comms-console-menu-broadcast-button-tooltip'}" />
+            <!-- DS14-end -->
         </BoxContainer>
     </BoxContainer>
 </TabContainer>

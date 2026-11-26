@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.Stylesheets; // DS14
 using Content.Client.Items;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
@@ -23,10 +24,20 @@ public sealed partial class ItemStatusPanel : Control
     // Tracked so we can re-run SetSide() if the theme changes.
     private HandLocation _side;
 
+    // DS14-start
+    // The theme's texture plates; the "Dead Space" style swaps in projected boxes and puts these back otherwise.
+    private readonly StyleBoxTexture _texturePanel;
+    private readonly StyleBoxTexture _textureHighlight;
+    // DS14-end
+
     public ItemStatusPanel()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
+        // DS14-start
+        _texturePanel = (StyleBoxTexture) Panel.PanelOverride!;
+        _textureHighlight = (StyleBoxTexture) HighlightPanel.PanelOverride!;
+        // DS14-end
     }
 
     public void SetSide(HandLocation location)
@@ -68,14 +79,14 @@ public sealed partial class ItemStatusPanel : Control
         //Because of hand ui flipping, left and right instead correspond to outside and inside respectively.
         patchMargin = MarginFromThemeColor("_itemstatus_patch_margin");
 
-        var panel = (StyleBoxTexture) Panel.PanelOverride!;
+        var panel = _texturePanel; // DS14
         panel.Texture = texture;
         panel.SetPatchMargin(cutOut, patchMargin.Left);
         panel.SetPatchMargin(flat, patchMargin.Right);
         panel.SetPatchMargin(StyleBox.Margin.Top, patchMargin.Top);
         panel.SetPatchMargin(StyleBox.Margin.Bottom, patchMargin.Bottom);
 
-        var panelHighlight = (StyleBoxTexture) HighlightPanel.PanelOverride!;
+        var panelHighlight = _textureHighlight; // DS14
         panelHighlight.Texture = textureHighlight;
         panelHighlight.SetPatchMargin(cutOut, patchMargin.Left);
         panelHighlight.SetPatchMargin(flat, patchMargin.Right);
@@ -98,7 +109,39 @@ public sealed partial class ItemStatusPanel : Control
     protected override void OnThemeUpdated()
     {
         SetSide(_side);
+        ApplyHologramTint(); // DS14
     }
+
+    // DS14-start
+    protected override void StylePropertiesChanged()
+    {
+        base.StylePropertiesChanged();
+        ApplyHologramTint();
+    }
+
+    /// <summary>
+    /// In the "Dead Space" style the hand status plates are projected panels in the palette (and so in the
+    /// projection colour) whatever the HUD theme; other styles keep the theme's texture plates.
+    /// </summary>
+    private void ApplyHologramTint()
+    {
+        if (!DeadSpaceStylePalette.Hologram)
+        {
+            Panel.PanelOverride = _texturePanel;
+            HighlightPanel.PanelOverride = _textureHighlight;
+            return;
+        }
+
+        Panel.PanelOverride = DeadSpaceStyleBoxes.Holo(
+            DeadSpaceStylePalette.SurfaceDark,
+            DeadSpaceStylePalette.BorderControl,
+            bracket: 6f);
+        HighlightPanel.PanelOverride = DeadSpaceStyleBoxes.Holo(
+            Color.Transparent,
+            DeadSpaceStylePalette.BorderHeader,
+            thickness: new Thickness(2));
+    }
+    // DS14-end
 
     protected override void FrameUpdate(FrameEventArgs args)
     {

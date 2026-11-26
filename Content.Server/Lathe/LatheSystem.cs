@@ -305,6 +305,13 @@ namespace Content.Server.Lathe
                 producing = node.Value.Recipe;
 
             var state = new LatheUpdateState(GetAvailableRecipes(uid, component), component.Queue.ToArray(), producing);
+            // DS14-start: lets the menu show the time left on the current item.
+            if (component.CurrentRecipe != null && TryComp<LatheProducingComponent>(uid, out var producingComp))
+            {
+                state.ProductionEnd = producingComp.StartTime + producingComp.ProductionLength;
+                state.ProductionLength = producingComp.ProductionLength;
+            }
+            // DS14-end
             _uiSys.SetUiState(uid, LatheUiKey.Key, state);
         }
 

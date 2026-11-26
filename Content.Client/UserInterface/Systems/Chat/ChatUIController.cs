@@ -298,19 +298,10 @@ public sealed partial class ChatUIController : UIController
         if (panel is null)
             return;
 
-        Color color;
-        if (panel.PanelOverride is StyleBoxFlat styleBoxFlat)
-            color = styleBoxFlat.BackgroundColor;
-        else if (panel.TryGetStyleProperty<StyleBox>(PanelContainer.StylePropertyPanel, out var style)
-                 && style is StyleBoxFlat propStyleBoxFlat)
-            color = propStyleBoxFlat.BackgroundColor;
-        else
-            color = DeadSpaceStylePalette.SurfaceTranscript.WithAlpha(221f / 255f); // DS14
-
-        panel.PanelOverride = new StyleBoxFlat
-        {
-            BackgroundColor = color.WithAlpha(opacity)
-        };
+        // DS14-start: the panel keeps the opacity and rebuilds its background (flat, or the projected frame of the
+        // Dead Space style) whenever the interface style or projection colour changes.
+        panel.SetOpacity(opacity);
+        // DS14-end
     }
 
     public void SetMainChat(bool setting)

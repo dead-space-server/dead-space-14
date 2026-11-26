@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Text;
 using Content.Client.DeadSpace.Chat;
+using Content.Client.DeadSpace.UserInterface.Hologram.Chat; // DS14
 using Content.Client.UserInterface.Systems.Chat.Controls;
 using Content.Shared.Chat;
 using Content.Shared.Input;
@@ -60,6 +61,10 @@ public partial class ChatBox : UIWidget
         _controller.MessageAdded += OnMessageAdded;
         _controller.HighlightsUpdated += OnHighlightsUpdated;
         _controller.RegisterChat(this);
+        // DS14-start
+        ChatWindowPanel.FramedChanged += OnHologramFramedChanged;
+        HologramHeader.CloseRequested += OnHologramCloseRequested;
+        // DS14-end
     }
 
     private void OnTextEntered(LineEditEventArgs args)
@@ -134,6 +139,14 @@ public partial class ChatBox : UIWidget
     {
         _controller.UpdateHighlights(highlighs);
     }
+
+    // DS14-start
+    /// <summary>A background for the message area only, or null for the stock one.</summary>
+    public void SetOutputBackground(Robust.Client.Graphics.StyleBox? box)
+    {
+        Contents.StyleBoxOverride = box;
+    }
+    // DS14-end
 
     public void AddLine(string message, Color color, string? commandLinkPrefix = null) // DS14
     {
@@ -317,9 +330,25 @@ public partial class ChatBox : UIWidget
         ChatInput.Input.OnKeyBindDown -= OnInputKeyBindDown;
         ChatInput.Input.OnTextChanged -= OnTextChanged;
         ChatInput.ChannelSelector.OnChannelSelect -= OnChannelSelect;
+        // DS14-start
+        ChatWindowPanel.FramedChanged -= OnHologramFramedChanged;
+        HologramHeader.CloseRequested -= OnHologramCloseRequested;
+        // DS14-end
     }
 
     // DS14-start
+    private void OnHologramFramedChanged(bool framed)
+    {
+        HologramChatLayout.Apply(framed, HologramHeader, Contents, ChatInput);
+    }
+
+    /// <summary>The close control of the projected chat drops the message being typed, as the cancel key does.</summary>
+    private void OnHologramCloseRequested()
+    {
+        ChatInput.Input.ReleaseKeyboardFocus();
+        ChatInput.Input.Clear();
+    }
+
     public void SetInputs(ref ChatBox args)
     {
         ClearInputs();

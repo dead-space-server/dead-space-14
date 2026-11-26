@@ -1,39 +1,34 @@
 <PanelContainer xmlns="https://spacestation14.io"
-                xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-                MinHeight="128"
-                Margin="3"
                 MouseFilter="Stop">
-    <PanelContainer.PanelOverride>
-        <gfx:StyleBoxFlat BackgroundColor="#16181d" BorderColor="#30343c" BorderThickness="1" />
-    </PanelContainer.PanelOverride>
-    <BoxContainer Orientation="Vertical" Margin="4" SeparationOverride="2">
-        <RichTextLabel Name="NameLabel"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Top" />
+    <!-- Every line is a single clipped line and the sprite has a fixed size, so all slots are the same height
+         and the grid stays even with long names or odd sprites; the full name is in the tooltip. -->
+    <BoxContainer Orientation="Vertical" Margin="6 4" SeparationOverride="2">
         <SpriteView Name="ItemPrototype"
                     HorizontalAlignment="Center"
-                    MinSize="48 48"
-                    SetSize="48 48" />
+                    Stretch="Fill"
+                    SetSize="64 64" />
+        <Label Name="NameLabel"
+               HorizontalExpand="True"
+               Align="Center"
+               ClipText="True" />
         <BoxContainer Name="SpiralCoils"
                       Orientation="Horizontal"
                       HorizontalAlignment="Center"
                       SeparationOverride="2"
                       MinHeight="8" />
-        <Label Name="AmountLabel"
-               HorizontalAlignment="Center"
-               StyleClasses="LabelSubText" />
-        <Label Name="PriceLabel"
-               Visible="False"
-               HorizontalAlignment="Stretch"
-               HorizontalExpand="True"
-               Align="Center"
-               ClipText="True"
-               FontColorOverride="#e8c547" />
-        <PanelContainer HorizontalAlignment="Center">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#c9b458" ContentMarginLeftOverride="6" ContentMarginRightOverride="6" />
-            </PanelContainer.PanelOverride>
-            <Label Name="CodeLabel" FontColorOverride="#111111" />
-        </PanelContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Label Name="AmountLabel"
+                   VerticalAlignment="Center"
+                   StyleClasses="LabelSubText" />
+            <Label Name="PriceLabel"
+                   Visible="False"
+                   HorizontalExpand="True"
+                   VerticalAlignment="Center"
+                   ClipText="True" />
+            <Control HorizontalExpand="True" />
+            <PanelContainer Name="CodeBadge" VerticalAlignment="Center">
+                <Label Name="CodeLabel" />
+            </PanelContainer>
+        </BoxContainer>
     </BoxContainer>
 </PanelContainer>

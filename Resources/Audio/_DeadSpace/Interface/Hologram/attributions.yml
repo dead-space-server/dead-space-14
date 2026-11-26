@@ -1,0 +1,19 @@
+- files: ["click.ogg"]
+  license: "CC0-1.0"
+  copyright: "Kenney (www.kenney.nl), Interface Sounds pack, glass_002.ogg, renamed"
+  source: "https://kenney.nl/assets/interface-sounds"
+
+- files: ["hover.ogg"]
+  license: "CC0-1.0"
+  copyright: "Kenney (www.kenney.nl), Interface Sounds pack, tick_004.ogg, renamed"
+  source: "https://kenney.nl/assets/interface-sounds"
+
+- files: ["open.ogg"]
+  license: "CC0-1.0"
+  copyright: "Kenney (www.kenney.nl), Interface Sounds pack, maximize_007.ogg, renamed"
+  source: "https://kenney.nl/assets/interface-sounds"
+
+- files: ["close.ogg"]
+  license: "CC0-1.0"
+  copyright: "Kenney (www.kenney.nl), Interface Sounds pack, minimize_007.ogg, renamed"
+  source: "https://kenney.nl/assets/interface-sounds"

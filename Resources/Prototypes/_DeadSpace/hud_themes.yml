@@ -1,0 +1,26 @@
+# "Dead Space" HUD: RIG hologram slots, pairs with the "Dead Space" interface style.
+# The textures in Hud/DeadSpace are white; DeadSpaceHudTintUIController paints them in the player's projection
+# colour (ui.hologram_color) into the in-memory DeadSpaceTinted folder the theme reads.
+- type: hudTheme
+  id: DSDeadSpaceTheme
+  name: ui-options-hud-theme-deadspace
+  path: /Textures/_DeadSpace/Interface/Hud/DeadSpaceTinted/
+  order: 8
+
+- type: uiTheme
+  id: DSDeadSpaceTheme
+  path: /Textures/_DeadSpace/Interface/Hud/DeadSpaceTinted/
+  colors:
+    whiteText: "#D8F3FF"
+    slotSelectedGold: "#62D6FF"
+    slotColor: "#061826"
+    slotOutline: "#3A8DB3"
+    slotText: "#7FA8BB"
+    nanoGold: "#62D6FF"
+    goodGreenFore: "#5DFF8F"
+    concerningOrangeFore: "#FFA83C"
+    dangerousRedFore: "#FF4D3F"
+    disabledFore: "#5F7D8B"
+    _itemstatus_content_margin_right: "#06060604"
+    _itemstatus_content_margin_left: "#06060604"
+    _itemstatus_patch_margin: "#07060505"

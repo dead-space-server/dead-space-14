@@ -17,6 +17,10 @@ namespace Content.Client.DeadSpace.Stylesheets;
 [CommonSheetlet]
 public sealed class DeadSpaceSurfaceSheetlet : Sheetlet<NanotrasenStylesheet>
 {
+    /// <summary>Corner bracket arm and lower-right cut of hologram windows, in UI units.</summary>
+    private const float WindowBracket = 14f;
+    private const float WindowChamfer = 0f;
+
     public override StyleRule[] GetRules(NanotrasenStylesheet sheet, object config)
     {
         StyleBox shell;
@@ -38,6 +42,26 @@ public sealed class DeadSpaceSurfaceSheetlet : Sheetlet<NanotrasenStylesheet>
             classicTopShell.SetContentMarginOverride(StyleBox.Margin.Horizontal, 10);
             classicTopShell.SetContentMarginOverride(StyleBox.Margin.Vertical, 7);
             topShell = classicTopShell;
+        }
+        else if (DeadSpaceStylePalette.Hologram)
+        {
+            // A projected frame: thin edge, bright corner brackets, cut lower-right corner; compact margins let
+            // windows take less of the screen.
+            var compact = DeadSpaceStylePalette.Compact;
+            shell = DeadSpaceStyleBoxes.Holo(
+                DeadSpaceStylePalette.SurfaceDark,
+                DeadSpaceStylePalette.BorderControl,
+                bracket: WindowBracket,
+                chamfer: WindowChamfer,
+                horizontalMargin: compact ? 8 : 10,
+                verticalMargin: compact ? 8 : 10);
+            topShell = DeadSpaceStyleBoxes.Holo(
+                DeadSpaceStylePalette.SurfaceDark,
+                DeadSpaceStylePalette.BorderControl,
+                bracket: WindowBracket,
+                chamfer: WindowChamfer,
+                horizontalMargin: compact ? 8 : 10,
+                verticalMargin: compact ? 8 : 8);
         }
         else
         {
@@ -177,13 +201,33 @@ public sealed class DeadSpaceSurfaceSheetlet : Sheetlet<NanotrasenStylesheet>
             classicInsetBorder,
             new Thickness(2));
         // Modern windows use tonal separation instead of a permanent dark frame.
-        var defaultWindowPanel = DeadSpaceStyleBoxes.Flat(DeadSpaceStylePalette.Surface);
-        var defaultWindowHeader = DeadSpaceStyleBoxes.Flat(
-            DeadSpaceStylePalette.SurfaceHeader,
-            DeadSpaceStylePalette.AccentDim,
-            new Thickness(0, 0, 0, 1));
+        StyleBox defaultWindowPanel = DeadSpaceStylePalette.Hologram
+            ? DeadSpaceStyleBoxes.Holo(
+                DeadSpaceStylePalette.Surface,
+                DeadSpaceStylePalette.BorderControl,
+                bracket: WindowBracket,
+                chamfer: WindowChamfer)
+            : DeadSpaceStyleBoxes.Flat(DeadSpaceStylePalette.Surface);
+        // The header covers the top of the window body, so in the hologram style it carries the top brackets.
+        StyleBox defaultWindowHeader = DeadSpaceStylePalette.Hologram
+            ? DeadSpaceStyleBoxes.Holo(
+                DeadSpaceStylePalette.SurfaceHeader,
+                DeadSpaceStylePalette.BorderHeader,
+                bracket: WindowBracket,
+                brackets: HoloBrackets.Top,
+                thickness: new Thickness(0, 0, 0, 1))
+            : DeadSpaceStyleBoxes.Flat(
+                DeadSpaceStylePalette.SurfaceHeader,
+                DeadSpaceStylePalette.AccentDim,
+                new Thickness(0, 0, 0, 1));
         // FancyWindow content needs one raised neutral step: deep black is reserved for genuine insets/HUD.
-        var backgroundPanel = DeadSpaceStyleBoxes.Flat(DeadSpaceStylePalette.SurfaceFlat);
+        StyleBox backgroundPanel = DeadSpaceStylePalette.Hologram
+            ? DeadSpaceStyleBoxes.Holo(
+                DeadSpaceStylePalette.SurfaceFlat,
+                DeadSpaceStylePalette.BorderControl,
+                bracket: WindowBracket,
+                chamfer: WindowChamfer)
+            : DeadSpaceStyleBoxes.Flat(DeadSpaceStylePalette.SurfaceFlat);
 
         var rules = new List<StyleRule>
         {

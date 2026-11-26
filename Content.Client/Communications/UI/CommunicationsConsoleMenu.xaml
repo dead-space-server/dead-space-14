@@ -2,12 +2,16 @@
 <comms:CommunicationsConsoleMenu xmlns="https://spacestation14.io"
     xmlns:comms="clr-namespace:Content.Client.Communications.UI"
     xmlns:widgets="clr-namespace:Content.Client.Communications.UI.Widgets"
-    MinSize="380 360" SetSize="450 460" Resizable="True"
+    MinSize="380 360" SetSize="560 540" Resizable="True"
     Title="{Loc 'comms-console-menu-title'}">
     <!-- DS14-end -->
     <!-- DS14-start -->
     <ScrollContainer HScrollEnabled="False" VerticalExpand="True" ReserveScrollbarSpace="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8" SeparationOverride="10">
+            <!-- Threat level first, then the announcement, then the shuttle, divided by thin lines. -->
+            <widgets:AlertLevelControls Name="AlertLevelControls" Margin="0 4" />
+            <PanelContainer StyleClasses="LowDivider" />
+
             <widgets:MessagingControls Name="MessagingControls" MinHeight="300" VerticalExpand="True" />
 
             <Button Name="EmagChannelButton"
@@ -15,7 +19,7 @@
                 Text="{Loc 'emag-comms-switch-emag'}"
                 Visible="False" />
 
-            <widgets:AlertLevelControls Name="AlertLevelControls" Margin="0 4" />
+            <PanelContainer StyleClasses="LowDivider" />
             <widgets:ShuttleControls Name="ShuttleControls" Margin="0 4" />
         </BoxContainer>
     </ScrollContainer>

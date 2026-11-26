@@ -14,6 +14,26 @@
                 <ui:OptionDropDown Name="DropDownHudLayout" Title="{Loc 'ui-options-hud-layout'}" />
                 <ui:OptionDropDown Name="BackgroundHudLayout" Title="{Loc 'ui-options-background-hud-layout'}" />
                 <!-- DS14-start -->
+                <Label Text="{Loc 'ui-options-general-hologram'}"
+                       StyleClasses="DeadSpaceSectionTitle"/>
+                <ui:OptionColorSlider Name="HologramColorSlider"
+                                      Title="{Loc 'ui-options-hologram-color'}"
+                                      Example="{Loc 'ui-options-hologram-color-example'}"/>
+                <ui:OptionSlider Name="HologramOpacitySlider" Title="{Loc 'ui-options-hologram-opacity'}" />
+                <CheckBox Name="HologramCompactCheckBox" Text="{Loc 'ui-options-hologram-compact'}" />
+                <ui:OptionSlider Name="HologramEffectsSlider" Title="{Loc 'ui-options-hologram-effects'}" />
+                <ui:OptionSlider Name="HologramOpenTimeSlider" Title="{Loc 'ui-options-hologram-open-time'}" />
+                <ui:OptionSlider Name="HologramCloseTimeSlider" Title="{Loc 'ui-options-hologram-close-time'}" />
+                <CheckBox Name="HologramScanlineCheckBox" Text="{Loc 'ui-options-hologram-scanline'}" />
+                <CheckBox Name="HologramFlickerCheckBox" Text="{Loc 'ui-options-hologram-flicker'}" />
+                <CheckBox Name="HologramSoundsCheckBox" Text="{Loc 'ui-options-hologram-sounds'}" />
+                <CheckBox Name="HologramCursorCheckBox" Text="{Loc 'ui-options-hologram-cursor'}" />
+                <ui:OptionSlider Name="HologramCursorScaleSlider" Title="{Loc 'ui-options-hologram-cursor-scale'}" />
+                <CheckBox Name="HologramChatFrameCheckBox" Text="{Loc 'ui-options-hologram-chat-frame'}" />
+                <CheckBox Name="HologramLobbyCabinCheckBox" Text="{Loc 'ui-options-hologram-lobby-cabin'}" />
+                <Button Name="HologramResetButton" Text="{Loc 'ui-options-hologram-reset'}" HorizontalAlignment="Left" Margin="0 4 0 0" />
+                <!-- DS14-end -->
+                <!-- DS14-start -->
                 <Label Text="{Loc 'ui-options-general-discord'}"
                        StyleClasses="DeadSpaceSectionTitle"/>
                 <!-- DS14-end -->

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Client.DeadSpace.Stylesheets; // DS14
 using Content.Client.Lobby;
 using Content.Client.UserInterface.Screens;
 using Content.Shared.CCVar;
@@ -30,6 +31,7 @@ public sealed partial class MiscTab : Control
             new(CCCCVars.InterfaceStyleDark, Loc.GetString("ui-options-interface-style-dark")),
             new(CCCCVars.InterfaceStyleLight, Loc.GetString("ui-options-interface-style-light")),
             new(CCCCVars.InterfaceStyleClassic, Loc.GetString("ui-options-interface-style-classic")),
+            new(CCCCVars.InterfaceStyleDeadSpace, Loc.GetString("ui-options-interface-style-deadspace")),
         };
         // DS14-end
 
@@ -59,6 +61,36 @@ public sealed partial class MiscTab : Control
 
         // DS14-start
         Control.AddOptionDropDown(CCCCVars.InterfaceStyle, DropDownInterfaceStyle, interfaceStyleEntries);
+        // The theme's own options, so they can be put back to their defaults on their own.
+        BaseOption[] hologramOptions =
+        [
+            Control.AddOptionColorSlider(CCCCVars.HologramColor, HologramColorSlider),
+            Control.AddOptionPercentSlider(
+                CCCCVars.HologramOpacity,
+                HologramOpacitySlider,
+                min: DeadSpaceStylePalette.MinHologramOpacity),
+            Control.AddOptionCheckBox(CCCCVars.HologramCompact, HologramCompactCheckBox),
+            Control.AddOptionPercentSlider(CCCCVars.HologramEffects, HologramEffectsSlider),
+            Control.AddOptionSlider(CCCCVars.HologramOpenTime, HologramOpenTimeSlider, 0, 1500, FormatMilliseconds),
+            Control.AddOptionSlider(CCCCVars.HologramCloseTime, HologramCloseTimeSlider, 0, 1500, FormatMilliseconds),
+            Control.AddOptionCheckBox(CCCCVars.HologramScanline, HologramScanlineCheckBox),
+            Control.AddOptionCheckBox(CCCCVars.HologramFlicker, HologramFlickerCheckBox),
+            Control.AddOptionCheckBox(CCCCVars.HologramSounds, HologramSoundsCheckBox),
+            Control.AddOptionCheckBox(CCCCVars.HologramCursor, HologramCursorCheckBox),
+            Control.AddOptionPercentSlider(CCCCVars.HologramCursorScale, HologramCursorScaleSlider, 0.5f, 3f),
+            Control.AddOptionCheckBox(CCCCVars.HologramChatFrame, HologramChatFrameCheckBox),
+            Control.AddOptionCheckBox(CCCCVars.HologramLobbyCabin, HologramLobbyCabinCheckBox),
+        ];
+        // Like the tab's own reset: the defaults go into the controls and are saved with "Apply".
+        HologramResetButton.OnPressed += _ =>
+        {
+            foreach (var option in hologramOptions)
+            {
+                option.ResetToDefault();
+            }
+
+            Control.ValueChanged();
+        };
         // DS14-end
         Control.AddOptionDropDown(CVars.InterfaceTheme, DropDownHudTheme, themeEntries);
         Control.AddOptionDropDown(CCVars.UILayout, DropDownHudLayout, layoutEntries);
@@ -81,4 +113,11 @@ public sealed partial class MiscTab : Control
 
         Control.Initialize();
     }
+
+    // DS14-start
+    private static string FormatMilliseconds(OptionSliderIntCVar slider, int value)
+    {
+        return Loc.GetString("ui-options-hologram-ms", ("value", value));
+    }
+    // DS14-end
 }

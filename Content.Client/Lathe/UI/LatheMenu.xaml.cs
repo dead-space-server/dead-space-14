@@ -1,6 +1,12 @@
 using System.Linq;
 using System.Text;
 using Content.Client.Materials;
+// DS14-start
+using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
+using Content.Client.DeadSpace.UserInterface.Hologram.Vending;
+using Robust.Shared.Timing;
+// DS14-end
 using Content.Shared.Lathe;
 using Content.Shared.Lathe.Prototypes;
 using Content.Shared.Research.Prototypes;
@@ -20,6 +26,7 @@ public sealed partial class LatheMenu : DefaultWindow
 {
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!; // DS14
 
     private readonly SpriteSystem _spriteSystem;
     private readonly LatheSystem _lathe;
@@ -39,6 +46,14 @@ public sealed partial class LatheMenu : DefaultWindow
     public ProtoId<LatheCategoryPrototype>? CurrentCategory;
 
     public EntityUid Entity;
+
+    // DS14-start
+    private readonly HologramStyleStamp _stamp = new();
+    private readonly ButtonGroup _categoryGroup = new(false);
+    private readonly Dictionary<int, Button> _categoryButtons = new();
+    private TimeSpan? _productionEnd;
+    private TimeSpan _productionLength;
+    // DS14-end
 
     public LatheMenu()
     {
@@ -149,6 +164,7 @@ public sealed partial class LatheMenu : DefaultWindow
                         amount = 1;
                     RecipeQueueAction?.Invoke(s, amount);
                 };
+                control.SetCost(GetHologramCost(prototype, lathe)); // DS14
                 RecipeList.AddChild(control);
             }
             else
@@ -165,6 +181,7 @@ public sealed partial class LatheMenu : DefaultWindow
                 child.SetTooltipSupplier(tooltipFunction);
                 child.SetCanProduce(canProduce);
                 child.SetDisplayControl(GetRecipeDisplayControl(prototype));
+                child.SetCost(GetHologramCost(prototype, lathe)); // DS14
             }
             idx++;
         }
@@ -260,6 +277,7 @@ public sealed partial class LatheMenu : DefaultWindow
         }
 
         FilterOption.SelectId(-1);
+        PopulateCategoryButtons(sortedCategories); // DS14
     }
 
     /// <summary>
@@ -350,15 +368,140 @@ public sealed partial class LatheMenu : DefaultWindow
 
     private void OnItemSelected(OptionButton.ItemSelectedEventArgs obj)
     {
-        FilterOption.SelectId(obj.Id);
-        if (obj.Id == -1)
-        {
-            CurrentCategory = null;
-        }
-        else
-        {
-            CurrentCategory = Categories?[obj.Id];
-        }
+        SelectCategory(obj.Id); // DS14
+    }
+
+    // DS14-start: shared by the dropdown and the category column of the Dead Space style.
+    private void SelectCategory(int id)
+    {
+        FilterOption.SelectId(id);
+        SelectCategoryButton(id);
+        CurrentCategory = id == -1 ? null : Categories?[id];
         PopulateRecipes();
     }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+
+        if (_stamp.Update())
+            ApplyHologram();
+
+        UpdateProductionTime();
+    }
+
+    public void SetProductionTime(TimeSpan? end, TimeSpan length)
+    {
+        _productionEnd = end;
+        _productionLength = length;
+        UpdateProductionTime();
+    }
+
+    private void UpdateProductionTime()
+    {
+        ProductionRow.Visible = _productionEnd != null && FabricatingContainer.Visible;
+        if (_productionEnd is not { } end)
+            return;
+
+        var left = end - _timing.CurTime;
+        if (left < TimeSpan.Zero)
+            left = TimeSpan.Zero;
+
+        ProductionBar.Value = _productionLength > TimeSpan.Zero
+            ? 1f - (float) (left / _productionLength)
+            : 1f;
+        // Rounded up so the last second reads 0:01, not 0:00.
+        var seconds = (int) Math.Ceiling(left.TotalSeconds);
+        ProductionTime.Text = $"{seconds / 60}:{seconds % 60:00}";
+    }
+
+    /// <summary>
+    /// The Dead Space style lays the lathe out like the RIG concept: categories as a button column, recipe rows with
+    /// 2x icons and their materials, left-aligned section titles. The other styles keep the stock layout.
+    /// </summary>
+    private void ApplyHologram()
+    {
+        var hologram = DeadSpaceStylePalette.Hologram;
+
+        CategoryScroll.Visible = hologram;
+        FilterOption.Visible = !hologram;
+        QueueTitle.HorizontalAlignment = hologram ? HAlignment.Left : HAlignment.Center;
+        MaterialsTitle.HorizontalAlignment = hologram ? HAlignment.Left : HAlignment.Center;
+        ProductionTime.FontColorOverride = hologram ? DeadSpaceStylePalette.CyanBright : null;
+        ProductionBar.BackgroundStyleBoxOverride = hologram
+            ? DeadSpaceStyleBoxes.Flat(DeadSpaceStylePalette.SurfaceInset, DeadSpaceStylePalette.BorderDark, new Thickness(1))
+            : null;
+        ProductionBar.ForegroundStyleBoxOverride = hologram
+            ? DeadSpaceStyleBoxes.Flat(DeadSpaceStylePalette.Cyan)
+            : null;
+        MinSize = hologram ? new Vector2(760, 480) : new Vector2(550, 450);
+        if (hologram && SetWidth < 1050)
+            SetSize = new Vector2(1050, 620);
+
+        // Rows are rebuilt for the icon size and the materials column.
+        RecipeList.RemoveAllChildren();
+        if (Recipes.Count > 0)
+            PopulateRecipes();
+    }
+
+    private void PopulateCategoryButtons(List<LatheCategoryPrototype> categories)
+    {
+        CategoryButtons.RemoveAllChildren();
+        _categoryButtons.Clear();
+        AddCategoryButton(-1, Loc.GetString("lathe-menu-category-all"));
+
+        foreach (var category in categories)
+        {
+            AddCategoryButton(Categories!.IndexOf(category.ID), Loc.GetString(category.Name));
+        }
+
+        SelectCategoryButton(-1);
+    }
+
+    private void AddCategoryButton(int id, string name)
+    {
+        var button = new Button
+        {
+            Text = name.ToUpper(),
+            ToggleMode = true,
+            Group = _categoryGroup,
+            ClipText = true,
+            ToolTip = name,
+            HorizontalExpand = true,
+            Margin = new Thickness(0),
+        };
+        button.Label.Align = Label.AlignMode.Left;
+        button.OnPressed += _ => SelectCategory(id);
+        _categoryButtons[id] = button;
+        CategoryButtons.AddChild(button);
+    }
+
+    private void SelectCategoryButton(int id)
+    {
+        if (_categoryButtons.TryGetValue(id, out var button))
+            button.Pressed = true;
+    }
+
+    /// <summary>"STEEL 1 · GLASS 0.5" in sheets for the Dead Space recipe rows; null in the other styles.</summary>
+    private string? GetHologramCost(LatheRecipePrototype prototype, LatheComponent? lathe)
+    {
+        if (!DeadSpaceStylePalette.Hologram)
+            return null;
+
+        var multiplier = lathe?.MaterialUseMultiplier ?? 1f;
+        var parts = new List<string>();
+        foreach (var (id, amount) in prototype.Materials)
+        {
+            if (!_prototypeManager.Resolve(id, out var proto))
+                continue;
+
+            var adjusted = SharedLatheSystem.AdjustMaterial(amount, prototype.ApplyMaterialDiscount, multiplier);
+            parts.Add(Loc.GetString("hologram-lathe-cost-entry",
+                ("material", Loc.GetString(proto.Name).ToUpper()),
+                ("amount", adjusted / (float) _materialStorage.GetSheetVolume(proto))));
+        }
+
+        return string.Join(" · ", parts);
+    }
+    // DS14-end
 }

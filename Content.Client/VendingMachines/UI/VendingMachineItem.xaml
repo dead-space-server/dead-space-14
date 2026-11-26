@@ -2,13 +2,15 @@
             Orientation="Horizontal"
             HorizontalExpand="True"
             SeparationOverride="4">
+    <!-- DS14-start: a fixed sprite size keeps every row the same height; the list assumes uniform rows. -->
     <EntityPrototypeView
             Name="ItemPrototype"
             Margin="4 0 0 0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            MinSize="32 32"
+            SetSize="32 32"
             />
+    <!-- DS14-end -->
     <Label Name="NameLabel"
             SizeFlagsStretchRatio="3"
             HorizontalExpand="True"

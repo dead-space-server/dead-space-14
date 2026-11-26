@@ -9,6 +9,12 @@ using FancyWindow = Content.Client.UserInterface.Controls.FancyWindow;
 using Robust.Client.UserInterface;
 using Content.Client.UserInterface.Controls;
 using Robust.Shared.Utility;
+// DS14-start
+using System.Linq;
+using Content.Client.DeadSpace.Stylesheets;
+using Content.Client.DeadSpace.UserInterface.Hologram.Vending;
+using Robust.Shared.Timing;
+// DS14-end
 
 namespace Content.Client.VendingMachines.UI;
 
@@ -27,6 +33,12 @@ public sealed partial class VendingMachineMenu : FancyWindow
     /// </summary>
     private bool _enabled;
 
+    // DS14-start: the Dead Space style shows the goods as a card grid instead of the list.
+    private List<VendorItemsListData> _listData = new();
+    private bool _hologram;
+    private bool _renderFixture;
+    // DS14-end
+
     public event Action<GUIBoundKeyEventArgs, ListData>? OnItemSelected;
 
     public VendingMachineMenu()
@@ -40,6 +52,12 @@ public sealed partial class VendingMachineMenu : FancyWindow
         VendingContents.DataFilterCondition += DataFilterCondition;
         VendingContents.GenerateItem += GenerateButton;
         VendingContents.ItemKeyBindDown += (args, data) => OnItemSelected?.Invoke(args, data);
+
+        // DS14-start
+        HologramContents.OnItemKeyBindDown += (args, data) => OnItemSelected?.Invoke(args, data);
+        SearchBar.OnTextChanged += args => HologramContents.SetFilter(args.Text);
+        UpdateHologramMode();
+        // DS14-end
     }
 
     private bool DataFilterCondition(string filter, ListData data)
@@ -76,10 +94,15 @@ public sealed partial class VendingMachineMenu : FancyWindow
         _listItems.Clear();
         _amounts.Clear();
 
-        if (inventory.Count == 0 && VendingContents.Visible)
+        if (inventory.Count == 0 && SearchBar.Visible) // DS14: the list itself is hidden in the Dead Space style
         {
             SearchBar.Visible = false;
             VendingContents.Visible = false;
+            // DS14-start
+            _listData.Clear();
+            HologramContents.Clear();
+            HologramContents.Visible = false;
+            // DS14-end
 
             var outOfStockLabel = new Label
             {
@@ -120,10 +143,17 @@ public sealed partial class VendingMachineMenu : FancyWindow
             listData.Add(new VendorItemsListData(entry.Type, prototype.ID, i)
             {
                 ItemText = itemText,
+                ItemName = GetItemName(prototype), // DS14
             });
         }
 
         VendingContents.PopulateList(listData);
+
+        // DS14-start
+        _listData = listData;
+        if (_hologram)
+            PopulateHologram();
+        // DS14-end
 
         SetSizeAfterUpdate(longestEntry.Length, inventory.Count);
     }
@@ -134,6 +164,15 @@ public sealed partial class VendingMachineMenu : FancyWindow
     public void UpdateAmounts(List<VendingMachineInventoryEntry> cachedInventory, bool enabled)
     {
         _enabled = enabled;
+
+        // DS14-start: keep every amount current, not only the rows on screen, and update the card grid.
+        foreach (var entry in cachedInventory)
+        {
+            _amounts[new VendorItemKey(entry.Type, entry.ID)] = entry.Amount;
+        }
+
+        HologramContents.UpdateAmounts(_amounts, enabled);
+        // DS14-end
 
         foreach (var (key, button) in _listItems)
         {
@@ -155,6 +194,12 @@ public sealed partial class VendingMachineMenu : FancyWindow
 
     private string GetItemText(EntityPrototype prototype, uint amount)
     {
+        return $"[{amount}] {GetItemName(prototype)}"; // DS14
+    }
+
+    // DS14: the name alone, for the cards of the Dead Space style.
+    private string GetItemName(EntityPrototype prototype)
+    {
         var itemName = prototype.Name;
 
         // DS14-start: prototype labels contain locale IDs; entity MapInit normally localizes them.
@@ -168,19 +213,67 @@ public sealed partial class VendingMachineMenu : FancyWindow
         }
         // DS14-end
 
-        return $"[{amount}] {itemName}";
+        return itemName; // DS14
     }
 
     private void SetSizeAfterUpdate(int longestEntryLength, int contentCount)
     {
+        // DS14-start: room for a few columns of cards in the Dead Space style.
+        if (DeadSpaceStylePalette.Hologram && contentCount > 0)
+        {
+            SetSize = HologramVendingGrid.PreferredWindowSize(contentCount, new Vector2(16, 124));
+            return;
+        }
+        // DS14-end
+
         SetSize = new Vector2(Math.Clamp((longestEntryLength + 2) * 12, 320, 450), // DS14-resize
             Math.Clamp(contentCount * 50, 200, 350)); // DS14-resize
     }
+
+    // DS14-start
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        UpdateHologramMode();
+    }
+
+    /// <summary>
+    /// Shows the card grid in the Dead Space style and the list in the others. Cards are only built while the grid
+    /// is in use, since each one spawns a preview entity.
+    /// </summary>
+    private void UpdateHologramMode()
+    {
+        // The developer render fixture fills only the list.
+        var hologram = DeadSpaceStylePalette.Hologram && !_renderFixture;
+        VendingContents.Visible = SearchBar.Visible && !hologram;
+        HologramContents.Visible = SearchBar.Visible && hologram;
+
+        if (hologram == _hologram)
+            return;
+
+        _hologram = hologram;
+        if (hologram)
+            PopulateHologram();
+        else
+            HologramContents.Clear();
+    }
+
+    private void PopulateHologram()
+    {
+        HologramContents.SetFilter(SearchBar.Text);
+        HologramContents.Populate(
+            _listData.Select(data => ((ListData) data, new VendorItemKey(data.ItemType, data.ItemProtoID), data.ItemName)),
+            _amounts,
+            _enabled);
+    }
+    // DS14-end
 
 #if DEBUG
     // DS14-start: deterministic rows for the developer-only renderer do not require an active game entity system.
     internal void PopulateRenderFixture(IReadOnlyList<ListData> entries)
     {
+        _renderFixture = true;
+        UpdateHologramMode();
         VendingContents.GenerateItem = (data, button) =>
         {
             if (data is not VendingMachineRenderListData entry)
@@ -204,6 +297,7 @@ public sealed partial class VendingMachineMenu : FancyWindow
 public record VendorItemsListData(InventoryType ItemType, EntProtoId ItemProtoID, int ItemIndex) : ListData
 {
     public string ItemText = string.Empty;
+    public string ItemName = string.Empty; // DS14
 }
 
 public readonly record struct VendorItemKey(InventoryType Type, EntProtoId Prototype);
