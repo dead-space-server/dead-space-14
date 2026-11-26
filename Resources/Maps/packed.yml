@@ -73661,7 +73661,7 @@ entities:
     - type: ArtifactAnalyzer
       currentArtifact: null
     - type: ItemPlacer
-      placedEntities:
+      placedEntities: []
 - proto: MachineCentrifuge
   entities:
   - uid: 9758
