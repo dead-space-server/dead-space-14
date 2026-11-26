@@ -78401,7 +78401,7 @@ entities:
       pos: 37.5,35.5
 - proto: PoweredlightExterior
   entities:
-- uid: 477
+  - uid: 477
     components:
     - type: Transform
       parent: 2
