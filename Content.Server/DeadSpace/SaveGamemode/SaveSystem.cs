@@ -287,6 +287,11 @@ public sealed partial class SaveSystem : EntitySystem
     ///     прототипы открыть не может. Смотреть нужно в прототип: в файл пишутся только отличающиеся
     ///     от него поля, и по файлу такая сущность неотличима от любой другой.
     /// </summary>
+    /// <remarks>
+    ///     Теги сюда не смотрим: в этом движке тег — не поле прототипа, а компонент <c>Tag</c>, и
+    ///     сущность с тегом «не сохранять» помечается прогоном <c>SaveGamemodeDoNotSaveSystem</c>
+    ///     перед записью — прототип для этого раскрывать не нужно.
+    /// </remarks>
     public void ExpandPrototypeComponentRules(MapFilterConfig config)
     {
         if (config.RemovePrototypesWithComponents.Count == 0)
@@ -307,7 +312,7 @@ public sealed partial class SaveSystem : EntitySystem
             }
         }
 
-        Log.Debug($"SaveSystem: правило «компонент в прототипе» раскрыто в {added} прототипов " +
+        Log.Debug($"SaveSystem: правила «компонент в прототипе» раскрыты в {added} прототипов " +
                   $"по {config.RemovePrototypesWithComponents.Count} компонентам");
     }
 

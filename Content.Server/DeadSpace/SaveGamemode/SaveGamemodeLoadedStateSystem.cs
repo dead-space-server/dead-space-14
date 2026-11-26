@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Server.Machines.EntitySystems;
 using Content.Server.ParticleAccelerator.Components;
 using Content.Server.ParticleAccelerator.EntitySystems;
@@ -66,6 +67,7 @@ public sealed partial class SaveGamemodeLoadedStateSystem : EntitySystem
     [Dependency] private MultipartMachineSystem _multipart = default!;
     [Dependency] private ParticleAcceleratorSystem _accelerator = default!;
     [Dependency] private RadiationCollectorSystem _collector = default!;
+    [Dependency] private SuperNecroobeliskSystem _obelisk = default!;
 
     /// <summary>
     ///     Маркерные компоненты переходящих процессов: на загрузке снимаются со всех сущностей.

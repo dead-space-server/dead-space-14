@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Server.Machines.EntitySystems;
 using Content.Server.ParticleAccelerator.Components;
 using Content.Server.ParticleAccelerator.EntitySystems;
 using Content.Server.Singularity.Components;
 using Content.Server.Singularity.EntitySystems;
+using Content.Shared.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Shared.Singularity.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
@@ -45,11 +47,19 @@ namespace Content.Server.DeadSpace.SaveGamemode;
 ///     спрайта живёт только в appearance-ключе <c>RadiationCollectorVisuals.VisualState</c>, которого в
 ///     файле нет ни у кого: коллектор, вырабатывающий энергию, выглядел выключенным.
 ///     </description></item>
+///     <item><description>
+///     <b>Обелиск суперматерии.</b> Стадия активации (<c>Percents</c> и <c>StateEnum</c>) не
+///     сериализовалась, а поднятая ею нагрузка <c>PowerSupplier</c> — сериализуется: после загрузки
+///     обелиск стоял «неактивным» и продолжал кормить сеть 65/245/385 кВт. Стадия теперь в файле, а
+///     проход сверяет с ней нагрузку и раздаёт ключи внешнего вида — без них спрайт остаётся «unactive»
+///     даже у активного обелиска, потому что appearance-ключей в файле нет ни у кого.
+///     </description></item>
 ///     </list>
 ///     <para>
 ///     Старые сохранения (написанные до DS14-правок компонента) чинятся наполовину: у ускорителя режима в
 ///     файле не было и взять его негде — он останется выключенным. Поля генератора и вид коллектора
-///     восстанавливаются для любого файла.
+///     восстанавливаются для любого файла. У обелиска стадия выводится из <c>IsActive</c> — единственного
+///     уцелевшего свидетеля активации (см. <c>RefreshLoadedObelisk</c>).
 ///     </para>
 /// </remarks>
 public sealed partial class SaveGamemodeLoadedStateSystem
@@ -71,10 +81,11 @@ public sealed partial class SaveGamemodeLoadedStateSystem
         var linked = RestoreContainmentFields(out var removed);
         var accelerators = RestoreParticleAccelerators();
         var collectors = RestoreRadiationCollectors();
+        var obelisks = RestoreObelisks(out var inferred);
 
         Log.Info($"SaveGamemode: режимы машин на загруженной карте: связей поля восстановлено {linked}, " +
                  $"сирот полей удалено {removed}, ускорителей включено {accelerators}, " +
-                 $"коллекторов обновлено {collectors}");
+                 $"коллекторов обновлено {collectors}, обелисков обновлено {obelisks}, стадий выведено {inferred}");
     }
 
     /// <summary>
@@ -271,6 +282,34 @@ public sealed partial class SaveGamemodeLoadedStateSystem
         }
 
         return updated;
+    }
+
+    /// <summary>
+    ///     Раздает обелискам суперматерии нагрузку и вид по их стадии активации.
+    /// </summary>
+    /// <param name="inferred">Сколько стадий выведено из старых файлов, где стадии нет.</param>
+    /// <returns>Сколько обелисков получили исправленную нагрузку.</returns>
+    private int RestoreObelisks(out int inferred)
+    {
+        inferred = 0;
+
+        var fixedUp = 0;
+        var query = AllEntityQuery<SuperMatterialNecroObeliskComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
+            // Всё решение — в системе-владельце: она знает заводскую нагрузку из прототипа и то,
+            // какой стадии какая соответствует, и сама раздаёт ключи внешнего вида.
+            var (powerFixed, stageInferred) = _obelisk.RefreshLoadedObelisk(uid, comp);
+            if (powerFixed)
+                fixedUp++;
+            if (stageInferred)
+                inferred++;
+        }
+
+        return fixedUp;
     }
 
     /// <summary>

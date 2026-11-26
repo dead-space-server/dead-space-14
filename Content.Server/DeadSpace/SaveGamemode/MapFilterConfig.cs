@@ -62,6 +62,13 @@ public sealed class MapFilterConfig
     ///     Пост-процессор прототипов не видит, поэтому правило раскрывает в
     ///     <see cref="RemovePrototypes"/> вызывающий код (<c>SaveSystem.CreateFilterConfig</c>).
     /// </summary>
+    /// <remarks>
+    ///     Второй способ пометить «не сохранять» — тег <c>DoNotSave</c>. Тега в дереве YAML нет и в
+    ///     прототипе его тоже нет (в этом движке теги — компонент <c>Tag</c>), поэтому тегом помечает
+    ///     сам режим перед записью, а пост-процессору достаётся метка
+    ///     <see cref="DoNotSaveComponent"/> из <see cref="RemoveEntitiesWithComponents"/>.
+    ///     См. <c>SaveGamemodeDoNotSaveSystem</c>.
+    /// </remarks>
     public HashSet<string> RemovePrototypesWithComponents = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
@@ -254,6 +261,26 @@ public sealed class MapFilterConfig
         config.RemoveEntitiesWithComponents.UnionWith([
             "Ghost", // Content.Shared.Ghost.GhostComponent
             "Actor", // Robust.Shared.Player.ActorComponent — игрок, он не часть карты
+        ]);
+
+        // --- Помеченные «не сохранять» (DoNotSaveComponent): эвакошаттл и будущие случаи. ---
+        // Эвакошаттл — сущность, созданная во время раунда (AddEmergencyShuttle): если раунд кончился, а
+        // шаттл остался припаркованным у станции, его сетка уезжает в map.yml с содержимым, стыковками и
+        // ProtectedGrid, а в следующем раунде приезжает обратно чужой сеткой в списке сеток станции.
+        // Режим навешивает метку перед самой записью (SaveGamemodeDoNotSaveSystem), а «EmergencyShuttle» —
+        // страховка для файлов, написанных до появления метки: этот компонент тоже рантаймный, значит
+        // в файл он попал, и удалить по нему можно и старый сейв (на загрузке его чистит тот же режим).
+        config.RemoveEntitiesWithComponents.UnionWith([
+            "DoNotSave", // Content.Server.DeadSpace.SaveGamemode.DoNotSaveComponent — метка режима
+            "EmergencyShuttle", // Content.Server.Shuttles.Components.EmergencyShuttleComponent
+        ]);
+
+        // Метка «never save» в ПРОТОТИПЕ: компонент прототипный, в файл он не пишется, и по файлу такую
+        // сущность от любой другой не отличить — правило раскрывается в список id прототипов.
+        // Тег DoNotSave сюда не входит: тег — компонент Tag, он в файле виден, и им помечает сам режим
+        // (SaveGamemodeDoNotSaveSystem.StampTagged), так что пост-процессору хватает метки выше.
+        config.RemovePrototypesWithComponents.UnionWith([
+            "DoNotSave",
         ]);
 
         // --- Сущности действий: их в сохранении быть не должно. ---

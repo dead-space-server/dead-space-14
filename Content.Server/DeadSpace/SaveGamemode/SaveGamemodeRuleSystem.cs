@@ -72,6 +72,7 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SaveGamemodeMobStateSystem _mobStateSave = default!;
     [Dependency] private SaveGamemodeLoadedStateSystem _loadedState = default!;
+    [Dependency] private SaveGamemodeDoNotSaveSystem _doNotSave = default!;
 
     /// <summary>
     ///     Имя, которое движок даёт сущности сетки при создании. Для сетки из сохранения оно означает
@@ -750,6 +751,9 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
     ///     режим пишет рядом со слотом в <c>station.yml</c> и применяет отсюда:
     ///     см. <see cref="ApplyStationStates"/>. Файла нет (старое сохранение) — имя хотя бы берётся
     ///     с сетки, см. <see cref="RestoreStationNames"/>, а балансы остаются заводскими.
+    ///     Перед сборкой сеток карта очищается: от сущностей станции (<see cref="PurgeSavedStations"/>)
+    ///     и от того, чему в сохранении не место (<c>SaveGamemodeDoNotSaveSystem.PurgeLoaded</c>,
+    ///     в первую очередь сетки припаркованного эвакошаттла).
     /// </remarks>
     /// <param name="suppressRoundstartGrids">
     ///     Не спавнять обязательные гриды станции на время регистрации: в сохранении они уже есть.
@@ -762,6 +766,12 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
     private bool TryRegisterStations(MapId mapId, bool suppressRoundstartGrids, string slot)
     {
         PurgeSavedStations(mapId);
+
+        // Сетка эвакошаттла, припаркованного в конце раунда, — такая же сетка на карте: без удаления
+        // она попала бы в список сеток станции (а то и в «главную»), а EmergencyShuttleSystem навесил бы
+        // поверх ещё один шаттл. Новые файлы эту сетку не пишут вовсе (метка «не сохранять»), здесь
+        // чинятся файлы, написанные до появления метки. См. SaveGamemodeDoNotSaveSystem.
+        _doNotSave.PurgeLoaded();
 
         var grids = new List<EntityUid>();
         var stationIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -1973,11 +1983,17 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
         // компонента быть не должно, иначе следующее сохранение возьмёт состояние из устаревшей метки.
         var stamped = _mobStateSave.StampMobStates();
 
+        // Всё, чему в сохранении не место (эвакошаттл, если раунд кончился, а он остался на станции,
+        // и будущие случаи), помечается тем же временем жизни: метка нужна только сериализации,
+        // см. DoNotSaveComponent.
+        var markedNoSave = _doNotSave.StampDoNotSave();
+
         // Сохранение через пост-процессор: он вычищает runtime-состояние и снимает mapInit,
         // чтобы карта загрузилась как неинициализированная.
         MapFilterReport report;
         bool saved;
         var cleared = 0;
+        var clearedNoSave = 0;
         try
         {
             saved = _save.TrySaveFilteredSlot(mapId, slot, out report);
@@ -1985,12 +2001,15 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
         finally
         {
             cleared = _mobStateSave.ClearMobStateStamps();
+            clearedNoSave = _doNotSave.ClearDoNotSaveStamps();
         }
 
         // Метка — состояние записи, а не мира: снять её обязаны со всех, кому навешивали.
         // Разница возможна, только если существо погибло за время долгой записи.
         if (cleared != stamped)
             Log.Warning($"SaveGamemode: меток состояния снято {cleared}, а навешано было {stamped}");
+        if (clearedNoSave != markedNoSave)
+            Log.Warning($"SaveGamemode: меток «не сохранять» снято {clearedNoSave}, а навешано было {markedNoSave}");
 
         if (!saved)
         {
@@ -2000,7 +2019,7 @@ public sealed partial class SaveGamemodeRuleSystem : GameRuleSystem<SaveGamemode
         }
 
         Log.Info($"SaveGamemode: карта {mapId} сохранена в слот '{slot}' " +
-                 $"(меток состояния существ: {stamped}). {report}");
+                 $"(меток состояния существ: {stamped}, помечено «не сохранять»: {markedNoSave}). {report}");
 
         // Станция — сущность вне карты, в файл карты она не попадает: её имя и балансы пишутся
         // рядом в station.yml. Без них станция при загрузке рождается заново — с новым именем
