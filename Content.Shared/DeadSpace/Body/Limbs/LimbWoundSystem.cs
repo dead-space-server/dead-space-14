@@ -1385,6 +1385,15 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
         else if (life == LimbLife.Crit && args.State == MobState.Alive)
             args.State = MobState.Critical;
+        // DS14: out of a limb crit only once the torso has really mended, not the moment it ticks past zero,
+        // or regenerating bodies (necromorphs) drop and rise every second.
+        else if (ent.Comp.LimbCrit && args.State == MobState.Alive && !TorsoMended(ent.Comp))
+            args.State = MobState.Critical;
+    }
+
+    private static bool TorsoMended(LimbBodyComponent limbs)
+    {
+        return limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health >= LimbWoundRules.CritRecoverTorso;
     }
 
     private bool InStasis(EntityUid uid)
@@ -2395,6 +2404,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         if (limbs.LimbCrit && _mobs.IsCritical(uid))
         {
+            if (!TorsoMended(limbs))
+                return;
+
             limbs.LimbCrit = false;
             _mobs.UpdateMobState(uid);
         }
