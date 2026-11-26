@@ -82,7 +82,7 @@ public sealed partial class CardinalScreamComponent : Component
     /// the green scream are marked.
     /// </summary>
     [DataField]
-    public Vector2 ScreenHalfExtents = new(10.5f, 7.5f);
+    public Vector2 ScreenHalfExtents = new(10.5f, 8.5f);
 
     [DataField]
     public EntProtoId RallyWave = "EffectCardinalRallyScream";
@@ -91,11 +91,11 @@ public sealed partial class CardinalScreamComponent : Component
     public EntProtoId HuntWave = "EffectCardinalHuntScream";
 
     [DataField]
-    public SoundSpecifier RallySound = new SoundPathSpecifier("/Audio/Effects/Screech/changeling_screech_strong.ogg",
+    public SoundSpecifier RallySound = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/TheCircle/cardinal-scream.ogg",
         AudioParams.Default.WithVolume(2f).WithPitchScale(0.85f).WithMaxDistance(14f));
 
     [DataField]
-    public SoundSpecifier HuntSound = new SoundPathSpecifier("/Audio/Effects/Screech/changeling_screech_strong.ogg",
+    public SoundSpecifier HuntSound = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/TheCircle/cardinal-scream.ogg",
         AudioParams.Default.WithVolume(2f).WithPitchScale(1.1f).WithMaxDistance(14f));
 
     [DataField]
@@ -214,4 +214,13 @@ public sealed class CardinalScreamChoiceEvent(NetEntity cardinal, CardinalScream
 {
     public NetEntity Cardinal = cardinal;
     public CardinalScreamKind Kind = kind;
+}
+
+/// <summary>
+/// Sent to every player the scream reaches: their view takes the scream's colour for a moment.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CardinalScreamTintEvent(Color color) : EntityEventArgs
+{
+    public Color Color = color;
 }

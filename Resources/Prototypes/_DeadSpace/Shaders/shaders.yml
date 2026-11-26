@@ -43,3 +43,8 @@
   id: CardinalScream
   kind: source
   path: "/Textures/_DeadSpace/Shaders/cardinal_scream.swsl"
+
+- type: shader
+  id: CardinalScreamTint
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/cardinal_scream_tint.swsl"

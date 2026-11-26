@@ -32,6 +32,7 @@ public sealed partial class CardinalScreamSystem : EntitySystem
 
     private CardinalScreamWaveOverlay _waves = default!;
     private CardinalHuntOverlay _hunt = default!;
+    private CardinalScreamTintOverlay _tint = default!;
     private SimpleRadialMenu? _menu;
 
     public override void Initialize()
@@ -39,11 +40,14 @@ public sealed partial class CardinalScreamSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CardinalScreamComponent, CardinalScreamActionEvent>(OnAction);
+        SubscribeNetworkEvent<CardinalScreamTintEvent>(ev => _tint.Start(ev.Color));
 
         _waves = new CardinalScreamWaveOverlay(EntityManager, _timing, _transform, _prototypes);
         _hunt = new CardinalHuntOverlay(EntityManager, _player, _timing, _lookup, _sprite, _transform);
         _overlays.AddOverlay(_waves);
+        _tint = new CardinalScreamTintOverlay(_timing, _prototypes);
         _overlays.AddOverlay(_hunt);
+        _overlays.AddOverlay(_tint);
     }
 
     public override void Shutdown()
@@ -52,6 +56,7 @@ public sealed partial class CardinalScreamSystem : EntitySystem
         _menu?.Close();
         _overlays.RemoveOverlay(_waves);
         _overlays.RemoveOverlay(_hunt);
+        _overlays.RemoveOverlay(_tint);
     }
 
     private void OnAction(Entity<CardinalScreamComponent> ent, ref CardinalScreamActionEvent args)

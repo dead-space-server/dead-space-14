@@ -6,7 +6,10 @@ using Content.Shared.Actions;
 using Content.Shared.Alert;
 using Content.Shared.Camera;
 using Content.Shared.DeadSpace.TheCircle.Cardinal;
+using Content.Shared.CCVar;
 using Content.Shared.Hands;
+using Content.Shared.Humanoid;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Mobs.Components;
@@ -15,6 +18,7 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Server.GameStates;
 using Robust.Shared.Audio;
+using Robust.Shared.Configuration;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -33,6 +37,7 @@ public sealed partial class CardinalScreamSystem : EntitySystem
     private static readonly Color RallyColor = Color.FromHex("#ff3030");
     private static readonly Color HuntColor = Color.FromHex("#40ff60");
     private static readonly TimeSpan OverrideInterval = TimeSpan.FromSeconds(0.25);
+    private const string NecromorphFaction = "Necromorfs";
     private static readonly float[] ShakeSteps = [0f, 0.12f, 0.24f, 0.36f, 0.5f];
 
     [Dependency] private SharedActionsSystem _actions = default!;
@@ -45,6 +50,8 @@ public sealed partial class CardinalScreamSystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private PvsOverrideSystem _pvs = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private NpcFactionSystem _factions = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -165,7 +172,10 @@ public sealed partial class CardinalScreamSystem : EntitySystem
                 views.Add(_transform.GetWorldPosition(xform));
         }
 
-        var half = ent.Comp.ScreenHalfExtents;
+        // The widest screen the server allows, and its fixed height, with a little room at the edges.
+        var half = new Vector2(
+            MathF.Max(ent.Comp.ScreenHalfExtents.X, _cfg.GetCVar(CCVars.ViewportMaximumWidth) / 2f + 0.5f),
+            ent.Comp.ScreenHalfExtents.Y);
         var reach = half.Length();
         _mobs.Clear();
         foreach (var view in views)
@@ -175,7 +185,7 @@ public sealed partial class CardinalScreamSystem : EntitySystem
 
         foreach (var (mob, _) in _mobs)
         {
-            if (HasComp<CircleSquadComponent>(mob) || !HasComp<ActorComponent>(mob) || _mobState.IsDead(mob))
+            if (!Outsider(mob))
                 continue;
 
             var at = _transform.GetWorldPosition(mob);
@@ -189,6 +199,20 @@ public sealed partial class CardinalScreamSystem : EntitySystem
         }
 
         _nextOverrides = TimeSpan.Zero;
+    }
+
+    /// <summary>
+    /// A living person who is not of the squad nor one of its necromorphs: a player, or a humanoid without one.
+    /// </summary>
+    private bool Outsider(EntityUid mob)
+    {
+        if (HasComp<CircleSquadComponent>(mob) || _mobState.IsDead(mob))
+            return false;
+
+        if (!HasComp<ActorComponent>(mob) && !HasComp<HumanoidAppearanceComponent>(mob))
+            return false;
+
+        return !_factions.IsMember(mob, NecromorphFaction);
     }
 
     private static bool OnAnyScreen(Vector2 at, List<Vector2> views, Vector2 half)
@@ -242,6 +266,9 @@ public sealed partial class CardinalScreamSystem : EntitySystem
         var center = _transform.GetWorldPosition(ent);
         foreach (var (mob, _) in _mobs)
         {
+            if (HasComp<ActorComponent>(mob))
+                RaiseNetworkEvent(new CardinalScreamTintEvent(color), mob);
+
             if (!HasComp<CameraRecoilComponent>(mob))
                 continue;
 

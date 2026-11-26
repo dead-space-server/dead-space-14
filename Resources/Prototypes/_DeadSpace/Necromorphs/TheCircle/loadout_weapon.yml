@@ -116,6 +116,9 @@
   id: WeaponCaseHeavyFilledAmmo
   suffix: Патроны, Круг
   components:
+  - type: Storage
+    grid:
+    - 0,0,9,5 # two of every Circle round fit with room to spare
   - type: StorageFill
     contents:
       - id: MagazineLightRifleAsVal

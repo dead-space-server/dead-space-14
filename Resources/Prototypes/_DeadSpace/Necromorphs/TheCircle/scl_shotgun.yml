@@ -12,6 +12,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/scl/scl.rsi
+    scale: 0.75, 0.75 # the 48x32 sprite looks oversized next to other guns
   - type: Item
     sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/scl/scl_inhands.rsi
   - type: Clothing
@@ -20,7 +21,7 @@
   - type: Gun
     fireRate: 1.5
     soundGunshot:
-      path: /Audio/_DeadSpace/Necromorfs/TheCircle/Weapon/sfx/ks23-sfx/ks23.ogg
+      path: /Audio/Weapons/Guns/Gunshots/hpistol.ogg # the Hammerhead's shot
   - type: BallisticAmmoProvider
     whitelist:
       tags:
@@ -101,4 +102,4 @@
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-slug-1
       map: [ "enum.GunVisualLayers.Mag" ]
-    - state: practice
+    - state: slug # white packaging
