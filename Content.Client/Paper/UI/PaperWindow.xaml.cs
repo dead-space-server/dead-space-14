@@ -438,9 +438,12 @@ namespace Content.Client.Paper.UI
                 msg.AddMarkupPermissive("\r\n");
 
             // DS14-start
-            CheckTagHandler.Interactive = !isEditing &&
+            var checksInteractive = !isEditing &&
                 state.StampedBy.Count == 0 && state.Signatures.Count == 0 && !state.EditingDisabled;
-            WrittenTextLabel.SetMessage(msg, UserFormattableTags.BaseAllowedTags, DefaultTextColor);
+            var renderMessage = checksInteractive
+                ? CheckTagHandler.WithInteractiveChecks(msg)
+                : msg;
+            WrittenTextLabel.SetMessage(renderMessage, UserFormattableTags.BaseAllowedTags, DefaultTextColor);
             WrittenTextLabel.Visible = !isEditing && (state.Text.Length > 0 || hasSignatures); // DS14-signatures
             BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0 && !hasSignatures;
             // DS14-end
@@ -1025,7 +1028,6 @@ namespace Content.Client.Paper.UI
 
             var msg = new FormattedMessage();
             msg.AddMarkupPermissive(Rope.Collapse(Input.TextRope));
-            CheckTagHandler.Interactive = false; // DS14
             PreviewLabel.SetMessage(msg, UserFormattableTags.BaseAllowedTags, DefaultTextColor);
         }
 

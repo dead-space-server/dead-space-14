@@ -13,18 +13,42 @@ namespace Content.Client.DeadSpace.UserInterface.RichText;
 
 public sealed class CheckTagHandler : IMarkupTagHandler
 {
+    private const string TagName = "check";
+    private const string InteractiveAttribute = "ds14-interactive";
+
     private static readonly Color InkColor = new(25, 25, 25);
 
-    public string Name => "check";
+    public string Name => TagName;
 
-    public static bool Interactive = true;
+    public static FormattedMessage WithInteractiveChecks(FormattedMessage message)
+    {
+        var result = new FormattedMessage(message.Count);
+
+        foreach (var node in message)
+        {
+            if (node.Name == TagName && !node.Closing)
+            {
+                var attributes = new Dictionary<string, MarkupParameter>(node.Attributes)
+                {
+                    [InteractiveAttribute] = new MarkupParameter(1),
+                };
+
+                result.PushTag(new MarkupNode(node.Name, node.Value, attributes));
+                continue;
+            }
+
+            result.PushTag(node);
+        }
+
+        return result;
+    }
 
     public bool TryCreateControl(MarkupNode node, [NotNullWhen(true)] out Control? control)
     {
         var state = GetNodeState(node);
         var glyph = CheckGlyphs[(int) state];
 
-        if (!Interactive)
+        if (!node.Attributes.ContainsKey(InteractiveAttribute))
         {
             control = new Label
             {
