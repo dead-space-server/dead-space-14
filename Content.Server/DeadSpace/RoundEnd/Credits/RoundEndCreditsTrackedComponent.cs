@@ -9,5 +9,10 @@ public sealed partial class RoundEndCreditsTrackedComponent : Component
 
     public TimeSpan LastAttackTime;
 
+    /// <summary>
+    /// Everyone who hurt this body, and when they last did, for kill assists.
+    /// </summary>
+    public Dictionary<EntityUid, TimeSpan> Attackers = new();
+
     public bool Cuffed;
 }

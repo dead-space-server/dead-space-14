@@ -10,6 +10,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Weapons.Akimbo;
+using Content.Shared.DeadSpace.Weapons.Ranged; // DS14
 using Content.Shared.Movement.Components;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
@@ -435,13 +436,16 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
 
         // Remove ammo
-        var ev = new TakeAmmoEvent(shots, [], fromCoordinates, user);
+        // DS14-start: a gun firing bullets side by side spends a round for each of them
+        var roundsPerShot = TryComp<GunParallelShotComponent>(gun, out var parallel) ? Math.Max(1, parallel.Count) : 1;
+        var ev = new TakeAmmoEvent(shots * roundsPerShot, [], fromCoordinates, user);
+        // DS14-end
 
         // Listen it just makes the other code around it easier if shots == 0 to do this.
         if (shots > 0)
             RaiseLocalEvent(gun, ev);
 
-        DebugTools.Assert(ev.Ammo.Count <= shots);
+        DebugTools.Assert(ev.Ammo.Count <= shots * roundsPerShot); // DS14
         DebugTools.Assert(shots >= 0);
         UpdateAmmoCount(gun);
 

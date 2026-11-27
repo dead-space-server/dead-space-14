@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.DeadSpace.Necromorphs.Leviathan.Components;
 using Content.Shared.Body.Systems; // DS14 - forensics refactor moved BloodstreamSystem to Shared.
 using Content.Server.Cloning;
 using Content.Shared.Cloning.Events;
@@ -154,6 +155,10 @@ public sealed partial class NecromorfSystem : SharedInfectionDeadSystem
     private void OnMindRemoved(Entity<NecromorfComponent> ent, ref MindRemovedMessage args)
     {
         if (TerminatingOrDeleted(ent))
+            return;
+
+        // The leviathan's mind moves into its roaming mind; the body stays its own, not a free role.
+        if (TryComp<LeviathanComponent>(ent, out var leviathan) && leviathan.GhostLeviathanEntity != null)
             return;
 
         EnsureNecromorphGhostRole(ent);

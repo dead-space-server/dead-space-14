@@ -113,9 +113,23 @@
 
 - type: entity
   parent: WeaponCaseHeavy
+  id: WeaponCaseHeavyFilledSCL
+  suffix: СКЛ
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponShotgunSCL
+      - id: BoxShotgunSCL
+        amount: 3
+
+- type: entity
+  parent: WeaponCaseHeavy
   id: WeaponCaseHeavyFilledAmmo
   suffix: Патроны, Круг
   components:
+  - type: Storage
+    grid:
+    - 0,0,9,5 # two of every Circle round fit with room to spare
   - type: StorageFill
     contents:
       - id: MagazineLightRifleAsVal
@@ -129,6 +143,10 @@
       - id: MagazineRifleSCARAB
         amount: 2
       - id: MagRifleZastaba
+        amount: 2
+      - id: BoxShotgunSCL
+        amount: 2
+      - id: BoxShotgun23MM
         amount: 2
 
 - type: entity

@@ -75,3 +75,38 @@
     state: icon
   name: Бешенство Легионера
   description: Показывает оставшееся время бешенства или его отката.
+
+- type: entity
+  parent: BaseAction
+  id: ActionSeraphimMend
+  name: Сшивание плоти
+  description: За пять секунд срастить союзнику переломы и разрывы и обновить повреждённые органы. После процедуры нужна минута, чтобы собраться с силами.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon:
+      sprite: _DeadSpace/Necromorfs/TheCircle/Gear/tools/hypo_2.rsi
+      state: hypo
+    itemIconStyle: BigAction
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:SeraphimMendActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionSeraphimBond
+  name: Некроволокна
+  description: Связать себя с союзником некроволокнами. Лечение одного достаётся и другому, передозы союзника делятся с вами пополам, а переломы и кровотечения у обоих медленно заживают. Повторное использование рвёт связь.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 3
+    icon:
+      sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/hand-hook.rsi
+      state: rope
+    itemIconStyle: BigAction
+  - type: TargetAction
+    range: 3
+  - type: EntityTargetAction
+    event: !type:SeraphimBondActionEvent

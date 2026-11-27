@@ -23,6 +23,9 @@ public static class LimbWoundRules
     public const float LimbHealth = 55f;
     public const float HeadHealth = 105f;
     public const float TorsoHealth = 110f;
+
+    /// <summary>A torso that put its body into crit must heal back to this before the body stands again.</summary>
+    public const float CritRecoverTorso = TorsoHealth * 0.1f;
     public const float GroinHealth = 80f;
     public const float ToneBlue = 0.75f;
     public const float ToneGreen = 0.5f;

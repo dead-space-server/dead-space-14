@@ -157,6 +157,46 @@ public static class LimbOrganRules
         return 0;
     }
 
+    /// <summary>
+    /// Same as <see cref="RuptureHome(Span{LimbOrganState}, LimbOrganMask, LimbZone, float, float, float)"/>,
+    /// but organs in <paramref name="boosted"/> are <paramref name="multiplier"/> times as likely to burst.
+    /// Each eligible organ normally bursts with <c>chance / eligible</c>; one roll walks those slices in order.
+    /// </summary>
+    public static int RuptureHome(Span<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, float chance, float roll,
+        LimbOrganMask boosted, float multiplier)
+    {
+        if (chance <= 0f)
+            return 0;
+
+        var count = Math.Min(organs.Length, Count);
+        var eligible = 0;
+        for (var i = 0; i < count; i++)
+        {
+            if (MayRupture(organs, present, zone, i))
+                eligible++;
+        }
+
+        if (eligible == 0)
+            return 0;
+
+        var share = chance / eligible;
+        var edge = 0f;
+        for (var i = 0; i < count; i++)
+        {
+            if (!MayRupture(organs, present, zone, i))
+                continue;
+
+            edge += (boosted & (LimbOrganMask) (1 << i)) != 0 ? share * multiplier : share;
+            if (roll >= edge)
+                continue;
+
+            organs[i].Ruptured = true;
+            return (LimbOrgan) i == LimbOrgan.Eyes ? EyeRuptureDamage : 0;
+        }
+
+        return 0;
+    }
+
     private static bool MayRupture(ReadOnlySpan<LimbOrganState> organs, LimbOrganMask present, LimbZone zone, int index)
     {
         return LimbOrganHomes.Home((LimbOrgan) index) == zone

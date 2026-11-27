@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.DeadSpace.RoundEnd;
 using Content.Shared.GameTicking;
 using Robust.Shared.Serialization;
 
@@ -48,6 +49,7 @@ public sealed class RoundEndCreditsStartEvent : EntityEventArgs
     public RoundEndCreditsPlayerStatus[] Statuses = Array.Empty<RoundEndCreditsPlayerStatus>();
     public RoundEndCreditsMvp? Mvp;
     public RoundEndCreditsMvp? AntagMvp;
+    public RoundEndCreditsShowcaseCast? Showcase;
     public List<RoundEndCreditsAward> Honors = new();
     public List<RoundEndCreditsAward> Nominations = new();
     public List<RoundEndCreditsVoteResult> Votes = new();
@@ -76,7 +78,50 @@ public record struct RoundEndCreditsTeam(
     int TotalObjectives);
 
 [Serializable, NetSerializable]
-public record struct RoundEndCreditsMvp(int Player, RoundEndCreditsStat Reason, float Value, int Score);
+public record struct RoundEndCreditsMvp(
+    int Player,
+    RoundEndCreditsStat Reason,
+    float Value,
+    int Score,
+    RoundEndCreditsShowcase Showcase = RoundEndCreditsShowcase.None);
+
+/// <summary>
+/// A special MVP scene played instead of the usual portrait.
+/// </summary>
+[Serializable, NetSerializable]
+public enum RoundEndCreditsShowcase : byte
+{
+    None,
+    Architect,
+}
+
+/// <summary>
+/// The numbers shown under the MVP in the special scene, and the two teammates shown next to them.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class RoundEndCreditsShowcaseCast
+{
+    public int Kills;
+    public int Assists;
+    public List<RoundEndCreditsContender> Contenders = new();
+}
+
+/// <summary>
+/// A worthy contender: the best teammate by kills, or by assists.
+/// </summary>
+[Serializable, NetSerializable]
+public record struct RoundEndCreditsContender(string Name, int Kills, int Assists, RoundEndDollData? Doll);
+
+/// <summary>
+/// Plays the Architect MVP scene for a player on every client (sent by the admin command).
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class ArchitectMvpShowcaseEvent : EntityEventArgs
+{
+    public string Name = string.Empty;
+    public RoundEndDollData? Doll;
+    public RoundEndCreditsShowcaseCast Cast = new();
+}
 
 [Serializable, NetSerializable]
 public record struct RoundEndCreditsAward(string Prototype, int Player, float Value);

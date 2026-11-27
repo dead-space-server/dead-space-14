@@ -1,0 +1,61 @@
+## Крики Кардинала
+
+- type: entity
+  parent: BaseAction
+  id: ActionCardinalScream
+  name: Клич Кардинала
+  description: "Клич, что разносится на семь тайлов. Красный на семь секунд ускоряет бойцов Круга рядом, учащает их стрельбу и ослабляет хватку бол. Зелёный на пятнадцать секунд показывает им живых сквозь стены и метит каждого чужака, что попал в поле зрения Кардинала или этих бойцов. Лампы вокруг мигают, а земля дрожит."
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon:
+      sprite: Interface/Actions/changeling2.rsi
+      state: screech
+    itemIconStyle: BigAction
+  - type: InstantAction
+    event: !type:CardinalScreamActionEvent
+
+- type: alert
+  id: CardinalRally
+  icons:
+  - sprite: /Textures/Interface/Actions/changeling2.rsi
+    state: screech
+  name: Клич Кардинала
+  description: "Вы быстрее двигаетесь и стреляете, а болы держат слабее."
+
+- type: alert
+  id: CardinalHunt
+  icons:
+  - sprite: /Textures/Interface/Actions/changeling2.rsi
+    state: screech
+  name: Охотничий клич
+  description: "Вы видите живых сквозь стены и всех помеченных чужаков."
+
+- type: alert
+  id: CardinalMarked
+  icons:
+  - sprite: /Textures/Interface/Actions/changeling2.rsi
+    state: screech
+  name: Метка Кардинала
+  description: "Крик Кардинала пометил вас. Отряд Круга видит вас, куда бы вы ни бежали."
+
+- type: entity
+  id: EffectCardinalRallyScream
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 3.2
+  - type: CardinalScreamWave
+    color: "#ff3030"
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: EffectCardinalRallyScream
+  id: EffectCardinalHuntScream
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CardinalScreamWave
+    color: "#40ff60"

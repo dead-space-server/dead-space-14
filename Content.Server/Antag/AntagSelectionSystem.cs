@@ -565,7 +565,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
 
         // DS14-start: selector-backed antagonists receive their components after the player chooses a body.
         var deferredGearSelection = TryComp<Content.Server.DeadSpace.AntagGearSelector.AntagGearSelectorComponent>(ent, out var gearSelector) &&
-                                    def.PrefRoles.Any(gearSelector.Roles.Contains);
+                                    Content.Server.DeadSpace.AntagGearSelector.AntagGearSelectorSystem.GearFor(gearSelector, def.PrefRoles) != null;
         if (!deferredGearSelection)
             EntityManager.AddComponents(player, def.Components);
         // DS14-end

@@ -96,6 +96,11 @@ public sealed partial class LimbBodyComponent : Component
 
     public TimeSpan FireOriginTime;
 
+    /// <summary>The limb that a strike killed this tick: that blow still reaches the body, later ones do not.</summary>
+    public LimbZone? KilledZone;
+
+    public TimeSpan KilledTime;
+
     public bool StrikeOpen;
 
     public bool StaminaArmed;

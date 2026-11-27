@@ -407,7 +407,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var index = LimbWoundRules.Index(strike.Zone);
         ref var state = ref span[index];
         var boneBefore = state.Bone;
+        var deadBefore = LimbWoundRules.DeadLimb(strike.Zone, state);
         var result = LimbWoundRules.Apply(ref state, strike, limbs.Soft, limbs.Bleeds);
+        if (!deadBefore && LimbWoundRules.DeadLimb(strike.Zone, state))
+        {
+            limbs.KilledZone = strike.Zone;
+            limbs.KilledTime = _timing.CurTime;
+        }
         ApplyOrgans(uid, limbs, strike, result, ready);
         var pelletSevered = ApplyPelletSever(uid, limbs, strike);
         Dirty(uid, limbs);
@@ -1132,6 +1138,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         args.FireRate *= LimbWoundRules.AimFireRate;
         args.AngleIncrease *= LimbWoundRules.AimSpread;
+        // Narrow both ends of the spread, or a gun whose minimum is close to its maximum ends up with min > max.
+        args.MinAngle *= LimbWoundRules.AimSpread;
         args.MaxAngle *= LimbWoundRules.AimSpread;
     }
 
@@ -1184,6 +1192,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         EnsureZones(limbs);
         var index = LimbWoundRules.Index(zone);
         if ((uint) index >= (uint) limbs.Zones.Count || !LimbWoundRules.DeadLimb(zone, limbs.Zones[index]))
+            return;
+
+        // The blow that killed the limb still lands on the body; only hits on an already dead limb are absorbed.
+        if (limbs.KilledZone == zone && limbs.KilledTime == _timing.CurTime)
             return;
 
         var kept = new DamageSpecifier();
@@ -1375,6 +1387,15 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
         else if (life == LimbLife.Crit && args.State == MobState.Alive)
             args.State = MobState.Critical;
+        // DS14: out of a limb crit only once the torso has really mended, not the moment it ticks past zero,
+        // or regenerating bodies (necromorphs) drop and rise every second.
+        else if (ent.Comp.LimbCrit && args.State == MobState.Alive && !TorsoMended(ent.Comp))
+            args.State = MobState.Critical;
+    }
+
+    private static bool TorsoMended(LimbBodyComponent limbs)
+    {
+        return limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health >= LimbWoundRules.CritRecoverTorso;
     }
 
     private bool InStasis(EntityUid uid)
@@ -2175,7 +2196,28 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var heart = (int) LimbOrgan.Heart;
         var brainWas = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartWas = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
-        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), _random.NextFloat());
+        var chance = new LimbOrganRuptureChanceEvent(zone);
+        RaiseLocalEvent(uid, ref chance);
+        var before = RupturedMask(organs);
+        var eyes = chance.Boosted == LimbOrganMask.None || chance.Multiplier == 1f
+            ? LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), _random.NextFloat())
+            : LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), chance.Boosted, chance.Multiplier);
+        var burst = RupturedMask(organs) & ~before;
+        if (burst != LimbOrganMask.None)
+        {
+            var ruptured = new LimbOrgansRupturedEvent(burst);
+            RaiseLocalEvent(uid, ref ruptured);
+            var regrow = ruptured.Regrow & burst;
+            for (var i = 0; i < organs.Length && i < LimbOrganRules.Count; i++)
+            {
+                if ((regrow & (LimbOrganMask) (1 << i)) != 0)
+                    organs[i] = default;
+            }
+
+            if ((regrow & LimbOrganMask.Eyes) != 0)
+                eyes = 0;
+        }
+
         var brainNow = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartNow = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
         if (eyes > 0 && TryComp<BlindableComponent>(uid, out var blind))
@@ -2188,6 +2230,50 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         return eyes > 0 || !brainWas && brainNow || !heartWas && heartNow;
+    }
+
+    private static LimbOrganMask RupturedMask(ReadOnlySpan<LimbOrganState> organs)
+    {
+        var mask = LimbOrganMask.None;
+        for (var i = 0; i < organs.Length && i < LimbOrganRules.Count; i++)
+        {
+            if (organs[i].Ruptured)
+                mask |= (LimbOrganMask) (1 << i);
+        }
+
+        return mask;
+    }
+
+    /// <summary>
+    /// Ruptured organs of the body, for systems that bring organs back later.
+    /// </summary>
+    public LimbOrganMask GetRupturedOrgans(EntityUid body, LimbBodyComponent? limbs = null)
+    {
+        if (!Resolve(body, ref limbs, false))
+            return LimbOrganMask.None;
+
+        EnsureOrgans(limbs);
+        return RupturedMask(CollectionsMarshal.AsSpan(limbs.Organs));
+    }
+
+    /// <summary>
+    /// Swaps a ruptured organ for a whole one: no damage, no rupture, no bleeding.
+    /// </summary>
+    public bool RegrowOrgan(EntityUid body, LimbOrgan organ, LimbBodyComponent? limbs = null)
+    {
+        if (!Resolve(body, ref limbs, false))
+            return false;
+
+        EnsureOrgans(limbs);
+        var index = (int) organ;
+        if ((uint) index >= (uint) limbs.Organs.Count || !limbs.Organs[index].Ruptured)
+            return false;
+
+        limbs.Organs[index] = default;
+        Dirty(body, limbs);
+        ApplyLife(body, limbs);
+        RefreshActive(body, limbs);
+        return true;
     }
 
     private void FinishHit(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike, LimbStrikeResult result)
@@ -2301,6 +2387,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         if (limbs.LimbCrit && _mobs.IsCritical(uid))
         {
+            if (!TorsoMended(limbs))
+                return;
+
             limbs.LimbCrit = false;
             _mobs.UpdateMobState(uid);
         }

@@ -64,3 +64,28 @@ public sealed class BlinkDashVisualEvent(NetEntity user, TimeSpan duration) : En
     public NetEntity User = user;
     public TimeSpan Duration = duration;
 }
+
+/// <summary>
+/// How a herald's blink works, picked at spawn. Without it the blink is the plain dash, held back by damage.
+/// </summary>
+[RegisterComponent]
+public sealed partial class BlinkStyleComponent : Component
+{
+    [DataField]
+    public BlinkStyle Style = BlinkStyle.Dash;
+
+    [DataField]
+    public SoundSpecifier TeleportSound = new SoundPathSpecifier("/Audio/Magic/blink.ogg")
+    {
+        Params = AudioParams.Default.WithVolume(5f),
+    };
+}
+
+public enum BlinkStyle : byte
+{
+    /// <summary>The dash, and taking damage does not hold it back.</summary>
+    Dash,
+
+    /// <summary>An instant jump to a point in sight, held back for a while by taking damage.</summary>
+    Teleport,
+}

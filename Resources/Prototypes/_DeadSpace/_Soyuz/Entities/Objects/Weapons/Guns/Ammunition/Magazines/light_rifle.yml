@@ -67,7 +67,7 @@
       tags:
         - CartridgeLightRifle
     proto: CartridgeLightRifle
-    capacity: 20
+    capacity: 26 # two rounds per shot
   - type: Item
     size: Small
   - type: ContainerContainer

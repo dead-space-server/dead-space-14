@@ -145,6 +145,7 @@ public sealed partial class GunSystem : SharedGunSystem
         // I must be high because this was getting tripped even when true.
         // DebugTools.Assert(direction != Vector2.Zero);
         var shotProjectiles = new List<EntityUid>(ammo.Count);
+        var parallelIndex = 0; // DS14
 
         foreach (var (ent, shootable) in ammo)
         {
@@ -235,11 +236,32 @@ public sealed partial class GunSystem : SharedGunSystem
                         shotProjectiles.Add(newuid);
                 }
             }
+            // DS14-start: side-by-side bullets, all flying in the shot direction; each comes from its own round
+            else if (TryComp<GunParallelShotComponent>(gun, out var parallel) && parallel.Count > 1)
+            {
+                var side = new Vector2(-mapDirection.Y, mapDirection.X).Normalized();
+                // fromEnt is relative to the grid (or map), so turn the map-space offset into its frame.
+                var localSide = (-TransformSystem.GetWorldRotation(fromEnt.EntityId)).RotateVec(side);
+                var slot = parallelIndex % parallel.Count;
+                var offset = localSide * (parallel.Spacing * (slot - (parallel.Count - 1) / 2f));
+                TransformSystem.SetCoordinates(ammoEnt, fromEnt.Offset(offset));
+                if (ShootOrThrow(ammoEnt, mapDirection, gunVelocity, gun, user))
+                    shotProjectiles.Add(ammoEnt);
+            }
+            // DS14-end
             else
             {
                 if (ShootOrThrow(ammoEnt, mapDirection, gunVelocity, gun, user))
                     shotProjectiles.Add(ammoEnt);
             }
+
+            // DS14-start: bullets fired side by side make one shot, so one flash and one bang
+            var firstOfShot = !TryComp<GunParallelShotComponent>(gun, out var group) || group.Count <= 1 ||
+                              parallelIndex % group.Count == 0;
+            parallelIndex++;
+            if (!firstOfShot)
+                return;
+            // DS14-end
 
             if (ammoComp != null && !firedHitscan)
                 MuzzleFlash(gun, ammoComp, mapDirection.ToAngle(), user);

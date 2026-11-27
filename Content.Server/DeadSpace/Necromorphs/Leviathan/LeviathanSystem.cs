@@ -43,6 +43,9 @@ public sealed partial class LeviathanSystem : EntitySystem
             leviathanGhostComp.MasterEntity = uid;
 
         component.GhostLeviathanEntity = leviathan;
+        // The body is taken: no one else may claim it while its mind roams.
+        RemComp<GhostTakeoverAvailableComponent>(uid);
+        RemComp<GhostRoleComponent>(uid);
 
         if (!TryComp<GhostRoleComponent>(leviathan, out var ghostRoleComponent))
         {

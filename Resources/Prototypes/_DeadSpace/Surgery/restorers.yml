@@ -410,17 +410,6 @@
   - TraitorUltraUplinkImplants
 
 - type: listing
-  id: UniPhoneUplinkLimbRestorerImplant
-  name: uplink-limb-restorer-implant-name
-  description: uplink-limb-restorer-implant-desc
-  productEntity: LimbRestorerImplanterSyndicate
-  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
-  cost:
-    Telecrystal: 12
-  categories:
-  - UniPhoneUplinkImplants
-
-- type: listing
   id: UnitologyLimbRestorerImplantList
   name: uplink-limb-restorer-implant-necro-name
   description: uplink-limb-restorer-implant-necro-desc
@@ -476,13 +465,38 @@
   categories:
   - TraitorUltraUplinkChemicals
 
+# The Circle: the Cardinal and the Geist get the necro reliquary (the Geist only one) and the Geist the restorer implant.
 - type: listing
-  id: UniPhoneUplinkLimbRestorer
-  name: uplink-limb-restorer-name
-  description: uplink-limb-restorer-desc
-  productEntity: LimbRestorerSyndicate
+  id: UniPhoneGeistUplinkLimbRestorerNecro
+  name: uplink-limb-restorer-necro-name
+  description: uplink-limb-restorer-necro-desc
+  productEntity: LimbRestorerNecro
   cost:
-    Telecrystal: 10
+    Telecrystal: 6
+  categories:
+  - UniPhoneGeistUplinkImplants
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UniPhoneGeistUplinkLimbRestorerImplantNecro
+  name: uplink-limb-restorer-implant-necro-name
+  description: uplink-limb-restorer-implant-necro-desc
+  productEntity: LimbRestorerImplanterNecro
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant_necro }
+  cost:
+    Telecrystal: 8
+  categories:
+  - UniPhoneGeistUplinkImplants
+
+- type: listing
+  id: UniPhoneUplinkLimbRestorerNecro
+  name: uplink-limb-restorer-necro-name
+  description: uplink-limb-restorer-necro-desc
+  productEntity: LimbRestorerNecro
+  cost:
+    Telecrystal: 6
   categories:
   - UniPhoneUplinkMedical
 
