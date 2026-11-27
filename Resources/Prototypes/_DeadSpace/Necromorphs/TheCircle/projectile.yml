@@ -239,7 +239,7 @@
     damage:
       types:
        Piercing: 18
-       Structural: 35
+       Structural: 42
   # Keeps flying through whatever it breaks (glass, grilles) until the damage budget is spent.
   - type: HitscanPenetration
     penetrationThreshold: 250

@@ -18,6 +18,12 @@ public sealed partial class NecroOrganRegrowthComponent : Component
     public float NecroRuptureMultiplier = 2f;
 
     /// <summary>
+    /// Damage slowly healed on every whole organ each second. Only the implant has it; Deacons do not.
+    /// </summary>
+    [DataField]
+    public float OrganRegenPerSecond;
+
+    /// <summary>
     /// Organs that already are necromorph ones.
     /// </summary>
     [ViewVariables]

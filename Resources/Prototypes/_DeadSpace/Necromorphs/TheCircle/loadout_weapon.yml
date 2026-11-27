@@ -113,6 +113,17 @@
 
 - type: entity
   parent: WeaponCaseHeavy
+  id: WeaponCaseHeavyFilledSCL
+  suffix: СКЛ
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponShotgunSCL
+      - id: BoxShotgunSCL
+        amount: 3
+
+- type: entity
+  parent: WeaponCaseHeavy
   id: WeaponCaseHeavyFilledAmmo
   suffix: Патроны, Круг
   components:

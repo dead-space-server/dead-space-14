@@ -1138,6 +1138,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         args.FireRate *= LimbWoundRules.AimFireRate;
         args.AngleIncrease *= LimbWoundRules.AimSpread;
+        // Narrow both ends of the spread, or a gun whose minimum is close to its maximum ends up with min > max.
+        args.MinAngle *= LimbWoundRules.AimSpread;
         args.MaxAngle *= LimbWoundRules.AimSpread;
     }
 

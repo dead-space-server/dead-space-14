@@ -63,8 +63,14 @@ public sealed partial class NecroOrganRegrowthSystem : EntitySystem
                 continue;
 
             regrowth.NextCheck = now + CheckInterval;
+            if (_mobState.IsDead(uid))
+                continue;
+
+            if (regrowth.OrganRegenPerSecond > 0f)
+                Regenerate(uid, limbs, regrowth.OrganRegenPerSecond * (float) CheckInterval.TotalSeconds);
+
             var ruptured = _limbs.GetRupturedOrgans(uid, limbs);
-            if (ruptured == LimbOrganMask.None || _mobState.IsDead(uid))
+            if (ruptured == LimbOrganMask.None)
                 continue;
 
             for (var i = 0; i < LimbOrganRules.Count; i++)
@@ -76,6 +82,22 @@ public sealed partial class NecroOrganRegrowthSystem : EntitySystem
                 if (_limbs.RegrowOrgan(uid, organ, limbs))
                     Regrown((uid, regrowth), organ);
             }
+        }
+    }
+
+    /// <summary>
+    /// Slowly knits damaged organs that are still whole; torn ones wait to be replaced.
+    /// </summary>
+    private void Regenerate(EntityUid uid, LimbBodyComponent limbs, float amount)
+    {
+        var count = Math.Min(limbs.Organs.Count, LimbOrganRules.Count);
+        for (var i = 0; i < count; i++)
+        {
+            var organ = limbs.Organs[i];
+            if (organ.Ruptured || organ.Missing || organ.Damage <= 0f)
+                continue;
+
+            _limbs.ApplyOrganEdit(uid, (LimbOrgan) i, new LimbOrganEdit { Damage = -amount });
         }
     }
 

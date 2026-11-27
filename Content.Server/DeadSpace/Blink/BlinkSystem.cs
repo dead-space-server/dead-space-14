@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Mobs.Systems;
 using System.Numerics;
 using Content.Server.Destructible;
 using Content.Server.Physics.Controllers;
@@ -44,6 +45,7 @@ public sealed partial class BlinkSystem : SharedBlinkSystem
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     private static readonly ProtoId<TagPrototype> WindowTag = "Window";
 
@@ -89,7 +91,9 @@ public sealed partial class BlinkSystem : SharedBlinkSystem
     private void OnBlinkRequest(BlinkRequestEvent msg, EntitySessionEventArgs args)
     {
         var item = GetEntity(msg.Item);
+        // Nobody blinks while down in crit or dead.
         if (args.SenderSession.AttachedEntity is not { } user ||
+            _mobState.IsIncapacitated(user) ||
             !TryComp<BlinkItemComponent>(item, out var blink) ||
             !CanUseItem(user, item, blink))
             return;

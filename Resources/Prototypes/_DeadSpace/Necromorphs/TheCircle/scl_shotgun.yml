@@ -19,7 +19,7 @@
     sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/scl/scl_inhands.rsi
   - type: GunRequiresWield
   - type: Gun
-    fireRate: 1.5
+    fireRate: 1.25
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/hpistol.ogg # the Hammerhead's shot
   - type: BallisticAmmoProvider
@@ -34,7 +34,7 @@
   id: ShellShotgunSCL
   parent: BaseShellShotgun
   name: ружейный патрон (разрывная пуля СКЛ)
-  description: Цельная пуля, которая через шесть метров полёта раскрывается веером картечи.
+  description: Цельная пуля, которая через четыре метра полёта раскрывается веером картечи.
   components:
   - type: Tag
     tags:
@@ -49,7 +49,7 @@
   - type: SpentAmmoVisuals
     state: slug
 
-# Hits as hard as a full KS-23 load (15 pellets x 5); after 6.5 tiles it splits into 5 pellets x 15 of the same total.
+# Hits as hard as a full KS-23 load (15 pellets x 5); flies 4 tiles and splits on the fifth into 5 pellets x 15.
 - type: entity
   id: BulletShotgunSCL
   parent: BaseBullet
@@ -59,11 +59,16 @@
     damage:
       types:
         Piercing: 75
+  # Breaks bones and opens wounds like the other heavy Circle rounds.
+  - type: LimbRound
+    bone: 24
+    organ: 1.2
+    bleed: 0.12
   - type: ProjectileBurst
     pellet: PelletShotgunSCL
     count: 5
     spread: 40
-    distance: 6.5
+    distance: 4.5
 
 - type: entity
   id: PelletShotgunSCL

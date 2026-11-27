@@ -158,8 +158,8 @@
   id: UniPhoneUplinkWeaponSCL
   name: дробовик СКЛ
   icon: { sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/scl/scl.rsi, state: icon }
-  description: Дробовик под разрывные пули. Пуля летит цельной и бьёт как заряд КС-23, а пролетев шесть метров, раскрывается веером картечи. Принимает и обычные ружейные патроны, но не патроны КС-23.
-  productEntity: WeaponShotgunSCL
+  description: Дробовик под разрывные пули. Пуля летит цельной и бьёт как заряд КС-23, а пролетев четыре метра, раскрывается веером картечи. Принимает и обычные ружейные патроны, но не патроны КС-23.
+  productEntity: WeaponCaseHeavyFilledSCL
   cost:
     Telecrystal: 15
   categories:
@@ -525,20 +525,9 @@
 # Имлпанты
 
 - type: listing
-  id: UniPhoneUplinkReviveAutosurgeon
-  name: uplink-revive-implanter-name
-  description: uplink-revive-implanter-desc
-  icon: { sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi, state: iconBefore }
-  productEntity: AutosurgeonRevive
-  cost:
-    Telecrystal: 7
-  categories:
-    - UniPhoneUplinkImplants
-
-- type: listing
   id: UniPhoneUplinkNecroOrgansImplanter
   name: Имплантер некротических органов
-  description: Разорванный орган отторгается, и на его месте прорастает некротический. Новой ткани нужна минута, чтобы окрепнуть, а некротические органы рвутся вдвое легче.
+  description: Разорванный орган отторгается, и на его месте прорастает некротический, а повреждённые органы понемногу затягиваются сами. Новой ткани нужна минута, чтобы окрепнуть, а некротические органы рвутся вдвое легче.
   productEntity: UnitologyNecroOrgansImplanter
   cost:
     Telecrystal: 12
@@ -711,20 +700,9 @@
   priority: 3
 
 - type: listing
-  id: UniPhoneGeistUplinkReviveAutosurgeon
-  name: uplink-revive-implanter-name
-  description: uplink-revive-implanter-desc
-  icon: { sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi, state: iconBefore }
-  productEntity: AutosurgeonRevive
-  cost:
-    Telecrystal: 7
-  categories:
-  - UniPhoneGeistUplinkImplants
-
-- type: listing
   id: UniPhoneGeistUplinkNecroOrgansImplanter
   name: Имплантер некротических органов
-  description: Разорванный орган отторгается, и на его месте прорастает некротический. Новой ткани нужна минута, чтобы окрепнуть, а некротические органы рвутся вдвое легче.
+  description: Разорванный орган отторгается, и на его месте прорастает некротический, а повреждённые органы понемногу затягиваются сами. Новой ткани нужна минута, чтобы окрепнуть, а некротические органы рвутся вдвое легче.
   productEntity: UnitologyNecroOrgansImplanter
   cost:
     Telecrystal: 12
