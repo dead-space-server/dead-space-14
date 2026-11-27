@@ -194,7 +194,7 @@
 
 # Glasses
 - type: entity
-  parent: ClothingEyesHudMultiversal
+  parent: ClothingEyesHudAdvanced
   id: ClothingEyesGlassesTheZuTi
   name: продвинутый визор валькирии
   description: Специализированный визор отслеживающий должность и состояние здоровья, выполнен в темно-фиолетовой расцветке.

@@ -118,18 +118,6 @@
   name: шлем скафандра Мед-Техника
   description: Шлем с встроенным медицинским визором, который обеспечивает защиту и освещение для работы в темных условиях.
   components:
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.65
-        Slash: 0.65
-        Piercing: 0.65
-        Heat: 0.65
-        Shock: 0.65
-        Cold: 0.65
-        Caustic: 0.65
-        Radiation: 0.65
-
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/helmet.rsi
   - type: Clothing
