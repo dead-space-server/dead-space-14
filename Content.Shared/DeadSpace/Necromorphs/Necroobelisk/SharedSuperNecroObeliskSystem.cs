@@ -4,6 +4,7 @@ using Robust.Shared.Timing;
 using Content.Shared.DeadSpace.Necromorphs.Sanity;
 using Content.Shared.Mobs.Components;
 using System.Linq;
+using Robust.Shared.Player;
 
 namespace Content.Shared.DeadSpace.Necromorphs.Necroobelisk;
 
@@ -66,7 +67,9 @@ public abstract partial class SharedSuperNecroobeliskSystem : EntitySystem
                 component.MobsInRange.Remove(entity);
             }
         }
-        if (entities.Count > 8 && component.Percents > 20) component.Percents -= 10;
+        // Only a crowd of players knocks the obelisk's percent down; monkeys and other NPCs do not count.
+        var players = entities.Count(e => HasComp<ActorComponent>(e.Owner));
+        if (players > 8 && component.Percents > 20) component.Percents -= 10;
         if (component.Percents < 25)
         {
             ClearTrackedOverlays(uid, component.MobsInRange);
