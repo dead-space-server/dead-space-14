@@ -272,7 +272,6 @@
   #DS14-start
   - type: LoadMapRule
     mapPath: /Maps/_DeadSpace/Ninja/ninja.yml
-  - type: PauseMapWhenEmpty
   - type: RuleGrids
   #DS14-end
   - type: StationEvent
@@ -679,7 +678,6 @@
   - type: RuleGrids
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/ds_lone_ops_outpost.yml #DS14
-  - type: PauseMapWhenEmpty # DS14
   - type: NukeopsRule
     roundEndBehavior: Nothing
   - type: AntagSelection

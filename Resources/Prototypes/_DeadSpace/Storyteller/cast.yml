@@ -1,0 +1,493 @@
+- type: storyKind
+  id: Human
+  name: storyteller-kind-Human
+  order: 0
+  species: Human
+  keywords: [ человек, люди, землянин ]
+
+- type: storyKind
+  id: Reptilian
+  name: storyteller-kind-Reptilian
+  order: 1
+  species: Reptilian
+  keywords: [ унатх, унатха, ящер, ящерица, ящерицу, рептилия ]
+
+- type: storyKind
+  id: Tajaran
+  name: storyteller-kind-Tajaran
+  order: 2
+  species: Tajaran
+  keywords: [ таяр, таяра, таярка, таярку ]
+
+- type: storyKind
+  id: Felinid
+  name: storyteller-kind-Felinid
+  order: 3
+  species: Felinid
+  keywords: [ фелинид, фелинидка, кошкодевочка, кошкодевочку ]
+
+- type: storyKind
+  id: Vulpkanin
+  name: storyteller-kind-Vulpkanin
+  order: 4
+  species: Vulpkanin
+  keywords: [ вульпканин, вульп, вульпа, вульпочка, лис, лиса ]
+
+- type: storyKind
+  id: Moth
+  name: storyteller-kind-Moth
+  order: 5
+  species: Moth
+  keywords: [ ниан, ниана, моль, мотылек, нианка ]
+
+- type: storyKind
+  id: Arachnid
+  name: storyteller-kind-Arachnid
+  order: 6
+  species: Arachnid
+  keywords: [ арахнид, арахнида, арахнидка ]
+
+- type: storyKind
+  id: Diona
+  name: storyteller-kind-Diona
+  order: 7
+  species: Diona
+  keywords: [ диона, диону, дерево ]
+
+- type: storyKind
+  id: Dwarf
+  name: storyteller-kind-Dwarf
+  order: 8
+  species: Dwarf
+  keywords: [ дворф, дворфа, гном, гнома ]
+
+- type: storyKind
+  id: SlimePerson
+  name: storyteller-kind-SlimePerson
+  order: 9
+  species: SlimePerson
+  keywords: [ слаймолюд, слайм, слизень ]
+
+- type: storyKind
+  id: Vox
+  name: storyteller-kind-Vox
+  order: 10
+  species: Vox
+  keywords: [ вокс, вокса ]
+
+- type: storyKind
+  id: IPC
+  name: storyteller-kind-IPC
+  order: 11
+  species: IPC
+  keywords: [ кпб, синтетик, синтетика, андроид, андроида ]
+
+- type: storyKind
+  id: Demon
+  name: storyteller-kind-Demon
+  order: 12
+  species: Demon
+  keywords: [ аркана, аркан, демон, демона ]
+
+- type: storyKind
+  id: Shark
+  name: storyteller-kind-Shark
+  order: 13
+  species: Shark
+  keywords: [ плафеим, акула, акулу, акулолюд ]
+
+- type: storyKind
+  id: Kobolt
+  name: storyteller-kind-Kobolt
+  order: 14
+  species: Kobolt
+  keywords: [ кобольд, кобольда ]
+
+- type: storyKind
+  id: Xenomorph
+  name: storyteller-kind-Xenomorph
+  order: 15
+  species: Xenomorph
+  keywords: [ ксеноморф, ксеноморфа, ксено, чужой ]
+
+- type: storyKind
+  id: Skeleton
+  name: storyteller-kind-Skeleton
+  order: 16
+  species: Skeleton
+  keywords: [ скелет, скелета ]
+
+- type: storyKind
+  id: Necromorph
+  name: storyteller-kind-Necromorph
+  order: 17
+  mob: MobNecromorfBrute
+  keywords: [ некроморф, некроморфа, тварь, тварь, чудовище, чудище, монстр, монстра ]
+
+- type: storyKind
+  id: Infector
+  name: storyteller-kind-Infector
+  order: 18
+  mob: MobNecromorfInfector
+  keywords: [ заражатель, заражателя, инфектор, инфектора ]
+
+- type: storyKind
+  id: Borg
+  name: storyteller-kind-Borg
+  order: 19
+  mob: BorgChassisGeneric
+  keywords: [ борг, борга, киборг, киборга, робот, робота ]
+
+- type: storyKind
+  id: Spider
+  name: storyteller-kind-Spider
+  order: 20
+  mob: MobSpiderTerrorLurker
+  keywords: [ паук, паука, паучиха ]
+
+- type: storyKind
+  id: Carp
+  name: storyteller-kind-Carp
+  order: 21
+  mob: MobCarp
+  keywords: [ карп, карпа ]
+
+- type: storyKind
+  id: Cat
+  name: storyteller-kind-Cat
+  order: 22
+  mob: MobCat
+  keywords: [ кот, кота, кошка, кошку, котик ]
+
+- type: storyKind
+  id: Corgi
+  name: storyteller-kind-Corgi
+  order: 23
+  mob: MobCorgi
+  keywords: [ корги, собака, собаку, пес, пса, песик ]
+
+- type: storyKind
+  id: Mouse
+  name: storyteller-kind-Mouse
+  order: 24
+  mob: MobMouse
+  keywords: [ мышь, мышка, мышку, крыса, крысу ]
+
+- type: storyKind
+  id: Monkey
+  name: storyteller-kind-Monkey
+  order: 25
+  mob: MobMonkey
+  keywords: [ обезьяна, обезьяну, мартышка, мартышку ]
+
+- type: storyKind
+  id: Bear
+  name: storyteller-kind-Bear
+  order: 26
+  mob: MobBear
+  keywords: [ медведь, медведя ]
+
+- type: storyKind
+  id: Gorilla
+  name: storyteller-kind-Gorilla
+  order: 27
+  mob: MobGorilla
+  keywords: [ горилла, гориллу ]
+
+- type: storyKind
+  id: Goat
+  name: storyteller-kind-Goat
+  order: 28
+  mob: MobGoat
+  keywords: [ коза, козу, козел, козла ]
+
+- type: storyRole
+  id: Passenger
+  name: storyteller-role-Passenger
+  order: 0
+  job: Passenger
+  keywords: [ пассажир, пассажира, ассистент, ассистента, грейтайд ]
+
+- type: storyRole
+  id: Captain
+  name: storyteller-role-Captain
+  order: 1
+  job: Captain
+  keywords: [ капитан, капитана, кэп ]
+
+- type: storyRole
+  id: HoP
+  name: storyteller-role-HoP
+  order: 2
+  job: HeadOfPersonnel
+  keywords: [ гп, хоп ]
+
+- type: storyRole
+  id: HoS
+  name: storyteller-role-HoS
+  order: 3
+  job: HeadOfSecurity
+  keywords: [ гсб, хос ]
+
+- type: storyRole
+  id: Security
+  name: storyteller-role-Security
+  order: 4
+  job: SecurityOfficer
+  keywords: [ офицер, офицера, охранник, охранника, безопасник, сбшник, сбшника, страж ]
+
+- type: storyRole
+  id: Warden
+  name: storyteller-role-Warden
+  order: 5
+  job: Warden
+  keywords: [ смотритель, смотрителя, варден ]
+
+- type: storyRole
+  id: Detective
+  name: storyteller-role-Detective
+  order: 6
+  job: Detective
+  keywords: [ детектив, детектива, сыщик ]
+
+- type: storyRole
+  id: CMO
+  name: storyteller-role-CMO
+  order: 7
+  job: ChiefMedicalOfficer
+  keywords: [ главврач, главврача ]
+
+- type: storyRole
+  id: Doctor
+  name: storyteller-role-Doctor
+  order: 8
+  job: MedicalDoctor
+  keywords: [ врач, врача, доктор, доктора, медик, медика ]
+
+- type: storyRole
+  id: Paramedic
+  name: storyteller-role-Paramedic
+  order: 9
+  job: Paramedic
+  keywords: [ парамедик, парамедика, санитар ]
+
+- type: storyRole
+  id: Chemist
+  name: storyteller-role-Chemist
+  order: 10
+  job: Chemist
+  keywords: [ химик, химика ]
+
+- type: storyRole
+  id: Psychologist
+  name: storyteller-role-Psychologist
+  order: 11
+  job: Psychologist
+  keywords: [ психолог, психолога, психиатр ]
+
+- type: storyRole
+  id: ChiefEngineer
+  name: storyteller-role-ChiefEngineer
+  order: 12
+  job: ChiefEngineer
+  keywords: [ си, стинж ]
+
+- type: storyRole
+  id: Engineer
+  name: storyteller-role-Engineer
+  order: 13
+  job: StationEngineer
+  keywords: [ инженер, инженера, техник, техника ]
+
+- type: storyRole
+  id: Atmos
+  name: storyteller-role-Atmos
+  order: 14
+  job: AtmosphericTechnician
+  keywords: [ атмосферщик, атмосферщика, атмос ]
+
+- type: storyRole
+  id: ResearchDirector
+  name: storyteller-role-ResearchDirector
+  order: 15
+  job: ResearchDirector
+  keywords: [ нр, рд ]
+
+- type: storyRole
+  id: Scientist
+  name: storyteller-role-Scientist
+  order: 16
+  job: Scientist
+  keywords: [ ученый, ученого, научник, научника ]
+
+- type: storyRole
+  id: Quartermaster
+  name: storyteller-role-Quartermaster
+  order: 17
+  job: Quartermaster
+  keywords: [ квартирмейстер, квартирмейстера, км ]
+
+- type: storyRole
+  id: Cargo
+  name: storyteller-role-Cargo
+  order: 18
+  job: CargoTechnician
+  keywords: [ грузчик, грузчика, каргонец, карготехник ]
+
+- type: storyRole
+  id: Salvage
+  name: storyteller-role-Salvage
+  order: 19
+  job: SalvageSpecialist
+  keywords: [ утилизатор, утилизатора, шахтер, шахтера ]
+
+- type: storyRole
+  id: Bartender
+  name: storyteller-role-Bartender
+  order: 20
+  job: Bartender
+  keywords: [ бармен, бармена, барменша, барменшу ]
+
+- type: storyRole
+  id: Chef
+  name: storyteller-role-Chef
+  order: 21
+  job: Chef
+  keywords: [ повар, повара, кок, шеф ]
+
+- type: storyRole
+  id: Botanist
+  name: storyteller-role-Botanist
+  order: 22
+  job: Botanist
+  keywords: [ ботаник, ботаника, садовник ]
+
+- type: storyRole
+  id: Janitor
+  name: storyteller-role-Janitor
+  order: 23
+  job: Janitor
+  keywords: [ уборщик, уборщика, уборщица, уборщицу ]
+
+- type: storyRole
+  id: Chaplain
+  name: storyteller-role-Chaplain
+  order: 24
+  job: Chaplain
+  keywords: [ священник, священника, капеллан, капеллана ]
+
+- type: storyRole
+  id: Librarian
+  name: storyteller-role-Librarian
+  order: 25
+  job: Librarian
+  keywords: [ библиотекарь, библиотекаря ]
+
+- type: storyRole
+  id: Lawyer
+  name: storyteller-role-Lawyer
+  order: 26
+  job: Lawyer
+  keywords: [ адвокат, адвоката, юрист, юриста ]
+
+- type: storyRole
+  id: Clown
+  name: storyteller-role-Clown
+  order: 27
+  job: Clown
+  keywords: [ клоун, клоуна, клоунесса ]
+
+- type: storyRole
+  id: Mime
+  name: storyteller-role-Mime
+  order: 28
+  job: Mime
+  keywords: [ мим, мима ]
+
+- type: storyRole
+  id: Musician
+  name: storyteller-role-Musician
+  order: 29
+  job: Musician
+  keywords: [ музыкант, музыканта ]
+
+- type: storyRole
+  id: Reporter
+  name: storyteller-role-Reporter
+  order: 30
+  job: Reporter
+  keywords: [ журналист, журналиста, репортер, репортера ]
+
+- type: storyRole
+  id: Boxer
+  name: storyteller-role-Boxer
+  order: 31
+  job: Boxer
+  keywords: [ боксер, боксера ]
+
+- type: storyRole
+  id: Zookeeper
+  name: storyteller-role-Zookeeper
+  order: 32
+  job: Zookeeper
+  keywords: [ зоотехник, зоотехника ]
+
+- type: storyRole
+  id: Syndicate
+  name: storyteller-role-Syndicate
+  order: 33
+  gear: SyndicateOperativeGearFull
+  keywords: [ синдикат, синдиката, оперативник, оперативника, оперативником, синдикатовец, яо, ядерный, ядерная, ядерным, ядерной, нюкер, нюкером ]
+
+- type: storyRole
+  id: Pirate
+  name: storyteller-role-Pirate
+  order: 34
+  gear: PirateGear
+  keywords: [ пират, пирата ]
+
+- type: storyRole
+  id: Wizard
+  name: storyteller-role-Wizard
+  order: 35
+  gear: WizardBlueGear
+  keywords: [ маг, мага, волшебник, волшебника, колдун ]
+
+- type: storyRole
+  id: Brigmedic
+  name: storyteller-role-Brigmedic
+  order: 36
+  job: Brigmedic
+  keywords: [ бригмедик, бригмедика ]
+
+- type: storyRole
+  id: SeniorPhysician
+  name: storyteller-role-SeniorPhysician
+  order: 37
+  job: SeniorPhysician
+  lead: Doctor
+  leadStem: ведущ
+
+- type: storyRole
+  id: SeniorEngineer
+  name: storyteller-role-SeniorEngineer
+  order: 38
+  job: SeniorEngineer
+  lead: Engineer
+  leadStem: ведущ
+
+- type: storyRole
+  id: SeniorResearcher
+  name: storyteller-role-SeniorResearcher
+  order: 39
+  job: SeniorResearcher
+  lead: Scientist
+  leadStem: ведущ
+
+- type: storyRole
+  id: SeniorSalvage
+  name: storyteller-role-SeniorSalvage
+  order: 40
+  job: SeniorSalvageSpecialist
+  lead: Salvage
+  leadStem: ведущ

@@ -18,6 +18,8 @@ public sealed class CentCommFaxEui : BaseEui
         _window = new CentCommFaxWindow(IoCManager.Resolve<IPrototypeManager>(), IoCManager.Resolve<IComponentFactory>());
         _window.OnClose += () => SendMessage(new CloseEuiMessage());
         _window.OnReply += SendMessage;
+        _window.OnPrint += sheet => SendMessage(new CentCommFaxEuiMsg.Print { Sheet = sheet });
+        _window.OnLoad += () => SendMessage(new CentCommFaxEuiMsg.Load());
         _window.OnTemplateRequested += (template, target) =>
             SendMessage(new CentCommFaxEuiMsg.RequestTemplate { Template = template, Target = target });
         _window.OnFollow += fax => SendMessage(new CentCommFaxEuiMsg.Follow { Target = fax });
@@ -41,7 +43,14 @@ public sealed class CentCommFaxEui : BaseEui
 
     public override void HandleMessage(EuiMessageBase msg)
     {
-        if (msg is CentCommFaxEuiMsg.TemplateLoaded template)
-            _window.ApplyTemplate(template);
+        switch (msg)
+        {
+            case CentCommFaxEuiMsg.TemplateLoaded template:
+                _window.ApplyTemplate(template);
+                break;
+            case CentCommFaxEuiMsg.PaperLoaded paper:
+                _window.ApplyLoaded(paper);
+                break;
+        }
     }
 }

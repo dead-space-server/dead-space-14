@@ -30,6 +30,9 @@ centcomm-fax-stamp = Stamp
 centcomm-fax-stamp-none = No stamp
 centcomm-fax-lock = Lock editing
 centcomm-fax-return-original = Send this paper back (its text, stamps and signatures are kept)
+centcomm-fax-comment-placeholder = [small][color=red][pfont="ComicSans"]text[/pfont][/color][/small]
+centcomm-fax-print = Print
+centcomm-fax-load = Load
 centcomm-fax-stamp-add = Add stamp
 centcomm-fax-stamp-clear = Clear
 centcomm-fax-stamp-list-empty = No stamps added, the selected one is used

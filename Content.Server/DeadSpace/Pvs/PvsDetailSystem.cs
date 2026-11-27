@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Access.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Containers.ItemSlots;
@@ -41,14 +42,15 @@ public sealed partial class PvsDetailSystem : EntitySystem
 
             foreach (var contained in container.ContainedEntities)
             {
-                _meta.AddFlag(contained, MetaDataFlags.PvsDetail);
+                if (!HasComp<IdCardComponent>(contained))
+                    _meta.AddFlag(contained, MetaDataFlags.PvsDetail);
             }
         }
     }
 
     private void OnInserted(EntInsertedIntoContainerMessage args)
     {
-        if (IsHidden(args.Container))
+        if (IsHidden(args.Container) && !HasComp<IdCardComponent>(args.Entity))
             _meta.AddFlag(args.Entity, MetaDataFlags.PvsDetail);
     }
 
