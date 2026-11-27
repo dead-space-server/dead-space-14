@@ -16,18 +16,19 @@ using Content.Shared.Ninja.Components;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
 using Robust.Shared.Containers;
+using Content.Shared.Interaction.Events;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class AutoDustSystem : SharedAutoDustSystem
+public sealed partial class AutoDustSystem : SharedAutoDustSystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly GibbingSystem _gibbing = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private MindSystem _mindSystem = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {
@@ -40,7 +41,8 @@ public sealed class AutoDustSystem : SharedAutoDustSystem
 
         SubscribeLocalEvent<AutoDustComponent, ToggleAutoDustModeActionEvent>(OnToggleMode);
 
-        SubscribeLocalEvent<AutoDustMarkerComponent, MindRemovedMessage>(OnMindRemoved);
+        SubscribeLocalEvent<AutoDustMarkerComponent, BeforeMindRemovedMessage>(OnMindRemoved);
+        SubscribeLocalEvent<AutoDustMarkerComponent, SuicideGhostEvent>(OnSuicide);
     }
 
     private void OnEquipped(Entity<AutoDustComponent> ent, ref GotEquippedEvent args)
@@ -55,7 +57,17 @@ public sealed class AutoDustSystem : SharedAutoDustSystem
         RemComp<AutoDustMarkerComponent>(args.Equipee);
     }
 
-    private void OnMindRemoved(Entity<AutoDustMarkerComponent> ent, ref MindRemovedMessage args)
+    private void OnSuicide(Entity<AutoDustMarkerComponent> ent, ref SuicideGhostEvent args)
+    {
+        if (_mindSystem.TryGetMind(args.Victim, out var mindId, out _))
+        {
+            ent.Comp.LastMind = mindId;
+            Dirty(ent.Owner, ent.Comp);
+        }
+        ActivateAutoDust(ent.Owner, ent.Comp);
+    }
+
+    private void OnMindRemoved(Entity<AutoDustMarkerComponent> ent, ref BeforeMindRemovedMessage args)
     {
         if (args.TransferEntity is { } target && HasComp<GhostComponent>(target))
         {

@@ -4,7 +4,6 @@ using Content.Server.StationEvents.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.StationEvents.Components;
 
@@ -45,13 +44,13 @@ public sealed partial class SurvivalNecromorphBreachRuleComponent : Component
     [DataField]
     public bool CanCreateVacuum;
 
-    [DataField("telegraphEffect", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("telegraphEffect")]
     public string TelegraphEffect = "SurvivalNecromorphBreachTelegraph";
 
-    [DataField("smokeEffect", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("smokeEffect")]
     public string SmokeEffect = "SurvivalNecromorphBreachSmoke";
 
-    [DataField("spawnEffect", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("spawnEffect")]
     public string SpawnEffect = "SurvivalNecromorphBreachSpawnEffect";
 
     [DataField]
@@ -83,7 +82,7 @@ public sealed partial class SurvivalNecromorphBreachRuleComponent : Component
 [DataDefinition]
 public sealed partial class SurvivalNecromorphBreachSpawnEntry
 {
-    [DataField("prototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("prototype")]
     public string Prototype = "SlasherNecromorfSpawner";
 
     [DataField]

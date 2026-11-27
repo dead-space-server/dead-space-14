@@ -13,14 +13,14 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.DeadSpace.Spiders.SpiderTerror;
 
-public sealed class SpiderTerrorTombSystem : EntitySystem
+public sealed partial class SpiderTerrorTombSystem : EntitySystem
 {
-    [Dependency] private readonly SpiderTerrorConditionSystem _spiderTerrorConditions = default!;
-    [Dependency] private readonly ITileDefinitionManager _tiledef = default!;
-    [Dependency] private readonly TileSystem _tile = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private SpiderTerrorConditionSystem _spiderTerrorConditions = default!;
+    [Dependency] private ITileDefinitionManager _tiledef = default!;
+    [Dependency] private TileSystem _tile = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     public override void Initialize()
     {

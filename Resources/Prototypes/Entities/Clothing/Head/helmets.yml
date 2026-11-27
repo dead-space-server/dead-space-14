@@ -155,9 +155,9 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.7
-        Slash: 0.7
-        Piercing: 0.7
+        Blunt: 0.55
+        Slash: 0.6
+        Piercing: 0.85
         Heat: 0.7
   #ds14-end
 
@@ -672,7 +672,7 @@
     energy: 2.5
     color: red
     netsync: false
-    mask: /Textures/Effects/LightMasks/double_cone.png
+    lightMask: ConeDouble
   - type: RotatingLight
     speed: 360
   - type: PowerCellSlot

@@ -292434,7 +292434,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30142
     components:
     - type: Transform
@@ -292444,7 +292448,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30143
     components:
     - type: Transform
@@ -292453,7 +292461,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30144
     components:
     - type: Transform
@@ -292463,7 +292475,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30145
     components:
     - type: Transform
@@ -292473,7 +292489,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30146
     components:
     - type: Transform
@@ -292483,7 +292503,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30147
     components:
     - type: Transform
@@ -292493,7 +292517,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30148
     components:
     - type: Transform
@@ -292502,7 +292530,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30149
     components:
     - type: Transform
@@ -292512,7 +292544,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30150
     components:
     - type: Transform
@@ -292522,7 +292558,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
   - uid: 30151
     components:
     - type: Transform
@@ -292563,7 +292603,11 @@ entities:
     - type: DeltaPressure
       gridUid: 2
     - type: Occluder
-      boundingBox: -0.5,-0.5,0.5,-0.3
+      polygon:
+      - -0.5,-0.5
+      - 0.5,-0.5
+      - 0.5,-0.3
+      - -0.5,-0.3
 - proto: WindowReinforcedDirectional
   entities:
   - uid: 30156

@@ -6,7 +6,7 @@ namespace Content.Server.Guardian;
 
 public sealed partial class GuardianSystem
 {
-    [Dependency] private readonly HealthAlertRelaySystem _healthAlertRelay = default!;
+    [Dependency] private HealthAlertRelaySystem _healthAlertRelay = default!;
 
     partial void OnGuardianCreated(EntityUid guardian, EntityUid host)
     {

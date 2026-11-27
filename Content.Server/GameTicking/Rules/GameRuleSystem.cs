@@ -13,20 +13,20 @@ namespace Content.Server.GameTicking.Rules;
 
 public abstract partial class GameRuleSystem<T> : EntitySystem where T : IComponent
 {
-    [Dependency] protected readonly IRobustRandom RobustRandom = default!;
-    [Dependency] protected readonly IChatManager ChatManager = default!;
-    [Dependency] protected readonly GameTicker GameTicker = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] protected IRobustRandom RobustRandom = default!;
+    [Dependency] protected IChatManager ChatManager = default!;
+    [Dependency] protected GameTicker GameTicker = default!;
+    [Dependency] protected IGameTiming Timing = default!;
     // DS14-start
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
     // DS14-end
 
-    [Dependency] protected readonly GameRuleStationSystem RuleStation = default!; // DS14
+    [Dependency] protected GameRuleStationSystem RuleStation = default!; // DS14
 
     // Not protected, just to be used in utility methods
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly MapSystem _map = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private MapSystem _map = default!;
 
     public override void Initialize()
     {
@@ -37,10 +37,7 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
         SubscribeLocalEvent<T, GameRuleStartedEvent>(OnGameRuleStarted);
         SubscribeLocalEvent<T, GameRuleEndedEvent>(OnGameRuleEnded);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndTextAppend);
-        // DS14-start
-        SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscordTextAppend);
-        SubscribeLocalEvent<T, CollectGameRuleAdminStatusEvent>(OnCollectAdminStatus);
-        // DS14-end
+        SubscribeLocalEvent<T, CollectGameRuleAdminStatusEvent>(OnCollectAdminStatus); // DS14
     }
 
     private void OnStartAttempt(RoundStartAttemptEvent args)
@@ -124,20 +121,6 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     }
 
     // DS14-start
-    private void OnRoundEndDiscordTextAppend(RoundEndDiscordTextAppendEvent ev)
-    {
-        var query = AllEntityQuery<T>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (!TryComp<GameRuleComponent>(uid, out var ruleData))
-                continue;
-
-            AppendRoundEndDiscordText(uid, comp, ruleData, ref ev);
-        }
-    }
-    // DS14-end
-
-    // DS14-start
     private void OnCollectAdminStatus(EntityUid uid, T component, CollectGameRuleAdminStatusEvent args)
     {
         if (!TryComp<GameRuleComponent>(uid, out var ruleData))
@@ -180,14 +163,6 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     }
 
     // DS14-start
-    /// <summary>
-    /// Called at the end of a round when Discord-only log text needs to be added for a game rule.
-    /// </summary>
-    protected virtual void AppendRoundEndDiscordText(EntityUid uid, T component, GameRuleComponent gameRule, ref RoundEndDiscordTextAppendEvent args)
-    {
-
-    }
-
     /// <summary>
     /// Adds a read-only section to the centralized periodic admin status report.
     /// </summary>

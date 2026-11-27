@@ -1,4 +1,5 @@
-﻿using Robust.Client.UserInterface;
+﻿using System.Linq; // DS14
+using Robust.Client.UserInterface;
 
 namespace Content.Client.Stylesheets;
 
@@ -36,7 +37,12 @@ public abstract partial class BaseStylesheet
     public StyleRule[] GetAllSheetletRules<TSheetTy, TAttrib>(StylesheetManager man)
         where TAttrib : Attribute
     {
-        var tys = ReflectionManager.FindTypesWithAttribute<TAttrib>();
+        var tys = ReflectionManager.FindTypesWithAttribute<TAttrib>()
+            // DS14-start: the DS theme sheetlets go last so their rules win ties against the base ones;
+            // reflection order alone is not stable between builds, so the rest is ordered by name.
+            .OrderBy(ty => ty.Namespace?.StartsWith("Content.Client.DeadSpace", StringComparison.Ordinal) == true ? 1 : 0)
+            .ThenBy(ty => ty.FullName, StringComparer.Ordinal);
+            // DS14-end
         var rules = new List<StyleRule>();
 
         foreach (var ty in tys)

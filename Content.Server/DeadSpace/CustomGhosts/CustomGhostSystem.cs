@@ -7,13 +7,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.CustomGhosts;
 
-public sealed class CustomGhostSystem : EntitySystem
+public sealed partial class CustomGhostSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly MetaDataSystem _metaDataSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedGhostSystem _ghostSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private MetaDataSystem _metaDataSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedGhostSystem _ghostSystem = default!;
 
     public void TryMakeCustomGhost(EntityUid uid)
     {

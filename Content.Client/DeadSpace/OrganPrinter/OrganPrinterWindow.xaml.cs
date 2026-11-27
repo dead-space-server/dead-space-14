@@ -16,7 +16,7 @@ namespace Content.Client.DeadSpace.OrganPrinter;
 [GenerateTypedNameReferences]
 public sealed partial class OrganPrinterWindow : DefaultWindow
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public event Action<EntProtoId, OrganSpeciesGroup>? OnPrint;
     public event Action? OnEjectPressed;

@@ -6,9 +6,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.Demons.DemonShadow;
 
-public sealed class DemonShadowSystem : SharedDemonShadowSystem
+public sealed partial class DemonShadowSystem : SharedDemonShadowSystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {

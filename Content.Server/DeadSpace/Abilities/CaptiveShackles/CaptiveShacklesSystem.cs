@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace Content.Server.DeadSpace.Abilities.CaptiveShackles;
 
-public sealed class CaptiveShacklesSystem : EntitySystem
+public sealed partial class CaptiveShacklesSystem : EntitySystem
 {
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
 
     public static readonly ProtoId<NpcFactionPrototype> SimpleNeutralFaction = "SimpleNeutral";
 

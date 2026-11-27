@@ -10,10 +10,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
-public sealed class LimbJumpSystem : EntitySystem
+public sealed partial class LimbJumpSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

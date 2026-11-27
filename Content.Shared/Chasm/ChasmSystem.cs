@@ -29,19 +29,19 @@ namespace Content.Shared.Chasm;
 /// <summary>
 ///     Handles making entities fall into chasms when stepped on.
 /// </summary>
-public sealed class ChasmSystem : EntitySystem
+public sealed partial class ChasmSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly SharedChatSystem _chat = default!; // DS14 - pre-v288 engine
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedGrapplingGunSystem _grapple = default!;
-    [Dependency] private readonly SharedGravitySystem _gravity = default!; //DS14
-    [Dependency] private readonly EntityLookupSystem _lookup = default!; //DS14
-    [Dependency] private readonly SharedTransformSystem _transform = default!; //DS14
-    [Dependency] private readonly InventorySystem _inventory = default!; //DS14
-    [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!; //DS14
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private SharedChatSystem _chat = default!; // DS14 - pre-v288 engine
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedGrapplingGunSystem _grapple = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!; //DS14
+    [Dependency] private EntityLookupSystem _lookup = default!; //DS14
+    [Dependency] private SharedTransformSystem _transform = default!; //DS14
+    [Dependency] private InventorySystem _inventory = default!; //DS14
+    [Dependency] private LavalandDayCycleSystem _dayCycle = default!; //DS14
 
     public override void Initialize()
     {

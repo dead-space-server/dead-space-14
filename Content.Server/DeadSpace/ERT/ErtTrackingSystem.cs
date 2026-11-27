@@ -18,16 +18,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.ERT;
 
-public sealed class ErtTrackingSystem : EntitySystem
+public sealed partial class ErtTrackingSystem : EntitySystem
 {
     private static readonly ProtoId<AlertPrototype> TrackingAlert = "ErtTracking";
 
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IdCardSystem _idCard = default!;
-    [Dependency] private readonly SharedJobSystem _job = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private IdCardSystem _idCard = default!;
+    [Dependency] private SharedJobSystem _job = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private EntityQuery<TransformComponent> _transformQuery;
 

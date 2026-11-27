@@ -13,8 +13,8 @@ namespace Content.Client.Info;
 public sealed partial class RulesPopup : Control
 {
     // DS14-start
-    [Dependency] private readonly IUriOpener _uri = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IUriOpener _uri = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
     // DS14-end
     private float _timer;
 

@@ -8,11 +8,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Administration.Systems;
 
-public sealed class SuperBonkSystem : EntitySystem
+public sealed partial class SuperBonkSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly ClimbSystem _climbSystem = default!; // DS14: current engine IoC requires readonly fields.
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private ClimbSystem _climbSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private EntityQuery<TransformComponent> _transformQuery;
 

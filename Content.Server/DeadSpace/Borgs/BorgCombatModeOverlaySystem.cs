@@ -6,10 +6,10 @@ using Robust.Shared.Maths;
 
 namespace Content.Server.DeadSpace.Borgs;
 
-public sealed class BorgCombatModeOverlaySystem : EntitySystem
+public sealed partial class BorgCombatModeOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedPointLightSystem _light = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
 
     public override void Initialize()
     {

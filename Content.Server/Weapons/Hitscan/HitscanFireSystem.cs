@@ -7,10 +7,10 @@ using Content.Shared.Weapons.Hitscan.Events;
 
 namespace Content.Server.Weapons.Hitscan;
 
-public sealed class HitscanFireSystem : EntitySystem
+public sealed partial class HitscanFireSystem : EntitySystem
 {
-    [Dependency] private readonly TemperatureSystem _temperature = default!;
-    [Dependency] private readonly FlammableSystem _flammable = default!;
+    [Dependency] private TemperatureSystem _temperature = default!;
+    [Dependency] private FlammableSystem _flammable = default!;
 
     public override void Initialize()
     {

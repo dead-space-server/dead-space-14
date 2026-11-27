@@ -30,19 +30,18 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// that runs off when approached, and a geist rising half out of a hole to throw traps around a player. None of them
 /// can be harmed; a shot while the ambusher aims only drops it back into its hole.
 /// </summary>
-public sealed class LavalandGeistSystem : EntitySystem
+public sealed partial class LavalandGeistSystem : EntitySystem
 {
-    [Dependency] private readonly BearTrapSystem _bearTrap = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly Content.Shared.Examine.ExamineSystemShared _examine = default!;
-    [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private BearTrapSystem _bearTrap = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private Content.Shared.Examine.ExamineSystemShared _examine = default!;
+    [Dependency] private Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly TimeSpan TriggerInterval = TimeSpan.FromSeconds(0.4);
     private static readonly Robust.Shared.Prototypes.EntProtoId HoleDust = "LavalandGeistHoleDust";
@@ -262,7 +261,7 @@ public sealed class LavalandGeistSystem : EntitySystem
     private bool TryFindChasmNear(MapCoordinates player, float range, out MapCoordinates spot)
     {
         spot = default;
-        if (!_mapManager.TryFindGridAt(player, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(player, out var gridUid, out var grid))
             return false;
 
         var center = _map.TileIndicesFor(gridUid, grid, player);
@@ -435,7 +434,7 @@ public sealed class LavalandGeistSystem : EntitySystem
             return;
 
         var center = _transform.GetMapCoordinates(player);
-        if (!_mapManager.TryFindGridAt(center, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(center, out var gridUid, out var grid))
             return;
 
         var origin = _map.TileIndicesFor(gridUid, grid, center);
@@ -550,7 +549,7 @@ public sealed class LavalandGeistSystem : EntitySystem
     /// <summary>A floor tile with nothing solid on it.</summary>
     private bool IsOpenGround(MapCoordinates coords)
     {
-        if (!_mapManager.TryFindGridAt(coords, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coords, out var gridUid, out var grid))
             return false;
 
         var tile = _map.TileIndicesFor(gridUid, grid, coords);

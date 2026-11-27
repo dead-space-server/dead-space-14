@@ -22,22 +22,22 @@ using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandBluespaceWellSystem : EntitySystem
+public sealed partial class LavalandBluespaceWellSystem : EntitySystem
 {
     private static readonly TimeSpan ScanInterval = TimeSpan.FromSeconds(5);
 
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly LavalandMorkiteMissionSystem _morkite = default!;
-    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly LavalandMiningSystem _mining = default!;
-    [Dependency] private readonly SharedCargoSystem _cargo = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private LavalandMorkiteMissionSystem _morkite = default!;
+    [Dependency] private LavalandFaunaRaidSystem _raids = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private LavalandMiningSystem _mining = default!;
+    [Dependency] private SharedCargoSystem _cargo = default!;
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private TimeSpan _nextScan;
 

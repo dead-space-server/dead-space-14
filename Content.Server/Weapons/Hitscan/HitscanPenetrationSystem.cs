@@ -10,14 +10,14 @@ using Robust.Shared.Physics.Components;
 
 namespace Content.Server.Weapons.Hitscan;
 
-public sealed class HitscanPenetrationSystem : EntitySystem
+public sealed partial class HitscanPenetrationSystem : EntitySystem
 {
-    [Dependency] private readonly DestructibleSystem _destructible = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private DestructibleSystem _destructible = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     // DS14-start
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
     // DS14-end
 
     public override void Initialize()

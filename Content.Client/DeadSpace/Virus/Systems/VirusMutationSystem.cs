@@ -6,10 +6,10 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.Virus.Systems;
 
-public sealed class VirusMutationSystem : EntitySystem
+public sealed partial class VirusMutationSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

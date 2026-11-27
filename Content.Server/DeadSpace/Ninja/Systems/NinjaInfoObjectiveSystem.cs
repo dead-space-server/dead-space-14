@@ -12,14 +12,14 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaInfoObjectiveSystem : EntitySystem
+public sealed partial class NinjaInfoObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedJobSystem _jobs = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     public override void Initialize()
     {
@@ -34,25 +34,31 @@ public sealed class NinjaInfoObjectiveSystem : EntitySystem
         var comp = ent.Comp;
 
         comp.TargetJobs.Clear();
-        comp.ScannedEntities.Clear();
+        comp.ScannedMinds.Clear();
         comp.CorrectScans = 0;
+        comp.TargetCount = 0;
         comp.PriorityMind = null;
+
+        var humans = _mind.GetAliveHumans(args.MindId);
+        _mind.FilterMinds(humans, comp.Filters, args.MindId);
+
+        if (humans.Count == 0)
+        {
+            args.Cancelled = true;
+            return;
+        }
 
         var byJob = new Dictionary<ProtoId<JobPrototype>, List<EntityUid>>();
 
-        var query = EntityQueryEnumerator<MindComponent>();
-        while (query.MoveNext(out var mindId, out var mind))
+        foreach (var human in humans)
         {
-            if (mind.OwnedEntity is not { } body || !_mobState.IsAlive(body))
-                continue;
-
-            if (!_jobs.MindTryGetJobId(mindId, out var jobId) || jobId is not { } id)
+            if (!_jobs.MindTryGetJobId(human, out var jobId) || jobId is not { } id)
                 continue;
 
             if (!byJob.TryGetValue(id, out var minds))
                 byJob[id] = minds = new List<EntityUid>();
 
-            minds.Add(mindId);
+            minds.Add(human);
         }
 
         if (byJob.Count < comp.JobCount)
@@ -61,9 +67,8 @@ public sealed class NinjaInfoObjectiveSystem : EntitySystem
             return;
         }
 
-        comp.TargetCount = GetTargetCount(byJob.Values.Sum(minds => minds.Count));
-
         var priority = _random.Pick(byJob.Values.SelectMany(minds => minds).ToList());
+
         if (!_jobs.MindTryGetJobId(priority, out var priorityJob) || priorityJob is not { } priorityJobId)
         {
             args.Cancelled = true;
@@ -71,16 +76,13 @@ public sealed class NinjaInfoObjectiveSystem : EntitySystem
         }
 
         comp.PriorityMind = priority;
-
         comp.TargetJobs.Add(priorityJobId);
 
         var pool = byJob.Keys.Where(job => job != priorityJobId).ToList();
-        while (comp.TargetJobs.Count < comp.JobCount)
-        {
-            var next = _random.Pick(pool);
-            pool.Remove(next);
-            comp.TargetJobs.Add(next);
-        }
+
+        comp.TargetJobs.AddRange(_random.GetItems(pool, comp.JobCount - 1, false));
+
+        comp.TargetCount = GetTargetCount(comp.TargetJobs.Sum(job => byJob[job].Count));
 
         var jobNames = comp.TargetJobs
             .Select(job => _proto.TryIndex<JobPrototype>(job, out var jobProto) ? jobProto.LocalizedName : job.Id)
@@ -124,19 +126,22 @@ public sealed class NinjaInfoObjectiveSystem : EntitySystem
         if (!_mind.TryGetMind(scannedBody, out var scannedMind, out _))
             return NinjaInfoScanResult.None;
 
-        if (actor is not { } actorUid || !_mind.TryGetMind(actorUid, out _, out var actorMind))
+        if (actor is not { } actorUid || !_mind.TryGetMind(actorUid, out var actorMind, out var actorMindComp))
+            return NinjaInfoScanResult.None;
+
+        if (scannedMind == actorMind)
             return NinjaInfoScanResult.None;
 
         _jobs.MindTryGetJobId(scannedMind, out var scannedJob);
 
         var result = NinjaInfoScanResult.None;
 
-        foreach (var objective in actorMind.Objectives)
+        foreach (var objective in actorMindComp.Objectives)
         {
             if (!TryComp<NinjaInfoConditionComponent>(objective, out var comp))
                 continue;
 
-            if (comp.ScannedEntities.Contains(scannedBody))
+            if (comp.ScannedMinds.Contains(scannedMind))
                 continue;
 
             var isPriority = comp.PriorityMind is { } priority && scannedMind == priority;
@@ -144,7 +149,7 @@ public sealed class NinjaInfoObjectiveSystem : EntitySystem
             if (!isPriority && (scannedJob is not { } job || !comp.TargetJobs.Contains(job)))
                 continue;
 
-            comp.ScannedEntities.Add(scannedBody);
+            comp.ScannedMinds.Add(scannedMind);
             comp.CorrectScans = isPriority ? comp.TargetCount : Math.Min(comp.CorrectScans + 1, comp.TargetCount);
 
             if (isPriority)

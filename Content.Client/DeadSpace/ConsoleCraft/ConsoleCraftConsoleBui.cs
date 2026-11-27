@@ -8,9 +8,9 @@ using Robust.Client.UserInterface;
 namespace Content.Client.DeadSpace.ConsoleCraft;
 
 [UsedImplicitly]
-public sealed class ConsoleCraftConsoleBui : BoundUserInterface
+public sealed partial class ConsoleCraftConsoleBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     private ConsoleCraftConsoleWindow? _window;
 

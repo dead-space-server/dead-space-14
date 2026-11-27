@@ -9,10 +9,10 @@ using Robust.Shared.Map;
 namespace Content.Client.DeadSpace.Lavaland;
 
 /// <summary>Records puffs behind <see cref="LavalandProjectileTrailComponent"/> entities and draws them fading out.</summary>
-public sealed class LavalandProjectileTrailSystem : EntitySystem
+public sealed partial class LavalandProjectileTrailSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly List<TrailPuff> _puffs = new();
     private readonly Dictionary<EntityUid, float> _sinceLast = new();
@@ -72,7 +72,7 @@ public sealed class LavalandProjectileTrailSystem : EntitySystem
     private readonly record struct TrailPuff(MapCoordinates Coords, float Born, float Lifetime, float Size, Color Color);
 }
 
-public sealed class LavalandProjectileTrailOverlay(LavalandProjectileTrailSystem system) : Overlay
+public sealed partial class LavalandProjectileTrailOverlay(LavalandProjectileTrailSystem system) : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 

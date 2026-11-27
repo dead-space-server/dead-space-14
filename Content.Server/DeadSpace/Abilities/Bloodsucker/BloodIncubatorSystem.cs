@@ -9,8 +9,8 @@ namespace Content.Server.DeadSpace.Abilities.Bloodsucker;
 
 public sealed partial class BloodIncubatorSystem : EntitySystem
 {
-    [Dependency] private readonly BloodsuckerSystem _bloodsucker = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private BloodsuckerSystem _bloodsucker = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     public override void Initialize()
     {
         base.Initialize();

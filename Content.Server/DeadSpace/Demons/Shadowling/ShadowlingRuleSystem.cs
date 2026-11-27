@@ -15,12 +15,12 @@ using Robust.Server.Player;
 
 namespace Content.Server.DeadSpace.Demons.Shadowling;
 
-public sealed class ShadowlingRuleSystem : GameRuleSystem<ShadowlingRuleComponent>
+public sealed partial class ShadowlingRuleSystem : GameRuleSystem<ShadowlingRuleComponent>
 {
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     private const int MinPlayers = 50;
     private const int MaxPlayers = 75;
@@ -98,11 +98,11 @@ public sealed class ShadowlingRuleSystem : GameRuleSystem<ShadowlingRuleComponen
         }
 
         if (anyAscended)
-            args.AddLine(Loc.GetString("shadowling-win"));
+            args.AddOutcome(Loc.GetString("shadowling-win"));
         else if (sessionData.Count > 0 && !anyAlive)
-            args.AddLine(Loc.GetString("shadowling-lose"));
+            args.AddOutcome(Loc.GetString("shadowling-lose"));
         else if (sessionData.Count > 0)
-            args.AddLine(Loc.GetString("shadowling-stalemate"));
+            args.AddOutcome(Loc.GetString("shadowling-stalemate"));
     }
 
     protected override void AppendAdminStatus(EntityUid uid,

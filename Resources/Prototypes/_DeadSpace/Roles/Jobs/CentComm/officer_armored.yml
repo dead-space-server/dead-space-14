@@ -45,6 +45,8 @@
   job: CentralCommandOfficerArmored
   equipment:
     mask: ClothingMaskGasCentcomSecurity
+    shoes: ClothingShoesBootsCombat
+    eyes: ClothingEyesGlassesSecurity
     outerClothing: ClothingOuterCoatCentcomOfficer
     head: ClothingHeadHelmetCentcomSecurityUSSP
     gloves: ClothingHandsGlovesCombat

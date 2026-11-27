@@ -22,15 +22,14 @@ namespace Content.Server.Shuttles.Systems
 {
     public sealed partial class DockingSystem : SharedDockingSystem
     {
-        [Dependency] private readonly IMapManager _mapManager = default!;
-        [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-        [Dependency] private readonly DoorSystem _doorSystem = default!;
-        [Dependency] private readonly EntityLookupSystem _lookup = default!;
-        [Dependency] private readonly PathfindingSystem _pathfinding = default!;
-        [Dependency] private readonly ShuttleConsoleSystem _console = default!;
-        [Dependency] private readonly SharedJointSystem _jointSystem = default!;
-        [Dependency] private readonly SharedPopupSystem _popup = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!;
+        [Dependency] private SharedMapSystem _mapSystem = default!;
+        [Dependency] private DoorSystem _doorSystem = default!;
+        [Dependency] private EntityLookupSystem _lookup = default!;
+        [Dependency] private PathfindingSystem _pathfinding = default!;
+        [Dependency] private ShuttleConsoleSystem _console = default!;
+        [Dependency] private SharedJointSystem _jointSystem = default!;
+        [Dependency] private SharedPopupSystem _popup = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
 
         private const string DockingJoint = "docking";
 
@@ -51,7 +50,6 @@ namespace Content.Server.Shuttles.Systems
             SubscribeLocalEvent<DockingComponent, ComponentStartup>(OnStartup);
             SubscribeLocalEvent<DockingComponent, ComponentShutdown>(OnShutdown);
             SubscribeLocalEvent<DockingComponent, AnchorStateChangedEvent>(OnAnchorChange);
-            SubscribeLocalEvent<DockingComponent, ReAnchorEvent>(OnDockingReAnchor);
 
             SubscribeLocalEvent<DockingComponent, BeforeDoorAutoCloseEvent>(OnAutoClose);
 
@@ -186,22 +184,6 @@ namespace Content.Server.Shuttles.Systems
             {
                 Undock(entity);
             }
-        }
-
-        private void OnDockingReAnchor(Entity<DockingComponent> entity, ref ReAnchorEvent args)
-        {
-            var uid = entity.Owner;
-            var component = entity.Comp;
-
-            if (!component.Docked)
-                return;
-
-            var otherDock = component.DockedWith;
-            var other = Comp<DockingComponent>(otherDock!.Value);
-
-            Undock(entity);
-            Dock((uid, component), (otherDock.Value, other));
-            _console.RefreshShuttleConsoles();
         }
 
         /// <summary>

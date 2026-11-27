@@ -66,6 +66,7 @@
     bone: 12
     organ: 0.9
     bleed: 0.06
+    embed: 0.005
   - type: StaminaDamageOnCollide
     damage: 15
 
@@ -81,6 +82,7 @@
     bone: 26
     organ: 1.25
     bleed: 0.14
+    embed: 0.025
   - type: HitscanBasicDamage
     damage:
       types:
@@ -162,6 +164,7 @@
     bone: 32
     organ: 1.3
     bleed: 0.16
+    embed: 0.05
   - type: HitscanBasicDamage
     damage:
       types:
@@ -198,6 +201,7 @@
     bone: 8
     organ: 0.5
     bleed: 0.05
+    embed: 0.005
   - type: HitscanBasicDamage
     damage:
       types:
@@ -235,6 +239,7 @@
     bone: 16
     organ: 1.1
     bleed: 0.09
+    embed: 0.01
   - type: HitscanBasicDamage
     damage:
       types:
@@ -315,6 +320,7 @@
     bone: 3
     organ: 0.2
     bleed: 0.03
+    embed: 0.01
   - type: HitscanBasicDamage
     damage:
       types:

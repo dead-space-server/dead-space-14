@@ -12,13 +12,13 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Backmen.Blob;
 
-public sealed class BlobbernautSystem : SharedBlobbernautSystem
+public sealed partial class BlobbernautSystem : SharedBlobbernautSystem
 {
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly EmpSystem _empSystem = default!;
-    [Dependency] private readonly ExplosionSystem _explosionSystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private EmpSystem _empSystem = default!;
+    [Dependency] private ExplosionSystem _explosionSystem = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     public override void Initialize()
     {

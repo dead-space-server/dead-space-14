@@ -9,7 +9,6 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared.NPC.Prototypes; // DS14
 
 namespace Content.Shared.Zombies;
@@ -67,13 +66,13 @@ public sealed partial class ZombieComponent : Component
     /// <summary>
     /// The attack arc of the zombie
     /// </summary>
-    [DataField("attackArc", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("attackArc")]
     public string AttackAnimation = "WeaponArcBite";
 
     /// <summary>
     /// The role prototype of the zombie antag role
     /// </summary>
-    [DataField("zombieRoleId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]
+    [DataField("zombieRoleId")]
     public string ZombieRoleId = "Zombie";
 
     /// <summary>

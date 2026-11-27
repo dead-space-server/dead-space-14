@@ -11,7 +11,7 @@ namespace Content.Client.Info.PlaytimeStats;
 [GenerateTypedNameReferences]
 public sealed partial class PlaytimeStatsWindow : FancyWindow
 {
-    [Dependency] private readonly JobRequirementsManager _jobRequirementsManager = default!;
+    [Dependency] private JobRequirementsManager _jobRequirementsManager = default!;
     private ISawmill _sawmill = Logger.GetSawmill("PlaytimeStatsWindow");
     private bool _useAltColor;
 

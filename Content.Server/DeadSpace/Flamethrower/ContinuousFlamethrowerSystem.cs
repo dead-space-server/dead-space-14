@@ -30,7 +30,7 @@ using Content.Shared.Popups;
 
 namespace Content.Server.DeadSpace.Flamethrower;
 
-public sealed class ContinuousFlamethrowerSystem : EntitySystem
+public sealed partial class ContinuousFlamethrowerSystem : EntitySystem
 {
     private const float TickRate = 0.1f;
     private const float SampleSpacing = 0.32f;
@@ -38,21 +38,21 @@ public sealed class ContinuousFlamethrowerSystem : EntitySystem
     private static readonly ReagentId Phlogiston = new("Phlogiston", null);
     private static readonly ReagentId Napalm = new("Napalm", null);
 
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
-    [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SlotBasedConnectedContainerSystem _connected = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private FlammableSystem _flammable = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SlotBasedConnectedContainerSystem _connected = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private readonly Dictionary<EntityUid, ActiveFlame> _active = new();
 
@@ -356,7 +356,7 @@ public sealed class ContinuousFlamethrowerSystem : EntitySystem
             _pointLight.SetEnabled(flame.Weapon, false, light);
     }
 
-    private sealed class ActiveFlame(
+    private sealed partial class ActiveFlame(
         EntityUid weapon,
         EntityCoordinates target,
         EntityUid? audioStream)

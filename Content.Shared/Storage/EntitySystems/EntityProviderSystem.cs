@@ -18,11 +18,11 @@ namespace Content.Shared.Storage.EntitySystems;
 public sealed partial class EntityProviderSystem : EntitySystem
 {
     // DS14-start: current engine baseline uses readonly IoC fields and explicit event subscriptions.
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private EntityQuery<EntityProviderComponent> _providerQuery;
     private EntityQuery<StorageComponent> _storageQuery;

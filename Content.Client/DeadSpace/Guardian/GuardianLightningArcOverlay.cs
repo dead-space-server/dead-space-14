@@ -9,13 +9,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Guardian;
 
-public sealed class GuardianLightningArcOverlay : Overlay
+public sealed partial class GuardianLightningArcOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
 
-    [Dependency] private readonly IEntityManager _ent = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _ent = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly EntityQuery<TransformComponent> _transformQuery;
     private readonly SharedTransformSystem _transform;

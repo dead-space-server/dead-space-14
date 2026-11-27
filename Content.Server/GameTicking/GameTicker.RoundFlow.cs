@@ -4,7 +4,6 @@ using Content.Server.Announcements;
 using Content.Server.Antag.Components;
 using Content.Server.DeadSpace.RoundEnd;
 using Content.Shared.DeadSpace.Arena;
-using Content.Server.Discord;
 using Content.Server.GameTicking.Events;
 using Content.Server.Maps;
 using Content.Server.Roles;
@@ -29,12 +28,11 @@ using Robust.Shared.Audio;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
-using System.Text;
-using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
 #pragma warning disable RA0026
@@ -43,15 +41,14 @@ namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly DiscordWebhook _discord = default!;
-        [Dependency] private readonly RoleSystem _role = default!;
+        [Dependency] private RoleSystem _role = default!;
         // DS14-start
-        [Dependency] private readonly RoundEndManifestStatsSystem _roundEndManifestStats = default!;
-        [Dependency] private readonly RoundEndDollStateSystem _roundEndDollState = default!;
-        [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
-        [Dependency] private readonly ObjectivesSystem _objectivesSystem = default!;
+        [Dependency] private RoundEndManifestStatsSystem _roundEndManifestStats = default!;
+        [Dependency] private RoundEndDollStateSystem _roundEndDollState = default!;
+        [Dependency] private SharedObjectivesSystem _objectives = default!;
+        [Dependency] private ObjectivesSystem _objectivesSystem = default!;
         // DS14-end
-        [Dependency] private readonly ITaskManager _taskManager = default!;
+        [Dependency] private ITaskManager _taskManager = default!;
 
         private static readonly Counter RoundNumberMetric = Metrics.CreateCounter(
             "ss14_round_number",
@@ -68,9 +65,6 @@ namespace Content.Server.GameTicking
         private const string TraitorAntagPrototype = "Traitor";
         private const string TraitorSleeperAntagPrototype = "TraitorSleeper";
         private const string TraitorUltraAntagPrototype = "TraitorUltra";
-        private const int DiscordMessageMaxLength = 2000;
-        private const string DiscordCodeBlockFence = "```";
-        private const int DiscordCodeBlockSplitOverhead = 8; // Closing/opening fences plus their newlines.
         // DS14-end
 
 #if EXCEPTION_TOLERANCE
@@ -89,6 +83,7 @@ namespace Content.Server.GameTicking
         private string? _replayRoundText;
 
         private RoundEndMessageEvent? _roundEndSnapshot; // DS14
+        private EntityUid[] _roundEndSnapshotMinds = Array.Empty<EntityUid>(); // DS14
 
         [ViewVariables]
         public GameRunLevel RunLevel
@@ -526,14 +521,17 @@ namespace Content.Server.GameTicking
             RunLevel = GameRunLevel.PostRound;
 
             // DS14-start
+            var report = new RoundEndTextAppendEvent();
             RoundEndMessageEvent roundEndSnapshot;
             try
             {
-                roundEndSnapshot = BuildRoundEndScoreboard(text);
+                roundEndSnapshot = BuildRoundEndScoreboard(text, report);
             }
             catch (Exception e)
             {
                 Log.Error($"Error while building round end scoreboard: {e}");
+                report = new RoundEndTextAppendEvent();
+                _roundEndSnapshotMinds = Array.Empty<EntityUid>();
                 roundEndSnapshot = new RoundEndMessageEvent(
                     string.Empty,
                     text,
@@ -558,7 +556,7 @@ namespace Content.Server.GameTicking
 
             try
             {
-                SendRoundEndDiscordMessage();
+                SendRoundEndDiscordMessage(roundEndSnapshot, report.Lines.Prepend((text, false))); // DS14
             }
             catch (Exception e)
             {
@@ -575,6 +573,10 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(_roundEndSnapshot);
             return true;
         }
+
+        public RoundEndMessageEvent? RoundEndSnapshot => RunLevel == GameRunLevel.PostRound ? _roundEndSnapshot : null; // DS14
+
+        public IReadOnlyList<EntityUid> RoundEndSnapshotMinds => _roundEndSnapshotMinds; // DS14
 
         private void TryRoundEndSideEffect(Action action, string description)
         {
@@ -602,7 +604,7 @@ namespace Content.Server.GameTicking
         }
         // DS14-end
 
-        private RoundEndMessageEvent BuildRoundEndScoreboard(string text) // DS14
+        private RoundEndMessageEvent BuildRoundEndScoreboard(string text, RoundEndTextAppendEvent report) // DS14
         {
             // Log end of round
             _adminLogger.Add(LogType.EmergencyShuttle, LogImpact.High, $"Round ended, showing summary");
@@ -610,10 +612,9 @@ namespace Content.Server.GameTicking
             var gamemodeTitle = CurrentPreset != null ? Loc.GetString(CurrentPreset.ModeTitle) : string.Empty;
 
             // Let things add text here.
-            var textEv = new RoundEndTextAppendEvent();
-            RaiseLocalEvent(textEv);
+            RaiseLocalEvent(report); // DS14
 
-            var roundEndText = $"{text}\n{textEv.Text}";
+            var roundEndText = $"{text}\n{report.Text}"; // DS14
 
             //Get the timespan of the round.
             var roundDuration = RoundDuration();
@@ -621,6 +622,7 @@ namespace Content.Server.GameTicking
             //Generate a list of basic player info to display in the end round summary.
             var listOfPlayerInfo = new List<RoundEndMessageEvent.RoundEndPlayerInfo>();
             var manifestAntagMinds = GetRoundEndManifestAntagMinds(); // DS14
+            var manifestMinds = new List<EntityUid>(); // DS14
             // Grab the great big book of all the Minds, we'll need them for this.
             var allMinds = EntityQueryEnumerator<MindComponent>();
             while (allMinds.MoveNext(out var mindId, out var mind))
@@ -713,15 +715,23 @@ namespace Content.Server.GameTicking
                     InCustody = inCustody,
                     IsDead = isDead,
                     ShowInAntagManifest = showInAntagManifest,
+                    GhostRole = _role.MindHasRole<GhostRoleMarkerRoleComponent>(mindId),
                     // DS14-end
                     Observer = observer,
                     Connected = connected
                 };
                 listOfPlayerInfo.Add(playerEndRoundInfo);
+                manifestMinds.Add(mindId); // DS14
             }
 
             // This ordering mechanism isn't great (no ordering of minds) but functions
-            var listOfPlayerInfoFinal = listOfPlayerInfo.OrderBy(pi => pi.PlayerOOCName).ToArray();
+            // DS14-start
+            var playerInfoOrder = Enumerable.Range(0, listOfPlayerInfo.Count)
+                .OrderBy(i => listOfPlayerInfo[i].PlayerOOCName)
+                .ToArray();
+            var listOfPlayerInfoFinal = playerInfoOrder.Select(i => listOfPlayerInfo[i]).ToArray();
+            _roundEndSnapshotMinds = playerInfoOrder.Select(i => manifestMinds[i]).ToArray();
+            // DS14-end
             var sound = RoundEndSoundCollection == null ? null : _audio.ResolveSound(new SoundCollectionSpecifier(RoundEndSoundCollection));
 
             var roundEndMessageEvent = new RoundEndMessageEvent(
@@ -830,219 +840,6 @@ namespace Content.Server.GameTicking
         }
         // DS14-end
 
-        private async void SendRoundEndDiscordMessage()
-        {
-            try
-            {
-                if (_webhookIdentifier == null)
-                    return;
-
-                var duration = RoundDuration();
-                var gamemodeTitle = CurrentPreset != null ? Loc.GetString(CurrentPreset.ModeTitle) : string.Empty;
-
-                // DS14-start
-                var discordTextEv = new RoundEndDiscordTextAppendEvent();
-                RaiseLocalEvent(discordTextEv);
-
-                var manifestBuilder = new StringBuilder();
-                if (!string.IsNullOrWhiteSpace(_replayRoundText))
-                    manifestBuilder.AppendLine(_replayRoundText.Trim());
-
-                if (!string.IsNullOrWhiteSpace(discordTextEv.Text))
-                {
-                    if (manifestBuilder.Length > 0)
-                        manifestBuilder.AppendLine();
-
-                    manifestBuilder.AppendLine(discordTextEv.Text.Trim());
-                }
-
-                var manifest = StripRoundEndDiscordMarkup(manifestBuilder.ToString().Trim());
-                // DS14-end
-
-                var content = Loc.GetString("discord-round-notifications-end",
-                    ("id", RoundId),
-                    ("hours", Math.Truncate(duration.TotalHours)),
-                    ("minutes", duration.Minutes),
-                    ("seconds", duration.Seconds),
-                    ("gamemode", gamemodeTitle),
-                    ("manifest", manifest));
-
-                if (string.IsNullOrWhiteSpace(manifest)) // DS14
-                {
-                    content = Loc.GetString("discord-round-notifications-end-no-manifest",
-                        ("id", RoundId),
-                        ("hours", Math.Truncate(duration.TotalHours)),
-                        ("minutes", duration.Minutes),
-                        ("seconds", duration.Seconds),
-                        ("gamemode", gamemodeTitle));
-                }
-
-                // DS14-start
-                WebhookPayload payload;
-                foreach (var message in SplitDiscordWebhookContent(content))
-                {
-                    payload = new WebhookPayload { Content = message };
-                    await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-                }
-                // DS14-end
-
-                if (DiscordRoundEndRole == null)
-                    return;
-
-                content = Loc.GetString("discord-round-notifications-end-ping", ("roleId", DiscordRoundEndRole));
-                payload = new WebhookPayload { Content = content };
-                payload.AllowedMentions.AllowRoleMentions();
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error while sending discord round end message:\n{e}");
-            }
-        }
-
-        // DS14-start
-        private static string StripRoundEndDiscordMarkup(string text)
-        {
-            return Regex.Replace(text, @"\[[^\]]*\]", "");
-        }
-
-        internal static List<string> SplitDiscordWebhookContent(string content)
-        {
-            var messages = new List<string>();
-            if (content.Length <= DiscordMessageMaxLength)
-            {
-                messages.Add(content);
-                return messages;
-            }
-
-            var containsCodeBlock = HasDiscordCodeBlockFence(content);
-            var maxLength = containsCodeBlock
-                ? DiscordMessageMaxLength - DiscordCodeBlockSplitOverhead
-                : DiscordMessageMaxLength;
-
-            var builder = new StringBuilder();
-            foreach (var line in content.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n'))
-            {
-                AppendDiscordWebhookLine(messages, builder, line, maxLength);
-            }
-
-            AddDiscordWebhookMessage(messages, builder);
-            return containsCodeBlock
-                ? BalanceDiscordCodeBlocks(messages)
-                : messages;
-        }
-
-        private static void AppendDiscordWebhookLine(
-            List<string> messages,
-            StringBuilder builder,
-            string line,
-            int maxLength)
-        {
-            var remaining = line;
-            while (true)
-            {
-                var separatorLength = builder.Length > 0 ? 1 : 0;
-                var available = maxLength - builder.Length - separatorLength;
-
-                if (remaining.Length <= available)
-                {
-                    if (builder.Length > 0)
-                        builder.Append('\n');
-
-                    builder.Append(remaining);
-                    return;
-                }
-
-                if (available <= 0)
-                {
-                    AddDiscordWebhookMessage(messages, builder);
-                    continue;
-                }
-
-                var splitAt = GetDiscordWebhookSplitIndex(remaining, available);
-                if (builder.Length > 0)
-                    builder.Append('\n');
-
-                builder.Append(remaining, 0, splitAt);
-                AddDiscordWebhookMessage(messages, builder);
-                remaining = remaining.Substring(splitAt).TrimStart();
-
-                if (remaining.Length == 0)
-                    return;
-            }
-        }
-
-        private static int GetDiscordWebhookSplitIndex(string text, int maxLength)
-        {
-            if (text.Length <= maxLength)
-                return text.Length;
-
-            for (var i = maxLength; i > 0; i--)
-            {
-                if (char.IsWhiteSpace(text[i - 1]))
-                    return i;
-            }
-
-            return maxLength;
-        }
-
-        private static void AddDiscordWebhookMessage(List<string> messages, StringBuilder builder)
-        {
-            var message = builder.ToString().TrimEnd();
-            builder.Clear();
-
-            if (message.Length > 0)
-                messages.Add(message);
-        }
-
-        private static List<string> BalanceDiscordCodeBlocks(List<string> messages)
-        {
-            var balanced = new List<string>(messages.Count);
-            var inCodeBlock = false;
-
-            foreach (var rawMessage in messages)
-            {
-                var message = inCodeBlock
-                    ? DiscordCodeBlockFence + "\n" + rawMessage
-                    : rawMessage;
-
-                inCodeBlock = IsInDiscordCodeBlockAfter(rawMessage, inCodeBlock);
-
-                if (inCodeBlock)
-                    message += "\n" + DiscordCodeBlockFence;
-
-                balanced.Add(message);
-            }
-
-            return balanced;
-        }
-
-        private static bool HasDiscordCodeBlockFence(string text)
-        {
-            foreach (var line in text.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n'))
-            {
-                if (line.TrimStart().StartsWith(DiscordCodeBlockFence, StringComparison.Ordinal))
-                    return true;
-            }
-
-            return false;
-        }
-
-        private static bool IsInDiscordCodeBlockAfter(string text, bool startsInCodeBlock)
-        {
-            var inCodeBlock = startsInCodeBlock;
-
-            foreach (var line in text.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n'))
-            {
-                if (line.TrimStart().StartsWith(DiscordCodeBlockFence, StringComparison.Ordinal))
-                    inCodeBlock = !inCodeBlock;
-            }
-
-            return inCodeBlock;
-        }
-        // DS14-end
-
         public void RestartRound()
         {
             // If this game ticker is a dummy, do nothing!
@@ -1056,6 +853,7 @@ namespace Content.Server.GameTicking
                 return;
 
             _roundEndSnapshot = null; // DS14
+            _roundEndSnapshotMinds = Array.Empty<EntityUid>(); // DS14
 
             // Check if the GamePreset needs to be reset
             TryResetPreset();
@@ -1092,25 +890,6 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private async void SendRoundStartingDiscordMessage()
-        {
-            try
-            {
-                if (_webhookIdentifier == null)
-                    return;
-
-                var content = Loc.GetString("discord-round-notifications-new");
-
-                var payload = new WebhookPayload { Content = content };
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error while sending discord round starting message:\n{e}");
-            }
-        }
-
         /// <summary>
         ///     Cleanup that has to run to clear up anything from the previous round.
         ///     Stuff like wiping the previous map clean.
@@ -1132,7 +911,18 @@ namespace Content.Server.GameTicking
 
             EntityManager.FlushEntities();
 
-            _mapManager.Restart();
+            // The engine no longer has a map manager restart: delete whatever maps survived the flush.
+            var maps = new List<EntityUid>();
+            var mapQuery = EntityQueryEnumerator<MapComponent>();
+            while (mapQuery.MoveNext(out var mapUid, out _))
+            {
+                maps.Add(mapUid);
+            }
+
+            foreach (var mapUid in maps)
+            {
+                Del(mapUid);
+            }
 
             _banManager.Restart();
 
@@ -1221,31 +1011,6 @@ namespace Content.Server.GameTicking
             if (proto.Sound != null)
                 _audio.PlayGlobal(proto.Sound, Filter.Broadcast(), true);
         }
-
-        private async void SendRoundStartedDiscordMessage()
-        {
-            try
-            {
-                if (_webhookIdentifier == null)
-                    return;
-
-                var mapName = _gameMapManager.GetSelectedMap()?.MapName ?? Loc.GetString("discord-round-notifications-unknown-map");
-                var gamemodeTitle = CurrentPreset != null ? Loc.GetString(CurrentPreset.ModeTitle) : string.Empty;
-                // DS14 Start
-                if (Decoy != null)
-                    gamemodeTitle = Loc.GetString(Decoy.ModeTitle);
-                // DS14 End
-                var content = Loc.GetString("discord-round-notifications-started", ("id", RoundId), ("map", mapName), ("gamemode", gamemodeTitle));
-
-                var payload = new WebhookPayload { Content = content };
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error while sending discord round start message:\n{e}");
-            }
-        }
     }
 
     public enum GameRunLevel
@@ -1255,7 +1020,7 @@ namespace Content.Server.GameTicking
         PostRound = 2
     }
 
-    public sealed class GameRunLevelChangedEvent
+    public sealed partial class GameRunLevelChangedEvent
     {
         public GameRunLevel Old { get; }
         public GameRunLevel New { get; }
@@ -1273,7 +1038,7 @@ namespace Content.Server.GameTicking
     ///     for example as part of a game rule.
     /// </summary>
     [PublicAPI]
-    public sealed class LoadingMapsEvent : EntityEventArgs
+    public sealed partial class LoadingMapsEvent : EntityEventArgs
     {
         public List<GameMapPrototype> Maps;
 
@@ -1291,7 +1056,7 @@ namespace Content.Server.GameTicking
     ///     You likely want to subscribe to this after StationSystem.
     /// </remarks>
     [PublicAPI]
-    public sealed class PreGameMapLoad(GameMapPrototype gameMap, DeserializationOptions options, Vector2 offset, Angle rotation) : EntityEventArgs
+    public sealed partial class PreGameMapLoad(GameMapPrototype gameMap, DeserializationOptions options, Vector2 offset, Angle rotation) : EntityEventArgs
     {
         public readonly GameMapPrototype GameMap = gameMap;
         public DeserializationOptions Options = options;
@@ -1306,7 +1071,7 @@ namespace Content.Server.GameTicking
     ///     You likely want to subscribe to this after StationSystem.
     /// </remarks>
     [PublicAPI]
-    public sealed class PostGameMapLoad : EntityEventArgs
+    public sealed partial class PostGameMapLoad : EntityEventArgs
     {
         public readonly GameMapPrototype GameMap;
         public readonly MapId Map;
@@ -1326,7 +1091,7 @@ namespace Content.Server.GameTicking
     ///     Event raised to refresh the late join status.
     ///     If you want to disallow late joins, listen to this and call Disallow.
     /// </summary>
-    public sealed class RefreshLateJoinAllowedEvent
+    public sealed partial class RefreshLateJoinAllowedEvent
     {
         public bool DisallowLateJoin { get; private set; } = false;
 
@@ -1340,7 +1105,7 @@ namespace Content.Server.GameTicking
     ///     Attempt event raised on round start.
     ///     This can be listened to by GameRule systems to cancel round start if some condition is not met, like player count.
     /// </summary>
-    public sealed class RoundStartAttemptEvent : CancellableEntityEventArgs
+    public sealed partial class RoundStartAttemptEvent : CancellableEntityEventArgs
     {
         public ICommonSession[] Players { get; }
         public bool Forced { get; }
@@ -1357,7 +1122,7 @@ namespace Content.Server.GameTicking
     ///     You can use this to spawn people off-station, like in the case of nuke ops or wizard.
     ///     Remove the players you spawned from the PlayerPool and call <see cref="GameTicker.PlayerJoinGame"/> on them.
     /// </summary>
-    public sealed class RulePlayerSpawningEvent
+    public sealed partial class RulePlayerSpawningEvent
     {
         /// <summary>
         ///     Pool of players to be spawned.
@@ -1380,7 +1145,7 @@ namespace Content.Server.GameTicking
     ///     Event raised after players were assigned jobs by the GameTicker and have been spawned in.
     ///     You can give on-station people special roles by listening to this event.
     /// </summary>
-    public sealed class RulePlayerJobsAssignedEvent
+    public sealed partial class RulePlayerJobsAssignedEvent
     {
         public ICommonSession[] Players { get; }
         public IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> Profiles { get; }
@@ -1397,14 +1162,17 @@ namespace Content.Server.GameTicking
     /// <summary>
     ///     Event raised to allow subscribers to add text to the round end summary screen.
     /// </summary>
-    public sealed class RoundEndTextAppendEvent
+    public sealed partial class RoundEndTextAppendEvent
     {
-        private readonly List<string> _lines = new(); // DS14
+        // DS14-start
+        private readonly List<(string Text, bool IsOutcome)> _lines = new();
+        internal IReadOnlyList<(string Text, bool IsOutcome)> Lines => _lines;
+        // DS14-end
 
         /// <summary>
         ///     Text to display in the round end summary screen.
         /// </summary>
-        public string Text => string.Join('\n', _lines); // DS14
+        public string Text => string.Join('\n', _lines.Select(line => line.Text)); // DS14
 
         /// <summary>
         ///     Invoke this method to add text to the round end summary screen.
@@ -1412,25 +1180,9 @@ namespace Content.Server.GameTicking
         /// <param name="text"></param>
         public void AddLine(string text)
         {
-            _lines.Add(text); // DS14
+            _lines.Add((text, false)); // DS14
         }
+
+        public void AddOutcome(string text) => _lines.Add((text, true)); // DS14
     }
-
-    // DS14-start
-    /// <summary>
-    ///     Event raised to add text only to the Discord round-end log.
-    ///     Keep player-facing round-end UI text on <see cref="RoundEndTextAppendEvent"/>.
-    /// </summary>
-    public sealed class RoundEndDiscordTextAppendEvent
-    {
-        private readonly List<string> _lines = new();
-
-        public string Text => string.Join('\n', _lines);
-
-        public void AddLine(string text)
-        {
-            _lines.Add(text);
-        }
-    }
-    // DS14-end
 }

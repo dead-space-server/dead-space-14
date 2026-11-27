@@ -23,16 +23,17 @@ namespace Content.Shared.Weapons.Reflect;
 /// <summary>
 /// This handles reflecting projectiles and hitscan shots.
 /// </summary>
-public sealed class ReflectSystem : EntitySystem
+public sealed partial class ReflectSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _netManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedProjectileSystem _projectiles = default!; //DS-14
 
     public override void Initialize()
     {
@@ -129,8 +130,8 @@ public sealed class ReflectSystem : EntitySystem
         {
             _adminLogger.Add(LogType.BulletHit, LogImpact.Medium, $"{ToPrettyString(user)} reflected {ToPrettyString(projectile)} from {ToPrettyString(projectile.Comp.Weapon)} shot by {projectile.Comp.Shooter}");
 
-            projectile.Comp.Shooter = user;
-            projectile.Comp.Weapon = user;
+            _projectiles.SetShooter(projectile, projectile.Comp, user); //DS-14
+            _projectiles.SetWeapon(projectile, projectile.Comp, user); //DS-14
             Dirty(projectile, projectile.Comp);
         }
         else

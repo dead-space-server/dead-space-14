@@ -6,9 +6,9 @@ using Content.Shared.Whitelist;
 
 namespace Content.Shared.DeadSpace.Abilities.Bloodsucker;
 
-public abstract class SharedBloodsuckerSystem : EntitySystem
+public abstract partial class SharedBloodsuckerSystem : EntitySystem
 {
-    [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
 
     public override void Initialize()
     {

@@ -76,19 +76,16 @@ namespace Content.Client.UserInterface.Controls
 
         protected override Vector2 ArrangeOverride(Vector2 finalSize)
         {
-            var box = new UIBox2(Vector2.Zero, finalSize);
-
             var padSize = HasMargins ? PadSize : 0;
 
-            if (HasTopEdge)
-            {
-                box += (0, padSize + EdgeSize, 0, 0);
-            }
+            // DS14-start: when the stripe is shorter than its edges, keep the box from inverting (UIBox2 rejects it).
+            var top = HasTopEdge ? padSize + EdgeSize : 0f;
+            var bottom = finalSize.Y - (HasBottomEdge ? padSize + EdgeSize : 0f);
+            if (bottom < top)
+                top = bottom = Math.Clamp((top + bottom) / 2f, 0f, finalSize.Y);
 
-            if (HasBottomEdge)
-            {
-                box += (0, 0, 0, -(padSize + EdgeSize));
-            }
+            var box = new UIBox2(0, top, finalSize.X, bottom);
+            // DS14-end
 
             foreach (var child in Children)
             {
@@ -101,22 +98,23 @@ namespace Content.Client.UserInterface.Controls
 
         protected override void Draw(DrawingHandleScreen handle)
         {
-            UIBox2 centerBox = PixelSizeBox;
-
             var padSize = HasMargins ? PadSize : 0;
+            var edge = (padSize + EdgeSize) * UIScale;
+            //DS-14 start
+            var top = HasTopEdge ? edge : 0f;
+            var bottom = PixelHeight - (HasBottomEdge ? edge : 0f);
+            if (bottom < top)
+                top = bottom = Math.Clamp((top + bottom) / 2f, 0f, PixelHeight);
 
-            if (HasTopEdge)
-            {
-                centerBox += (0, (padSize + EdgeSize) * UIScale, 0, 0);
-                handle.DrawRect(new UIBox2(0, padSize * UIScale, PixelWidth, centerBox.Top), EdgeColor);
-            }
+            if (HasTopEdge && top > padSize * UIScale)
+                handle.DrawRect(new UIBox2(0, padSize * UIScale, PixelWidth, top), EdgeColor);
 
-            if (HasBottomEdge)
-            {
-                centerBox += (0, 0, 0, -((padSize + EdgeSize) * UIScale));
-                handle.DrawRect(new UIBox2(0, centerBox.Bottom, PixelWidth, PixelHeight - padSize * UIScale),
-                    EdgeColor);
-            }
+            var bottomEdge = PixelHeight - padSize * UIScale;
+            if (HasBottomEdge && bottomEdge > bottom)
+                handle.DrawRect(new UIBox2(0, bottom, PixelWidth, bottomEdge), EdgeColor);
+
+            var centerBox = new UIBox2(0, top, PixelWidth, bottom);
+            //DS-14 end
 
             GetActualStyleBox()?.Draw(handle, centerBox, UIScale);
         }

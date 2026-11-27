@@ -7,11 +7,11 @@ using Content.Shared.Roles.Jobs;
 
 namespace Content.Server.DeadSpace.Traitor.Objectives;
 
-public sealed class TraitorUltraKillDepartmentConditionSystem : EntitySystem
+public sealed partial class TraitorUltraKillDepartmentConditionSystem : EntitySystem
 {
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedJobSystem _jobs = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
 
     public override void Initialize()
     {

@@ -67,16 +67,25 @@ public sealed class IdentityRepresentation
     /// </summary>
     public string ToStringUnknown()
     {
-        var genderString = TrueGender switch
-        {
-            Gender.Female => Loc.GetString("identity-gender-feminine"),
-            Gender.Male => Loc.GetString("identity-gender-masculine"),
-            Gender.Epicene or Gender.Neuter or _ => Loc.GetString("identity-gender-person")
-        };
-
         // i.e. 'young assistant man' or 'old cargo technician person' or 'middle-aged captain'
         return PresumedJob is null
-            ? $"{AgeString} {genderString}"
-            : $"{AgeString} {PresumedJob} {genderString}";
+            ? $"{AgeString} {GenderString}"
+            : $"{AgeString} {PresumedJob} {GenderString}";
     }
+
+    /// <summary>
+    ///     Returns a string representing a fully unidentifiable identity — no name and no job from the ID card.
+    ///     DS-14: used for entities without a face (e.g. decapitated bodies).
+    /// </summary>
+    public string ToStringFaceless()
+    {
+        return $"{AgeString} {GenderString}";
+    }
+
+    private string GenderString => TrueGender switch
+    {
+        Gender.Female => Loc.GetString("identity-gender-feminine"),
+        Gender.Male => Loc.GetString("identity-gender-masculine"),
+        Gender.Epicene or Gender.Neuter or _ => Loc.GetString("identity-gender-person")
+    };
 }

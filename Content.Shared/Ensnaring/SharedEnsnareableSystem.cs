@@ -7,9 +7,11 @@ using Content.Shared.DoAfter;
 using Content.Shared.Ensnaring.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Mobs.Systems; // DS14-downed-bola
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Stunnable; // DS14-downed-bola
 using Content.Shared.Strip.Components;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
@@ -25,20 +27,21 @@ public sealed partial class EnsnareableDoAfterEvent : SimpleDoAfterEvent
 {
 }
 
-public abstract class SharedEnsnareableSystem : EntitySystem
+public abstract partial class SharedEnsnareableSystem : EntitySystem
 {
     private const float SandevistanRemovalDurationMultiplier = 0.25f; // DS14
 
-    [Dependency] private   readonly AlertsSystem _alerts = default!;
-    [Dependency] private   readonly MovementSpeedModifierSystem _speedModifier = default!;
-    [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
-    [Dependency] private   readonly SharedAudioSystem _audio = default!;
-    [Dependency] protected readonly SharedContainerSystem Container = default!;
-    [Dependency] private   readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private   readonly SharedHandsSystem _hands = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] private   readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private   readonly IGameTiming _timing = default!; // DS14
+    [Dependency] private   AlertsSystem _alerts = default!;
+    [Dependency] private   MovementSpeedModifierSystem _speedModifier = default!;
+    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] private   SharedAudioSystem _audio = default!;
+    [Dependency] protected SharedContainerSystem Container = default!;
+    [Dependency] private   SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private   SharedHandsSystem _hands = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] private   SharedStaminaSystem _stamina = default!;
+    [Dependency] private   IGameTiming _timing = default!; // DS14
+    [Dependency] private   MobStateSystem _mobState = default!; // DS14-downed-bola
 
     public override void Initialize()
     {
@@ -263,6 +266,12 @@ public abstract class SharedEnsnareableSystem : EntitySystem
         if (HasComp<LubedComponent>(ensnare))
             return false;
         // DS14-hotfix-lubed-bola-end
+
+        // DS14-downed-bola-start
+        if (component.SkipDownedOrDead &&
+            (HasComp<KnockedDownComponent>(target) || _mobState.IsDead(target)))
+            return false;
+        // DS14-downed-bola-end
 
         //Don't do anything if they don't have the ensnareable component.
         if (!TryComp<EnsnareableComponent>(target, out var ensnareable))

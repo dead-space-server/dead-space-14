@@ -40,11 +40,11 @@
 - type: listing
   id: UplinkEswordDouble
   name: uplink-esword-double-name
-  description: uplink-esword-double-desc
+  description: uplink-esword-double-agent-desc
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: BriefcaseWeaponESwordDoubleFilled
+  productEntity: EnergySwordDouble
   cost:
-    Telecrystal: 36
+    Telecrystal: 21
   categories:
   - UplinkWeaponry
   conditions:
@@ -147,6 +147,30 @@
     whitelist:
       tags:
       - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkEnergyCrossbowNukeopsCommander
+  name: uplink-energy-crossbow-name
+  description: uplink-energy-crossbow-desc
+  productEntity: WeaponEnergyCrossbow
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsCommanderUplink
+  - !type:BuyerAntagCondition
+    whitelist:
+    - NukeopsCommander
+  - !type:ListingLimitedStockCondition
+    stock: 1
   - !type:BuyerWhitelistCondition
     blacklist:
       components:
@@ -726,6 +750,25 @@
     whitelist:
       tags:
       - NukeOpsUplink
+
+- type: listing
+  id: UplinkChemVendSyndicateNukeOps
+  name: uplink-chemvend-syndicate-name
+  description: uplink-chemvend-syndicate-desc
+  icon: { sprite: _DeadSpace/Objects/Specific/Service/vending_machine_restock.rsi, state: base }
+  productEntity: VendingMachineRestockChemVendSyndicate
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
 
 - type: listing
   id: UplinkClothingEyesHudSyndicateAgent

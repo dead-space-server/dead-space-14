@@ -10,9 +10,9 @@ using Content.Shared.DeadSpace.Virus.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Symptoms;
 
-public sealed class VocalDisruptionSymptom : VirusSymptomBase
+public sealed partial class VocalDisruptionSymptom : VirusSymptomBase
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     public override VirusSymptom Type => VirusSymptom.VocalDisruption;
     protected override ProtoId<VirusSymptomPrototype> PrototypeId => "VocalDisruptionSymptom";
     private static readonly ProtoId<ReplacementAccentPrototype> Accent = "virus";

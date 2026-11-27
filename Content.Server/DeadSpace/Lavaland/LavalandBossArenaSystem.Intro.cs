@@ -28,12 +28,12 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// </summary>
 public sealed partial class LavalandBossArenaSystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly LavalandNecropolisGateSystem _gates = default!;
-    [Dependency] private readonly LavalandLegionMegafaunaSystem _legion = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private LavalandNecropolisGateSystem _gates = default!;
+    [Dependency] private LavalandLegionMegafaunaSystem _legion = default!;
 
     private static readonly EntProtoId FireParticle = "LavalandIntroFireParticle";
     private static readonly EntProtoId SmokeParticle = "LavalandIntroSmokeParticle";
@@ -300,7 +300,7 @@ public sealed partial class LavalandBossArenaSystem
 
     #region The plans
 
-    private sealed class IntroPlan(
+    private sealed partial class IntroPlan(
         Entity<LavalandBossArenaComponent> arena,
         MapGridComponent grid,
         LavalandBossIntroConfig config,
@@ -898,7 +898,7 @@ public sealed partial class LavalandBossArenaSystem
         for (var step = 0.5f; step <= distance + 0.01f; step += 0.5f)
         {
             var candidate = from.Offset(direction * step);
-            if (!_mapManager.TryFindGridAt(candidate, out var gridUid, out var grid))
+            if (!_map.TryFindGridAt(candidate, out var gridUid, out var grid))
                 break;
 
             var tile = _map.TileIndicesFor(gridUid, grid, candidate);

@@ -12,17 +12,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Sandevistan;
 
-public sealed class SandevistanOverlay : Overlay
+public sealed partial class SandevistanOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> Shader = "SandevistanOverlay";
     private const float FadeDuration = 2.5f;
     private const float SoftcapRampLeadTime = 2f;
 
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;

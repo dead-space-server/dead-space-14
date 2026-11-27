@@ -30,19 +30,19 @@ using Content.Server.Database;
 
 namespace Content.Server.GameTicking.Rules;
 
-public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComponent>
+public sealed partial class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComponent>
 {
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
-    [Dependency] private readonly NukeCodeSendQueueSystem _nukeCodeQueue = default!; // DS14
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly AlertLevelSystem _alertLevel = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IVoteManager _voteManager = default!;
-    [Dependency] private readonly CargoSystem _cargoSystem = default!;
-    [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
+    [Dependency] private SharedObjectivesSystem _objectives = default!;
+    [Dependency] private NukeCodeSendQueueSystem _nukeCodeQueue = default!; // DS14
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private AlertLevelSystem _alertLevel = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IVoteManager _voteManager = default!;
+    [Dependency] private CargoSystem _cargoSystem = default!;
+    [Dependency] private ErtResponseSystem _ertResponseSystem = default!;
+    [Dependency] private IServerDbManager _db = default!;
     private static readonly ProtoId<ErtTeamPrototype> ErtTeam = "CburnSierra";
     private static readonly ProtoId<CargoAccountPrototype> Account = "Security";
     // Сумма пополнения баланса станции на стадии размножения
@@ -119,7 +119,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
 
                 if (IsSpiderTerrorVictory(uid, stationUid, component))
                 {
-                    args.AddLine(Loc.GetString("spider-terror-win")); // Тут можно добавить: захватили станцию (название станции), чтобы не было дублирования одного предложения.
+                    args.AddOutcome(Loc.GetString("spider-terror-win")); // DS14
 
                     // Статистика для дашборда
                     var winner = BiStatWinner.Antagonist;
@@ -137,7 +137,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
                 }
                 else
                 {
-                    args.AddLine(Loc.GetString("spider-terror-loose"));
+                    args.AddOutcome(Loc.GetString("spider-terror-loose")); // DS14
 
                     var winner = BiStatWinner.Crew;
                     _ = System.Threading.Tasks.Task.Run(async () =>

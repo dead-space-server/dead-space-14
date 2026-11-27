@@ -190,8 +190,6 @@ public sealed partial class LimbWoundSystem
 
         Dirty(body, limbs);
         ApplyLife(body, limbs);
-        if (edit.SetMissing && !edit.Missing)
-            ReleaseOrganDeath(body, limbs);
         return true;
     }
 

@@ -3,9 +3,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.Sprite;
 
-public sealed class SimpleSpriteOverlaySystem : EntitySystem // DS14 - pre-v288 event/IoC style
+public sealed partial class SimpleSpriteOverlaySystem : EntitySystem // DS14 - pre-v288 event/IoC style
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!; // DS14 - pre-v288 IoC
+    [Dependency] private SpriteSystem _sprite = default!; // DS14 - pre-v288 IoC
 
     // DS14-Start - pre-v288 explicit event subscriptions
     public override void Initialize()

@@ -12,12 +12,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.AppHub;
 
-public sealed class AppHubSystem : EntitySystem
+public sealed partial class AppHubSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly CartridgeLoaderSystem _cartridgeLoader = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private CartridgeLoaderSystem _cartridgeLoader = default!;
 
     public override void Initialize()
     {

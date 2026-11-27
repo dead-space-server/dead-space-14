@@ -46,6 +46,9 @@ public sealed partial class LimbSpeciesPrototype : IPrototype
     [DataField]
     public bool Ears = true;
 
+    [DataField]
+    public bool Jaw = true;
+
 }
 
 public static class LimbSpeciesRules

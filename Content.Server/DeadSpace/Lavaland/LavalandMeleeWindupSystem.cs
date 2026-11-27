@@ -23,9 +23,9 @@ public sealed partial class LavalandMeleeWindupComponent : Component
     public readonly Dictionary<EntityUid, (TimeSpan Since, TimeSpan Last)> Targets = new();
 }
 
-public sealed class LavalandMeleeWindupSystem : EntitySystem
+public sealed partial class LavalandMeleeWindupSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly List<EntityUid> _stale = new();
 

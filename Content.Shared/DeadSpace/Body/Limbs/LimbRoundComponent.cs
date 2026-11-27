@@ -21,4 +21,10 @@ public sealed partial class LimbRoundComponent : Component
 
     [DataField, AutoNetworkedField]
     public float Bleed;
+
+    /// <summary>
+    /// Chance (0-1) that this round stays stuck in the limb it hits. Null - the general bullet chance.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float? Embed;
 }

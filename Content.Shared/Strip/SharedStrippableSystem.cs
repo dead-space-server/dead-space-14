@@ -20,6 +20,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Silicons.Borgs.Components; // DS14
 using Content.Shared.Sound.Components;
 using Content.Shared.Strip.Components;
 using Content.Shared.Verbs;
@@ -31,25 +32,25 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Strip;
 
-public abstract class SharedStrippableSystem : EntitySystem
+public abstract partial class SharedStrippableSystem : EntitySystem
 {
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
 
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
-    [Dependency] private readonly InventorySystem _inventorySystem = default!;
+    [Dependency] private InventorySystem _inventorySystem = default!;
 
-    [Dependency] private readonly SharedCuffableSystem _cuffableSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedCuffableSystem _cuffableSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     // DS14-start
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly INetManager _netManager = default!;
-    [Dependency] private readonly SharedNinjaDisguiseSystem _ninjaDisguise = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private SharedNinjaDisguiseSystem _ninjaDisguise = default!;
     // DS14-end
 
     public override void Initialize()
@@ -78,7 +79,7 @@ public abstract class SharedStrippableSystem : EntitySystem
             return;
 
         // DS14-start: don't offer to strip a target that can't be stripped (e.g. a stasis cocoon).
-        if (args.Target is { Valid: true } target && TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+        if (args.Target is { Valid: true } target && IsEntityStripBlocked(target))
             return;
         // DS14-end
 
@@ -98,7 +99,7 @@ public abstract class SharedStrippableSystem : EntitySystem
             return;
 
         // DS14-start: don't offer to strip a target that can't be stripped (e.g. a stasis cocoon).
-        if (args.Target is { Valid: true } target && TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+        if (args.Target is { Valid: true } target && IsEntityStripBlocked(target))
             return;
         // DS14-end
 
@@ -197,7 +198,7 @@ public abstract class SharedStrippableSystem : EntitySystem
         // DS14-end
 
         // DS14-start: a stasis cocoon blocks inventory slots as well as hands.
-        if (TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+        if (IsEntityStripBlocked(target))
             return false;
         // DS14-end
 
@@ -313,7 +314,7 @@ public abstract class SharedStrippableSystem : EntitySystem
         // DS14-end
 
         // DS14-start: re-check during the strip do-after so entering a cocoon cancels it.
-        if (TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+        if (IsEntityStripBlocked(target))
             return false;
         // DS14-end
 
@@ -796,7 +797,7 @@ public abstract class SharedStrippableSystem : EntitySystem
 
         // DS14-start: don't let anyone open the stripping UI on a target that
         // can't be stripped (e.g. a changeling in a stasis cocoon).
-        if (TryComp<HandsComponent>(target.Owner, out var targetHands) && !targetHands.CanBeStripped)
+        if (IsEntityStripBlocked(target.Owner))
         {
             _popupSystem.PopupCursor(Loc.GetString("strip-cannot-strip"), user);
             return false;
@@ -839,6 +840,13 @@ public abstract class SharedStrippableSystem : EntitySystem
     }
 
     // DS14-start
+    private bool IsEntityStripBlocked(EntityUid target)
+    {
+        return TryComp<HandsComponent>(target, out var hands)
+            && !hands.CanBeStripped
+            && !HasComp<BorgChassisComponent>(target);
+    }
+
     private bool CanDirectInsertHand(EntityUid user, EntityUid target, bool allowClientUnknownSession = false)
     {
         if (IsInteractiveGhost(user))

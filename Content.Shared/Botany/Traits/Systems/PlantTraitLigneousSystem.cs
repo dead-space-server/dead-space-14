@@ -13,11 +13,11 @@ namespace Content.Shared.Botany.Traits.Systems;
 public sealed partial class PlantTraitLigneousSystem : EntitySystem
 {
     // DS14-start
-    [Dependency] private readonly PlantHarvestSystem _plantHarvest = default!;
-    [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
+    [Dependency] private PlantHarvestSystem _plantHarvest = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
 
     private EntityQuery<PlantHolderComponent> _holderQuery;
     // DS14-end

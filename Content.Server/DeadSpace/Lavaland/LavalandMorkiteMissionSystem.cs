@@ -26,22 +26,22 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandMorkiteMissionSystem : EntitySystem
+public sealed partial class LavalandMorkiteMissionSystem : EntitySystem
 {
     private static readonly TimeSpan NetworkInterval = TimeSpan.FromSeconds(1);
 
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PowerReceiverSystem _power = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly DestructibleSystem _destructible = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private PowerReceiverSystem _power = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NPCSteeringSystem _steering = default!;
+    [Dependency] private DestructibleSystem _destructible = default!;
     private float _objectiveRoll;
     private TimeSpan _nextNetworkUpdate;
 

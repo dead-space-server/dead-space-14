@@ -9,12 +9,12 @@ using Content.Shared.Cargo.Prototypes;
 
 namespace Content.Server.DeadSpace.GameRules;
 
-public sealed class CashCollectionSystem : GameRuleSystem<CashCollectionComponent>
+public sealed partial class CashCollectionSystem : GameRuleSystem<CashCollectionComponent>
 {
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private CargoSystem _cargo = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Update(float frameTime)
     {

@@ -8,10 +8,10 @@ using Content.Shared.DeadSpace.Virus;
 
 namespace Content.Client.DeadSpace.Virus.Systems;
 
-public sealed class VirusSystem : SharedVirusSystem
+public sealed partial class VirusSystem : SharedVirusSystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     public override void Initialize()
     {

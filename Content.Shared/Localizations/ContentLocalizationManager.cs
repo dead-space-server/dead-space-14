@@ -5,9 +5,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Localizations
 {
-    public sealed class ContentLocalizationManager
+    public sealed partial class ContentLocalizationManager
     {
-        [Dependency] private readonly ILocalizationManager _loc = default!;
+        [Dependency] private ILocalizationManager _loc = default!;
 
         // If you want to change your codebase's language, do it here.
         private const string Culture = "ru-RU"; // Corvax-Localization
@@ -31,7 +31,7 @@ namespace Content.Shared.Localizations
 
             _loc.LoadCulture(culture);
             _loc.LoadCulture(fallbackCulture); // Corvax-Localization
-            _loc.SetFallbackCluture(fallbackCulture); // Corvax-Localization
+            _loc.SetFallbackCulture(fallbackCulture); // Corvax-Localization
             _loc.AddFunction(culture, "MANY", FormatMany); // Corvax-Localization: To prevent problems in auto-generated locale files
             _loc.AddFunction(culture, "PRESSURE", FormatPressure);
             _loc.AddFunction(culture, "POWERWATTS", FormatPowerWatts);

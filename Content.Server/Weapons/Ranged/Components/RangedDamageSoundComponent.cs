@@ -1,6 +1,5 @@
 using Content.Shared.Damage.Prototypes;
 using Robust.Shared.Audio;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 
 namespace Content.Server.Weapons.Ranged.Components;
 
@@ -16,13 +15,13 @@ public sealed partial class RangedDamageSoundComponent : Component
     /// Specified sounds to apply when the entity takes damage with the specified group.
     /// Will fallback to defaults if none specified.
     /// </summary>
-    [DataField(customTypeSerializer: typeof(PrototypeIdDictionarySerializer<SoundSpecifier, DamageGroupPrototype>))]
+    [DataField]
     public Dictionary<string, SoundSpecifier>? SoundGroups;
 
     /// <summary>
     /// Specified sounds to apply when the entity takes damage with the specified type.
     /// Will fallback to defaults if none specified.
     /// </summary>
-    [DataField(customTypeSerializer: typeof(PrototypeIdDictionarySerializer<SoundSpecifier, DamageTypePrototype>))]
+    [DataField]
     public Dictionary<string, SoundSpecifier>? SoundTypes;
 }

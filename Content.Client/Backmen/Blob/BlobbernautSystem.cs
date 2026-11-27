@@ -9,9 +9,9 @@ using Robust.Shared.GameStates;
 
 namespace Content.Client.Backmen.Blob;
 
-public sealed class BlobbernautSystem : SharedBlobbernautSystem
+public sealed partial class BlobbernautSystem : SharedBlobbernautSystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     protected override DamageSpecifier? TryChangeDamage(string msg, EntityUid ent, DamageSpecifier dmg)
     {
         _popup.PopupClient(Loc.GetString(msg), ent, ent, PopupType.LargeCaution);
@@ -19,7 +19,7 @@ public sealed class BlobbernautSystem : SharedBlobbernautSystem
     }
 }
 
-public sealed class BlobbernautVisualizerSystem : VisualizerSystem<BlobbernautComponent>
+public sealed partial class BlobbernautVisualizerSystem : VisualizerSystem<BlobbernautComponent>
 {
     public override void Initialize()
     {

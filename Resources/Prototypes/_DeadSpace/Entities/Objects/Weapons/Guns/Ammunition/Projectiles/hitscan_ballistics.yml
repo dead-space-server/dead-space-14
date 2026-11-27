@@ -38,6 +38,8 @@
   parent: BulletTrace
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    embed: 0
   - type: HitscanBasicVisuals
     bullet:
       sprite:
@@ -77,6 +79,7 @@
     bone: 4
     organ: 0.4
     bleed: 0.03
+    embed: 0
   - type: PointLight
     enabled: true
     color: "#ff4300"
@@ -113,6 +116,8 @@
   parent: BulletTrace
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    embed: 0.0025
   - type: HitscanBasicDamage
     damage:
       types:
@@ -161,6 +166,7 @@
     bone: 14
     organ: 1.05
     bleed: 0.08
+    embed: 0.0075
   - type: HitscanBasicDamage
     damage:
       types:
@@ -209,6 +215,7 @@
     bone: 12
     organ: 1
     bleed: 0.07
+    embed: 0.01
   - type: HitscanBasicDamage
     damage:
       types:
@@ -257,6 +264,7 @@
     bone: 22
     organ: 1.2
     bleed: 0.12
+    embed: 0.025
   - type: HitscanBasicDamage
     damage:
       types:
@@ -290,6 +298,8 @@
   parent: BulletAPTrace
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    embed: 0.1
   - type: HitscanBasicDamage
     ignoreResistances: true
     damage:
@@ -347,6 +357,7 @@
     bone: 12
     organ: 1
     bleed: 0.07
+    embed: 0.05
   - type: HitscanBasicDamage
     damage:
       types:
@@ -371,6 +382,7 @@
     bone: 12
     organ: 1
     bleed: 0.07
+    embed: 0.05
   - type: HitscanBasicDamage
     damage:
       types:
@@ -395,6 +407,7 @@
     bone: 42
     organ: 1.45
     bleed: 0.2
+    embed: 0.075
   - type: HitscanBasicDamage
     damage:
       types:
@@ -428,6 +441,7 @@
     bone: 2
     organ: 0.15
     bleed: 0.02
+    embed: 0.0033
   - type: HitscanBasicDamage
     damage:
       types:
@@ -455,6 +469,7 @@
     bone: 2
     organ: 0.1
     bleed: 0.02
+    embed: 0
   - type: HitscanBasicDamage
     damage:
       types:
@@ -531,6 +546,7 @@
     bone: 2
     organ: 0.2
     bleed: 0.03
+    embed: 0
   - type: HitscanBasicDamage
     damage:
       types:
@@ -583,6 +599,7 @@
     bone: 24
     organ: 1.25
     bleed: 0.14
+    embed: 0.2
   - type: HitscanBasicDamage
     damage:
       types:
@@ -597,6 +614,7 @@
     bone: 8
     organ: 1.8
     bleed: 0.16
+    embed: 0.2
   - type: HitscanBasicDamage
     ignoreResistances: true
     damage:
@@ -652,6 +670,7 @@
     bone: 36
     organ: 1.4
     bleed: 0.18
+    embed: 0.125
   - type: HitscanBasicRaycast
     collisionMask: BulletImpassable
     maxDistance: 80
@@ -670,6 +689,7 @@
     bone: 55
     organ: 1.2
     bleed: 0.28
+    embed: 0.325
   - type: HitscanBasicRaycast
     collisionMask: BulletImpassable
     maxDistance: 120
@@ -698,6 +718,7 @@
     bone: 18
     organ: 2.2
     bleed: 0.24
+    embed: 0.325
   - type: HitscanBasicRaycast
     collisionMask: BulletImpassable
     maxDistance: 120
@@ -728,6 +749,7 @@
     bone: 4
     organ: 0.35
     bleed: 0.05
+    embed: 0.01
   - type: HitscanBasicDamage
     damage:
       types:

@@ -16,12 +16,12 @@ namespace Content.Shared.DeadSpace.ShieldBash;
 /// and independent of whatever else that shield's UseDelay is used for
 /// (e.g. an energy shield's fold/unfold cooldown).
 /// </summary>
-public sealed class SharedShieldBashSystem : EntitySystem
+public sealed partial class SharedShieldBashSystem : EntitySystem
 {
     private const string DelayId = "shieldbash";
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     public override void Initialize()
     {

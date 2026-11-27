@@ -10,8 +10,8 @@ namespace Content.Shared.DeadSpace.Psychiatry;
 
 public sealed partial class ClearSensoryFaultSystem : EntityEffectSystem<MetaDataComponent, ClearSensoryFault>
 {
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly BlindableSystem _blind = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private BlindableSystem _blind = default!;
 
     private static readonly EntProtoId Deaf = "StatusEffectDeaf";
     private static readonly EntProtoId Muted = "StatusEffectMuted";

@@ -14,15 +14,15 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Abilities.Cocoon;
 
-public sealed class CocoonSystem : EntitySystem
+public sealed partial class CocoonSystem : EntitySystem
 {
     private static readonly EntProtoId MutedEffect = "StatusEffectCocoonMuted";
     private static readonly EntProtoId PressureImmunityEffect = "StatusEffectPressureImmunity"; // DS14 - PressureImmunity status effect migration
 
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly RespiratorSystem _respirator = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private RespiratorSystem _respirator = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
     private ISawmill _sawmill = default!;
 
     const float Factor = 1f;

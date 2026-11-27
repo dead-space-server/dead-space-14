@@ -1,6 +1,5 @@
 using Content.Server.GameTicking;
 using Content.Server.Shuttles.Systems;
-using Content.Shared.CCVar;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mind;
@@ -16,32 +15,26 @@ using Content.Server.Objectives.Commands;
 using Content.Shared.Prototypes;
 using Content.Shared.Roles.Jobs;
 using Robust.Server.Player;
-using Robust.Shared.Configuration;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Objectives;
 
-public sealed class ObjectivesSystem : SharedObjectivesSystem
+public sealed partial class ObjectivesSystem : SharedObjectivesSystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly EmergencyShuttleSystem _emergencyShuttle = default!;
-    [Dependency] private readonly SharedJobSystem _job = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private EmergencyShuttleSystem _emergencyShuttle = default!;
+    [Dependency] private SharedJobSystem _job = default!;
 
     private IEnumerable<string>? _objectives;
-    private bool _showGreentext;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
-        SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscordText); // DS14
-
-        Subs.CVar(_cfg, CCVars.GameShowGreentext, value => _showGreentext = value, true);
 
         _prototypeManager.PrototypesReloaded += CreateCompletions;
     }
@@ -122,156 +115,8 @@ public sealed class ObjectivesSystem : SharedObjectivesSystem
         }
     }
 
-    // DS14-start
-    private void OnRoundEndDiscordText(RoundEndDiscordTextAppendEvent ev)
-    {
-        var summaries = GetDiscordObjectiveSummaries();
-
-        foreach (var (agent, summary) in summaries)
-        {
-            var result = new StringBuilder();
-            foreach (var (prepend, minds) in summary)
-            {
-                if (!string.IsNullOrWhiteSpace(prepend))
-                    result.AppendLine(prepend.Trim());
-
-                AddSummary(result, agent, minds);
-            }
-
-            if (result.Length > 0)
-                ev.AddLine(result.AppendLine().ToString());
-        }
-    }
-
-    private Dictionary<string, Dictionary<string, List<(EntityUid, string)>>> GetDiscordObjectiveSummaries()
-    {
-        var summaries = new Dictionary<string, Dictionary<string, List<(EntityUid, string)>>>();
-        var query = EntityQueryEnumerator<GameRuleComponent>();
-        while (query.MoveNext(out var uid, out var gameRule))
-        {
-            if (!_gameTicker.IsGameRuleAdded(uid, gameRule))
-                continue;
-
-            var info = new ObjectivesTextGetInfoEvent(new List<(EntityUid, string)>(), string.Empty);
-            RaiseLocalEvent(uid, ref info);
-            if (info.Minds.Count == 0)
-                continue;
-
-            var agent = info.AgentName;
-            if (!summaries.ContainsKey(agent))
-                summaries[agent] = new Dictionary<string, List<(EntityUid, string)>>();
-
-            var prepend = new ObjectivesTextPrependEvent("");
-            RaiseLocalEvent(uid, ref prepend);
-
-            var summary = summaries[agent];
-            if (summary.ContainsKey(prepend.Text))
-            {
-                summary[prepend.Text].AddRange(info.Minds);
-            }
-            else
-            {
-                summary[prepend.Text] = info.Minds;
-            }
-        }
-
-        return summaries;
-    }
-
-    private void AddSummary(StringBuilder result, string agent, List<(EntityUid, string)> minds)
-    {
-        var agentSummaries = new List<(string Summary, float SuccessRate, int CompletedObjectives)>();
-
-        foreach (var (mindId, name) in minds)
-        {
-            if (!TryComp<MindComponent>(mindId, out var mind))
-                continue;
-
-            var title = GetTitle((mindId, mind), name);
-            var custody = IsInCustody(mindId, mind) ? Loc.GetString("objectives-in-custody") : string.Empty;
-
-            var objectives = mind.Objectives;
-            if (objectives.Count == 0)
-            {
-                agentSummaries.Add((Loc.GetString("objectives-no-objectives", ("custody", custody), ("title", title), ("agent", agent)), 0f, 0));
-                continue;
-            }
-
-            var completedObjectives = 0;
-            var totalObjectives = 0;
-            var agentSummary = new StringBuilder();
-            agentSummary.AppendLine(Loc.GetString("objectives-with-objectives", ("custody", custody), ("title", title), ("agent", agent)));
-
-            foreach (var objectiveGroup in objectives.GroupBy(o => Comp<ObjectiveComponent>(o).LocIssuer))
-            {
-                agentSummary.AppendLine(objectiveGroup.Key);
-
-                foreach (var objective in objectiveGroup)
-                {
-                    var info = GetInfo(objective, mindId, mind);
-                    if (info == null)
-                        continue;
-
-                    var objectiveTitle = info.Value.Title;
-                    var progress = info.Value.Progress;
-                    totalObjectives++;
-
-                    agentSummary.Append("- ");
-                    if (!_showGreentext)
-                    {
-                        agentSummary.AppendLine(objectiveTitle);
-                    }
-                    else if (progress > 0.99f)
-                    {
-                        agentSummary.AppendLine(Loc.GetString(
-                            "objectives-objective-success",
-                            ("objective", objectiveTitle),
-                            ("progress", progress)
-                        ));
-                        completedObjectives++;
-                    }
-                    else if (progress <= 0.99f && progress >= 0.5f)
-                    {
-                        agentSummary.AppendLine(Loc.GetString(
-                            "objectives-objective-partial-success",
-                            ("objective", objectiveTitle),
-                            ("progress", progress)
-                        ));
-                    }
-                    else if (progress < 0.5f && progress > 0f)
-                    {
-                        agentSummary.AppendLine(Loc.GetString(
-                            "objectives-objective-partial-failure",
-                            ("objective", objectiveTitle),
-                            ("progress", progress)
-                        ));
-                    }
-                    else
-                    {
-                        agentSummary.AppendLine(Loc.GetString(
-                            "objectives-objective-fail",
-                            ("objective", objectiveTitle),
-                            ("progress", progress)
-                        ));
-                    }
-                }
-            }
-
-            var successRate = totalObjectives > 0 ? (float) completedObjectives / totalObjectives : 0f;
-            agentSummaries.Add((agentSummary.ToString(), successRate, completedObjectives));
-        }
-
-        var sortedAgents = agentSummaries
-            .OrderByDescending(x => x.SuccessRate)
-            .ThenByDescending(x => x.CompletedObjectives);
-
-        foreach (var (summary, _, _) in sortedAgents)
-        {
-            result.AppendLine(summary);
-        }
-    }
-
     public EntityUid? GetRandomObjective(EntityUid mindId, MindComponent mind, ProtoId<WeightedRandomPrototype> objectiveGroupProto, float maxDifficulty)
+    // DS14-start
     {
         return GetRandomObjective(mindId, mind, objectiveGroupProto, maxDifficulty, null);
     }

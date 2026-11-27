@@ -73,6 +73,9 @@ public sealed partial class LimbBodyComponent : Component
     public bool HasEars = true;
 
     [DataField, AutoNetworkedField]
+    public bool HasJaw = true;
+
+    [DataField, AutoNetworkedField]
     public byte EyesGone;
 
     [DataField, AutoNetworkedField]

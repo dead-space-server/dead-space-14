@@ -9,12 +9,12 @@ using Robust.Shared.Network;
 
 namespace Content.Shared.DeadSpace.Clothing;
 
-public sealed class MultiClothingSystem : EntitySystem
+public sealed partial class MultiClothingSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private INetManager _net = default!;
 
     public const string ContainerId = "multi-clothing-container";
 
@@ -596,14 +596,14 @@ public sealed class MultiClothingSystem : EntitySystem
         return depth;
     }
 
-    private sealed class DeferredHostRollbackEvent(EntityUid host, EntityUid equipee, string slot) : EntityEventArgs
+    private sealed partial class DeferredHostRollbackEvent(EntityUid host, EntityUid equipee, string slot) : EntityEventArgs
     {
         public readonly EntityUid Host = host;
         public readonly EntityUid Equipee = equipee;
         public readonly string Slot = slot;
     }
 
-    private sealed class DeferredCleanupEvent(
+    private sealed partial class DeferredCleanupEvent(
         EntityUid host,
         EntityUid equipee,
         Dictionary<string, EntityUid> preservedItems) : EntityEventArgs

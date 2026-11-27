@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.DeadSpace.CentCommFax;
 using Content.Server.Fax;
 using Content.Server.Station.Systems;
 using Content.Shared.Fax.Components;
@@ -15,14 +16,15 @@ namespace Content.Server.DeadSpace.StationGoal;
 /// <summary>
 ///     System to spawn paper with station goal
 /// </summary>
-public sealed class StationGoalPaperSystem : EntitySystem
+public sealed partial class StationGoalPaperSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly FaxSystem _faxSystem = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private FaxSystem _faxSystem = default!;
+    [Dependency] private CentCommFaxSystem _centComm = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private CargoSystem _cargo = default!;
 
     public override void Initialize()
     {
@@ -47,28 +49,30 @@ public sealed class StationGoalPaperSystem : EntitySystem
         var wasSent = false;
         var wasModifiedOnce = false;
 
-        string text = _resourceManager.ContentFileReadText(goal.Text).ReadToEnd();
+        var text = _resourceManager.ContentFileReadText(goal.Text).ReadToEnd();
+        var stamps = new List<StampDisplayInfo>();
+
+        if (goal.ExtraStamps != null)
+        {
+            foreach (var stamp in goal.ExtraStamps)
+                stamps.Add(stamp);
+        }
+
+        EntityUid? stationFax = null;
+        FaxPrintout? letter = null;
 
         var query = EntityQueryEnumerator<FaxMachineComponent>();
         while (query.MoveNext(out var uid, out var fax))
         {
-            if (!fax.ReceiveStationGoal) continue;
+            if (!fax.ReceiveStationGoal)
+                continue;
 
             if (_station.GetOwningStation(uid) is { } station)
             {
                 text = text.Replace("STATION XX-00", Name(station));
+                stationFax ??= uid;
                 if (goal.ModifyStationBalance != null && goal.ModifyStationBalance != 0 && !wasModifiedOnce)
                     wasModifiedOnce = ModifyStationBalance(station, goal.ModifyStationBalance.Value);
-            }
-
-            var stamps = new List<StampDisplayInfo>{};
-
-            if (goal.ExtraStamps != null)
-            {
-                foreach (var stamp in goal.ExtraStamps)
-                {
-                    stamps.Add(stamp);
-                }
             }
 
             var printout = new FaxPrintout(
@@ -79,10 +83,13 @@ public sealed class StationGoalPaperSystem : EntitySystem
                 "paper_stamp-centcom",
                 stamps);
 
-            _faxSystem.Receive(uid, printout, null, fax);
-
+            _faxSystem.Receive(uid, printout, null, fax, recordInbox: false);
+            letter = printout;
             wasSent = true;
         }
+
+        if (letter != null)
+            _centComm.Record(stationFax, _centComm.UplinkName, letter, notify: false);
 
         return wasSent;
     }

@@ -29,21 +29,20 @@ namespace Content.Client.DeadSpace.Audio;
 /// <summary>
 /// Estimates the room around a positional sound and applies a local reverb send.
 /// </summary>
-public sealed class AreaEchoSystem : EntitySystem
+public sealed partial class AreaEchoSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IAudioManager _audioManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly RoofSystem _roof = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SpaceMufflingSystem _muffling = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IAudioManager _audioManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private RoofSystem _roof = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SpaceMufflingSystem _muffling = default!;
 
     private const float ProbeRange = 48f;
     private const int ProbesPerTick = 6;
@@ -319,7 +318,7 @@ public sealed class AreaEchoSystem : EntitySystem
 
         var gridUid = xform.GridUid ?? EntityUid.Invalid;
         if (!TryComp<MapGridComponent>(gridUid, out var grid) &&
-            !_mapManager.TryFindGridAt(xform.MapID, position, out gridUid, out grid))
+            !_maps.TryFindGridAt(xform.MapID, position, out gridUid, out grid))
             return true;
 
         if (_timing.RealTime >= _refreshAt)

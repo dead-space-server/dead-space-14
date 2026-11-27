@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -6,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Content.Server.Discord;
 
-public sealed class DiscordWebhook : IPostInjectInit
+public sealed partial class DiscordWebhook : IPostInjectInit
 {
     private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
-    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private ILogManager _log = default!;
 
     private const string BaseUrl = "https://discord.com/api/v10/webhooks";
     private readonly HttpClient _http = new();
@@ -78,6 +79,29 @@ public sealed class DiscordWebhook : IPostInjectInit
         return response;
     }
 
+    // DS14-start
+    public async Task<HttpResponseMessage> CreateMessage(
+        WebhookIdentifier identifier,
+        WebhookPayload payload,
+        IReadOnlyList<WebhookAttachment> attachments)
+    {
+        using var form = new MultipartFormDataContent();
+        form.Add(JsonContent.Create(payload, options: JsonOptions), "payload_json");
+
+        for (var i = 0; i < attachments.Count; i++)
+        {
+            var attachment = attachments[i];
+            var file = new ByteArrayContent(attachment.Data);
+            file.Headers.ContentType = new MediaTypeHeaderValue(attachment.MediaType);
+            form.Add(file, $"files[{i}]", attachment.FileName);
+        }
+
+        var response = await _http.PostAsync($"{GetUrl(identifier)}?wait=true", form);
+        LogResponse(response, "Create");
+        return response;
+    }
+    // DS14-end
+
     /// <summary>
     ///     Deletes a webhook message with the given identifier and message id.
     /// </summary>
@@ -141,3 +165,5 @@ public sealed class DiscordWebhook : IPostInjectInit
 
 
 }
+
+public readonly record struct WebhookAttachment(string FileName, string MediaType, byte[] Data); // DS14

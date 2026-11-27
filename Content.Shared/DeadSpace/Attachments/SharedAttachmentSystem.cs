@@ -20,14 +20,14 @@ namespace Content.Shared.DeadSpace.Attachments;
 /// Stat modifiers, unique groups and examine text of <see cref="AttachmentComponent"/>s.
 /// Component swaps and effects happen on the server, overlays on the client.
 /// </summary>
-public abstract class SharedAttachmentSystem : EntitySystem
+public abstract partial class SharedAttachmentSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
 
     public override void Initialize()
     {

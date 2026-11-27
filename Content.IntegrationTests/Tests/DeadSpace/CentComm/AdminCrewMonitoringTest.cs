@@ -77,6 +77,9 @@ public sealed class AdminCrewMonitoringTest
             var inventory = server.System<InventorySystem>();
             Assert.That(inventory.TryEquip(firstCrew, firstUniform, "jumpsuit"), Is.True);
             Assert.That(inventory.TryEquip(secondCrew, secondUniform, "jumpsuit"), Is.True);
+            var minds = server.System<MindSystem>();
+            minds.TransferTo(minds.CreateMind(null), firstCrew);
+            minds.TransferTo(minds.CreateMind(null), secondCrew);
             Assert.That(em.Count<CrewMonitoringServerComponent>(), Is.Zero);
 
             monitor = em.SpawnEntity("AdminObserver", firstMap.GridCoords);

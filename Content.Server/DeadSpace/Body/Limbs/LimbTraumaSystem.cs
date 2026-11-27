@@ -8,11 +8,11 @@ using Content.Shared.Stunnable;
 
 namespace Content.Server.DeadSpace.Body.Limbs;
 
-public sealed class LimbTraumaSystem : EntitySystem
+public sealed partial class LimbTraumaSystem : EntitySystem
 {
-    [Dependency] private readonly PsychiatrySystem _psychiatry = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly LimbHearingSystem _hearing = default!;
+    [Dependency] private PsychiatrySystem _psychiatry = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private LimbHearingSystem _hearing = default!;
 
     public override void Initialize()
     {
@@ -26,11 +26,15 @@ public sealed class LimbTraumaSystem : EntitySystem
         var time = TimeSpan.FromSeconds(args.Heavy ? 8 : 4);
         _stun.TryAddParalyzeDuration(ent, time);
         _hearing.Damage(ent, args.Heavy ? LimbHearing.ConcussionHeavy : LimbHearing.ConcussionLight, ent.Comp);
-        _psychiatry.TryOnsetOrEscalate(ent, SchizophreniaStage.Latent, "blunt-head", harm: true);
+        if (!_psychiatry.IsSkeleton(ent))
+            _psychiatry.TryOnsetOrEscalate(ent, SchizophreniaStage.Latent, "blunt-head", harm: true);
     }
 
     private void OnBrain(Entity<LimbBodyComponent> ent, ref LimbBrainRuptureEvent args)
     {
+        if (_psychiatry.IsSkeleton(ent.Owner))
+            return;
+
         _psychiatry.ApplyNew(ent.Owner, SchizophreniaStage.Acute, pillForced: true, reason: "brain-rupture");
     }
 }

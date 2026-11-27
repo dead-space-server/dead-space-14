@@ -613,3 +613,27 @@
     sprite: _DeadSpace/Clothing/Uniforms/Turtleneck/Jumpskirt/turtleneck_white_womensleeveless.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Uniforms/Turtleneck/Jumpskirt/turtleneck_white_womensleeveless.rsi
+
+# RND
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitScientistTurtle
+  name: водолазка учёного
+  description: Белая водолазка со специальными знаками, указывающими на принадлежность к научному отделу.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/scientist_turtle.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/scientist_turtle.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitSeniorResearcherTurtle
+  name: водолазка ведущего учёного
+  description: Белая водолазка со специальными разлищающимися знаками, указывающими на принадлежность к научному отделу и отличительный профессионализм.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/senior_researcher_turtle.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/senior_researcher_turtle.rsi

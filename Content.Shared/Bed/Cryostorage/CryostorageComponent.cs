@@ -57,10 +57,7 @@ public record struct CryostorageContainedPlayerData()
     /// </summary>
     public string PlayerName = string.Empty;
 
-    /// <summary>
-    /// The player's entity
-    /// </summary>
-    public NetEntity PlayerEnt = NetEntity.Invalid;
+    public int EntryId; //DS-14
 
     /// <summary>
     /// A dictionary relating a slot definition name to the name of the item inside of it.
@@ -87,7 +84,7 @@ public sealed class CryostorageBuiState : BoundUserInterfaceState
 [Serializable, NetSerializable]
 public sealed class CryostorageRemoveItemBuiMessage : BoundUserInterfaceMessage
 {
-    public NetEntity StoredEntity;
+    public int EntryId; //DS-14
 
     public string Key;
 
@@ -99,9 +96,9 @@ public sealed class CryostorageRemoveItemBuiMessage : BoundUserInterfaceMessage
         Inventory
     }
 
-    public CryostorageRemoveItemBuiMessage(NetEntity storedEntity, string key, RemovalType type)
+    public CryostorageRemoveItemBuiMessage(int entryId, string key, RemovalType type) //DS-14
     {
-        StoredEntity = storedEntity;
+        EntryId = entryId; //DS-14
         Key = key;
         Type = type;
     }

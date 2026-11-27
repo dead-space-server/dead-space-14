@@ -38,20 +38,20 @@ using Content.Server.Database;
 
 namespace Content.Server.GameTicking.Rules;
 
-public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
+public sealed partial class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly EmergencyShuttleSystem _emergency = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly RoundEndSystem _roundEndSystem = default!;
-    [Dependency] private readonly StoreSystem _store = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private EmergencyShuttleSystem _emergency = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private RoundEndSystem _roundEndSystem = default!;
+    [Dependency] private StoreSystem _store = default!;
+    [Dependency] private TagSystem _tag = default!;
     // DS14-Start
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly AlertLevelSystem _alertLevel = default!;
-    [Dependency] private readonly CargoSystem _cargoSystem = default!;
-    [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!; // DS14
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private AlertLevelSystem _alertLevel = default!;
+    [Dependency] private CargoSystem _cargoSystem = default!;
+    [Dependency] private ErtResponseSystem _ertResponseSystem = default!; // DS14
     private static readonly ProtoId<ErtTeamPrototype> ErtTeam = "Gamma";
     private static readonly ProtoId<CargoAccountPrototype> Account = "Security";
     private const int AdditionalSupport = 70000;
@@ -113,7 +113,7 @@ public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
         ref RoundEndTextAppendEvent args)
     {
         var winText = Loc.GetString($"nukeops-{component.WinType.ToString().ToLower()}");
-        args.AddLine(winText);
+        args.AddOutcome(winText); // DS14
 
         foreach (var cond in component.WinConditions)
         {
@@ -141,24 +141,6 @@ public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
             }
         });
     }
-
-    // DS14-start
-    protected override void AppendRoundEndDiscordText(EntityUid uid,
-        NukeopsRuleComponent component,
-        GameRuleComponent gameRule,
-        ref RoundEndDiscordTextAppendEvent args)
-    {
-        args.AddLine(Loc.GetString("nukeops-list-start"));
-
-        var antags = _antag.GetAntagIdentifiers(uid);
-        foreach (var (_, sessionData, name) in antags)
-        {
-            args.AddLine(Loc.GetString("nukeops-list-name-user", ("name", name), ("user", sessionData.UserName)));
-        }
-
-        args.AddLine("");
-    }
-    // DS14-end
 
     private void OnNukeExploded(NukeExplodedEvent ev)
     {

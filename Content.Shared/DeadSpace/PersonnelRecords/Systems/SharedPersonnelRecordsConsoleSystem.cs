@@ -15,11 +15,11 @@ namespace Content.Shared.DeadSpace.PersonnelRecords.Systems;
 /// Concrete BUI handling, permission checks and status-transition logic live in
 /// <c>Content.Server.DeadSpace.PersonnelRecords.Systems.PersonnelRecordsConsoleSystem</c>.
 /// </summary>
-public abstract class SharedPersonnelRecordsConsoleSystem : EntitySystem
+public abstract partial class SharedPersonnelRecordsConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPersonnelRecordsSystem _personnelRecords = default!;
-    [Dependency] private readonly SharedStationRecordsSystem _records = default!;
-    [Dependency] private readonly SharedStationSystem _station = default!;
+    [Dependency] private SharedPersonnelRecordsSystem _personnelRecords = default!;
+    [Dependency] private SharedStationRecordsSystem _records = default!;
+    [Dependency] private SharedStationSystem _station = default!;
 
     public override void Initialize()
     {

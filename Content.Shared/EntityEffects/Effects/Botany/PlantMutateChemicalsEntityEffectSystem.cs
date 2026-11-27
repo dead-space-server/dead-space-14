@@ -13,8 +13,8 @@ namespace Content.Shared.EntityEffects.Effects.Botany;
 public sealed partial class PlantMutateChemicalsEntityEffectSystem : EntityEffectSystem<PlantComponent, PlantMutateChemicals>
 {
     // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly PlantChemicalsSystem _plantChemicals = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private PlantChemicalsSystem _plantChemicals = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
     // DS14-end
 
     protected override void Effect(Entity<PlantComponent> entity, ref EntityEffectEvent<PlantMutateChemicals> args)

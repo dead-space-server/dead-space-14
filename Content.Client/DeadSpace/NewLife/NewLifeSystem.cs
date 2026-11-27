@@ -6,9 +6,9 @@ using Robust.Shared.Player;
 
 namespace Content.Client.DeadSpace.NewLife;
 
-public sealed class NewLifeSystem : EntitySystem
+public sealed partial class NewLifeSystem : EntitySystem
 {
-    [Dependency] private readonly IBaseClient _client = default!;
+    [Dependency] private IBaseClient _client = default!;
     public NewLifeState State { get; private set; }
     public event Action? StateChanged;
 

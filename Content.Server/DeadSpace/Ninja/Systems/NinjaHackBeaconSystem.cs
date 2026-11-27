@@ -21,19 +21,19 @@ using Content.Server.Pinpointer;
 
 namespace Content.Server.DeadSpace.Ninja.Systems;
 
-public sealed class NinjaHackBeaconSystem : EntitySystem
+public sealed partial class NinjaHackBeaconSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly StoreSystem _store = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly IPrototypeManager _protoMan = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly NinjaStealMoneyObjectiveSystem _ninjaStealMoneyObjective = default!;
-    [Dependency] private readonly NavMapSystem _navMap = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private AccessReaderSystem _accessReaderSystem = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private StoreSystem _store = default!;
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private NinjaStealMoneyObjectiveSystem _ninjaStealMoneyObjective = default!;
+    [Dependency] private NavMapSystem _navMap = default!;
 
     public override void Initialize()
     {
@@ -121,7 +121,7 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
                 continue;
             }
 
-            var withdrawn = AnnounceAndWithdraw(station.Value, comp.MineAtOnce);
+            var withdrawn = AnnounceAndWithdraw(uid, station.Value, comp.MineAtOnce);
             if (withdrawn <= 0)
                 continue;
 
@@ -180,6 +180,7 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
     }
 
     private int AnnounceAndWithdraw(
+    EntityUid uid,
     Entity<StationBankAccountComponent?> station,
     int amount,
     bool dirty = true)
@@ -227,7 +228,7 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
         if (total <= 0)
             return 0;
 
-        AnnounceTransfers(station, plan);
+        AnnounceTransfers(uid, station, plan);
 
         foreach (var (account, taken) in plan)
         {
@@ -244,6 +245,7 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
     }
 
     private void AnnounceTransfers(
+    EntityUid beacon,
     EntityUid station,
     Dictionary<ProtoId<CargoAccountPrototype>, int> plan)
     {
@@ -281,7 +283,7 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
                 ("amount", taken),
                 ("name", Loc.GetString(account.Name)),
                 ("code", Loc.GetString(account.Code)),
-                ("position", GenerateGarbage(_navMap.GetNearestBeaconString(console))));
+                ("position", GenerateGarbage(_navMap.GetNearestBeaconString(beacon))));
 
             _radio.SendRadioMessage(console, msg, account.RadioChannel, console, escapeMarkup: false);
         }

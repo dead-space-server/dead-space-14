@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 276.0.0
-  forkId: dsfobos
-  forkVersion: 6a2424e319302b8f938b113535bb97544740a0da
-  time: 09/22/2026 04:23:14
-  entityCount: 23772
+  engineVersion: 276.0.6
+  forkId: dspublicfobos
+  forkVersion: b756dec5fc67ab80ffd9cb4b41ff2e371e201e6d
+  time: 11/08/2026 07:36:22
+  entityCount: 23794
 maps:
 - 1
 grids:
@@ -10896,7 +10896,8 @@ entities:
           4,-5:
             1: 18210
           -4,5:
-            0: 45311
+            0: 37119
+            6: 8192
           -5,5:
             0: 57599
           -4,6:
@@ -12759,6 +12760,33 @@ entities:
     - type: Action
       originalIconColor: '#FFFFFFFF'
       container: 43
+  - uid: 23786
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 23775
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 23775
+  - uid: 23787
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 23776
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 23776
+  - uid: 23788
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 23777
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 23777
 - proto: ActionToggleJetpack
   entities:
   - uid: 34
@@ -15766,6 +15794,13 @@ entities:
     - type: Transform
       pos: -67.5,13.5
       parent: 2
+- proto: AirlockBlueShieldLocked
+  entities:
+  - uid: 328
+    components:
+    - type: Transform
+      pos: -28.5,68.5
+      parent: 2
 - proto: AirlockBrigGlassLocked
   entities:
   - uid: 313
@@ -15825,7 +15860,7 @@ entities:
       pos: 1.5,61.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -1282547.5
+      secondsUntilStateChange: -1284802.1
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -15854,7 +15889,7 @@ entities:
       pos: -27.5,77.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -241395.16
+      secondsUntilStateChange: -243649.8
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -15867,18 +15902,13 @@ entities:
       rot: 3.141592653589793 rad
       pos: -34.5,74.5
       parent: 2
-  - uid: 328
-    components:
-    - type: Transform
-      pos: -28.5,68.5
-      parent: 2
   - uid: 329
     components:
     - type: Transform
       pos: -29.5,75.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -241393
+      secondsUntilStateChange: -243647.64
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -15889,7 +15919,7 @@ entities:
       pos: -31.5,77.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -241392.53
+      secondsUntilStateChange: -243647.17
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -15955,7 +15985,7 @@ entities:
       pos: -31.5,30.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -750710.5
+      secondsUntilStateChange: -752965.2
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16164,7 +16194,7 @@ entities:
       pos: -55.5,23.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -733268.1
+      secondsUntilStateChange: -735522.8
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16255,7 +16285,7 @@ entities:
       pos: 16.5,-3.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -886308.06
+      secondsUntilStateChange: -888562.75
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16566,7 +16596,7 @@ entities:
       pos: -46.5,52.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -47708.254
+      secondsUntilStateChange: -49962.902
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16960,7 +16990,7 @@ entities:
       pos: -19.5,31.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -1526976.1
+      secondsUntilStateChange: -1529230.8
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -17034,7 +17064,7 @@ entities:
       pos: 9.5,68.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -1311801.5
+      secondsUntilStateChange: -1314056.1
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -17363,7 +17393,7 @@ entities:
       pos: -76.5,51.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -957524.56
+      secondsUntilStateChange: -959779.25
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -24997,6 +25027,22 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
+  - uid: 23200
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+  - uid: 23774
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
 - proto: BoxSurvivalEngineering
   entities:
   - uid: 1764
@@ -34978,12 +35024,6 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
-  - uid: 3680
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -18.324692,23.15818
-      parent: 2
   - uid: 3681
     components:
     - type: Transform
@@ -57265,6 +57305,36 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
+- proto: ClothingBackpackDuffelSurgeryFilled
+  entities:
+  - uid: 20580
+    components:
+    - type: Transform
+      pos: -15.499198,25.534342
+      parent: 2
+    - type: Physics
+      canCollide: False
+    - type: GroupExamine
+      group:
+      - hoverMessage: ""
+        contextText: verb-examine-group-other
+        icon: /Textures/Interface/examine-star.png
+        components:
+        - Armor
+        - ClothingSpeedModifier
+        entries:
+        - message: >-
+            Обеспечивает следующую защиту:
+
+            Обеспечивает следующий уровень защиты:
+
+            - [color=orange]Взрывной[/color] урон [color=white]к содержимому[/color] снижается на [color=lightblue]10%[/color].
+          priority: 0
+          component: Armor
+        - message: Понижает вашу скорость бега на [color=yellow]10%[/color].
+          priority: 0
+          component: ClothingSpeedModifier
+        title: null
 - proto: ClothingBackpackSatchel
   entities:
   - uid: 7815
@@ -58111,6 +58181,60 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
+- proto: ClothingHeadHatSurgcapBlue
+  entities:
+  - uid: 23783
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+  - uid: 23784
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+- proto: ClothingHeadHatSurgcapGreen
+  entities:
+  - uid: 19560
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+  - uid: 20620
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+- proto: ClothingHeadHatSurgcapPurple
+  entities:
+  - uid: 23781
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+  - uid: 23782
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
 - proto: ClothingHeadHatSyndie
   entities:
   - uid: 7912
@@ -58425,6 +58549,27 @@ entities:
       rot: 3.141592653589793 rad
       pos: 17.828806,26.244116
       parent: 2
+  - uid: 23778
+    components:
+    - type: Transform
+      pos: -14.634614,25.555176
+      parent: 2
+    - type: Physics
+      canCollide: False
+  - uid: 23779
+    components:
+    - type: Transform
+      pos: -14.613781,25.680176
+      parent: 2
+    - type: Physics
+      canCollide: False
+  - uid: 23780
+    components:
+    - type: Transform
+      pos: -14.572114,25.586426
+      parent: 2
+    - type: Physics
+      canCollide: False
 - proto: ClothingMaskBreathMedicalSecurity
   entities:
   - uid: 7947
@@ -59136,12 +59281,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -33.5,23.5
       parent: 2
-  - uid: 8026
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -18.5,23.5
-      parent: 2
   - uid: 8027
     components:
     - type: Transform
@@ -59496,12 +59635,6 @@ entities:
       parent: 2
 - proto: ComputerBroken
   entities:
-  - uid: 8085
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -18.5,24.5
-      parent: 2
   - uid: 8086
     components:
     - type: Transform
@@ -62520,6 +62653,14 @@ entities:
       parent: 2
 - proto: DefibrillatorCabinetFilled
   entities:
+  - uid: 3680
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -16.5,22.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
   - uid: 8463
     components:
     - type: Transform
@@ -62546,14 +62687,6 @@ entities:
     components:
     - type: Transform
       pos: -28.5,35.5
-      parent: 2
-    - type: Fixtures
-      fixtures: {}
-  - uid: 8467
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -13.5,23.5
       parent: 2
     - type: Fixtures
       fixtures: {}
@@ -74347,8 +74480,10 @@ entities:
   - uid: 10398
     components:
     - type: Transform
-      pos: -34.861595,77.669495
+      pos: -34.664886,77.72741
       parent: 2
+    - type: Physics
+      canCollide: False
   - uid: 10399
     components:
     - type: Transform
@@ -78191,7 +78326,7 @@ entities:
       - 248
       - 218
     - type: Door
-      secondsUntilStateChange: -1084295.5
+      secondsUntilStateChange: -1086550.1
       state: Closing
   - uid: 10885
     components:
@@ -78849,6 +78984,13 @@ entities:
     components:
     - type: Transform
       pos: -49.5,83.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 23773
+    components:
+    - type: Transform
+      pos: -15.5,24.5
       parent: 2
     - type: Fixtures
       fixtures: {}
@@ -116556,7 +116698,7 @@ entities:
       pos: -66.5,14.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -284423.06
+      secondsUntilStateChange: -286677.7
       state: Opening
 - proto: InflatableDoorStack1
   entities:
@@ -116688,6 +116830,22 @@ entities:
       parent: 2
     - type: Fixtures
       fixtures: {}
+- proto: IvDrip
+  entities:
+  - uid: 23792
+    components:
+    - type: Transform
+      pos: -14.707531,24.567791
+      parent: 2
+    - type: Physics
+      canCollide: False
+- proto: IvDripFolded
+  entities:
+  - uid: 23789
+    components:
+    - type: Transform
+      pos: -14.332531,24.453207
+      parent: 2
 - proto: JanitorialTrolley
   entities:
   - uid: 15950
@@ -119158,6 +119316,44 @@ entities:
     - type: Transform
       pos: 4.5,54.5
       parent: 2
+- proto: LockerWallMedical
+  entities:
+  - uid: 8467
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -13.5,23.5
+      parent: 2
+    - type: EntityStorage
+      air:
+        volume: 200
+        immutable: False
+        temperature: 293.14673
+        moles:
+          Oxygen: 1.7459903
+          Nitrogen: 6.568249
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents:
+          - 20620
+          - 19560
+          - 19335
+          - 16488
+          - 16371
+          - 16369
+          - 16209
+          - 16367
+          - 23200
+          - 23774
+          - 23781
+          - 23782
+          - 23783
+          - 23784
+    - type: Fixtures
+      fixtures: {}
 - proto: LockerWallMedicalDoctorFilled
   entities:
   - uid: 16182
@@ -119354,12 +119550,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 23.5,58.5
-      parent: 2
-  - uid: 16209
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -18.5,23.5
       parent: 2
   - uid: 16210
     components:
@@ -120609,12 +120799,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -42.25699,6.302273
       parent: 2
-  - uid: 16367
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -18.770004,24.048805
-      parent: 2
   - uid: 16368
     components:
     - type: Transform
@@ -120623,11 +120807,6 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
-  - uid: 16369
-    components:
-    - type: Transform
-      pos: -17.563107,23.225744
-      parent: 2
   - uid: 16370
     components:
     - type: Transform
@@ -120636,12 +120815,6 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
-  - uid: 16371
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -18.80043,23.233183
-      parent: 2
   - uid: 16372
     components:
     - type: Transform
@@ -121359,6 +121532,51 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
+  - uid: 23775
+    components:
+    - type: Transform
+      pos: -14.436697,25.409342
+      parent: 2
+    - type: GasTank
+      toggleActionEntity: 23786
+    - type: Physics
+      canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 23786
+  - uid: 23776
+    components:
+    - type: Transform
+      pos: -14.478364,25.51351
+      parent: 2
+    - type: GasTank
+      toggleActionEntity: 23787
+    - type: Physics
+      canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 23787
+  - uid: 23777
+    components:
+    - type: Transform
+      pos: -14.363781,25.409342
+      parent: 2
+    - type: GasTank
+      toggleActionEntity: 23788
+    - type: Physics
+      canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 23788
 - proto: NodeScanner
   entities:
   - uid: 16471
@@ -121493,11 +121711,6 @@ entities:
       canCollide: False
 - proto: OperatingTable
   entities:
-  - uid: 16488
-    components:
-    - type: Transform
-      pos: -14.5,24.5
-      parent: 2
   - uid: 16489
     components:
     - type: Transform
@@ -121507,6 +121720,11 @@ entities:
     components:
     - type: Transform
       pos: 26.5,16.5
+      parent: 2
+  - uid: 23793
+    components:
+    - type: Transform
+      pos: -15.5,24.5
       parent: 2
 - proto: OreBag
   entities:
@@ -121618,6 +121836,13 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
+- proto: OrganPrinter
+  entities:
+  - uid: 23785
+    components:
+    - type: Transform
+      pos: -18.5,24.5
+      parent: 2
 - proto: OxygenCanister
   entities:
   - uid: 16505
@@ -125616,7 +125841,7 @@ entities:
   - uid: 16987
     components:
     - type: Transform
-      pos: -15.925887,23.198643
+      pos: -17.554962,25.559612
       parent: 2
   - uid: 16988
     components:
@@ -140313,41 +140538,6 @@ entities:
       parent: 2
 - proto: SmartFridge
   entities:
-  - uid: 19335
-    components:
-    - type: Transform
-      pos: -14.5,25.5
-      parent: 2
-    - type: Construction
-      containers:
-      - machine_parts
-      - machine_board
-      - smart_fridge_inventory
-      - entity_storage
-    - type: ContainerContainer
-      containers:
-        smart_fridge_inventory: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        entity_storage: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        machine_board: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        machine_parts: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-    - type: EntityStorage
-      open: True
-      closeSound: !type:SoundPathSpecifier
-        path: /Audio/Effects/closetclose.ogg
-      openSound: !type:SoundPathSpecifier
-        path: /Audio/Effects/closetopen.ogg
   - uid: 19336
     components:
     - type: Transform
@@ -140363,6 +140553,13 @@ entities:
     - type: Transform
       pos: 27.5,16.5
       parent: 2
+  - uid: 23794
+    components:
+    - type: Transform
+      pos: -18.5,23.5
+      parent: 2
+    - type: AccessReader
+      accessListsOriginal: []
 - proto: SmartFridgeMedical
   entities:
   - uid: 19339
@@ -141801,10 +141998,16 @@ entities:
       parent: 2
 - proto: SpawnPointMedicalSurgeon
   entities:
-  - uid: 19560
+  - uid: 8085
     components:
     - type: Transform
-      pos: -16.5,24.5
+      pos: -13.5,32.5
+      parent: 2
+  - uid: 23791
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -15.5,24.5
       parent: 2
 - proto: SpawnPointMime
   entities:
@@ -142290,6 +142493,13 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
+- proto: SprayBottleSpaceCleaner
+  entities:
+  - uid: 8026
+    components:
+    - type: Transform
+      pos: -14.937886,23.23934
+      parent: 2
 - proto: SprayBottleWater
   entities:
   - uid: 19636
@@ -144780,6 +144990,13 @@ entities:
     components:
     - type: Transform
       pos: 16.5,19.5
+      parent: 2
+- proto: TableCounterMetal
+  entities:
+  - uid: 23790
+    components:
+    - type: Transform
+      pos: -14.5,25.5
       parent: 2
 - proto: TableCounterWood
   entities:
@@ -148165,14 +148382,6 @@ entities:
       canCollide: False
 - proto: ToyRubberDuck
   entities:
-  - uid: 20580
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -14.549852,24.45812
-      parent: 2
-    - type: Physics
-      canCollide: False
   - uid: 20581
     components:
     - type: Transform
@@ -148577,14 +148786,6 @@ entities:
         8171:
         - - Left
           - Forward
-- proto: UnfinishedMachineFrame
-  entities:
-  - uid: 20620
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -17.5,23.5
-      parent: 2
 - proto: UniformPrinter
   entities:
   - uid: 20621
@@ -148598,6 +148799,60 @@ entities:
       - Arsenal
       - Experimental
       - CivilianServices
+- proto: UniformScrubsColorBlue
+  entities:
+  - uid: 16209
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+  - uid: 16367
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+- proto: UniformScrubsColorGreen
+  entities:
+  - uid: 16488
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+  - uid: 19335
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+- proto: UniformScrubsColorPurple
+  entities:
+  - uid: 16369
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
+  - uid: 16371
+    components:
+    - type: Transform
+      parent: 8467
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8467
 - proto: UprightPianoInstrument
   entities:
   - uid: 20622
@@ -162813,11 +163068,6 @@ entities:
     - type: Transform
       pos: -1.5,5.5
       parent: 2
-  - uid: 23200
-    components:
-    - type: Transform
-      pos: -16.5,23.5
-      parent: 2
   - uid: 23201
     components:
     - type: Transform
@@ -163553,7 +163803,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -1453252.6
+      secondsUntilStateChange: -1455507.2
       state: Opening
     - type: Airlock
       autoClose: False

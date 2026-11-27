@@ -14,14 +14,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
-public sealed class UnitologyEnslavedSystem : EntitySystem
+public sealed partial class UnitologyEnslavedSystem : EntitySystem
 {
     private static readonly ProtoId<RadioChannelPrototype> UnitologyChannel = "Unitolog";
 
-    [Dependency] private readonly UnitologyRuleSystem _unitologyRule = default!;
-    [Dependency] private readonly SharedSubdermalImplantSystem _implant = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
+    [Dependency] private UnitologyRuleSystem _unitologyRule = default!;
+    [Dependency] private SharedSubdermalImplantSystem _implant = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private RoleSystem _role = default!;
 
     public override void Initialize()
     {

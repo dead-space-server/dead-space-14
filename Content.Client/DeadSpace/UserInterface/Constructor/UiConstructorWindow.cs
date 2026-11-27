@@ -26,19 +26,19 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Content.Client.DeadSpace.UserInterface.Constructor;
 
-public sealed class UiConstructorWindow : DefaultWindow
+public sealed partial class UiConstructorWindow : DefaultWindow
 {
     private static readonly ResPath SaveDirectory = new("/UiConstructor");
 
-    [Dependency] private readonly IClipboardManager _clipboard = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IDynamicTypeFactory _types = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
-    [Dependency] private readonly ITaskManager _tasks = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IClipboardManager _clipboard = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IDynamicTypeFactory _types = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IResourceManager _resources = default!;
+    [Dependency] private ITaskManager _tasks = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private readonly UiLayoutFactory _factory;
     private readonly UiConstructorSurface _surface;
@@ -1390,7 +1390,7 @@ public sealed class UiConstructorWindow : DefaultWindow
         return result.Length == 0 ? "Окно" : result;
     }
 
-    private sealed class PaletteButton : Button
+    private sealed partial class PaletteButton : Button
     {
         public UiElementKind Kind;
         public Func<Vector2>? MouseUi;
@@ -1424,7 +1424,7 @@ public sealed class UiConstructorWindow : DefaultWindow
         }
     }
 
-    private sealed class EyedropperCatcher : Control
+    private sealed partial class EyedropperCatcher : Control
     {
         public event Action<Vector2>? OnPick;
         public event Action? OnCancel;
