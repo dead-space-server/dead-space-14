@@ -1,3 +1,4 @@
+using Content.Server.Ensnaring; // DS14-downed-bola
 using Content.Server.Stunnable.Components;
 using Content.Shared.Damage;
 using Content.Shared.Ensnaring.Components; // DS14-downed-bola
@@ -24,7 +25,9 @@ internal sealed partial class StunOnCollideSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<StunOnCollideComponent, StartCollideEvent>(HandleCollide);
-        SubscribeLocalEvent<StunOnCollideComponent, ThrowDoHitEvent>(HandleThrow);
+        // DS14-downed-bola-start
+        SubscribeLocalEvent<StunOnCollideComponent, ThrowDoHitEvent>(HandleThrow, after: new[] { typeof(EnsnareableSystem) });
+        // DS14-downed-bola-end
         SubscribeLocalEvent<StunOnCollideComponent, HitscanRaycastFiredEvent>(HandleHitscan); // DS14
     }
 
