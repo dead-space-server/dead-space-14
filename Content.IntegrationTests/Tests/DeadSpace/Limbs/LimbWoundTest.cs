@@ -7,6 +7,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
+using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Systems;
@@ -98,6 +99,83 @@ public sealed class LimbWoundTest
             damage.ChangeDamage(human, dose);
 
             Assert.That(limbs.Zones[(int) LimbZone.LegLeft].Health, Is.EqualTo(pool));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SevereAmbientHeatLeavesAGraftableBurn()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var damage = server.EntMan.System<DamageableSystem>();
+            var burn = new DamageSpecifier();
+            burn.DamageDict["Heat"] = FixedPoint2.New(120);
+            damage.ChangeDamage(human, burn);
+
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            var torso = limbs.Zones[(int) LimbZone.Torso];
+            Assert.Multiple(() =>
+            {
+                Assert.That(torso.Skin, Is.GreaterThanOrEqualTo(LimbWoundRules.BurnSecond));
+                Assert.That(LimbWoundRules.BurnDegree(torso.Skin), Is.InRange(1, 3));
+                Assert.That(SurgeryConditions.Has("Skin", torso, true, false), Is.True);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SevereColdLeavesAGraftableBurn()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var damage = server.EntMan.System<DamageableSystem>();
+            var frostbite = new DamageSpecifier();
+            frostbite.DamageDict["Cold"] = FixedPoint2.New(120);
+            damage.ChangeDamage(human, frostbite);
+
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            var torso = limbs.Zones[(int) LimbZone.Torso];
+            Assert.That(SurgeryConditions.Has("Skin", torso, true, false), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task MinorHeatDoesNotForceABurnGraft()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var damage = server.EntMan.System<DamageableSystem>();
+            var burn = new DamageSpecifier();
+            burn.DamageDict["Heat"] = FixedPoint2.New(50);
+            damage.ChangeDamage(human, burn);
+
+            var torso = server.EntMan.GetComponent<LimbBodyComponent>(human).Zones[(int) LimbZone.Torso];
+            Assert.Multiple(() =>
+            {
+                Assert.That(torso.Skin, Is.EqualTo(0f));
+                Assert.That(SurgeryConditions.Has("Skin", torso, true, false), Is.False);
+            });
         });
 
         await pair.CleanReturnAsync();

@@ -35,6 +35,10 @@ public static class LimbWoundRules
     public const float BurnSecond = 40f;
     public const float BurnFourth = 100f;
 
+    public static float ThermalBurnThreshold => LimbTuning.BurnFourth;
+
+    public static float MaxThermalSkin => LimbTuning.BurnFourth - 0.01f;
+
     public const float HandFootSever = 40f;
     public const float LimbSever = 80f;
     public const float HeadSever = 200f;
@@ -200,6 +204,11 @@ public static class LimbWoundRules
             zone = Extremity(zoneRoll);
 
         return IsBody(zone) && CanSever(zone);
+    }
+
+    public static float GraftableSkin(float thermalDamage)
+    {
+        return MathF.Min(MathF.Max(0f, thermalDamage), MaxThermalSkin);
     }
 
     public static int BurnDegree(float skin)
