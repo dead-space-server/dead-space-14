@@ -17,7 +17,10 @@ using static Robust.Client.UserInterface.Controls.BaseButton;
 namespace Content.Client.UserInterface.Systems.EscapeMenu;
 
 [UsedImplicitly]
-public sealed partial class EscapeUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
+public sealed partial class EscapeUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>,
+    // DS14-start
+    IOnStateEntered<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>, IOnStateExited<Content.Client.DeadSpace.Mapping.DeadSpaceMappingState>
+    // DS14-end
 {
     [Dependency] private IClientConsoleHost _console = default!;
     [Dependency] private IUriOpener _uri = default!;
@@ -60,6 +63,12 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
     private void DeactivateButton() => EscapeButton!.SetClickPressed(false);
 
     public void OnStateEntered(GameplayState state)
+    {
+        OpenEscapeWindow();
+    }
+
+    // DS14-start
+    private void OpenEscapeWindow()
     {
         DebugTools.Assert(_escapeWindow == null);
 
@@ -140,8 +149,27 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
                 InputCmdHandler.FromDelegate(_ => ToggleWindow()))
             .Register<EscapeUIController>();
     }
+    // DS14-end
+
+    // DS14-start
+    public void OnStateEntered(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
+    {
+        OpenEscapeWindow();
+    }
+
+    public void OnStateExited(Content.Client.DeadSpace.Mapping.DeadSpaceMappingState state)
+    {
+        TeardownEscapeWindow();
+    }
+    // DS14-end
 
     public void OnStateExited(GameplayState state)
+    {
+        TeardownEscapeWindow();
+    }
+
+    // DS14-start
+    private void TeardownEscapeWindow()
     {
         _cfg.UnsubValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged);
 
@@ -153,6 +181,7 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
 
         CommandBinds.Unregister<EscapeUIController>();
     }
+    // DS14-end
 
     private void OnSeeOwnNotesChanged(bool seeOwnNotes)
     {
