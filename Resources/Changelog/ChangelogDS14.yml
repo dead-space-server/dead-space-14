@@ -10872,3 +10872,10 @@ Entries:
   - type: Fix
     message: Игра не вылетает при прицельной стрельбе и при осмотре предмета, который
       пропал из вида. 🤖 Generated with [Claude Code](https://claude.com/claude-code)
+- id: 1051
+  author: IvanKuvalda
+  time: '2026-11-28T11:52:03.099724+00:00'
+  pr: 2874
+  changes:
+  - type: Add
+    message: боевые ножи теперь могут вскрывать люд
