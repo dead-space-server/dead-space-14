@@ -12,7 +12,7 @@ public sealed partial class CelestialOrbComponent : Component
 {
     /// <summary>Радиус шара, метры.</summary>
     [DataField]
-    public float Radius = 0.45f;
+    public float Radius = 1.3f;
 
     /// <summary>Максимальное время жизни, сек.</summary>
     [DataField]
@@ -36,7 +36,7 @@ public sealed partial class CelestialOrbComponent : Component
 
     /// <summary>Урон при касании: долетев до игрока, шар взрывается на нём.</summary>
     [DataField]
-    public float ContactDamage = 25f;
+    public float ContactDamage = 50f;
 
     /// <summary>Радиус взрыва при касании, метры.</summary>
     [DataField]
@@ -68,11 +68,30 @@ public sealed partial class CelestialOrbComponent : Component
 
     /// <summary>Скорость поворота шара, рад/сек - чем меньше, тем неповоротливее и тем проще уйти.</summary>
     [DataField]
-    public float TurnRate = 1.4f;
+    public float TurnRate = 0.9f;
 
     /// <summary>Текущее направление полёта шара.</summary>
     [ViewVariables]
     public Vector2 VelocityDir;
+
+    /// <summary>Интервал телепорта-рывка, сек.</summary>
+    [DataField]
+    public float TeleportInterval = 0.6f;
+
+    /// <summary>Дальность телепорта-рывка, метры.</summary>
+    [DataField]
+    public float TeleportDist = 3.5f;
+
+    /// <summary>Боковой разброс рывка, метры: создаёт рваный глитч-полёт.</summary>
+    [DataField]
+    public float TeleportJitter = 0f;
+
+    /// <summary>Сколько глитч-рывков осталось: когда дойдёт до 0 — шар рвётся.</summary>
+    [ViewVariables]
+    public int JumpsLeft = 16;
+
+    [ViewVariables]
+    public float TeleportAccumulator;
 
     [ViewVariables]
     public float Elapsed;

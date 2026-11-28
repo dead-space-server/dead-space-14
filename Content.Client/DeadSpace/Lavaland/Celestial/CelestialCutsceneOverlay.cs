@@ -35,6 +35,23 @@ public sealed class CelestialCutsceneOverlay : Overlay
     private const float FadeInTime = 1f;
     private const float FadeOutTime = 1.3f;
 
+    private sealed class AmbientSphere
+    {
+        public Vector2 Offset;
+        public float Age;
+        public float Lifetime;
+        public float PeakTime;
+        public float MaxRadius;
+    }
+
+    private readonly List<AmbientSphere> _ambientSpheres = new();
+    private float _sphereSpawnTimer;
+    private readonly Random _rand = new();
+
+    private const float SphereSpawnMin = 0.04f;
+    private const float SphereSpawnMax = 0.11f;
+    private const int MaxAmbientSpheres = 220;
+
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 
     public CelestialCutsceneOverlay(IResourceCache resourceCache)
@@ -49,6 +66,8 @@ public sealed class CelestialCutsceneOverlay : Overlay
         _fadeAlpha = 0f; // плавное проявление
         _stage = 0;
         _elapsed = 0f;
+        _ambientSpheres.Clear();
+        _sphereSpawnTimer = 0.2f;
     }
 
     public void BeginFadeOut()
@@ -69,6 +88,24 @@ public sealed class CelestialCutsceneOverlay : Overlay
 
         _elapsed += frameTime;
 
+        if (!_fadingOut)
+        {
+            _sphereSpawnTimer -= frameTime;
+            if (_sphereSpawnTimer <= 0f)
+            {
+                _sphereSpawnTimer = SphereSpawnMin + (float) _rand.NextDouble() * (SphereSpawnMax - SphereSpawnMin);
+                SpawnAmbientSphere();
+            }
+        }
+
+        for (var i = _ambientSpheres.Count - 1; i >= 0; i--)
+        {
+            var s = _ambientSpheres[i];
+            s.Age += frameTime;
+            if (s.Age >= s.Lifetime)
+                _ambientSpheres.RemoveAt(i);
+        }
+
         if (_fadingOut)
         {
             _fadeAlpha -= frameTime / FadeOutTime;
@@ -76,12 +113,35 @@ public sealed class CelestialCutsceneOverlay : Overlay
             {
                 _fadeAlpha = 0f;
                 _active = false;
+                _ambientSpheres.Clear();
             }
         }
         else
         {
             _fadeAlpha = MathF.Min(1f, _fadeAlpha + frameTime / FadeInTime);
         }
+    }
+
+    private void SpawnAmbientSphere()
+    {
+        var angle = (float) _rand.NextDouble() * MathF.Tau;
+        var dist = 0.15f + (float) _rand.NextDouble() * 0.45f;
+        var offset = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * dist;
+
+        var peakTime = 0.12f + (float) _rand.NextDouble() * 0.13f;
+        var shrinkTime = 1.1f + (float) _rand.NextDouble() * 1.2f;
+
+        _ambientSpheres.Add(new AmbientSphere
+        {
+            Offset = offset,
+            Age = 0f,
+            PeakTime = peakTime,
+            Lifetime = peakTime + shrinkTime,
+            MaxRadius = 30f + (float) _rand.NextDouble() * 80f,
+        });
+
+        if (_ambientSpheres.Count > MaxAmbientSpheres)
+            _ambientSpheres.RemoveAt(0);
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -100,9 +160,39 @@ public sealed class CelestialCutsceneOverlay : Overlay
             new UIBox2(bounds.Left, bounds.Top, bounds.Left + bounds.Width, bounds.Top + bounds.Height),
             new Color(0f, 0f, 0f, 0.93f * fade));
 
-        // большая чёрная сфера с тонкой розовой обводкой: дышит и деформируется
         var center = new Vector2(bounds.Left + bounds.Width / 2f, bounds.Top + bounds.Height / 2f - 40f);
-        var baseR = MathF.Min(bounds.Width, bounds.Height) * 0.42f;
+        var minDim = MathF.Min(bounds.Width, bounds.Height);
+
+        foreach (var s in _ambientSpheres)
+        {
+            float radius;
+            float alpha;
+            if (s.Age < s.PeakTime)
+            {
+                var p = s.Age / s.PeakTime;
+                var ease = 1f - (1f - p) * (1f - p);
+                radius = s.MaxRadius * ease;
+                alpha = p;
+            }
+            else
+            {
+                var p = Math.Clamp((s.Age - s.PeakTime) / (s.Lifetime - s.PeakTime), 0f, 1f);
+                var ease = 1f - (1f - p) * (1f - p);
+                radius = s.MaxRadius * (1f - ease);
+                alpha = 1f - p * p;
+            }
+
+            if (radius < 1f)
+                continue;
+
+            var pos = center + s.Offset * minDim;
+            var a = alpha * fade;
+            handle.DrawCircle(pos, radius, Pink.WithAlpha(0.85f * a));
+            handle.DrawCircle(pos, radius - 1.5f, new Color(0f, 0f, 0f, 0.95f * a));
+        }
+
+        // большая чёрная сфера с тонкой розовой обводкой: дышит и деформируется
+        var baseR = minDim * 0.42f;
 
         // дыхание: медленный пульс радиуса
         var breathe = 1f + 0.05f * MathF.Sin(_elapsed * 1.6f);

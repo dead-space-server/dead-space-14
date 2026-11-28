@@ -1,0 +1,725 @@
+diff --git a/Content.Client/DeadSpace/Lavaland/Celestial/CelestialCutsceneOverlay.cs b/Content.Client/DeadSpace/Lavaland/Celestial/CelestialCutsceneOverlay.cs
+index e1817149761..df0a94eb552 100644
+--- a/Content.Client/DeadSpace/Lavaland/Celestial/CelestialCutsceneOverlay.cs
++++ b/Content.Client/DeadSpace/Lavaland/Celestial/CelestialCutsceneOverlay.cs
+@@ -32,22 +32,25 @@ public sealed class CelestialCutsceneOverlay : Overlay
+     private int _stage;
+     private float _elapsed;
+ 
+-    // цикличные чёрные сферы с розовой обводкой, всплывающие у Селестиала
+-    private sealed class IntroOrb
++    private const float FadeInTime = 1f;
++    private const float FadeOutTime = 1.3f;
++
++    private sealed class AmbientSphere
+     {
+         public Vector2 Offset;
+-        public float Born;
+-        public float Life;
+-        public float Radius;
+-        public float Phase;
++        public float Age;
++        public float Lifetime;
++        public float PeakTime;
++        public float MaxRadius;
+     }
+ 
+-    private readonly List<IntroOrb> _orbs = new();
+-    private float _orbWaveTimer;
+-    private readonly Random _orbRand = new();
++    private readonly List<AmbientSphere> _ambientSpheres = new();
++    private float _sphereSpawnTimer;
++    private readonly Random _rand = new();
+ 
+-    private const float FadeInTime = 1f;
+-    private const float FadeOutTime = 1.3f;
++    private const float SphereSpawnMin = 0.04f;
++    private const float SphereSpawnMax = 0.11f;
++    private const int MaxAmbientSpheres = 220;
+ 
+     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
+ 
+@@ -63,6 +66,8 @@ public void Show()
+         _fadeAlpha = 0f; // плавное проявление
+         _stage = 0;
+         _elapsed = 0f;
++        _ambientSpheres.Clear();
++        _sphereSpawnTimer = 0.2f;
+     }
+ 
+     public void BeginFadeOut()
+@@ -83,27 +88,24 @@ public void FrameUpdate(float frameTime)
+ 
+         _elapsed += frameTime;
+ 
+-        // волны сфер: старая гаснет - появляется новая
+-        _orbs.RemoveAll(o => _elapsed - o.Born > o.Life);
+-        _orbWaveTimer -= frameTime;
+-        if (_orbWaveTimer <= 0f)
++        if (!_fadingOut)
+         {
+-            _orbWaveTimer = 2.6f;
+-            for (var i = 0; i < 6; i++)
++            _sphereSpawnTimer -= frameTime;
++            if (_sphereSpawnTimer <= 0f)
+             {
+-                var ang = (float)(_orbRand.NextDouble() * Math.PI * 2);
+-                var dist = 180f + (float)_orbRand.NextDouble() * 240f;
+-                _orbs.Add(new IntroOrb
+-                {
+-                    Offset = new Vector2((float)Math.Cos(ang) * dist, (float)Math.Sin(ang) * dist * 0.8f),
+-                    Born = _elapsed + (float)_orbRand.NextDouble() * 0.6f,
+-                    Life = 2f + (float)_orbRand.NextDouble() * 2f,
+-                    Radius = 45f + (float)_orbRand.NextDouble() * 75f,
+-                    Phase = (float)_orbRand.NextDouble() * 10f,
+-                });
++                _sphereSpawnTimer = SphereSpawnMin + (float) _rand.NextDouble() * (SphereSpawnMax - SphereSpawnMin);
++                SpawnAmbientSphere();
+             }
+         }
+ 
++        for (var i = _ambientSpheres.Count - 1; i >= 0; i--)
++        {
++            var s = _ambientSpheres[i];
++            s.Age += frameTime;
++            if (s.Age >= s.Lifetime)
++                _ambientSpheres.RemoveAt(i);
++        }
++
+         if (_fadingOut)
+         {
+             _fadeAlpha -= frameTime / FadeOutTime;
+@@ -111,6 +113,7 @@ public void FrameUpdate(float frameTime)
+             {
+                 _fadeAlpha = 0f;
+                 _active = false;
++                _ambientSpheres.Clear();
+             }
+         }
+         else
+@@ -119,6 +122,28 @@ public void FrameUpdate(float frameTime)
+         }
+     }
+ 
++    private void SpawnAmbientSphere()
++    {
++        var angle = (float) _rand.NextDouble() * MathF.Tau;
++        var dist = 0.15f + (float) _rand.NextDouble() * 0.45f;
++        var offset = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * dist;
++
++        var peakTime = 0.12f + (float) _rand.NextDouble() * 0.13f;
++        var shrinkTime = 1.1f + (float) _rand.NextDouble() * 1.2f;
++
++        _ambientSpheres.Add(new AmbientSphere
++        {
++            Offset = offset,
++            Age = 0f,
++            PeakTime = peakTime,
++            Lifetime = peakTime + shrinkTime,
++            MaxRadius = 30f + (float) _rand.NextDouble() * 80f,
++        });
++
++        if (_ambientSpheres.Count > MaxAmbientSpheres)
++            _ambientSpheres.RemoveAt(0);
++    }
++
+     protected override void Draw(in OverlayDrawArgs args)
+     {
+         if (!_active)
+@@ -135,9 +160,39 @@ protected override void Draw(in OverlayDrawArgs args)
+             new UIBox2(bounds.Left, bounds.Top, bounds.Left + bounds.Width, bounds.Top + bounds.Height),
+             new Color(0f, 0f, 0f, 0.93f * fade));
+ 
+-        // большая чёрная сфера с тонкой розовой обводкой: дышит и деформируется
+         var center = new Vector2(bounds.Left + bounds.Width / 2f, bounds.Top + bounds.Height / 2f - 40f);
+-        var baseR = MathF.Min(bounds.Width, bounds.Height) * 0.42f;
++        var minDim = MathF.Min(bounds.Width, bounds.Height);
++
++        foreach (var s in _ambientSpheres)
++        {
++            float radius;
++            float alpha;
++            if (s.Age < s.PeakTime)
++            {
++                var p = s.Age / s.PeakTime;
++                var ease = 1f - (1f - p) * (1f - p);
++                radius = s.MaxRadius * ease;
++                alpha = p;
++            }
++            else
++            {
++                var p = Math.Clamp((s.Age - s.PeakTime) / (s.Lifetime - s.PeakTime), 0f, 1f);
++                var ease = 1f - (1f - p) * (1f - p);
++                radius = s.MaxRadius * (1f - ease);
++                alpha = 1f - p * p;
++            }
++
++            if (radius < 1f)
++                continue;
++
++            var pos = center + s.Offset * minDim;
++            var a = alpha * fade;
++            handle.DrawCircle(pos, radius, Pink.WithAlpha(0.85f * a));
++            handle.DrawCircle(pos, radius - 1.5f, new Color(0f, 0f, 0f, 0.95f * a));
++        }
++
++        // большая чёрная сфера с тонкой розовой обводкой: дышит и деформируется
++        var baseR = minDim * 0.42f;
+ 
+         // дыхание: медленный пульс радиуса
+         var breathe = 1f + 0.05f * MathF.Sin(_elapsed * 1.6f);
+@@ -151,29 +206,6 @@ protected override void Draw(in OverlayDrawArgs args)
+         handle.DrawCircle(Vector2.Zero, baseR - 3f, new Color(0f, 0f, 0f, 1f * fade));
+         handle.SetTransform(Vector2.Zero, Angle.Zero, Vector2.One);
+ 
+-        // цикличные сферы вокруг Селестиала: всплывают, дрожат, исчезают
+-        foreach (var orb in _orbs)
+-        {
+-            var t = (_elapsed - orb.Born) / orb.Life;
+-            if (t < 0f || t >= 1f)
+-                continue;
+-
+-            var fadeIn = Math.Clamp(t / 0.15f, 0f, 1f);
+-            var fadeOut = Math.Clamp((1f - t) / 0.25f, 0f, 1f);
+-            var alpha = MathF.Min(fadeIn, fadeOut) * 0.9f;
+-
+-            // дрожание
+-            var jx = (float)(_orbRand.NextDouble() * 2 - 1) * 2f;
+-            var jy = (float)(_orbRand.NextDouble() * 2 - 1) * 2f;
+-            // лёгкое всплытие вверх за время жизни
+-            var rise = -40f * t;
+-            var orbPos = center + orb.Offset + new Vector2(jx, jy + rise);
+-
+-            // основная часть - ЧЁРНАЯ, обводка тонкая розовая
+-            handle.DrawCircle(orbPos, orb.Radius, new Color(0f, 0f, 0f, alpha));
+-            handle.DrawCircle(orbPos, orb.Radius, Pink.WithAlpha(0.8f * alpha), filled: false);
+-        }
+-
+         // спрайт Селестиала по центру
+         var stateName = _stage switch
+         {
+diff --git a/Content.Server/DeadSpace/Lavaland/Celestial/CelestialComponent.cs b/Content.Server/DeadSpace/Lavaland/Celestial/CelestialComponent.cs
+index d761c445aea..4e0e9a2685b 100644
+--- a/Content.Server/DeadSpace/Lavaland/Celestial/CelestialComponent.cs
++++ b/Content.Server/DeadSpace/Lavaland/Celestial/CelestialComponent.cs
+@@ -97,17 +97,33 @@ public sealed partial class CelestialComponent : Component
+     [DataField]
+     public int FutilityTargets = 1;
+ 
+-    /// <summary>Сколько раз повторяется последовательность трещина-шар.</summary>
++    /// <summary>Сколько шаров всего выпускает атака: по одному за раз, каждый из нового портала.</summary>
+     [DataField]
+-    public int FutilityRepeats = 4;
++    public int FutilityOrbCount = 4;
+ 
+-    /// <summary>Пауза между повторами, сек.</summary>
++    /// <summary>Насколько далеко перед игроком открывается портал для второго и следующих шаров, метры.</summary>
+     [DataField]
+-    public float FutilityRepeatDelay = 1.2f;
++    public float FutilityPortalDistance = 30f;
+ 
+-    /// <summary>Скорость шара, м/с. Медленнее бегущего игрока: от шара можно убежать, но не стоять на месте.</summary>
++    /// <summary>Сколько портал целится перед выстрелом шаром, сек.</summary>
+     [DataField]
+-    public float OrbSpeed = 6.5f;
++    public float FutilityAimTime = 0.5f;
++
++    /// <summary>Интервал глитч-рывков шара, сек: 16 рывков по 0.125 с ≈ две секунды полёта.</summary>
++    [DataField]
++    public float FutilityJumpInterval = 0.125f;
++
++    /// <summary>Боковой разброс каждого глитч-рывка шара, метры.</summary>
++    [DataField]
++    public float FutilityJumpJitter = 1.1f;
++
++    /// <summary>Длительность фазы шаров: после неё начинаются Cutter и лучи, сек.</summary>
++    [DataField]
++    public float FutilityOrbPhaseTime = 8f;
++
++    /// <summary>Скорость шара, м/с. Быстрее бегущего игрока: уходить нужно маневром, а не спринтом.</summary>
++    [DataField]
++    public float OrbSpeed = 9.5f;
+ 
+     /// <summary>Максимальное время жизни шара, сек.</summary>
+     [DataField]
+@@ -122,10 +138,6 @@ public sealed partial class CelestialComponent : Component
+     [DataField]
+     public float RiftMaxDistance = 7f;
+ 
+-    /// <summary>Сколько шаров выходит из одной трещины.</summary>
+-    [DataField]
+-    public int OrbsPerCrack = 3;
+-
+     /// <summary>Неповоротливость шаров: скорость поворота, рад/сек. Чем меньше - тем тяжелее им доворачивать за игроком.</summary>
+     [DataField]
+     public float OrbTurnRate = 3.2f;
+@@ -144,11 +156,11 @@ public sealed partial class CelestialComponent : Component
+ 
+     /// <summary>Минимальный урон мелкого луча.</summary>
+     [DataField]
+-    public float SmallBeamMinDamage = 15f;
++    public float SmallBeamMinDamage = 24f;
+ 
+     /// <summary>Максимальный урон мелкого луча.</summary>
+     [DataField]
+-    public float SmallBeamMaxDamage = 30f;
++    public float SmallBeamMaxDamage = 48f;
+ 
+     /// <summary>Сколько раз повторяется Cutter.</summary>
+     [DataField]
+@@ -192,7 +204,7 @@ public sealed partial class CelestialComponent : Component
+ 
+     /// <summary>Урон луча Cutter.</summary>
+     [DataField]
+-    public float CutterDamage = 30f;
++    public float CutterDamage = 48f;
+ 
+     // ----- радиусы попадания (понижены: лучи били слишком широко) -----
+ 
+@@ -280,7 +292,11 @@ public sealed partial class CelestialComponent : Component
+ 
+     /// <summary>Урон за тик гигантского луча.</summary>
+     [DataField]
+-    public float BloomBeamDamage = 20f;
++    public float BloomBeamDamage = 32f;
++
++    /// <summary>Полуширина урона гигантского луча, метры (визуально луч чуть шире).</summary>
++    [DataField]
++    public float BloomDamageRadius = 1.2f;
+ 
+     /// <summary>Интервал урона гигантского луча, сек.</summary>
+     [DataField]
+@@ -308,7 +324,7 @@ public sealed partial class CelestialComponent : Component
+ 
+     /// <summary>Урон замершего луча при почернении.</summary>
+     [DataField]
+-    public float FreezeBeamDamage = 20f;
++    public float FreezeBeamDamage = 32f;
+ 
+     /// <summary>Сколько замерших лучей проходит прямо через каждого игрока (остальные - по округе).</summary>
+     [DataField]
+diff --git a/Content.Server/DeadSpace/Lavaland/Celestial/CelestialSystem.cs b/Content.Server/DeadSpace/Lavaland/Celestial/CelestialSystem.cs
+index d21e4c47562..c5e610958e8 100644
+--- a/Content.Server/DeadSpace/Lavaland/Celestial/CelestialSystem.cs
++++ b/Content.Server/DeadSpace/Lavaland/Celestial/CelestialSystem.cs
+@@ -44,16 +44,6 @@ public sealed class CelestialSystem : EntitySystem
+ 
+     private static readonly DamageSpecifier BeamDamage = MakeBeamDamage();
+ 
+-    private static float AngleDiff(float from, float to)
+-    {
+-        var d = (to - from) % MathF.Tau;
+-        if (d > MathF.PI)
+-            d -= MathF.Tau;
+-        if (d < -MathF.PI)
+-            d += MathF.Tau;
+-        return d;
+-    }
+-
+     private static float DistanceToSegment(Vector2 p, Vector2 a, Vector2 b)
+     {
+         var ab = b - a;
+@@ -67,9 +57,9 @@ private static float DistanceToSegment(Vector2 p, Vector2 a, Vector2 b)
+     private static DamageSpecifier MakeBeamDamage()
+     {
+         var d = new DamageSpecifier();
+-        d.DamageDict.TryAdd("Heat", 20f);
+-        d.DamageDict.TryAdd("Blunt", 10f);
+-        d.DamageDict.TryAdd("Structural", 25f);
++        d.DamageDict.TryAdd("Heat", 32f);
++        d.DamageDict.TryAdd("Blunt", 16f);
++        d.DamageDict.TryAdd("Structural", 40f);
+         return d;
+     }
+ 
+@@ -699,41 +689,13 @@ private void StartFutility(Entity<CelestialComponent> ent)
+ 
+         SpeakFor(ent, "ТЩЕТНО.", 4f);
+ 
+-        // шары ДЕЛЯТСЯ: у каждой цели одновременно гоняются не больше
+-        // OrbsPerCrack шаров; погиб — из нового рифта выходит следующий
+-        var orbPhase = comp.FutilityRepeats * comp.FutilityRepeatDelay + 3f;
+-        var quota = comp.OrbsPerCrack * comp.FutilityRepeats;
++        // строго по одному шару: следующий выходит из нового портала только
++        // после того, как пропал предыдущий (2-й и дальше — из портала прямо
++        // перед игроком)
+         foreach (var target in targets)
+-        {
+-            var spawned = 0;
+-            var alive = new List<EntityUid>();
+-            var check = 0f;
+-            while (check < orbPhase)
+-            {
+-                var delay = check;
+-                var targetRef = target;
+-                var aliveRef = alive;
+-                Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
+-                {
+-                    if (TerminatingOrDeleted(ent))
+-                        return;
+-
+-                    // чистим исчезнувшие шары
+-                    aliveRef.RemoveAll(o => o == EntityUid.Invalid || TerminatingOrDeleted(o) || !Exists(o));
++            SpawnFutilityOrb(ent, comp, target, 0);
+ 
+-                    if (spawned >= quota || aliveRef.Count >= 1)
+-                        return;
+-                    if (TerminatingOrDeleted(targetRef))
+-                        return;
+-
+-                    if (SpawnRiftAndOrb(ent, comp, targetRef, aliveRef, 1))
+-                        spawned++;
+-                });
+-                check += 0.3f;
+-            }
+-        }
+-
+-        var afterOrbs = orbPhase;
++        var afterOrbs = comp.FutilityOrbPhaseTime;
+ 
+         // Cutter по тем, кто НЕ был целью (с рандомным смещением), но не больше CutterTargets игроков
+         var cutterPool = GetTargets(ent, 1 + comp.ExtraTargets + comp.FutilityTargets);
+@@ -741,6 +703,7 @@ private void StartFutility(Entity<CelestialComponent> ent)
+         for (var r = 0; r < comp.CutterRepeats; r++)
+         {
+             var delay = afterOrbs + r * comp.CutterRepeatDelay;
++            var isFinalCutter = r == comp.CutterRepeats - 1;
+             Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
+             {
+                 if (TerminatingOrDeleted(ent))
+@@ -750,7 +713,7 @@ private void StartFutility(Entity<CelestialComponent> ent)
+                 {
+                     if (TerminatingOrDeleted(target))
+                         continue;
+-                    RunCutter(ent, comp, target, final: r == comp.CutterRepeats - 1);
++                    RunCutter(ent, comp, target, final: isFinalCutter);
+                 }
+             });
+         }
+@@ -780,54 +743,108 @@ private void StartFutility(Entity<CelestialComponent> ent)
+         });
+     }
+ 
+-    private bool SpawnRiftAndOrb(Entity<CelestialComponent> ent, CelestialComponent comp,
+-        EntityUid target, List<EntityUid> alive, int orbsToSpawn)
++    /// <summary>
++    /// Один шар из свежего портала. Первый портал открывается рядом с целью,
++    /// второй и следующие — прямо перед игроком. Следующий шар запускается
++    /// только после исчезновения текущего.
++    /// </summary>
++    private void SpawnFutilityOrb(Entity<CelestialComponent> ent, CelestialComponent comp,
++        EntityUid target, int index)
+     {
++        if (index >= comp.FutilityOrbCount)
++            return;
++
++        if (TerminatingOrDeleted(ent) || TerminatingOrDeleted(target))
++            return;
++
+         var targetPos = _transform.GetMapCoordinates(target);
+-        var spawnedAny = false;
++        var riftCenter = GetFutilityRiftCenter(target, comp, index);
++        var riftMap = new MapCoordinates(riftCenter, targetPos.MapId);
++
++        // рифт: текстура телепорта + звук появления
++        Spawn("CelestialRift", riftMap);
++        Sound(comp.FutilityCrackSound, ent, -4f);
+ 
+-        // рифты вокруг цели, из каждого выходит свой шар
+-        for (var i = 0; i < orbsToSpawn; i++)
++        // прицеливание: пока портал заряжается, от него к цели идёт тонкая линия
++        RaiseVisual(targetPos.MapId, new CelestialBeamVisualEvent(
++            riftCenter, targetPos.Position, (int) targetPos.MapId,
++            comp.FutilityAimTime, 0.05f, 0.35f), comp.LocalizedEvents);
++
++        Timer.Spawn(TimeSpan.FromSeconds(comp.FutilityAimTime), () =>
+         {
+-            var riftAngle = _random.NextFloat(0f, MathF.Tau);
+-            var riftDist = _random.NextFloat(comp.RiftMinDistance, MathF.Max(comp.RiftMinDistance, comp.RiftMaxDistance));
+-            var riftCenter = targetPos.Position +
+-                new Vector2(MathF.Cos(riftAngle) * riftDist, MathF.Sin(riftAngle) * riftDist);
++            if (TerminatingOrDeleted(target) || TerminatingOrDeleted(ent))
++                return;
++
++            if (comp.FutilityOrbSounds.Count > 0)
++                Sound(_random.Pick(comp.FutilityOrbSounds), ent, -8f);
++
++            var toTarget = _transform.GetMapCoordinates(target).Position - riftCenter;
++            var dist = MathF.Max(toTarget.Length(), 0.01f);
++
++            var orb = Spawn("CelestialOrb", riftMap);
++            var orbComp = EnsureComp<CelestialOrbComponent>(orb);
++            orbComp.Target = target;
++            orbComp.Phase = _random.NextFloat(0f, MathF.Tau);
++            orbComp.Lifetime = comp.OrbLifetime;
++            orbComp.Speed = comp.OrbSpeed;
++            orbComp.TurnRate = comp.OrbTurnRate; // неповоротливость: шар тяжело доворачивает
++            orbComp.FireInterval = comp.OrbFireInterval;
++            orbComp.BeamDamageMin = comp.SmallBeamMinDamage;
++            orbComp.BeamDamageMax = comp.SmallBeamMaxDamage;
++            orbComp.BeamRadius = comp.SmallBeamRadius;
++            orbComp.LocalizedEvents = comp.LocalizedEvents;
++            orbComp.VelocityDir = toTarget / dist;
++
++            // глитч-полёт: ~16 рывков по 0.125 с — около двух секунд до игрока,
++            // каждый рывок уводит шар вбок на случайное смещение
++            orbComp.TeleportInterval = comp.FutilityJumpInterval;
++            orbComp.TeleportDist = dist / 16f;
++            orbComp.TeleportJitter = comp.FutilityJumpJitter;
++
++            WaitFutilityOrbGone(ent, comp, target, orb, index + 1);
++        });
++    }
+ 
+-            // рифт: текстура телепорта + звук появления
+-            Spawn("CelestialRift", new MapCoordinates(riftCenter, targetPos.MapId));
+-            Sound(comp.FutilityCrackSound, ent, -4f);
++    /// <summary>Ждёт, пока шар пропадёт, и открывает портал для следующего.</summary>
++    private void WaitFutilityOrbGone(Entity<CelestialComponent> ent, CelestialComponent comp,
++        EntityUid target, EntityUid orb, int nextIndex)
++    {
++        Timer.Spawn(TimeSpan.FromSeconds(0.2f), () =>
++        {
++            if (TerminatingOrDeleted(ent) || TerminatingOrDeleted(target))
++                return;
+ 
+-            // шар выходит из этого рифта
+-            var riftMap = new MapCoordinates(riftCenter, targetPos.MapId);
+-            Timer.Spawn(TimeSpan.FromSeconds(0.8f), () =>
++            if (Exists(orb) && !TerminatingOrDeleted(orb))
+             {
+-                if (TerminatingOrDeleted(target) || TerminatingOrDeleted(ent))
+-                    return;
++                WaitFutilityOrbGone(ent, comp, target, orb, nextIndex);
++                return;
++            }
+ 
+-                if (comp.FutilityOrbSounds.Count > 0)
+-                    Sound(_random.Pick(comp.FutilityOrbSounds), ent, -8f);
+-
+-                var orb = Spawn("CelestialOrb", riftMap);
+-                var orbComp = EnsureComp<CelestialOrbComponent>(orb);
+-                orbComp.Target = target;
+-                orbComp.Phase = _random.NextFloat(0f, MathF.Tau);
+-                orbComp.Lifetime = comp.OrbLifetime;
+-                orbComp.Speed = comp.OrbSpeed;
+-                orbComp.TurnRate = comp.OrbTurnRate; // неповоротливость: шар тяжело доворачивает
+-                orbComp.FireInterval = comp.OrbFireInterval;
+-                orbComp.BeamDamageMin = comp.SmallBeamMinDamage;
+-                orbComp.BeamDamageMax = comp.SmallBeamMaxDamage;
+-                orbComp.BeamRadius = comp.SmallBeamRadius;
+-                orbComp.LocalizedEvents = comp.LocalizedEvents;
+-                orbComp.VelocityDir = Vector2.Normalize(
+-                    _transform.GetMapCoordinates(target).Position - riftCenter);
+-                alive.Add(orb);
+-            });
+-            spawnedAny = true;
++            SpawnFutilityOrb(ent, comp, target, nextIndex);
++        });
++    }
++
++    /// <summary>Точка портала: первый — рядом с целью, остальные — перед игроком по взгляду.</summary>
++    private Vector2 GetFutilityRiftCenter(EntityUid target, CelestialComponent comp, int index)
++    {
++        var targetPos = _transform.GetMapCoordinates(target).Position;
++
++        if (index <= 0)
++        {
++            var riftAngle = _random.NextFloat(0f, MathF.Tau);
++            var riftDist = _random.NextFloat(comp.RiftMinDistance, MathF.Max(comp.RiftMinDistance, comp.RiftMaxDistance));
++            return targetPos + new Vector2(MathF.Cos(riftAngle), MathF.Sin(riftAngle)) * riftDist;
+         }
+ 
+-        return spawnedAny;
++        // портал открывается прямо перед игроком, по направлению взгляда
++        var facing = _transform.GetWorldRotation(target).ToVec();
++        if (facing.LengthSquared() < 0.01f)
++        {
++            var fallbackAngle = _random.NextFloat(0f, MathF.Tau);
++            facing = new Vector2(MathF.Cos(fallbackAngle), MathF.Sin(fallbackAngle));
++        }
++
++        return targetPos + Vector2.Normalize(facing) * comp.FutilityPortalDistance;
+     }
+ 
+     private void OrbContact(EntityUid uid, CelestialOrbComponent orb, Vector2 at)
+@@ -985,45 +1002,22 @@ private void UpdateOrbs(float frameTime)
+                 continue;
+             }
+ 
+-            // шар НИКОГДА не останавливается: постоянная скорость, поворот
+-            // с ограниченной скоростью - уйти можно, уводя шар в сторону
+-            var desired = toTarget / dist;
+-
+-            if (orb.VelocityDir.LengthSquared() < 0.001f)
+-                orb.VelocityDir = desired;
+-
+-            var angle = MathF.Atan2(orb.VelocityDir.Y, orb.VelocityDir.X);
+-            var targetAngle = MathF.Atan2(desired.Y, desired.X);
+-            var diff = AngleDiff(angle, targetAngle);
+-            var maxTurn = orb.TurnRate * frameTime;
+-            angle += Math.Clamp(diff, -maxTurn, maxTurn);
+-            orb.VelocityDir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
+-
+-            // зигзаг-телепорт: раз в интервал шар РЫВКОМ телепортируется
+-            // к точке прицела (вперёд к игроку + боковой зигзаг)
++            // шар не летит плавно: глитч-рывки к цели с боковым разбросом,
++            // между рывками висит на месте
+             orb.TeleportAccumulator += frameTime;
+-            if (orb.TeleportAccumulator >= orb.TeleportInterval)
+-            {
+-                orb.TeleportAccumulator -= orb.TeleportInterval;
+-
+-                var blinkAngle = MathF.Atan2(orb.VelocityDir.Y, orb.VelocityDir.X)
+-                    + MathF.Sin(orb.Elapsed * orb.WeaveFreq + orb.Phase) * 0.6f;
+-                var blinkDir = new Vector2(MathF.Cos(blinkAngle), MathF.Sin(blinkAngle));
+-                var blink = blinkDir * MathF.Min(orb.TeleportDist, dist * 0.6f);
+-                _transform.SetWorldPosition(uid, orbPos + blink);
++            if (orb.TeleportAccumulator < orb.TeleportInterval)
+                 continue;
+-            }
+ 
+-            // между рывками - неспешный неповоротливый дрейф к игроку
+-            var perpendicular = new Vector2(-orb.VelocityDir.Y, orb.VelocityDir.X);
+-            var weave = MathF.Sin(orb.Elapsed * orb.WeaveFreq + orb.Phase) * orb.WeaveAmp;
+-            var moveDir = Vector2.Normalize(orb.VelocityDir + perpendicular * weave);
++            orb.TeleportAccumulator -= orb.TeleportInterval;
+ 
+-            var step = orb.Speed * 0.55f * frameTime;
+             if (!CanMove(uid))
+                 continue;
+ 
+-            _transform.SetWorldPosition(uid, orbPos + moveDir * step);
++            var jumpDir = toTarget / dist;
++            var jump = MathF.Min(orb.TeleportDist, dist);
++            var perpendicular = new Vector2(-jumpDir.Y, jumpDir.X);
++            var jitter = perpendicular * _random.NextFloat(-orb.TeleportJitter, orb.TeleportJitter);
++            _transform.SetWorldPosition(uid, orbPos + jumpDir * jump + jitter);
+ 
+             // стрельба мелкими лучами вдоль пути
+             orb.FireAccumulator += frameTime;
+@@ -1086,6 +1080,7 @@ private void StartRaznesu(Entity<CelestialComponent> ent)
+                 for (var r = 0; r < comp.CutterRepeats; r++)
+                 {
+                     var delay = r * comp.CutterRepeatDelay;
++                    var isFinalCutter = r == comp.CutterRepeats - 1;
+                     Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
+                     {
+                         if (TerminatingOrDeleted(ent))
+@@ -1094,7 +1089,7 @@ private void StartRaznesu(Entity<CelestialComponent> ent)
+                         {
+                             if (TerminatingOrDeleted(target))
+                                 continue;
+-                            RunCutter(ent, comp, target, final: r == comp.CutterRepeats - 1);
++                            RunCutter(ent, comp, target, final: isFinalCutter);
+                         }
+                     });
+                 }
+@@ -1292,18 +1287,23 @@ private void StartBloom(Entity<CelestialComponent> ent, CelestialComponent? comp
+         for (var tick = 1; tick <= damageTicks; tick++)
+         {
+             var delay = comp.BloomSweepTime + (tick - 1) * comp.BloomDamageInterval;
++
++            // угол считаем ДО таймера: переменная цикла захватывается лямбдой
++            // по ссылке, и внутри таймера tick всегда равен damageTicks + 1 —
++            // урон уходил в одну повёрнутую сторону, а не по видимым лучам
++            var tickElapsed = (tick - 1) * comp.BloomDamageInterval;
++            var tickAngle = baseAngle + comp.BloomRotateSpeed * (comp.BloomSweepTime + tickElapsed);
++
+             Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
+             {
+                 if (TerminatingOrDeleted(ent))
+                     return;
+ 
+-                var elapsed = (tick - 1) * comp.BloomDamageInterval;
+-                var angle = baseAngle + comp.BloomRotateSpeed * (comp.BloomSweepTime + elapsed);
+-
+                 var bloomDamage = new DamageSpecifier();
+                 bloomDamage.DamageDict.TryAdd("Heat", comp.BloomBeamDamage);
+ 
+-                var queryRadius = comp.BloomLength / 2f + 4f;
++                // радиус запроса = вся длина луча (плюс запас)
++                var queryRadius = comp.BloomLength + 4f;
+                 _nearbySpheres.Clear();
+                 foreach (var victim in _lookup.GetEntitiesInRange(
+                     new MapCoordinates(center, mapId), queryRadius, LookupFlags.Uncontained))
+@@ -1312,14 +1312,13 @@ private void StartBloom(Entity<CelestialComponent> ent, CelestialComponent? comp
+                         continue;
+ 
+                     var victimPos = _transform.GetMapCoordinates(victim).Position;
+-                    var victimRel = victimPos - center;
+ 
+                     // 4 луча по 90 градусов
+                     for (var k = 0; k < 4; k++)
+                     {
+-                        var ang = angle + k * MathF.PI / 2f;
++                        var ang = tickAngle + k * MathF.PI / 2f;
+                         var rayEnd = center + new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * comp.BloomLength;
+-                        if (DistanceToSegment(victimPos, center, rayEnd) <= 1.2f)
++                        if (DistanceToSegment(victimPos, center, rayEnd) <= comp.BloomDamageRadius)
+                         {
+                             _damage.TryChangeDamage(victim, bloomDamage);
+                             break;
+diff --git a/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialCircleComponent.cs b/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialCircleComponent.cs
+index e74d5bf7b65..fef8bb85f37 100644
+--- a/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialCircleComponent.cs
++++ b/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialCircleComponent.cs
+@@ -32,7 +32,7 @@ public sealed partial class CelestialCircleComponent : Component
+ 
+     /// <summary>Урон за тик в чёрной фазе.</summary>
+     [DataField]
+-    public float DamagePerTick = 12f;
++    public float DamagePerTick = 20f;
+ 
+     /// <summary>Множитель радиуса урона от радиуса кружка.</summary>
+     [DataField]
+diff --git a/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialOrbComponent.cs b/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialOrbComponent.cs
+index ae625acd86c..a00aa21802b 100644
+--- a/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialOrbComponent.cs
++++ b/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialOrbComponent.cs
+@@ -36,7 +36,7 @@ public sealed partial class CelestialOrbComponent : Component
+ 
+     /// <summary>Урон при касании: долетев до игрока, шар взрывается на нём.</summary>
+     [DataField]
+-    public float ContactDamage = 25f;
++    public float ContactDamage = 40f;
+ 
+     /// <summary>Радиус взрыва при касании, метры.</summary>
+     [DataField]
+@@ -82,6 +82,10 @@ public sealed partial class CelestialOrbComponent : Component
+     [DataField]
+     public float TeleportDist = 3.5f;
+ 
++    /// <summary>Боковой разброс рывка, метры: создаёт рваный глитч-полёт.</summary>
++    [DataField]
++    public float TeleportJitter = 0f;
++
+     [ViewVariables]
+     public float TeleportAccumulator;
+ 
+diff --git a/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialSphereComponent.cs b/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialSphereComponent.cs
+index 653d149c001..c007911dfaf 100644
+--- a/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialSphereComponent.cs
++++ b/Content.Shared/DeadSpace/Lavaland/Celestial/CelestialSphereComponent.cs
+@@ -27,7 +27,7 @@ public sealed partial class CelestialSphereComponent : Component
+ 
+     /// <summary>Урон за тик всем сущностям внутри сферы.</summary>
+     [DataField]
+-    public float DamagePerTick = 15f;
++    public float DamagePerTick = 24f;
+ 
+     /// <summary>Множитель радиуса урона от визуального радиуса сферы.</summary>
+     [DataField]
+diff --git a/Resources/Prototypes/_DeadSpace/Lavaland/Celestial/celestial.yml b/Resources/Prototypes/_DeadSpace/Lavaland/Celestial/celestial.yml
+index 9a61d410aa1..17344fd5875 100644
+--- a/Resources/Prototypes/_DeadSpace/Lavaland/Celestial/celestial.yml
++++ b/Resources/Prototypes/_DeadSpace/Lavaland/Celestial/celestial.yml
+@@ -7,7 +7,7 @@
+     startScale: 0.25
+     endScale: 1.3
+     lifetime: 2.6
+-    damagePerTick: 15
++    damagePerTick: 24
+     damageRadiusScale: 0.8
+   - type: PointLight
+     enabled: true
