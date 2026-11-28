@@ -25393,7 +25393,7 @@ entities:
     - type: Transform
       parent: 2
       pos: 14.5,-15.5
-- proto: PoweredLightExterior
+- proto: AlwaysPoweredLightExterior
   entities:
   - uid: 881
     components:
@@ -25630,6 +25630,14 @@ entities:
       parent: 2
       rot: -1.5707963267948966 rad
       pos: 4.5,70.5
+- proto: AlwaysPoweredLightLED
+  entities:
+  - uid: 922
+    components:
+    - type: Transform
+      parent: 2
+      rot: -1.5707963267948966 rad
+      pos: 54.5,21.5
 - proto: AmePartFlatpack
   entities:
   - uid: 924
@@ -147139,12 +147147,6 @@ entities:
       pos: 3.5,-4.5
 - proto: PoweredlightLED
   entities:
-  - uid: 922
-    components:
-    - type: Transform
-      parent: 2
-      rot: -1.5707963267948966 rad
-      pos: 54.5,21.5
   - uid: 19798
     components:
     - type: Transform
