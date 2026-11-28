@@ -1,15 +1,21 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.Backmen.Blob.Components;
+using Content.Server.Backmen.GameTicking.Rules.Components;
 using Content.Server.Construction.Components;
 using Content.Server.Destructible;
 using Content.Server.Emp;
+using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Backmen.Blob;
 using Content.Shared.Backmen.Blob.Components;
+using Content.Shared.Chemistry;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
 using Content.Shared.Flash;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
@@ -20,10 +26,13 @@ namespace Content.Server.Backmen.Blob;
 
 public sealed partial class BlobTileSystem : SharedBlobTileSystem
 {
+    private static readonly SoundPathSpecifier BlastSound = new("/Audio/Effects/explosion1.ogg");
     [Dependency] private AudioSystem _audioSystem = default!;
     [Dependency] private BlobCoreSystem _blobCoreSystem = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
     [Dependency] private EmpSystem _empSystem = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MapSystem _mapSystem = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private TransformSystem _transform = default!;
@@ -38,8 +47,29 @@ public sealed partial class BlobTileSystem : SharedBlobTileSystem
         SubscribeLocalEvent<BlobTileComponent, BlobTileGetPulseEvent>(OnPulsed);
         SubscribeLocalEvent<BlobTileComponent, FlashAttemptEvent>(OnFlashAttempt);
         SubscribeLocalEvent<BlobTileComponent, EntityTerminatingEvent>(OnTerminate);
+        SubscribeLocalEvent<BlobTileComponent, ReactionEntityEvent>(OnReaction);
 
         _blobCoreQuery = GetEntityQuery<BlobCoreComponent>();
+    }
+
+    private void OnReaction(EntityUid uid, BlobTileComponent component, ref ReactionEntityEvent args)
+    {
+        if (component.Core == null ||
+            !_blobCoreQuery.TryComp(component.Core.Value, out var blobCoreComponent) ||
+            blobCoreComponent.CurrentChem != BlobChemType.BlazingOil)
+            return;
+
+        if (args.Method != ReactionMethod.Touch || args.Reagent.ID != "Water")
+            return;
+
+        var amount = Math.Min(args.ReagentQuantity.Quantity.Float(), 50f) * 0.5f;
+        _damageableSystem.TryChangeDamage(uid, new DamageSpecifier
+        {
+            DamageDict =
+            {
+                ["Heat"] = FixedPoint2.New(amount),
+            }
+        });
     }
 
     private void OnTerminate(EntityUid uid, BlobTileComponent component, EntityTerminatingEvent args)
@@ -63,8 +93,97 @@ public sealed partial class BlobTileSystem : SharedBlobTileSystem
         if (component.Core == null || !_blobCoreQuery.TryComp(component.Core.Value, out var blobCoreComponent))
             return;
 
-        if (blobCoreComponent.CurrentChem == BlobChemType.ElectromagneticWeb)
-            _empSystem.EmpPulse(_transform.GetMapCoordinates(uid), 3f, 50f, TimeSpan.FromSeconds(3));
+        switch (blobCoreComponent.CurrentChem)
+        {
+            case BlobChemType.ElectromagneticWeb:
+            {
+                _empSystem.EmpPulse(_transform.GetMapCoordinates(uid), 5f, 2500f, TimeSpan.FromSeconds(3)); // DS14
+
+                var empDamage = new DamageSpecifier
+                {
+                    DamageDict =
+                    {
+                        ["Heat"] = FixedPoint2.New(20),
+                    }
+                };
+                foreach (var ent in _lookup.GetEntitiesInRange<DamageableComponent>(_transform.GetMapCoordinates(uid), 5f))
+                {
+                    if (!HasComp<MobStateComponent>(ent))
+                        continue;
+                    if (IsBlobFriendly(ent))
+                        continue;
+                    _damageableSystem.TryChangeDamage(ent.Owner, empDamage);
+                }
+
+                break;
+            }
+            case BlobChemType.ExplosiveLattice:
+                BlobDirectionalBlast(uid, component.Core.Value, blobCoreComponent, damage: 30f, count: 3); // DS14
+                break;
+        }
+    }
+
+    private void BlobDirectionalBlast(EntityUid tile, EntityUid coreUid, BlobCoreComponent core, float damage, int count) // DS14
+    {
+        var xform = Transform(tile);
+        if (!TryComp<MapGridComponent>(xform.GridUid, out var grid))
+            return;
+
+        var tileRef = _mapSystem.GetTileRef(xform.GridUid.Value, grid, xform.Coordinates);
+        var horizontal = core.ExplosionDirection == BlobExplosionDirection.Horizontal;
+
+        // DS14-start
+        for (var i = 1; i <= count; i++)
+        {
+            var indices = horizontal
+                ? new Vector2i(tileRef.GridIndices.X + i, tileRef.GridIndices.Y)
+                : new Vector2i(tileRef.GridIndices.X, tileRef.GridIndices.Y + i);
+
+            var blastDamage = new DamageSpecifier
+            {
+                DamageDict =
+                {
+                    ["Blunt"] = FixedPoint2.New(damage),
+                    ["Structural"] = FixedPoint2.New(damage),
+                }
+            };
+
+            foreach (var ent in _mapSystem.GetAnchoredEntities(xform.GridUid.Value, grid, indices))
+            {
+                if (HasComp<BlobTileComponent>(ent))
+                    continue;
+                if (!HasComp<DestructibleComponent>(ent) || !HasComp<DamageableComponent>(ent))
+                    continue;
+                _damageableSystem.TryChangeDamage(ent, blastDamage);
+            }
+
+            var coords = _mapSystem.ToCenterCoordinates(xform.GridUid.Value, indices, grid);
+            _explosion.QueueExplosion(_transform.ToMapCoordinates(coords), core.BlobExplosive, 2f, 2f, 6f, coreUid, maxTileBreak: 0);
+            foreach (var ent in _lookup.GetEntitiesInRange<DamageableComponent>(coords, 0.71f))
+            {
+                if (!HasComp<MobStateComponent>(ent))
+                    continue;
+                if (IsBlobFriendly(ent))
+                    continue;
+                _damageableSystem.TryChangeDamage(ent.Owner, blastDamage);
+            }
+        }
+        // DS14-end
+
+        if (!BlobSilence.BeforeAnnouncement(EntityManager))
+            _audioSystem.PlayPvs(BlastSound, tile, AudioParams.Default.WithVolume(3f));
+    }
+
+    private bool IsBlobFriendly(EntityUid uid)
+    {
+        if (HasComp<BlobMobComponent>(uid) ||
+            HasComp<ZombieBlobComponent>(uid) ||
+            HasComp<BlobCarrierComponent>(uid))
+        {
+            return true;
+        }
+
+        return HasComp<BlobTileComponent>(uid);
     }
 
     protected override void TryRemove(EntityUid target,
@@ -140,7 +259,7 @@ public sealed partial class BlobTileSystem : SharedBlobTileSystem
             var healCore = new DamageSpecifier();
             foreach (var keyValuePair in component.HealthOfPulse.DamageDict)
             {
-                healCore.DamageDict.Add(keyValuePair.Key, keyValuePair.Value * 5);
+                healCore.DamageDict.Add(keyValuePair.Key, keyValuePair.Value * 2.5f);
             }
 
             _damageableSystem.TryChangeDamage(uid, healCore);
@@ -185,7 +304,8 @@ public sealed partial class BlobTileSystem : SharedBlobTileSystem
                 if (!HasComp<DestructibleComponent>(ent) || !HasComp<ConstructionComponent>(ent))
                     continue;
                 _damageableSystem.TryChangeDamage(ent, blobCoreComponent.ChemDamageDict[blobCoreComponent.CurrentChem]);
-                _audioSystem.PlayPvs(blobCoreComponent.AttackSound, uid, AudioParams.Default);
+                if (!BlobSilence.BeforeAnnouncement(EntityManager))
+                    _audioSystem.PlayPvs(blobCoreComponent.AttackSound, uid, AudioParams.Default);
                 args.Handled = true;
                 return;
             }

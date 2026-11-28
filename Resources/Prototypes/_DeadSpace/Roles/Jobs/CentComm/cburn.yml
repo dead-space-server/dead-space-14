@@ -250,6 +250,52 @@
     pocket1: DoubleEmergencyOxygenTankFilled
     pocket2: FlashlightSeclite
 
+### Flamer
+### CBURN
+- type: job
+  id: CBURNFlamer
+  name: job-name-cburn-flamer
+  description: job-description-cburnflamer
+  playTimeTracker: JobCBURNFlamer
+  setPreference: false
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Medical
+      time: 57600 # 16 hours
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 201600 # 56 hours
+    - !type:OverallPlaytimeRequirement
+      time: 1944000 # 540 hours
+  startingGear: CBURNFlamerGear
+  icon: "JobIconERT"
+  supervisors: job-supervisors-centcom
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - CentralCommand
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant ]
+
+- type: startingGear
+  id: CBURNFlamerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    mask: ClothingMaskGasExplorer
+    eyes: ClothingEyesHudAdvanced
+    ears: ClothingHeadsetAltAERT
+    gloves: ClothingHandsGlovesCombat
+    back: ClothingMilitaryBackpackCBURNFlamer
+    belt: ClothingBeltMilitaryWebbingCBURN
+    outerClothing: ClothingOuterHardsuitCBURNFlamer
+    suitstorage: ClothingBackpackSyndieFlametankCBURNFilled
+    shoes: ClothingShoesBootsMagSecurity
+    id: CBURNPDA
+    pocket1: DoubleEmergencyOxygenTankFilled
+    pocket2: FlashlightSeclite
+
 ### SCST
 - type: job
   id: SCSTAgent

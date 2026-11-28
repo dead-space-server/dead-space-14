@@ -278,7 +278,6 @@
       - id: JawsOfLife
       - id: PinpointerNuclear
       - id: GrenadeIncendiary
-      - id: GrenadeIncendiary
       - id: ClusterBangFull
       - id: ClusterBangFull
 
@@ -329,6 +328,42 @@
       - id: MedkitCombatFilled
       - id: PillCanisterCBURN
       - id: WeaponFlareGunSecurity
+
+# CBURN Flamer
+
+- type: entity
+  name: армейский рюкзак РХБЗЗ
+  parent: ClothingMilitaryBackpack
+  id: ClothingMilitaryBackpackCBURNFlamer
+  description: У нас есть цель, цель будет выполнена.
+  suffix: Огнеметчик
+  components:
+  - type: StorageFill
+    contents:
+      - id: BoxCardboardERT
+      - id: JawsOfLife
+      - id: PinpointerNuclear
+      - id: GrenadeIncendiary
+      - id: ClusterBangFull
+      - id: ClusterBangFull
+      - id: SyndieFlamethrower
+      - id: CBURNJugFlame
+
+- type: entity
+  name: блюспейс кувшин
+  parent: JugTheCircle
+  id: CBURNJugFlame
+  description: Кувшин, вмещающий полторы сотни единиц огнесмеси для заправки огнемётного ранца.
+  suffix: топливо для огнемёта
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        reagents:
+        - ReagentId: Napalm
+          Quantity: 135
+        - ReagentId: Phlogiston
+          Quantity: 15
 
 # CBURN Sierra
 

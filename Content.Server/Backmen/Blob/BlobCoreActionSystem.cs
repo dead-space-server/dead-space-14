@@ -213,9 +213,31 @@ public sealed partial class BlobCoreActionSystem : EntitySystem
 
         switch (ent.Comp.CurrentChem)
         {
+            // DS14-start
             case BlobChemType.ExplosiveLattice:
-                _explosionSystem.QueueExplosion(target, ent.Comp.BlobExplosive, 4, 1, 6, maxTileBreak: 0);
+            {
+                var xform = Transform(target);
+                if (TryComp<MapGridComponent>(xform.GridUid, out var grid))
+                {
+                    var tileRef = _mapSystem.GetTileRef(xform.GridUid.Value, grid, xform.Coordinates);
+                    var horizontal = ent.Comp.ExplosionDirection == BlobExplosionDirection.Horizontal;
+                    for (var i = 1; i <= 3; i++)
+                    {
+                        var indices = horizontal
+                            ? new Vector2i(tileRef.GridIndices.X + i, tileRef.GridIndices.Y)
+                            : new Vector2i(tileRef.GridIndices.X, tileRef.GridIndices.Y + i);
+                        var coords = _mapSystem.ToCenterCoordinates(xform.GridUid.Value, indices, grid);
+                        _explosionSystem.QueueExplosion(_transform.ToMapCoordinates(coords), ent.Comp.BlobExplosive, 3f, 2f, 6f, ent, maxTileBreak: 0);
+                    }
+                }
+                else
+                {
+                    _explosionSystem.QueueExplosion(target, ent.Comp.BlobExplosive, 8, 1, 6, maxTileBreak: 0);
+                }
+
                 break;
+            }
+            // DS14-end
             case BlobChemType.ElectromagneticWeb:
             {
                 if (_random.Prob(0.2f))
@@ -236,7 +258,8 @@ public sealed partial class BlobCoreActionSystem : EntitySystem
 
         ent.Comp.NextAction =
             _gameTiming.CurTime + TimeSpan.FromSeconds(ent.Comp.AttackRate);
-        _audioSystem.PlayPvs(ent.Comp.AttackSound, from, AudioParams.Default);
+        if (!BlobSilence.BeforeAnnouncement(EntityManager))
+            _audioSystem.PlayPvs(ent.Comp.AttackSound, from, AudioParams.Default);
     }
 
     private void OnInteract(EntityUid uid, BlobObserverComponent observerComponent, AfterInteractEvent args)

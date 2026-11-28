@@ -46,6 +46,25 @@
           Quantity: 1350
 
 - type: entity
+  parent: ClothingBackpackSyndieFlametank
+  id: ClothingBackpackSyndieFlametankCBURNFilled
+  name: огнемётный ранец РХБЗЗ
+  description: Комбинированный огнемётный ранец с жидким топливом и встроенным кислородным баллоном. Заправлен огнесмесью РХБЗЗ, можно доливать топливо из кувшина.
+  suffix: Заполненный, РХБЗЗ
+  components:
+  - type: RefillableSolution
+    solution: tank
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 650
+        reagents:
+        - ReagentId: Phlogiston
+          Quantity: 65
+        - ReagentId: Napalm
+          Quantity: 585
+
+- type: entity
   parent: ClothingBackpack
   id: ClothingBackpackTailbag
   name: подсумок на хвост плафеимов

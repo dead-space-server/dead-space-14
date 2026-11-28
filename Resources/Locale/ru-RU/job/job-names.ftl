@@ -65,6 +65,7 @@ job-name-ertjanitor-gamma = Уборщик ОБР (Гамма)
 job-name-ertchaplain = Священник ОБР
 job-name-cburn-leader = Лидер РХБЗЗ
 job-name-cburn-agent = Боец РХБЗЗ
+job-name-cburn-flamer = Огнеметчик РХБЗЗ
 job-name-scst-leader = Лидер ОППУ
 job-name-scst-agent = Боец ОППУ
 job-name-scnt-leader = Лидер ОПНУ

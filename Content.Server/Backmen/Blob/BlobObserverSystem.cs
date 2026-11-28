@@ -74,6 +74,7 @@ public sealed partial class BlobObserverSystem : SharedBlobObserverSystem
         SubscribeLocalEvent<BlobCoreComponent, BlobSwapChemActionEvent>(OnBlobSwapChem);
         SubscribeLocalEvent<BlobCoreComponent, BlobSwapCoreActionEvent>(OnSwapCore);
         SubscribeLocalEvent<BlobCoreComponent, BlobSplitCoreActionEvent>(OnSplitCore);
+        SubscribeLocalEvent<BlobCoreComponent, BlobPlantMineActionEvent>(OnPlantMine);
 
         SubscribeLocalEvent<BlobObserverComponent, MoveEvent>(OnMoveEvent);
         SubscribeLocalEvent<BlobObserverComponent, BlobChemSwapPrototypeSelectedMessage>(OnChemSelected);
@@ -205,8 +206,12 @@ public sealed partial class BlobObserverSystem : SharedBlobObserverSystem
             coreComponent.ActionSwapBlobCore!.Value
         }, component.Core.Value);
 
+        if (coreComponent.CurrentChem == BlobChemType.BlazingOil && coreComponent.ActionPlantBlobMine is { } mineAction)
+            _action.GrantActions(uid, new[] { mineAction }, component.Core.Value);
+
         _viewSubscriberSystem.AddViewSubscriber(component.Core.Value, playerSession); // GrantActions require keep in pvs
     }
+
 
     private void OnPlayerAttached(EntityUid uid, BlobObserverComponent component, PlayerAttachedEvent args)
     {
@@ -256,6 +261,7 @@ public sealed partial class BlobObserverSystem : SharedBlobObserverSystem
             return;
         component.SelectedChemId = newChem;
         _blobCoreSystem.ChangeChem(component.Core.Value, newChem, blobCoreComponent);
+        _blobCoreSystem.UpdateMineAction(component.Core.Value, blobCoreComponent);
 
         _popup.PopupEntity(Loc.GetString("blob-spent-resource", ("point", blobCoreComponent.SwapChemCost)),
             uid,
@@ -763,6 +769,87 @@ public sealed partial class BlobObserverSystem : SharedBlobObserverSystem
                 blobCoreComponent,
                 transformCost: blobCoreComponent.FactoryBlobCost))
             return;
+
+        args.Handled = true;
+    }
+
+    private void OnPlantMine(EntityUid uid, BlobCoreComponent blobCoreComponent, BlobPlantMineActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        var gridUid = args.Target.GetGridUid(EntityManager);
+
+        if (!TryComp<MapGridComponent>(gridUid, out var grid))
+            return;
+
+        var centerTile = _mapSystem.GetLocalTilesIntersecting(gridUid.Value, grid,
+            new Box2(args.Target.Position, args.Target.Position)).ToArray();
+
+        if (centerTile.Length == 0)
+            return;
+
+        var centerCoords = _mapSystem.ToCenterCoordinates(gridUid.Value, centerTile[0].GridIndices, grid);
+
+        // DS14-start
+        foreach (var tileRef in centerTile)
+        {
+            if (tileRef.Tile.IsEmpty)
+            {
+                _popup.PopupEntity(Loc.GetString("blob-mine-invalid-target"), args.Performer, args.Performer, PopupType.Large);
+                return;
+            }
+
+            foreach (var ent in _mapSystem.GetAnchoredEntities(gridUid.Value, grid, tileRef.GridIndices))
+            {
+                _popup.PopupEntity(Loc.GetString("blob-mine-invalid-target"), args.Performer, args.Performer, PopupType.Large);
+                return;
+            }
+        }
+
+        var mineOnTile = false;
+        foreach (var ent in _lookup.GetEntitiesInRange<BlobMineComponent>(centerCoords, 0.5f))
+        {
+            mineOnTile = true;
+            break;
+        }
+
+        if (mineOnTile)
+        {
+            _popup.PopupEntity(Loc.GetString("blob-mine-invalid-target"), args.Performer, args.Performer, PopupType.Large);
+            return;
+        }
+        // DS14-end
+
+        var nearTile = false;
+        foreach (var ent in _lookup.GetEntitiesInRange<BlobTileComponent>(centerCoords, 2.5f))
+        {
+            if (ent.Comp.Core != uid)
+                continue;
+            nearTile = true;
+            break;
+        }
+
+        if (!nearTile)
+        {
+            _popup.PopupEntity(Loc.GetString("blob-mine-invalid-target"), args.Performer, args.Performer, PopupType.Large);
+            return;
+        }
+
+        if (!_blobCoreSystem.TryUseAbility(args.Performer, uid, blobCoreComponent, blobCoreComponent.MineBlobCost))
+        {
+            args.Handled = true;
+            return;
+        }
+
+        var mine = Spawn(blobCoreComponent.MineBlobTile, centerCoords);
+        if (TryComp<BlobMineComponent>(mine, out var mineComponent))
+            mineComponent.Core = uid;
+
+        _popup.PopupEntity(Loc.GetString("blob-spent-resource", ("point", blobCoreComponent.MineBlobCost)),
+            mine,
+            args.Performer,
+            PopupType.LargeCaution);
 
         args.Handled = true;
     }
