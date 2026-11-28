@@ -1,4 +1,4 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+﻿// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Globalization;
 using System.Linq;
@@ -21,7 +21,7 @@ public static class MarkingDyeStore
         var style = ((byte) value.Style).ToString(CultureInfo.InvariantCulture);
         var offset = value.Offset.ToString("0.###", CultureInfo.InvariantCulture);
         var palette = string.Join(PaletteSeparator, value.Colors.Select(c => c.ToHex()));
-        var payload = string.Join(FieldSeparator, style, offset, palette);
+        var payload = $"{style}{FieldSeparator}{offset}{FieldSeparator}{palette}";
 
         return $"{color}{Marker}{payload}";
     }
