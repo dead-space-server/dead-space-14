@@ -3,7 +3,9 @@
     <BoxContainer Orientation="Horizontal" Margin="0 0 0 4">
     <!-- DS14-end -->
         <Label Name="NameLabel" MinWidth="400" />
-        <Slider Name="Slider" Access="Public" HorizontalExpand="True" />
-        <Label Name="ValueLabel" Access="Public" Margin="8 0 4 0" MinWidth="48" Align="Right" />
+        <!-- DS14-start -->
+        <Slider Name="Slider" Access="Public" HorizontalExpand="True" StyleClasses="DeadSpaceHoloSlider" />
+        <Label Name="ValueLabel" Access="Public" Margin="8 0 4 0" MinWidth="48" Align="Right" StyleClasses="DeadSpaceHoloSliderValue" />
+        <!-- DS14-end -->
     </BoxContainer>
 </Control>

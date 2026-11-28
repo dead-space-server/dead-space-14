@@ -49,6 +49,7 @@ namespace Content.Client.Lathe.UI
                     _menu?.UpdateCategories();
                     _menu?.PopulateQueueList(msg.Queue);
                     _menu?.SetQueueInfo(msg.CurrentlyProducing);
+                    _menu?.SetProductionTime(msg.ProductionEnd, msg.ProductionLength); // DS14
                     break;
             }
         }

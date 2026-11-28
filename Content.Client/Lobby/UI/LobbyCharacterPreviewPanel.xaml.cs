@@ -16,6 +16,14 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
 
     private EntityUid? _previewDummy;
 
+    // DS14-start
+    /// <summary>The current preview dummy; the "Dead Space" lobby portrait shows it too.</summary>
+    public EntityUid? PreviewDummy => _previewDummy;
+
+    /// <summary>Raised after the preview dummy is replaced.</summary>
+    public event Action? PreviewChanged;
+    // DS14-end
+
     public LobbyCharacterPreviewPanel()
     {
         RobustXamlLoader.Load(this);
@@ -52,6 +60,7 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         };
         spriteView.SetEntity(uid);
         ViewBox.AddChild(spriteView);
+        PreviewChanged?.Invoke(); // DS14
     }
 
     protected override void Dispose(bool disposing)

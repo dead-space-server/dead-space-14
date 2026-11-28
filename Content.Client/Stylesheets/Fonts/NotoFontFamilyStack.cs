@@ -42,6 +42,26 @@ public sealed class NotoFontFamilyStack(IResourceCache resCache, string variant 
 
     public HashSet<FontKind> AvailableKinds = [FontKind.Regular, FontKind.Bold, FontKind.Italic, FontKind.BoldItalic];
 
+    // DS14-start
+    /// <summary>
+    ///     The interface font of the "Dead Space" style in front, a size larger, with Noto Sans and its symbol fonts
+    ///     behind it for any glyph it lacks.
+    /// </summary>
+    public static NotoFontFamilyStack DeadSpaceInterface(IResourceCache resCache)
+    {
+        return new NotoFontFamilyStack(resCache)
+        {
+            _fontPrimary = "/Fonts/_DeadSpace/Play/Play-{2}.ttf",
+            _extras = ["/Fonts/NotoSans/NotoSans-Regular.ttf", "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf"],
+            AvailableKinds = [FontKind.Regular, FontKind.Bold],
+            _sizeOffset = 1,
+        };
+    }
+
+    /// <summary>Added to every requested size; lets a family that reads small sit level with Noto.</summary>
+    private int _sizeOffset;
+    // DS14-end
+
     /// <summary>
     ///     This should return the paths of every font in this stack given the abstract members.
     /// </summary>
@@ -85,6 +105,6 @@ public sealed class NotoFontFamilyStack(IResourceCache resCache, string variant 
         //ALDebugTools.AssertContains(AvailableKinds, kind);
         var paths = GetFontPaths(kind);
 
-        return resCache.GetFont(paths, size);
+        return resCache.GetFont(paths, size + _sizeOffset); // DS14
     }
 }

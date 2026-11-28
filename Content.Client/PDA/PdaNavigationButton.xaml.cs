@@ -24,6 +24,8 @@ public sealed partial class PdaNavigationButton : ContainerButton
         BorderThickness = new Thickness(0, 0, 0, 2)
     };
 
+    private static readonly StyleBoxEmpty HologramButtonBox = new();
+
     private Color? _inactiveBgColor;
     private Color? _activeBgColor;
     private Color? _inactiveFgColor;
@@ -95,6 +97,8 @@ public sealed partial class PdaNavigationButton : ContainerButton
 
             if (value is not null)
                 Icon.SetFromSpriteSpecifier(value);
+
+            UpdateVisuals(); // DS14
         }
     }
 
@@ -107,7 +111,13 @@ public sealed partial class PdaNavigationButton : ContainerButton
     public string? LabelText
     {
         get => Label.Text;
-        set => Label.Text = value;
+        // DS14-start
+        set
+        {
+            Label.Text = value;
+            UpdateVisuals();
+        }
+        // DS14-end
     }
 
     /// <summary>
@@ -172,11 +182,31 @@ public sealed partial class PdaNavigationButton : ContainerButton
 
     private void UpdateVisuals()
     {
+        // The projected box below is the whole button in the "Dead Space" style.
+        StyleBoxOverride = DeadSpaceStylePalette.Hologram ? HologramButtonBox : null;
         _styleBox.BackgroundColor = _isCurrent ? ActiveBgColor : InactiveBgColor;
         _styleBox.BorderColor = DeadSpaceStylePalette.ClassicChrome
             ? Color.FromHex("#5A5A5A")
             : DeadSpaceStylePalette.BorderTabActive;
         _styleBox.BorderThickness = _isCurrent ? CurrentTabBorderThickness : BorderThickness;
+
+        // The "Dead Space" style draws every tab and icon button as a separate framed projected button: the open
+        // tab and a switched-on toggle (the flashlight) are lit, a button lights up under the cursor, and a button
+        // without label or icon is an invisible spacer.
+        if (DeadSpaceStylePalette.Hologram)
+        {
+            var spacer = Icon is { Visible: false } && Label != null && string.IsNullOrEmpty(Label.Text);
+            var lit = _isCurrent || ToggleMode && _isActive;
+            _styleBox.BorderThickness = spacer ? new Thickness(0) : new Thickness(1);
+            _styleBox.BorderColor = lit ? DeadSpaceStylePalette.BorderTabActive : DeadSpaceStylePalette.BorderControl;
+            _styleBox.BackgroundColor = spacer
+                ? Color.Transparent
+                : lit
+                    ? DeadSpaceStylePalette.SurfaceTabActive
+                    : DrawMode == DrawModeEnum.Hover
+                        ? DeadSpaceStylePalette.ControlHover
+                        : DeadSpaceStylePalette.Control;
+        }
 
         if (Icon == null || Label == null)
             return;

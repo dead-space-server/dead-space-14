@@ -11,6 +11,11 @@
         VerticalExpand="True"
         HorizontalExpand="True"
         SeparationOverride="5">
+        <!-- DS14-start: categories as a button column in the Dead Space style -->
+        <ScrollContainer Name="CategoryScroll" HScrollEnabled="False" VerticalExpand="True" SetWidth="180" Visible="False">
+            <BoxContainer Name="CategoryButtons" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6" Margin="0 0 4 0" />
+        </ScrollContainer>
+        <!-- DS14-end -->
         <!-- Left Col-->
         <BoxContainer
             VerticalExpand="True"
@@ -82,7 +87,7 @@
                     </Button>
                 </BoxContainer>
                 <!-- DS14-start -->
-                <Label Text="{Loc 'lathe-menu-queue-title'}" Margin="5 5 5 5" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle" />
+                <Label Name="QueueTitle" Text="{Loc 'lathe-menu-queue-title'}" Margin="5 5 5 5" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle" />
                 <!-- DS14-end -->
                 <BoxContainer
                     Name="FabricatingContainer"
@@ -121,6 +126,13 @@
                             StyleClasses="Caution OpenLeft" />
                     </PanelContainer>
                 </BoxContainer>
+                <!-- DS14-start: progress and time left on the current item -->
+                <BoxContainer Name="ProductionRow" Orientation="Horizontal" Visible="False" Margin="5 4" SeparationOverride="8">
+                    <ProgressBar Name="ProductionBar" HorizontalExpand="True" VerticalAlignment="Center"
+                                 MinHeight="8" MinValue="0" MaxValue="1" Value="0" />
+                    <Label Name="ProductionTime" MinWidth="40" Align="Right" />
+                </BoxContainer>
+                <!-- DS14-end -->
                 <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
                     <BoxContainer
                         Name="QueueList"
@@ -136,7 +148,7 @@
             HorizontalExpand="True"
             Orientation="Vertical">
             <!-- DS14-start -->
-            <Label Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle" />
+            <Label Name="MaterialsTitle" Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle" />
             <!-- DS14-end -->
             <PanelContainer VerticalExpand="True" StyleClasses="PanelDeep">
                 <BoxContainer

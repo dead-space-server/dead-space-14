@@ -1,4 +1,5 @@
 using Content.Client.DeadSpace.Stylesheets;
+using Content.Client.DeadSpace.UserInterface.Hologram.Pda; // DS14
 using Content.Client.GameTicking.Managers;
 using Content.Shared.PDA;
 using Robust.Shared.Utility;
@@ -37,6 +38,16 @@ namespace Content.Client.PDA
 
         private int _currentView;
 
+        // DS14-start
+        private static readonly SpriteSpecifier HomeIcon = new SpriteSpecifier.Texture(new("/Textures/Interface/home.png"));
+
+        /// <summary>The PDA itself; the "Dead Space" home screen shows the ID card in its slot.</summary>
+        public EntityUid? PdaEntity;
+
+        private List<(EntityUid, CartridgeComponent)>? _programs;
+        private bool _programsDirty;
+        // DS14-end
+
         public event Action<EntityUid>? OnProgramItemPressed;
         public event Action<EntityUid>? OnUninstallButtonPressed;
         public event Action<EntityUid>? OnInstallButtonPressed;
@@ -48,12 +59,16 @@ namespace Content.Client.PDA
 
             ViewContainer.OnChildAdded += control => control.Visible = false;
 
-            HomeButton.IconTexture = new SpriteSpecifier.Texture(new("/Textures/Interface/home.png"));
+            HomeButton.IconTexture = HomeIcon; // DS14
             FlashLightToggleButton.IconTexture = new SpriteSpecifier.Texture(new("/Textures/Interface/light.png"));
             EjectPenButton.IconTexture = new SpriteSpecifier.Texture(new("/Textures/Interface/pencil.png"));
             EjectIdButton.IconTexture = new SpriteSpecifier.Texture(new("/Textures/Interface/eject.png"));
             EjectPaiButton.IconTexture = new SpriteSpecifier.Texture(new("/Textures/Interface/pai.png"));
             ProgramCloseButton.IconTexture = new SpriteSpecifier.Texture(new("/Textures/Interface/Nano/cross.svg.png"));
+            // DS14-start
+            RingtoneButton.IconTexture = new SpriteSpecifier.Rsi(new("/Textures/Interface/Actions/actions_borg.rsi"), "musical-module");
+            RingtoneButton.ToolTip = Loc.GetString("comp-pda-ui-ringtone-button");
+            // DS14-end
 
 
             HomeButton.OnPressed += _ => ToHomeScreen();
@@ -210,12 +225,34 @@ namespace Content.Client.PDA
             ToggleSilentModeButton.RemoveStyleClass(DeadSpaceStyleClass.ControlPositive);
             if (silentMode)
                 ToggleSilentModeButton.AddStyleClass(DeadSpaceStyleClass.ControlPositive);
+
+            HologramHome.UpdateState(state, PdaEntity);
+            SetHologramTitle(HologramHome.WindowTitle, state.Address?.ToUpper());
             // DS14-End
         }
 
         public void UpdateAvailablePrograms(List<(EntityUid, CartridgeComponent)> programs)
         {
             ProgramList.RemoveAllChildren();
+
+            // DS14-start
+            _programs = programs;
+            HologramHome.SetPrograms(programs,
+                uid => OnProgramItemPressed?.Invoke(uid),
+                uid => OnInstallButtonPressed?.Invoke(uid),
+                uid => OnUninstallButtonPressed?.Invoke(uid));
+
+            if (DeadSpaceStylePalette.Hologram && programs.Count > 0)
+            {
+                var grid = new PdaHologramProgramGrid { Margin = new Thickness(2, 6) };
+                grid.Populate(programs,
+                    uid => OnProgramItemPressed?.Invoke(uid),
+                    uid => OnInstallButtonPressed?.Invoke(uid),
+                    uid => OnUninstallButtonPressed?.Invoke(uid));
+                ProgramList.AddChild(grid);
+                return;
+            }
+            // DS14-end
 
             if (programs.Count == 0)
             {
@@ -298,7 +335,7 @@ namespace Content.Client.PDA
             ProgramTitle.Visible = false;
             ProgramCloseButton.Visible = false;
             NavigationSpacer.Visible = true; // DS14
-            ProgramListButton.Visible = true;
+            ProgramListButton.Visible = !DeadSpaceStylePalette.Hologram; // DS14
             SettingsButton.Visible = true;
         }
 
@@ -356,6 +393,58 @@ namespace Content.Client.PDA
                 view.Visible = false;
             }
         }
+
+        // DS14-start
+        /// <summary>
+        /// The "Dead Space" style turns the navigation into separate framed tabs and icon buttons and swaps the home
+        /// rows for the hologram home screen, whose program tiles replace the program list tab.
+        /// </summary>
+        protected override void HologramChanged(bool hologram)
+        {
+            base.HologramChanged(hologram);
+
+            HologramHome.Visible = hologram;
+            HomeSummary.Visible = !hologram;
+            RingtoneButton.Visible = hologram;
+
+            // The home screen holds the program tiles with their install buttons, so there is no program list tab.
+            if (!ProgramTitle.Visible)
+                ProgramListButton.Visible = !hologram;
+            if (hologram && _currentView == ProgramListView)
+                ToHomeScreen();
+
+            NavigationBar.SeparationOverride = hologram ? 6 : null;
+            NavigationBar.Margin = hologram ? new Thickness(2, 6, 2, 0) : new Thickness(1, 1, 3, 0);
+
+            HomeButton.IconTexture = hologram ? null : HomeIcon;
+            HomeButton.LabelText = hologram ? Loc.GetString("pda-hologram-tab-home").ToUpperInvariant() : null;
+            HomeButton.SetWidth = hologram ? float.NaN : 32;
+            HomeButton.MinWidth = hologram ? 100 : 0;
+            ProgramListButton.LabelText = TabLabel("comp-pda-io-program-list-button", hologram);
+            SettingsButton.LabelText = TabLabel("comp-pda-io-settings-button", hologram);
+
+            _programsDirty = true;
+        }
+
+        private static string TabLabel(string key, bool hologram)
+        {
+            var text = Loc.GetString(key);
+            return hologram ? text.ToUpperInvariant() : text;
+        }
+
+        protected override void FrameUpdate(FrameEventArgs args)
+        {
+            base.FrameUpdate(args);
+
+            // Rebuilt outside the styling pass that reported the style change.
+            if (!_programsDirty)
+                return;
+
+            _programsDirty = false;
+            if (_programs != null)
+                UpdateAvailablePrograms(_programs);
+        }
+        // DS14-end
 
         protected override void Draw(DrawingHandleScreen handle)
         {

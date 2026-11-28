@@ -1,0 +1,9 @@
+- files: ["SlotBackground.png", "Slots/back.png", "Slots/belt.png", "Slots/ears.png", "Slots/glasses.png", "Slots/gloves.png", "Slots/hand_l.png", "Slots/hand_l_no_letter.png", "Slots/hand_m.png", "Slots/hand_r.png", "Slots/hand_r_no_letter.png", "Slots/head.png", "Slots/id.png", "Slots/mask.png", "Slots/neck.png", "Slots/pocket.png", "Slots/shoes.png", "Slots/suit.png", "Slots/suit_storage.png", "Slots/toggle.png", "Slots/uniform.png", "Slots/web.png", "Storage/back.png", "Storage/exit.png", "Storage/piece_bottom.png", "Storage/piece_bottomLeft.png", "Storage/piece_bottomRight.png", "Storage/piece_center.png", "Storage/piece_left.png", "Storage/piece_right.png", "Storage/piece_top.png", "Storage/piece_topLeft.png", "Storage/piece_topRight.png", "Storage/sidebar_bottom.png", "Storage/sidebar_mid.png", "Storage/sidebar_top.png", "item_status_left.png", "item_status_left_highlight.png", "item_status_right.png", "item_status_right_highlight.png", "slot_highlight.png", "template_small.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "TrasenKnox HUD theme: original sprites by Imaginos16 (/tg/station, commit 5a3c1d63cb63edaac080414196658333316b277b), ported and expanded for SS14 by Salty145; recoloured for Dead Space 14"
+  source: "https://github.com/space-wizards/space-station-14/tree/master/Resources/Textures/Interface/TrasenKnox"
+
+- files: ["Slots/socks.png", "Slots/tailbag.png", "Slots/underwearb.png", "Slots/underweart.png", "Storage/sidebar_fat.png", "Storage/tile_empty.png", "Storage/tile_empty_opaque.png"]
+  license: "CC-BY-NC-SA-3.0"
+  copyright: "Taken from https://github.com/goonstation/goonstation at commit e77d85d9c1d93aa32da7702737ceeac2b56738ac, slightly modified by PixelTK; recoloured for Dead Space 14"
+  source: "https://github.com/goonstation/goonstation/commit/e77d85d9c1d93aa32da7702737ceeac2b56738ac"

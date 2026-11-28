@@ -2,8 +2,10 @@
                xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
                Title="{Loc 'ui-options-title'}"
                MinSize="800 570">
+    <!-- DS14-start: tab strip of the "Dead Space" style -->
     <TabContainer Name="Tabs"
                   Access="Public"
+                  StyleClasses="DeadSpaceHoloTabs"
                   VerticalExpand="True"
                   HorizontalExpand="True">
         <tabs:MiscTab Name="MiscTab" />
@@ -16,4 +18,5 @@
         <!-- DS14-end -->
         <tabs:AdminOptionsTab Name="AdminOptionsTab" />
     </TabContainer>
+    <!-- DS14-end -->
 </DefaultWindow>

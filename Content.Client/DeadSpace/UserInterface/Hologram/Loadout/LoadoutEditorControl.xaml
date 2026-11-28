@@ -1,0 +1,82 @@
+<BoxContainer xmlns="https://spacestation14.io"
+              xmlns:loadout="clr-namespace:Content.Client.DeadSpace.UserInterface.Hologram.Loadout"
+              xmlns:hologram="clr-namespace:Content.Client.DeadSpace.UserInterface.Hologram"
+              Orientation="Vertical"
+              VerticalExpand="True"
+              HorizontalExpand="True"
+              Margin="6 4 6 6"
+              SeparationOverride="6">
+    <!-- Header: screen title, edited role, the job's priority (embedded in the jobs tab) and loadout points. -->
+    <BoxContainer Orientation="Horizontal" Margin="2 0" SeparationOverride="4">
+        <Label Name="HeaderTitle" StyleClasses="DeadSpaceTitle" VAlign="Bottom"/>
+        <Label Name="HeaderRole" StyleClasses="DeadSpaceSectionTitle" VAlign="Bottom" ClipText="True" Margin="8 0 0 1"/>
+        <Control HorizontalExpand="True"/>
+        <BoxContainer Name="PriorityRow" Orientation="Horizontal" SeparationOverride="2" Visible="False"/>
+        <Label Name="PointsLabel" StyleClasses="DeadSpaceSectionTitle" VAlign="Bottom" Margin="8 0 0 0" Visible="False"/>
+    </BoxContainer>
+    <BoxContainer Name="RoleNameBox" Orientation="Horizontal" Margin="2 0" SeparationOverride="8">
+        <Label Name="LoadoutNameLabel" StyleClasses="LabelSubText" VAlign="Center"/>
+        <LineEdit Name="RoleNameEdit" HorizontalExpand="True"/>
+    </BoxContainer>
+    <Label Name="RoleDescription" StyleClasses="LabelSubText" ClipText="True" Margin="2 0" Visible="False"/>
+    <BoxContainer Orientation="Horizontal" VerticalExpand="True" HorizontalExpand="True" SeparationOverride="6">
+        <!-- Roles grouped by department. -->
+        <PanelContainer Name="RolePanel" SetWidth="220">
+            <BoxContainer Orientation="Vertical" VerticalExpand="True" SeparationOverride="4">
+                <BoxContainer Orientation="Horizontal" SeparationOverride="2">
+                    <LineEdit Name="RoleSearch" HorizontalExpand="True"/>
+                    <Button Name="RoleSearchClear" Text="×" MinWidth="24"/>
+                </BoxContainer>
+                <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                    <BoxContainer Name="RoleList" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2"/>
+                </ScrollContainer>
+            </BoxContainer>
+        </PanelContainer>
+        <!-- Character preview between two columns of equipment slots, extra slots under it. -->
+        <PanelContainer Name="EquipmentPanel" HorizontalExpand="True">
+            <ScrollContainer Name="EquipmentScroll" HScrollEnabled="False" VerticalExpand="True" HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="8">
+                    <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" SeparationOverride="10">
+                        <BoxContainer Name="LeftSlots" Orientation="Vertical" VerticalAlignment="Center" MinWidth="92"/>
+                        <BoxContainer Orientation="Vertical" VerticalAlignment="Center" SeparationOverride="6">
+                            <loadout:LoadoutPreviewFrame Name="PreviewFrame" SetSize="220 260">
+                                <SpriteView Name="PreviewSprite"
+                                            Scale="6 6"
+                                            Stretch="Fit"
+                                            OverrideDirection="South"
+                                            HorizontalExpand="True"
+                                            VerticalExpand="True"/>
+                            </loadout:LoadoutPreviewFrame>
+                            <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" SeparationOverride="4">
+                                <Button Name="RotateLeftButton" Text="◀"/>
+                                <Button Name="RotateRightButton" Text="▶"/>
+                            </BoxContainer>
+                        </BoxContainer>
+                        <BoxContainer Name="RightSlots" Orientation="Vertical" VerticalAlignment="Center" MinWidth="92"/>
+                    </BoxContainer>
+                    <PanelContainer Name="BottomDivider" StyleClasses="LowDivider" MinHeight="1" Visible="False"/>
+                    <GridContainer Name="BottomSlots" Columns="5" HorizontalAlignment="Center" Visible="False"/>
+                    <Label Name="NoSlotsLabel" StyleClasses="LabelSubText" HorizontalAlignment="Center" Visible="False"/>
+                </BoxContainer>
+            </ScrollContainer>
+            <hologram:HologramInterference Subtle="True"/>
+        </PanelContainer>
+        <!-- Options of the selected slot and the groups that don't map to a slot. -->
+        <PanelContainer Name="InventoryPanel" SetWidth="360">
+            <BoxContainer Orientation="Vertical" VerticalExpand="True">
+                <Label Name="InventoryTitle" StyleClasses="DeadSpaceSectionTitle" ClipText="True" Margin="2 0 2 4"/>
+                <PanelContainer StyleClasses="LowDivider" MinHeight="1" Margin="0 0 0 4"/>
+                <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                    <BoxContainer Name="GroupPanel" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4"/>
+                </ScrollContainer>
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+    <!-- Bottom bar of the window: unsaved changes and the profile editor's reset/save. -->
+    <BoxContainer Name="BottomBar" Orientation="Horizontal" Margin="2 0" SeparationOverride="6">
+        <Label Name="UnsavedLabel" StyleClasses="highlight" VAlign="Center" Visible="False"/>
+        <Control HorizontalExpand="True"/>
+        <Button Name="ResetButton" StyleClasses="DeadSpaceControlDanger" MinWidth="110"/>
+        <Button Name="SaveButton" StyleClasses="DeadSpaceAction" MinWidth="110"/>
+    </BoxContainer>
+</BoxContainer>

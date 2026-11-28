@@ -13,6 +13,11 @@ public sealed class LatheUpdateState : BoundUserInterfaceState
 
     public ProtoId<LatheRecipePrototype>? CurrentlyProducing;
 
+    // DS14-start: when the item being made is done, in server game time, and how long it takes; null when idle.
+    public TimeSpan? ProductionEnd;
+    public TimeSpan ProductionLength;
+    // DS14-end
+
     public LatheUpdateState(List<ProtoId<LatheRecipePrototype>> recipes, LatheRecipeBatch[] queue, ProtoId<LatheRecipePrototype>? currentlyProducing = null)
     {
         Recipes = recipes;

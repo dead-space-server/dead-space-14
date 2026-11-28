@@ -3,16 +3,24 @@
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Chat.Widgets"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Systems.Chat.Controls"
+    xmlns:hologram="clr-namespace:Content.Client.DeadSpace.UserInterface.Hologram.Chat"
     MouseFilter="Stop"
     HorizontalExpand="True"
     VerticalExpand="True"
     MinSize="465 225">
-    <PanelContainer Name="ChatWindowPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True"
+    <!-- DS14-start: the panel keeps the chat opacity and becomes a projected frame in the Dead Space style -->
+    <hologram:HologramChatPanel Name="ChatWindowPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True"
                     StyleClasses="StyleNano.StyleClassChatPanel">
+    <!-- DS14-end -->
         <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" VerticalExpand="True">
+            <!-- DS14-start -->
+            <hologram:HologramChatHeader Name="HologramHeader" Visible="False" />
+            <!-- DS14-end -->
             <OutputPanel Name="Contents" HorizontalExpand="True" VerticalExpand="True" Margin="8 8 8 4"
                          ShowScrollDownButton="True" StyleClasses="ChatTranscript" />
             <controls:ChatInputBox HorizontalExpand="True" Name="ChatInput" Access="Public" Margin="2"/>
         </BoxContainer>
-    </PanelContainer>
+    <!-- DS14-start -->
+    </hologram:HologramChatPanel>
+    <!-- DS14-end -->
 </widgets:ChatBox>

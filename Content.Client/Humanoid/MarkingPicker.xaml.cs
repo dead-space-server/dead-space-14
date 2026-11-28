@@ -386,6 +386,38 @@ public sealed partial class MarkingPicker : Control
         PopulateUsed();
     }
 
+    // DS14-start
+    /// <summary>Whether the category dropdown is shown; the appearance screen picks the category through its slots.</summary>
+    public bool CategorySelectorVisible
+    {
+        get => CMarkingCategoryButton.Visible;
+        set => CMarkingCategoryButton.Visible = value;
+    }
+
+    /// <summary>Puts the unused and used lists one above the other, for a narrow panel.</summary>
+    public bool StackLists
+    {
+        get => CMarkingLists.Orientation == BoxContainer.LayoutOrientation.Vertical;
+        set => CMarkingLists.Orientation = value
+            ? BoxContainer.LayoutOrientation.Vertical
+            : BoxContainer.LayoutOrientation.Horizontal;
+    }
+
+    /// <summary>Switches the picker to a category, as choosing it in the dropdown does. False if it isn't offered.</summary>
+    public bool SelectCategory(MarkingCategories category)
+    {
+        var id = _markingCategories.IndexOf(category);
+        if (id < 0 || !CMarkingCategoryButton.TrySelectId(id))
+            return false;
+
+        _selectedMarkingCategory = category;
+        Populate(CMarkingSearch.Text);
+        PopulateUsed();
+        UpdatePoints();
+        return true;
+    }
+    // DS14-end
+
     private void UpdatePoints()
     {
         var count = _currentMarkings.PointsLeft(_selectedMarkingCategory);

@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.UserInterface.Hologram.Sound; // DS14
 using Content.Shared.CCVar;
 using Robust.Client.Audio;
 using Robust.Client.ResourceManagement;
@@ -20,6 +21,12 @@ public sealed partial class AudioUIController : UIController
     private const float ClickGain = 0.25f;
     private const float HoverGain = 0.05f;
 
+    // DS14-start
+    private UISoundOverride? _soundOverride;
+    private float CurrentClickGain => _soundOverride?.ClickGain ?? ClickGain;
+    private float CurrentHoverGain => _soundOverride?.HoverGain ?? HoverGain;
+    // DS14-end
+
     public override void Initialize()
     {
         base.Initialize();
@@ -41,12 +48,12 @@ public sealed partial class AudioUIController : UIController
 
         if (_clickSource != null)
         {
-            _clickSource.Gain = ClickGain * _interfaceGain;
+            _clickSource.Gain = CurrentClickGain * _interfaceGain; // DS14
         }
 
         if (_hoverSource != null)
         {
-            _hoverSource.Gain = HoverGain * _interfaceGain;
+            _hoverSource.Gain = CurrentHoverGain * _interfaceGain; // DS14
         }
     }
 
@@ -54,13 +61,13 @@ public sealed partial class AudioUIController : UIController
     {
         if (!string.IsNullOrEmpty(value))
         {
-            var resource = GetSoundOrFallback(value, CCVars.UIClickSound.DefaultValue);
+            var resource = GetSoundOrFallback(_soundOverride?.Click ?? value, CCVars.UIClickSound.DefaultValue); // DS14
             var source =
                 _audioManager.CreateAudioSource(resource);
 
             if (source != null)
             {
-                source.Gain = ClickGain * _interfaceGain;
+                source.Gain = CurrentClickGain * _interfaceGain; // DS14
                 source.Global = true;
             }
 
@@ -77,13 +84,13 @@ public sealed partial class AudioUIController : UIController
     {
         if (!string.IsNullOrEmpty(value))
         {
-            var hoverResource = GetSoundOrFallback(value, CCVars.UIHoverSound.DefaultValue);
+            var hoverResource = GetSoundOrFallback(_soundOverride?.Hover ?? value, CCVars.UIHoverSound.DefaultValue); // DS14
             var hoverSource =
                 _audioManager.CreateAudioSource(hoverResource);
 
             if (hoverSource != null)
             {
-                hoverSource.Gain = HoverGain * _interfaceGain;
+                hoverSource.Gain = CurrentHoverGain * _interfaceGain; // DS14
                 hoverSource.Global = true;
             }
 
@@ -95,6 +102,22 @@ public sealed partial class AudioUIController : UIController
             UIManager.SetHoverSound(null);
         }
     }
+
+    // DS14-start
+    /// <summary>
+    /// Swaps the click and hover sounds for another set with its own loudness, e.g. the "Dead Space" interface
+    /// style's; null puts the server's sounds back. A sound the server turned off stays off.
+    /// </summary>
+    public void SetSoundOverride(UISoundOverride? soundOverride)
+    {
+        if (_soundOverride == soundOverride)
+            return;
+
+        _soundOverride = soundOverride;
+        SetClickSound(_configManager.GetCVar(CCVars.UIClickSound));
+        SetHoverSound(_configManager.GetCVar(CCVars.UIHoverSound));
+    }
+    // DS14-end
 
     private AudioResource GetSoundOrFallback(string path, string fallback)
     {

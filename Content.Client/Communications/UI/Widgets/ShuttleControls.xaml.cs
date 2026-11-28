@@ -65,5 +65,10 @@ public sealed partial class ShuttleControls : Control
     {
         EmergencyShuttleCallButton.Disabled = !(_canCall && !_countdownStarted);
         EmergencyShuttleRecallButton.Disabled = !(_canCall && _countdownStarted);
+        // DS14-start
+        ShuttleStatusLabel.Text = Loc.GetString(_countdownStarted
+            ? "hologram-comms-shuttle-en-route"
+            : "hologram-comms-shuttle-not-called");
+        // DS14-end
     }
 }

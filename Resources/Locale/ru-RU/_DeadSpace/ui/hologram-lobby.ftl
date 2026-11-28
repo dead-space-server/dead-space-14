@@ -1,0 +1,16 @@
+hologram-lobby-title = Мёртвый Космос
+hologram-lobby-round-panel = Раунд
+hologram-lobby-round-number = Номер раунда
+hologram-lobby-round-mode = Режим
+hologram-lobby-round-map = Станция
+hologram-lobby-round-players = Игроки
+hologram-lobby-players-ready = { $players } · готовы { $ready }
+hologram-lobby-ready-panel = Готовность
+hologram-lobby-character = { $name } · { $job }
+hologram-lobby-no-job = должность не выбрана
+hologram-lobby-chat-panel = Чат лобби
+hologram-lobby-server-tab = Сервер
+hologram-lobby-unknown = —
+hologram-lobby-arrival = Шаттл на станцию «{ $station }» · прибытие через { $time }
+hologram-lobby-shuttle = Шаттл на станцию «{ $station }»
+hologram-lobby-players = Игроков на сервере

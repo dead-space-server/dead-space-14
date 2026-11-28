@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
     <!-- DS14-start: KSO-styled lobby character preview -->
-    <PanelContainer StyleClasses="DeadSpaceInset"
+    <PanelContainer StyleClasses="DeadSpaceInset DeadSpaceHoloLobbyInset"
                     HorizontalExpand="True">
         <BoxContainer Name="VBox"
                       Orientation="Vertical"
@@ -16,7 +16,7 @@
                           Orientation="Vertical"
                           Visible="False"
                           HorizontalExpand="True">
-                <Label Name="Summary" HorizontalAlignment="Center" Margin="3 3"/>
+                <Label Name="Summary" HorizontalAlignment="Center" Margin="3 3" StyleClasses="DeadSpaceHoloLobbyCharacterName"/>
                 <BoxContainer Name="ViewBox" Orientation="Horizontal" HorizontalAlignment="Center">
 
                 </BoxContainer>

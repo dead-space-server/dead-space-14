@@ -8,28 +8,28 @@
     <!-- DS14-start -->
     <BoxContainer Orientation="Vertical"
                   SeparationOverride="6"
-                  MinWidth="220"
+                  MinWidth="260"
                   Margin="10">
-        <ui:VoteCallMenuButton />
+        <ui:VoteCallMenuButton StyleClasses="DeadSpaceHoloMenuRow" />
         <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
-        <Button Access="Public" Name="RulesButton" Text="{Loc 'ui-escape-rules'}" />
-        <Button Access="Public" Name="GuidebookButton" Text="{Loc 'ui-escape-guidebook'}" />
+        <Button Access="Public" Name="RulesButton" Text="{Loc 'ui-escape-rules'}" StyleClasses="DeadSpaceHoloMenuRow" />
+        <Button Access="Public" Name="GuidebookButton" Text="{Loc 'ui-escape-guidebook'}" StyleClasses="DeadSpaceHoloMenuRow" />
         <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
-        <Button Access="Public" Name="WikiButton" Text="{Loc 'ui-escape-wiki'}" />
-        <Button Access="Public" Name="DiscordButton" Text="{Loc 'ui-escape-discord'}" />
-        <Button Access="Public" Name="PatrionButton" Text="{Loc 'ui-escape-patrion'}" />
-        <changelog:ChangelogButton Access="Public" Name="ChangelogButton" />
-        <Button Access="Public" Name="FeedbackButton" Text="{Loc 'ui-escape-feedback'}"/>
-        <Button Access="Public" Name="AdminRemarksButton" Text="{Loc 'ui-escape-remarks'}" />
+        <Button Access="Public" Name="WikiButton" Text="{Loc 'ui-escape-wiki'}" StyleClasses="DeadSpaceHoloMenuRow" />
+        <Button Access="Public" Name="DiscordButton" Text="{Loc 'ui-escape-discord'}" StyleClasses="DeadSpaceHoloMenuRow" />
+        <Button Access="Public" Name="PatrionButton" Text="{Loc 'ui-escape-patrion'}" StyleClasses="DeadSpaceHoloMenuRow" />
+        <changelog:ChangelogButton Access="Public" Name="ChangelogButton" StyleClasses="DeadSpaceHoloMenuRow" />
+        <Button Access="Public" Name="FeedbackButton" Text="{Loc 'ui-escape-feedback'}" StyleClasses="DeadSpaceHoloMenuRow" />
+        <Button Access="Public" Name="AdminRemarksButton" Text="{Loc 'ui-escape-remarks'}" StyleClasses="DeadSpaceHoloMenuRow" />
         <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
-        <Button Access="Public" Name="OptionsButton" Text="{Loc 'ui-escape-options'}" />
+        <Button Access="Public" Name="OptionsButton" Text="{Loc 'ui-escape-options'}" StyleClasses="DeadSpaceHoloMenuRow" />
         <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
-        <Button Access="Public" Name="DisconnectButton" Text="{Loc 'ui-escape-disconnect'}" />
-        <Button Access="Public" Name="QuitButton" Text="{Loc 'ui-escape-quit'}" StyleClasses="negative" />
+        <Button Access="Public" Name="DisconnectButton" Text="{Loc 'ui-escape-disconnect'}" StyleClasses="DeadSpaceHoloMenuRow" />
+        <Button Access="Public" Name="QuitButton" Text="{Loc 'ui-escape-quit'}" StyleClasses="negative DeadSpaceHoloMenuRow DeadSpaceHoloDanger" />
     </BoxContainer>
     <!-- DS14-end -->
 </ui1:EscapeMenu>

@@ -12,6 +12,8 @@ using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.IdentityManagement;
 using Content.Client.DeadSpace.Body.Limbs; // DS14
+using Content.Client.DeadSpace.Stylesheets; // DS14
+using Content.Client.DeadSpace.UserInterface.Hologram.Medical; // DS14
 using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.DeadSpace.Surgery; // DS14
 using Content.Shared.MedicalScanner;
@@ -39,14 +41,14 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
     private NetEntity? _limbPatient; // DS14
     private LimbZone? _limbPick; // DS14
     private readonly AnalyzerLimbView _outline = new(); // DS14
-    private BoxContainer? _limbText; // DS14
+    private readonly HoloLimbRow[] _limbRows = new HoloLimbRow[LimbWoundRules.BodyZoneCount]; // DS14
     private bool _limbDetailed; // DS14
     private bool _limbMachine; // DS14
-    private IReadOnlyList<byte>? _limbShadeCache; // DS14
     private IReadOnlyList<LimbScanIssue>? _limbIssueCache; // DS14
     private Dictionary<string, FixedPoint2>? _generalGroups; // DS14
     private Dictionary<string, FixedPoint2>? _generalTypes; // DS14
     private FixedPoint2 _generalTotal; // DS14
+    private MobState? _mobState; // DS14
 
     public HealthAnalyzerControl()
     {
@@ -56,24 +58,77 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         _entityManager = dependencies.Resolve<IEntityManager>();
         _spriteSystem = _entityManager.System<SpriteSystem>(); // DS14
         _prototypes = dependencies.Resolve<IPrototypeManager>();
-        HealthStripe.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#d16b7a") }; // DS14
-        BloodStripe.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#7dcea0") }; // DS14
-        TempStripe.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#d16b7a") }; // DS14
-        StateStripe.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#5aa0c8") }; // DS14
-        ScanStripe.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#5ec8c8") }; // DS14
-        HurtStripe.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#d7b56d") }; // DS14
-        HealthBar.ForegroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#d16b7a") }; // DS14
-        BloodBar.ForegroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#7dcea0") }; // DS14
-        RotStripe.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#6aaa4a") }; // DS14
-        SpriteView.MouseFilter = MouseFilterMode.Ignore; // DS14
-        Portrait.InheritChildMeasure = false; // DS14
-        Portrait.RectClipContent = true; // DS14
-        _outline.SetSize = new Vector2(64f, 64f); // DS14
-        Portrait.RemoveChild(SpriteView); // DS14
-        Portrait.AddChild(SpriteView); // DS14
-        Portrait.AddChild(_outline); // DS14
-        _outline.OnZone += OnLimbOutline; // DS14
+        // DS14-start
+        SpriteView.MouseFilter = MouseFilterMode.Ignore;
+        Portrait.InheritChildMeasure = false;
+        Portrait.RectClipContent = true;
+        _outline.SetSize = new Vector2(128f, 128f);
+        Portrait.RemoveChild(SpriteView);
+        Portrait.AddChild(SpriteView);
+        Portrait.AddChild(_outline);
+        _outline.OnZone += OnLimbOutline;
+
+        // One row per body part, made once so hover and the picked part survive the scanner's updates.
+        for (var i = 0; i < _limbRows.Length; i++)
+        {
+            var row = new HoloLimbRow((LimbZone) i);
+            row.OnPressed += _ => OnLimbOutline(_limbPick == row.Zone ? null : row.Zone);
+            _limbRows[i] = row;
+            LimbsContainer.AddChild(row);
+        }
+
+        ConditionCaption.Text = Caption(ConditionCaption.Text);
+        BloodTitle.Text = Caption(BloodTitle.Text);
+        TemperatureTitle.Text = Caption(TemperatureTitle.Text);
+        ScanTitle.Text = Caption(ScanTitle.Text);
+        RotTitle.Text = Caption(RotTitle.Text);
+        ApplyChrome();
+        // DS14-end
     }
+
+    // DS14-start
+    /// <summary>Small uppercase caption without the trailing colon of the older strings.</summary>
+    private static string Caption(string? text)
+    {
+        return (text ?? string.Empty).TrimEnd().TrimEnd(':').ToUpperInvariant();
+    }
+
+    protected override void StylePropertiesChanged()
+    {
+        base.StylePropertiesChanged();
+        ApplyChrome();
+    }
+
+    /// <summary>
+    /// Colours and panels set in code. Re-run on every restyle (a style or projection colour change restyles the whole
+    /// interface) and on every scan, so they always follow the active palette.
+    /// </summary>
+    private void ApplyChrome()
+    {
+        var holo = DeadSpaceStylePalette.Hologram;
+        // A flat projection-coloured bar in a dim frame, no glow; the other styles keep the old green bar.
+        BloodBar.ForegroundStyleBoxOverride = new StyleBoxFlat
+        {
+            BackgroundColor = holo ? DeadSpaceStylePalette.BorderHeader : Color.FromHex("#7dcea0"),
+        };
+        BloodBar.BackgroundStyleBoxOverride = holo
+            ? new StyleBoxFlat
+            {
+                BackgroundColor = DeadSpaceStylePalette.BorderHeader.WithAlpha(0.1f),
+                BorderColor = DeadSpaceStylePalette.BorderDark,
+                BorderThickness = new Thickness(1),
+            }
+            : null;
+
+        // Warnings sit in a square amber frame; the other styles keep the plain dark panel.
+        AlertsDivider.PanelOverride = holo
+            ? DeadSpaceStyleBoxes.Flat(
+                DeadSpaceStylePalette.SurfaceInset,
+                DeadSpaceStylePalette.Amber,
+                new Thickness(2))
+            : null;
+    }
+    // DS14-end
 
     public void Populate(HealthAnalyzerUiState state)
     {
@@ -104,7 +159,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                 : Loc.GetString("health-analyzer-window-scan-mode-inactive")
             : Loc.GetString("health-analyzer-window-entity-unknown-text");
 
-        ScanModeLabel.FontColorOverride = state.ScanMode.HasValue && state.ScanMode.Value ? Color.Green : Color.Red;
+        ScanModeLabel.FontColorOverride = state.ScanMode.HasValue && state.ScanMode.Value ? MedicalHoloColors.Good : MedicalHoloColors.Off; // DS14
 
         // Patient Information
 
@@ -114,7 +169,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         NoDataTex.Visible = !SpriteView.Visible;
 
         var name = new FormattedMessage();
-        name.PushColor(Color.FromHex("#d7b56d")); // DS14
+        name.PushColor(MedicalHoloColors.Heading); // DS14
         name.AddText(_entityManager.HasComponent<MetaDataComponent>(target.Value)
             ? Identity.Name(target.Value, _entityManager)
             : Loc.GetString("health-analyzer-window-entity-unknown-text"));
@@ -125,12 +180,18 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                 out var humanoidAppearanceComponent)
                 ? Loc.GetString(_prototypes.Index<SpeciesPrototype>(humanoidAppearanceComponent.Species).Name)
                 : Loc.GetString("health-analyzer-window-entity-unknown-species-text");
+        SpeciesLabel.Text = Caption(SpeciesLabel.Text); // DS14
 
         // Basic Diagnostic
 
         TemperatureLabel.Text = !float.IsNaN(state.Temperature)
             ? $"{state.Temperature - Atmospherics.T0C:F1} °C ({state.Temperature:F1} K)"
             : Loc.GetString("health-analyzer-window-entity-unknown-value-text");
+        // DS14-start
+        TemperatureTag.Visible = state.Overheating;
+        if (state.Overheating)
+            TemperatureTag.Set(Loc.GetString("hologram-medical-overheating"), MedicalHoloColors.Warning);
+        // DS14-end
 
         BloodLabel.Text = !float.IsNaN(state.BloodLevel)
             ? $"{state.BloodLevel * 100:F1} %"
@@ -141,6 +202,8 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             _entityManager.TryGetComponent<MobStateComponent>(target.Value, out var mobStateComponent)
                 ? GetStatus(mobStateComponent.CurrentState)
                 : Loc.GetString("health-analyzer-window-entity-unknown-text");
+        StatusLabel.Text = StatusLabel.Text?.ToUpperInvariant(); // DS14
+        _mobState = mobStateComponent?.CurrentState; // DS14
 
         // Total Damage
 
@@ -161,9 +224,9 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         {
             AlertsContainer.AddChild(new Label
             {
-                Text = Loc.GetString("health-analyzer-section-warnings"),
+                Text = Caption(Loc.GetString("health-analyzer-section-warnings")), // DS14
                 Margin = new Thickness(0, 0, 0, 2),
-                FontColorOverride = Color.FromHex("#d7b56d"),
+                FontColorOverride = MedicalHoloColors.Warning, // DS14
             });
         }
 
@@ -202,7 +265,31 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         ShowRot(target.Value);
         ShowDamage();
         DrawInjectedReagents(state.Reagents);
+        // DS14-start
+        StatusLabel.FontColorOverride = StatusColor();
+        ApplyChrome();
+        // DS14-end
     }
+
+    // DS14-start
+    /// <summary>Mob state colour; a living patient is coloured by how much of the body is left, like the spine.</summary>
+    private Color StatusColor()
+    {
+        return _mobState switch
+        {
+            MobState.Dead or MobState.Critical => MedicalHoloColors.Critical,
+            MobState.PreCritical => MedicalHoloColors.Bad,
+            MobState.Alive => MedicalHoloColors.ForFraction(GeneralLeft()),
+            _ => MedicalHoloColors.Missing,
+        };
+    }
+
+    private float GeneralLeft()
+    {
+        var max = Pool(null);
+        return Math.Clamp((max - (float) _generalTotal) / max, 0f, 1f);
+    }
+    // DS14-end
 
     private static RichTextLabel AlertLine(string text)
     {
@@ -215,23 +302,18 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         return label;
     }
 
+    // DS14-start
     private void DrawLimbs(NetEntity? patient, bool hasLimbs, IReadOnlyList<byte>? shades, IReadOnlyList<LimbScanIssue>? issues)
     {
-        LimbsContainer.RemoveAllChildren();
         LimbsDivider.Visible = hasLimbs;
         LimbsContainer.Visible = hasLimbs;
         _outline.Visible = hasLimbs;
         if (!hasLimbs)
         {
             _limbPick = null;
-            _limbText = null;
-            _limbShadeCache = null;
             _limbIssueCache = null;
             return;
         }
-
-        _outline.Shades = SyncShades(shades, patient);
-        _outline.Selected = _limbPick;
 
         if (_limbPatient != patient)
         {
@@ -239,18 +321,10 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             _limbPick = null;
         }
 
-        var text = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-        };
-        LimbsContainer.AddChild(text);
-        _limbShadeCache = shades;
+        _outline.Shades = SyncShades(shades, patient);
+        _outline.Selected = _limbPick;
         _limbIssueCache = issues;
-        WriteLimbText(text);
-        LimbsDivider.Visible = text.ChildCount > 0;
-        LimbsContainer.Visible = text.ChildCount > 0;
-        _limbText = text;
+        WriteLimbRows();
     }
 
     private void OnLimbOutline(LimbZone? zone)
@@ -258,50 +332,92 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         _limbPick = zone;
         _outline.Selected = zone;
         ShowDamage();
-        if (_limbText == null)
-            return;
-
-        _limbText.RemoveAllChildren();
-        WriteLimbText(_limbText);
-        LimbsDivider.Visible = _limbText.ChildCount > 0;
-        LimbsContainer.Visible = _limbText.ChildCount > 0;
+        foreach (var row in _limbRows)
+            row.Selected = row.Zone == zone;
     }
 
-    private void WriteLimbText(BoxContainer text)
+    /// <summary>
+    /// The limb list: every body part with its condition as "left / max" in the doll's shade colour, and its findings
+    /// as tags, red for the urgent ones and amber for the rest.
+    /// </summary>
+    private void WriteLimbRows()
     {
-        var marks = new SortedDictionary<int, bool>();
-        var words = new Dictionary<int, List<string>>();
-        LimbBodyComponent? limbBody = null; //DS-14
+        LimbBodyComponent? limbBody = null;
+        if (_limbPatient is { } net && _entityManager.TryGetEntity(net, out var scanned))
+            _entityManager.TryGetComponent(scanned.Value, out limbBody);
+
+        var findings = CollectLimbFindings(limbBody);
+        var shades = _outline.Shades;
+        for (var i = 0; i < _limbRows.Length; i++)
+        {
+            var row = _limbRows[i];
+            var shade = i < shades.Length ? shades[i] : LimbScan.Fine;
+            row.Set(Loc.GetString($"health-analyzer-zone-{i}"), ZoneCondition(limbBody, i, shade), MedicalHoloColors.ForShade(shade));
+            row.Selected = _limbPick == row.Zone;
+            row.ClearTags();
+            if (!findings.TryGetValue(i, out var list))
+                continue;
+
+            foreach (var (word, tone) in list)
+                row.AddTag(word, tone);
+        }
+    }
+
+    /// <summary>
+    /// "left / max" of a body part, the same figure the condition meter shows when the part is picked. Without the
+    /// limb data on this side it falls back to the scanner's shade word.
+    /// </summary>
+    private string ZoneCondition(LimbBodyComponent? limbs, int index, byte shade)
+    {
+        if (limbs == null || (uint) index >= (uint) limbs.Zones.Count)
+        {
+            return shade switch
+            {
+                LimbScan.Missing => Loc.GetString("health-analyzer-limb-shade-missing"),
+                LimbScan.Critical => Loc.GetString("health-analyzer-limb-shade-critical"),
+                LimbScan.Bad => Loc.GetString("health-analyzer-limb-shade-bad"),
+                LimbScan.Hurt => Loc.GetString("health-analyzer-limb-shade-hurt"),
+                _ => "—",
+            };
+        }
+
+        var max = Math.Max(1f, LimbWoundRules.HealthFor((LimbZone) index, limbs));
+        var state = limbs.Zones[index];
+        var left = state.Severed || state.Atrophied
+            ? 0f
+            : Math.Min(state.Health, max - ZoneDamage(limbs, index));
+        left = Math.Clamp(left, 0f, max);
+        return $"{left:0} / {max:0}";
+    }
+
+    private Dictionary<int, List<(string Word, Color Tone)>> CollectLimbFindings(LimbBodyComponent? limbBody)
+    {
+        var words = new Dictionary<int, List<(string Word, Color Tone)>>();
         SurgeryCavityComponent? hold = null; //DS-14
         SurgeryInfectionComponent? infection = null; //DS-14
         if (_limbPatient is { } net && _entityManager.TryGetEntity(net, out var scanned)) //DS-14
         {
-            _entityManager.TryGetComponent(scanned.Value, out limbBody); //DS-14
             _entityManager.TryGetComponent(scanned.Value, out hold); //DS-14
             _entityManager.TryGetComponent(scanned.Value, out infection); //DS-14
         }
 
-        void Mark(int index, bool urgent)
+        void Note(int index, string word, bool urgent, bool mild = false) //DS-14
         {
             if ((uint) index >= (uint) LimbWoundRules.BodyZoneCount)
                 return;
 
-            if (marks.TryGetValue(index, out var already))
-                marks[index] = already || urgent;
-            else
-                marks[index] = urgent;
-        }
-
-        void Note(int index, string word) //DS-14
-        {
             if (!words.TryGetValue(index, out var list))
             {
-                list = new List<string>();
+                list = new List<(string Word, Color Tone)>();
                 words[index] = list;
             }
 
-            if (!list.Contains(word))
-                list.Add(word);
+            var tone = urgent ? MedicalHoloColors.Critical : mild ? MedicalHoloColors.Hurt : MedicalHoloColors.Warning;
+            var found = list.FindIndex(entry => entry.Word == word);
+            if (found < 0)
+                list.Add((word, tone));
+            else if (urgent)
+                list[found] = (word, tone);
         }
 
         if (_limbIssueCache != null)
@@ -335,7 +451,6 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                     or LimbIssueKind.RibOpen
                     or LimbIssueKind.BurnThird
                     or LimbIssueKind.Embedded;
-                Mark(index, urgent);
 
                 var prefix = _limbMachine ? "health-analyzer-issue-machine-" : "health-analyzer-issue-";
                 var word = Loc.GetString($"{prefix}{(byte) issue.Kind}");
@@ -344,7 +459,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                 if (issue.Organ)
                     word = $"{word} ({Loc.GetString($"health-analyzer-organ-{issue.Index}")})";
 
-                Note(index, word);
+                Note(index, word, urgent, issue.Kind == LimbIssueKind.Scar);
             }
         }
 
@@ -356,37 +471,13 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             if (hidden.Count == 0)
                 continue;
 
-            Mark(i, infection != null && infection.Rots((LimbZone) i));
+            var rots = infection != null && infection.Rots((LimbZone) i);
             foreach (var line in hidden)
-                Note(i, line);
+                Note(i, line, rots);
         }
         //DS-14 end
 
-        if (_limbShadeCache != null)
-        {
-            var count = Math.Min(_limbShadeCache.Count, LimbWoundRules.BodyZoneCount);
-            for (var i = 0; i < count; i++)
-            {
-                var shade = _limbShadeCache[i];
-                if (shade == LimbScan.Fine)
-                    continue;
-
-                Mark(i, shade is LimbScan.Critical or LimbScan.Missing);
-            }
-        }
-
-        foreach (var (index, urgent) in marks)
-        {
-            var name = Loc.GetString($"health-analyzer-zone-{index}");
-            var phrase = words.TryGetValue(index, out var found) && found.Count > 0
-                ? string.Join(", ", found)
-                : Loc.GetString("health-analyzer-limb-hurt");
-            text.AddChild(new Label
-            {
-                Text = $"{name}: {phrase}",
-                FontColorOverride = urgent ? Color.FromHex("#c43838") : Color.FromHex("#d6c14a"),
-            });
-        }
+        return words;
     }
 
     private byte[] SyncShades(IReadOnlyList<byte>? shades, NetEntity? patient)
@@ -459,7 +550,8 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         if (ShowZoneDamage())
             return;
 
-        DamageTitleLabel.Text = Loc.GetString("health-analyzer-window-entity-damage-total-text");
+        DamageTitleLabel.Text = Caption(Loc.GetString("health-analyzer-window-entity-damage-total-text")); // DS14
+        DamageHeader.Text = Loc.GetString("health-analyzer-section-damage"); // DS14
         DamageLabel.Text = _generalTotal.ToString();
         NoteDamage(_generalTotal, null);
         if (_generalGroups != null && _generalTypes != null)
@@ -522,7 +614,8 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                 groups[group.ID] = sum;
         }
 
-        DamageTitleLabel.Text = Loc.GetString("limb-analyzer-zone-damage");
+        DamageTitleLabel.Text = Caption(Loc.GetString("limb-analyzer-zone-damage"));
+        DamageHeader.Text = Loc.GetString("hologram-medical-damage-zone", ("zone", Loc.GetString($"health-analyzer-zone-{index}")));
         DamageLabel.Text = total.ToString();
         NoteDamage(total, pick);
         DrawDiagnosticGroups(groups.OrderByDescending(g => g.Value).ToDictionary(g => g.Key, g => g.Value), types);
@@ -553,12 +646,6 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             if (damageAmount == 0)
                 continue;
 
-            var groupTitleText = $"{Loc.GetString(
-                "health-analyzer-window-damage-group-text",
-                ("damageGroup", _prototypes.Index<DamageGroupPrototype>(damageGroupId).LocalizedName),
-                ("amount", damageAmount)
-            )}";
-
             var lines = new List<string>();
             var group = _prototypes.Index<DamageGroupPrototype>(damageGroupId);
             foreach (var type in group.DamageTypes)
@@ -573,14 +660,16 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                 ));
             }
 
-            GroupsContainer.AddChild(DamageBlock(damageGroupId, groupTitleText, lines)); // DS14
+            GroupsContainer.AddChild(DamageBlock(damageGroupId, group.LocalizedName, damageAmount, lines)); // DS14
         }
     }
 
     // DS14-start
-    private Control DamageBlock(string id, string title, IReadOnlyList<string> lines)
+    /// <summary>
+    /// One damage group: its colour as a thin edge, icon, uppercase name and amount, then the damage types under it.
+    /// </summary>
+    private Control DamageBlock(string id, string name, FixedPoint2 amount, IReadOnlyList<string> lines)
     {
-        var color = GroupColor(id);
         var text = new BoxContainer
         {
             Orientation = LayoutOrientation.Vertical,
@@ -590,22 +679,28 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         var head = new BoxContainer
         {
             Orientation = LayoutOrientation.Horizontal,
-            Margin = new Thickness(0, 3, 0, 1),
+            SeparationOverride = 6,
         };
         head.AddChild(new TextureRect
         {
-            SetSize = new Vector2(22, 22),
-            MinSize = new Vector2(22, 22),
+            SetSize = new Vector2(18, 18),
+            MinSize = new Vector2(18, 18),
             Stretch = TextureRect.StretchMode.Scale,
             RectClipContent = true,
             Texture = GroupIcon(id),
             VerticalAlignment = VAlignment.Center,
-            Margin = new Thickness(0, 0, 6, 0),
         });
         head.AddChild(new Label
         {
-            Text = title,
+            Text = name.ToUpperInvariant(),
+            StyleClasses = { DeadSpaceStyleClass.Subtitle },
             HorizontalExpand = true,
+            VerticalAlignment = VAlignment.Center,
+        });
+        head.AddChild(new Label
+        {
+            Text = amount.ToString(),
+            FontColorOverride = DamageColor((float) amount),
             VerticalAlignment = VAlignment.Center,
         });
         text.AddChild(head);
@@ -614,39 +709,38 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         {
             text.AddChild(new Label
             {
-                Text = " · " + line,
-                Margin = new Thickness(28, 0, 0, 0),
+                Text = "· " + line,
+                StyleClasses = { DeadSpaceStyleClass.Subtitle },
+                Margin = new Thickness(24, 0, 0, 0),
             });
         }
 
-        var row = new BoxContainer
+        var block = new PanelContainer
         {
-            Orientation = LayoutOrientation.Horizontal,
             HorizontalExpand = true,
+            Margin = new Thickness(0, 3, 0, 3),
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = Color.Transparent,
+                BorderColor = GroupColor(id),
+                BorderThickness = new Thickness(2, 0, 0, 0),
+                ContentMarginLeftOverride = 8,
+            },
         };
-        row.AddChild(text);
-        row.AddChild(new PanelContainer
-        {
-            MinWidth = 4,
-            SetWidth = 4,
-            VerticalExpand = true,
-            PanelOverride = new StyleBoxFlat { BackgroundColor = color },
-        });
-
-        var block = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            Margin = new Thickness(0, 6, 0, 0),
-        };
-        block.AddChild(new PanelContainer
-        {
-            SetHeight = 2,
-            HorizontalExpand = true,
-            PanelOverride = new StyleBoxFlat { BackgroundColor = color },
-        });
-        block.AddChild(row);
+        block.AddChild(text);
         return block;
+    }
+
+    /// <summary>The scanner's old damage thresholds, in the active palette.</summary>
+    private static Color DamageColor(float amount)
+    {
+        return amount > 200f
+            ? MedicalHoloColors.Critical
+            : amount >= 100f
+                ? MedicalHoloColors.Bad
+                : amount > 50f
+                    ? MedicalHoloColors.Hurt
+                    : MedicalHoloColors.Fine;
     }
 
     private Texture GroupIcon(string id)
@@ -666,13 +760,6 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         if (reagents == null || reagents.Count == 0)
             return;
 
-        ReagentsContainer.AddChild(new Label
-        {
-            Text = Loc.GetString("health-analyzer-window-reagents-title"),
-            FontColorOverride = Color.FromHex("#d7b56d"),
-            Margin = new Thickness(0, 0, 0, 3),
-        });
-
         foreach (var reagent in reagents)
         {
             var name = _prototypes.TryIndex<ReagentPrototype>(reagent.ReagentId, out var prototype)
@@ -689,7 +776,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
 
             var harm = reagent.Overdosed || AlwaysHarms(reagent.ReagentId);
             label.SetMessage(harm
-                ? FormattedMessage.FromMarkupPermissive($"[bold][color=red]{escapedAmount}[/color][/bold]")
+                ? FormattedMessage.FromMarkupPermissive($"[bold][color={MedicalHoloColors.Critical.ToHex()}]{escapedAmount}[/color][/bold]") // DS14
                 : FormattedMessage.FromUnformatted(amount));
 
             var row = new BoxContainer
@@ -702,7 +789,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                 ? colored.SubstanceColor
                 : Color.FromHex("#8a8a9a");
             if (harm)
-                tone = Color.FromHex("#c45c5c");
+                tone = MedicalHoloColors.Critical; // DS14
             row.AddChild(new PanelContainer
             {
                 MinSize = new Vector2(4, 14),
@@ -757,18 +844,11 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             }
         }
 
-        HealthTitle.Text = Loc.GetString(zone == null ? "health-analyzer-meter-health" : "health-analyzer-meter-condition");
+        HealthTitle.Text = Caption(Loc.GetString(zone == null ? "health-analyzer-meter-health" : "health-analyzer-meter-condition"));
         HealthReadout.Text = $"{pct:0}%";
-        HealthBar.MaxValue = 100f;
-        HealthBar.Value = pct;
-        var amount = (float) damage;
-        DamageLabel.FontColorOverride = amount > 200f
-            ? Color.FromHex("#c43838")
-            : amount >= 100f
-                ? Color.FromHex("#e07a2f")
-                : amount > 50f
-                    ? Color.FromHex("#d6c14a")
-                    : Color.White;
+        HealthSpine.Fraction = pct / 100f;
+        HealthSpine.FillColor = MedicalHoloColors.ForFraction(pct / 100f);
+        DamageLabel.FontColorOverride = DamageColor((float) damage);
     }
 
     private void ShowRot(EntityUid body)

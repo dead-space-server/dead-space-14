@@ -87,7 +87,9 @@
                                                      VerticalAlignment="Stretch"/>
                         </BoxContainer>
 
-                        <TextureRect TextureScale="0.18 0.18"
+                        <!-- DS14: named, the Dead Space cabin lobby hides it -->
+                        <TextureRect Name="LobbyLogo"
+                                     TextureScale="0.18 0.18"
                                      Stretch="KeepCentered"
                                      TexturePath="/Textures/Interface/main_logo.png"
                                      MinSize="170 34"
@@ -146,7 +148,7 @@
             </BoxContainer>
 
             <PanelContainer Name="BottomContainer"
-                            StyleClasses="DeadSpaceWindow"
+                            StyleClasses="DeadSpaceWindow DeadSpaceHoloLobbyShell"
                             MinHeight="300"
                             HorizontalExpand="True"
                             VerticalExpand="True">
@@ -158,7 +160,7 @@
 
                     <PanelContainer Name="LeftPanel"
                                     MinWidth="400"
-                                    StyleClasses="DeadSpaceSurface"
+                                    StyleClasses="DeadSpaceSurface DeadSpaceHoloLobbyPanel"
                                     HorizontalExpand="True"
                                     VerticalExpand="True">
                         <BoxContainer Orientation="Vertical"
@@ -166,11 +168,12 @@
                                       VerticalExpand="True"
                                       VerticalAlignment="Stretch"
                                       SeparationOverride="8">
-                            <PanelContainer StyleClasses="DeadSpaceSectionHeader">
+                            <PanelContainer StyleClasses="DeadSpaceSectionHeader DeadSpaceHoloLobbyHeader">
                                 <BoxContainer Orientation="Vertical"
                                               SeparationOverride="2">
-                                    <Label Text="{Loc 'ui-lobby-server-info-block'}"
-                                           StyleClasses="DeadSpaceTitle"/>
+                                    <Label Name="ServerInfoTitle"
+                                           Text="{Loc 'ui-lobby-server-info-block'}"
+                                           StyleClasses="DeadSpaceTitle DeadSpaceHoloLobbyTitle"/>
                                     <Label Name="StationTime"
                                            Access="Public"
                                            StyleClasses="DeadSpaceSubtitle"
@@ -211,7 +214,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="CenterPanel"
-                                    StyleClasses="DeadSpaceSurface"
+                                    StyleClasses="DeadSpaceSurface DeadSpaceHoloLobbyPanel"
                                     MinWidth="400"
                                     HorizontalExpand="True"
                                     VerticalExpand="True">
@@ -223,18 +226,19 @@
                                       SeparationOverride="8">
                             <PanelContainer Name="StripeBack"
                                             Access="Public"
-                                            StyleClasses="DeadSpaceRoundStatus"
+                                            StyleClasses="DeadSpaceRoundStatus DeadSpaceHoloLobbyStatus"
                                             HorizontalAlignment="Center">
                                 <BoxContainer Orientation="Vertical"
                                               HorizontalAlignment="Center"
                                               SeparationOverride="2">
-                                    <Label Text="{Loc 'lobby-state-round-start-title'}"
-                                           StyleClasses="DeadSpaceRoundStatusTitle"
+                                    <Label Name="RoundStartTitle"
+                                           Text="{Loc 'lobby-state-round-start-title'}"
+                                           StyleClasses="DeadSpaceRoundStatusTitle DeadSpaceHoloLobbyStatusTitle"
                                            HorizontalAlignment="Center"/>
                                     <Label Name="StartTime"
                                            Access="Public"
                                            Align="Center"
-                                           StyleClasses="DeadSpaceRoundStatusTime"
+                                           StyleClasses="DeadSpaceRoundStatusTime DeadSpaceHoloLobbyStatusTime"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
                                 </BoxContainer>
@@ -287,13 +291,13 @@
                             <Button Name="LeaveButton"
                                     Access="Public"
                                     Text="{Loc 'ui-lobby-leave-button'}"
-                                    StyleClasses="DeadSpaceAction"
+                                    StyleClasses="DeadSpaceAction DeadSpaceHoloDanger"
                                     HorizontalAlignment="Stretch"
                                     MinSize="250 50" />
                         </BoxContainer>
                     </PanelContainer>
 
-                    <PanelContainer StyleClasses="DeadSpaceSurface"
+                    <PanelContainer StyleClasses="DeadSpaceSurface DeadSpaceHoloLobbyPanel"
                                     Name="RightPanel"
                                     MinWidth="400"
                                     HorizontalExpand="True"
@@ -304,11 +308,11 @@
                                       HorizontalExpand="True"
                                       HorizontalAlignment="Stretch"
                                       SeparationOverride="8">
-                            <PanelContainer StyleClasses="DeadSpaceSectionHeader">
+                            <PanelContainer StyleClasses="DeadSpaceSectionHeader DeadSpaceHoloLobbyHeader">
                                 <BoxContainer Orientation="Vertical"
                                               SeparationOverride="2">
                                     <Label Text="COMMS"
-                                           StyleClasses="DeadSpaceTitle"/>
+                                           StyleClasses="DeadSpaceTitle DeadSpaceHoloLobbyTitle"/>
                                     <Label Text="{Loc 'ui-lobby-online-players-block'}"
                                            StyleClasses="DeadSpaceSubtitle"/>
                                 </BoxContainer>

@@ -1,7 +1,9 @@
 using System.Linq;
 using Content.Client.CharacterInfo;
 using Content.Client.DeadSpace.Stylesheets;
+using Content.Client.DeadSpace.UserInterface.Hologram.Character; // DS14
 using Content.Client.Gameplay;
+using Content.Client.Roles; // DS14
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Character.Controls;
@@ -142,6 +144,16 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
         _window.SubText.Text = job != null
             ? Loc.GetString(job.Name)
             : Loc.GetString("character-info-no-profession");
+        // DS14-start
+        if (job != null && _ent.System<JobSystem>().TryGetPrimaryDepartment(job.ID, out var department))
+        {
+            _window.SubText.Text = Loc.GetString("hologram-character-subtitle",
+                ("job", _window.SubText.Text),
+                ("department", Loc.GetString(department.Name)));
+        }
+
+        _window.SubText.Text = _window.SubText.Text?.ToUpperInvariant();
+        // DS14-end
         _window.Objectives.RemoveAllChildren();
         _window.ObjectivesLabel.Visible = objectives.Any();
 
@@ -157,7 +169,7 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
                 var objectiveControl = new CharacterObjectiveControl
                 {
                     Orientation = BoxContainer.LayoutOrientation.Vertical,
-                    Modulate = DeadSpaceStylePalette.TextPlaceholder // DS14
+                    Modulate = DeadSpaceStylePalette.Hologram ? Color.White : DeadSpaceStylePalette.TextPlaceholder // DS14: the projection keeps objectives and their status colours at full brightness
                 };
 
                 objectiveControl.AddChild(new Label
@@ -188,6 +200,8 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
 
                 _window.Memory.AddChild(objectiveControl);
             }
+
+            _window.MemorySection.Visible = _window.Memory.ChildCount > 0; // DS14
         }
         // end backmen: currency
 
@@ -203,7 +217,7 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
             var objectiveControl = new CharacterObjectiveControl
             {
                 Orientation = BoxContainer.LayoutOrientation.Vertical,
-                Modulate = DeadSpaceStylePalette.TextPlaceholder // DS14
+                Modulate = DeadSpaceStylePalette.Hologram ? Color.White : DeadSpaceStylePalette.TextPlaceholder // DS14: the projection keeps objectives and their status colours at full brightness
             };
 
 
@@ -232,8 +246,10 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
 
                 conditionControl.Title.SetMessage(titleMessage);
                 conditionControl.Description.SetMessage(descriptionMessage);
+                conditionControl.AddChild(ObjectiveStatusTag.Create(condition.Progress)); // DS14
 
                 objectiveControl.AddChild(conditionControl);
+                objectiveControl.AddChild(new PanelContainer { StyleClasses = { StyleClass.LowDivider } }); // DS14
             }
 
             _window.Objectives.AddChild(objectiveControl);

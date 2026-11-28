@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Client.DeadSpace.Stylesheets; // DS14
 using Content.Client.Stylesheets.Fonts;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -37,7 +38,11 @@ public partial class NanotrasenStylesheet : CommonStylesheet
 
     public NanotrasenStylesheet(object config, StylesheetManager man) : base(config)
     {
-        BaseFont = new NotoFontFamilyStack(ResCache);
+        // DS14-start
+        BaseFont = DeadSpaceStylePalette.Hologram
+            ? NotoFontFamilyStack.DeadSpaceInterface(ResCache)
+            : new NotoFontFamilyStack(ResCache);
+        // DS14-end
         var rules = new[]
         {
             // Set up important rules that need to go first.

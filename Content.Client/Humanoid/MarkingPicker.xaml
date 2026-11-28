@@ -2,7 +2,8 @@
     <!-- Primary container -->
     <BoxContainer Orientation="Vertical" HorizontalExpand="True">
         <!-- Marking lists -->
-        <BoxContainer Orientation="Horizontal" SeparationOverride="5" HorizontalExpand="True">
+        <!-- DS14: named so the appearance screen can stack the lists -->
+        <BoxContainer Name="CMarkingLists" Orientation="Horizontal" SeparationOverride="5" HorizontalExpand="True">
             <!-- Unused markings -->
             <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                 <!-- DS14-start -->

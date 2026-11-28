@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Numerics;
 using Content.Client.Stylesheets.Colorspace;
 using Content.Client.Stylesheets.Palette;
 using Content.Shared.DeadSpace.CCCCVars;
@@ -14,13 +15,28 @@ public static class DeadSpaceStylePalette
 {
     public const float NeutralLightnessOffset = -0.002f;
 
+    /// <summary>Stock projection colour of the "Dead Space" style; the palette below is written for it.</summary>
+    public static readonly Color DefaultHologramColor = Color.FromHex("#62D6FF");
+    public const float DefaultHologramOpacity = 0.9f;
+    public const float MinHologramOpacity = 0.6f;
+
+    /// <summary>Alpha of the window surfaces at the lowest opacity setting; text on them has to stay readable.</summary>
+    private const float MinSurfaceAlpha = 0.85f;
+
     private static readonly ThemePalette Dark = CreateDark();
     private static readonly ThemePalette Light = CreateLight();
     private static readonly ThemePalette Classic = CreateClassic();
+    private static ThemePalette DeadSpace = CreateDeadSpace(DefaultHologramColor, DefaultHologramOpacity, true);
     private static ThemePalette _current = Dark;
 
     public static string CurrentTheme { get; private set; } = CCCCVars.InterfaceStyleDark;
     public static bool ClassicChrome => _current.ClassicChrome;
+
+    /// <summary>The "Dead Space" style: translucent projected windows with a cyan frame and hologram effects.</summary>
+    public static bool Hologram => _current.Hologram;
+
+    /// <summary>Tighter window margins; only the "Dead Space" style sets it.</summary>
+    public static bool Compact => _current.Compact;
     public static bool LightChrome => ReferenceEquals(_current, Light);
 
     public static Color Surface => _current.Surface;
@@ -69,6 +85,9 @@ public static class DeadSpaceStylePalette
     public static Color CyanBright => _current.CyanBright;
     public static Color CyanSelection => _current.CyanSelection;
     public static Color Amber => _current.Amber;
+
+    /// <summary>Window titles and headings: the warm accent, or the bright projection colour in the "Dead Space" style.</summary>
+    public static Color Heading => _current.Hologram ? _current.CyanBright : _current.Amber;
     public static Color AccentDim => _current.AccentDim;
 
     public static Color Text => _current.Text;
@@ -104,6 +123,18 @@ public static class DeadSpaceStylePalette
     public static ColorPalette SecondaryPalette => _current.SecondaryPalette;
 
     /// <summary>
+    /// Rebuilds the "Dead Space" palette for the player's projection colour, window opacity and margins. The caller
+    /// rebuilds the stylesheet afterwards.
+    /// </summary>
+    public static void ConfigureHologram(Color color, float opacity, bool compact)
+    {
+        var wasCurrent = ReferenceEquals(_current, DeadSpace);
+        DeadSpace = CreateDeadSpace(color, Math.Clamp(opacity, MinHologramOpacity, 1f), compact);
+        if (wasCurrent)
+            _current = DeadSpace;
+    }
+
+    /// <summary>
     /// Selects a canonical palette. Invalid archived values safely fall back to the current dark style.
     /// </summary>
     public static bool TrySetTheme(string theme)
@@ -119,6 +150,13 @@ public static class DeadSpaceStylePalette
         {
             _current = Classic;
             CurrentTheme = CCCCVars.InterfaceStyleClassic;
+            return true;
+        }
+
+        if (string.Equals(theme, CCCCVars.InterfaceStyleDeadSpace, StringComparison.OrdinalIgnoreCase))
+        {
+            _current = DeadSpace;
+            CurrentTheme = CCCCVars.InterfaceStyleDeadSpace;
             return true;
         }
 
@@ -419,6 +457,131 @@ public static class DeadSpaceStylePalette
         };
     }
 
+    /// <summary>
+    /// Holographic projection, as on a RIG: deep translucent blue surfaces the game shows through, cyan frames and
+    /// selection, amber only for warnings.
+    /// </summary>
+    private static ThemePalette CreateDeadSpace(Color accent, float opacity, bool compact)
+    {
+        var baseHsv = Color.ToHsv(DefaultHologramColor);
+        var accentHsv = Color.ToHsv(accent);
+
+        // Every projection colour turns by the hue between the stock cyan and the chosen colour, and loses or gains
+        // saturation with it, so a grey projection stays grey and a green one keeps the same light/dark steps.
+        Color Tint(string hex)
+        {
+            var color = Color.FromHex(hex);
+            var hsv = Color.ToHsv(color);
+            var hue = hsv.X + accentHsv.X - baseHsv.X;
+            hue -= MathF.Floor(hue);
+            var saturation = baseHsv.Y > 0f ? Math.Clamp(hsv.Y * accentHsv.Y / baseHsv.Y, 0f, 1f) : hsv.Y;
+            return Color.FromHsv(new Vector4(hue, saturation, hsv.Z, color.A));
+        }
+
+        // Window surfaces stay readable: the opacity setting only moves them between 85% and fully opaque.
+        Color Glass(string hex)
+        {
+            var color = Tint(hex);
+            var t = Math.Clamp((opacity - MinHologramOpacity) / (1f - MinHologramOpacity), 0f, 1f);
+            return color.WithAlpha(MathHelper.Lerp(MinSurfaceAlpha, 1f, t));
+        }
+
+        var palette = new ThemePalette
+        {
+            Hologram = true,
+            Compact = compact,
+            Surface = Glass("#0B2233E6"),
+            SurfaceDark = Glass("#061826EB"),
+            SurfaceFlat = Glass("#0D2738E6"),
+            SurfaceHeader = Glass("#12344AF0"),
+            SurfaceInset = Glass("#03111CF0"),
+            SurfaceStatus = Glass("#0C2A3EE6"),
+            SurfacePopup = Glass("#071C2BF2"),
+            SurfaceIcon = Tint("#020A12"),
+            SurfaceTabs = Glass("#081E2EE6"),
+            SurfaceTabActive = Glass("#164661F0"),
+            SurfaceTabInactive = Glass("#0A2131E6"),
+            SurfaceTranscript = Glass("#030E18E0"),
+            ModalScrim = Tint("#00060CAA"),
+            // Selection is a brighter projection, not the warm accent of the other styles.
+            Control = Tint("#0F2F42"),
+            ControlHover = Tint("#164661"),
+            ControlPressed = Tint("#2A86AE"),
+            ControlDisabled = Tint("#1A262E"),
+            ControlDisabledPressed = Tint("#22414F"),
+            Action = Tint("#0D2A3B"),
+            ActionHover = Tint("#164661"),
+            ActionPressed = Tint("#2A86AE"),
+            ActionDisabled = Tint("#1A262E"),
+            ListItem = Tint("#0C2A3C"),
+            ListItemAlternate = Tint("#0F3146"),
+            ListItemHover = Tint("#164A66"),
+            ListItemPressed = Tint("#1F6688"),
+            Input = Tint("#061A28"),
+            Border = Tint("#3A8DB3"),
+            BorderDark = Tint("#1C4F68"),
+            BorderHeader = Tint("#62D6FF"),
+            BorderInset = Tint("#1D5670"),
+            BorderControl = Tint("#3A8DB3"),
+            BorderDisabled = Tint("#33515F"),
+            BorderIcon = Tint("#2A6F8E"),
+            BorderTabActive = Tint("#62D6FF"),
+            BorderTabInactive = Tint("#1C4F68"),
+            HoverOutline = Tint("#62D6FF"),
+            PressedOutline = Tint("#9FE8FF"),
+            CyanDim = Tint("#1D6E8E"),
+            Cyan = Tint("#3FB8E6"),
+            CyanBright = Tint("#9FE8FF"),
+            CyanSelection = Tint("#3FB8E655"),
+            Amber = Color.FromHex("#FFA83C"),
+            AccentDim = Tint("#2C7FA3"),
+            Text = Tint("#D8F3FF"),
+            TextInactive = Tint("#BBDDEC"),
+            TextMuted = Tint("#A2C6D6"),
+            TextDisabled = Tint("#80A0AE"),
+            TextPlaceholder = Tint("#8BACBB"),
+            TextOnTranscript = Tint("#D8F3FF"),
+            TextOnTranscriptMuted = Tint("#A6C9D8"),
+            TextOnTranscriptPlaceholder = Tint("#8BACBB"),
+            Positive = Color.FromHex("#14402AF0"),
+            PositiveHover = Color.FromHex("#1B5636F4"),
+            PositivePressed = Color.FromHex("#237043F8"),
+            PositiveBorder = Color.FromHex("#3FD07A"),
+            PositiveBorderHover = Color.FromHex("#5DFF8F"),
+            PositiveBorderPressed = Color.FromHex("#8CFFB0"),
+            Negative = Color.FromHex("#3B1620F0"),
+            NegativeHover = Color.FromHex("#521D29F4"),
+            NegativeStrong = Color.FromHex("#66222FF4"),
+            NegativeStrongHover = Color.FromHex("#7C2836F8"),
+            NegativeBorder = Color.FromHex("#C44B55"),
+            NegativeBorderStrong = Color.FromHex("#FF4D3F"),
+            NegativeBorderHover = Color.FromHex("#FF6F64"),
+            Warning = Color.FromHex("#B37420"),
+            WarningControl = Color.FromHex("#4A2A10F0"),
+            WarningControlHover = Color.FromHex("#663816F4"),
+            WarningControlPressed = Color.FromHex("#84481CF8"),
+            WarningBorder = Color.FromHex("#FFA83C"),
+            WarningBorderHover = Color.FromHex("#FFC070"),
+        };
+
+        return palette with
+        {
+            PrimaryPalette = ColorPalette.FromHexBase(
+                Tint("#1F6688").ToHex(),
+                lightnessShift: 0.05f,
+                chromaShift: 0.003f,
+                element: palette.Control,
+                background: palette.SurfaceDark,
+                text: palette.Text),
+            SecondaryPalette = ColorPalette.FromHexBase(
+                Tint("#1A3442").ToHex(),
+                lightnessShift: 0.05f,
+                element: palette.SurfaceHeader,
+                background: palette.Surface,
+                text: palette.TextMuted),
+        };
+    }
+
     private static Color Neutral(string hex)
     {
         return Color.FromHex(hex).NudgeLightness(NeutralLightnessOffset);
@@ -427,6 +590,8 @@ public static class DeadSpaceStylePalette
     private sealed record ThemePalette
     {
         public bool ClassicChrome { get; init; }
+        public bool Hologram { get; init; }
+        public bool Compact { get; init; }
         public Color Surface { get; init; }
         public Color SurfaceDark { get; init; }
         public Color SurfaceFlat { get; init; }

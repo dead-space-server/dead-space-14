@@ -20,14 +20,14 @@
             <BoxContainer Orientation="Vertical"
                           MinWidth="360"
                           SeparationOverride="8">
-                <PanelContainer StyleClasses="DeadSpaceSectionHeader">
+                <PanelContainer StyleClasses="DeadSpaceSectionHeader DeadSpaceHoloLobbyHeader">
                     <BoxContainer Orientation="Vertical"
                                   SeparationOverride="2">
                         <TextureRect Name="Logo"
                                      Stretch="KeepCentered"
                                      Margin="0 0 0 6"/>
                         <Label Text="NANOTRASEN COMMAND UPLINK"
-                               StyleClasses="DeadSpaceTitle"
+                               StyleClasses="DeadSpaceTitle DeadSpaceHoloLobbyTitle"
                                HorizontalAlignment="Center" />
                         <Label Text="{Loc 'main-menu-direct-connect-button'}"
                                StyleClasses="DeadSpaceSubtitle"
@@ -73,7 +73,7 @@
                         Access="Public"
                         Text="{Loc 'main-menu-quit-button'}"
                         TextAlign="Center"
-                        StyleClasses="DeadSpaceAction"
+                        StyleClasses="DeadSpaceAction DeadSpaceHoloDanger"
                         StyleIdentifier="mainMenu"/>
 
                 <PanelContainer StyleClasses="DeadSpaceAccentDim" />

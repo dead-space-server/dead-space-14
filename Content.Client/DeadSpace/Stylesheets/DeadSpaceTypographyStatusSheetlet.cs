@@ -235,7 +235,7 @@ public sealed class DeadSpaceTypographyStatusSheetlet : Sheetlet<NanotrasenStyle
             E<Label>()
                 .Class(DeadSpaceStyleClass.Title)
                 .Font(sheet.BaseFont.GetFont(16, FontKind.Bold))
-                .FontColor(DeadSpaceStylePalette.Amber),
+                .FontColor(DeadSpaceStylePalette.Heading),
             E<Label>()
                 .Class(DeadSpaceStyleClass.Subtitle)
                 .Font(sheet.BaseFont.GetFont(10))
@@ -243,15 +243,15 @@ public sealed class DeadSpaceTypographyStatusSheetlet : Sheetlet<NanotrasenStyle
             E<Label>()
                 .Class(DeadSpaceStyleClass.SectionTitle)
                 .Font(sheet.BaseFont.GetFont(12))
-                .FontColor(DeadSpaceStylePalette.Amber),
+                .FontColor(DeadSpaceStylePalette.Heading),
             E<Label>()
                 .Class(DeadSpaceStyleClass.ListHeader)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
-                .FontColor(DeadSpaceStylePalette.Amber),
+                .FontColor(DeadSpaceStylePalette.Heading),
             E<Label>()
                 .Class(DeadSpaceStyleClass.RoundStatusTitle)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
-                .FontColor(DeadSpaceStylePalette.Amber),
+                .FontColor(DeadSpaceStylePalette.Heading),
             E<Label>()
                 .Class(DeadSpaceStyleClass.RoundStatusTime)
                 .Font(sheet.BaseFont.GetFont(16, FontKind.Bold))
@@ -296,9 +296,9 @@ public sealed class DeadSpaceTypographyStatusSheetlet : Sheetlet<NanotrasenStyle
                 E<Label>().FontColor(DeadSpaceStylePalette.Text),
                 E<Label>().Class(StyleClass.LabelSubText).FontColor(DeadSpaceStylePalette.TextMuted),
                 E<Label>().Class(StyleClass.LabelWeak).FontColor(DeadSpaceStylePalette.TextMuted),
-                E<Label>().Class(StyleClass.LabelHeading).FontColor(DeadSpaceStylePalette.Amber),
-                E<Label>().Class(StyleClass.LabelHeadingBigger).FontColor(DeadSpaceStylePalette.Amber),
-                E<Label>().Class(StyleClass.LabelKeyText).FontColor(DeadSpaceStylePalette.Amber),
+                E<Label>().Class(StyleClass.LabelHeading).FontColor(DeadSpaceStylePalette.Heading),
+                E<Label>().Class(StyleClass.LabelHeadingBigger).FontColor(DeadSpaceStylePalette.Heading),
+                E<Label>().Class(StyleClass.LabelKeyText).FontColor(DeadSpaceStylePalette.Heading),
                 E<Label>().Class(StyleClass.Positive).FontColor(DeadSpaceStylePalette.PositiveBorderPressed),
                 E<Label>().Class(StyleClass.Negative).FontColor(DeadSpaceStylePalette.NegativeBorderHover),
                 E<Label>().Class(StyleClass.Highlight).FontColor(DeadSpaceStylePalette.Amber),
@@ -307,8 +307,8 @@ public sealed class DeadSpaceTypographyStatusSheetlet : Sheetlet<NanotrasenStyle
                 E<Label>().Class(StyleClass.StatusWarning).FontColor(DeadSpaceStylePalette.WarningBorderHover),
                 E<Label>().Class(StyleClass.StatusBad).FontColor(DeadSpaceStylePalette.NegativeBorder),
                 E<Label>().Class(StyleClass.StatusCritical).FontColor(DeadSpaceStylePalette.NegativeBorderHover),
-                E<Label>().Class(DefaultWindow.StyleClassWindowTitle).FontColor(DeadSpaceStylePalette.Amber),
-                E<Label>().Class("FancyWindowTitle").FontColor(DeadSpaceStylePalette.Amber),
+                E<Label>().Class(DefaultWindow.StyleClassWindowTitle).FontColor(DeadSpaceStylePalette.Heading),
+                E<Label>().Class("FancyWindowTitle").FontColor(DeadSpaceStylePalette.Heading),
                 E<Label>().Class("WindowFooterText").FontColor(DeadSpaceStylePalette.TextMuted),
                 E<RichTextLabel>().Modulate(richTextModulate),
                 E<TextureRect>().Class(OptionButton.StyleClassOptionTriangle).Modulate(optionTriangleModulate),

@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
@@ -19,10 +20,16 @@ public sealed partial class VendingMachineSpiralSlot : PanelContainer
     private static readonly Color CoilLoaded = Color.FromHex("#b8bcc6");
     private static readonly Color CoilEmpty = Color.FromHex("#2c2f36");
     private static readonly Color NameColor = Color.FromHex("#d8dce4");
+    private static readonly Color PriceColor = Color.FromHex("#e8c547");
+    private static readonly Color SlotBackground = Color.FromHex("#16181d");
+    private static readonly Color SlotBorder = Color.FromHex("#30343c");
+    private static readonly Color BadgeBackground = Color.FromHex("#c9b458");
+    private static readonly Color BadgeText = Color.FromHex("#111111");
 
     private readonly EntProtoId? _proto;
     private readonly int _capacity;
     private EntityUid? _previewEntity;
+    private uint? _amount;
 
     public string ItemName { get; }
 
@@ -34,9 +41,49 @@ public sealed partial class VendingMachineSpiralSlot : PanelContainer
         _proto = proto;
         _capacity = Math.Max(1, capacity);
         ItemName = name;
-        NameLabel.SetMessage(name, NameColor);
+        NameLabel.Text = name;
         CodeLabel.Text = code;
         ToolTip = $"{code} — {name}";
+        RefreshStyle();
+    }
+
+    /// <summary>
+    /// Frame, badge and colours for the current interface style: square projected frames from the palette in the
+    /// Dead Space style, the original vending machine look in the others.
+    /// </summary>
+    public void RefreshStyle()
+    {
+        if (DeadSpaceStylePalette.Hologram)
+        {
+            PanelOverride = DeadSpaceStyleBoxes.Holo(DeadSpaceStylePalette.ListItem, DeadSpaceStylePalette.BorderDark);
+            CodeBadge.PanelOverride = DeadSpaceStyleBoxes.Holo(
+                Color.Transparent,
+                DeadSpaceStylePalette.BorderHeader,
+                horizontalMargin: 6);
+            NameLabel.FontColorOverride = DeadSpaceStylePalette.Text;
+            PriceLabel.FontColorOverride = DeadSpaceStylePalette.Amber;
+            CodeLabel.FontColorOverride = DeadSpaceStylePalette.CyanBright;
+        }
+        else
+        {
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = SlotBackground,
+                BorderColor = SlotBorder,
+                BorderThickness = new Thickness(1),
+            };
+            CodeBadge.PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = BadgeBackground,
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+            };
+            NameLabel.FontColorOverride = NameColor;
+            PriceLabel.FontColorOverride = PriceColor;
+            CodeLabel.FontColorOverride = BadgeText;
+        }
+
+        UpdateCoils();
     }
 
     protected override void EnteredTree()
@@ -104,8 +151,17 @@ public sealed partial class VendingMachineSpiralSlot : PanelContainer
 
     public void SetAmount(uint? amount)
     {
+        _amount = amount;
         AmountLabel.Text = amount is { } count ? $"×{count}" : "×∞";
         ItemPrototype.Modulate = amount == 0 ? Color.White.WithAlpha(0.2f) : Color.White;
+        UpdateCoils();
+    }
+
+    private void UpdateCoils()
+    {
+        var hologram = DeadSpaceStylePalette.Hologram;
+        var loaded = hologram ? DeadSpaceStylePalette.Cyan : CoilLoaded;
+        var empty = hologram ? DeadSpaceStylePalette.BorderDark : CoilEmpty;
 
         SpiralCoils.RemoveAllChildren();
         for (var i = 0; i < _capacity; i++)
@@ -113,7 +169,7 @@ public sealed partial class VendingMachineSpiralSlot : PanelContainer
             SpiralCoils.AddChild(new PanelContainer
             {
                 MinSize = new(6, 8),
-                PanelOverride = new StyleBoxFlat(amount == null || i < amount ? CoilLoaded : CoilEmpty),
+                PanelOverride = new StyleBoxFlat(_amount == null || i < _amount ? loaded : empty),
             });
         }
     }

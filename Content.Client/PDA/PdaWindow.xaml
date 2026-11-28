@@ -1,14 +1,27 @@
 ﻿<pda:PdaWindow  xmlns="https://spacestation14.io"
                 xmlns:pda="clr-namespace:Content.Client.PDA"
                 MouseFilter="Stop">
-    <PanelContainer Name="Background" Access="Public" StyleClasses="PdaBackgroundRect" />
+    <!-- DS14-start -->
+    <!-- DeadSpacePda* classes are styled only in the "Dead Space" style (PdaHologramSheetlet). -->
+    <PanelContainer Name="Background" Access="Public" StyleClasses="PdaBackgroundRect DeadSpacePdaShell" />
+    <!-- DS14-end -->
     <!-- The negative markin fixes a gap between the window edges and the decorative panel -->
     <PanelContainer Name="AccentH" Margin="-1 170 -2 170" Access="Public" StyleClasses="PdaBackground" />
     <PanelContainer Name="AccentV" Margin="220 -1 220 -1" Access="Public" StyleClasses="PdaBackground" />
-    <PanelContainer Name="Border" StyleClasses="PdaBorderRect" />
+    <PanelContainer Name="Border" StyleClasses="PdaBorderRect DeadSpacePdaFrame" /> <!-- DS14 -->
     <BoxContainer Orientation="Vertical" HorizontalExpand="True">
         <!--Heading-->
+        <!-- DS14-start -->
+        <PanelContainer StyleClasses="DeadSpacePdaHeader">
         <BoxContainer SetHeight="32" Margin="4 4 8 0" Orientation="Horizontal">
+            <BoxContainer Name="HoloTitleBox" Orientation="Horizontal" Visible="False" HorizontalExpand="True"
+                          VerticalAlignment="Center" Margin="10 0 8 0" SeparationOverride="12">
+                <Label Name="HoloTitleLabel" VerticalAlignment="Center"
+                       StyleClasses="DeadSpacePdaWindowTitle"/>
+                <Label Name="HoloSubtitleLabel" VerticalAlignment="Center" ClipText="True" HorizontalExpand="True"
+                       StyleClasses="DeadSpacePdaWindowSubtitle"/>
+            </BoxContainer>
+            <!-- DS14-end -->
             <Control HorizontalExpand="True"/>
             <TextureButton Name="CloseButton" StyleClasses="windowCloseButton"
                            SetWidth="20" SetHeight="20"
@@ -16,12 +29,13 @@
                            VerticalAlignment="Center"
                            Margin="0 0 2 0"/>
         </BoxContainer>
+        </PanelContainer> <!-- DS14 -->
         <!--Content-->
-        <Control Margin="18 0" RectClipContent="True" VerticalExpand="true"
-                 HorizontalExpand="True">
-            <PanelContainer Name="ContentBorder" StyleClasses="PdaBackground"/>
+        <Control Name="ContentFrame" Margin="18 0" RectClipContent="True" VerticalExpand="true"
+                 HorizontalExpand="True"> <!-- DS14: Name -->
+            <PanelContainer Name="ContentBorder" StyleClasses="PdaBackground DeadSpacePdaScreenFrame"/> <!-- DS14 -->
             <Control Margin="3 3">
-                <PanelContainer Name="ContentBackground" StyleClasses="PdaContentBackground"/>
+                <PanelContainer Name="ContentBackground" StyleClasses="PdaContentBackground DeadSpacePdaScreen"/> <!-- DS14 -->
                 <BoxContainer Access="Public" Name="ContentsContainer" Orientation="Vertical" StyleClasses="PdaContent"/>
 
             </Control>

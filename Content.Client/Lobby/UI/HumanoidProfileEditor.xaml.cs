@@ -4,6 +4,8 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Humanoid;
+using Content.Client.DeadSpace.UserInterface.Hologram.Appearance; // DS14
+using Content.Client.DeadSpace.UserInterface.Hologram.Loadout; // DS14
 using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
 using Content.Client.Message;
@@ -15,6 +17,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.Corvax.CCCVars;
 using Content.Shared.Corvax.TTS; // Corvax-TTS
+using Content.Shared.DeadSpace.CCCCVars; // DS14
 using Content.Shared.DeadSpace.Roles;
 using Content.Shared.GameTicking;
 using Content.Shared.Guidebook;
@@ -68,7 +71,14 @@ namespace Content.Client.Lobby.UI
         private TextEdit? _flavorTextEdit;
 
         // One at a time.
-        private LoadoutWindow? _loadoutWindow;
+        private LoadoutEditorWindow? _loadoutWindow; // DS14
+        private AppearanceEditorControl? _appearanceScreen; // DS14: the appearance tab in the Dead Space style
+        // DS14-start: the loadout screen shown in the jobs tab in the Dead Space style, and its job
+        private LoadoutEditorControl? _jobScreen;
+        private string? _jobScreenJob;
+        private LoadoutEditorControl? _antagScreen;
+        private string? _antagScreenAntag;
+        // DS14-end
 
         private bool _exporting;
         private bool _imaging;
@@ -190,6 +200,11 @@ namespace Content.Client.Lobby.UI
                 Save?.Invoke();
             };
 
+            // DS14-start
+            _cfgManager.OnValueChanged(CCCCVars.InterfaceStyle, OnDeadSpaceStyleChanged);
+            RefreshDeadSpaceLayout();
+            // DS14-end
+
             #region Left
 
             #region Name
@@ -199,6 +214,7 @@ namespace Content.Client.Lobby.UI
             NameRandomize.OnPressed += args => RandomizeName();
             RandomizeEverythingButton.OnPressed += args => { RandomizeEverything(); };
             WarningLabel.SetMarkup($"[color=red]{Loc.GetString("humanoid-profile-editor-naming-rules-warning")}[/color]");
+            WarningLabel.Visible = !DeadSpaceStylePalette.Hologram; // DS14: no naming warning over the Dead Space editor
 
             #endregion Name
 
@@ -770,6 +786,7 @@ namespace Content.Client.Lobby.UI
             _favoriteAntagCategory = null;
             _favoriteAntagButtons.Clear();
             _favoriteAntagRows.Clear();
+            RefreshAntagScreen(); // DS14
 
             // DS14-start
             if (!_antagFavoritesInitialized && _preferencesManager.Preferences is not null)
@@ -1183,6 +1200,8 @@ namespace Content.Client.Lobby.UI
 
         private void SetDirty()
         {
+            _appearanceScreen?.Refresh(Profile, PreviewDummy); // DS14
+
             // If it equals default then reset the button.
             if (Profile == null || _preferencesManager.Preferences?.SelectedCharacter.MemberwiseEquals(Profile) == true)
             {
@@ -1261,6 +1280,8 @@ namespace Content.Client.Lobby.UI
             CharacterSlot = slot;
             IsDirty = false;
             JobOverride = null;
+            _jobScreenJob = null; // DS14: a newly loaded character opens on its own preferred job
+            _antagScreenAntag = null; // DS14
 
             UpdateNameEdit();
             UpdateFlavorTextEdit();
@@ -1290,6 +1311,7 @@ namespace Content.Client.Lobby.UI
                 PreferenceUnavailableButton.SelectId((int) Profile.PreferenceUnavailable);
             }
 
+            _appearanceScreen?.Refresh(Profile, PreviewDummy); // DS14
             ApplyReadOnlyState(); // DS14
         }
 
@@ -1625,6 +1647,8 @@ namespace Content.Client.Lobby.UI
             UpdateJobPriorities();
             if (_readOnly) // DS14
                 SetInteractiveControlsDisabled(JobList, true);
+
+            RefreshJobScreen(); // DS14
         }
 
         private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
@@ -1632,24 +1656,39 @@ namespace Content.Client.Lobby.UI
             if (_readOnly) // DS14
                 return;
 
-            _loadoutWindow?.Dispose();
+            // DS14-start - the new window takes the place of the previous one when switching roles in it.
+            var previousWindow = _loadoutWindow;
             _loadoutWindow = null;
+            _antagPreviewOverride = null;
+            _antagPreviewLoadout = null;
+            // DS14-end
             var collection = IoCManager.Instance;
 
             if (collection == null || _playerManager.LocalSession == null || Profile == null)
+            {
+                previousWindow?.Dispose(); // DS14
                 return;
+            }
 
             JobOverride = jobProto;
             var session = _playerManager.LocalSession;
 
-            _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, _playerManager.LocalSession, collection)
+            // DS14-start
+            previousWindow?.Dispose();
+            var profile = Profile;
+            if (!TryOpenLoadoutWindow(() => new LoadoutEditorWindow(profile, roleLoadout, roleLoadoutProto, session, collection, jobProto, null)
+                {
+                    Title = Loc.GetString("loadout-window-title-loadout", ("job", $"{jobProto?.LocalizedName}")),
+                }, roleLoadout, session, collection))
             {
-                Title = Loc.GetString("loadout-window-title-loadout", ("job", $"{jobProto?.LocalizedName}")),
-            };
-
-            // Refresh the buttons etc.
-            _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
-            _loadoutWindow.OpenCenteredLeft();
+                return;
+            }
+            _loadoutWindow.OnJobSelected += OpenJobLoadout;
+            _loadoutWindow.OnAntagSelected += OpenAntagLoadout;
+            _loadoutWindow.OnSaveRequested += () => Save?.Invoke();
+            _loadoutWindow.OnResetRequested += ResetToDefault;
+            UpdateSaveButton();
+            // DS14-end
 
             _loadoutWindow.OnNameChanged += name =>
             {
@@ -1698,24 +1737,37 @@ namespace Content.Client.Lobby.UI
             if (_readOnly)
                 return;
 
-            _loadoutWindow?.Dispose();
+            var previousWindow = _loadoutWindow;
             _loadoutWindow = null;
             var collection = IoCManager.Instance;
 
             if (collection == null || _playerManager.LocalSession == null || Profile == null)
+            {
+                previousWindow?.Dispose();
                 return;
+            }
 
             JobOverride = null;
             _antagPreviewOverride = antag;
             _antagPreviewLoadout = roleLoadout;
             var session = _playerManager.LocalSession;
 
-            _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, session, collection)
+            previousWindow?.Dispose();
+            var profile = Profile;
+            if (!TryOpenLoadoutWindow(() => new LoadoutEditorWindow(profile, roleLoadout, roleLoadoutProto, session, collection, null, antag)
+                {
+                    Title = Loc.GetString("loadout-window-title-loadout", ("job", Loc.GetString(antag.Name))),
+                }, roleLoadout, session, collection))
             {
-                Title = Loc.GetString("loadout-window-title-loadout", ("job", Loc.GetString(antag.Name))),
-            };
-            _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
-            _loadoutWindow.OpenCenteredLeft();
+                _antagPreviewOverride = null;
+                _antagPreviewLoadout = null;
+                return;
+            }
+            _loadoutWindow.OnJobSelected += OpenJobLoadout;
+            _loadoutWindow.OnAntagSelected += OpenAntagLoadout;
+            _loadoutWindow.OnSaveRequested += () => Save?.Invoke();
+            _loadoutWindow.OnResetRequested += ResetToDefault;
+            UpdateSaveButton();
 
             _loadoutWindow.OnNameChanged += name =>
             {
@@ -1750,6 +1802,496 @@ namespace Content.Client.Lobby.UI
                 _antagPreviewLoadout = null;
                 ReloadPreview();
             };
+        }
+
+        /// <summary>
+        /// Builds, fills and opens the loadout screen. A failure is logged instead of silently leaving no window.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(_loadoutWindow))]
+        private bool TryOpenLoadoutWindow(
+            Func<LoadoutEditorWindow> create,
+            RoleLoadout roleLoadout,
+            global::Robust.Shared.Player.ICommonSession session,
+            IDependencyCollection collection)
+        {
+            try
+            {
+                _loadoutWindow = create();
+                _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+                _loadoutWindow.OpenFitted();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error($"Failed to open the loadout screen for {roleLoadout.Role}: {e}");
+                _loadoutWindow?.Dispose();
+                _loadoutWindow = null;
+                return false;
+            }
+        }
+
+        /// <summary>Opens the stored (or default) loadout of a job, as its loadout button does.</summary>
+        private void OpenJobLoadout(JobPrototype job)
+        {
+            if (_readOnly || Profile == null ||
+                !_prototypeManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var roleLoadoutProto))
+            {
+                return;
+            }
+
+            // Clone so we don't modify the underlying loadout.
+            Profile.Loadouts.TryGetValue(roleLoadoutProto.ID, out var storedLoadout);
+            var loadout = storedLoadout?.Clone();
+
+            if (loadout == null)
+            {
+                loadout = new RoleLoadout(roleLoadoutProto.ID);
+                loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+            }
+
+            OpenLoadout(job, loadout, roleLoadoutProto);
+        }
+
+        /// <summary>Opens the stored (or default) loadout of an antagonist, as its loadout button does.</summary>
+        private void OpenAntagLoadout(AntagPrototype antag)
+        {
+            if (_readOnly || Profile == null || antag.RoleLoadout == null ||
+                !_prototypeManager.TryIndex(antag.RoleLoadout.Value, out RoleLoadoutPrototype? roleLoadoutProto))
+            {
+                return;
+            }
+
+            Profile.Loadouts.TryGetValue(roleLoadoutProto.ID, out var storedLoadout);
+            var loadout = storedLoadout?.Clone() ?? new RoleLoadout(roleLoadoutProto.ID);
+            if (storedLoadout == null)
+                loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+
+            OpenAntagLoadout(antag, loadout, roleLoadoutProto);
+        }
+
+        /// <summary>
+        /// In the Dead Space style the jobs tab is the loadout screen; other styles (and read-only viewing) keep the stock
+        /// job list. Runs after every job list rebuild and on style switches.
+        /// </summary>
+        private void RefreshJobScreen()
+        {
+            var screen = DeadSpaceStylePalette.Hologram && !_readOnly && Profile != null;
+            JobListScroll.Visible = !screen;
+            JobScreenHost.Visible = screen;
+
+            if (!screen || PickJobScreenJob() is not { } job)
+            {
+                DisposeJobScreen();
+                return;
+            }
+
+            BuildJobScreen(job);
+        }
+
+        private void OnDeadSpaceStyleChanged(string _)
+        {
+            // The style cvar is still being dispatched and the screens subscribe to it, so rebuild after it.
+            global::Robust.Shared.Timing.Timer.Spawn(0, () =>
+            {
+                if (!Disposed)
+                    RefreshDeadSpaceLayout();
+            });
+        }
+
+        /// <summary>
+        /// The Dead Space style shows the appearance and jobs tabs as screens with their own doll, so the top-right
+        /// preview goes and the markings tab folds into the appearance screen. Other styles keep the stock layout.
+        /// </summary>
+        private void RefreshDeadSpaceLayout()
+        {
+            var hologram = DeadSpaceStylePalette.Hologram;
+            PreviewSeparator.Visible = !hologram;
+            PreviewColumn.Visible = !hologram;
+
+            RefreshAppearanceScreen(hologram);
+            RefreshJobScreen();
+            RefreshAntagScreen();
+            ApplyCompactActions(hologram);
+        }
+
+        /// <summary>
+        /// The profile actions (save, reset, import, export, images, name generation) step back in the Dead Space
+        /// style: one compact row with a smaller font, so the embedded screens get the attention.
+        /// </summary>
+        private void ApplyCompactActions(bool hologram)
+        {
+            ProfileActions.Columns = hologram ? 6 : 2;
+
+            foreach (var button in new[] { SaveButton, ResetButton, ImportButton, ExportButton, ExportImageButton, OpenImagesButton })
+            {
+                button.MinWidth = hologram ? 0 : 145;
+            }
+
+            foreach (var button in new[]
+                     {
+                         SaveButton, ResetButton, ImportButton, ExportButton, ExportImageButton, OpenImagesButton,
+                         NameRandomize, RandomizeEverythingButton,
+                     })
+            {
+                button.SetHeight = hologram ? 24 : float.NaN;
+
+                const string small = global::Content.Client.Stylesheets.StyleClass.FontSmall;
+                if (hologram && !button.Label.HasStyleClass(small))
+                    button.Label.AddStyleClass(small);
+                else if (!hologram)
+                    button.Label.RemoveStyleClass(small);
+            }
+        }
+
+        /// <summary>
+        /// In the Dead Space style the antagonists tab is the same screen as the jobs tab: antagonists with their
+        /// preference on the left, the selected one's preview, details and loadout. Other styles keep the stock list.
+        /// </summary>
+        private void RefreshAntagScreen()
+        {
+            // The stock antagonist list is kept in every style; the Dead Space sheet styles it.
+            const bool screen = false;
+            AntagSearch.Visible = !screen;
+            AntagListScroll.Visible = !screen;
+            AntagScreenHost.Visible = screen;
+
+            if (!screen || PickAntagScreenAntag() is not { } antag)
+            {
+                DisposeAntagScreen();
+                return;
+            }
+
+            BuildAntagScreen(antag);
+        }
+
+        /// <summary>The antagonist picked in the screen, else the first wanted one, else the first by name.</summary>
+        private AntagPrototype? PickAntagScreenAntag()
+        {
+            if (Profile == null)
+                return null;
+
+            if (_antagScreenAntag != null &&
+                _prototypeManager.TryIndex<AntagPrototype>(_antagScreenAntag, out var picked) && picked.SetPreference)
+            {
+                return picked;
+            }
+
+            var antags = _prototypeManager.EnumeratePrototypes<AntagPrototype>()
+                .Where(antag => antag.SetPreference)
+                .OrderBy(antag => Loc.GetString(antag.Name))
+                .ToList();
+
+            var wanted = Profile.AntagPreferences;
+            return antags.FirstOrDefault(antag => wanted.Contains(antag.ID)) ?? antags.FirstOrDefault();
+        }
+
+        private void BuildAntagScreen(AntagPrototype antag)
+        {
+            DisposeAntagScreen();
+
+            if (Profile == null || _playerManager.LocalSession is not { } session)
+                return;
+
+            var collection = IoCManager.Instance!;
+            RoleLoadoutPrototype roleLoadoutProto;
+            RoleLoadout roleLoadout;
+            var hasLoadout = false;
+
+            if (antag.RoleLoadout is { } roleId && _prototypeManager.TryIndex(roleId, out RoleLoadoutPrototype? proto))
+            {
+                // Clone so we don't modify the underlying loadout.
+                hasLoadout = true;
+                roleLoadoutProto = proto;
+                Profile.Loadouts.TryGetValue(proto.ID, out var storedLoadout);
+                roleLoadout = storedLoadout?.Clone() ?? new RoleLoadout(proto.ID);
+                if (storedLoadout == null)
+                    roleLoadout.SetDefault(Profile, session, _prototypeManager);
+            }
+            else
+            {
+                // No loadout to edit: the screen still shows the preview, the details and the preference.
+                roleLoadoutProto = new RoleLoadoutPrototype();
+                roleLoadout = new RoleLoadout(roleLoadoutProto.ID);
+            }
+
+            try
+            {
+                var screen = new LoadoutEditorControl(Profile, roleLoadout, roleLoadoutProto, session, collection, null, antag, embedded: true);
+                screen.EnableAntagPreference(GetAntagLockReason);
+
+                if (hasLoadout)
+                {
+                    // The same handlers as the antagonist loadout window.
+                    screen.OnNameChanged += name =>
+                    {
+                        roleLoadout.EntityName = name;
+                        Profile = Profile?.WithLoadout(roleLoadout);
+                        SetDirty();
+                    };
+                    screen.OnLoadoutPressed += (loadoutGroup, loadoutProto) =>
+                    {
+                        roleLoadout.AddLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                        screen.RefreshLoadouts(roleLoadout, session, collection);
+                        Profile = Profile?.WithLoadout(roleLoadout);
+                        SetDirty();
+                        ReloadPreview();
+                    };
+                    screen.OnLoadoutUnpressed += (loadoutGroup, loadoutProto) =>
+                    {
+                        roleLoadout.RemoveLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                        screen.RefreshLoadouts(roleLoadout, session, collection);
+                        Profile = Profile?.WithLoadout(roleLoadout);
+                        SetDirty();
+                        ReloadPreview();
+                    };
+                }
+
+                screen.OnAntagSelected += selected =>
+                {
+                    _antagScreenAntag = selected.ID;
+                    BuildAntagScreen(selected);
+                };
+                // The same steps as the stock preference checkbox; the rebuild re-checks locked antagonists.
+                screen.OnAntagPreferenceChanged += (changed, wanted) =>
+                {
+                    if (_readOnly)
+                        return;
+
+                    Profile = Profile?.WithAntagPreference(changed.ID, wanted);
+                    SetDirty();
+                    RefreshAntags();
+                };
+
+                _antagScreen = screen;
+                _antagScreenAntag = antag.ID;
+                AntagScreenHost.AddChild(screen);
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error($"Failed to build the antagonist screen for {antag.ID}: {e}");
+                DisposeAntagScreen();
+            }
+        }
+
+        private void DisposeAntagScreen()
+        {
+            if (_antagScreen == null)
+                return;
+
+            _antagScreen.Orphan();
+            _antagScreen.Dispose();
+            _antagScreen = null;
+        }
+
+        private FormattedMessage? GetAntagLockReason(AntagPrototype antag)
+        {
+            if (_sponsorsManager?.TryGetInfo(out var sponsor) == true && sponsor.HavePriorityAntag)
+                return null;
+
+            return _requirements.IsAllowed(antag, (HumanoidCharacterProfile?) _preferencesManager.Preferences?.SelectedCharacter, out var reason)
+                ? null
+                : reason;
+        }
+
+        private void RefreshAppearanceScreen(bool hologram)
+        {
+            AppearanceScroll.Visible = !hologram;
+            AppearanceScreenHost.Visible = hologram;
+
+            var markingsTab = MarkingsTab.GetPositionInParent();
+            if (hologram && TabContainer.CurrentTab == markingsTab)
+                TabContainer.CurrentTab = 0;
+            TabContainer.SetTabVisible(markingsTab, !hologram);
+
+            if (!hologram)
+            {
+                // Disposing gives the borrowed fields and pickers back to the stock tabs.
+                if (_appearanceScreen != null)
+                {
+                    _appearanceScreen.Orphan();
+                    _appearanceScreen.Dispose();
+                    _appearanceScreen = null;
+                }
+
+                return;
+            }
+
+            if (_appearanceScreen == null)
+            {
+                try
+                {
+                    _appearanceScreen = new AppearanceEditorControl(
+                        IoCManager.Instance!,
+                        _markingManager,
+                        AppearanceBasicBox,
+                        AppearanceSkinBox,
+                        AppearanceEyesBox,
+                        HairStylePicker,
+                        FacialHairPicker,
+                        Markings);
+                    AppearanceScreenHost.AddChild(_appearanceScreen);
+                }
+                catch (Exception e)
+                {
+                    _sawmill.Error($"Failed to build the appearance screen: {e}");
+                    _appearanceScreen?.Dispose();
+                    _appearanceScreen = null;
+                    AppearanceScroll.Visible = true;
+                    AppearanceScreenHost.Visible = false;
+                    TabContainer.SetTabVisible(markingsTab, true);
+                    return;
+                }
+            }
+
+            _appearanceScreen?.Refresh(Profile, PreviewDummy);
+        }
+
+        /// <summary>The job picked in the screen, else the highest-priority job, else the first job with a loadout.</summary>
+        private JobPrototype? PickJobScreenJob()
+        {
+            if (Profile == null)
+                return null;
+
+            bool HasLoadout(string id) =>
+                _prototypeManager.HasIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(id));
+
+            if (_jobScreenJob != null && HasLoadout(_jobScreenJob) &&
+                _prototypeManager.TryIndex<JobPrototype>(_jobScreenJob, out var picked))
+            {
+                return picked;
+            }
+
+            foreach (var (jobId, priority) in Profile.JobPriorities.OrderByDescending(p => p.Value))
+            {
+                if (priority != JobPriority.Never && HasLoadout(jobId.Id) &&
+                    _prototypeManager.TryIndex(jobId, out var preferred) && preferred.SetPreference)
+                {
+                    return preferred;
+                }
+            }
+
+            foreach (var (jobId, _) in _jobPriorities)
+            {
+                if (HasLoadout(jobId) && _prototypeManager.TryIndex<JobPrototype>(jobId, out var first))
+                    return first;
+            }
+
+            return null;
+        }
+
+        private void BuildJobScreen(JobPrototype job)
+        {
+            DisposeJobScreen();
+
+            if (Profile == null || _playerManager.LocalSession is not { } session ||
+                !_prototypeManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var roleLoadoutProto))
+            {
+                return;
+            }
+
+            var collection = IoCManager.Instance!;
+
+            // Clone so we don't modify the underlying loadout.
+            Profile.Loadouts.TryGetValue(roleLoadoutProto.ID, out var storedLoadout);
+            var roleLoadout = storedLoadout?.Clone();
+            if (roleLoadout == null)
+            {
+                roleLoadout = new RoleLoadout(roleLoadoutProto.ID);
+                roleLoadout.SetDefault(Profile, session, _prototypeManager);
+            }
+
+            try
+            {
+                var screen = new LoadoutEditorControl(Profile, roleLoadout, roleLoadoutProto, session, collection, job, null, embedded: true);
+                screen.EnablePriorityEditing(GetJobLockReason);
+
+                // The same handlers as the loadout window.
+                screen.OnNameChanged += name =>
+                {
+                    roleLoadout.EntityName = name;
+                    Profile = Profile?.WithLoadout(roleLoadout);
+                    SetDirty();
+                };
+                screen.OnLoadoutPressed += (loadoutGroup, loadoutProto) =>
+                {
+                    roleLoadout.AddLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                    screen.RefreshLoadouts(roleLoadout, session, collection);
+                    Profile = Profile?.WithLoadout(roleLoadout);
+                    ReloadPreview();
+                };
+                screen.OnLoadoutUnpressed += (loadoutGroup, loadoutProto) =>
+                {
+                    roleLoadout.RemoveLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                    screen.RefreshLoadouts(roleLoadout, session, collection);
+                    Profile = Profile?.WithLoadout(roleLoadout);
+                    ReloadPreview();
+                };
+                screen.OnJobSelected += selected =>
+                {
+                    _jobScreenJob = selected.ID;
+                    BuildJobScreen(selected);
+                };
+                screen.OnPriorityChanged += SetJobPriorityFromScreen;
+
+                _jobScreen = screen;
+                _jobScreenJob = job.ID;
+                JobScreenHost.AddChild(screen);
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error($"Failed to build the loadout screen for {job.ID}: {e}");
+                DisposeJobScreen();
+            }
+        }
+
+        private void DisposeJobScreen()
+        {
+            if (_jobScreen == null)
+                return;
+
+            _jobScreen.Orphan();
+            _jobScreen.Dispose();
+            _jobScreen = null;
+        }
+
+        private FormattedMessage? GetJobLockReason(JobPrototype job)
+        {
+            return _requirements.IsAllowed(job, (HumanoidCharacterProfile?) _preferencesManager.Preferences?.SelectedCharacter, out var reason)
+                ? null
+                : reason;
+        }
+
+        /// <summary>A priority set in the loadout screen: the same steps as the stock priority selector.</summary>
+        private void SetJobPriorityFromScreen(JobPrototype job, JobPriority priority)
+        {
+            if (_readOnly || Profile == null)
+                return;
+
+            Profile = Profile.WithJobPriority(job.ID, priority);
+
+            foreach (var (jobId, other) in _jobPriorities)
+            {
+                // Sync other selectors with the same job in case of multiple department jobs
+                if (jobId == job.ID)
+                {
+                    other.Select((int) priority);
+                    continue;
+                }
+
+                if (priority != JobPriority.High || (JobPriority) other.Selected != JobPriority.High)
+                    continue;
+
+                // Lower any other high priorities to medium.
+                other.Select((int) JobPriority.Medium);
+                Profile = Profile?.WithJobPriority(jobId, JobPriority.Medium);
+            }
+
+            ReloadPreview();
+            UpdateJobPriorities();
+            SetDirty();
+
+            if (Profile != null)
+                _jobScreen?.UpdatePriorities(Profile);
         }
         // DS14-end
 
@@ -1817,6 +2359,10 @@ namespace Content.Client.Lobby.UI
 
         protected override void Dispose(bool disposing)
         {
+            // DS14: return the borrowed pickers before the editor's own tree is disposed.
+            if (disposing)
+                _appearanceScreen?.Dispose();
+
             base.Dispose(disposing);
             if (!disposing)
                 return;
@@ -1824,6 +2370,7 @@ namespace Content.Client.Lobby.UI
             _loadoutWindow?.Dispose();
             _loadoutWindow = null;
             _cfgManager.UnsubValueChanged(TTSProviderCVars.Provider, OnTtsProviderChanged); // DS14
+            _cfgManager.UnsubValueChanged(CCCCVars.InterfaceStyle, OnDeadSpaceStyleChanged); // DS14
         }
 
         protected override void EnteredTree()
@@ -2235,6 +2782,7 @@ namespace Content.Client.Lobby.UI
             // DS14-start
             SaveButton.Disabled = _readOnly || Profile is null || !IsDirty;
             ResetButton.Disabled = _readOnly || Profile is null || !IsDirty;
+            _loadoutWindow?.SetUnsaved(!SaveButton.Disabled);
             // DS14-end
         }
 
