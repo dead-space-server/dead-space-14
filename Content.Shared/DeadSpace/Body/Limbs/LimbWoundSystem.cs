@@ -15,6 +15,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
 using Content.Shared.CCVar;
+using Content.Shared.Corvax.TTS;
 using Content.Shared.Actions.Components;
 using Content.Shared.Changeling.Components;
 using Content.Shared.CombatMode;
@@ -1897,6 +1898,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             var flesh = EnsureComp<LimbFleshComponent>(part.Id);
             flesh.Source = body;
             flesh.Donor = Name(body);
+            flesh.DonorVoices = TryComp<TTSComponent>(body, out var bodyTts) ? new(bodyTts.Voices) : new();
             flesh.Bare = bare;
             flesh.Gelatin = HasComp<SurgeryMannequinComponent>(body);
             flesh.Eyes = eyes;

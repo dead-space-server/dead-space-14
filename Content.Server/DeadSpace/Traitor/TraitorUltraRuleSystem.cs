@@ -680,6 +680,8 @@ public sealed partial class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltra
             if (!TryComp<MindComponent>(mindId, out var mind))
                 continue;
 
+            FollowMovedBounty(uid, mindId, component, state);
+
             if (IsPendingUpgradeStage(state.Stage) &&
                 !TryGetEligibleAliveBody(mind, state, out _))
             {
@@ -1399,6 +1401,13 @@ public sealed partial class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltra
                 continue;
 
             requiredObjectives.Add(objective);
+
+            if (TargetMindInTransit(objective, component, out var transitSince) &&
+                Timing.CurTime < transitSince + component.TransplantGrace)
+            {
+                return false;
+            }
+
             if (!_objectives.IsCompleted(objective, (mindId, mind)))
                 return false;
         }
@@ -1406,8 +1415,34 @@ public sealed partial class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltra
         if (requiredObjectives.Count == 0)
             return false;
 
+        component.ObjectiveTransitSince.Clear();
         foreach (var objective in requiredObjectives)
             _sharedObjectives.LockCompletion(objective);
+
+        return true;
+    }
+
+    private bool TargetMindInTransit(EntityUid objective, TraitorUltraRuleComponent component, out TimeSpan transitSince)
+    {
+        transitSince = default;
+
+        if (!_targetObjectives.GetTarget(objective, out var target))
+            return false;
+
+        if (!TryComp<MindComponent>(target.Value, out var targetMind) || targetMind.OwnedEntity is not { } owned)
+            return false;
+
+        if (HasComp<MobStateComponent>(owned))
+        {
+            component.ObjectiveTransitSince.Remove(objective);
+            return false;
+        }
+
+        if (!component.ObjectiveTransitSince.TryGetValue(objective, out transitSince))
+        {
+            transitSince = Timing.CurTime;
+            component.ObjectiveTransitSince[objective] = transitSince;
+        }
 
         return true;
     }
@@ -2031,7 +2066,7 @@ public sealed partial class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltra
         ResolveBountyDeath(ent, null);
     }
 
-    private void ResolveBountyDeath(Entity<TraitorUltraBountyTargetComponent> ent, EntityUid? origin)
+    private void ResolveBountyDeath(Entity<TraitorUltraBountyTargetComponent> ent, EntityUid? origin, bool force = false)
     {
         if (!TryComp<TraitorUltraRuleComponent>(ent.Comp.Rule, out var ruleComp) ||
             !ruleComp.Minds.TryGetValue(ent.Comp.MindId, out var state) ||
@@ -2040,7 +2075,19 @@ public sealed partial class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltra
             return;
         }
 
+        if (!force &&
+            TryComp<MindComponent>(ent.Comp.MindId, out var bountyMind) &&
+            bountyMind.OwnedEntity is { } bountyOwned &&
+            bountyOwned != ent.Owner &&
+            (!TryComp<MobStateComponent>(bountyOwned, out var bountyOwnedState) ||
+             bountyOwnedState.CurrentState != MobState.Dead))
+        {
+            state.BountyMovedAt ??= Timing.CurTime;
+            return;
+        }
+
         state.BountyResolved = true;
+        state.BountyMovedAt = null;
         state.Stage = TraitorUltraStage.Resolved;
         if (!TerminatingOrDeleted(ent.Owner))
             RemCompDeferred<TraitorUltraBountyTargetComponent>(ent);
@@ -2081,6 +2128,64 @@ public sealed partial class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltra
             SendMindMessage(killerMind, "traitor-ultra-bounty-crew-kill-message", Color.Yellow);
             QueueDelayedAction(ruleComp.RewardDelay, ent.Comp.Rule, killerMindId, TraitorUltraDelayedActionType.OpenRecruitOffer, state.OriginalCorporation);
         }
+    }
+
+    private void FollowMovedBounty(EntityUid rule, EntityUid mindId, TraitorUltraRuleComponent component, TraitorUltraMindState state)
+    {
+        if (state.BountyResolved || state.BountyBody is not { } bountyBody || state.BountyMovedAt is not { } movedAt)
+            return;
+
+        var owned = CompOrNull<MindComponent>(mindId)?.OwnedEntity;
+
+        if (owned == bountyBody)
+        {
+            state.BountyMovedAt = null;
+            return;
+        }
+
+        if (owned is { } newBody &&
+            !TerminatingOrDeleted(newBody) &&
+            TryComp<MobStateComponent>(newBody, out var newMobState) &&
+            newMobState.CurrentState != MobState.Dead &&
+            !HasComp<TraitorUltraBountyTargetComponent>(newBody))
+        {
+            RetargetBounty(bountyBody, newBody, rule, mindId, state);
+            return;
+        }
+
+        if (Timing.CurTime < movedAt + component.TransplantGrace)
+            return;
+
+        state.BountyMovedAt = null;
+        if (TryComp<TraitorUltraBountyTargetComponent>(bountyBody, out var bountyComp))
+            ResolveBountyDeath((bountyBody, bountyComp), null, force: true);
+        else
+        {
+            state.BountyResolved = true;
+            state.Stage = TraitorUltraStage.Resolved;
+        }
+    }
+
+    private void RetargetBounty(EntityUid oldBody, EntityUid newBody, EntityUid rule, EntityUid mindId, TraitorUltraMindState state)
+    {
+        var comp = EnsureComp<TraitorUltraBountyTargetComponent>(newBody);
+        comp.Rule = rule;
+        comp.MindId = mindId;
+
+        if (TryComp<TraitorUltraBountyTargetComponent>(oldBody, out var oldComp))
+        {
+            foreach (var (sourceMind, damage) in oldComp.DamageByMind)
+                comp.DamageByMind[sourceMind] = damage;
+            foreach (var (sourceMind, source) in oldComp.DamageSourceByMind)
+                comp.DamageSourceByMind[sourceMind] = source;
+
+            RemCompDeferred<TraitorUltraBountyTargetComponent>(oldBody);
+        }
+
+        state.BountyBody = newBody;
+        state.BountyMovedAt = null;
+        _adminLogger.Add(LogType.AntagSelection, LogImpact.Medium,
+            $"TraitorUltra bounty retargeted for {ToPrettyString(mindId)}: {ToPrettyString(oldBody)} -> {ToPrettyString(newBody)} (head transplant).");
     }
 
     private bool TryResolveKillerMind(
