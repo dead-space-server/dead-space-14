@@ -1,6 +1,7 @@
-﻿using Content.IntegrationTests.Tests.Interaction;
+using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Damage.Components;
 using Content.Shared.DeadSpace.Player;
+using Content.Shared.DeadSpace.Weapons;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Wieldable.Components;
@@ -66,6 +67,29 @@ public sealed class WeaponTests : InteractionTest
         Assert.That(damageComp.TotalDamage.Value,
             Is.GreaterThan(0),
             "Mosin was fired but urist sustained no damage!");
+    }
+
+    [Test]
+    public async Task SemiAutoFireRateCanBeActiveOnlyOrPassive()
+    {
+        var gunSystem = SEntMan.System<SharedGunSystem>();
+        var gunNet = await PlaceInHands("WeaponPistolMk58");
+        var gun = ToServer(gunNet);
+
+        await Server.WaitPost(() =>
+        {
+            var gunComp = Comp<GunComponent>(gunNet);
+            var fireRate = SEntMan.EnsureComponent<SemiAutoFireRateComponent>(SPlayer);
+            fireRate.ActiveMultiplier = 1.2f;
+            fireRate.OnlyWhileActive = true;
+
+            gunSystem.RefreshModifiers(gun);
+            Assert.That(gunComp.FireRateModified, Is.EqualTo(gunComp.FireRate));
+
+            fireRate.OnlyWhileActive = false;
+            gunSystem.RefreshModifiers(gun);
+            Assert.That(gunComp.FireRateModified, Is.EqualTo(gunComp.FireRate * fireRate.ActiveMultiplier));
+        });
     }
 
     // DS14-start

@@ -398,6 +398,8 @@ public sealed partial class SandevistanSystem : EntitySystem
         active.MaxJitterFrequency = component.MaxJitterFrequency;
         active.JitterLerpRate = component.JitterLerpRate;
         active.JitterRefreshTime = component.JitterRefreshTime;
+        active.AfterimageTrail = component.AfterimageTrail;
+        active.EnsnareRemovalDurationMultiplier = component.EnsnareRemovalDurationMultiplier;
         active.AfterimageInterval = component.AfterimageInterval;
         active.AfterimageMinDistance = component.AfterimageMinDistance;
         active.AfterimageLifetime = component.AfterimageLifetime;

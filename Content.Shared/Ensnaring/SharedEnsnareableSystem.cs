@@ -29,8 +29,6 @@ public sealed partial class EnsnareableDoAfterEvent : SimpleDoAfterEvent
 
 public abstract partial class SharedEnsnareableSystem : EntitySystem
 {
-    private const float SandevistanRemovalDurationMultiplier = 0.25f; // DS14
-
     [Dependency] private   AlertsSystem _alerts = default!;
     [Dependency] private   MovementSpeedModifierSystem _speedModifier = default!;
     [Dependency] protected SharedAppearanceSystem Appearance = default!;
@@ -171,7 +169,7 @@ public abstract partial class SharedEnsnareableSystem : EntitySystem
             sandevistan.LifeStage <= ComponentLifeStage.Running &&
             _timing.CurTime < sandevistan.EndTime)
         {
-            freeTime *= SandevistanRemovalDurationMultiplier;
+            freeTime *= Math.Clamp(sandevistan.EnsnareRemovalDurationMultiplier, 0f, 1f);
         }
         // DS14-end
 

@@ -68,6 +68,7 @@ public abstract partial class SharedGunSystem
 
         DebugTools.Assert((component.AvailableModes & fire) != 0x0);
         component.SelectedMode = fire;
+        RefreshModifiers((uid, component)); // DS14
 
         if (!Paused(uid))
         {

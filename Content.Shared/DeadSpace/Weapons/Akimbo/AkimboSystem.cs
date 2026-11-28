@@ -106,6 +106,9 @@ public sealed partial class AkimboSystem : EntitySystem
 
     public float GetShotAccuracy(EntityUid user, EntityUid gun)
     {
+        if (TryComp<AkimboAccuracyComponent>(user, out var accuracy))
+            return Math.Clamp(accuracy.Accuracy, 0.01f, 1f);
+
         if (!TryComp<AkimboComponent>(gun, out var akimbo) ||
             !TryGetPair(user, gun, out _, out _))
         {
