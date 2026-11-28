@@ -131,6 +131,16 @@ public abstract partial class SharedBuckleSystem
             return;
         }
 
+        // DS14-start
+        if (strapComp.MaxCapacity > 1)
+        {
+            if (xform.ParentUid != strapUid || _container.IsEntityInContainer(buckle))
+            {
+                Unbuckle(buckle, (strapUid, strapComp), null);
+            }
+            return;
+        }
+        // DS14-end
         if (xform.ParentUid != strapUid || _container.IsEntityInContainer(buckle))
         {
             Unbuckle(buckle, (strapUid, strapComp), null);
@@ -207,6 +217,26 @@ public abstract partial class SharedBuckleSystem
         return Resolve(uid, ref component, false) && component.Buckled;
     }
 
+    // DS14-start
+    private int GetFreeBuckleSlot(StrapComponent strap)
+    {
+        if (strap.MaxCapacity <= 1)
+            return -1;
+
+        var occupied = new HashSet<int>();
+        foreach (var buckled in strap.BuckledEntities)
+            occupied.Add(CompOrNull<BuckleComponent>(buckled)?.BuckleSlot ?? -1);
+
+        for (var i = 0; i < strap.MaxCapacity; i++)
+        {
+            if (!occupied.Contains(i))
+                return i;
+        }
+
+        return -1;
+    }
+    // DS14-end
+
     protected void SetBuckledTo(Entity<BuckleComponent> buckle, Entity<StrapComponent?>? strap)
     {
         if (TryComp(buckle.Comp.BuckledTo, out StrapComponent? old))
@@ -215,8 +245,14 @@ public abstract partial class SharedBuckleSystem
             Dirty(buckle.Comp.BuckledTo.Value, old);
         }
 
+        // DS14-start
+        buckle.Comp.BuckleSlot = -1;
+        // DS14-end
         if (strap is {} strapEnt && Resolve(strapEnt.Owner, ref strapEnt.Comp))
         {
+            // DS14-start
+            buckle.Comp.BuckleSlot = GetFreeBuckleSlot(strapEnt.Comp);
+            // DS14-end
             strapEnt.Comp.BuckledEntities.Add(buckle);
             Dirty(strapEnt);
             _alerts.ShowAlert(buckle.Owner, strapEnt.Comp.BuckledAlertType);
@@ -257,6 +293,14 @@ public abstract partial class SharedBuckleSystem
             return false;
 
         // Does it pass the Whitelist
+        // DS14-start
+        if (strapComp.MaxCapacity > 0 && strapComp.BuckledEntities.Count >= strapComp.MaxCapacity)
+        {
+            if (popup)
+                _popup.PopupClient(Loc.GetString("buckle-component-no-space-message"), user, PopupType.Medium);
+            return false;
+        }
+        // DS14-end
         if (_whitelistSystem.IsWhitelistFail(strapComp.Whitelist, buckleUid) ||
             _whitelistSystem.IsWhitelistPass(strapComp.Blacklist, buckleUid))
         {
@@ -374,6 +418,17 @@ public abstract partial class SharedBuckleSystem
         return true;
     }
 
+    // DS14-start
+    private Vector2 GetBuckleOffset(Entity<StrapComponent> strap, int positionIndex)
+    {
+        if (positionIndex < 0)
+            return strap.Comp.BuckleOffset;
+
+        return strap.Comp.MultiBuckleOffsets.TryGetValue(positionIndex, out var customOffset)
+            ? customOffset
+            : strap.Comp.BuckleOffset;
+    }
+    // DS14-end
     private void Buckle(Entity<BuckleComponent> buckle, Entity<StrapComponent> strap, EntityUid? user)
     {
         if (user == buckle.Owner)
@@ -382,16 +437,18 @@ public abstract partial class SharedBuckleSystem
             _adminLogger.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):player} buckled {ToPrettyString(buckle)} to {ToPrettyString(strap)}");
 
         _audio.PlayPredicted(strap.Comp.BuckleSound, strap, user);
-
+        // DS14-start
         SetBuckledTo(buckle, strap!);
-        Appearance.SetData(strap, StrapVisuals.State, true);
+        Appearance.SetData(strap, StrapVisuals.State, strap.Comp.BuckledEntities.Count > 0);
         Appearance.SetData(buckle, BuckleVisuals.Buckled, true);
 
         _rotationVisuals.SetHorizontalAngle(buckle.Owner, strap.Comp.Rotation);
 
+        var buckleOffset = GetBuckleOffset(strap, buckle.Comp.BuckleSlot);
         var xform = Transform(buckle);
-        var coords = new EntityCoordinates(strap, strap.Comp.BuckleOffset);
+        var coords = new EntityCoordinates(strap, buckleOffset);
         _transform.SetCoordinates(buckle, xform, coords, rotation: Angle.Zero);
+        // DS14-end
 
         _joints.SetRelay(buckle, strap);
 
@@ -474,6 +531,9 @@ public abstract partial class SharedBuckleSystem
 
         _audio.PlayPredicted(strap.Comp.UnbuckleSound, strap, user);
 
+        // DS14-start
+        var buckleOffset = GetBuckleOffset(strap, buckle.Comp.BuckleSlot);
+        // DS14-end
         SetBuckledTo(buckle, null);
 
         var buckleXform = Transform(buckle);
@@ -488,10 +548,12 @@ public abstract partial class SharedBuckleSystem
             _transform.SetWorldRotationNoLerp((buckle, buckleXform), oldBuckledToWorldRot);
 
             // TODO: This is doing 4 moveevents this is why I left the warning in, if you're going to remove it make it only do 1 moveevent.
-            if (strap.Comp.BuckleOffset != Vector2.Zero)
+            // DS14-start
+            if (buckleOffset != Vector2.Zero)
             {
-                _transform.SetCoordinates(buckle, buckleXform, oldBuckledXform.Coordinates.Offset(strap.Comp.BuckleOffset));
+                _transform.SetCoordinates(buckle, buckleXform, oldBuckledXform.Coordinates.Offset(buckleOffset));
             }
+            // DS14-end
         }
 
         _rotationVisuals.ResetHorizontalAngle(buckle.Owner);

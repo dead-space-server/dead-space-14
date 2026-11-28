@@ -5,6 +5,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
+using Content.Shared.DeadSpace.Furniture; // DS14
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Standing;
@@ -19,6 +20,7 @@ namespace Content.IntegrationTests.Tests.Buckle
     {
         private const string BuckleDummyId = "BuckleDummy";
         private const string StrapDummyId = "StrapDummy";
+        private const string MultiStrapDummyId = "MultiStrapDummy"; // DS14
         private const string ItemDummyId = "ItemDummy";
 
         [TestPrototypes]
@@ -42,6 +44,18 @@ namespace Content.IntegrationTests.Tests.Buckle
   id: {StrapDummyId}
   components:
   - type: Strap
+
+# DS14-start
+- type: entity
+  name: {MultiStrapDummyId}
+  id: {MultiStrapDummyId}
+  components:
+  - type: Strap
+    maxCapacity: 2
+    multiBuckleOffsets:
+      0: ""0,0.18""
+      1: ""0,-0.18""
+# DS14-end
 
 - type: entity
   name: {ItemDummyId}
@@ -234,6 +248,95 @@ namespace Content.IntegrationTests.Tests.Buckle
 
             await pair.CleanReturnAsync();
         }
+
+        // DS14-start
+        [Test]
+        public async Task MultiBuckleSlotsSurviveRebuckleTest()
+        {
+            await using var pair = await PoolManager.GetServerClient();
+            var server = pair.Server;
+
+            var testMap = await pair.CreateTestMap();
+            var coordinates = testMap.GridCoords;
+            var entityManager = server.ResolveDependency<IEntityManager>();
+            var buckleSystem = entityManager.System<SharedBuckleSystem>();
+
+            EntityUid first = default;
+            EntityUid second = default;
+            EntityUid bed = default;
+            BuckleComponent firstBuckle = null;
+            BuckleComponent secondBuckle = null;
+
+            await server.WaitAssertion(() =>
+            {
+                first = entityManager.SpawnEntity(BuckleDummyId, coordinates);
+                second = entityManager.SpawnEntity(BuckleDummyId, coordinates);
+                bed = entityManager.SpawnEntity(MultiStrapDummyId, coordinates);
+
+                Assert.That(entityManager.TryGetComponent(first, out firstBuckle));
+                Assert.That(entityManager.TryGetComponent(second, out secondBuckle));
+
+                Assert.That(buckleSystem.TryBuckle(first, first, bed, firstBuckle));
+                Assert.That(buckleSystem.TryBuckle(second, second, bed, secondBuckle));
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(firstBuckle.BuckleSlot, Is.EqualTo(0));
+                    Assert.That(secondBuckle.BuckleSlot, Is.EqualTo(1));
+                });
+            });
+
+            // Wait out the unbuckle cooldown
+            await server.WaitRunTicks(60);
+
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(buckleSystem.TryUnbuckle(first, first, buckleComp: firstBuckle));
+                Assert.That(firstBuckle.BuckleSlot, Is.EqualTo(-1));
+
+                Assert.That(buckleSystem.TryBuckle(first, first, bed, firstBuckle));
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(firstBuckle.BuckleSlot, Is.EqualTo(0));
+                    Assert.That(secondBuckle.BuckleSlot, Is.EqualTo(1));
+                });
+            });
+
+            await pair.CleanReturnAsync();
+        }
+        // DS14-end
+
+        // DS14-start
+        [Test]
+        public async Task BunkBedSpawnsTopOverlayTest()
+        {
+            await using var pair = await PoolManager.GetServerClient();
+            var server = pair.Server;
+
+            var testMap = await pair.CreateTestMap();
+            var coordinates = testMap.GridCoords;
+            var entityManager = server.ResolveDependency<IEntityManager>();
+
+            EntityUid bed = default;
+
+            await server.WaitAssertion(() =>
+            {
+                bed = entityManager.SpawnEntity("BunkBed", coordinates);
+                Assert.That(entityManager.HasComponent<BunkBedComponent>(bed));
+
+                var found = false;
+                var xform = entityManager.GetComponent<TransformComponent>(bed);
+                using var children = xform.ChildEnumerator;
+                while (children.MoveNext(out var child))
+                    found |= entityManager.HasComponent<BunkBedOverlayComponent>(child);
+
+                Assert.That(found, Is.True);
+            });
+
+            await pair.CleanReturnAsync();
+        }
+        // DS14-end
 
         [Test]
         public async Task BuckledDyingDropItemsTest()

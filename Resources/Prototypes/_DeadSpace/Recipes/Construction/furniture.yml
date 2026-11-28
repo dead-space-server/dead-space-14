@@ -251,6 +251,18 @@
     - !type:TileNotBlocked
 
 - type: construction
+  id: BunkBed
+  graph: bed
+  startNode: start
+  targetNode: bunkbed
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
   id: NTTribune
   graph: NTTribune
   startNode: start
