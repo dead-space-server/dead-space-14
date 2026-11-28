@@ -39,7 +39,7 @@ namespace Content.Server.DeadSpace.SaveGamemode;
 ///     и на загрузке.
 ///     </para>
 /// </remarks>
-public partial sealed class SaveGamemodeDoNotSaveSystem : EntitySystem
+public sealed partial class SaveGamemodeDoNotSaveSystem : EntitySystem
 {
     /// <summary>
     ///     Тег «не сохранять» — разметка автора карты или спавнера, не требующая компонента.
