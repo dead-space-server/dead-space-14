@@ -1,6 +1,8 @@
 using Content.Server.Body.Components;
 using Content.Server.Temperature.Systems;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Mobs; // DS14
+using Content.Shared.Mobs.Components; // DS14
 using Content.Shared.Temperature.Components;
 using Robust.Shared.Timing;
 
@@ -50,6 +52,11 @@ public sealed partial class ThermalRegulatorSystem : EntitySystem
     {
         if (!Resolve(ent, ref ent.Comp2, logMissing: false))
             return;
+
+        // DS14-start
+        if (TryComp<MobStateComponent>(ent, out var mob) && mob.CurrentState == MobState.Dead)
+            return;
+        // DS14-end
 
         // TODO: Why do we have two datafields for this if they are only ever used once here?
         var totalMetabolismTempChange = ent.Comp1.MetabolismHeat - ent.Comp1.RadiatedHeat;

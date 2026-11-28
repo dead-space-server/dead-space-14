@@ -2,6 +2,8 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Temperature.Components;
 using Content.Shared.Atmos;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs; // DS14
+using Content.Shared.Mobs.Components; // DS14
 using Content.Shared.Rejuvenate;
 using Content.Shared.Temperature;
 using Content.Shared.Projectiles;
@@ -14,6 +16,8 @@ namespace Content.Server.Temperature.Systems;
 public sealed partial class TemperatureSystem : SharedTemperatureSystem
 {
     [Dependency] private AtmosphereSystem _atmosphere = default!;
+
+    private const float CorpseAtmosTransferFactor = 0.05f; // DS14
 
     public override void Initialize()
     {
@@ -60,7 +64,7 @@ public sealed partial class TemperatureSystem : SharedTemperatureSystem
         UpdateDamage();
     }
 
-    public void ForceChangeTemperature(EntityUid uid, float temp, TemperatureComponent? temperature = null)
+    public override void ForceChangeTemperature(EntityUid uid, float temp, TemperatureComponent? temperature = null) // DS14
     {
         if (!TemperatureQuery.Resolve(uid, ref temperature))
             return;
@@ -103,6 +107,12 @@ public sealed partial class TemperatureSystem : SharedTemperatureSystem
         // TODO ATMOS: This heat transfer formula is really really wrong, it needs to be pulled out. Pending on HeatContainers.
         var heat = temperatureDelta * (airHeatCapacity * heatCapacity /
                                        (airHeatCapacity + heatCapacity));
+
+        // DS14-start
+        if (TryComp<MobStateComponent>(uid, out var mob) && mob.CurrentState == MobState.Dead)
+            heat *= CorpseAtmosTransferFactor;
+        // DS14-end
+
         ChangeHeat(uid, heat * temperature.AtmosTemperatureTransferEfficiency, temperature: temperature);
     }
 

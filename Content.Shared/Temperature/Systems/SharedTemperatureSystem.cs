@@ -89,6 +89,13 @@ public abstract partial class SharedTemperatureSystem : EntitySystem
 
     }
 
+    // DS14-start
+    public virtual void ForceChangeTemperature(EntityUid uid, float temp, TemperatureComponent? temperature = null)
+    {
+
+    }
+    // DS14-end
+
     public float GetHeatCapacity(EntityUid uid, TemperatureComponent? comp = null, PhysicsComponent? physics = null)
     {
         if (!TemperatureQuery.Resolve(uid, ref comp) || !Resolve(uid, ref physics, false) || physics.FixturesMass <= 0)

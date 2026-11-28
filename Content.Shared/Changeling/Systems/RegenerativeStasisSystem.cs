@@ -6,6 +6,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Changeling.Components;
 using Content.Shared.Cuffs; // DS14
 using Content.Shared.Cuffs.Components; // DS14
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.DeadSpace.Changeling.Systems; // DS14
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -15,6 +16,9 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Atmos; // DS14
+using Content.Shared.Temperature.Components; // DS14
+using Content.Shared.Temperature.Systems; // DS14
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared.Changeling.Systems;
@@ -31,6 +35,7 @@ public sealed partial class RegenerativeStasisSystem : EntitySystem
     [Dependency] private MobStateSystem _mobs = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedTemperatureSystem _temperature = default!; // DS14
 
     // DS14-start: pre-v288 RobustToolbox has no action-event relay or subscription source generator.
     public override void Initialize()
@@ -150,6 +155,11 @@ public sealed partial class RegenerativeStasisSystem : EntitySystem
 
         // Heal all damage.
         _damage.ClearAllDamage(target);
+
+        // DS14-start
+        if (TryComp<TemperatureComponent>(target, out var bodyTemp))
+            _temperature.ForceChangeTemperature(target, Atmospherics.T0C + LimbWoundRules.LivingCelsius, bodyTemp);
+        // DS14-end
 
         // Heal bloodloss and stop bleeding.
         if (TryComp<BloodstreamComponent>(target, out var bloodstream))

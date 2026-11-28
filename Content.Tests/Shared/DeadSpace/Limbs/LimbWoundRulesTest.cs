@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Numerics;
-using Content.Shared.Atmos;
 using Robust.Shared.Maths;
 using Content.Shared.DeadSpace.Body.Limbs;
 using NUnit.Framework;
@@ -973,8 +972,6 @@ public sealed class LimbWoundRulesTest
             Assert.That(LimbWoundRules.ZoneFromHit(left.X, left.Y), Is.EqualTo(LimbZone.ArmLeft));
             Assert.That(LimbWoundRules.HarvestSeconds(LimbZone.Head, 0.4f), Is.GreaterThan(LimbWoundRules.HarvestSeconds(LimbZone.HandLeft, 0.4f)));
             Assert.That(LimbWoundRules.HarvestSeconds(LimbZone.Head, 3f), Is.LessThan(LimbWoundRules.HarvestSeconds(LimbZone.Head, 0.4f)));
-            Assert.That(LimbWoundRules.CorpseKelvin(0f) - Atmospherics.T0C, Is.EqualTo(37f).Within(0.01f));
-            Assert.That(LimbWoundRules.CorpseKelvin(10f) - Atmospherics.T0C, Is.EqualTo(27f).Within(0.01f));
         });
     }
 
