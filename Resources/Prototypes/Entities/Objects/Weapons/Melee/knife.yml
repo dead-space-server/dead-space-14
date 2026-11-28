@@ -134,6 +134,16 @@
     tags:
     - CombatKnife
     - Knife
+  # DS14-Start
+  - type: SurgeryTool
+    precision: 0.7
+    slip: 0.15
+    wobble: 16
+    verbs:
+    - Incise
+    softVerbs:
+    - Incise
+  # DS14-End
   - type: Sprite
     sprite: Objects/Weapons/Melee/combat_knife.rsi
     state: icon
