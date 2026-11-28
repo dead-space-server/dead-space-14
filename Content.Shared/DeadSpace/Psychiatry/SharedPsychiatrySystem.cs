@@ -35,11 +35,18 @@ public abstract partial class SharedPsychiatrySystem : EntitySystem
     public const string SpecialPillReagentId = "Schizotoxin";
     public const string ClarityReagentId = "NeuroClarity";
     public const string PositronicSpecies = "IPC";
+    public const string SkeletonSpecies = "Skeleton";
 
     public bool IsPositronic(EntityUid uid)
     {
         return TryComp<HumanoidAppearanceComponent>(uid, out var humanoid)
                && humanoid.Species == PositronicSpecies;
+    }
+
+    public bool IsSkeleton(EntityUid uid)
+    {
+        return TryComp<HumanoidAppearanceComponent>(uid, out var humanoid)
+               && humanoid.Species == SkeletonSpecies;
     }
 
     public bool IsAntagImmune(EntityUid uid, bool pillForced, bool gas = false)

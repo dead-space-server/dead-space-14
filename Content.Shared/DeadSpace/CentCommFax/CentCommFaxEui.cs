@@ -59,6 +59,37 @@ public static class CentCommFaxEuiMsg
         /// stamps; Title and Content are ignored.
         /// </summary>
         public bool ReturnOriginal;
+
+        public string Comment = string.Empty;
+
+        public bool UseLoaded;
+        public string? LoadedLabel;
+        public string? LoadedStampState;
+        public List<StampDisplayInfo> LoadedStamps = new();
+        public List<string> LoadedSignatures = new();
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class Print : EuiMessageBase
+    {
+        public Reply Sheet = new();
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class Load : EuiMessageBase
+    {
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class PaperLoaded : EuiMessageBase
+    {
+        public string Title = string.Empty;
+        public string Content = string.Empty;
+        public string PaperPrototype = string.Empty;
+        public string? Label;
+        public string? StampState;
+        public List<StampDisplayInfo> Stamps = new();
+        public List<string> Signatures = new();
     }
 
     [Serializable, NetSerializable]

@@ -82,14 +82,6 @@
   - type: PointLight
     radius: 7
     energy: 3
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
-        Radiation: 0.5
 
 # Magboots
 - type: entity

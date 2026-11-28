@@ -1,4 +1,3 @@
-using Content.Server.Antag;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.RoundEnd;
@@ -14,7 +13,6 @@ namespace Content.Server.GameTicking.Rules;
 
 public sealed partial class XenoborgsRuleSystem : GameRuleSystem<XenoborgsRuleComponent>
 {
-    [Dependency] private AntagSelectionSystem _antag = default!;
     // [Dependency] private ChatSystem _chatSystem = default!; // DS14: announcements use RuleStation.
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
@@ -57,17 +55,17 @@ public sealed partial class XenoborgsRuleSystem : GameRuleSystem<XenoborgsRuleCo
         var numHumans = _mindSystem.GetAliveHumans().Count;
 
         if (numXenoborgs < 5)
-            args.AddLine(Loc.GetString("xenoborgs-crewmajor"));
+            args.AddOutcome(Loc.GetString("xenoborgs-crewmajor")); // DS14
         else if (4 * numXenoborgs < numHumans)
-            args.AddLine(Loc.GetString("xenoborgs-crewmajor"));
+            args.AddOutcome(Loc.GetString("xenoborgs-crewmajor")); // DS14
         else if (2 * numXenoborgs < numHumans)
-            args.AddLine(Loc.GetString("xenoborgs-crewminor"));
+            args.AddOutcome(Loc.GetString("xenoborgs-crewminor")); // DS14
         else if (1.5 * numXenoborgs < numHumans)
-            args.AddLine(Loc.GetString("xenoborgs-neutral"));
+            args.AddOutcome(Loc.GetString("xenoborgs-neutral")); // DS14
         else if (numXenoborgs < numHumans)
-            args.AddLine(Loc.GetString("xenoborgs-borgsminor"));
+            args.AddOutcome(Loc.GetString("xenoborgs-borgsminor")); // DS14
         else
-            args.AddLine(Loc.GetString("xenoborgs-borgsmajor"));
+            args.AddOutcome(Loc.GetString("xenoborgs-borgsmajor")); // DS14
 
         var numMothershipCores = GetNumberMothershipCores();
 
@@ -85,24 +83,6 @@ public sealed partial class XenoborgsRuleSystem : GameRuleSystem<XenoborgsRuleCo
 
         args.AddLine("");
     }
-
-    // DS14-start
-    protected override void AppendRoundEndDiscordText(EntityUid uid,
-        XenoborgsRuleComponent component,
-        GameRuleComponent gameRule,
-        ref RoundEndDiscordTextAppendEvent args)
-    {
-        args.AddLine(Loc.GetString("xenoborgs-list-start"));
-
-        var antags = _antag.GetAntagIdentifiers(uid);
-        foreach (var (_, sessionData, name) in antags)
-        {
-            args.AddLine(Loc.GetString("xenoborgs-list", ("name", name), ("user", sessionData.UserName)));
-        }
-
-        args.AddLine("");
-    }
-    // DS14-end
 
     private void CheckRoundEnd(EntityUid uid, XenoborgsRuleComponent xenoborgsRuleComponent) // DS14
     {

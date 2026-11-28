@@ -34,8 +34,22 @@
   kind: source
   path: "/Textures/_DeadSpace/Shaders/severed_mask.swsl"
 
-# DS14
 - type: shader
   id: DSMarkingDye
   kind: source
   path: "/Textures/_DeadSpace/Shaders/marking_dye.swsl"
+
+- type: shader
+  id: ArchitectMvpAdditive
+  kind: canvas
+  blend_mode: Add
+
+- type: shader
+  id: CardinalScream
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/cardinal_scream.swsl"
+
+- type: shader
+  id: CardinalScreamTint
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/cardinal_scream_tint.swsl"

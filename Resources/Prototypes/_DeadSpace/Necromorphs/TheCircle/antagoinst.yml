@@ -170,6 +170,29 @@
     belt: ClothingBeltUnitologyEngineerWebbing
     id: UnitologyEngineerPDA
 
+# The Architect's look in the MVP scene, the same whatever the player wore.
+- type: startingGear
+  parent: TheCircleEngineerGear
+  id: TheCircleArchitectShowcaseGear
+  equipment:
+    outerClothing: ClothingOuterHardsuitUnitologyEngineer
+    head: ClothingHeadHelmetHardsuitUnitologyEngineer
+
+# The Deacon and the Seraphim as they appear in the MVP scene: full hardsuit and helmet.
+- type: startingGear
+  parent: TheCircleHeavyGear
+  id: TheCircleDeaconShowcaseGear
+  equipment:
+    outerClothing: ClothingOuterHardsuitUnitologyHeavy
+    head: ClothingHeadHelmetHardsuitUnitologyHeavy
+
+- type: startingGear
+  parent: TheCircleMedicGear
+  id: TheCircleSeraphimShowcaseGear
+  equipment:
+    outerClothing: ClothingOuterHardsuitUnitologyMedic
+    head: ClothingHeadHelmetHardsuitUnitologyMedic
+
 - type: startingGear
   parent: TheCircleBaseGear
   id: TheCircleMedicGear

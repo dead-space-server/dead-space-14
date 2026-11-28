@@ -18,7 +18,7 @@
     key: enum.StoreUiKey.Key
   - type: Store
     balance:
-      Telecrystal: 700
+      Telecrystal: 750
 
 - type: entity
   id: UniPhonePresetUplink
@@ -33,7 +33,6 @@
     - UniPhoneUplinkGear
     - UniPhoneUplinkImplants
     - UniPhoneUplinkGrenade
-    - UniPhoneUplinkOther
     currencyWhitelist:
     - Telecrystal
     balance:
@@ -68,11 +67,6 @@
   id: UniPhoneUplinkGrenade
   name: Гранаты
   priority: 6
-
-- type: storeCategory
-  id: UniPhoneUplinkOther
-  name: Разное
-  priority: 7
 
 
 ### Вооружение
@@ -159,6 +153,20 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 3
+
+- type: listing
+  id: UniPhoneUplinkWeaponSCL
+  name: дробовик СКЛ
+  icon: { sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/scl/scl.rsi, state: icon }
+  description: Дробовик под разрывные пули. Пуля летит цельной и бьёт как заряд КС-23, а пролетев четыре метра, раскрывается веером картечи. Принимает и обычные ружейные патроны, но не патроны КС-23.
+  productEntity: WeaponCaseHeavyFilledSCL
+  cost:
+    Telecrystal: 15
+  categories:
+   - UniPhoneUplinkWeaponry
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 2
 
 - type: listing
   id: UniPhoneUplinkWeaponSCARAB
@@ -301,6 +309,16 @@
   productEntity: BoxShotgun23MM
   cost:
     Telecrystal: 1
+  categories:
+   - UniPhoneUplinkAmmo
+
+- type: listing
+  id: UniPhoneUplinkAmmoSCL
+  name: коробка разрывных патронов СКЛ
+  description: Пули для дробовика СКЛ, что раскрываются веером картечи на излёте.
+  productEntity: BoxShotgunSCL
+  cost:
+    Telecrystal: 2
   categories:
    - UniPhoneUplinkAmmo
 
@@ -507,13 +525,12 @@
 # Имлпанты
 
 - type: listing
-  id: UniPhoneUplinkReviveAutosurgeon
-  name: uplink-revive-implanter-name
-  description: uplink-revive-implanter-desc
-  icon: { sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi, state: iconBefore }
-  productEntity: AutosurgeonRevive
+  id: UniPhoneUplinkNecroOrgansImplanter
+  name: Имплантер некротических органов
+  description: Разорванный орган отторгается, и на его месте прорастает некротический, а повреждённые органы понемногу затягиваются сами. Новой ткани нужна минута, чтобы окрепнуть, а некротические органы рвутся вдвое легче.
+  productEntity: UnitologyNecroOrgansImplanter
   cost:
-    Telecrystal: 7
+    Telecrystal: 12
   categories:
     - UniPhoneUplinkImplants
 
@@ -635,63 +652,6 @@
   categories:
     - UniPhoneUplinkGrenade
 
-# Прочее
-
-- type: listing
-  id: UniPhoneSyringeNecromorphMutagenBruteList
-  name: Шприц с мутагеном некроморфа зверя
-  description: Вводите 5 ед. вещества в животное. После заражения он станет зверем.
-  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
-  productEntity: SyringeNecromorphMutagenBrute
-  cost:
-    Telecrystal: 10
-  categories:
-    - UniPhoneUplinkOther
-
-- type: listing
-  id: UniPhonePukerNecroList
-  name: Некроморф выделитель газа
-  description: Некроморф.
-  icon: { sprite: _DeadSpace/Necromorfs/puker.rsi, state: running }
-  productEntity: PukerNecro
-  cost:
-    Telecrystal: 10
-  categories:
-    - UniPhoneUplinkOther
-
-- type: listing
-  id: UniPhoneLauncherSyringeList
-  name: Шприцемёт
-  description: Стреляет шприцами.
-  icon: { sprite: Objects/Weapons/Guns/Cannons/syringe_gun.rsi, state: syringe_gun }
-  productEntity: LauncherSyringe
-  cost:
-    Telecrystal: 5
-  categories:
-    - UniPhoneUplinkOther
-
-- type: listing
-  id: UniPhoneMiniSyringeList
-  name: Мини-шприц
-  description: Патрон для шприцемёта.
-  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: minisyringe1 }
-  productEntity: MiniSyringe
-  cost:
-    Telecrystal: 1
-  categories:
-    - UniPhoneUplinkOther
-
-- type: listing
-  id: UniPhoneInfectionDeadList
-  name: Экстракт заразителя
-  description: Шприц с экстрактом заразителя на 15 единиц.
-  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
-  productEntity: SyringeExtractInfectorDead
-  cost:
-    Telecrystal: 16
-  categories:
-    - UniPhoneUplinkOther
-
 ### Специализированный аплинк Гейста
 - type: entity
   id: UniPhoneGeistUplink
@@ -723,6 +683,7 @@
     name: circle-store-name
     categories:
     - UniPhoneGeistUplinkTraps
+    - UniPhoneGeistUplinkImplants
     currencyWhitelist:
     - Telecrystal
     balance:
@@ -732,6 +693,21 @@
   id: UniPhoneGeistUplinkTraps
   name: Ловушки и диверсии
   priority: 1
+
+- type: storeCategory
+  id: UniPhoneGeistUplinkImplants
+  name: Импланты
+  priority: 3
+
+- type: listing
+  id: UniPhoneGeistUplinkNecroOrgansImplanter
+  name: Имплантер некротических органов
+  description: Разорванный орган отторгается, и на его месте прорастает некротический, а повреждённые органы понемногу затягиваются сами. Новой ткани нужна минута, чтобы окрепнуть, а некротические органы рвутся вдвое легче.
+  productEntity: UnitologyNecroOrgansImplanter
+  cost:
+    Telecrystal: 12
+  categories:
+  - UniPhoneGeistUplinkImplants
 
 - type: listing
   id: UniPhoneGeistUplinkC4
@@ -746,16 +722,6 @@
   id: UniPhoneGeistUplinkTripwireExplosiveGrenade
   name: Граната для растяжки
   productEntity: TripwireExplosiveGrenade
-  cost:
-    Telecrystal: 2
-  categories:
-  - UniPhoneGeistUplinkTraps
-
-- type: listing
-  id: UniPhoneGeistUplinkTripwireNecroGasGrenade
-  name: Газовый заряд для растяжки (некрогаз)
-  description: Срабатывает только от растяжки и заполняет некрогазом около десяти тайлов.
-  productEntity: TripwireNecroGasGrenade
   cost:
     Telecrystal: 2
   categories:

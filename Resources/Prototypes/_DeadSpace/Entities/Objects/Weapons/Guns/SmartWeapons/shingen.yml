@@ -16,11 +16,11 @@
   - type: Wieldable
     unwieldOnUse: false
   - type: GunWieldBonus
-    minAngle: -23
+    minAngle: -20
     maxAngle: -21
   - type: Gun
     minAngle: 21
-    maxAngle: 32
+    maxAngle: 36
     fireRate: 7.5
     burstFireRate: 20
     soundGunshot:

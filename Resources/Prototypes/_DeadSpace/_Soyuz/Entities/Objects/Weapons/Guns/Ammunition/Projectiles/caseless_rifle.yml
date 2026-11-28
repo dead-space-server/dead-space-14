@@ -4,6 +4,8 @@
   parent: BaseBulletIncendiary
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    embed: 0
   - type: Projectile
     damage:
       types:
@@ -16,6 +18,8 @@
   parent: BaseBulletUranium
   categories: [ HideSpawnMenu ]
   components:
+  - type: LimbRound
+    embed: 0
   - type: Projectile
     damage:
       types:

@@ -247,6 +247,14 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
             return false;
         }
 
+        // DS14-start: steady hands keep working on the move, but a hit still knocks them off it
+        if (HasComp<Content.Shared.DeadSpace.DoAfter.SteadyDoAfterComponent>(args.User))
+        {
+            args.BreakOnMove = false;
+            args.BreakOnDamage = true;
+        }
+        // DS14-end
+
         id = new DoAfterId(args.User, comp.NextId++);
         var doAfter = new DoAfter(id.Value.Index, args, GameTiming.CurTime);
 

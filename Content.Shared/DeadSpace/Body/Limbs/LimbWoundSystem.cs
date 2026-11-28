@@ -407,7 +407,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var index = LimbWoundRules.Index(strike.Zone);
         ref var state = ref span[index];
         var boneBefore = state.Bone;
+        var deadBefore = LimbWoundRules.DeadLimb(strike.Zone, state);
         var result = LimbWoundRules.Apply(ref state, strike, limbs.Soft, limbs.Bleeds);
+        if (!deadBefore && LimbWoundRules.DeadLimb(strike.Zone, state))
+        {
+            limbs.KilledZone = strike.Zone;
+            limbs.KilledTime = _timing.CurTime;
+        }
         ApplyOrgans(uid, limbs, strike, result, ready);
         var pelletSevered = ApplyPelletSever(uid, limbs, strike);
         Dirty(uid, limbs);
@@ -1132,6 +1138,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         args.FireRate *= LimbWoundRules.AimFireRate;
         args.AngleIncrease *= LimbWoundRules.AimSpread;
+        // Narrow both ends of the spread, or a gun whose minimum is close to its maximum ends up with min > max.
+        args.MinAngle *= LimbWoundRules.AimSpread;
         args.MaxAngle *= LimbWoundRules.AimSpread;
     }
 
@@ -1184,6 +1192,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         EnsureZones(limbs);
         var index = LimbWoundRules.Index(zone);
         if ((uint) index >= (uint) limbs.Zones.Count || !LimbWoundRules.DeadLimb(zone, limbs.Zones[index]))
+            return;
+
+        // The blow that killed the limb still lands on the body; only hits on an already dead limb are absorbed.
+        if (limbs.KilledZone == zone && limbs.KilledTime == _timing.CurTime)
             return;
 
         var kept = new DamageSpecifier();
@@ -1375,6 +1387,15 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
         else if (life == LimbLife.Crit && args.State == MobState.Alive)
             args.State = MobState.Critical;
+        // DS14: out of a limb crit only once the torso has really mended, not the moment it ticks past zero,
+        // or regenerating bodies (necromorphs) drop and rise every second.
+        else if (ent.Comp.LimbCrit && args.State == MobState.Alive && !TorsoMended(ent.Comp))
+            args.State = MobState.Critical;
+    }
+
+    private static bool TorsoMended(LimbBodyComponent limbs)
+    {
+        return limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health >= LimbWoundRules.CritRecoverTorso;
     }
 
     private bool InStasis(EntityUid uid)
@@ -1744,6 +1765,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
                     continue;
 
                 if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * ent.Comp.Burn * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share, ent.Comp.Soft, ent.Comp.Bleeds))
+                    changed = true;
+
+                // DS14: a blast is incoming damage like any hit - it can crack a worn limb, or break a cracked one
+                if (!ent.Comp.Soft && !zones[i].Severed && LimbWoundRules.RollCrack(ref zones[i], worn[i], _random.NextFloat()))
                     changed = true;
 
                 if (caustic[i] > 0f || other[i] > 0f)
@@ -2171,7 +2196,28 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var heart = (int) LimbOrgan.Heart;
         var brainWas = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartWas = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
-        var eyes = LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), _random.NextFloat());
+        var chance = new LimbOrganRuptureChanceEvent(zone);
+        RaiseLocalEvent(uid, ref chance);
+        var before = RupturedMask(organs);
+        var eyes = chance.Boosted == LimbOrganMask.None || chance.Multiplier == 1f
+            ? LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), _random.NextFloat())
+            : LimbOrganRules.RuptureHome(organs, limbs.Present, zone, LimbOrganRules.RuptureChance, _random.NextFloat(), chance.Boosted, chance.Multiplier);
+        var burst = RupturedMask(organs) & ~before;
+        if (burst != LimbOrganMask.None)
+        {
+            var ruptured = new LimbOrgansRupturedEvent(burst);
+            RaiseLocalEvent(uid, ref ruptured);
+            var regrow = ruptured.Regrow & burst;
+            for (var i = 0; i < organs.Length && i < LimbOrganRules.Count; i++)
+            {
+                if ((regrow & (LimbOrganMask) (1 << i)) != 0)
+                    organs[i] = default;
+            }
+
+            if ((regrow & LimbOrganMask.Eyes) != 0)
+                eyes = 0;
+        }
+
         var brainNow = (uint) brain < (uint) organs.Length && organs[brain].Ruptured;
         var heartNow = (uint) heart < (uint) organs.Length && organs[heart].Ruptured;
         if (eyes > 0 && TryComp<BlindableComponent>(uid, out var blind))
@@ -2184,6 +2230,50 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         return eyes > 0 || !brainWas && brainNow || !heartWas && heartNow;
+    }
+
+    private static LimbOrganMask RupturedMask(ReadOnlySpan<LimbOrganState> organs)
+    {
+        var mask = LimbOrganMask.None;
+        for (var i = 0; i < organs.Length && i < LimbOrganRules.Count; i++)
+        {
+            if (organs[i].Ruptured)
+                mask |= (LimbOrganMask) (1 << i);
+        }
+
+        return mask;
+    }
+
+    /// <summary>
+    /// Ruptured organs of the body, for systems that bring organs back later.
+    /// </summary>
+    public LimbOrganMask GetRupturedOrgans(EntityUid body, LimbBodyComponent? limbs = null)
+    {
+        if (!Resolve(body, ref limbs, false))
+            return LimbOrganMask.None;
+
+        EnsureOrgans(limbs);
+        return RupturedMask(CollectionsMarshal.AsSpan(limbs.Organs));
+    }
+
+    /// <summary>
+    /// Swaps a ruptured organ for a whole one: no damage, no rupture, no bleeding.
+    /// </summary>
+    public bool RegrowOrgan(EntityUid body, LimbOrgan organ, LimbBodyComponent? limbs = null)
+    {
+        if (!Resolve(body, ref limbs, false))
+            return false;
+
+        EnsureOrgans(limbs);
+        var index = (int) organ;
+        if ((uint) index >= (uint) limbs.Organs.Count || !limbs.Organs[index].Ruptured)
+            return false;
+
+        limbs.Organs[index] = default;
+        Dirty(body, limbs);
+        ApplyLife(body, limbs);
+        RefreshActive(body, limbs);
+        return true;
     }
 
     private void FinishHit(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike, LimbStrikeResult result)
@@ -2272,21 +2362,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return (uint) index < (uint) limbs.Organs.Count && limbs.Organs[index].Missing;
     }
 
-    private void ReleaseOrganDeath(EntityUid uid, LimbBodyComponent limbs)
-    {
-        if (!_net.IsServer || VitalGone(limbs) || InStasis(uid))
-            return;
-
-        var head = HeadHealth(limbs);
-        var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
-        var life = LimbWoundRules.Life(head, torso);
-        var state = life == LimbLife.Dead ? MobState.Dead : life == LimbLife.Crit ? MobState.Critical : MobState.Alive;
-        if (state == MobState.Dead && HasComp<SurgeryMannequinComponent>(uid))
-            state = MobState.Critical;
-        _thresholds.SetCurrentThresholdState(uid, state);
-        _mobs.ChangeMobState(uid, state);
-    }
-
     private void ApplyLife(EntityUid uid, LimbBodyComponent limbs)
     {
         if (!_net.IsServer)
@@ -2300,15 +2375,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         if (_mobs.IsDead(uid))
-        {
-            if (limbs.LimbDeath && !DeadByDamage(uid))
-            {
-                limbs.LimbDeath = false;
-                _mobs.UpdateMobState(uid);
-            }
-
             return;
-        }
 
         if (life == LimbLife.Crit)
         {
@@ -2320,6 +2387,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         if (limbs.LimbCrit && _mobs.IsCritical(uid))
         {
+            if (!TorsoMended(limbs))
+                return;
+
             limbs.LimbCrit = false;
             _mobs.UpdateMobState(uid);
         }
@@ -2350,14 +2420,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         limbs.LimbDeath = true;
         _mobs.ChangeMobState(uid, MobState.Dead);
-    }
-
-    private bool DeadByDamage(EntityUid uid)
-    {
-        return TryComp<MobThresholdsComponent>(uid, out var thresholds)
-            && TryComp<DamageableComponent>(uid, out var damage)
-            && (thresholds.CurrentThresholdState == MobState.Dead && !thresholds.AllowRevives
-                || _thresholds.TryGetThresholdForState(uid, MobState.Dead, out var dead, thresholds) && damage.TotalDamage >= dead.Value);
     }
 
     private void NoteFace(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike)
@@ -2613,6 +2675,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var pellet = false;
         var pelletSever = false;
         var roundBone = 0f;
+        float? roundEmbed = null;
         var roundOrgan = 1f;
         var roundBleed = 0f;
         if (tool is { } held)
@@ -2629,12 +2692,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 pellet = round.Pellet;
                 pelletSever = round.Sever;
                 roundBone = round.Bone;
+                roundEmbed = round.Embed;
                 roundOrgan = round.Organ;
                 roundBleed = round.Bleed;
             }
         }
 
-        return new LimbStrike(zone, mark, amount, _random.NextFloat(), pierce, projectile, cover.Face, cover.Grip, cover.Ricochet, cover.ShieldBlocked, multiplier, aimed, cover.BehindArmor, _random.NextFloat(), distance, _random.NextFloat(), cut, liquid, ThroughArmor: throughArmor, Called: called ?? zone, Sharp: sharp, Pellet: pellet, PelletSever: pelletSever, RoundBone: roundBone, RoundOrgan: roundOrgan, RoundBleed: roundBleed, SeverChance: severChance, Harm: harm);
+        return new LimbStrike(zone, mark, amount, _random.NextFloat(), pierce, projectile, cover.Face, cover.Grip, cover.Ricochet, cover.ShieldBlocked, multiplier, aimed, cover.BehindArmor, _random.NextFloat(), distance, _random.NextFloat(), cut, liquid, ThroughArmor: throughArmor, Called: called ?? zone, Sharp: sharp, Pellet: pellet, PelletSever: pelletSever, RoundBone: roundBone, RoundEmbed: roundEmbed, RoundOrgan: roundOrgan, RoundBleed: roundBleed, SeverChance: severChance, Harm: harm);
     }
 
     private LimbCover Cover(EntityUid target, EntityUid attacker, LimbZone zone)

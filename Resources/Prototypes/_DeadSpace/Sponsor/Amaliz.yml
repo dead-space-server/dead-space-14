@@ -110,14 +110,6 @@
       - state: on-unshaded
         shader: unshaded
   - type: EyeProtection
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
-        Radiation: 0.5
   - type: HideLayerClothing
     slots:
     - Hair

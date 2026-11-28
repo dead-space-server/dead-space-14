@@ -250,12 +250,14 @@ public sealed partial class RCDSystem : EntitySystem
         // DS14-end
 
         //DS-14 start
+        // A device with its own construction effect (the Architect's arm) keeps the old behaviour:
+        // its effect plays over the full delay and no build site is left behind.
         var fullDelay = delay;
-        if (delay > 0)
+        var deviceEffect = prototype.Mode != RcdMode.Deconstruct && component.ConstructionEffect != null;
+        if (delay > 0 && !deviceEffect)
             delay = _sites.RemainingDelay(gridUid.Value, position, prototype, component.ConstructionDirection, target, delay);
 
         EntityUid? effect = null;
-        var deviceEffect = prototype.Mode != RcdMode.Deconstruct && component.ConstructionEffect != null;
         if (fullDelay <= 0 || deviceEffect)
             effect = Spawn(effectPrototype, _mapSystem.ToCenterCoordinates(tile, mapGrid));
         //DS-14 end
@@ -288,7 +290,7 @@ public sealed partial class RCDSystem : EntitySystem
         }
 
         //DS-14 start
-        if (fullDelay > 0 && delay > 0)
+        if (fullDelay > 0 && delay > 0 && !deviceEffect)
             _sites.Begin(gridUid.Value, mapGrid, tile, position, prototype, component.ConstructionDirection, target, user, uid, fullDelay);
         //DS-14 end
     }

@@ -67,9 +67,6 @@
       path: /Audio/_DeadSpace/Necromorfs/marker_red.ogg
       params:
         volume: -8
-    cost:
-      types:
-        Cellular: 15
     heal:
     - Bleed
     - Fracture
@@ -210,7 +207,6 @@
         Slash: -15
         Piercing: -15
         Heat: -10
-        Cellular: 4
     heal:
     - Bleed
     - Fracture
@@ -238,6 +234,15 @@
     recharge: 210
 
 - type: entity
+  id: LimbRestorerImplantRenegadeRefill
+  parent: LimbRestorerImplantSyndicateRefill
+  name: renegade rechargeable autosurgeon implant
+  description: A Renegade's subdermal autosurgeon. One charge that refills every 90 seconds, fires by itself when the wearer goes critical.
+  components:
+  - type: LimbRestorer
+    recharge: 90
+
+- type: entity
   id: LimbRestorerImplantNecro
   name: Marker's heart
   description: A sliver of the Marker sewn under the skin. Two charges, wakes by itself when the wearer goes critical, and even pushes out lost limbs.
@@ -261,7 +266,6 @@
         Blunt: -15
         Slash: -15
         Piercing: -15
-        Cellular: 12
     heal:
     - Bleed
     - Fracture
@@ -406,17 +410,6 @@
   - TraitorUltraUplinkImplants
 
 - type: listing
-  id: UniPhoneUplinkLimbRestorerImplant
-  name: uplink-limb-restorer-implant-name
-  description: uplink-limb-restorer-implant-desc
-  productEntity: LimbRestorerImplanterSyndicate
-  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
-  cost:
-    Telecrystal: 12
-  categories:
-  - UniPhoneUplinkImplants
-
-- type: listing
   id: UnitologyLimbRestorerImplantList
   name: uplink-limb-restorer-implant-necro-name
   description: uplink-limb-restorer-implant-necro-desc
@@ -472,13 +465,38 @@
   categories:
   - TraitorUltraUplinkChemicals
 
+# The Circle: the Cardinal and the Geist get the necro reliquary (the Geist only one) and the Geist the restorer implant.
 - type: listing
-  id: UniPhoneUplinkLimbRestorer
-  name: uplink-limb-restorer-name
-  description: uplink-limb-restorer-desc
-  productEntity: LimbRestorerSyndicate
+  id: UniPhoneGeistUplinkLimbRestorerNecro
+  name: uplink-limb-restorer-necro-name
+  description: uplink-limb-restorer-necro-desc
+  productEntity: LimbRestorerNecro
   cost:
-    Telecrystal: 10
+    Telecrystal: 6
+  categories:
+  - UniPhoneGeistUplinkImplants
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UniPhoneGeistUplinkLimbRestorerImplantNecro
+  name: uplink-limb-restorer-implant-necro-name
+  description: uplink-limb-restorer-implant-necro-desc
+  productEntity: LimbRestorerImplanterNecro
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant_necro }
+  cost:
+    Telecrystal: 8
+  categories:
+  - UniPhoneGeistUplinkImplants
+
+- type: listing
+  id: UniPhoneUplinkLimbRestorerNecro
+  name: uplink-limb-restorer-necro-name
+  description: uplink-limb-restorer-necro-desc
+  productEntity: LimbRestorerNecro
+  cost:
+    Telecrystal: 6
   categories:
   - UniPhoneUplinkMedical
 

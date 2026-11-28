@@ -581,13 +581,17 @@
     size: Large
     shape:
     - 0,0,3,2
+  # Two bullets side by side per round: 2 x 21 x 3.8 = ~160 damage per second, ~23 more than the old 6.5 rate.
   - type: Gun
-    fireRate: 6.5
+    fireRate: 3.8
     burstFireRate: 16
     soundGunshot:
       path: /Audio/_DeadSpace/Necromorfs/TheCircle/Weapon/sfx/asval-sfx/vss.ogg
       params:
         volume: -5
+  - type: GunParallelShot
+    count: 2
+    spacing: 0.25
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/ltrifle_cock.ogg

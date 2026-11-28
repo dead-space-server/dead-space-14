@@ -53,6 +53,7 @@ round-end-credits-stat-messages = Реплик за смену: { $value }
 round-end-credits-stat-shocks = Ударов током: { $value }
 round-end-credits-stat-cuffed = Раз в наручниках: { $value }
 round-end-credits-stat-objectivescompleted = Выполнено целей: { $value }
+round-end-credits-stat-assists = Помощи в убийствах: { $value }
 
 round-end-credits-status-escaped = Эвакуирован
 round-end-credits-status-alive = Остался на станции
@@ -143,3 +144,8 @@ round-end-credits-vote-survivor-name = Выживальщик года
 round-end-credits-vote-survivor-desc = Выбрался оттуда, откуда не выбираются
 round-end-credits-vote-polite-name = Самый вежливый
 round-end-credits-vote-polite-desc = Говорил «пожалуйста» даже генокраду
+architect-mvp-title = ЛУЧШИЙ ИГРОК
+architect-mvp-stats = Убийств: { $kills }   Помощи: { $assists }
+architect-mvp-contender = ДОСТОЙНЫЙ ПРЕТЕНДЕНТ
+architect-mvp-placeholder-deacon = Диакон
+architect-mvp-placeholder-seraphim = Серафим

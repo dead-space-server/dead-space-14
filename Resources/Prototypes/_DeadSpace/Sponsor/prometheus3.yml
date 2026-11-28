@@ -613,8 +613,6 @@
       - state: on-equipped-HELMET
       - state: on-unshaded
         shader: unshaded
-  - type: ZombificationResistance
-    zombificationResistanceCoefficient: 0.9
   - type: VirusResistance
     virusResistanceCoefficient: 0.1
   - type: Tag

@@ -1,0 +1,20 @@
+- type: entity
+  parent: BaseImplantOnlyImplanterSyndi
+  id: UnitologyNecroOrgansImplanter
+  name: имплантер некротических органов
+  description: Ампула с культурой некроморфной ткани. Прижившись, она вытесняет разорванные органы и выращивает на их месте свои.
+  components:
+  - type: Implanter
+    implant: UnitologyNecroOrgansImplant
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: UnitologyNecroOrgansImplant
+  name: некротическая культура
+  description: Некроморфная ткань, что заменяет разорванные органы своими, более хрупкими.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantComponents:
+    - type: NecroOrganRegrowth
+      organRegenPerSecond: 0.3

@@ -61,14 +61,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/helmet_suit.rsi
   - type: PointLight
     color: "#daffad"
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
-        Radiation: 0.5
 
 # HardSuit Event
 
@@ -111,14 +103,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/hardsuit_helmet.rsi
   - type: PointLight
     color: "#daffad"
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.75
-        Slash: 0.75
-        Piercing: 0.80
-        Heat: 0.80
-        Radiation: 0.3
 
 # Mask
 - type: entity
@@ -300,14 +284,6 @@
   categories: [ HideSpawnMenu ]
   description: Шлем оснащён системами фильтрации которые обеспечивают сёстрам чистый воздух. Дизайн шлема отражает его функциональность и эстетику, сочетая в себе элементы футуризма и религиозного символизма.
   components:
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.95
-        Heat: 0.9
-        Radiation: 0.5
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/SisterOfBattle/head.rsi
   - type: Clothing
@@ -398,14 +374,6 @@
   categories: [ HideSpawnMenu ]
   description:
   components:
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.95
-        Heat: 0.9
-        Radiation: 0.5
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/hardsuit/helmet.rsi
   - type: Clothing

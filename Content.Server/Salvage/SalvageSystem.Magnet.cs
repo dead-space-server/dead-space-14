@@ -45,10 +45,15 @@ public sealed partial class SalvageSystem
         var station = _station.GetOwningStation(uid);
 
         if (!TryComp(station, out SalvageMagnetDataComponent? dataComp) ||
-            dataComp.EndTime != null)
+        // DS14-Start
+            dataComp.EndTime != null ||
+            dataComp.Offered.Count == 0 ||
+            args.Index >= dataComp.Offered.Count ||
+            args.Index < 0)
         {
             return;
         }
+        // DS14-end
 
         var index = args.Index;
         async void TryTakeMagnetOffer()
@@ -71,12 +76,14 @@ public sealed partial class SalvageSystem
         var station = _station.GetOwningStation(uid);
 
         if (!TryComp(station, out SalvageMagnetDataComponent? dataComp) ||
-            dataComp.EndTime == null)
+            dataComp.EndTime == null ||
+            dataComp.ReleaseLocked)
         {
             return;
         }
 
         EndMagnet((station.Value, dataComp));
+        dataComp.ReleaseLocked = true;
         CreateMagnetOffers((station.Value, dataComp));
     }
     // DS14-end
@@ -124,6 +131,7 @@ public sealed partial class SalvageSystem
                 if (magnetData.EndTime.Value < curTime)
                 {
                     EndMagnet((uid, magnetData));
+                    magnetData.ReleaseLocked = false; // DS14
                 }
                 else if (!magnetData.Announced && (magnetData.EndTime.Value - curTime).TotalSeconds < 31)
                 {
@@ -271,6 +279,7 @@ public sealed partial class SalvageSystem
                 EndTime = dataComp.EndTime,
                 NextOffer = dataComp.NextOffer,
                 ActiveSeed = dataComp.ActiveSeed,
+                ReleaseLocked = dataComp.ReleaseLocked, // DS14
             });
     }
 
@@ -293,6 +302,7 @@ public sealed partial class SalvageSystem
                     EndTime = data.Comp.EndTime,
                     NextOffer = data.Comp.NextOffer,
                     ActiveSeed = data.Comp.ActiveSeed,
+                    ReleaseLocked = data.Comp.ReleaseLocked, // DS14
                 });
         }
     }

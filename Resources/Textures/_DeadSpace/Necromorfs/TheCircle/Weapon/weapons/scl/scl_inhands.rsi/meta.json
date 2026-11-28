@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from https://github.com/DS-13-Dev-Team/DS13-2.0 at commit 9c1bfc3a52f1c47aff076ac1fecaeb447bb29901 (deadspace/icons/obj/weapons/ds13guns48x32.dmi, deadspace/icons/mob/onmob/items/*hand_guns.dmi, deadspace/icons/mob/onmob/back.dmi, state scl_shotgun)",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "wielded-inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "wielded-inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "equipped-BACKPACK",
+            "directions": 4
+        },
+        {
+            "name": "equipped-SUITSTORAGE",
+            "directions": 4
+        }
+    ]
+}

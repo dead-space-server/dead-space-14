@@ -2,7 +2,7 @@
     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8" Margin="8">
         <PanelContainer StyleClasses="BackgroundPanel" MinWidth="360" VerticalExpand="True">
             <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="8" SeparationOverride="6">
-                <Label Text="Выберите бойца" Align="Center" StyleClasses="LabelHeading"/>
+                <Label Text="Сделайте мудрое решение" Align="Center" StyleClasses="LabelHeading"/>
                 <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
                     <BoxContainer Name="GearContainer" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5"/>
                 </ScrollContainer>

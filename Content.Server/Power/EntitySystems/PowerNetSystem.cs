@@ -49,7 +49,6 @@ namespace Content.Server.Power.EntitySystems
         internal int StallApcReconnects; //DS-14
         internal int StallNetReconnects; //DS-14
 
-        public bool IsIdle => _apcNetReconnectQueue.Count == 0 && _powerNetReconnectQueue.Count == 0;
         // DS14-end
 
         private EntityQuery<ApcPowerReceiverBatteryComponent> _apcBatteryQuery;

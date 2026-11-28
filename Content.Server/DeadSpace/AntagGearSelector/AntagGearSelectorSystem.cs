@@ -15,6 +15,7 @@ using Content.Shared.DeadSpace.AntagGearSelector;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
+using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -51,7 +52,7 @@ public sealed partial class AntagGearSelectorSystem : EntitySystem
 
     private void OnSelectEntity(Entity<AntagGearSelectorComponent> ent, ref AntagSelectEntityEvent args)
     {
-        if (args.Handled || args.Session == null || !args.AntagRoles.Any(ent.Comp.Roles.Contains))
+        if (args.Handled || args.Session == null || GearFor(ent.Comp, args.AntagRoles) == null)
             return;
 
         // This controller has no sprite or body. AntagSelection places it at the role spawn marker.
@@ -62,7 +63,7 @@ public sealed partial class AntagGearSelectorSystem : EntitySystem
     {
         var session = args.Session;
         if (session == null || _selected.Contains(args.EntityUid) ||
-            !args.Def.PrefRoles.Any(ent.Comp.Roles.Contains))
+            GearFor(ent.Comp, args.Def.PrefRoles) is not { } gear)
             return;
 
         var deadline = _timing.CurTime + ent.Comp.SelectionTimeout;
@@ -70,9 +71,30 @@ public sealed partial class AntagGearSelectorSystem : EntitySystem
             session,
             ent.Owner,
             args.Def,
-            deadline);
-        var state = new AntagGearSelectorEuiState(ToOptions(ent.Comp.Gear), deadline);
+            deadline,
+            gear);
+        var state = new AntagGearSelectorEuiState(ToOptions(gear), deadline);
         _eui.OpenEui(new AntagGearSelectorEui(this, session, args.EntityUid, ent, state), session);
+    }
+
+    /// <summary>
+    /// The choices offered to a player picked for any of <paramref name="roles"/>, or null when this rule offers none.
+    /// </summary>
+    public static List<AntagGearSelectorEntry>? GearFor(AntagGearSelectorComponent selector, IEnumerable<ProtoId<AntagPrototype>> roles)
+    {
+        foreach (var role in roles)
+        {
+            if (selector.Roles.Contains(role) && selector.Gear.Count > 0)
+                return selector.Gear;
+
+            foreach (var set in selector.Sets)
+            {
+                if (set.Roles.Contains(role) && set.Gear.Count > 0)
+                    return set.Gear;
+            }
+        }
+
+        return null;
     }
 
     public AntagGearSelectorEuiState GetState(EntityUid rule)
@@ -118,16 +140,18 @@ public sealed partial class AntagGearSelectorSystem : EntitySystem
     public bool TryApplySelection(ICommonSession session, EntityUid target, EntityUid rule, int gearIndex, int perkIndex)
     {
         if (_selected.Contains(target) || session.AttachedEntity != target ||
-            !TryComp<AntagGearSelectorComponent>(rule, out var selector) ||
-            gearIndex < 0 || gearIndex >= selector.Gear.Count ||
-            (selector.Gear[gearIndex].Perks.Count > 0 &&
-                (perkIndex < 0 || perkIndex >= selector.Gear[gearIndex].Perks.Count)))
+            !HasComp<AntagGearSelectorComponent>(rule) ||
+            !_pending.TryGetValue(target, out var pending) ||
+            gearIndex < 0 || gearIndex >= pending.Gear.Count ||
+            (pending.Gear[gearIndex].Perks.Count > 0 &&
+                (perkIndex < 0 || perkIndex >= pending.Gear[gearIndex].Perks.Count)))
             return false;
 
-        if (!_pending.Remove(target, out var pending) || !TrySpawnBody(target, pending, out var body))
+        _pending.Remove(target);
+        if (!TrySpawnBody(target, pending, out var body))
             return false;
 
-        var gear = selector.Gear[gearIndex];
+        var gear = pending.Gear[gearIndex];
         ApplyEntry(body, gear, session);
         if (gear.Perks.Count > 0)
             ApplyEntry(body, gear.Perks[perkIndex], session);
@@ -148,15 +172,15 @@ public sealed partial class AntagGearSelectorSystem : EntitySystem
             if (now < pending.Deadline)
                 continue;
 
-            if (!Exists(target) || !TryComp<AntagGearSelectorComponent>(pending.Rule, out var selector) ||
-                selector.Gear.Count == 0)
+            if (!Exists(target) || !HasComp<AntagGearSelectorComponent>(pending.Rule) ||
+                pending.Gear.Count == 0)
             {
                 _pending.Remove(target);
                 continue;
             }
 
-            var gearIndex = _random.Next(selector.Gear.Count);
-            var perks = selector.Gear[gearIndex].Perks;
+            var gearIndex = _random.Next(pending.Gear.Count);
+            var perks = pending.Gear[gearIndex].Perks;
             var perkIndex = perks.Count == 0 ? -1 : _random.Next(perks.Count);
             TryApplySelection(pending.Session, target, pending.Rule, gearIndex, perkIndex);
         }
@@ -209,5 +233,6 @@ public sealed partial class AntagGearSelectorSystem : EntitySystem
         ICommonSession Session,
         EntityUid Rule,
         AntagSelectionDefinition Definition,
-        TimeSpan Deadline);
+        TimeSpan Deadline,
+        List<AntagGearSelectorEntry> Gear);
 }

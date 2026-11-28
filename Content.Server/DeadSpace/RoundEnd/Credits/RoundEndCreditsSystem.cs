@@ -14,6 +14,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Roles;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
@@ -39,6 +40,7 @@ public sealed partial class RoundEndCreditsSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private RoundEndCreditsStatsSystem _stats = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
 
     private const float ObjectiveDoneProgress = 0.99f;
     private const float MassacreDeadRatio = 0.5f;
@@ -423,8 +425,9 @@ public sealed partial class RoundEndCreditsSystem : EntitySystem
             Outcome = BuildOutcome(players, minds, statuses),
         };
 
-        credits.Mvp = PickMvp(players, minds, statuses, antag: false, exclude: -1);
-        credits.AntagMvp = PickMvp(players, minds, statuses, antag: true, exclude: credits.Mvp?.Player ?? -1);
+        credits.Mvp = WithShowcase(PickMvp(players, minds, statuses, antag: false, exclude: -1), minds);
+        credits.AntagMvp = WithShowcase(PickMvp(players, minds, statuses, antag: true, exclude: credits.Mvp?.Player ?? -1), minds);
+        credits.Showcase = BuildShowcaseCast(players, minds, statuses, credits);
         BuildAwards(players, minds, statuses, credits);
 
         return credits;
@@ -662,6 +665,113 @@ public sealed partial class RoundEndCreditsSystem : EntitySystem
         (RoundEndCreditsStat.HealingGiven, 0.08f, float.MaxValue),
         (RoundEndCreditsStat.Messages, 0.1f, 12f),
     };
+
+    private static readonly ProtoId<AntagPrototype> ArchitectRole = "CircleEngineer";
+
+    /// <summary>
+    /// Some roles get their own MVP scene instead of the usual portrait.
+    /// </summary>
+    private RoundEndCreditsMvp? WithShowcase(RoundEndCreditsMvp? mvp, IReadOnlyList<EntityUid> minds)
+    {
+        if (mvp is not { } award || award.Player < 0 || award.Player >= minds.Count ||
+            !TryComp<MindComponent>(minds[award.Player], out var mind))
+        {
+            return mvp;
+        }
+
+        foreach (var role in _roles.MindGetAllRoleInfo((minds[award.Player], mind)))
+        {
+            if (role.Prototype == ArchitectRole.Id)
+                return award with { Showcase = RoundEndCreditsShowcase.Architect };
+        }
+
+        return mvp;
+    }
+
+    /// <summary>
+    /// The showcased MVP's kills and assists, and the two teammates worth standing next to them:
+    /// the best of the rest by kills, then the best of the others by assists.
+    /// </summary>
+    private RoundEndCreditsShowcaseCast? BuildShowcaseCast(
+        RoundEndMessageEvent.RoundEndPlayerInfo[] players,
+        IReadOnlyList<EntityUid> minds,
+        RoundEndCreditsPlayerStatus[] statuses,
+        RoundEndCreditsStartEvent credits)
+    {
+        RoundEndCreditsMvp mvp;
+        if (credits.Mvp is { Showcase: not RoundEndCreditsShowcase.None } main)
+            mvp = main;
+        else if (credits.AntagMvp is { Showcase: not RoundEndCreditsShowcase.None } antag)
+            mvp = antag;
+        else
+            return null;
+
+        var cast = new RoundEndCreditsShowcaseCast
+        {
+            Kills = (int) _stats.GetStat(minds[mvp.Player], RoundEndCreditsStat.Kills),
+            Assists = (int) _stats.GetStat(minds[mvp.Player], RoundEndCreditsStat.Assists),
+        };
+
+        var circle = IsCircle(minds[mvp.Player]);
+        var team = new List<int>();
+        for (var i = 0; i < players.Length; i++)
+        {
+            if (i == mvp.Player || statuses[i] == RoundEndCreditsPlayerStatus.Observer)
+                continue;
+
+            var teammate = circle ? IsCircle(minds[i]) : players[i].Antag == players[mvp.Player].Antag;
+            if (teammate)
+                team.Add(i);
+        }
+
+        AddContender(cast, team, players, minds, RoundEndCreditsStat.Kills);
+        AddContender(cast, team, players, minds, RoundEndCreditsStat.Assists);
+        return cast;
+    }
+
+    private void AddContender(
+        RoundEndCreditsShowcaseCast cast,
+        List<int> team,
+        RoundEndMessageEvent.RoundEndPlayerInfo[] players,
+        IReadOnlyList<EntityUid> minds,
+        RoundEndCreditsStat by)
+    {
+        var best = -1;
+        var bestValue = 0f;
+        foreach (var i in team)
+        {
+            var value = _stats.GetStat(minds[i], by);
+            if (value <= bestValue)
+                continue;
+
+            best = i;
+            bestValue = value;
+        }
+
+        if (best < 0)
+            return;
+
+        team.Remove(best);
+        cast.Contenders.Add(new RoundEndCreditsContender(
+            players[best].PlayerICName ?? players[best].PlayerOOCName,
+            (int) _stats.GetStat(minds[best], RoundEndCreditsStat.Kills),
+            (int) _stats.GetStat(minds[best], RoundEndCreditsStat.Assists),
+            players[best].DollData));
+    }
+
+    private bool IsCircle(EntityUid mindId)
+    {
+        if (!TryComp<MindComponent>(mindId, out var mind))
+            return false;
+
+        foreach (var role in _roles.MindGetAllRoleInfo((mindId, mind)))
+        {
+            if (role.Prototype.StartsWith("Circle", StringComparison.Ordinal))
+                return true;
+        }
+
+        return false;
+    }
 
     private RoundEndCreditsMvp? PickMvp(
         RoundEndMessageEvent.RoundEndPlayerInfo[] players,

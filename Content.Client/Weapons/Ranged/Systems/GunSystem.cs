@@ -498,9 +498,16 @@ public sealed partial class GunSystem : SharedGunSystem
         // This also means any ammo specific stuff can be grabbed as necessary.
         var direction = TransformSystem.ToMapCoordinates(fromCoordinates).Position - TransformSystem.ToMapCoordinates(toCoordinates).Position;
         var worldAngle = direction.ToAngle().Opposite();
+        // DS14-start: bullets fired side by side are one shot, so one flash, bang and kick per group
+        var group = TryComp<Content.Shared.DeadSpace.Weapons.Ranged.GunParallelShotComponent>(gun, out var parallel)
+            ? Math.Max(1, parallel.Count)
+            : 1;
+        var round = 0;
+        // DS14-end
 
         foreach (var (ent, shootable) in ammo)
         {
+            var firstOfShot = round++ % group == 0; // DS14
             if (throwItems)
             {
                 Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
@@ -518,9 +525,12 @@ public sealed partial class GunSystem : SharedGunSystem
                     if (!cartridge.Spent)
                     {
                         SetCartridgeSpent(ent!.Value, cartridge, true);
-                        MuzzleFlash(gun, cartridge, worldAngle, user);
-                        _adjustableAudio.Mark(Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user)); // DS14
-                        Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
+                        if (firstOfShot) // DS14
+                        {
+                            MuzzleFlash(gun, cartridge, worldAngle, user);
+                            _adjustableAudio.Mark(Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user)); // DS14
+                            Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
+                        } // DS14
                         // TODO: Can't predict entity deletions.
                         //if (cartridge.DeleteOnSpawn)
                         //    Del(cartridge.Owner);

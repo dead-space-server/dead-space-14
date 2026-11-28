@@ -36,10 +36,6 @@ namespace Content.Server.NodeContainer.EntitySystems
         private readonly HashSet<Node> _toRemove = new();
         private readonly List<Node> _toReflood = new();
 
-        //DS-14 start
-        public bool IsIdle => _toRemake.Count == 0 && _toReflood.Count == 0 && _toRemove.Count == 0;
-        //DS-14 end
-
         private ISawmill _sawmill = default!;
 
         private const float VisDataUpdateInterval = 1;

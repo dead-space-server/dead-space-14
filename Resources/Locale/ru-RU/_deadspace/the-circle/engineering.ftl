@@ -8,3 +8,8 @@ alerts-architect-dash-description = Время до следующего исп�
 rcd-component-circle-trigger-kudzu = Триггер кудзу
 rcd-component-circle-trigger-melee-tentacle = Триггер атакующей тентакли
 rcd-component-circle-trigger-ranged-tentacle = Триггер стрелковой тентакли
+
+architect-biomass-invalid = Из этого не вытянуть биомассу.
+architect-biomass-start = Зодчий впивается в { $target } и тянет из него биомассу.
+architect-biomass-done = Биомасса { $target } иссякла, рука наполняется материей.
+architect-biomass-verb = Поглотить биомассу

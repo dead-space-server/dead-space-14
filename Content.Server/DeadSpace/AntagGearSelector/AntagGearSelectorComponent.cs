@@ -13,12 +13,27 @@ public sealed partial class AntagGearSelectorComponent : Component
     [DataField]
     public TimeSpan SelectionTimeout = TimeSpan.FromMinutes(1);
 
+    [DataField]
+    public HashSet<ProtoId<AntagPrototype>> Roles = new();
+
+    [DataField]
+    public List<AntagGearSelectorEntry> Gear = new();
+
+    /// <summary>
+    /// More roles with choices of their own, so one game rule can offer different picks to different roles.
+    /// </summary>
+    [DataField]
+    public List<AntagGearSelectorSet> Sets = new();
+}
+
+[DataDefinition]
+public sealed partial class AntagGearSelectorSet
+{
     [DataField(required: true)]
     public HashSet<ProtoId<AntagPrototype>> Roles = new();
 
     [DataField(required: true)]
     public List<AntagGearSelectorEntry> Gear = new();
-
 }
 
 [DataDefinition]

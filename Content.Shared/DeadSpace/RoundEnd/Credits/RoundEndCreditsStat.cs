@@ -25,6 +25,7 @@ public enum RoundEndCreditsStat : byte
     Shocks,
     Cuffed,
     ObjectivesCompleted,
+    Assists,
 }
 
 [Serializable, NetSerializable]

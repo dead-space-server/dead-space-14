@@ -3,7 +3,6 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Events;
 using Content.Shared.Body.Components;
 using Content.Shared.DeadSpace.AshWalkers;
-using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.CCCCVars;
 using Robust.Shared.Configuration;
 
@@ -28,11 +27,6 @@ public sealed partial class AshWalkerSystem : EntitySystem
     {
         RemComp<RespiratorComponent>(ent);
         RemComp<InternalsComponent>(ent);
-        RemComp<LimbBodyComponent>(ent);
-        RemComp<LimbTargetComponent>(ent);
-        RemComp<LimbAimComponent>(ent);
-        RemComp<LimbActiveComponent>(ent);
-        RemComp<LimbWoundVisualsComponent>(ent);
     }
 
     private void OnEggMapInit(Entity<AshWalkerEggComponent> ent, ref MapInitEvent args)

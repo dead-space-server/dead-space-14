@@ -477,18 +477,4 @@ public sealed class CCCCVars
 
     public static readonly CVarDef<bool> RoundEndCreditsPauseMaps =
         CVarDef.Create("deadspace.round_end_credits.pause_maps", true, CVar.SERVERONLY);
-
-    /// <summary>
-    /// Load the antag and ERT maps ahead of time at round start / in the lobby, so a rule or a call only claims them.
-    /// Off: they are loaded when needed, as before.
-    /// </summary>
-    public static readonly CVarDef<bool> RoundMapPreloadEnabled =
-        CVarDef.Create("deadspace.round_map_preload.enabled", true, CVar.SERVERONLY);
-
-    /// <summary>
-    /// Pause lavaland, chromite caves and antag maps while no player is on them.
-    /// Off: lavaland and the caves are woken once when generated and their pause is left alone after.
-    /// </summary>
-    public static readonly CVarDef<bool> PauseEmptyMaps =
-        CVarDef.Create("deadspace.pause_empty_maps", true, CVar.SERVERONLY);
 }
