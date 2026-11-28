@@ -1,4 +1,5 @@
-using Content.Shared.DeadSpace.TTS;
+﻿using Content.Shared.DeadSpace.TTS;
+using Content.Shared.DeadSpace.Humanoid.Markings; // DS14
 using Content.Shared.DisplacementMap;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -111,17 +112,8 @@ public sealed partial class HumanoidAppearanceComponent : Component
     public Color? CachedFacialHairColor;
 
     // DS14-start
-    /// <summary>
-    ///     Градиент включн
-    /// </summary>
     [DataField, AutoNetworkedField]
-    public bool HairGradientEnabled;
-
-    /// <summary>
-    ///     ЦЦвет градиента
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public Color HairGradientColor = Color.Black;
+    public MarkingDye? BodyDye;
     // DS14-end
 
     /// <summary>

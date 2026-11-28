@@ -2,6 +2,7 @@ using Content.Shared.DeadSpace.TTS;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Content.Client.DeadSpace.Humanoid; // DS14
 using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Loadouts;
@@ -38,6 +39,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing; // DS14
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
 
@@ -119,6 +121,8 @@ namespace Content.Client.Lobby.UI
         private Direction _previewRotation = Direction.North;
 
         private ColorSelectorSliders _rgbSkinColorSelector;
+        private MarkingDyeEditor? _bodyDyeEditor; // DS14
+        private bool _previewDue; // DS14
 
         private bool _isDirty;
         private bool _readOnly; // DS14
@@ -272,6 +276,18 @@ namespace Content.Client.Lobby.UI
                 OnSkinColorOnValueChanged();
             };
 
+            // DS14-start
+            _bodyDyeEditor = new MarkingDyeEditor();
+            BodyDyeContainer.AddChild(_bodyDyeEditor);
+            _bodyDyeEditor.OnDyeChanged += dye =>
+            {
+                if (Profile is null || _readOnly)
+                    return;
+                Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithBodyDye(dye));
+                RequestPreview(); // DS14
+            };
+            // DS14-end
+
             RgbSkinColorContainer.AddChild(_rgbSkinColorSelector = new ColorSelectorSliders());
             _rgbSkinColorSelector.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv; // defaults color selector to HSV
             _rgbSkinColorSelector.OnColorChanged += _ =>
@@ -287,17 +303,8 @@ namespace Content.Client.Lobby.UI
             {
                 if (Profile is null || _readOnly) // DS14
                     return;
-                // DS14-start
-                var selectedId = newStyle.id;
-                if (Profile.Appearance.HairGradientEnabled)
-                {
-                    var gradientId = selectedId + "Gradient";
-                    if (_markingManager.Markings.ContainsKey(gradientId))
-                        selectedId = gradientId;
-                }
-                // DS14-End
                 Profile = Profile.WithCharacterAppearance(
-                    Profile.Appearance.WithHairStyleName(selectedId)); // DS14
+                    Profile.Appearance.WithHairStyleName(newStyle.id));
                 ReloadPreview();
             };
 
@@ -307,57 +314,22 @@ namespace Content.Client.Lobby.UI
                     return;
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithHairColor(newColor.marking.MarkingColors[0]));
-                // DS14-start
-                if (Profile.Appearance.HairGradientEnabled && newColor.marking.MarkingColors.Count > 1)
-                {
-                    Profile = Profile.WithCharacterAppearance(
-                        Profile.Appearance.WithHairGradientColor(newColor.marking.MarkingColors[1]));
-                }
-                // DS14-end
                 UpdateCMarkingsHair();
-                ReloadPreview();
+                RequestPreview(); // DS14
             };
 
             // DS14-start
-            HairStylePicker.OnGradientChanged += gradient =>
+            HairStylePicker.OnDyeChanged += args =>
             {
-                if (Profile is null || _readOnly)
+                if (Profile is null || _readOnly || args.marking.MarkingColors.Count == 0)
                     return;
-
-                var currentHairId = Profile.Appearance.HairStyleId;
-
-                if (gradient.enabled)
-                {
-                    var baseId = currentHairId;
-                    if (baseId.EndsWith("Gradient"))
-                        baseId = baseId[..^"Gradient".Length];
-
-                    var gradientId = baseId + "Gradient";
-                    if (_markingManager.Markings.ContainsKey(gradientId))
-                    {
-                        Profile = Profile.WithCharacterAppearance(
-                            Profile.Appearance.WithHairStyleName(gradientId)
-                                .WithHairGradientEnabled(true)
-                                .WithHairGradientColor(gradient.color));
-                    }
-                }
-                else
-                {
-                    var baseId = currentHairId;
-                    if (baseId.EndsWith("Gradient"))
-                        baseId = baseId[..^"Gradient".Length];
-
-                    if (baseId.Length > 0 && _markingManager.Markings.ContainsKey(baseId))
-                    {
-                        Profile = Profile.WithCharacterAppearance(
-                            Profile.Appearance.WithHairStyleName(baseId)
-                                .WithHairGradientEnabled(false));
-                    }
-                }
-
-                UpdateHairPickers();
+                var hair = args.marking.MarkingColors[0];
+                Profile = Profile.WithCharacterAppearance(
+                    Profile.Appearance
+                        .WithHairColor(hair)
+                        .WithHairDye(args.marking.Dye));
                 UpdateCMarkingsHair();
-                ReloadPreview();
+                RequestPreview(); // DS14
             };
             // DS14-end
 
@@ -377,8 +349,23 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithFacialHairColor(newColor.marking.MarkingColors[0]));
                 UpdateCMarkingsFacialHair();
-                ReloadPreview();
+                RequestPreview(); // DS14
             };
+
+            // DS14-start
+            FacialHairPicker.OnDyeChanged += args =>
+            {
+                if (Profile is null || _readOnly || args.marking.MarkingColors.Count == 0)
+                    return;
+                var facialHair = args.marking.MarkingColors[0];
+                Profile = Profile.WithCharacterAppearance(
+                    Profile.Appearance
+                        .WithFacialHairColor(facialHair)
+                        .WithFacialHairDye(args.marking.Dye));
+                UpdateCMarkingsFacialHair();
+                RequestPreview(); // DS14
+            };
+            // DS14-end
 
             HairStylePicker.OnSlotRemove += _ =>
             {
@@ -386,7 +373,7 @@ namespace Content.Client.Lobby.UI
                     return;
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithHairStyleName(HairStyles.DefaultHairStyle)
-                        .WithHairGradientEnabled(false) // DS14
+                        .WithHairDye(null) // DS14
                 );
                 UpdateHairPickers();
                 UpdateCMarkingsHair();
@@ -399,6 +386,7 @@ namespace Content.Client.Lobby.UI
                     return;
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithFacialHairStyleName(HairStyles.DefaultFacialHairStyle)
+                        .WithFacialHairDye(null) // DS14
                 );
                 UpdateHairPickers();
                 UpdateCMarkingsFacialHair();
@@ -415,15 +403,6 @@ namespace Content.Client.Lobby.UI
 
                 if (string.IsNullOrEmpty(hair))
                     return;
-
-                // DS14-start
-                if (Profile.Appearance.HairGradientEnabled)
-                {
-                    var gradientHair = hair + "Gradient";
-                    if (_markingManager.Markings.ContainsKey(gradientHair))
-                        hair = gradientHair;
-                }
-                // DS14-end
 
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithHairStyleName(hair)
@@ -480,7 +459,7 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithEyeColor(newColor));
                 Markings.CurrentEyeColor = Profile.Appearance.EyeColor;
-                ReloadProfilePreview();
+                RequestPreview(); // DS14
             };
 
             #endregion Eyes
@@ -1413,6 +1392,28 @@ namespace Content.Client.Lobby.UI
             SetDirty();
         }
 
+        // DS14-start
+        private void RequestPreview()
+        {
+            _previewDue = true;
+        }
+
+        private void FlushPreview()
+        {
+            if (!_previewDue)
+                return;
+
+            _previewDue = false;
+            ReloadProfilePreview();
+        }
+
+        protected override void FrameUpdate(FrameEventArgs args)
+        {
+            base.FrameUpdate(args);
+            FlushPreview();
+        }
+        // DS14-end
+
         private void OnSpeciesInfoButtonPressed(BaseButton.ButtonEventArgs args)
         {
             // TODO GUIDEBOOK
@@ -1768,7 +1769,7 @@ namespace Content.Client.Lobby.UI
                 return;
 
             Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(markings.GetForwardEnumerator().ToList()));
-            ReloadProfilePreview();
+            RequestPreview(); // DS14
         }
 
         private void OnSkinColorOnValueChanged()
@@ -1812,7 +1813,8 @@ namespace Content.Client.Lobby.UI
                 }
             }
 
-            ReloadProfilePreview();
+            UpdateBodyDyeControls(); // DS14
+            RequestPreview(); // DS14
         }
 
         protected override void Dispose(bool disposing)
@@ -2047,7 +2049,21 @@ namespace Content.Client.Lobby.UI
                     break;
                 }
             }
+
+            UpdateBodyDyeControls(); // DS14
         }
+
+        // DS14-start
+        private void UpdateBodyDyeControls()
+        {
+            if (Profile == null)
+                return;
+
+            var isSlime = Profile.Species == "SlimePerson";
+            BodyDyeContainer.Visible = isSlime;
+            _bodyDyeEditor?.SetData(isSlime ? Profile.Appearance.BodyDye : null, Profile.Appearance.SkinColor);
+        }
+        // DS14-end
 
         public void UpdateSpeciesGuidebookIcon()
         {
@@ -2109,37 +2125,15 @@ namespace Content.Client.Lobby.UI
 
             // DS14-start
             var hairId = Profile.Appearance.HairStyleId;
-            var gradientEnabled = Profile.Appearance.HairGradientEnabled;
-
-            var hairColors = new List<Color> { Profile.Appearance.HairColor };
-            if (gradientEnabled)
-            {
-                hairColors.Add(Profile.Appearance.HairGradientColor);
-            }
-
-            // If gradient enabled, the ID should be the Gradient version (it's set in OnGradientChanged)
-            // But make sure the marking actually exists; if not, fall back
-            if (gradientEnabled && !_markingManager.Markings.ContainsKey(hairId))
-            {
-                var gradientId = hairId + "Gradient";
-                if (_markingManager.Markings.ContainsKey(gradientId))
-                    hairId = gradientId;
-            }
-            // DS14-end
-
             var hairMarking = hairId == HairStyles.DefaultHairStyle
                 ? new List<Marking>()
-                : new() { new(hairId, hairColors) };
+                : new() { new(hairId, new List<Color> { Profile.Appearance.HairColor }) { Dye = Profile.Appearance.HairDye } };
+            // DS14-end
 
             var facialHairMarking = Profile.Appearance.FacialHairStyleId == HairStyles.DefaultFacialHairStyle
                 ? new List<Marking>()
-                : new() { new(Profile.Appearance.FacialHairStyleId, new List<Color>() { Profile.Appearance.FacialHairColor }) };
+                : new() { new(Profile.Appearance.FacialHairStyleId, new List<Color>() { Profile.Appearance.FacialHairColor }) { Dye = Profile.Appearance.FacialHairDye } }; // DS14
 
-            // DS14-start
-            HairStylePicker.SetGradientData(
-                gradientEnabled,
-                Profile.Appearance.HairGradientColor);
-            // DS14-end
             HairStylePicker.UpdateData(
                 hairMarking,
                 Profile.Species,
@@ -2177,7 +2171,7 @@ namespace Content.Client.Lobby.UI
             }
             if (hairColor != null)
             {
-                Markings.HairMarking = new (Profile.Appearance.HairStyleId, new List<Color>() { hairColor.Value });
+                Markings.HairMarking = new (Profile.Appearance.HairStyleId, new List<Color>() { hairColor.Value }) { Dye = Profile.Appearance.HairDye }; // DS14
             }
             else
             {
@@ -2211,7 +2205,7 @@ namespace Content.Client.Lobby.UI
             }
             if (facialHairColor != null)
             {
-                Markings.FacialHairMarking = new (Profile.Appearance.FacialHairStyleId, new List<Color>() { facialHairColor.Value });
+                Markings.FacialHairMarking = new (Profile.Appearance.FacialHairStyleId, new List<Color>() { facialHairColor.Value }) { Dye = Profile.Appearance.FacialHairDye }; // DS14
             }
             else
             {

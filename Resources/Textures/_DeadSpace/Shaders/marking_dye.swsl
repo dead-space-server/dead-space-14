@@ -1,0 +1,141 @@
+// DS14
+uniform highp vec3 baseLab;
+uniform highp float[30] dyeStack;
+uniform lowp int dyeSize;
+uniform lowp int dyePattern;
+uniform highp float dyeSpread;
+uniform highp vec2 dyeBand;
+uniform highp vec2 frameSize;
+uniform highp vec4 dirBack;
+uniform highp vec4 dirEast;
+uniform highp vec4 dirWest;
+
+highp vec3 oklabToLinear(highp vec3 lab) {
+    highp float l = lab.x + 0.3963377774 * lab.y + 0.2158037573 * lab.z;
+    highp float m = lab.x - 0.1055613458 * lab.y - 0.0638541728 * lab.z;
+    highp float s = lab.x - 0.0894841775 * lab.y - 1.2914855480 * lab.z;
+    l = l * l * l;
+    m = m * m * m;
+    s = s * s * s;
+    return vec3(
+        4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s);
+}
+
+bool insideQuad(highp vec4 quad) {
+    return UV.x >= quad.x && UV.y >= quad.y && UV.x <= quad.z && UV.y <= quad.w;
+}
+
+highp float downRamp(highp float value, highp float edge) {
+    return clamp((value - edge) / max(1.0 - edge, 0.001), 0.0, 1.0);
+}
+
+highp float upRamp(highp float value, highp float edge) {
+    return clamp((1.0 - value) / max(1.0 - edge, 0.001), 0.0, 1.0);
+}
+
+highp vec3 paletteAt(highp float pos) {
+    int idx = int(clamp(pos, 0.0, 0.999) * float(dyeSize));
+    idx = clamp(idx, 0, dyeSize - 1);
+    return vec3(dyeStack[idx * 3], dyeStack[idx * 3 + 1], dyeStack[idx * 3 + 2]);
+}
+
+highp float fadePaint(highp float depth, highp float col, out highp float accent) {
+    highp float shifted = depth + (col - 0.5) * 0.1;
+    highp float edge = mix(0.85, 0.15, dyeSpread);
+    accent = smoothstep(edge - 0.3, edge + 0.3, shifted);
+    return upRamp(shifted, edge);
+}
+
+highp float tipPaint(highp float depth, highp float col, out highp float accent) {
+    highp float shifted = depth + (col - 0.5) * 0.06;
+    highp float edge = mix(0.9, 0.3, dyeSpread);
+    accent = smoothstep(edge - 0.02, edge + 0.02, shifted);
+    return upRamp(shifted, edge);
+}
+
+highp float halfPaint(highp float pixel, out highp float accent) {
+    if (insideQuad(dirEast)) {
+        accent = 0.0;
+        return 0.0;
+    }
+    if (insideQuad(dirWest)) {
+        accent = 1.0;
+        return 0.999;
+    }
+
+    highp float across = insideQuad(dirBack) ? 1.0 - UV2.x : UV2.x;
+    highp float edge = mix(0.35, 0.65, dyeSpread);
+    accent = smoothstep(edge - pixel, edge + pixel, across);
+    return downRamp(across, edge);
+}
+
+highp float innerPaint(highp float depth, highp float shade, highp float col, out highp float accent) {
+    highp float score = depth * 0.5 + (1.0 - shade) * 0.5 + (col - 0.5) * 0.2;
+    highp float edge = mix(0.75, 0.25, dyeSpread);
+    accent = smoothstep(edge - 0.03, edge + 0.03, score);
+    return upRamp(score, edge);
+}
+
+highp float strandPaint(highp float depth, highp float col, out highp float accent) {
+    highp float painted = step(1.0 - mix(0.15, 0.6, dyeSpread), col);
+    accent = painted * smoothstep(0.0, 0.3, depth + (col - 0.5) * 0.3);
+    return 1.0 - depth;
+}
+
+highp float framePaint(highp float pixel, highp float depth, out highp float accent) {
+    if (insideQuad(dirBack)) {
+        accent = 0.0;
+        return 0.0;
+    }
+
+    highp float away = abs(abs(UV2.x - 0.5) - 0.16);
+    if (insideQuad(dirEast))
+        away = abs(UV2.x - 0.66);
+    else if (insideQuad(dirWest))
+        away = abs(UV2.x - 0.34);
+
+    highp float width = mix(0.02, 0.08, dyeSpread);
+    accent = 1.0 - smoothstep(width, width + pixel, away);
+    return 1.0 - depth;
+}
+
+void fragment() {
+    highp vec4 sprite = zTexture(UV);
+    if (sprite.a == 0.0)
+        discard;
+
+    highp float shade = zGrayscale(sprite.rgb);
+    highp float depth = 1.0 - clamp((UV2.y - dyeBand.x) / (dyeBand.y - dyeBand.x), 0.0, 1.0);
+    highp float col = fract(floor(UV2.x * frameSize.x) * 0.6180339887);
+    highp float pixel = 1.0 / frameSize.x;
+
+    highp float accent = 0.0;
+    highp float pos = 0.0;
+    bool lifted = false;
+
+    if (dyePattern == 1) {
+        pos = halfPaint(pixel, accent);
+    } else if (dyePattern == 2) {
+        pos = innerPaint(depth, shade, col, accent);
+        lifted = true;
+    } else if (dyePattern == 3) {
+        pos = strandPaint(depth, col, accent);
+        lifted = true;
+    } else if (dyePattern == 4) {
+        pos = tipPaint(depth, col, accent);
+    } else if (dyePattern == 5) {
+        pos = framePaint(pixel, depth, accent);
+        lifted = true;
+    } else {
+        pos = fadePaint(depth, col, accent);
+    }
+
+    if (lifted)
+        shade = mix(shade, 0.55 + 0.45 * shade, accent);
+
+    highp vec3 dye = dyeSize > 0 ? paletteAt(pos) : vec3(0.0);
+    highp vec3 color = clamp(oklabToLinear(mix(baseLab, dye, accent)), 0.0, 1.0);
+    COLOR = vec4(color * shade, sprite.a);
+}

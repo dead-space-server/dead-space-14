@@ -1,7 +1,8 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+﻿// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Humanoid;
 using Content.Shared.DeadSpace.TTS;
+using Content.Shared.DeadSpace.Humanoid.Markings;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Inventory;
@@ -59,8 +60,5 @@ public sealed partial class NinjaDisguiseAppearance
     public Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo> CustomBaseLayers = new();
 
     [DataField]
-    public bool HairGradientEnabled;
-
-    [DataField]
-    public Color HairGradientColor = Color.Black;
+    public MarkingDye? BodyDye;
 }

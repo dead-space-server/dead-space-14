@@ -1,4 +1,4 @@
-- type: shader
+﻿- type: shader
   id: DeadSpaceGradientCircleMask
   kind: source
   path: "/Textures/_DeadSpace/Shaders/gradient_circle_mask.swsl"
@@ -33,6 +33,11 @@
   id: NecromorphSeveredMask
   kind: source
   path: "/Textures/_DeadSpace/Shaders/severed_mask.swsl"
+
+- type: shader
+  id: DSMarkingDye
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/marking_dye.swsl"
 
 - type: shader
   id: ArchitectMvpAdditive

@@ -1,5 +1,6 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.DeadSpace.Interfaces.Client;
+using Content.Client.DeadSpace.Humanoid; // DS14
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -33,6 +34,7 @@ public sealed partial class MarkingPicker : Control
     public Action<MarkingSet>? OnMarkingRankChange;
 
     private List<Color> _currentMarkingColors = new();
+    private MarkingDyeEditor? _dyeEditor; // DS14
 
     private ItemList.Item? _selectedMarking;
     private ItemList.Item? _selectedUnusedMarking;
@@ -256,6 +258,7 @@ public sealed partial class MarkingPicker : Control
         CMarkingsUsed.Clear();
         CMarkingColors.Visible = false;
         _selectedMarking = null;
+        _dyeEditor = null; // DS14
 
         if (!IgnoreSpecies)
         {
@@ -417,6 +420,8 @@ public sealed partial class MarkingPicker : Control
             return;
         }
 
+        AddDyeEditor(prototype, item.ItemIndex); // DS14
+
         var stateNames = GetMarkingStateNames(prototype);
         _currentMarkingColors.Clear();
         CMarkingColors.RemoveAllChildren();
@@ -459,6 +464,26 @@ public sealed partial class MarkingPicker : Control
 
         CMarkingColors.Visible = true;
     }
+
+    // DS14-start
+    private void AddDyeEditor(MarkingPrototype prototype, int itemIndex)
+    {
+        if (prototype.ForcedColoring || !_currentMarkings.TryGetCategory(_selectedMarkingCategory, out var listing))
+            return;
+
+        var marking = listing[listing.Count - 1 - itemIndex];
+
+        _dyeEditor = new MarkingDyeEditor { Margin = new Thickness(0, 4, 0, 0) };
+        _dyeEditor.SetData(marking.Dye, MarkingDyeEditor.BaseColor(marking));
+        _dyeEditor.OnDyeChanged += dye =>
+        {
+            marking.Dye = dye;
+            OnMarkingColorChange?.Invoke(_currentMarkings);
+        };
+
+        CMarkingColors.AddChild(_dyeEditor);
+    }
+    // DS14-end
 
     private void ColorChanged(int colorIndex)
     {

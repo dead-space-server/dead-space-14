@@ -1,4 +1,4 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+﻿// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
 using System.Numerics;
@@ -1553,8 +1553,7 @@ public sealed partial class StorytellerSystem : EntitySystem
                 SkinColor = humanoid.SkinColor,
                 Sex = humanoid.Sex,
                 EyeColor = humanoid.EyeColor,
-                HairGradientEnabled = humanoid.HairGradientEnabled,
-                HairGradientColor = humanoid.HairGradientColor,
+                BodyDye = humanoid.BodyDye, // DS14
             };
         }
 
