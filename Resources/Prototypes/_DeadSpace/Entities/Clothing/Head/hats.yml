@@ -392,3 +392,16 @@
     sprite: _DeadSpace/Clothing/Head/Hats/beret_iaa_officer.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Head/Hats/beret_iaa_officer.rsi
+
+# NanoTrasen diplomat
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretCentcomDiplomat
+  name: берет дипломата NanoTrasen
+  description: Белоснежный берет с золотой эмблемой NanoTrasen. Символ дипломатической неприкосновенности и корпоративного превосходства.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/nt_diplomat.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/nt_diplomat.rsi

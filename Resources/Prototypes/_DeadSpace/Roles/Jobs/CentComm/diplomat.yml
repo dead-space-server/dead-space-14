@@ -1,0 +1,52 @@
+- type: job
+  id: CentralCommandDiplomat
+  name: job-name-centcom-diplomat
+  description: job-description-centcom-official
+  playTimeTracker: JobCentralCommandDiplomat
+  setPreference: false
+  startingGear: CentralCommandDiplomatGear
+  icon: "JobIconNanotrasen"
+  supervisors: job-supervisors-centcom-administrator
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - CentralCommand
+  - BlueShield
+  - ErtTeamLeader
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: ZombieImmune
+    - type: NpcFactionMember
+      factions:
+      - CentralCommand
+
+- type: startingGear
+  id: CentralCommandDiplomatGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomDiplomat
+    # back: ClothingBackpackSatchelOfficial
+    shoes: ClothingShoesBootsLaceup
+    # head: ClothingHeadHatCentcom
+    # eyes: ClothingEyesGlassesSunglasses
+    gloves: ClothingHandsGlovesColorWhite
+    # outerClothing: ClothingOuterArmorCentcommCarapace
+    id: CentcomOfficialPDA
+    ears: ClothingHeadsetAltCentCom
+    # belt: ADTClothingBeltSupremeSheathFilled
+    pocket1: RubberStampCentcom
+    pocket2: WeaponPistolN1984
+
+- type: chameleonOutfit
+  id: CentralCommandDiplomatChameleonOutfit
+  job: CentralCommandDiplomat
+  equipment:
+    shoes: ClothingShoesBootsLaceup
+    head: ClothingHeadHatCentcom
+    eyes: ClothingEyesGlassesSunglasses
+    gloves: ClothingHandsGlovesColorBlack
+    outerClothing: ClothingOuterVestWeb

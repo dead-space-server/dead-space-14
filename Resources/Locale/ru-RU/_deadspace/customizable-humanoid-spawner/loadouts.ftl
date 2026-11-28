@@ -4,3 +4,4 @@ spawner-loadout-centcomm-official = Представитель ЦК, спавн�
 spawner-loadout-centcomm-soo = Офицер Специальных Операций, спавнер
 spawner-loadout-centcomm-administrator = Администратор ЦК, спавнер
 spawner-loadout-centcomm-operator = Оператор ЦК, спавнер
+spawner-loadout-centcomm-diplomat = Дипломат НТ, спавнер

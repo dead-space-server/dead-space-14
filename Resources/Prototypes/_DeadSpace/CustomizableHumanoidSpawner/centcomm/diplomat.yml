@@ -1,0 +1,61 @@
+- type: entity
+  parent: CustomizableSpawnerBase
+  id: CustomizableSpawnerCentralCommandDiplomat
+  name: Дипломат NanoTrasen
+  suffix: ПЦК, Кастомизируемый персонаж
+  components:
+    - type: Sprite
+      layers:
+      - state: timed
+      - sprite: Markers/jobs.rsi
+        state: centcom
+    - type: CustomizableHumanoidSpawner
+      jobPrototype: CentralCommandDiplomat
+      allowedSpecies:
+      - Human
+    - type: GhostRole
+      name: ghost-role-information-centcom-diplomat-name
+      description: ghost-role-information-ert-centcom-diplomat-description
+      rules: ghost-role-information-centcom-personal-rules
+      category: ghost-role-information-centcomm-category
+      requirements:
+        - !type:OverallPlaytimeRequirement
+          time: 750h
+        - !type:DepartmentTimeRequirement
+          department: Security
+          time: 50h
+        - !type:RoleTimeRequirement
+          role: JobCaptain
+          time: 60h
+        - !type:RoleTimeRequirement
+          role: JobIAA
+          time: 20h
+      raffle:
+        settings: default
+
+- type: roleLoadout
+  id: JobCentralCommandDiplomat
+  groups:
+  # - GroupTankHarness # outerClothing slot occupied by startingGear
+  - CentralCommandDiplomatLoadout
+  - Survival
+  - GroupSpeciesBreathTool
+  - CentcommOfficerUnderwear
+
+- type: loadoutGroup
+  id: CentralCommandDiplomatLoadout
+  name: spawner-loadout-centcomm-diplomat
+  hidden: true
+  loadouts:
+  - CentralCommandDiplomatLoadout
+
+- type: loadout
+  id: CentralCommandDiplomatLoadout
+  equipment:
+    back: ClothingBackpackSatchelLeather
+    head: ClothingHeadHatBeretCentcomDiplomat
+    eyes: ClothingEyesHudCaptain
+  storage:
+    back:
+    - PhoneInstrument
+    - DoorRemoteCustom

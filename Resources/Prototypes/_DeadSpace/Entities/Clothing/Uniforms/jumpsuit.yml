@@ -593,3 +593,16 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/suit_waiter.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/suit_waiter.rsi
+
+# NanoTrasen diplomat
+
+- type: entity
+  parent: ClothingUniformJumpsuitCentcomOfficial
+  id: ClothingUniformJumpsuitCentcomDiplomat
+  name: костюм дипломата NanoTrasen
+  description: Элегантный белый комбинезон с золотой отделкой, подчёркивающий безупречную репутацию своего владельца. По крайней мере, официальную.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/nt_diplomat.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/nt_diplomat.rsi
