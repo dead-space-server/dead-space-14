@@ -119,7 +119,7 @@ public static class SurgeryCut
                     break;
                 }
 
-                result.ClearSkinBare = true;
+                result.ClearSkinBare = !request.Dead;
                 result.Integrity = 0.4f;
                 result.Retracted = false;
                 result.Finished = true;
@@ -174,7 +174,7 @@ public static class SurgeryCut
             result.Key = "surgery-eye-cut";
         }
 
-        if (request.SkinBare && request.Kind is SurgeryLayerKind.Skin && progress > 0.9f && slips < 4)
+        if (!request.Dead && request.SkinBare && request.Kind is SurgeryLayerKind.Skin && progress > 0.9f && slips < 4)
         {
             result.Skin = -request.CurrentSkin;
             result.ClearSkinBare = true;

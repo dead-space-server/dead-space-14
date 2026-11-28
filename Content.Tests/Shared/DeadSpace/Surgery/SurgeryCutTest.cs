@@ -72,6 +72,51 @@ public sealed class SurgeryCutTest
     }
 
     [Test]
+    public void IncisingBareSkinDebridesALivingPatient()
+    {
+        var result = SurgeryCut.Resolve(new SurgeryRequest
+        {
+            Verb = SurgeryVerbKind.Incise,
+            Zone = LimbZone.Torso,
+            Kind = SurgeryLayerKind.Skin,
+            Progress = 1f,
+            ToolPrecision = 1f,
+            SkinBare = true,
+            CurrentSkin = 90f,
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Skin, Is.EqualTo(-90f));
+            Assert.That(result.ClearSkinBare, Is.True);
+            Assert.That(result.Key, Is.EqualTo("surgery-debrided"));
+        });
+    }
+
+    [Test]
+    public void IncisingBareSkinDoesNotDebrideACorpse()
+    {
+        var result = SurgeryCut.Resolve(new SurgeryRequest
+        {
+            Verb = SurgeryVerbKind.Incise,
+            Zone = LimbZone.Torso,
+            Kind = SurgeryLayerKind.Skin,
+            Progress = 1f,
+            ToolPrecision = 1f,
+            SkinBare = true,
+            CurrentSkin = 90f,
+            Dead = true,
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Skin, Is.EqualTo(0f));
+            Assert.That(result.ClearSkinBare, Is.False);
+            Assert.That(result.Key, Is.EqualTo("surgery-layer-open"));
+        });
+    }
+
+    [Test]
     public void AnOpenWoundOffersOneMendByItsKind()
     {
         var shot = new LimbZoneState { Flesh = LimbWoundRules.StrainFlesh, HitPierce = 12f, HitSlash = 3f };

@@ -788,6 +788,7 @@ public sealed partial class SurgerySystem : EntitySystem
             SurfaceSlip = place.Slip,
             BoneFloor = place.BoneFloor,
             Implant = implantSlot.Length > 0,
+            Dead = _mobs.IsDead(patient.Value),
         };
 
         if (LimbWoundRules.IsBody(site.Zone) && TryComp<LimbBodyComponent>(patient, out var limbs))
@@ -2724,6 +2725,9 @@ public sealed partial class SurgerySystem : EntitySystem
 
     private void CoolHeat(EntityUid patient, LimbZone zone)
     {
+        if (_mobs.IsDead(patient))
+            return;
+
         var amount = zone switch
         {
             LimbZone.Torso or LimbZone.Head => 75f,
