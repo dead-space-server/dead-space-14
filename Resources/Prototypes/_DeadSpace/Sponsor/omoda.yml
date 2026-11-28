@@ -1,0 +1,673 @@
+# backpack.rsi
+- type: entity
+  parent: ClothingBackpackDominator
+  id: ClothingBackpackomoda
+  categories: [ HideSpawnMenu ]
+  name: полевая сумка «Триаж»
+  description: Прочная медицинская сумка для сортировки и хранения снаряжения первой помощи. Внутренние отделения подписаны под разные категории экстренных расходников.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/backpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,10
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterHardsuitomoda
+    - id: ClothingBeltMilitaryWebbingomoda
+    - id: JetpackVoidFilledomoda
+    - id: Hyposprayomoda
+    - id: DefibrillatorCompactomoda
+    - id: ClothingShoesBootsMagomoda
+    - id: ClothingEyesHudMedicalomoda
+    - id: PaperLawomoda
+    - id: ClothingHandsGlovesomoda
+    - id: ClothingNeckMantleomoda
+    - id: ClothingHeadsetomoda
+    - id: ClothingUniformJumpsuitomoda
+    - id: PDAomoda
+    - id: MedkitAdvancedFilled
+    - id: ClothingMaskomoda
+    - id: ClothingUnderwearSocksomoda
+    - id: ClothingUnderwearBottomBoxersomoda
+    - id: ADTtelescopicBaton
+    - id: ClothingHeadHatBeretomoda
+    - id: AnomalyScanneromoda
+    - id: HolofanProjectoromoda
+    - id: GasAnalyzeromoda
+    - id: WeaponPistolCHIMPomoda
+    - id: WeaponProtoKineticAcceleratoromoda
+  - type: Tag
+    tags: [ ]
+
+# belt.rsi
+- type: entity
+  parent: ClothingBeltDominatorFilled
+  id: ClothingBeltMilitaryWebbingomoda
+  name: тактический пояс «Регламент»
+  description: Эргономичный подсумок из плотной чёрной ткани для размещения всего необходимого. Внутри царит идеальный порядок, не допускающий ни малейшей суеты.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/belt.rsi
+  - type: StorageFill
+    contents:
+      - id: JawsOfLifeomoda
+      - id: PowerDrillomoda
+      - id: WelderExperimentalomoda
+      - id: Multitoolomoda
+      - id: RCDomoda 
+      - id: trayScanneromoda
+  - type: Tag
+    tags: [ ]
+
+# hardsuit.rsi
+- type: entity
+  parent: ClothingOuterHardsuitDominator
+  id: ClothingOuterHardsuitomoda
+  name: скафандр «Монолит»
+  description: Герметичный боевой скафандр в чёрно-золотом исполнении, созданный для тех, кто привык диктовать свои правила в любой среде. Выглядит так, словно его владелец спустился на станцию исключительно для вынесения окончательного приговора.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitomoda
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
+        Heat: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
+        Stun: 0.65
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: HideLayerClothing
+    clothingSlots: 
+    - belt
+    - back
+  - type: HardsuitIdentification
+    nonlethal: true
+  - type: Tag
+    tags: [ ]
+
+# helmet.rsi
+- type: entity
+  parent: ClothingHeadHelmetHardsuitDominator
+  categories: [ HideSpawnMenu ]
+  id: ClothingHeadHelmetHardsuitomoda
+  name: шлем скафандра «Монолит»
+  description: Шлем защитного скафандра, созданный для работы в опасной среде и экстренных вылазок.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/helmet.rsi
+  - type: PointLight
+    color: "#c3fff7"
+    radius: 5
+    energy: 3
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.9
+        Radiation: 0.5
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - FacialHair
+    clothingSlots:
+    - ears
+    bodyLayers:
+    - Head
+  - type: Tag
+    tags: [ ]
+
+# jumpsuit.rsi
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitomoda
+  name: служебный костюм «Превосходство»
+  description: Безупречно скроенный чёрный комбинезон с золотыми вставками и встроенными датчиками. Посадка и материалы всем своим видом намекают, что перед вами человек, не привыкший спрашивать ваше мнение.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/jumpsuit.rsi
+  - type: Tag
+    tags: [ ]
+
+# headset.rsi
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetomoda
+  name: гарнитура «Резонанс»
+  description: Гарнитура с закрытыми наушниками и выносным микрофоном для стабильной связи. 
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/headset.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/headset.rsi
+  - type: Headset
+    color: "#ecc381" 
+    colorEnd: "#000000"
+  - type: EncryptionKeyHolder
+    keySlots: 5
+  - type: Tag
+    tags: []
+
+# gloves.rsi
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsGlovesomoda
+  name: усиленные перчатки «Контроль»
+  description: Тактические перчатки с золотистой прошивкой и диэлектрическим покрытием. Идеально подходят для того, чтобы держать под контролем любую ситуацию и не пачкать руки о чужие ошибки.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/gloves.rsi
+  - type: Tag
+    tags: [ ]
+
+# cloak.rsi
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckMantleomoda
+  name: наплечная мантия «Триумф»
+  description: Тяжёлая чёрная мантия с золотой вышивкой и густым мехом на плечах. Подчёркивает безупречный статус владельца, для которого обычная суета экипажа остаётся где-то далеко внизу.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/cloak.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/cloak.rsi
+  - type: Tag
+    tags: [ ]
+
+# hud.rsi
+- type: entity
+  parent: ClothingEyesHudAdvanced
+  id: ClothingEyesHudMedicalomoda
+  name: продвинутый визор «Вердикт»
+  description: Высокотехнологичный визор с золотистым напылением и тактической индикацией. Позволяет с привычной скукой наблюдать, как очередной гений на смене пытается совершить ошибку, очевидную владельцу заранее.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/hud.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/hud.rsi
+  - type: IdentityBlocker
+    coverage: EYES
+  - type: EyeProtection
+  - type: Tag
+    tags: [ ]
+
+# gasmask.rsi
+- type: entity
+  parent: ClothingMaskGasSponsor
+  id: ClothingMaskomoda
+  name: защитный противогаз «Изоляция»
+  description: Герметичный респиратор с усиленной фильтрацией в строгом чёрном корпусе. Надёжно отсекает токсичные газы и избавляет владельца от необходимости дышать одним воздухом с остальными.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/gasmask.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/gasmask.rsi
+  - type: Tag
+    tags: [ ]
+
+# magboots.rsi
+- type: entity
+  parent: ClothingShoesBootsMag
+  id: ClothingShoesBootsMagomoda
+  name: магнитные сапоги «Бастион»
+  description: Тяжёлые чёрно-золотые сапоги с усиленными электромагнитами и стабилизаторами. Обеспечивают безупречную устойчивость на любой поверхности, когда остальной экипаж едва держится на ногах.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/omoda/magboots.rsi
+      layers:
+      - state: icon
+        map: [ "enum.ToggleableVisuals.Layer" ]
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/omoda/magboots.rsi
+    - type: ClothingSpeedModifier
+      walkModifier: 1
+      sprintModifier: 1
+    - type: Tag
+      tags: [ ]
+
+# beret.rsi
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretomoda
+  name: фуражка «Статус»
+  description: Строгая чёрная фуражка с золотым шитьём, подчёркивающая безусловное старшинство владельца. Смотрится так, словно её обладатель прибыл на станцию исключительно для того, чтобы напомнить всем, кто здесь главный.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/hat.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/hat.rsi
+  - type: Tag
+    tags: [ ]
+
+# jetpack.rsi
+- type: entity
+  parent: JetpackVoidFilled
+  id: JetpackVoidFilledomoda
+  name: пустотный джетпак «Эшелон»
+  description: Маневровый ранец в чёрном корпусе для свободного перемещения в открытом космосе. Позволяет чувствовать себя хозяином положения даже в абсолютной пустоте за пределами станции.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Item
+    sprite: _DeadSpace/Sponsor/omoda/jetpack.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/jetpack.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/jetpack.rsi
+    slots:
+      - Back
+      - suitStorage
+      - Belt
+  - type: Tag
+    tags: [ ]
+
+# pda.rsi
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDAomoda
+  name: служебный кпк «Реестр»
+  description: Карманный компьютер в строгом чёрно-золотом корпусе с полным набором рабочих модулей. На его экран попадает всё, что остальной экипаж наивно считает своей маленькой тайной.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/omoda/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/pda.rsi
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - CrewManifestCartridge
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - NewsReaderCartridge
+      - MedTekCartridge
+      - AstroNavCartridge
+      - MessengerCartridge
+  - type: PdaBorderColor
+    borderColor: "#2a3424"
+    accentHColor: "#242424"
+    accentVColor: "#3a4533"
+  - type: Tag
+    tags: [ ]
+
+# defibsmall.rsi
+- type: entity
+  parent: DefibrillatorCompact
+  id: DefibrillatorCompactomoda
+  name: компактный дефибриллятор «Отсрочка»
+  description: Портативный реанимационный прибор. Возвращает к жизни тех, кому ещё рано покидать смену без личного разрешения владельца.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/defibsmall.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/omoda/defibsmall.rsi
+
+# hypo.rsi
+- type: entity
+  parent: BaseItem
+  id: Hyposprayomoda
+  name: гипоспрей «Эгида»
+  description: Лимитированный чёрно-золотой инъектор уменьшенного объёма с ускоренным впрыском, собранный по спецзаказу. Рассчитан на тех, кто не привык тратить ни лишнее время, ни лишние миллилитры на других.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/hypo.rsi
+    layers:
+      - state: hypo
+        map: ["enum.SolutionContainerLayers.Base"]
+      - state: hypo_fill1
+        map: ["enum.SolutionContainerLayers.Fill"]
+        visible: false
+  - type: Item
+    sprite: _DeadSpace/Sponsor/omoda/hypo.rsi
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 5
+  - type: RefillableSolution
+    solution: hypospray
+  - type: ExaminableSolution
+    solution: hypospray
+    exactVolume: true
+  - type: Injector
+    solutionName: hypospray
+    ignoreClosed: false
+    activeModeProtoId: HyposprayDynamicMode
+    allowedModes:
+    - HyposprayDynamicMode
+    - HyposprayInjectMode
+  - type: UseDelay
+    delay: 0.5
+  - type: Appearance
+  - type: SolutionContainerVisuals
+    maxFillLevels: 6
+    fillBaseName: hypo_fill
+    solutionName: hypospray
+
+- type: entity
+  parent: ClothingUnderwearSocksBase
+  id: ClothingUnderwearSocksomoda
+  name: носки «Премиум»
+  categories: [ HideSpawnMenu ]
+  description: Удобные чёрные носки сшиты специально для ношения под тяжёлыми сапогами.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/under/socks.rsi
+
+- type: entity
+  parent: ClothingUnderwearBottomBase
+  id: ClothingUnderwearBottomBoxersomoda
+  name: трусы «Премиум»
+  categories: [ HideSpawnMenu ]
+  description: Стандартные чёрные боксеры из плотной ткани, обеспечивающие комфорт в любой обстановке.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/under/boxers.rsi
+
+# tools_jawsoflife.rsi
+- type: entity
+  parent: JawsOfLife
+  id: JawsOfLifeomoda
+  name: челюсти жизни «Санкция»
+  description: Мощный гидравлический инструмент для силового вскрытия шлюзов. Любая закрытая дверь перед ним — лишь временное препятствие.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_jawsoflife.rsi
+    state: syn_jaws_pry
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: syn_inhand-left
+      right:
+      - state: syn_inhand-right
+    size: Normal
+  - type: MultipleTool
+    entries:
+      - behavior: [ Prying ]
+        sprite:
+          sprite: _DeadSpace/Sponsor/omoda/tools_jawsoflife.rsi
+          state: syn_jaws_pry
+        useSound: /Audio/Items/jaws_pry.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+      - behavior: [ Cutting ]
+        sprite:
+          sprite: _DeadSpace/Sponsor/omoda/tools_jawsoflife.rsi
+          state: syn_jaws_cutter
+        useSound: /Audio/Items/jaws_cut.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+
+# tools_powerdrill.rsi
+- type: entity
+  parent: PowerDrill
+  id: PowerDrillomoda
+  name: электродрель «Конструктив»
+  description: Надёжная дрель с электроприводом в чёрно-золотом корпусе для быстрой разборки и монтажа оборудования. Незаменима в случаях, когда чью-то сомнительную архитектурную задумку проще разобрать по винтикам, чем пытаться понять.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_powerdrill.rsi
+    state: drill_screw
+  - type: Item
+    sprite: _DeadSpace/Sponsor/omoda/tools_powerdrill.rsi
+    size: Small
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: [ Screwing ]
+        sprite:
+          sprite: _DeadSpace/Sponsor/omoda/tools_powerdrill.rsi
+          state: drill_screw
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: [ Anchoring ]
+        sprite:
+          sprite: _DeadSpace/Sponsor/omoda/tools_powerdrill.rsi
+          state: drill_bolt
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+
+# tools_welder.rsi
+- type: entity
+  parent: WelderExperimental
+  id: WelderExperimentalomoda
+  name: сварочный аппарат «Банхаммер»
+  description: Сварочный аппарат для быстрой сварки конструкций и переборок. Удобен, когда целый отсек проще заварить снаружи, чем объяснять его обитателям правила.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_welder.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/omoda/tools_welder.rsi
+
+# tools_multitool.rsi
+- type: entity
+  parent: Multitool
+  id: Multitoolomoda
+  name: мультитул «Обход»
+  description: Компактный прибор для работы с проводами, сигналами и настройкой станционной электроники. Позволяет с лёгкой усмешкой обходить любые блокировки, которые экипаж всерьёз считает надёжной защитой.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_multitool.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/omoda/tools_multitool.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/tools_multitool.rsi
+
+# tools_rcd.rci
+- type: entity
+  parent: RCD
+  id: RCDomoda
+  name: рсу «Эталон»
+  description: Портативное устройство для мгновенного возведения и демонтажа конструкций. Позволяет перестраивать пространство вокруг себя по собственному усмотрению.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_rcd.rsi
+    layers:
+    - state: icon
+
+#t-ray scanner
+- type: entity
+  name: т-лучевой сканер «Надзор»
+  parent: BaseItem
+  id: trayScanneromoda
+  description: Портативный сканер для выявления скрытых коммуникаций под обшивкой. От взгляда этого прибора не укроется ни одна деталь, как бы тщательно её ни пытались спрятать.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_trayscanner.rsi
+    layers:
+    - state: tray-off
+      map: ["base"]
+  - type: TrayScanner
+  - type: Item
+    sprite: _DeadSpace/Sponsor/omoda/tools_trayscanner.rsi
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.TrayScannerVisual.Visual:
+        base:
+          On: { state: tray-on }
+          Off: { state: tray-off }
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 400
+      Glass: 150
+  - type: StaticPrice
+    price: 85
+
+# tools_gasanalyzer.rsi
+- type: entity
+  parent: GasAnalyzer
+  id: GasAnalyzeromoda
+  name: газоанализатор «Барометр»
+  description: Портативный чёрно-золотой прибор для быстрого анализа атмосферы в отсеке. Позволяет документально подтвердить, что в этом помещении тяжело находиться не только из-за присутствия экипажа.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_gasanalyzer.rsi
+    layers:
+    - state: icon
+      map: ["analyzer"]
+
+# tools_holofanprojector.rsi
+- type: entity
+  parent: HolofanProjector
+  id: HolofanProjectoromoda
+  name: атмос голопроектор «Рубеж»
+  description: Проектор голографических барьеров, удерживающих температуру и давление при разгерметизации, не мешая свободному проходу. Наглядно показывает, как легко отделить порядок от хаоса, не перекрывая себе дорогу.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_holofanprojector.rsi
+    state: icon
+
+# tools_anomalyscanner.rsi
+- type: entity
+  parent: AnomalyScanner
+  id: AnomalyScanneromoda
+  name: сканер аномалий «Ревизор»
+  description: Ручной прибор в чёрно-золотом корпусе для анализа нестабильных аномальных объектов. Позволяет безошибочно определить, где естественное явление, а где чья-то халатность на грани катастрофы.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/tools_anomalyscanner.rsi
+    layers:
+      - state: icon
+        map: ["enum.AnomalyScannerVisualLayers.Base"]
+      - map: ["enum.AnomalyScannerVisualLayers.Screen"]
+        visible: false
+        shader: unshaded
+      - state: severity_mask
+        map: ["enum.AnomalyScannerVisualLayers.SeverityMask"]
+        visible: false
+        shader: unshaded
+      - map: ["enum.AnomalyScannerVisualLayers.Stability"]
+        visible: false
+        shader: unshaded
+      - visible: false
+        map: ["enum.AnomalyScannerVisualLayers.Pulse"]
+        shader: unshaded
+      - state: supercritical
+        map: ["enum.AnomalyScannerVisualLayers.Supercritical"]
+        shader: unshaded
+        visible: false
+
+# chimp.rsi
+- type: entity
+  parent: WeaponPistolCHIMP
+  categories: [ HideSpawnMenu ]
+  id: WeaponPistolCHIMPomoda
+  name: излучатель «Дисциплина»
+  description: Портативный излучатель в строгом чёрном корпусе для стабилизации и изменения поведения аномалий. Незаменим, когда местные явления начинают вести себя слишком вызывающе и требуют быстрой воспитательной меры.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/chimp.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/chimp.rsi
+
+# kinetic_accelerator.rsi
+- type: entity
+  parent: WeaponProtoKineticAccelerator
+  id: WeaponProtoKineticAcceleratoromoda
+  categories: [ HideSpawnMenu ]
+  name: кинетический карабин «Довод»
+  description: Компактное оружие в строгом чёрном корпусе с лаконичным профилем. Само его присутствие в руках владельца моментально переводит любой спор в конструктивное русло.
+  components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.71875,0.40625
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.40625,0.3125
+  - type: Gun
+    fireRate: 0.5
+    selectedMode: SemiAuto
+    angleDecay: 45
+    minAngle: 44
+    maxAngle: 45
+    availableModes:
+    - SemiAuto
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.75
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/omoda/kinetic_accelerator.rsi
+    layers:
+    - state: icon
+    - state: icon-overlay
+      visible: false
+      map: [ "empty-icon" ]
+  - type: Item
+    sprite: _DeadSpace/Sponsor/omoda/kinetic_accelerator.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/omoda/kinetic_accelerator.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+# документ
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperLawomoda
+  name: распечатанная лицензия
+  description: Роскошный лист бумаги с заголовком ЦентКома. Выглядит лучше, чем другие.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-omoda
+  - type: Tag
+    tags: [ ]
