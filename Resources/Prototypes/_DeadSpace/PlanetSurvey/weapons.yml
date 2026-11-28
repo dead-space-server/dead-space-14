@@ -1,0 +1,373 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: SurveyNpcGunBase
+  components:
+  - type: Item
+    size: Normal
+  - type: Gun
+    fireRate: 3
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/pistol.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletPistolTrace
+    capacity: 10
+    count: 10
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.5
+  - type: SurveyNativeWeapon
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcPistol
+  name: самодельный пистолет
+  description: Собран из чего попало. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+  - type: SurveyNativeWeapon
+    drop: WeaponPistolMk58
+    dropChance: 0.35
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcShotgun
+  name: самодельный обрез
+  description: Бьёт громко и больно. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Shotguns/sawn.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/Shotguns/sawn.rsi
+  - type: Gun
+    fireRate: 1.2
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletMagnumTrace
+    capacity: 4
+    count: 4
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 1
+  - type: SurveyNativeWeapon
+    drop: WeaponShotgunSawn
+    dropChance: 0.3
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcRevolver
+  name: пиратский револьвер
+  description: Старый и злой. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Revolvers/deckard.rsi
+    state: base
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/Revolvers/deckard.rsi
+  - type: Gun
+    fireRate: 1.6
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/pistol.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletMagnumTrace
+    capacity: 6
+    count: 6
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.8
+  - type: SurveyNativeWeapon
+    drop: WeaponRevolverDeckard
+    dropChance: 0.3
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcSmg
+  name: трофейный пистолет-пулемёт
+  description: Его выдают по тревоге. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/SMGs/drozd.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/SMGs/drozd.rsi
+  - type: Gun
+    fireRate: 7
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/smg.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletLightRifleTrace
+    capacity: 24
+    count: 24
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.25
+  - type: SurveyNativeWeapon
+    drop: WeaponSubMachineGunDrozd
+    dropChance: 0.15
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcRifle
+  name: штурмовая винтовка подмоги
+  description: Так вооружают тех, кого зовут на помощь. Чужие руки она не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/SMGs/drozd.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/SMGs/drozd.rsi
+  - type: Gun
+    fireRate: 4
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/smg.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletRifleTrace
+    capacity: 20
+    count: 20
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.3
+  - type: SurveyNativeWeapon
+    drop: WeaponSubMachineGunDrozd
+    dropChance: 0.1
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcCobra
+  name: туземная «Кобра»
+  description: Запасной ствол медика. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Pistols/cobra.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/Pistols/cobra.rsi
+  - type: Gun
+    fireRate: 4
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/pistol.ogg
+  - type: SurveyNativeWeapon
+    drop: WeaponPistolCobra
+    dropChance: 0.2
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcCarbine
+  name: туземный карабин
+  description: Бьёт одиночными, но далеко. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/carbine.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/Rifles/carbine.rsi
+  - type: Gun
+    fireRate: 3
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rifle2.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletRifleTrace
+    capacity: 20
+    count: 20
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.35
+  - type: SurveyNativeWeapon
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcAk
+  name: туземный автомат
+  description: Старый, грязный и безотказный. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+  - type: Gun
+    fireRate: 5.5
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rifle2.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletRifleTrace
+    capacity: 30
+    count: 30
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.2
+  - type: SurveyNativeWeapon
+    drop: WeaponRifleAk
+    dropChance: 0.08
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcLmg
+  name: туземный пулемёт
+  description: Им прижимают к земле, пока остальные заходят сбоку. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/LMGs/l6.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/LMGs/l6.rsi
+  - type: Gun
+    fireRate: 8
+    minAngle: 6
+    maxAngle: 18
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/lmg.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletLightRifleTrace
+    capacity: 60
+    count: 60
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.12
+  - type: SurveyNativeWeapon
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcBulldog
+  name: туземный штурмовой дробовик
+  description: Для дверей и тех, кто за ними. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Shotguns/bulldog.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/Shotguns/bulldog.rsi
+  - type: Gun
+    fireRate: 2.5
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletMagnumTrace
+    capacity: 8
+    count: 8
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.6
+  - type: SurveyNativeWeapon
+    drop: WeaponShotgunBulldog
+    dropChance: 0.05
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcVector
+  name: туземный «Вектор»
+  description: Короткий, злой и очень быстрый. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/SMGs/vector.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/SMGs/vector.rsi
+  - type: Gun
+    fireRate: 9
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/smg.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletPistolTrace
+    capacity: 30
+    count: 30
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.15
+  - type: SurveyNativeWeapon
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcC20r
+  name: туземный C-20r
+  description: Пистолет-пулемёт с чужого склада. Чужие руки он не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
+  - type: Gun
+    fireRate: 6
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/smg.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletPistolTrace
+    capacity: 24
+    count: 24
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.2
+  - type: SurveyNativeWeapon
+
+- type: entity
+  parent: SurveyNpcGunBase
+  id: SurveyNpcMarksman
+  name: туземная марксманская винтовка
+  description: Работает с крыши и из-за угла. Чужие руки она не слушается.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/lecter.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: Objects/Weapons/Guns/Rifles/lecter.rsi
+  - type: Gun
+    fireRate: 1.1
+    minAngle: 0
+    maxAngle: 2
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/sniper.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletMagnumTrace
+    capacity: 8
+    count: 8
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 1.2
+  - type: SurveyNativeWeapon

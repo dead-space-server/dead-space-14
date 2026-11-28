@@ -1,0 +1,640 @@
+- type: htnCompound
+  id: SurveyBarkCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:SurveyBarkOperator
+
+- type: htnCompound
+  id: SurveyWaitCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:RandomOperator
+        targetKey: SurveyWait
+        minKey: SurveyWaitMin
+        maxKey: SurveyWaitMax
+    - !type:HTNPrimitiveTask
+      operator: !type:WaitOperator
+        key: SurveyWait
+
+- type: htnCompound
+  id: SurveyStandFireCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UtilityOperator
+        proto: NearbyGunTargets
+    - !type:HTNPrimitiveTask
+      operator: !type:SurveyLimbAimOperator
+    - !type:HTNPrimitiveTask
+      operator: !type:JukeOperator
+        jukeType: AdjacentTile
+    - !type:HTNPrimitiveTask
+      preconditions:
+      - !type:KeyExistsPrecondition
+        key: Target
+      operator: !type:GunOperator
+        targetKey: Target
+        requireLOS: true
+        opaqueKey: true
+      services:
+      - !type:UtilityService
+        id: RangedService
+        proto: NearbyGunTargets
+        key: Target
+
+- type: htnCompound
+  id: SurveyAimedShotCompound
+  branches:
+  - preconditions:
+    - !type:TargetInLOSPrecondition
+      targetKey: SurveyTarget
+      rangeKey: SurveyFireRange
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyStandFireCompound
+  - preconditions:
+    - !type:KeyExistsPrecondition
+      key: SurveyTargetCoords
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyTargetCoords
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        stopOnLineOfSight: true
+        rangeKey: SurveyFireRange
+    - !type:HTNCompoundTask
+      task: SurveyStandFireCompound
+
+- type: htnCompound
+  id: SurveySuppressCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UtilityOperator
+        proto: NearbyGunTargets
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        shutdownState: PlanFinished
+        pathfindInPlanning: true
+        removeKeyOnFinish: false
+        targetKey: TargetCoordinates
+        pathfindKey: TargetPathfind
+        stopOnLineOfSight: true
+        rangeKey: SurveyFireRange
+    - !type:HTNPrimitiveTask
+      operator: !type:SurveyLimbAimOperator
+        loose: true
+    - !type:HTNPrimitiveTask
+      operator: !type:JukeOperator
+        jukeType: AdjacentTile
+    - !type:HTNPrimitiveTask
+      preconditions:
+      - !type:KeyExistsPrecondition
+        key: Target
+      operator: !type:GunOperator
+        targetKey: Target
+        opaqueKey: true
+      services:
+      - !type:UtilityService
+        id: RangedService
+        proto: NearbyGunTargets
+        key: Target
+  - preconditions:
+    - !type:KeyExistsPrecondition
+      key: SurveyTargetCoords
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyTargetCoords
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        stopOnLineOfSight: true
+        rangeKey: SurveyFireRange
+
+- type: htnCompound
+  id: SurveyAmbushCompound
+  branches:
+  - preconditions:
+    - !type:TargetInRangePrecondition
+      targetKey: SurveyTarget
+      rangeKey: SurveyAmbushRange
+    - !type:TargetInLOSPrecondition
+      targetKey: SurveyTarget
+      rangeKey: SurveyAmbushRange
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyStandFireCompound
+  - preconditions:
+    - !type:KeyExistsPrecondition
+      key: SurveyPost
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyPost
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        rangeKey: SurveyPostRange
+    - !type:HTNCompoundTask
+      task: SurveyWaitCompound
+
+- type: htnCompound
+  id: SurveyFlankCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyFlank
+        removeKeyOnFinish: false
+        pathfindInPlanning: false
+        rangeKey: SurveyPostRange
+    - !type:HTNCompoundTask
+      task: SurveyAimedShotCompound
+
+- type: htnCompound
+  id: SurveyMeleeCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UtilityOperator
+        proto: NearbyMeleeTargets
+    - !type:HTNPrimitiveTask
+      operator: !type:SurveyLimbAimOperator
+        melee: true
+        zoneKey: SurveyMeleeZone
+    - !type:HTNCompoundTask
+      task: MeleeAttackTargetCompound
+
+- type: htnCompound
+  id: SurveyRetreatCompound
+  branches:
+  - preconditions:
+    - !type:CoordinatesInRangePrecondition
+      targetKey: SurveyCover
+      rangeKey: SurveyPostRange
+    - !type:TargetInLOSPrecondition
+      targetKey: SurveyTarget
+      rangeKey: SurveyAmbushRange
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyStandFireCompound
+  - preconditions:
+    - !type:KeyExistsPrecondition
+      key: SurveyCover
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyCover
+        removeKeyOnFinish: false
+        pathfindInPlanning: false
+        rangeKey: SurveyPostRange
+    - !type:HTNCompoundTask
+      task: SurveyWaitCompound
+
+- type: htnCompound
+  id: SurveyPeaceCompound
+  branches:
+  - preconditions:
+    - !type:CoordinatesNotInRangePrecondition
+      targetKey: SurveyPost
+      rangeKey: SurveyHomeRange
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyPost
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        rangeKey: SurveyPostRange
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleCompound
+
+- type: htnCompound
+  id: SurveyHumanCombatCompound
+  branches:
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Ambush ]
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyAmbushCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Flank ]
+    - !type:KeyExistsPrecondition
+      key: SurveyFlank
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyFlankCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Hold, Flank, Rush ]
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyAimedShotCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Suppress, Hold, Flank, Rush ]
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveySuppressCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Suppress, Hold, Flank, Rush ]
+    - !type:KeyExistsPrecondition
+      key: SurveyTargetCoords
+    - !type:CoordinatesNotInRangePrecondition
+      targetKey: SurveyTargetCoords
+      rangeKey: SurveyPostRange
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyPursueCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Hold, Flank, Suppress, Rush, Ambush ]
+    - !type:KeyBoolEqualsPrecondition
+      key: SurveyConfident
+      value: true
+    - !type:TargetInRangePrecondition
+      targetKey: SurveyTarget
+      rangeKey: SurveyMeleeReach
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyMeleeCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Hold, Flank, Suppress, Rush, Ambush ]
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyRetreatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: SurveyPeaceCompound
+
+- type: htnCompound
+  id: SurveyPursueCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyTargetCoords
+        removeKeyOnFinish: false
+        pathfindInPlanning: false
+        stopOnLineOfSight: true
+        rangeKey: SurveyPostRange
+
+- type: htnCompound
+  id: SurveyErrandCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyErrand
+        removeKeyOnFinish: false
+        pathfindInPlanning: false
+        rangeKey: SurveyErrandRange
+    - !type:HTNPrimitiveTask
+      operator: !type:WaitOperator
+        key: SurveyErrandWait
+
+- type: htnCompound
+  id: SurveyScoutCompound
+  branches:
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Errand ]
+    - !type:KeyExistsPrecondition
+      key: SurveyErrand
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyErrandCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleCompound
+
+- type: htnCompound
+  id: SurveyRobotCompound
+  branches:
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Errand ]
+    - !type:KeyExistsPrecondition
+      key: SurveyErrand
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyErrandCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Flank ]
+    - !type:KeyExistsPrecondition
+      key: SurveyFlank
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyFlankCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Hold, Flank ]
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyAimedShotCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Rush ]
+    - !type:KeyExistsPrecondition
+      key: SurveyTargetCoords
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyTargetCoords
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        stopOnLineOfSight: true
+        rangeKey: SurveyPostRange
+    - !type:HTNCompoundTask
+      task: MeleeCombatCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Hold, Flank, Rush ]
+    - !type:KeyExistsPrecondition
+      key: SurveyTargetCoords
+    - !type:CoordinatesNotInRangePrecondition
+      targetKey: SurveyTargetCoords
+      rangeKey: SurveyPostRange
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyPursueCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: InnateRangedCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: MeleeCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: SurveyPeaceCompound
+
+- type: htnCompound
+  id: SurveyRepairCompound
+  branches:
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Errand ]
+    - !type:KeyExistsPrecondition
+      key: SurveyErrand
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyErrandCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: SurveyCrowdCompound
+
+- type: htnCompound
+  id: SurveyRaiderCompound
+  branches:
+  - preconditions:
+    - !type:KeyExistsPrecondition
+      key: SurveyBark
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyBarkCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Errand ]
+    - !type:KeyExistsPrecondition
+      key: SurveyErrand
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyErrandCompound
+  - preconditions:
+    - !type:KeyBoolEqualsPrecondition
+      key: SurveyRetreat
+      value: true
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyRetreatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: SurveyHumanCombatCompound
+
+- type: htnCompound
+  id: SurveyRushCompound
+  branches:
+  - preconditions:
+    - !type:TargetInRangePrecondition
+      targetKey: SurveyTarget
+      rangeKey: SurveyBlockRange
+    - !type:TargetInLOSPrecondition
+      targetKey: SurveyTarget
+      rangeKey: SurveyBlockRange
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveySuppressCompound
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyRush
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        rangeKey: SurveyPostRange
+    - !type:HTNCompoundTask
+      task: SurveyWaitCompound
+
+- type: htnCompound
+  id: SurveyPirateCompound
+  branches:
+  - preconditions:
+    - !type:KeyExistsPrecondition
+      key: SurveyBark
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyBarkCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Errand ]
+    - !type:KeyExistsPrecondition
+      key: SurveyErrand
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyErrandCompound
+  - preconditions:
+    - !type:KeyBoolEqualsPrecondition
+      key: SurveyRetreat
+      value: true
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyRetreatCompound
+  - preconditions:
+    - !type:KeyBoolEqualsPrecondition
+      key: SurveyHoldFire
+      value: true
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyWaitCompound
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Rush ]
+    - !type:KeyExistsPrecondition
+      key: SurveyRush
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyRushCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: SurveyHumanCombatCompound
+
+- type: htnCompound
+  id: SurveyGunnerCompound
+  branches:
+  - preconditions:
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UtilityOperator
+        proto: NearbyGunTargets
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        shutdownState: PlanFinished
+        pathfindInPlanning: true
+        removeKeyOnFinish: false
+        targetKey: TargetCoordinates
+        pathfindKey: TargetPathfind
+        stopOnLineOfSight: true
+        rangeKey: SurveyFireRange
+    - !type:HTNPrimitiveTask
+      operator: !type:JukeOperator
+        jukeType: AdjacentTile
+    - !type:HTNPrimitiveTask
+      preconditions:
+      - !type:KeyExistsPrecondition
+        key: Target
+      operator: !type:GunOperator
+        targetKey: Target
+        opaqueKey: true
+      services:
+      - !type:UtilityService
+        id: RangedService
+        proto: NearbyGunTargets
+        key: Target
+  - tasks:
+    - !type:HTNCompoundTask
+      task: MeleeCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleCompound
+
+- type: htnCompound
+  id: SurveyCrowdCompound
+  branches:
+  - tasks:
+    - !type:HTNCompoundTask
+      task: MeleeCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleCompound
+
+- type: htnCompound
+  id: SurveyEliteCompound
+  branches:
+  - preconditions:
+    - !type:KeyBoolEqualsPrecondition
+      key: SurveyGuard
+      value: true
+    - !type:CoordinatesNotInRangePrecondition
+      targetKey: SurveyPost
+      rangeKey: SurveyGuardRange
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyPost
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        rangeKey: SurveyGuardRange
+  - preconditions:
+    - !type:SurveyRolePrecondition
+      roles: [ Hold ]
+    - !type:GunAmmoPrecondition
+      minPercent: 0.001
+    tasks:
+    - !type:HTNCompoundTask
+      task: SurveyAimedShotCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: InnateRangedCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: SurveyPeaceCompound
+
+- type: htnCompound
+  id: SurveyGrazeCompound
+  branches:
+  - preconditions:
+    - !type:CoordinatesNotInRangePrecondition
+      targetKey: SurveyDen
+      rangeKey: SurveyHomeRange
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyDen
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        rangeKey: SurveyPostRange
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleCompound
+
+- type: htnCompound
+  id: SurveyBeastCompound
+  branches:
+  - preconditions:
+    - !type:KeyBoolEqualsPrecondition
+      key: SurveyFlee
+      value: true
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyCover
+        removeKeyOnFinish: false
+        pathfindInPlanning: false
+        rangeKey: SurveyPostRange
+    - !type:HTNCompoundTask
+      task: SurveyWaitCompound
+  - preconditions:
+    - !type:KeyBoolEqualsPrecondition
+      key: SurveyCalled
+      value: true
+    - !type:KeyExistsPrecondition
+      key: SurveyCall
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        targetKey: SurveyCall
+        pathfindInPlanning: false
+        removeKeyOnFinish: false
+        rangeKey: SurveyCallRange
+  - preconditions:
+    - !type:KeyBoolEqualsPrecondition
+      key: SurveyThreat
+      value: true
+    tasks:
+    - !type:HTNCompoundTask
+      task: MeleeCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: SurveyGrazeCompound

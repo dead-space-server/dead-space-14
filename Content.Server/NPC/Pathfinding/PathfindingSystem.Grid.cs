@@ -33,6 +33,8 @@ public sealed partial class PathfindingSystem
     public bool PauseUpdating = false;
 
     private const int MaxDirtyChunksPerUpdate = 8; //DS-14
+    private readonly List<(EntityUid, GridPathfindingComponent)> _dirtyGrids = new(); //DS-14
+    private int _dirtyGridCursor; //DS-14
 
     private readonly Stopwatch _stopwatch = new();
 
@@ -93,8 +95,19 @@ public sealed partial class PathfindingSystem
         var query = AllEntityQuery<GridPathfindingComponent>();
         var budget = MaxDirtyChunksPerUpdate; //DS-14
 
-        while (query.MoveNext(out var uid, out var comp))
+        //DS-14 start
+        _dirtyGrids.Clear();
+        while (query.MoveNext(out var dirtyUid, out var dirtyComp))
         {
+            if (dirtyComp.DirtyChunks.Count > 0)
+                _dirtyGrids.Add((dirtyUid, dirtyComp));
+        }
+
+        var start = _dirtyGrids.Count == 0 ? 0 : _dirtyGridCursor++ % _dirtyGrids.Count;
+        for (var turn = 0; turn < _dirtyGrids.Count; turn++)
+        {
+            var (uid, comp) = _dirtyGrids[(start + turn) % _dirtyGrids.Count];
+        //DS-14 end
             //DS-14 start
             if (budget <= 0)
                 break;
@@ -548,7 +561,7 @@ public sealed partial class PathfindingSystem
                             if (!colliding)
                                 continue;
 
-                            if (_accessQuery.HasComponent(ent))
+                            if (_accessQuery.HasComponent(ent) && !HasComp<Content.Server.DeadSpace.PlanetSurvey.SurveyNativeDoorComponent>(ent)) //DS-14
                             {
                                 flags |= PathfindingBreadcrumbFlag.Access;
                             }

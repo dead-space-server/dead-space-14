@@ -91,6 +91,19 @@ public sealed partial class NPCSteeringSystem
                     if (!doorQuery.TryGetComponent(ent, out var door))
                         continue;
 
+                    //DS-14 start
+                    if (HasComp<Content.Server.DeadSpace.PlanetSurvey.SurveyNativeDoorComponent>(ent) && (component.Flags & PathFlags.Interact) != 0x0)
+                    {
+                        if (door.State == DoorState.Open)
+                            return SteeringObstacleStatus.Completed;
+
+                        if (door.State is not (DoorState.Closed or DoorState.Welded) || door.State == DoorState.Closed && _doors.TryOpen(ent, door, uid))
+                            return SteeringObstacleStatus.Continuing;
+
+                        break;
+                    }
+                    //DS-14 end
+
                     if (!door.BumpOpen && (component.Flags & PathFlags.Interact) != 0x0)
                     {
                         if (door.State != DoorState.Opening)

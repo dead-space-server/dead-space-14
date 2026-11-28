@@ -1,0 +1,285 @@
+- type: surveyWorld
+  id: SurveyRaiderCity
+  kind: Raiders
+  land: survey-land-city
+  biomes: [ Continental, Grasslands ]
+  dungeons: [ SurveyTown ]
+  dungeonCount: 1
+  siteMin: 30
+  siteMax: 38
+  spread: 22
+  camps: 3
+  squadCount: 7
+  squads:
+  - members: [ SurveyMobRaiderRifleman, SurveyMobRaiderGunner, SurveyMobRaiderMedic, SurveyMobRaider, SurveyMobRaiderGrenadier ]
+  - members: [ SurveyMobRaiderBreacher, SurveyMobRaiderShotgun ]
+    ambush: true
+  - members: [ SurveyMobRaiderMarksman, SurveyMobRaiderRifleman, SurveyMobRaider ]
+  - members: [ SurveyMobRaiderBreacher, SurveyMobRaiderRifleman, SurveyMobRaiderMedic, SurveyMobRaiderShotgun ]
+  - members: [ SurveyMobRaiderGrenadier, SurveyMobRaider, SurveyMobRaiderRifleman ]
+  calm: Rain
+  cargo: [ SurveyCargoData, SurveyCargoMedicine, SurveyCargoEvidence, SurveyCargoSupply ]
+  cargoCount: 4
+  sites: [ SurveySiteObelisk, SurveySiteProbe, SurveySiteCrystal ]
+  relics: [ SurveyRelicEmpty, SurveyRelicBattery, SurveyRelicBloom, SurveyRelicEgg, SurveyRelicIdol ]
+  scatter: [ SurveyMobGoat, SurveyMobBoar, AmbrosiaVulgarisSeeds, GalaxythistleSeeds, LingzhiSeeds, FlyAmanitaSeeds, KoibeanSeeds, AloeSeeds, PoppySeeds ]
+  scatterCount: 18
+  traps: [ LandMineExplosive ]
+  trapCount: 4
+  outpost: SurveyOutpostTown
+  outpostCount: 2
+  devices: true
+  lamp: SurveyBaseLamp
+  border: SurveyCliff
+  turret: WeaponTurretSyndicate
+  turretCount: 5
+  veterans: [ SurveyMobRaiderVeteran, SurveyMobRaiderVeteranGunner, SurveyMobRaiderVeteranBreacher ]
+  scout: SurveyMobRaiderScout
+  scoutCount: 2
+  autodoc: SurveyAutodoc
+  autodocCount: 3
+
+- type: surveyWorld
+  id: SurveyPirateCove
+  kind: Pirates
+  land: survey-land-cove
+  biomes: [ Continental ]
+  light: "#E6CB8B"
+  dungeons: [ SurveyHideout ]
+  dungeonCount: 1
+  siteMin: 28
+  siteMax: 36
+  spread: 22
+  camps: 3
+  squadCount: 6
+  squads:
+  - members: [ SurveyMobPirateCaptain, SurveyMobPirateBoarder, SurveyMobPirateGunner, SurveyMobPirateMedic ]
+  - members: [ SurveyMobPirate, SurveyMobPirateBoarder, SurveyMobPirate ]
+  - members: [ SurveyMobPirateBreacher, SurveyMobPirate ]
+    ambush: true
+  - members: [ SurveyMobPirateGunner, SurveyMobPirate, SurveyMobPirateMedic ]
+  stash: SurveyPirateStash
+  cargo: [ SurveyCargoSupply, SurveyCargoEnergy, SurveyCargoEvidence, SurveyCargoBlueprint ]
+  cargoCount: 4
+  sites: [ SurveySiteObelisk, SurveySiteProbe, SurveySiteCrystal ]
+  relics: [ SurveyRelicEmpty, SurveyRelicBattery, SurveyRelicBloom, SurveyRelicEgg, SurveyRelicIdol ]
+  scatter: [ SurveyMobBoar, ExtradimensionalOrangeSeeds, PineappleSeeds, BananaSeeds, CocoaSeeds, SpacemansTrumpetSeeds, AloeSeeds ]
+  scatterCount: 16
+  traps: [ LandMineExplosive ]
+  trapCount: 3
+  outpost: SurveyOutpostTown
+  outpostCount: 2
+  devices: true
+  lamp: SurveyBaseLamp
+  border: SurveyCliff
+  turret: WeaponTurretSyndicate
+  turretCount: 4
+  veterans: [ SurveyMobPirateVeteran, SurveyMobPirateBreacher, SurveyMobPirateGunner ]
+  scout: SurveyMobRaiderScout
+  scoutCount: 2
+  autodoc: SurveyAutodoc
+  autodocCount: 2
+
+- type: surveyWorld
+  id: SurveyFactory
+  kind: Factory
+  land: survey-land-factory
+  biomes: [ Continental ]
+  light: "#6A5A50"
+  siteMin: 30
+  siteMax: 38
+  spread: 22
+  stamp: SurveyStamp
+  stampCount: 5
+  crowd: SurveyMobDrone
+  crowdPool: [ SurveyMobDrone, SurveyMobDrone, SurveyMobWelder, SurveyMobGunner, SurveyMobGunner, SurveyMobGunner, SurveyMobAssembler ]
+  veterans: [ SurveyMobAssembler, SurveyMobGunner, SurveyMobWarden ]
+  factoryHalls: true
+  crowdCap: 10
+  stampInterval: 10
+  elites: [ SurveyMobWarden ]
+  elitesPerStamp: 2
+  alarmSound: /Audio/Machines/alarm.ogg
+  calm: AshfallLight
+  cargo: [ SurveyCargoBlueprint, SurveyCargoEnergy, SurveyCargoData ]
+  cargoCount: 3
+  sites: [ SurveySiteObelisk, SurveySiteProbe, SurveySiteCrystal ]
+  relics: [ SurveyRelicEmpty, SurveyRelicBattery, SurveyRelicEgg, SurveyRelicIdol ]
+  traps: [ LandMineKick, LandMineExplosive ]
+  trapCount: 8
+  devices: true
+  scout: SurveyMobWatcher
+  scoutCount: 3
+  repair: SurveyMobRepairDrone
+  repairCount: 3
+
+- type: surveyWorld
+  id: SurveyForest
+  kind: Beasts
+  land: survey-land-forest
+  biomes: [ Grasslands ]
+  siteMin: 26
+  siteMax: 34
+  spread: 24
+  packCount: 4
+  packSize: 3
+  herdSize: 5
+  herds: 3
+  predators: [ SurveyMobBear ]
+  prey: [ SurveyMobGoat, SurveyMobBoar ]
+  callSound: /Audio/Animals/bear.ogg
+  calm: Rain
+  cargo: [ SurveyCargoData, SurveyCargoMedicine, SurveyCargoBlueprint ]
+  cargoCount: 3
+  sites: [ SurveySiteObelisk, SurveySiteProbe, SurveySiteCrystal ]
+  relics: [ SurveyRelicEmpty, SurveyRelicBattery, SurveyRelicBloom, SurveyRelicEgg, SurveyRelicIdol ]
+  denSign: SurveyDenClutch
+  scatter: [ ChanterelleSeeds, LingzhiSeeds, FlyAmanitaSeeds, AmbrosiaVulgarisSeeds, BerrySeeds, AppleSeeds, NettleSeeds, PoppySeeds ]
+  scatterCount: 18
+  outpost: SurveyOutpostShelter
+  outpostCount: 1
+  border: SurveyCliff
+
+- type: surveyWorld
+  id: SurveyAcidJungle
+  kind: Beasts
+  land: survey-land-jungle
+  biomes: [ Continental ]
+  light: "#9FC27A"
+  siteMin: 26
+  siteMax: 34
+  spread: 24
+  packCount: 4
+  packSize: 2
+  herdSize: 4
+  herds: 2
+  predators: [ SurveyMobCrocodile ]
+  prey: [ SurveyMobBoar ]
+  callSound: /Audio/_DeadSpace/Animals/croc_roar.ogg
+  storm: Storm
+  calm: Rain
+  stormDamage:
+    types:
+      Caustic: 2
+  stormGapMin: 240
+  stormGapMax: 420
+  stormLength: 90
+  cargo: [ SurveyCargoMedicine, SurveyCargoData, SurveyCargoEnergy ]
+  cargoCount: 3
+  sites: [ SurveySiteObelisk, SurveySiteProbe, SurveySiteCrystal ]
+  relics: [ SurveyRelicEmpty, SurveyRelicBattery, SurveyRelicBloom, SurveyRelicEgg, SurveyRelicIdol ]
+  denSign: SurveyDenClutch
+  scatter: [ DeathNettleSeeds, GalaxythistleSeeds, SpacemansTrumpetSeeds, KoibeanSeeds, CocoaSeeds, BananaSeeds, AnomalyBerrySeeds ]
+  scatterCount: 18
+  outpost: SurveyOutpostShelter
+  outpostCount: 1
+  border: SurveyCliff
+
+- type: surveyWorld
+  id: SurveyTundra
+  kind: Beasts
+  land: survey-land-tundra
+  biomes: [ Snow ]
+  light: "#C8D8F0"
+  temperature: 250
+  siteMin: 26
+  siteMax: 34
+  spread: 24
+  packCount: 3
+  packSize: 3
+  herdSize: 3
+  herds: 2
+  predators: [ SurveyMobBearPolar ]
+  prey: [ SurveyMobGoat ]
+  callSound: /Audio/Voice/Vulpkanin/howl.ogg
+  storm: SnowfallHeavy
+  calm: SnowfallLight
+  stormCooling: 2.5
+  stormMinTemperature: 255
+  stormGapMin: 240
+  stormGapMax: 420
+  stormLength: 100
+  cargo: [ SurveyCargoEnergy, SurveyCargoData, SurveyCargoSupply ]
+  cargoCount: 3
+  sites: [ SurveySiteObelisk, SurveySiteProbe, SurveySiteCrystal ]
+  relics: [ SurveyRelicEmpty, SurveyRelicBattery, SurveyRelicBloom, SurveyRelicEgg, SurveyRelicIdol ]
+  denSign: SurveyDenClutch
+  scatter: [ ChillySeeds, LingzhiSeeds, BlueTomatoSeeds, GlasstleSeeds, SurveyMobGoat ]
+  scatterCount: 14
+  outpost: SurveyOutpostShelter
+  outpostCount: 1
+  border: SurveyCliffSnow
+
+- type: surveyWorld
+  id: SurveyFrozenWaste
+  kind: DeadElement
+  land: survey-land-frost
+  biomes: [ Snow ]
+  light: "#9FB4D8"
+  temperature: 235
+  dungeons: [ SurveyShelter ]
+  dungeonCount: 1
+  siteMin: 28
+  siteMax: 36
+  spread: 24
+  storm: SnowfallHeavy
+  calm: SnowfallMedium
+  stormDamage:
+    types:
+      Cold: 1.5
+  stormCooling: 4
+  stormMinTemperature: 230
+  stormGapMin: 150
+  stormGapMax: 270
+  stormLength: 120
+  stormGrowth: 40
+  cargo: [ SurveyCargoEnergy, SurveyCargoData, SurveyCargoMedicine, SurveyCargoBlueprint ]
+  cargoCount: 4
+  sites: [ SurveySiteObelisk, SurveySiteProbe, SurveySiteCrystal ]
+  relics: [ SurveyRelicEmpty, SurveyRelicBattery, SurveyRelicBloom, SurveyRelicEgg, SurveyRelicIdol ]
+  siteCount: 3
+  relicCount: 3
+  scatter: [ ChillySeeds, GlasstleSeeds, BlueTomatoSeeds ]
+  scatterCount: 10
+  outpost: SurveyOutpostShelter
+  outpostCount: 1
+  lamp: SurveyBaseLamp
+  border: SurveyCliffSnow
+
+- type: surveyWorld
+  id: SurveyDustWaste
+  kind: DeadElement
+  land: survey-land-dust
+  biomes: [ LowDesert ]
+  light: "#D9A066"
+  temperature: 315
+  dungeons: [ SurveyShelter ]
+  dungeonCount: 1
+  siteMin: 28
+  siteMax: 36
+  spread: 24
+  storm: SandstormHeavy
+  calm: Sandstorm
+  stormDamage:
+    types:
+      Blunt: 1
+      Heat: 1
+  stormGapMin: 150
+  stormGapMax: 270
+  stormLength: 110
+  stormGrowth: 40
+  cargo: [ SurveyCargoSupply, SurveyCargoEvidence, SurveyCargoEnergy ]
+  cargoCount: 4
+  sites: [ SurveySiteObelisk, SurveySiteProbe, SurveySiteCrystal ]
+  relics: [ SurveyRelicEmpty, SurveyRelicBattery, SurveyRelicBloom, SurveyRelicEgg, SurveyRelicIdol ]
+  siteCount: 3
+  relicCount: 3
+  scatter: [ AloeSeeds, CottonSeeds, PyrottonSeeds, GatfruitSeeds ]
+  scatterCount: 10
+  traps: [ LandMineExplosive ]
+  trapCount: 3
+  outpost: SurveyOutpostShelter
+  outpostCount: 1
+  lamp: SurveyBaseLamp
+  border: SurveyCliff
+

@@ -139,7 +139,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         if (visuals.TravelFlash is { } travel &&
             trace.TravelCoordinates is { } travelCoordinates &&
-            trace.Distance > 1.5f)
+            trace.Distance > 1.75f) //DS-14
         {
             RenderHitscanFlash(travelCoordinates, trace.Angle, travel, MathF.Max(trace.Distance - 1.5f, 0f), true, false, length, delay);
         }
@@ -390,7 +390,7 @@ public sealed partial class GunSystem : SharedGunSystem
             {
                 ComponentType = typeof(SpriteComponent),
                 Property = nameof(SpriteComponent.Scale),
-                InterpolationMode = AnimationInterpolationMode.Cubic,
+                InterpolationMode = AnimationInterpolationMode.Linear, //DS-14
                 KeyFrames =
                 {
                     new AnimationTrackProperty.KeyFrame(new Vector2(0.05f, 0.5f), delay / 1000f),
@@ -402,7 +402,7 @@ public sealed partial class GunSystem : SharedGunSystem
             {
                 ComponentType = typeof(SpriteComponent),
                 Property = nameof(SpriteComponent.Offset),
-                InterpolationMode = AnimationInterpolationMode.Cubic,
+                InterpolationMode = AnimationInterpolationMode.Linear, //DS-14
                 KeyFrames =
                 {
                     new AnimationTrackProperty.KeyFrame(new Vector2(distance * -0.5f, 0f), delay / 1000f),

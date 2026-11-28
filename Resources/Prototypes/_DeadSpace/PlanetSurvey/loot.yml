@@ -1,0 +1,90 @@
+- type: entity
+  parent: CrateGenericSteel
+  id: SurveyCrateLoot
+  suffix: Survey
+  components:
+  - type: StorageFill
+    contents:
+    - id: SheetSteel10
+      prob: 0.6
+    - id: SheetGlass10
+      prob: 0.35
+    - id: PartRodMetal10
+      prob: 0.4
+    - id: CableApcStack
+      prob: 0.35
+    - id: PowerCellMedium
+      prob: 0.4
+    - id: Flare
+      prob: 0.4
+      amount: 2
+    - id: SpaceCash100
+      prob: 0.35
+    - id: MedkitFilled
+      prob: 0.2
+
+- type: entity
+  parent: CrateSecure
+  id: SurveyCrateNative
+  name: туземный ящик
+  description: Заперт на туземный замок. Ключа нет, но лом найдётся.
+  suffix: Survey
+  components:
+  - type: AccessReader
+    access: [ [ "SurveyNative" ] ]
+  - type: StorageFill
+    contents:
+    - id: SheetPlasteel10
+      prob: 0.4
+    - id: PowerCellHigh
+      prob: 0.5
+    - id: SpaceCash500
+      prob: 0.5
+    - id: IngotGold
+      prob: 0.3
+    - id: MedkitBruteFilled
+      prob: 0.45
+    - id: MedkitBurnFilled
+      prob: 0.3
+    - id: WeaponPistolMk58
+      prob: 0.15
+    - id: MagazinePistol
+      prob: 0.3
+      amount: 2
+    - id: BoxShotgunSlug
+      prob: 0.2
+    - id: EncryptionKeySurveyNative
+      prob: 0.1
+
+- type: entity
+  parent: LockerSteel
+  id: SurveyLockerNative
+  name: туземный шкаф
+  description: Личный шкаф туземца. Заперт, и замок не слушается станционных карт.
+  suffix: Survey
+  components:
+  - type: AccessReader
+    access: [ [ "SurveyNative" ] ]
+  - type: StorageFill
+    contents:
+    - id: ClothingHeadHelmetBasic
+      prob: 0.35
+    - id: ClothingOuterArmorBasic
+      prob: 0.3
+    - id: ClothingBeltUtilityFilled
+      prob: 0.3
+    - id: MedkitFilled
+      prob: 0.45
+    - id: LanternFlash
+      prob: 0.5
+    - id: HandheldGPSBasic
+      prob: 0.2
+    - id: RadioHandheld
+      prob: 0.2
+    - id: SpaceCash100
+      prob: 0.6
+      amount: 2
+    - id: Multitool
+      prob: 0.2
+    - id: CrowbarRed
+      prob: 0.3

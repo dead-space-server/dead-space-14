@@ -310,13 +310,15 @@ public sealed partial class ShuttleDockControl : BaseShuttleControl
         var invertedPosition = Vector2.Zero;
         invertedPosition.Y = -invertedPosition.Y;
         var rotation = Matrix3Helpers.CreateRotation(-_angle.Value + MathF.PI);
-        var ourDockConnection = new UIBox2(
+        //DS-14 start
+        var ourDockConnection = BoxFromCorners(
             ScalePosition(Vector2.Transform(new Vector2(-0.2f, -0.7f), rotation)),
             ScalePosition(Vector2.Transform(new Vector2(0.2f, -0.5f), rotation)));
 
-        var ourDock = new UIBox2(
+        var ourDock = BoxFromCorners(
             ScalePosition(Vector2.Transform(new Vector2(-0.5f, 0.5f), rotation)),
             ScalePosition(Vector2.Transform(new Vector2(0.5f, -0.5f), rotation)));
+        //DS-14 end
 
         var dockColor = _viewedState?.HighlightedColor ?? _fallbackHighlightedColor;
         var connectionColor = Color.Pink;
@@ -456,4 +458,11 @@ public sealed partial class ShuttleDockControl : BaseShuttleControl
             }
         }
     }
+
+    //DS-14 start
+    private static UIBox2 BoxFromCorners(Vector2 a, Vector2 b)
+    {
+        return new UIBox2(Vector2.Min(a, b), Vector2.Max(a, b));
+    }
+    //DS-14 end
 }

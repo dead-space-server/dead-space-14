@@ -16,6 +16,7 @@ public sealed partial class PathfindingSystem
     /// Maximum amount of nodes we're allowed to expand.
     /// </summary>
     private const int NodeLimit = 512;
+    private const int MaxExpansions = 3000; //DS-14
 
     private sealed class PathComparer : IComparer<ValueTuple<float, PathPoly>>
     {

@@ -139,6 +139,7 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("nukeopsRole");
             _prototypeManager.RegisterIgnore("ghostRoleRaffleDecider");
             _prototypeManager.RegisterIgnore("stationGoal"); // DS14 StationGoal
+            _prototypeManager.RegisterIgnore("surveyWorld"); //DS-14
             _prototypeManager.RegisterIgnore("sponsorLoadout"); // Corvax-Loadout
             _prototypeManager.RegisterIgnore("codewordGenerator");
             _prototypeManager.RegisterIgnore("codewordFaction");

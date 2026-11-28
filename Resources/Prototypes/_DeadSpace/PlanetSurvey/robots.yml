@@ -1,0 +1,427 @@
+- type: entity
+  abstract: true
+  parent: MobHivebot
+  id: SurveyRobotBase
+  components:
+  - type: SurveyMember
+    robot: true
+  - type: Access
+    tags:
+    - SurveyNative
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: HTN
+    rootTask:
+      task: SurveyRobotCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavClimb: !type:Bool
+        true
+      VisionRadius: !type:Single
+        11
+      AggroVisionRadius: !type:Single
+        14
+      IdleRange: !type:Single
+        4
+      SurveyFireRange: !type:Single
+        11
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyErrandRange: !type:Single
+        1.2
+      SurveyErrandWait: !type:Single
+        1
+      SurveyHomeRange: !type:Single
+        6
+      SurveyGuardRange: !type:Single
+        3
+
+- type: entity
+  parent: SurveyRobotBase
+  id: SurveyMobDrone
+  name: заводской дрон
+  description: Свежий оттиск штампа. Быстрый, вертлявый, режет ближнего.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Mobs/Silicon/drone.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: drone
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      60: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.6
+    baseSprintSpeed: 3.8
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    attackRate: 1.4
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    animation: WeaponArcClaw
+    damage:
+      types:
+        Slash: 9
+
+- type: entity
+  parent: SurveyRobotBase
+  id: SurveyMobWelder
+  name: сварочный дрон
+  description: Варит швы и всё, что подвернётся.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Mobs/Silicon/engineering_drone.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: engineering_drone_alt
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      55: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.3
+    baseSprintSpeed: 3.4
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    attackRate: 1.2
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/energy_meat1.ogg
+    animation: WeaponArcClaw
+    damage:
+      types:
+        Heat: 11
+
+- type: entity
+  parent: SurveyRobotBase
+  id: SurveyMobGunner
+  name: дрон-стрелок
+  description: Держит дистанцию и сыплет очередями, переступая с места на место.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Mobs/Aliens/hivebot.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: ranged_attack
+  - type: HTN
+    rootTask:
+      task: SurveyRobotCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavClimb: !type:Bool
+        true
+      VisionRadius: !type:Single
+        12
+      AggroVisionRadius: !type:Single
+        15
+      IdleRange: !type:Single
+        4
+      SurveyFireRange: !type:Single
+        11
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      50: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 3
+  - type: Gun
+    fireRate: 3
+    useKey: false
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/smg.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletLightRifleTrace
+    capacity: 8
+    count: 8
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.4
+
+- type: entity
+  parent: SurveyRobotBase
+  id: SurveyMobWarden
+  name: страж цеха
+  description: Стережёт штамп. Видит сенсором и бьёт по конечностям.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Mobs/Aliens/hivebot.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: strong_attack
+  - type: SurveyMember
+    elite: true
+    robot: true
+  - type: LimbAim
+  - type: PointLight
+    radius: 2.5
+    energy: 1.2
+    color: "#ff4a3a"
+  - type: HTN
+    rootTask:
+      task: SurveyRobotCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavClimb: !type:Bool
+        true
+      VisionRadius: !type:Single
+        12
+      AggroVisionRadius: !type:Single
+        15
+      IdleRange: !type:Single
+        3
+      SurveyFireRange: !type:Single
+        12
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyErrandRange: !type:Single
+        1.2
+      SurveyErrandWait: !type:Single
+        1
+      SurveyHomeRange: !type:Single
+        5
+      SurveyGuardRange: !type:Single
+        3
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      140: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.8
+    baseSprintSpeed: 2.6
+  - type: Gun
+    fireRate: 3
+    useKey: false
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/smg.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletRifleTrace
+    capacity: 12
+    count: 12
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.35
+
+- type: entity
+  parent: SurveyRobotBase
+  id: SurveyMobAssembler
+  name: собранная форма
+  description: Корпус из чужих деталей, собранный ядром на конвейере. Медленный, тяжёлый, бьёт навылет.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Mobs/Silicon/chassis.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: derelict
+    - state: derelict_e
+      shader: unshaded
+  - type: HTN
+    rootTask:
+      task: SurveyRobotCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavClimb: !type:Bool
+        true
+      VisionRadius: !type:Single
+        12
+      AggroVisionRadius: !type:Single
+        15
+      IdleRange: !type:Single
+        3
+      SurveyFireRange: !type:Single
+        10
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      220: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.5
+    baseSprintSpeed: 2.1
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    attackRate: 0.8
+    soundHit:
+      collection: MetalThud
+    animation: WeaponArcFist
+    damage:
+      types:
+        Blunt: 18
+  - type: Gun
+    fireRate: 1.4
+    useKey: false
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletMagnumTrace
+    capacity: 3
+    count: 3
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.8
+
+- type: entity
+  parent: SurveyRobotBase
+  id: SurveyMobRepairDrone
+  name: ремонтный дрон
+  description: Подлетает к подбитым формам и заваривает пробоины прямо под огнём.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Mobs/Silicon/medical_drone.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: medical_drone_alt
+  - type: SurveyMember
+    robot: true
+    medic: true
+  - type: HTN
+    rootTask:
+      task: SurveyRepairCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavClimb: !type:Bool
+        true
+      VisionRadius: !type:Single
+        10
+      AggroVisionRadius: !type:Single
+        12
+      IdleRange: !type:Single
+        3
+      SurveyErrandRange: !type:Single
+        1.2
+      SurveyErrandWait: !type:Single
+        1
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      70: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.8
+    baseSprintSpeed: 3.9
+  - type: PointLight
+    radius: 2
+    energy: 1.2
+    color: "#6affc8"
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    attackRate: 1
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/energy_meat1.ogg
+    animation: WeaponArcClaw
+    damage:
+      types:
+        Heat: 6
+
+- type: entity
+  parent: SurveyRobotBase
+  id: SurveyMobWatcher
+  name: дрон-наблюдатель
+  description: Глаз ядра. Летает по цехам и зовёт стражу, как только увидит чужого.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Mobs/Silicon/chassis.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: xenoborg_scout
+    - state: xenoborg_scout_e
+      shader: unshaded
+  - type: SurveyMember
+    robot: true
+    scout: true
+    sight: 16
+  - type: HTN
+    rootTask:
+      task: SurveyScoutCompound
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      IdleRange: !type:Single
+        6
+      SurveyErrandRange: !type:Single
+        1.5
+      SurveyErrandWait: !type:Single
+        1
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      45: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.4
+    baseSprintSpeed: 4.4
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 40
+        mask:
+        - FlyingMobMask
+        layer:
+        - FlyingMobLayer
+  - type: PointLight
+    radius: 5
+    energy: 1.8
+    color: "#ff3a3a"
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 0

@@ -1,0 +1,152 @@
+- type: entity
+  parent: MobBear
+  id: SurveyMobBear
+  name: лесной медведь
+  description: Хозяин этого леса. Ревёт, и стая отвечает.
+  components:
+  - type: SurveyMember
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      130: Critical
+      170: Dead
+  - type: HTN
+    rootTask:
+      task: SurveyBeastCompound
+    blackboard:
+      VisionRadius: !type:Single
+        8
+      AggroVisionRadius: !type:Single
+        10
+      IdleRange: !type:Single
+        5
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyHomeRange: !type:Single
+        10
+      SurveyCallRange: !type:Single
+        3
+      SurveyWaitMin: !type:Single
+        2
+      SurveyWaitMax: !type:Single
+        5
+
+- type: entity
+  parent: MobBearPolar
+  id: SurveyMobBearPolar
+  name: белый медведь
+  description: Холод ему дом.
+  components:
+  - type: SurveyMember
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      150: Critical
+      190: Dead
+  - type: HTN
+    rootTask:
+      task: SurveyBeastCompound
+    blackboard:
+      VisionRadius: !type:Single
+        8
+      AggroVisionRadius: !type:Single
+        10
+      IdleRange: !type:Single
+        5
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyHomeRange: !type:Single
+        10
+      SurveyCallRange: !type:Single
+        3
+      SurveyWaitMin: !type:Single
+        2
+      SurveyWaitMax: !type:Single
+        5
+
+- type: entity
+  parent: MobCrocodile
+  id: SurveyMobCrocodile
+  name: болотный крокодил
+  description: Кислый дождь ему не мешает.
+  components:
+  - type: SurveyMember
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SurveyBeastCompound
+    blackboard:
+      VisionRadius: !type:Single
+        8
+      AggroVisionRadius: !type:Single
+        10
+      IdleRange: !type:Single
+        5
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyHomeRange: !type:Single
+        10
+      SurveyCallRange: !type:Single
+        3
+      SurveyWaitMin: !type:Single
+        2
+      SurveyWaitMax: !type:Single
+        5
+
+- type: entity
+  parent: MobGoat
+  id: SurveyMobGoat
+  name: дикий козёл
+  description: Пасётся и убегает.
+  components:
+  - type: SurveyMember
+    prey: true
+  - type: HTN
+    rootTask:
+      task: SurveyBeastCompound
+    blackboard:
+      VisionRadius: !type:Single
+        8
+      IdleRange: !type:Single
+        5
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyHomeRange: !type:Single
+        10
+      SurveyWaitMin: !type:Single
+        2
+      SurveyWaitMax: !type:Single
+        5
+
+- type: entity
+  parent: MobPig
+  id: SurveyMobBoar
+  name: дикий кабан
+  description: Пасётся и убегает.
+  components:
+  - type: SurveyMember
+    prey: true
+  - type: HTN
+    rootTask:
+      task: SurveyBeastCompound
+    blackboard:
+      VisionRadius: !type:Single
+        8
+      IdleRange: !type:Single
+        5
+      SurveyPostRange: !type:Single
+        1.5
+      SurveyHomeRange: !type:Single
+        10
+      SurveyWaitMin: !type:Single
+        2
+      SurveyWaitMax: !type:Single
+        5
