@@ -1,5 +1,6 @@
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.DeadSpace.Prison.Components;
+using Content.Server.Salvage.Expeditions;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Shared.Shuttles.BUIStates;
@@ -195,7 +196,15 @@ public sealed partial class ShuttleConsoleSystem
 
         // DS14-start: expedition beacons sit in the middle of a procedural asteroid, so arriving exactly on
         // one buries the shuttle inside the generated dungeon. Drop into a clear spot around it instead.
-        if (_shuttle.TryGetExpeditionLandingSpot(shuttleUid.Value, targetCoordinates, targetAngle, out var landingCoordinates))
+        var targetMapUid = _xformQuery.TryGetComponent(targetCoordinates.EntityId, out var targetXform)
+            ? targetXform.MapUid
+            : null;
+        var expeditionMap = targetMapUid != null && HasComp<SalvageExpeditionComponent>(targetMapUid.Value);
+        EntityCoordinates landingCoordinates = default;
+        var expeditionLanding = expeditionMap &&
+            _shuttle.TryGetExpeditionLandingSpot(shuttleUid.Value, targetCoordinates, targetAngle, out landingCoordinates);
+
+        if (expeditionLanding)
         {
             targetCoordinates = landingCoordinates;
         }
@@ -211,7 +220,14 @@ public sealed partial class ShuttleConsoleSystem
         RaiseLocalEvent(ref ev);
 
         NoteShuttleControl(actor, ent.Owner); //DS-14
-        _shuttle.FTLToCoordinates(shuttleUid.Value, shuttleComp, adjustedCoordinates, targetAngle);
+        // DS14-start
+        _shuttle.FTLToCoordinates(
+            shuttleUid.Value,
+            shuttleComp,
+            adjustedCoordinates,
+            targetAngle,
+            useProximity: expeditionMap && !expeditionLanding);
+        // DS14-end
     }
 
     private void ConsoleBeaconFallbackFTL(

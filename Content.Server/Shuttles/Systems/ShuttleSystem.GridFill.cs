@@ -69,14 +69,48 @@ public sealed partial class ShuttleSystem
 
         if (_loader.TryLoadGrid(mapId, component.Path, out var ent))
         {
-            if (HasComp<ShuttleComponent>(ent))
-                TryFTLProximity(ent.Value, targetGrid.Value);
-
-            _station.AddGridToStation(uid, ent.Value);
+            // DS14-start
+            if (!HasComp<ShuttleComponent>(ent) ||
+                TryFTLProximity(ent.Value, targetGrid.Value) ||
+                FTLEmptySpaceFallback(ent.Value, targetGrid.Value))
+            {
+                _station.AddGridToStation(uid, ent.Value);
+            }
+            else
+            {
+                Log.Error($"Failed to place cargo shuttle {component.Path} for {ToPrettyString(targetGrid.Value)}; deleting it");
+                QueueDel(ent.Value);
+            }
+            // DS14-end
         }
 
         _mapSystem.DeleteMap(mapId);
     }
+
+    // DS14-start
+    private bool FTLEmptySpaceFallback(EntityUid shuttle, EntityUid targetGrid)
+    {
+        if (!TryComp(targetGrid, out TransformComponent? targetXform) ||
+            targetXform.MapUid == null ||
+            !targetXform.MapUid.Value.IsValid())
+        {
+            return false;
+        }
+
+        Log.Warning($"Failed to place {ToPrettyString(shuttle)} near {ToPrettyString(targetGrid)}; dumping it far out in empty space");
+
+        var farCoords = new EntityCoordinates(
+            targetXform.MapUid.Value,
+            _transform.GetWorldPosition(targetXform) +
+            _random.NextAngle().RotateVec(new Vector2(_random.NextFloat(2000f, 4000f), 0f)));
+
+        if (TryFTLProximity((shuttle, _xformQuery.GetComponent(shuttle)), farCoords))
+            return true;
+
+        _transform.SetCoordinates(shuttle, farCoords);
+        return true;
+    }
+    // DS14-end
 
     private bool TryDungeonSpawn(Entity<MapGridComponent?> targetGrid, DungeonSpawnGroup group, out EntityUid spawned)
     {
@@ -138,8 +172,16 @@ public sealed partial class ShuttleSystem
 
         if (_loader.TryLoadGrid(mapId, path, out var grid))
         {
-            if (HasComp<ShuttleComponent>(grid))
-                TryFTLProximity(grid.Value, targetGrid);
+            // DS14-start
+            if (HasComp<ShuttleComponent>(grid) &&
+                !TryFTLProximity(grid.Value, targetGrid) &&
+                !FTLEmptySpaceFallback(grid.Value, targetGrid))
+            {
+                Log.Error($"Failed to place gridspawn {path} for {ToPrettyString(targetGrid)}; deleting it");
+                QueueDel(grid.Value);
+                return false;
+            }
+            // DS14-end
 
             if (group.NameGrid)
             {
