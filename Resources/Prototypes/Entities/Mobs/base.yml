@@ -1,7 +1,7 @@
 # The literal bare minimum needed to be a controllable mob. Cannot move but can interact.
 - type: entity
   abstract: true
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   id: BaseControllable
   components:
   - type: Sprite
@@ -43,7 +43,7 @@
 # Only put things on here if every mob *must* have it. This includes ghosts.
 - type: entity
   abstract: true
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   parent: BaseControllable
   id: BaseMob
   components:
@@ -58,7 +58,7 @@
   - type: TTS # Corvax-TTS
 
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   id: MobPolymorphable
   abstract: true
   components:
@@ -66,7 +66,7 @@
 
 # Used for mobs that have health and can take damage.
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   id: MobDamageable
   abstract: true
   components:
@@ -153,7 +153,7 @@
 
 # Used for mobs that can enter combat mode and can attack.
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   id: MobCombat
   abstract: true
   components:
@@ -168,7 +168,7 @@
 
 # Used for mobs that are affected by atmospherics, pressure, and heat
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   id: MobAtmosExposed
   abstract: true
   components:
@@ -228,7 +228,7 @@
 
 # Used for mobs that can be set on fire
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   id: MobFlammable
   abstract: true
   components:
@@ -244,7 +244,7 @@
 
 # Used for mobs that need to breathe
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   id: MobRespirator
   abstract: true
   components:
@@ -259,7 +259,7 @@
 
 # Used for mobs that have a bloodstream
 - type: entity
-  save: false
+  save: true  # DeadSpace: существа должны переживать перезагрузку карты
   id: MobBloodstream
   abstract: true
   components:

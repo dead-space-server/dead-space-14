@@ -49,7 +49,7 @@ public sealed partial class StationGoalPaperSystem : EntitySystem
         var wasSent = false;
         var wasModifiedOnce = false;
 
-        var text = _resourceManager.ContentFileReadText(goal.Text).ReadToEnd();
+        var template = _resourceManager.ContentFileReadText(goal.Text).ReadToEnd();
         var stamps = new List<StampDisplayInfo>();
 
         if (goal.ExtraStamps != null)
@@ -66,6 +66,8 @@ public sealed partial class StationGoalPaperSystem : EntitySystem
         {
             if (!fax.ReceiveStationGoal)
                 continue;
+
+            var text = template;
 
             if (_station.GetOwningStation(uid) is { } station)
             {

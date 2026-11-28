@@ -99,19 +99,28 @@ public sealed partial class SuperMatterialNecroObeliskComponent : Component
 
     #endregion
     #region Super
-    [ViewVariables]
+    // DS14-start: стадия активации — [DataField], иначе режим машины не доезжает ни до какого сохранения.
+    // Пока эти поля были только [ViewVariables], в файл не попадало ничего из прогресса, а вот поднятая
+    // PowerSupplier.MaxSupply (обычный [DataField]) приезжала: после загрузки обелиск выглядел
+    // выключенным и при этом кормил сеть 65/245/385 кВт. Ключи внешнего вида в файл не пишутся вообще,
+    // поэтому стадия — единственный источник и для нагрузки, и для спрайта (см. UpdateState).
+    [DataField, ViewVariables]
     public bool SequenceStarted = false;
 
     /// <summary>The Circle's geist lifted the cap: it reaches 100% with no unitologists' mode running.</summary>
-    [ViewVariables]
+    [DataField, ViewVariables]
     public bool ForceCompletion;
-    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int Percents = 0;
+    // DS14-end
     [ViewVariables]
     public TimeSpan NextCheckPercents = TimeSpan.Zero;
     [DataField]
     public TimeSpan CheckTime = TimeSpan.FromSeconds(20);
+    // DS14-start: стадия активации того же ряда, что Percents (см. переходы в SuperNecroobeliskSystem.Update).
+    [DataField]
     public SuperMatterialNecroObeliskState StateEnum = SuperMatterialNecroObeliskState.Stop;
+    // DS14-end
     public TimeSpan NextCheckNecroSpawn = TimeSpan.Zero;
     [DataField]
     public string NecroPrototype = "MobSmallNecro";

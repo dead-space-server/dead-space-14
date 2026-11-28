@@ -1,0 +1,50 @@
+- type: entity
+  id: SaveGamemodeDeathmatch
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SaveGamemodeRule
+    saveSlot: Deathmatch
+    loadOnStart: false
+    saveOnRoundEnd: true
+    deleteSaveOnRoundEnd: false
+    nextPreset: SaveGamemodeExtended
+  - type: GameRule
+    minPlayers: 0
+    cancelPresetOnTooFewPlayers: false
+
+# Наследование раундов: своя папка сохранения у каждой карты (perMapSlot).
+# Папки нет — раунд идёт на обычной карте и в конце сохраняется в новую папку с именем карты.
+# Папка есть — раунд поднимается из неё. Смена карты раунд не ломает: каждая карта живёт у себя.
+- type: entity
+  id: SaveGamemodePerMap
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SaveGamemodeRule
+    saveSlot: PerMap
+    perMapSlot: true
+    loadOnStart: true
+    saveOnRoundEnd: true
+    deleteSaveOnRoundEnd: false
+    suppressRoundstartGrids: true
+    nextPreset: null
+  - type: GameRule
+    minPlayers: 0
+    cancelPresetOnTooFewPlayers: false
+
+- type: entity
+  id: SaveGamemodeExtended
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SaveGamemodeRule
+    saveSlot: Deathmatch
+    loadOnStart: true
+    saveOnRoundEnd: false
+    deleteSaveOnRoundEnd: true
+    suppressRoundstartGrids: true
+    nextPreset: null
+  - type: GameRule
+    minPlayers: 0
+    cancelPresetOnTooFewPlayers: false

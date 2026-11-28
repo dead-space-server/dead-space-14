@@ -157,6 +157,10 @@
 - type: Tag
   id: DonkCo
 
+# Сущность с этим тегом не попадает в сохранение режима SaveGamemode (Content.Server/DeadSpace/SaveGamemode).
+- type: Tag
+  id: DoNotSave
+
 - type: Tag
   id: Durf
 

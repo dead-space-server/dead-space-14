@@ -25,6 +25,7 @@ using Robust.Shared.Audio.Systems;
 using Content.Server.Power.Components;
 using Content.Server.Anomaly;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes; // DS14: заводская нагрузка обелиска читается из прототипа
 using Robust.Shared.Random;
 using System.Numerics;
 using Content.Server.GameTicking;
@@ -57,6 +58,9 @@ public sealed partial class SuperNecroobeliskSystem : SharedSuperNecroobeliskSys
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private AnomalySystem _anomaly = default!;
+    // DS14-start: заводская нагрузка обелиска для карты из сохранения (см. RefreshLoadedObelisk).
+    [Dependency] private IPrototypeManager _prototype = default!;
+    // DS14-end
 
 
     public override void Initialize()
@@ -483,4 +487,117 @@ public sealed partial class SuperNecroobeliskSystem : SharedSuperNecroobeliskSys
         component.IsActive = isActive;
         UpdateState(target, component);
     }
+
+    // DS14-start: обелиск на карте, поднятой из сохранения (SaveGamemode). Причина — стадия активации
+    // не сериализовалась, а поднятая ею нагрузка PowerSupplier сериализуется: машина выглядела
+    // выключенной и при этом кормила сеть. См. SuperMatterialNecroObeliskComponent.
+    /// <summary>
+    ///     Нагрузка, которую обелиск держит на стадии активации — те же числа, что ставит <see cref="Update"/>.
+    /// </summary>
+    /// <returns>null — стадии нет, нагрузка должна быть заводской.</returns>
+    public static float? StageMaxSupply(SuperMatterialNecroObeliskState stage) => stage switch
+    {
+        SuperMatterialNecroObeliskState.Zero => 65000f,
+        SuperMatterialNecroObeliskState.TwentyFive => 245000f,
+        >= SuperMatterialNecroObeliskState.Fifty => 385000f,
+        _ => null,
+    };
+
+    /// <summary>
+    ///     Заводская нагрузка обелиска (<c>supplyRate</c> прототипа) — что лежит в
+    ///     <c>PowerSupplier.MaxSupply</c> у свежего объекта.
+    /// </summary>
+    /// <remarks>
+    ///     Из живого компонента брать нельзя: у обелиска из сохранения там уже поднятая стадией нагрузка,
+    ///     и именно она приехала из файла.
+    /// </remarks>
+    public float? GetPrototypeMaxSupply(EntityUid uid)
+    {
+        var proto = MetaData(uid).EntityPrototype;
+        if (proto == null || !_prototype.TryIndex(proto.ID, out var indexed))
+            return null;
+
+        return indexed.Components.TryGetValue("PowerSupplier", out var entry) && entry.Component is PowerSupplierComponent supplier
+            ? supplier.MaxSupply
+            : null;
+    }
+
+    /// <summary>
+    ///     Возвращает обелиску, поднятому из сохранения, нагрузку и вид, соответствующие его стадии.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///     Новый файл: стадия приехала в <c>StateEnum</c> (DS14-правка компонента), нагрузка берётся из неё.
+    ///     </para>
+    ///     <para>
+    ///     Старый файл: стадии в нём нет, и единственный уцелевший свидетель активации — <c>IsActive</c>,
+    ///     которую из сериализуемых полей ставит только порог в 25 %. При поднятой нагрузке выводится
+    ///     стадия 25 %: иначе такой сейв продолжал бы кормить сеть из «выключенной» машины. Обелиск без
+    ///     активности, но с поднятой нагрузкой (стадия «ноль», её админ выключил вручную) наоборот,
+    ///     возвращается к заводским 10 кВт — неактивный обелиск энергию не вырабатывает.
+    ///     </para>
+    ///     <para>
+    ///     Ничего не спавним: kudzu, аномалии и некроморфы — дело рук <see cref="Update"/>, который
+    ///     дойдёт до них сам по стадии. Таймеры не трогаем: они не сериализуются, и первая проверка
+    ///     отсчитается от текущего времени. Вид раздаётся всегда — appearance-ключей в файле нет ни у
+    ///     кого, а без ключа клиент оставляет слой таким, как он написан в прототипе, то есть «unactive».
+    ///     </para>
+    /// </remarks>
+    /// <returns>Приведена ли нагрузка к стадии; выведена ли стадия из старых данных.</returns>
+    public (bool PowerFixed, bool StageInferred) RefreshLoadedObelisk(EntityUid uid, SuperMatterialNecroObeliskComponent component)
+    {
+        var stage = component.StateEnum;
+        var inferred = false;
+
+        // Старый файл: стадии нет, но поднятая нагрузка осталась — тот самый баг.
+        if (stage == SuperMatterialNecroObeliskState.Stop
+            && component.IsActive
+            && GetPrototypeMaxSupply(uid) is { } prototypeSupply
+            && TryComp<PowerSupplierComponent>(uid, out var boosted)
+            && boosted.MaxSupply > prototypeSupply)
+        {
+            stage = SuperMatterialNecroObeliskState.TwentyFive;
+            component.StateEnum = stage;
+            if (component.Percents < 25)
+                component.Percents = 25;
+            inferred = true;
+        }
+
+        var powerFixed = false;
+
+        if (StageMaxSupply(stage) is { } stageSupply)
+        {
+            // Питать сеть может только машина в активной стадии; supplier на такой обелиске есть
+            // всегда — его вешает сам Update через EnsureComp.
+            var supplier = EnsureComp<PowerSupplierComponent>(uid);
+            if (!MaxSupplyMatches(supplier.MaxSupply, stageSupply))
+            {
+                supplier.MaxSupply = stageSupply;
+                powerFixed = true;
+            }
+        }
+        else
+        {
+            // Стадии нет: нагрузку, приехавшую из файла, возвращаем к заводской.
+            if (GetPrototypeMaxSupply(uid) is { } factorySupply && TryComp<PowerSupplierComponent>(uid, out var idle)
+                && !MaxSupplyMatches(idle.MaxSupply, factorySupply))
+            {
+                idle.MaxSupply = factorySupply;
+                powerFixed = true;
+            }
+        }
+
+        UpdateState(uid, component);
+        return (powerFixed, inferred);
+    }
+
+    /// <summary>
+    ///     Совпадает ли нагрузка с ожидаемой. Сравнение с допуском: значения константы из таблицы стадий,
+    ///     но в файле они могли пережить round-trip через YAML и правку руками.
+    /// </summary>
+    private static bool MaxSupplyMatches(float actual, float expected)
+    {
+        return MathF.Abs(actual - expected) < 0.01f;
+    }
+    // DS14-end
 }
