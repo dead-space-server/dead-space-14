@@ -16,6 +16,7 @@ public sealed partial class SignaturePaperSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private PaperSystem _paper = default!;
 
     public override void Initialize()
     {
@@ -67,6 +68,8 @@ public sealed partial class SignaturePaperSystem : EntitySystem
         entity.Comp.Signatures.Add(name);
         component.NumberSignatures += 1;
         Dirty(entity);
+
+        _paper.UpdateUserInterface(entity);
 
         if (toolComponent.Sound != null)
             _audio.PlayPvs(toolComponent.Sound, entity);

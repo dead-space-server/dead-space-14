@@ -51,6 +51,10 @@ namespace Content.Client.Paper.UI
 
         public event Action<string>? OnSaved;
 
+        // DS14-start
+        public event Action<int, PaperComponent.PaperCheckState>? OnCheckToggled;
+        // DS14-end
+
         private int _MaxInputLength = -1;
 
         public int MaxInputLength
@@ -160,6 +164,7 @@ namespace Content.Client.Paper.UI
             ConfusionButton.OnPressed += _ => ToggleInlineFormat("[conf=2]", "[/conf]");
             CyrillicConfusionButton.OnPressed += _ => ToggleInlineFormat("[сonf=2]", "[/сonf]");
             BulletButton.OnPressed += _ => ToggleBlockFormat("[bullet]", "[/bullet]");
+            CheckTagButton.OnPressed += _ => Input.InsertAtCursor("[check]"); // DS14
             ColorButton.OnPressed += _ => ToggleColorPicker();
             InsertButton.OnPressed += _ => ToggleInsertDataPanel(); // DS14
 
@@ -433,7 +438,12 @@ namespace Content.Client.Paper.UI
                 msg.AddMarkupPermissive("\r\n");
 
             // DS14-start
-            WrittenTextLabel.SetMessage(msg, UserFormattableTags.BaseAllowedTags, DefaultTextColor);
+            var checksInteractive = !isEditing &&
+                state.StampedBy.Count == 0 && state.Signatures.Count == 0 && !state.EditingDisabled;
+            var renderMessage = checksInteractive
+                ? CheckTagHandler.WithInteractiveChecks(msg)
+                : msg;
+            WrittenTextLabel.SetMessage(renderMessage, UserFormattableTags.BaseAllowedTags, DefaultTextColor);
             WrittenTextLabel.Visible = !isEditing && (state.Text.Length > 0 || hasSignatures); // DS14-signatures
             BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0 && !hasSignatures;
             // DS14-end
@@ -446,6 +456,13 @@ namespace Content.Client.Paper.UI
 
             StampDisplay.Visible = !isEditing && state.StampedBy.Count > 0; // DS14
         }
+
+        // DS14-start
+        public void SetCheckState(int checkIndex, PaperComponent.PaperCheckState state)
+        {
+            OnCheckToggled?.Invoke(checkIndex, state);
+        }
+        // DS14-end
 
         /// <summary>
         /// BaseWindow interface. Allow users to drag UI around by grabbing

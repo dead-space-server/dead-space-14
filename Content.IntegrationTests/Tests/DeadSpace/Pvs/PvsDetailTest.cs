@@ -2,6 +2,7 @@
 
 using System.Linq;
 using System.Numerics;
+using Content.IntegrationTests.Pair;
 using Content.Server.GameTicking;
 using Content.Shared.Body.Systems;
 using Content.Shared.PDA;
@@ -141,7 +142,8 @@ public sealed class PvsDetailTest
         var lanternLook = Look(cEntMan, netLantern, HandheldLightVisuals.Power);
 
         await server.WaitPost(() => xforms.SetCoordinates(mob, far));
-        await pair.RunTicksSync(90);
+        await pair.RunTicksSync(1);
+        await WaitUntilHidden(pair, cEntMan, netItem, netTool, netPart, netMagazine, netCell);
         Assert.That(Seen(cEntMan, netLocker), Is.True, "The storage itself left PVS.");
         Assert.That(Seen(cEntMan, netPawn), Is.True, "The other player left PVS.");
         Assert.That(Seen(cEntMan, netGun), Is.True, "The pistol left PVS.");
@@ -166,7 +168,8 @@ public sealed class PvsDetailTest
             xforms.SetCoordinates(mob, far);
         });
 
-        await pair.RunTicksSync(90);
+        await pair.RunTicksSync(1);
+        await WaitUntilVisible(pair, cEntMan, netItem);
         Assert.That(Seen(cEntMan, netItem), Is.True, "Items from an opened storage are hidden from far away.");
 
         await pair.CleanReturnAsync();
@@ -259,6 +262,18 @@ public sealed class PvsDetailTest
         return entMan.System<SharedAppearanceSystem>().TryGetData<ShowLayerData>(uid, StorageMapVisuals.LayerChanged, out var data)
             ? string.Join(",", data.QueuedEntities)
             : string.Empty;
+    }
+
+    private static async Task WaitUntilHidden(TestPair pair, IEntityManager cEntMan, params NetEntity[] entities)
+    {
+        for (var i = 0; i < 300 && entities.Any(net => Seen(cEntMan, net)); i++)
+            await pair.RunTicksSync(1);
+    }
+
+    private static async Task WaitUntilVisible(TestPair pair, IEntityManager cEntMan, params NetEntity[] entities)
+    {
+        for (var i = 0; i < 300 && entities.Any(net => !Seen(cEntMan, net)); i++)
+            await pair.RunTicksSync(1);
     }
 
     private static bool Seen(IEntityManager entMan, NetEntity net)

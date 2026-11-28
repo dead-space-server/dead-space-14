@@ -24,6 +24,7 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
         _window = this.CreateWindow<PaperWindow>();
         _window.OnSaved += InputOnTextEntered;
         _window.OnInsertDataRequested += () => SendMessage(new PaperInsertDataRequestMessage()); // DS14
+        _window.OnCheckToggled += (index, state) => SendMessage(new PaperCheckMessage(index, state)); // DS14
 
         if (EntMan.TryGetComponent<PaperComponent>(Owner, out var paper))
         {
