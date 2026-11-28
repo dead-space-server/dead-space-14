@@ -11,6 +11,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Popups;
+using Content.Shared.Rotatable;
 using Content.Shared.Rotation;
 using Content.Shared.SSDIndicator;
 using Content.Shared.Strip.Components;
@@ -134,6 +135,7 @@ public sealed partial class RuneCasterSystem
 
             var dance = EnsureComp<RuneDanceComponent>(target);
             dance.End = now + TimeSpan.FromSeconds(effect.Duration * ctx.DurationScale);
+            _chat.TrySendInGameICMessage(target, Loc.GetString("rune-dead-line-1"), InGameICChatType.Speak, false, ignoreActionBlocker: true);
             dance.Speed = effect.Speed;
             dance.Target = _random.Prob(effect.FollowChance) ? PickWitness(target, effect.FollowRange) : null;
             dance.NextTurn = now;
@@ -212,7 +214,6 @@ public sealed partial class RuneCasterSystem
     {
         var emote = Loc.GetString("rune-dance-point", ("target", Identity.Entity(pointed, EntityManager)));
         _chat.TrySendInGameICMessage(pointer, emote, InGameICChatType.Emote, false, ignoreActionBlocker: true);
-        _popup.PopupEntity(Loc.GetString("rune-dance-point-target"), pointed, pointed, PopupType.MediumCaution);
     }
 
     private void OnEntitySpoke(EntitySpokeEvent args)
@@ -248,11 +249,12 @@ public sealed partial class RuneCasterSystem
     {
         foreach (var target in Targets(ctx, effect))
         {
-            if (target == ctx.Caster)
+            if (target == ctx.Caster && !effect.IncludeCaster)
                 continue;
 
             var flash = EnsureComp<RuneScreenFlashComponent>(target);
             flash.Sprite = effect.Sprite;
+            flash.Color = effect.Color;
             flash.Start = Timing.CurTime;
             flash.End = Timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(effect.MinTime, effect.MaxTime));
             Dirty(target, flash);
@@ -262,6 +264,8 @@ public sealed partial class RuneCasterSystem
     private void Petrify(EntityUid target, Color color, LocId? description)
     {
         var petrified = EnsureComp<RunePetrifiedComponent>(target);
+        EnsureComp<RotatableComponent>(target);
+        Transform(target).NoLocalRotation = false;
         petrified.Description = description;
         Dirty(target, petrified);
         RemComp<SSDIndicatorComponent>(target);

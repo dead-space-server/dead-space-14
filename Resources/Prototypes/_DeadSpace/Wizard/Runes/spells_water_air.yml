@@ -81,6 +81,7 @@
   - !type:RuneComponentsEffect
     template: RuneSlipperyTemplate
     duration: 20
+    alert: RuneAlertSlippery
   - !type:RuneSoakEffect
     time: 8
 

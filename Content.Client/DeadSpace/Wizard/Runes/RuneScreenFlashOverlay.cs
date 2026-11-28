@@ -34,15 +34,13 @@ public sealed class RuneScreenFlashOverlay : Overlay
     {
         return _player.LocalEntity is { } local &&
                _entity.TryGetComponent(local, out RuneScreenFlashComponent? flash) &&
-               flash.Sprite != null &&
                _timing.CurTime < flash.End;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
     {
         if (_player.LocalEntity is not { } local ||
-            !_entity.TryGetComponent(local, out RuneScreenFlashComponent? flash) ||
-            flash.Sprite is not { } sprite)
+            !_entity.TryGetComponent(local, out RuneScreenFlashComponent? flash))
             return;
 
         var now = _timing.CurTime;
@@ -51,6 +49,12 @@ public sealed class RuneScreenFlashOverlay : Overlay
         var alpha = Math.Clamp(MathF.Min(shown / FadeIn, left / FadeOut), 0f, 1f);
         if (alpha <= 0f)
             return;
+
+        if (flash.Sprite is not { } sprite)
+        {
+            args.ScreenHandle.DrawRect(args.ViewportBounds, flash.Color.WithAlpha(alpha * 0.85f));
+            return;
+        }
 
         var texture = _sprite.Frame0(sprite);
         UIBox2 bounds = args.ViewportBounds;

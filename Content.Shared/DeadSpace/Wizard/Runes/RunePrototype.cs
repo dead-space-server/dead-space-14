@@ -116,6 +116,18 @@ public sealed partial class RunePrototype : IPrototype
     public bool Fusable = true;
 
     [DataField]
+    public List<ProtoId<RunePrototype>> FusionForbids = new();
+
+    [DataField]
+    public float FusionDamageScale = 1f;
+
+    [DataField]
+    public EntProtoId? FusionProjectile;
+
+    [DataField]
+    public float FusionProjectileSpeed = 18f;
+
+    [DataField]
     public SpriteSpecifier? Icon;
 
     [DataField]

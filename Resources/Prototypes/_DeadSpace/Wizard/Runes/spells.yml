@@ -549,7 +549,7 @@
   element: RuneElementVoid
   targeting: Entity
   range: 2
-  strain: 60
+  strain: 80
   cooldown: 180
   loudness: 4
   requiresClothes: true

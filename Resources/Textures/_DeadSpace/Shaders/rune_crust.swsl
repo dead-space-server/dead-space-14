@@ -1,0 +1,15 @@
+uniform highp vec3 tint;
+uniform highp float strength;
+
+void fragment() {
+    highp vec4 color = zTexture(UV);
+    highp vec2 px = TEXTURE_PIXEL_SIZE;
+    highp float neighbors =
+        zTexture(UV + vec2(px.x, 0.0)).a +
+        zTexture(UV + vec2(-px.x, 0.0)).a +
+        zTexture(UV + vec2(0.0, px.y)).a +
+        zTexture(UV + vec2(0.0, -px.y)).a;
+    highp float edge = clamp((neighbors * 0.25) - color.a, 0.0, 1.0);
+    highp float sheen = edge * strength;
+    COLOR = vec4(mix(color.rgb, tint, sheen), max(color.a, sheen * 0.85));
+}

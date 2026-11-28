@@ -27,6 +27,9 @@ public sealed partial class RuneScrollHatComponent : Component
     [DataField]
     public float Interval = 60f;
 
+    [DataField]
+    public int MaxCarried = 4;
+
     public EntityUid? Wearer;
 
     public TimeSpan Next;

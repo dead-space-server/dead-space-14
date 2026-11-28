@@ -410,7 +410,7 @@ public sealed partial class RuneCasterSystem
 
     private float StaminaAmount(RuneCastContext ctx, EntityUid target, RuneStaminaEffect effect)
     {
-        var amount = effect.Amount * ctx.Power;
+        var amount = effect.Amount * ctx.Power * SoakedScale(target, effect.SoakedScale);
         if (effect.ResistAs is not { } type || !Proto.TryIndex(type, out var damageType))
             return amount * Touch(ctx, target);
 
@@ -423,5 +423,10 @@ public sealed partial class RuneCasterSystem
         var ev = new DamageModifyEvent(damage, ctx.Caster);
         RaiseLocalEvent(target, ev);
         return MathF.Max(0f, ev.Damage.GetTotal().Float());
+    }
+
+    private float SoakedScale(EntityUid target, float scale)
+    {
+        return scale > 1f && HasComp<RuneSoakedComponent>(target) ? scale : 1f;
     }
 }

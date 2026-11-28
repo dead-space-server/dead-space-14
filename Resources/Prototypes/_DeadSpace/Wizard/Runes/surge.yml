@@ -85,6 +85,15 @@
       prototype: RuneFireTile
       pattern: RingAroundCaster
       size: 1
+    - !type:RuneIgniteEffect
+      target: Caster
+      fireStacks: 2
+    - !type:RuneDamageEffect
+      target: Caster
+      ignoreResistances: true
+      damage:
+        types:
+          Heat: 25
   - weight: 1
     popup: rune-surge-boom
     effects:
@@ -102,6 +111,9 @@
     - !type:RuneParalyzeEffect
       target: Caster
       time: 3
+    - !type:RuneTemperatureEffect
+      target: Caster
+      delta: -50
     - !type:RuneDamageEffect
       target: Caster
       damage:
@@ -114,6 +126,9 @@
       target: Caster
       time: 8
       multiplier: 0.3
+    - !type:RuneTemperatureEffect
+      target: Caster
+      delta: -50
 
 - type: wizardRuneSurge
   id: RuneSurgeEarth
@@ -121,9 +136,14 @@
   - weight: 3
     popup: rune-surge-earth-fall
     effects:
-    - !type:RuneKnockdownEffect
+    - !type:RuneComponentsEffect
       target: Caster
-      time: 4
+      template: RuneSlipperyTemplate
+      duration: 8
+      alert: RuneAlertSlippery
+    - !type:RuneParalyzeEffect
+      target: Caster
+      time: 3
     - !type:RuneDamageEffect
       target: Caster
       damage:
@@ -166,8 +186,8 @@
     effects:
     - !type:RuneSpawnEffect
       prototype: RuneHedge
-      pattern: RingAroundCaster
-      size: 1
+      pattern: AreaAtPoint
+      size: 3
       lifetime: 10
     - !type:RuneSpawnEffect
       prototype: RuneHedge
@@ -189,15 +209,15 @@
     effects:
     - !type:RuneTeleportEffect
       mode: ScatterCaster
-      radius: 8
+      radius: 7
   - weight: 2
     popup: rune-surge-void-air
     effects:
-    - !type:RuneDamageEffect
+    - !type:RuneTossEffect
       target: Caster
-      damage:
-        types:
-          Asphyxiation: 20
+      duration: 3
+      interval: 0.5
+      speed: 8
 
 - type: wizardRuneSurge
   id: RuneSurgeChaos
@@ -232,22 +252,18 @@
     effects:
     - !type:RuneComponentsEffect
       target: Caster
-      fromAction: ActionSlippery
+      template: RuneSlipperyTemplate
       duration: 20
+      alert: RuneAlertSlippery
     - !type:RuneKnockdownEffect
       target: Caster
       time: 1.5
   - weight: 2
     popup: rune-surge-water-lungs
     effects:
-    - !type:RuneDamageEffect
+    - !type:RuneThirstEffect
       target: Caster
-      damage:
-        types:
-          Asphyxiation: 15
-    - !type:RuneStaminaEffect
-      target: Caster
-      amount: 40
+      amount: -80
 
 - type: wizardRuneSurge
   id: RuneSurgeAir
@@ -255,20 +271,26 @@
   - weight: 3
     popup: rune-surge-air-gust
     effects:
-    - !type:RuneTeleportEffect
-      mode: ScatterCaster
-      radius: 5
-    - !type:RuneKnockdownEffect
+    - !type:RuneStaminaEffect
       target: Caster
-      time: 2
+      amount: 25
+    - !type:RuneVacuumEffect
+      target: Caster
+      time: 10
+      airlossPerSecond: 0.5
   - weight: 2
     popup: rune-surge-air-lungs
     effects:
-    - !type:RuneDamageEffect
-      target: Caster
-      damage:
-        types:
-          Asphyxiation: 20
+    - !type:RuneSpawnEffect
+      prototype: RuneAirWall
+      pattern: RingAroundCaster
+      size: 1
+      lifetime: 8
+    - !type:RuneSpawnEffect
+      prototype: WizardSmoke
+      pattern: AreaAtPoint
+      size: 2
+      skipBlocked: false
 
 # Смертельные срывы
 

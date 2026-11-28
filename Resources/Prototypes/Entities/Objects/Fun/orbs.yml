@@ -123,20 +123,11 @@
   description: Ponderous, man... Really ponderous. Magically shows the station's camera network.
   suffix: Wizard
   components:
-  - type: ActivatableUI
-    requireActiveHand: false
-    inHandsOnly: true
-    key: enum.SurveillanceCameraMonitorUiKey.Key
-  - type: UserInterface
-    interfaces:
-      enum.SurveillanceCameraMonitorUiKey.Key:
-        type: SurveillanceCameraMonitorBoundUserInterface
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCamera
-    transmitFrequencyId: SurveillanceCamera
-  - type: WiredNetworkConnection
-  - type: SurveillanceCameraMonitor
+  # DS14-start
+  - type: RuneScryingOrb
+  - type: UseDelay
+    delay: 60
+  # DS14-end
 
 - type: entity
   parent: BaseItem

@@ -170,6 +170,14 @@
       types:
         Heat: 10
         Slash: 6
+  - !type:RuneIgniteEffect
+    target: Auto
+    radius: 2.5
+    fireStacks: 2
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 2.5
+    fraction: -0.15
 
 - type: wizardRuneFusion
   id: RuneFusionBloodIce
@@ -177,6 +185,9 @@
   first: RuneElementBlood
   second: RuneElementIce
   strain: 12
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneTemperatureEffect
@@ -189,6 +200,10 @@
     damage:
       types:
         Piercing: 12
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 2.5
+    fraction: -0.2
   - !type:RuneSlowEffect
     target: Auto
     radius: 2.5
@@ -201,6 +216,8 @@
   first: RuneElementBlood
   second: RuneElementEarth
   strain: 12
+  forbids:
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneDamageEffect
@@ -209,6 +226,10 @@
     damage:
       types:
         Blunt: 10
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 2.5
+    fraction: -0.2
   - !type:RuneKnockdownEffect
     target: Auto
     radius: 2.5
@@ -220,6 +241,10 @@
   first: RuneElementBlood
   second: RuneElementLightning
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneDamageEffect
@@ -231,7 +256,12 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 2.5
-    amount: 23
+    amount: 52
+    resistAs: Shock
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 2.5
+    fraction: -0.2
 
 - type: wizardRuneFusion
   id: RuneFusionTransfusion
@@ -239,6 +269,8 @@
   first: RuneElementBlood
   second: RuneElementLife
   strain: 12
+  forbids:
+  - RuneModifierDuration
   effects:
   - !type:RuneDamageEffect
     target: Auto
@@ -249,7 +281,12 @@
       types:
         Bloodloss: -40
       groups:
-        Brute: -20
+        Brute: -30
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 2.5
+    includeCaster: true
+    fraction: 0.3
 
 - type: wizardRuneFusion
   id: RuneFusionVampirism
@@ -257,6 +294,10 @@
   first: RuneElementBlood
   second: RuneElementVoid
   strain: 18
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 3
   effects:
   - !type:RuneDamageEffect
@@ -265,7 +306,11 @@
     ignoreResistances: true
     damage:
       types:
-        Slash: 14
+        Slash: 20
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 2
+    fraction: -0.2
   - !type:RuneDamageEffect
     target: Caster
     ignoreResistances: true
@@ -280,19 +325,19 @@
   first: RuneElementBlood
   second: RuneElementChaos
   strain: 8
+  forbids:
+  - RuneModifierPower
   loudness: 1
   absurdity: 2
   effects:
-  - !type:RuneSpawnRandomEffect
-    prototypes:
-    - PuddleBloodSmall
-    pattern: Auto
-    size: 2
-    count: 5
   - !type:RuneSpeakEffect
     target: Auto
     radius: 3
     lines: RuneChaosLines
+  - !type:RuneHostileEffect
+    target: Auto
+    radius: 3
+    duration: 3
   - !type:RuneStaminaEffect
     target: Auto
     radius: 3
@@ -304,6 +349,9 @@
   first: RuneElementBlood
   second: RuneElementWater
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RunePushEffect
@@ -316,6 +364,10 @@
     damage:
       types:
         Bloodloss: 10
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 3
+    fraction: -0.2
 
 - type: wizardRuneFusion
   id: RuneFusionBloodMist
@@ -323,6 +375,8 @@
   first: RuneElementBlood
   second: RuneElementAir
   strain: 12
+  forbids:
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneSpawnEffect
@@ -335,6 +389,10 @@
     damage:
       types:
         Slash: 4
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 3
+    fraction: -0.2
   - !type:RuneStaminaEffect
     target: Auto
     radius: 3
@@ -350,22 +408,31 @@
     effects:
     - !type:RuneDamageEffect
       target: Caster
+      ignoreResistances: true
       damage:
         types:
-          Bloodloss: 20
-          Slash: 10
+          Heat: 10
+    - !type:RuneBloodEffect
+      target: Caster
+      fraction: -0.3
   - weight: 2
     popup: rune-surge-blood-eyes
     effects:
-    - !type:RuneSpawnRandomEffect
-      prototypes:
-      - PuddleBloodSmall
-      pattern: AtCaster
-      count: 2
-    - !type:RuneSlowEffect
+    - !type:RuneScreenFlashEffect
       target: Caster
-      time: 6
-      multiplier: 0.5
+      includeCaster: true
+      minTime: 5
+      maxTime: 5
+      color: "#c41414"
+    - !type:RuneDamageEffect
+      target: Caster
+      ignoreResistances: true
+      damage:
+        types:
+          Slash: 5
+    - !type:RuneBloodEffect
+      target: Caster
+      fraction: -0.11
 
 - type: wizardRuneSurge
   id: RuneFatalBlood

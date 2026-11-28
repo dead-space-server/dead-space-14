@@ -87,6 +87,7 @@ public sealed class RuneSpell
     public List<RuneSpellEffect> Effects = new();
     public bool HoldCooldown;
     public int MaxActive;
+    public float DamageScale = 1f;
 
     public const string LifeElement = "RuneElementLife";
     public const string DeathElement = "RuneElementDeath";
@@ -127,6 +128,7 @@ public sealed class RuneSpell
             Effects = proto.Effects,
             HoldCooldown = proto.HoldCooldown ?? form?.HoldCooldown ?? false,
             MaxActive = form?.MaxActive ?? 0,
+            DamageScale = form == null || form.Ultimate ? 1f : form.FusionDamageScale,
         };
     }
 
@@ -155,8 +157,22 @@ public sealed class RuneSpell
         if (!form.Ultimate && !form.Fusable)
             return null;
 
+        var forbids = new HashSet<string>();
+        foreach (var id in form.FusionForbids)
+            forbids.Add(id);
+        foreach (var id in fusion.Forbids)
+            forbids.Add(id);
+        if (fusion.FormForbids.TryGetValue(form.ID, out var formForbids))
+        {
+            foreach (var id in formForbids)
+                forbids.Add(id);
+        }
+
         return new RuneSpell
         {
+            Forbids = forbids,
+            HoldCooldown = fusion.HoldCooldown,
+            DamageScale = form.Ultimate ? 1f : form.FusionDamageScale,
             ID = form.ID + "+" + fusion.ID,
             CooldownKey = form.Ultimate ? null : fusion.ID,
             Name = fusion.Name,
@@ -168,7 +184,28 @@ public sealed class RuneSpell
             Cooldown = FusedCooldown(form, fusion),
             Loudness = form.SpellLoudness + fusion.Loudness,
             Absurdity = fusion.Absurdity,
-            Effects = fusion.FormEffects.TryGetValue(form.ID, out var own) ? own : fusion.Effects,
+            Effects = FusedEffects(form, fusion),
+        };
+    }
+
+    private static List<RuneSpellEffect> FusedEffects(RunePrototype form, RuneFusionPrototype fusion)
+    {
+        if (fusion.FormEffects.TryGetValue(form.ID, out var own))
+            return own;
+
+        if (form.FusionProjectile is not { } projectile)
+            return fusion.Effects;
+
+        return new List<RuneSpellEffect>
+        {
+            new RuneProjectileEffect
+            {
+                Prototype = projectile,
+                Speed = form.FusionProjectileSpeed,
+                OnHit = fusion.Effects,
+                OnLand = true,
+                Tint = true,
+            },
         };
     }
 }
@@ -196,6 +233,15 @@ public sealed partial class RuneFusionPrototype : IPrototype
 
     [DataField]
     public Dictionary<ProtoId<RunePrototype>, float> FormCooldowns = new();
+
+    [DataField]
+    public List<ProtoId<RunePrototype>> Forbids = new();
+
+    [DataField]
+    public Dictionary<ProtoId<RunePrototype>, List<ProtoId<RunePrototype>>> FormForbids = new();
+
+    [DataField]
+    public bool HoldCooldown;
 
     [DataField]
     public int Loudness;

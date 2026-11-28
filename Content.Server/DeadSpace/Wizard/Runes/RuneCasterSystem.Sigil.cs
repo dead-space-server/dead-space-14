@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.DeadSpace.Wizard.Runes;
+using Content.Shared.Stunnable;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 
@@ -94,8 +95,13 @@ public sealed partial class RuneCasterSystem
         {
             if (sigil.State == RuneSigilState.Drawing)
             {
-                if (!HasComp<ActorComponent>(uid) || !HasComp<RuneCasterComponent>(uid) || !_blocker.CanInteract(uid, null))
+                var down = HasComp<KnockedDownComponent>(uid);
+                if (!TryComp<ActorComponent>(uid, out var actor) || !HasComp<RuneCasterComponent>(uid) || (!_blocker.CanInteract(uid, null) && !down))
+                {
                     EndSigil(uid, RuneSigilState.Fade);
+                    if (actor != null)
+                        RaiseNetworkEvent(new RuneChainResetEvent(), actor.PlayerSession);
+                }
             }
             else if ((Timing.CurTime - sigil.Changed).TotalSeconds > SigilLinger)
             {

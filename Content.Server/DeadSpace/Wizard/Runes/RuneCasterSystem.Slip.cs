@@ -57,19 +57,22 @@ public sealed partial class RuneCasterSystem
             return;
 
         var chain = new List<string>(sigil.Chain);
-        if (TryComp<ActorComponent>(caster, out var actor))
-            RaiseNetworkEvent(new RuneChainResetEvent(), actor.PlayerSession);
-
         if (!ValidChain(caster.Comp, chain) || !TryCompose(chain, out var composition) || composition.Spell == null)
         {
-            EndSigil(caster, RuneSigilState.Fizzle);
+            StumbleSigil(caster);
             _popup.PopupEntity(Loc.GetString("rune-slip-lost"), caster, caster, PopupType.SmallCaution);
             return;
         }
 
         _popup.PopupEntity(Loc.GetString("rune-slip-cast"), caster, caster, PopupType.MediumCaution);
         if (!TryCast(caster, composition, SlipTarget(caster, composition), false))
-            EndSigil(caster, RuneSigilState.Fizzle);
+        {
+            StumbleSigil(caster);
+            return;
+        }
+
+        if (TryComp<ActorComponent>(caster, out var actor))
+            RaiseNetworkEvent(new RuneChainResetEvent(), actor.PlayerSession);
     }
 
     private EntityCoordinates SlipTarget(EntityUid caster, RuneComposition composition)

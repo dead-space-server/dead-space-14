@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
@@ -34,6 +35,9 @@ public sealed class WizardWeaponRestrictionSystem : EntitySystem
             return;
 
         if (ent.Comp.Mind is not { } mindId || !_roles.MindHasRole<WizardRoleComponent>(mindId))
+            return;
+
+        if (TryComp<MindComponent>(mindId, out var mind) && GetEntity(mind.OriginalOwnedEntity) is { } original && original != ent.Owner)
             return;
 
         _popup.PopupClient(Loc.GetString("gun-disabled"), ent, ent);

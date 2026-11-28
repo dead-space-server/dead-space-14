@@ -13,6 +13,7 @@
   spellCooldown: 8
   autoTarget: AroundPoint
   autoPattern: AtPoint
+  fusionProjectile: RuneProjectileFusion
   forbids:
   - RuneModifierDuration
   color: "#ffd27a"
@@ -62,6 +63,9 @@
   spellLoudness: 2
   autoTarget: AroundCaster
   autoPattern: RingAroundCaster
+  fusionDamageScale: 0.5
+  fusionForbids:
+  - RuneModifierSwarm
   forbids:
   - RuneModifierSwarm
   - RuneModifierDuration
@@ -94,6 +98,9 @@
   spellCooldown: 10
   autoTarget: Target
   autoPattern: AtPoint
+  fusionDamageScale: 2.5
+  fusionForbids:
+  - RuneModifierSwarm
   forbids:
   - RuneModifierSwarm
   - RuneModifierDuration
@@ -119,6 +126,9 @@
   autoPattern: AtCaster
   holdCooldown: true
   maxActive: 2
+  fusionDamageScale: 2.5
+  fusionForbids:
+  - RuneModifierSwarm
   forbids:
   - RuneModifierSwarm
   - RuneModifierRange

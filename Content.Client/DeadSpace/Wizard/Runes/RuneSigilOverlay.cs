@@ -16,6 +16,12 @@ public sealed class RuneSigilOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
     private static readonly ProtoId<ShaderPrototype> GlowShader = "RuneAdditive";
+    private static readonly ProtoId<ShaderPrototype> OutlineShader = "SelectionOutline";
+    private static readonly ProtoId<ShaderPrototype> CrustShader = "RuneCrust";
+    private static readonly Color IceArmor = Color.FromHex("#9be7ff");
+    private static readonly Color SlipCrust = Color.FromHex("#c56bff");
+    private const string IceArmorCharm = "RuneAlertIceArmor";
+    private const string SlipCharm = "RuneAlertSlippery";
     private static readonly Color Night = Color.FromHex("#0b0614");
     private static readonly Color Danger = Color.FromHex("#ff3b4a");
 
@@ -36,6 +42,8 @@ public sealed class RuneSigilOverlay : Overlay
     private readonly SpriteSystem _sprite;
     private readonly ShaderInstance _unshaded;
     private readonly ShaderInstance _glow;
+    private readonly ShaderInstance _outline;
+    private readonly ShaderInstance _crust;
     private readonly List<Vector2> _quad = new(6);
     private readonly List<RunePrototype> _runes = new();
 
@@ -50,6 +58,12 @@ public sealed class RuneSigilOverlay : Overlay
         _sprite = _entity.System<SpriteSystem>();
         _unshaded = _proto.Index(UnshadedShader).Instance();
         _glow = _proto.Index(GlowShader).Instance();
+        _outline = _proto.Index(OutlineShader).InstanceUnique();
+        _outline.SetParameter("outline_color", IceArmor.WithAlpha(0.9f));
+        _outline.SetParameter("outline_width", 1f);
+        _outline.SetParameter("outline_fullbright", true);
+        _crust = _proto.Index(CrustShader).InstanceUnique();
+        _crust.SetParameter("tint", new Vector3(IceArmor.R, IceArmor.G, IceArmor.B));
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -92,6 +106,17 @@ public sealed class RuneSigilOverlay : Overlay
             if (!bounds.Contains(position))
                 continue;
 
+            if (sprite != null && CrustOf(aura.Charms, out var crustTint))
+            {
+                var crust = front ? 0.45f + 0.08f * MathF.Sin(now * 2f + uid.Id) : 1f;
+                _outline.SetParameter("outline_color", crustTint.WithAlpha(0.9f));
+                _crust.SetParameter("tint", new Vector3(crustTint.R, crustTint.G, crustTint.B));
+                _crust.SetParameter("strength", crust);
+                handle.UseShader(front ? _crust : _outline);
+                _sprite.RenderSprite((uid, sprite), handle, eye, _transform.GetWorldRotation(xform), position);
+                handle.UseShader(null);
+            }
+
             handle.SetTransform(Matrix3x2.Multiply(Matrix3Helpers.CreateRotation(-eye), Matrix3Helpers.CreateTranslation(position)));
             var seed = uid.Id % 97 * 0.37f;
             if (aura.Shields > 0)
@@ -121,6 +146,24 @@ public sealed class RuneSigilOverlay : Overlay
         }
     }
 
+    private static bool CrustOf(List<string> charms, out Color tint)
+    {
+        if (charms.Contains(SlipCharm))
+        {
+            tint = SlipCrust;
+            return true;
+        }
+
+        if (charms.Contains(IceArmorCharm))
+        {
+            tint = IceArmor;
+            return true;
+        }
+
+        tint = default;
+        return false;
+    }
+
     private void DrawCharm(DrawingHandleWorld handle, string charm, float now, float seed, bool front)
     {
         handle.UseShader(_glow);
@@ -144,18 +187,13 @@ public sealed class RuneSigilOverlay : Overlay
                 break;
 
             case "RuneAlertIceArmor":
+                break;
+
+            case "RuneAlertSlippery":
                 if (!front)
                     break;
 
-                TextureBox(handle, RuneCircleArt.Ring(_clyde, 10f), new Vector2(0f, -0.02f), new Vector2(0.95f, 1.2f), Color.FromHex("#9be7ff").WithAlpha(0.55f));
-                TextureBox(handle, RuneCircleArt.Glow(_clyde), new Vector2(0f, -0.02f), new Vector2(1.2f, 1.5f), Color.FromHex("#9be7ff").WithAlpha(0.12f));
-                for (var i = 0; i < 4; i++)
-                {
-                    var angle = i * MathF.Tau / 4f + seed;
-                    var twinkle = MathF.Max(0f, MathF.Sin(now * 3f + i * 1.7f));
-                    var at = new Vector2(MathF.Cos(angle) * 0.47f, MathF.Sin(angle) * 0.6f - 0.02f);
-                    Texture(handle, RuneCircleArt.Glow(_clyde), at, 0.14f, 0f, Color.White.WithAlpha(twinkle));
-                }
+                Texture(handle, RuneCircleArt.Glow(_clyde), new Vector2(-0.18f, 0.42f), 0.16f, 0f, Color.White.WithAlpha(0.75f));
                 break;
 
             case "RuneAlertStoneSkin":
@@ -199,9 +237,18 @@ public sealed class RuneSigilOverlay : Overlay
                 if (!front)
                     break;
 
-                Texture(handle, RuneCircleArt.Glow(_clyde), new Vector2(0f, 0.22f), 0.75f, 0f, Color.FromHex("#63b7e6").WithAlpha(0.18f));
-                Texture(handle, RuneCircleArt.Ring(_clyde, 14f), new Vector2(0f, 0.22f), 0.62f, 0f, Color.FromHex("#b8ecff").WithAlpha(0.7f));
-                Texture(handle, RuneCircleArt.Glow(_clyde), new Vector2(-0.12f, 0.36f), 0.14f, 0f, Color.White.WithAlpha(0.8f));
+                TextureBox(handle, RuneCircleArt.Ring(_clyde, 10f), new Vector2(0f, -0.02f), new Vector2(0.95f, 1.2f), Color.FromHex("#9be7ff").WithAlpha(0.55f));
+                TextureBox(handle, RuneCircleArt.Glow(_clyde), new Vector2(0f, -0.02f), new Vector2(1.2f, 1.5f), Color.FromHex("#9be7ff").WithAlpha(0.12f));
+                for (var i = 0; i < 4; i++)
+                {
+                    var angle = i * MathF.Tau / 4f + seed;
+                    var twinkle = MathF.Max(0f, MathF.Sin(now * 3f + i * 1.7f));
+                    var at = new Vector2(MathF.Cos(angle) * 0.47f, MathF.Sin(angle) * 0.6f - 0.02f);
+                    Texture(handle, RuneCircleArt.Glow(_clyde), at, 0.14f, 0f, Color.White.WithAlpha(twinkle));
+                }
+
+                Texture(handle, RuneCircleArt.Glow(_clyde), Vector2.Zero, 1.7f, 0f, Color.FromHex("#63b7e6").WithAlpha(0.22f));
+                Texture(handle, RuneCircleArt.Ring(_clyde, 14f), Vector2.Zero, 1.15f, 0f, Color.FromHex("#b8ecff").WithAlpha(0.55f));
                 break;
 
             case "RuneAlertRegeneration":

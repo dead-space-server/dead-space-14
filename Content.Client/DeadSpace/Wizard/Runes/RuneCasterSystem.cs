@@ -8,6 +8,7 @@ using Content.Client.UserInterface.Systems.Inventory.Widgets;
 using Content.Client.UserInterface.Systems.Storage.Controls;
 using Content.Client.Viewport;
 using Content.Shared.DeadSpace.Wizard.Runes;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -41,6 +42,7 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
 
     private const float MinStrokePixels = 16f;
     private const float RangeSlack = 0.5f;
@@ -505,6 +507,10 @@ public sealed class RuneCasterSystem : SharedRuneCasterSystem
 
     private bool OverHud(Vector2 pixel)
     {
+        if (_caster is { } caster && _hands.GetActiveItem(caster) is { } held &&
+            TryComp<RuneScrollComponent>(held, out var scroll) && scroll.Runes.Count > 0)
+            return true;
+
         if (Hits(_ui.GetActiveUIWidgetOrNull<HotbarGui>(), pixel) ||
             Hits(_ui.GetActiveUIWidgetOrNull<InventoryGui>(), pixel) ||
             Hits(_ui.GetActiveUIWidgetOrNull<AlertsUI>(), pixel))

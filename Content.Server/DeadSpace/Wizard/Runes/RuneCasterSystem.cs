@@ -79,12 +79,14 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         InitializeDoom();
         InitializeActive();
         InitializeSlip();
+        InitializeOrb();
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
         UpdateMarks();
+        UpdateSlip();
         UpdateSigils();
         UpdateHazards();
         UpdateBlastWards();
@@ -99,8 +101,11 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         UpdateDoom();
         UpdateScrollHats();
         UpdateActive();
-        UpdateSlip();
         UpdateMirrors();
+        UpdateOrb();
+        UpdateToss();
+        UpdateHostile();
+        UpdateAge();
     }
 
     private void OnMapInit(Entity<RuneCasterComponent> ent, ref MapInitEvent args)
@@ -223,7 +228,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         if (!TryCompose(msg.Runes, out var composition) || composition.Spell == null)
         {
             SetStrain(caster, caster.Comp, GetStrain(caster.Comp) + MismatchStrain);
-            EndSigil(caster, RuneSigilState.Fizzle);
+            StumbleSigil(caster);
             Reply(args, false, Loc.GetString("rune-cast-mismatch"));
             return;
         }
@@ -375,7 +380,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
         if (composition.Second != null)
             runes.Add(composition.Second);
         runes.AddRange(composition.Modifiers);
-        if (!spell.Effects.Exists(effect => effect is RuneTimeStopEffect))
+        if (!spell.Effects.Exists(effect => effect is RuneTimeStopEffect or RuneMirrorCrowdEffect))
             Shout(caster, Loc.GetString(spell.Name), ComputeLoudness(runes, spell), ComputeAbsurdity(runes, spell), 7);
 
         var impact = ultimate ? LogImpact.High : LogImpact.Medium;
@@ -391,7 +396,7 @@ public sealed partial class RuneCasterSystem : SharedRuneCasterSystem
             if (ultimate)
                 StartUltimateCooldown(caster);
 
-            SetStrain(caster, caster.Comp, caster.Comp.MaxStrain * 0.5f);
+            SetStrain(caster, caster.Comp, caster.Comp.MaxStrain * 0.99f);
             FinishSigil(caster, composition, RuneSigilState.Fizzle);
             var element = composition.Second != null && _random.Prob(0.5f) ? composition.Second : composition.Element;
             var fatal = after > caster.Comp.MaxStrain * caster.Comp.FatalOverload && strain >= FatalMinimumStrain;

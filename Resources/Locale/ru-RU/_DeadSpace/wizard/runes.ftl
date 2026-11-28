@@ -61,6 +61,7 @@ rune-blood-drink = Чужая кровь затягивает ваши раны.
 rune-seeker-slip = Вы поскальзываетесь на волшебной кожуре!
 rune-animate-revert = { CAPITALIZE($item) } замирает и снова становится вещью.
 rune-emote-dance = танцует
+rune-emote-defib = вздрагивает от разряда, сердце бьётся ровнее
 rune-circle-need-two = Нужны минимум форма и стихия
 rune-circle-unrecognized = Руна не распознана
 rune-circle-undo = Последняя руна снята
@@ -406,6 +407,12 @@ rune-time-stop-speak = МИР - ВРЕМЯ ОСТАНОВИСЬ
 rune-time-stop-resume = ВРЕМЯ ВОЗОБНОВИЛО СВОЙ ХОД
 
 rune-hat-scroll = В головном уборе шуршит новый чистый свиток.
+rune-orb-leave = Дух выходит из тела. Через { $seconds } с шар вернёт его обратно.
+rune-orb-return = Дух возвращается в тело.
+rune-thirst = Горло пересохло. Хочется пить.
+
+alerts-rune-slippery-name = Скользкая кожа
+alerts-rune-slippery-desc = Всё тело покрыто скользкой плёнкой.
 rune-robe-examine = Рунная вязь гасит [color=lightblue]30%[/color] урона, если её носит маг рун.
 
 rune-dance-point = указывает на { $target }.

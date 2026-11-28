@@ -58,6 +58,8 @@ public sealed partial class RuneCasterSystem
                 continue;
 
             hat.Next = now + TimeSpan.FromSeconds(hat.Interval);
+            if (CarriedScrolls(wearer) >= hat.MaxCarried)
+                continue;
 
             var scroll = Spawn(hat.Scroll, Transform(uid).Coordinates);
             if (!_storage.Insert(uid, scroll, out _, storageComp: storage, playSound: false))
@@ -68,6 +70,31 @@ public sealed partial class RuneCasterSystem
 
             _popup.PopupEntity(Loc.GetString("rune-hat-scroll"), wearer, wearer);
         }
+    }
+
+    private int CarriedScrolls(EntityUid wearer)
+    {
+        var count = 0;
+        var scrolls = EntityQueryEnumerator<RuneScrollComponent, TransformComponent>();
+        while (scrolls.MoveNext(out _, out _, out var xform))
+        {
+            var parent = xform.ParentUid;
+            while (parent.IsValid())
+            {
+                if (parent == wearer)
+                {
+                    count++;
+                    break;
+                }
+
+                if (!TryComp(parent, out TransformComponent? next) || next.GridUid == parent || next.MapUid == parent)
+                    break;
+
+                parent = next.ParentUid;
+            }
+        }
+
+        return count;
     }
 
     private bool HoldsQuill(EntityUid uid)

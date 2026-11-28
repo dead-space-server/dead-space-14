@@ -6,6 +6,10 @@
   first: RuneElementDeath
   second: RuneElementFire
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneDamageEffect
@@ -34,6 +38,9 @@
   first: RuneElementDeath
   second: RuneElementIce
   strain: 16
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneDamageEffect
@@ -46,6 +53,11 @@
     target: Auto
     radius: 2.5
     time: 3
+  - !type:RuneTemperatureEffect
+    target: Auto
+    radius: 2.5
+    onlyDead: true
+    delta: -2000
 
 - type: wizardRuneFusion
   id: RuneFusionBurial
@@ -53,6 +65,9 @@
   first: RuneElementDeath
   second: RuneElementEarth
   strain: 18
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneSpawnEffect
@@ -60,6 +75,10 @@
     pattern: RingAtPoint
     size: 1
     lifetime: 15
+  - !type:RuneSpawnEffect
+    prototype: Window
+    pattern: AtPoint
+    skipBlocked: false
   - !type:RuneKnockdownEffect
     target: Auto
     radius: 1.5
@@ -71,6 +90,10 @@
   first: RuneElementDeath
   second: RuneElementLightning
   strain: 16
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneDamageEffect
@@ -82,7 +105,7 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 2.5
-    amount: 33
+    amount: 90
 
 - type: wizardRuneFusion
   id: RuneFusionTime
@@ -90,6 +113,9 @@
   first: RuneElementDeath
   second: RuneElementLife
   strain: 8
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   absurdity: 1
   effects:
@@ -112,6 +138,10 @@
     target: Auto
     radius: 2.5
     lines: RuneOldAgeLines
+  - !type:RuneAgeEffect
+    target: Auto
+    radius: 2.5
+    duration: 30
   formEffects:
     RuneFormSelf:
     - !type:RuneDamageEffect
@@ -152,6 +182,10 @@
   first: RuneElementDeath
   second: RuneElementVoid
   strain: 20
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 3
   effects:
   - !type:RuneDamageEffect
@@ -160,7 +194,7 @@
     ignoreResistances: true
     damage:
       types:
-        Slash: 20
+        Slash: 30
   - !type:RuneGibEffect
     target: Auto
     radius: 2
@@ -172,13 +206,11 @@
   first: RuneElementDeath
   second: RuneElementChaos
   strain: 10
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   absurdity: 3
   effects:
-  - !type:RuneSpeakEffect
-    target: Auto
-    radius: 4
-    onlyDead: true
-    lines: RuneDeadLines
   - !type:RuneLastWordsEffect
     target: Auto
     radius: 4
@@ -199,6 +231,9 @@
   first: RuneElementDeath
   second: RuneElementWater
   strain: 16
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneDamageEffect
@@ -207,6 +242,12 @@
     damage:
       types:
         Asphyxiation: 22
+  - !type:RuneComponentsEffect
+    target: Auto
+    radius: 2.5
+    template: RuneSlipperyTemplate
+    duration: 3
+    alert: RuneAlertSlippery
   - !type:RuneSlowEffect
     target: Auto
     radius: 2.5
@@ -219,6 +260,10 @@
   first: RuneElementDeath
   second: RuneElementAir
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneDamageEffect
@@ -226,7 +271,7 @@
     radius: 2.5
     damage:
       types:
-        Asphyxiation: 15
+        Asphyxiation: 20
   - !type:RuneDamageEffect
     target: Caster
     ignoreResistances: true
@@ -240,21 +285,20 @@
   first: RuneElementDeath
   second: RuneElementBlood
   strain: 14
+  forbids:
+  - RuneModifierPower
+  - RuneModifierSwarm
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 3
+  cooldown: 120
   effects:
   - !type:RuneGibEffect
     target: Auto
     radius: 2.5
     onlyDead: true
-  - !type:RuneDamageEffect
-    target: Caster
-    ignoreResistances: true
-    damage:
-      types:
-        Bloodloss: -40
-      groups:
-        Brute: -40
-        Burn: -20
+    healPerCorpse: 60
+    bloodPerCorpse: 0.7
   - !type:RuneSpawnRandomEffect
     prototypes:
     - PuddleBloodSmall

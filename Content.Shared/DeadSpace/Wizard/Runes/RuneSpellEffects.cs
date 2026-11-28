@@ -147,6 +147,9 @@ public sealed partial class RuneProjectileEffect : RuneSpellEffect
 
     [DataField]
     public bool OnLand;
+
+    [DataField]
+    public bool Tint;
 }
 
 public sealed partial class RuneSpawnEffect : RuneSpellEffect
@@ -171,6 +174,9 @@ public sealed partial class RuneSpawnEffect : RuneSpellEffect
 
     [DataField]
     public int Rows = 1;
+
+    [DataField]
+    public int Span;
 }
 
 public sealed partial class RuneSpawnRandomEffect : RuneSpellEffect
@@ -197,6 +203,12 @@ public sealed partial class RuneSpawnRandomEffect : RuneSpellEffect
     public bool PerTile;
 
     [DataField]
+    public bool OneTile;
+
+    [DataField]
+    public int Span;
+
+    [DataField]
     public bool SkipBlocked;
 
     [DataField]
@@ -216,6 +228,9 @@ public sealed partial class RuneDamageEffect : RuneTargetedEffect
 
     [DataField]
     public bool MendInternal;
+
+    [DataField]
+    public float SoakedScale = 1f;
 }
 
 public sealed partial class RuneStaminaEffect : RuneTargetedEffect
@@ -225,6 +240,9 @@ public sealed partial class RuneStaminaEffect : RuneTargetedEffect
 
     [DataField]
     public ProtoId<DamageTypePrototype>? ResistAs;
+
+    [DataField]
+    public float SoakedScale = 1f;
 }
 
 public sealed partial class RuneKnockdownEffect : RuneTargetedEffect
@@ -348,6 +366,15 @@ public sealed partial class RuneTeleportEffect : RuneSpellEffect
 
     [DataField]
     public float Reach = 2.5f;
+
+    [DataField]
+    public bool Pulse;
+
+    [DataField]
+    public float PulseSpeed = 16f;
+
+    [DataField]
+    public float PulseRadius = 2.5f;
 }
 
 public sealed partial class RunePolymorphEffect : RuneTargetedEffect
@@ -509,6 +536,11 @@ public sealed partial class RuneKnockEffect : RuneSpellEffect
 
 public sealed partial class RuneGibEffect : RuneTargetedEffect
 {
+    [DataField]
+    public float HealPerCorpse;
+
+    [DataField]
+    public float BloodPerCorpse;
 }
 
 public sealed partial class RuneLightningEffect : RuneSpellEffect
@@ -555,8 +587,11 @@ public sealed partial class RuneRandomEffect : RuneSpellEffect
 
 public sealed partial class RuneScreenFlashEffect : RuneTargetedEffect
 {
-    [DataField(required: true)]
-    public SpriteSpecifier Sprite = default!;
+    [DataField]
+    public SpriteSpecifier? Sprite;
+
+    [DataField]
+    public Color Color = Color.White;
 
     [DataField]
     public float MinTime = 1f;
@@ -621,4 +656,49 @@ public sealed partial class RuneDanceEffect : RuneTargetedEffect
 
     [DataField]
     public float FollowRange = 8f;
+}
+
+public sealed partial class RuneThirstEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Amount = -80f;
+
+    [DataField]
+    public LocId Popup = "rune-thirst";
+}
+
+public sealed partial class RuneSnowballEffect : RuneTargetedEffect
+{
+    [DataField]
+    public int Count = 10;
+
+    [DataField]
+    public float Damage = 2f;
+
+    [DataField]
+    public EntProtoId Prototype = "RuneProjectileSnowball";
+}
+
+public sealed partial class RuneTossEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Duration = 3f;
+
+    [DataField]
+    public float Interval = 0.5f;
+
+    [DataField]
+    public float Speed = 8f;
+}
+
+public sealed partial class RuneAgeEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Duration = 30f;
+}
+
+public sealed partial class RuneHostileEffect : RuneTargetedEffect
+{
+    [DataField]
+    public float Duration = 3f;
 }

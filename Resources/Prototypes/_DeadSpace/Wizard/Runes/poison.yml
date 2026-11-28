@@ -7,7 +7,7 @@
   element: RuneElementPoison
   range: 12
   strain: 12
-  cooldown: 30
+  cooldown: 20
   effects:
   - !type:RuneProjectileEffect
     prototype: RuneProjectileVenom
@@ -204,13 +204,17 @@
   first: RuneElementPoison
   second: RuneElementFire
   strain: 12
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneInjectEffect
     target: Auto
     radius: 2.5
     reagent: Lead
-    amount: 0.4
+    amount: 2
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
@@ -224,7 +228,7 @@
   - !type:RuneIgniteEffect
     target: Auto
     radius: 2
-    fireStacks: 1
+    fireStacks: 3
 
 - type: wizardRuneFusion
   id: RuneFusionPoisonFrost
@@ -232,12 +236,15 @@
   first: RuneElementPoison
   second: RuneElementIce
   strain: 12
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   effects:
   - !type:RuneInjectEffect
     target: Auto
     radius: 2.5
     reagent: Lead
-    amount: 0.4
+    amount: 2
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
@@ -247,7 +254,7 @@
     radius: 2.5
     damage:
       types:
-        Cold: 6
+        Cold: 12
   - !type:RuneSlowEffect
     target: Auto
     radius: 2.5
@@ -260,12 +267,18 @@
   first: RuneElementPoison
   second: RuneElementEarth
   strain: 12
+  forbids:
+  - RuneModifierEcho
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneMiasmaTile
     pattern: Auto
     size: 1
     skipBlocked: false
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 2
+    time: 2
   - !type:RuneInjectEffect
     target: Auto
     radius: 2
@@ -278,13 +291,16 @@
   first: RuneElementPoison
   second: RuneElementLightning
   strain: 16
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneInjectEffect
     target: Auto
     radius: 2.5
     reagent: Lead
-    amount: 0.4
+    amount: 2
   - !type:RuneStaminaEffect
     target: Auto
     radius: 2.5
@@ -300,12 +316,15 @@
   first: RuneElementPoison
   second: RuneElementLife
   strain: 12
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   effects:
   - !type:RuneInjectEffect
     target: Auto
     radius: 2.5
     reagent: Lead
-    amount: 0.5
+    amount: 2
   - !type:RuneDamageEffect
     target: Caster
     ignoreResistances: true
@@ -319,6 +338,10 @@
   first: RuneElementPoison
   second: RuneElementVoid
   strain: 18
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RunePushEffect
@@ -329,7 +352,7 @@
     target: Auto
     radius: 2.5
     reagent: Lead
-    amount: 0.7
+    amount: 2
   - !type:RuneDamageEffect
     target: Auto
     radius: 2.5
@@ -345,6 +368,11 @@
   strain: 6
   absurdity: 3
   effects:
+  - !type:RuneInjectEffect
+    target: Auto
+    radius: 2.5
+    reagent: Toxin
+    amount: 3
   - !type:RuneRandomEffect
     options:
     - !type:RunePolymorphEffect
@@ -375,6 +403,8 @@
   first: RuneElementPoison
   second: RuneElementWater
   strain: 12
+  forbids:
+  - RuneModifierEcho
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneToxinPuddle
@@ -386,6 +416,13 @@
     radius: 2
     reagent: Lead
     amount: 0.3
+  - !type:RuneSpawnRandomEffect
+    prototypes:
+    - RuneToxinSlime
+    pattern: AtPoint
+    count: 1
+    lifetime: 5
+    noGhostRole: true
 
 - type: wizardRuneFusion
   id: RuneFusionToxicFog
@@ -393,6 +430,9 @@
   first: RuneElementPoison
   second: RuneElementAir
   strain: 14
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   effects:
   - !type:RuneSpawnEffect
     prototype: WizardSmoke
@@ -427,13 +467,20 @@
   first: RuneElementPoison
   second: RuneElementBlood
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneInjectEffect
     target: Auto
     radius: 2.5
     reagent: Lead
-    amount: 0.5
+    amount: 2
+  - !type:RuneBloodEffect
+    target: Auto
+    radius: 2.5
+    fraction: -0.2
   - !type:RuneDamageEffect
     target: Auto
     radius: 2.5
@@ -453,13 +500,13 @@
     target: Auto
     radius: 2.5
     reagent: Lead
-    amount: 0.8
+    amount: 2
   - !type:RuneDamageEffect
     target: Auto
     radius: 2.5
     damage:
       types:
-        Cellular: 6
+        Cellular: 10
   - !type:RuneDecayEffect
     radius: 2
     damage:
@@ -474,6 +521,10 @@
   - weight: 3
     popup: rune-surge-poison-self
     effects:
+    - !type:RuneInjectEffect
+      target: Caster
+      reagent: Lead
+      amount: 2
     - !type:RuneDamageEffect
       target: Caster
       damage:
@@ -487,8 +538,8 @@
     effects:
     - !type:RuneSpawnEffect
       prototype: RuneMiasmaTile
-      pattern: RingAroundCaster
-      size: 1
+      pattern: AreaAtPoint
+      size: 2
       skipBlocked: false
 
 - type: wizardRuneSurge

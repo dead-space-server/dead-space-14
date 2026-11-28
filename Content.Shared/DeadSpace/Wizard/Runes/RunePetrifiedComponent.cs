@@ -2,6 +2,7 @@
 
 using Content.Shared.DeadSpace.Body.Limbs;
 using Robust.Shared.GameStates;
+using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.DeadSpace.Wizard.Runes;
@@ -30,4 +31,7 @@ public sealed partial class RuneScreenFlashComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan End;
+
+    [DataField, AutoNetworkedField]
+    public Color Color = Color.White;
 }

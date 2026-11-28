@@ -410,6 +410,13 @@ public abstract class SharedRuneCasterSystem : EntitySystem
                 foreach (var option in random.Options)
                     AddArea(option, composition, ref caster, ref point);
                 break;
+            case RuneProjectileEffect projectile:
+                foreach (var hit in projectile.OnHit)
+                    AddArea(hit, composition, ref caster, ref point);
+                break;
+            case RuneMirrorCrowdEffect crowd:
+                caster = MathF.Max(caster, crowd.Radius * scale);
+                break;
         }
     }
 

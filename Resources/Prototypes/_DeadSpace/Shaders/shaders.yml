@@ -30,6 +30,14 @@
 
 # Legs and head a plasma cutter took off a necromorph, cut out of all of its sprite layers (suits and helmets too).
 - type: shader
+  id: RuneCrust
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/rune_crust.swsl"
+  params:
+    tint: 0.6,0.9,1.0
+    strength: 0.4
+
+- type: shader
   id: NecromorphSeveredMask
   kind: source
   path: "/Textures/_DeadSpace/Shaders/severed_mask.swsl"

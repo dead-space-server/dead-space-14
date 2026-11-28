@@ -53,21 +53,30 @@ public sealed partial class RuneCasterSystem
 
     private void ApplyDamage(RuneCastContext ctx, RuneDamageEffect effect)
     {
-        var damage = effect.Damage * ctx.Power;
+        var damage = effect.Damage * (ctx.Power * ctx.DamageScale);
         var heal = -damage.GetTotal().Float();
         var deep = effect.MendInternal || ctx.Power > 1f;
         var rest = SplitGroupHeals(damage, out var groupHeals);
 
         foreach (var target in Targets(ctx, effect))
         {
-            if (!rest.Empty)
-                _damageable.TryChangeDamage(target, rest, effect.IgnoreResistances, origin: ctx.Caster);
-            foreach (var (group, amount) in groupHeals)
+            var soaked = effect.SoakedScale > 1f && HasComp<RuneSoakedComponent>(target) ? effect.SoakedScale : 1f;
+            var dealt = soaked > 1f ? rest * soaked : rest;
+            var dealtGroups = groupHeals;
+            if (soaked > 1f)
+            {
+                dealtGroups = new List<(ProtoId<DamageGroupPrototype> Group, FixedPoint2 Amount)>();
+                foreach (var pair in groupHeals)
+                    dealtGroups.Add((pair.Group, FixedPoint2.New(pair.Amount.Float() * soaked)));
+            }
+            if (!dealt.Empty)
+                _damageable.TryChangeDamage(target, dealt, effect.IgnoreResistances, origin: ctx.Caster);
+            foreach (var (group, amount) in dealtGroups)
                 _damageable.HealDistributed(target, amount, group, ctx.Caster);
             if (damage.DamageDict.TryGetValue(BloodlossDamage, out var bloodloss) && bloodloss != FixedPoint2.Zero)
-                _bloodstream.TryModifyBloodLevel(target, -bloodloss);
+                _bloodstream.TryModifyBloodLevel(target, -bloodloss * soaked);
             if (heal > 0f)
-                MendLimbs(target, heal, deep);
+                MendLimbs(target, heal * soaked, deep);
         }
     }
 

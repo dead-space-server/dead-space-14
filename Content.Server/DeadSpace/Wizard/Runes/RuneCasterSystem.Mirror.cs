@@ -4,6 +4,9 @@ using Content.Shared.Corvax.TTS;
 using Content.Shared.DeadSpace.Wizard.Runes;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
+using Content.Shared.StatusIcon;
+using Content.Shared.StatusIcon.Components;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Wizard.Runes;
@@ -14,6 +17,10 @@ public sealed partial class RuneMirrorDisguiseComponent : Component
     public string Name = string.Empty;
 
     public Dictionary<string, string>? Voices;
+
+    public ProtoId<JobIconPrototype>? JobIcon;
+
+    public bool HadJobIcon;
 
     public TimeSpan End;
 }
@@ -35,7 +42,10 @@ public sealed partial class RuneCasterSystem
 
         Spawn(effect.Smoke, Transform(caster).Coordinates);
         if (crowd.Count == 0)
+        {
+            ShoutCrowd(ctx, caster, crowd);
             return;
+        }
 
         var end = Timing.CurTime + TimeSpan.FromSeconds(effect.Duration * ctx.DurationScale);
         var name = Name(caster);
@@ -48,6 +58,25 @@ public sealed partial class RuneCasterSystem
 
         if (!_random.Prob(effect.StayChance))
             _transform.SwapPositions(caster, _random.Pick(crowd));
+
+        ShoutCrowd(ctx, caster, crowd);
+    }
+
+    private void ShoutCrowd(RuneCastContext ctx, EntityUid caster, List<EntityUid> crowd)
+    {
+        if (ctx.Composition is not { } composition)
+            return;
+
+        var runes = new List<RunePrototype> { composition.Form, composition.Element };
+        if (composition.Second != null)
+            runes.Add(composition.Second);
+        runes.AddRange(composition.Modifiers);
+        var line = Loc.GetString(composition.Spell?.Name ?? composition.Element.Name);
+        var loudness = ComputeLoudness(runes, composition.Spell);
+        var absurdity = ComputeAbsurdity(runes, composition.Spell);
+        Shout(caster, line, loudness, absurdity, 7);
+        foreach (var target in crowd)
+            Shout(target, line, loudness, absurdity, target.Id);
     }
 
     private void Disguise(EntityUid target, EntityUid source, string name, Dictionary<string, string>? voices, TimeSpan end)
@@ -65,6 +94,15 @@ public sealed partial class RuneCasterSystem
         image.Source = source;
         Dirty(target, image);
 
+        if (TryComp<JobStatusComponent>(target, out var job))
+        {
+            disguise.HadJobIcon = true;
+            disguise.JobIcon = job.JobStatusIcon;
+            if (TryComp<JobStatusComponent>(source, out var sourceJob))
+                job.JobStatusIcon = sourceJob.JobStatusIcon;
+            Dirty(target, job);
+        }
+
         _meta.SetEntityName(target, name);
         _identity.QueueIdentityUpdate(target);
     }
@@ -74,6 +112,12 @@ public sealed partial class RuneCasterSystem
         _meta.SetEntityName(target, disguise.Name);
         if (disguise.Voices != null && TryComp<TTSComponent>(target, out var tts))
             tts.Voices = disguise.Voices;
+
+        if (disguise.HadJobIcon && TryComp<JobStatusComponent>(target, out var job))
+        {
+            job.JobStatusIcon = disguise.JobIcon;
+            Dirty(target, job);
+        }
 
         RemCompDeferred<RuneMirrorImageComponent>(target);
         RemCompDeferred<RuneMirrorDisguiseComponent>(target);

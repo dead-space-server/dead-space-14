@@ -121,6 +121,14 @@
   clickEvent: !type:RuneDispelAlertEvent
 
 - type: alert
+  id: RuneAlertSlippery
+  icons:
+  - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi
+    state: ice-armor
+  name: alerts-rune-slippery-name
+  description: alerts-rune-slippery-desc
+
+- type: alert
   id: RuneAlertWaterBubble
   icons:
   - sprite: /Textures/_DeadSpace/Wizard/rune_alerts.rsi

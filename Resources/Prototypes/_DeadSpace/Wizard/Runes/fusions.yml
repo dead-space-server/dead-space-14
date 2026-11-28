@@ -6,6 +6,10 @@
   first: RuneElementFire
   second: RuneElementIce
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneDamageEffect
@@ -58,6 +62,9 @@
   first: RuneElementFire
   second: RuneElementEarth
   strain: 14
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneTemperatureEffect
@@ -75,6 +82,10 @@
       types:
         Heat: 8
         Blunt: 8
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 2
+    time: 1
   formEffects:
     RuneFormProjectile:
     - !type:RuneProjectileEffect
@@ -91,6 +102,10 @@
   first: RuneElementFire
   second: RuneElementLightning
   strain: 16
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneTemperatureEffect
@@ -107,6 +122,15 @@
   - !type:RuneEmpEffect
     auto: true
     range: 2
+  - !type:RuneIgniteEffect
+    target: Auto
+    radius: 2
+    fireStacks: 1
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 2
+    amount: 20
+    resistAs: Shock
 
 - type: wizardRuneFusion
   id: RuneFusionCautery
@@ -114,6 +138,9 @@
   first: RuneElementFire
   second: RuneElementLife
   strain: 10
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   effects:
   - !type:RuneTemperatureEffect
     target: Auto
@@ -140,6 +167,10 @@
   first: RuneElementFire
   second: RuneElementVoid
   strain: 20
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneTemperatureEffect
@@ -152,7 +183,7 @@
     ignoreResistances: true
     damage:
       types:
-        Heat: 12
+        Heat: 20
   - !type:RuneIgniteEffect
     target: Auto
     radius: 2
@@ -182,6 +213,17 @@
     target: Auto
     radius: 3
     lines: RuneChaosLines
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Heat: 15
+  - !type:RuneComponentsEffect
+    target: Auto
+    radius: 3
+    template: RuneInvertControlsTemplate
+    duration: 5
 
 # Лёд
 
@@ -191,16 +233,27 @@
   first: RuneElementIce
   second: RuneElementEarth
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
-    delta: -10
+    delta: -30
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Cold: 10
+        Blunt: 10
   - !type:RuneKnockdownEffect
     target: Auto
     radius: 2.5
-    time: 1.5
+    time: 1
   - !type:RuneSlowEffect
     target: Auto
     radius: 2.5
@@ -213,12 +266,15 @@
   first: RuneElementIce
   second: RuneElementLightning
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
-    delta: -10
+    delta: -30
   - !type:RuneDamageEffect
     target: Auto
     radius: 3
@@ -229,7 +285,8 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 3
-    amount: 23
+    amount: 52
+    resistAs: Shock
   - !type:RuneSlowEffect
     target: Auto
     radius: 3
@@ -242,11 +299,14 @@
   first: RuneElementIce
   second: RuneElementLife
   strain: 12
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   effects:
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
-    delta: -8
+    delta: -30
   - !type:RuneDamageEffect
     target: Auto
     radius: 2
@@ -254,8 +314,8 @@
     ignoreResistances: true
     damage:
       groups:
-        Brute: -15
-        Burn: -15
+        Brute: -30
+        Burn: -30
         Toxin: -10
         Airloss: -15
   - !type:RuneSlowEffect
@@ -271,7 +331,11 @@
   first: RuneElementIce
   second: RuneElementVoid
   strain: 20
-  cooldown: 75
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
+  cooldown: 50
   loudness: 2
   effects:
   - !type:RuneTemperatureEffect
@@ -290,6 +354,9 @@
   first: RuneElementIce
   second: RuneElementChaos
   strain: 6
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   absurdity: 2
   effects:
   - !type:RuneTemperatureEffect
@@ -299,7 +366,16 @@
   - !type:RuneSpawnEffect
     prototype: RuneSlickTile
     pattern: AreaAtPoint
-    size: 2
+    span: 8
+  - !type:RuneComponentsEffect
+    target: Auto
+    radius: 4
+    template: RunePacifiedTemplate
+    duration: 3
+  - !type:RuneEmoteEffect
+    target: Auto
+    radius: 4
+    emote: rune-emote-dance
   formEffects:
     RuneFormWave:
     - !type:RuneSpawnEffect
@@ -325,12 +401,24 @@
   first: RuneElementEarth
   second: RuneElementLightning
   strain: 14
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RunePushEffect
     auto: true
     speed: -10
     radius: 4
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 2
+    time: 1
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 2
+    amount: 52
+    resistAs: Shock
   - !type:RuneDamageEffect
     target: Auto
     radius: 2
@@ -344,6 +432,10 @@
   first: RuneElementEarth
   second: RuneElementLife
   strain: 10
+  holdCooldown: true
+  cooldown: 30
+  forbids:
+  - RuneModifierEcho
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneBloom
@@ -366,6 +458,13 @@
   first: RuneElementEarth
   second: RuneElementVoid
   strain: 18
+  formForbids:
+    RuneFormSelf:
+    - RuneModifierPower
+    - RuneModifierSwarm
+    - RuneModifierRange
+    - RuneModifierDuration
+    - RuneModifierEcho
   formCooldowns:
     RuneFormSelf: 180
   loudness: 2
@@ -374,6 +473,12 @@
     auto: true
     speed: -16
     radius: 5
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 2.5
+    damage:
+      types:
+        Blunt: 12
   - !type:RuneKnockdownEffect
     target: Auto
     radius: 2.5
@@ -390,21 +495,28 @@
   first: RuneElementEarth
   second: RuneElementChaos
   strain: 8
+  cooldown: 60
+  forbids:
+  - RuneModifierPower
   absurdity: 2
   effects:
   - !type:RuneSlowEffect
     target: Auto
-    radius: 3
-    time: 6
-    multiplier: 0.35
+    radius: 2
+    time: 12
+    multiplier: 0.18
   - !type:RuneSpawnRandomEffect
     prototypes:
     - ToyRubberDuck
     - TrashBananaPeel
     - ClothingHeadHatCone
-    pattern: Auto
-    size: 2
-    count: 4
+    - PlushieCarp
+    - BikeHorn
+    - ToyMouse
+    pattern: AreaAtPoint
+    span: 4
+    oneTile: true
+    count: 8
 
 # Молния
 
@@ -414,6 +526,10 @@
   first: RuneElementLightning
   second: RuneElementLife
   strain: 12
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneDamageEffect
@@ -423,17 +539,23 @@
     ignoreResistances: true
     damage:
       groups:
-        Airloss: -40
+        Airloss: -10
         Brute: -10
       types:
         Shock: 3
+  - !type:RuneEmoteEffect
+    target: Auto
+    radius: 2
+    emote: rune-emote-defib
 
 - type: wizardRuneFusion
   id: RuneFusionRiftBolt
   name: rune-fusion-rift-bolt
   first: RuneElementLightning
   second: RuneElementVoid
-  strain: 18
+  strain: 8
+  forbids:
+  - RuneModifierDuration
   loudness: 1
   effects:
   - !type:RuneTeleportEffect
@@ -444,7 +566,12 @@
     radius: 2.5
     damage:
       types:
-        Shock: 8
+        Shock: 10
+  - !type:RuneStaminaEffect
+    target: Auto
+    radius: 2.5
+    amount: 52
+    resistAs: Shock
 
 - type: wizardRuneFusion
   id: RuneFusionDisco
@@ -452,6 +579,9 @@
   first: RuneElementLightning
   second: RuneElementChaos
   strain: 8
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   absurdity: 3
   effects:
   - !type:RuneSpeakEffect
@@ -467,7 +597,7 @@
   - !type:RuneStaminaEffect
     target: Auto
     radius: 4
-    amount: 13
+    amount: 70
   - !type:RuneEmoteEffect
     target: Auto
     radius: 4
@@ -486,6 +616,9 @@
   first: RuneElementLife
   second: RuneElementVoid
   strain: 18
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneDamageEffect
@@ -493,15 +626,15 @@
     radius: 2
     damage:
       types:
-        Cold: 10
-        Asphyxiation: 8
+        Cold: 20
+        Asphyxiation: 16
   - !type:RuneDamageEffect
     target: Caster
     ignoreResistances: true
     damage:
       groups:
-        Brute: -12
-        Burn: -12
+        Brute: -24
+        Burn: -24
 
 - type: wizardRuneFusion
   id: RuneFusionMutation
@@ -509,6 +642,10 @@
   first: RuneElementLife
   second: RuneElementChaos
   strain: 14
+  forbids:
+  - RuneModifierPower
+  - RuneModifierSwarm
+  - RuneModifierEcho
   cooldown: 90
   absurdity: 2
   effects:
@@ -538,6 +675,9 @@
   first: RuneElementVoid
   second: RuneElementChaos
   strain: 12
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   formCooldowns:
     RuneFormTouch: 180
   absurdity: 2
@@ -553,6 +693,11 @@
     target: Auto
     radius: 3
     time: 1
+  - !type:RuneComponentsEffect
+    target: Auto
+    radius: 3
+    template: RunePacifiedTemplate
+    duration: 2
   formEffects:
     RuneFormTouch:
     - !type:RuneMindSwapEffect
@@ -565,24 +710,43 @@
   first: RuneElementWater
   second: RuneElementIce
   strain: 12
+  formCooldowns:
+    RuneFormTouch: 80
+  formForbids:
+    RuneFormTouch:
+    - RuneModifierRange
+    - RuneModifierPower
+    - RuneModifierEcho
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneTemperatureEffect
     target: Auto
     radius: 2.5
     delta: -8
+  - !type:RuneSnowballEffect
+    target: Auto
+    radius: 2.5
+    count: 10
+    damage: 2
   - !type:RuneDamageEffect
     target: Auto
     radius: 2.5
     damage:
       types:
-        Blunt: 10
         Cold: 4
   - !type:RuneSlowEffect
     target: Auto
     radius: 2.5
     time: 4
     multiplier: 0.6
+  formEffects:
+    RuneFormTouch:
+    - !type:RuneComponentsEffect
+      template: RuneSlipperyTemplate
+      alert: RuneAlertSlippery
 
 - type: wizardRuneFusion
   id: RuneFusionMire
@@ -590,6 +754,12 @@
   first: RuneElementWater
   second: RuneElementEarth
   strain: 12
+  formForbids:
+    RuneFormWave:
+    - RuneModifierDuration
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   effects:
   - !type:RuneSlowEffect
     target: Auto
@@ -600,6 +770,11 @@
     target: Auto
     radius: 3
     time: 1
+  - !type:RuneSpawnEffect
+    prototype: RuneWaterWall
+    pattern: RingAtPoint
+    size: 2
+    lifetime: 7
   formEffects:
     RuneFormWave:
     - !type:RuneSpawnEffect
@@ -618,6 +793,11 @@
       radius: 4
       time: 5
       multiplier: 0.5
+    - !type:RuneSpawnEffect
+      prototype: RuneWaterWall
+      pattern: RingAroundCaster
+      size: 3
+      lifetime: 5
 
 - type: wizardRuneFusion
   id: RuneFusionShockwater
@@ -625,11 +805,16 @@
   first: RuneElementWater
   second: RuneElementLightning
   strain: 16
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RuneDamageEffect
     target: Auto
     radius: 3
+    soakedScale: 3
     damage:
       types:
         Shock: 12
@@ -637,6 +822,7 @@
     target: Auto
     radius: 3
     amount: 29
+    soakedScale: 2
 
 - type: wizardRuneFusion
   id: RuneFusionLivingWater
@@ -644,6 +830,10 @@
   first: RuneElementWater
   second: RuneElementLife
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   effects:
   - !type:RuneDamageEffect
     target: Auto
@@ -652,10 +842,21 @@
     ignoreResistances: true
     damage:
       groups:
-        Brute: -15
-        Burn: -15
+        Brute: -30
+        Burn: -30
         Toxin: -15
         Airloss: -15
+  - !type:RuneSpawnEffect
+    prototype: RuneHolyPuddle
+    pattern: AreaAtPoint
+    size: 2
+    skipBlocked: false
+  - !type:RuneDamageEffect
+    target: Auto
+    radius: 1.5
+    damage:
+      types:
+        Holy: 50
   - !type:RuneExtinguishEffect
     target: Auto
     radius: 2.5
@@ -667,6 +868,10 @@
   first: RuneElementWater
   second: RuneElementVoid
   strain: 8
+  forbids:
+  - RuneModifierPower
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 2
   effects:
   - !type:RunePushEffect
@@ -682,7 +887,7 @@
   - !type:RuneSpawnEffect
     prototype: RuneWaterPuddle
     pattern: AreaAtPoint
-    size: 2
+    size: 3
     skipBlocked: false
 
 - type: wizardRuneFusion
@@ -691,15 +896,18 @@
   first: RuneElementWater
   second: RuneElementChaos
   strain: 6
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   absurdity: 3
   effects:
   - !type:RuneSpawnEffect
     prototype: RuneSlickTile
     pattern: AreaAtPoint
-    size: 2
+    span: 8
   - !type:RuneSpeakEffect
     target: Auto
-    radius: 3
+    radius: 4
     lines: RuneChaosLines
 
 - type: wizardRuneFusion
@@ -708,11 +916,18 @@
   first: RuneElementWater
   second: RuneElementAir
   strain: 14
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RunePushEffect
     auto: true
-    speed: 14
+    speed: 22
+    radius: 4
+  - !type:RuneDisarmEffect
+    target: Auto
     radius: 4
   - !type:RuneStaminaEffect
     target: Auto
@@ -731,6 +946,9 @@
   first: RuneElementAir
   second: RuneElementFire
   strain: 22
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 2
   cooldown: 40
   effects:
@@ -765,6 +983,9 @@
   first: RuneElementAir
   second: RuneElementIce
   strain: 14
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   effects:
   - !type:RuneTemperatureEffect
     target: Auto
@@ -784,7 +1005,12 @@
     radius: 3
     damage:
       types:
-        Cold: 6
+        Cold: 12
+  - !type:RuneComponentsEffect
+    target: Auto
+    radius: 3
+    template: RuneBlindTemplate
+    duration: 5
 
 - type: wizardRuneFusion
   id: RuneFusionSandstorm
@@ -792,6 +1018,9 @@
   first: RuneElementAir
   second: RuneElementEarth
   strain: 14
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneSpawnEffect
@@ -804,6 +1033,15 @@
     damage:
       types:
         Blunt: 5
+  - !type:RuneComponentsEffect
+    target: Auto
+    radius: 3
+    template: RuneBlindTemplate
+    duration: 3
+  - !type:RuneKnockdownEffect
+    target: Auto
+    radius: 3
+    time: 1
   - !type:RuneStaminaEffect
     target: Auto
     radius: 3
@@ -815,6 +1053,12 @@
   first: RuneElementAir
   second: RuneElementLightning
   strain: 24
+  formForbids:
+    RuneFormWave:
+    - RuneModifierDuration
+  forbids:
+  - RuneModifierPower
+  - RuneModifierEcho
   cooldown: 75
   loudness: 3
   effects:
@@ -838,6 +1082,9 @@
   first: RuneElementAir
   second: RuneElementLife
   strain: 10
+  forbids:
+  - RuneModifierDuration
+  - RuneModifierEcho
   effects:
   - !type:RuneDamageEffect
     target: Auto
@@ -846,7 +1093,7 @@
     ignoreResistances: true
     damage:
       groups:
-        Airloss: -50
+        Airloss: -15
   - !type:RuneStaminaEffect
     target: Auto
     radius: 2.5
@@ -859,10 +1106,17 @@
   first: RuneElementAir
   second: RuneElementVoid
   strain: 16
+  forbids:
+  - RuneModifierPower
+  - RuneModifierDuration
+  - RuneModifierEcho
   loudness: 1
   effects:
   - !type:RuneTeleportEffect
     mode: SwapWithTarget
+    pulse: true
+    pulseSpeed: 16
+    pulseRadius: 2.5
   formEffects:
     RuneFormWave:
     - !type:RuneTeleportEffect
@@ -875,6 +1129,9 @@
   first: RuneElementAir
   second: RuneElementChaos
   strain: 10
+  forbids:
+  - RuneModifierPower
+  - RuneModifierDuration
   absurdity: 3
   effects:
   - !type:RuneTeleportEffect
@@ -887,8 +1144,8 @@
     - TrashBananaPeel
     - BikeHorn
     pattern: Auto
-    size: 2
-    count: 5
+    oneTile: true
+    count: 8
   - !type:RuneSpeakEffect
     target: Auto
     radius: 3

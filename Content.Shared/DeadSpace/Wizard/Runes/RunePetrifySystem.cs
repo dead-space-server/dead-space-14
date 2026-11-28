@@ -9,6 +9,7 @@ using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
+using Content.Shared.Rotatable;
 using Content.Shared.Movement.Events;
 using Content.Shared.Speech;
 using Content.Shared.Throwing;
@@ -30,6 +31,7 @@ public sealed class RunePetrifySystem : EntitySystem
         SubscribeLocalEvent<RunePetrifiedComponent, ChangeDirectionAttemptEvent>(OnCancel);
         SubscribeLocalEvent<RunePetrifiedComponent, UseAttemptEvent>(OnCancel);
         SubscribeLocalEvent<RunePetrifiedComponent, PickupAttemptEvent>(OnCancel);
+        SubscribeLocalEvent<RunePetrifiedComponent, GettingPickedUpAttemptEvent>(OnCancel);
         SubscribeLocalEvent<RunePetrifiedComponent, DropAttemptEvent>(OnCancel);
         SubscribeLocalEvent<RunePetrifiedComponent, AttackAttemptEvent>(OnCancel);
         SubscribeLocalEvent<RunePetrifiedComponent, ThrowAttemptEvent>(OnCancel);
