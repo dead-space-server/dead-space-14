@@ -1,0 +1,17 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "sprited by ss14fan(discord)",
+    "size": {
+        "x": 512,
+        "y": 512
+    },
+    "states": [
+        {
+            "name": "vinyl"
+        },
+        {
+            "name": "label"
+        }
+    ]
+}
