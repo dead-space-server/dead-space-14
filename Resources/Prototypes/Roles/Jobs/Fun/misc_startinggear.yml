@@ -167,6 +167,8 @@
     - WelderExperimental # DS14
     - SprayPainterRecharging # DS14
     - DoorRemoteAll # DS14
+    - HandheldStationMapUnpowered # DS14
+    - TabletPowerMonitoring # DS14
 
 #Gladiator with spear
 - type: startingGear
