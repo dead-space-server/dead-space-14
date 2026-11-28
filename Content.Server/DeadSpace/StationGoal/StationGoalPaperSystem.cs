@@ -50,7 +50,6 @@ public sealed partial class StationGoalPaperSystem : EntitySystem
         var wasModifiedOnce = false;
 
         var template = _resourceManager.ContentFileReadText(goal.Text).ReadToEnd();
-        var text = _resourceManager.ContentFileReadText(goal.Text).ReadToEnd();
         var stamps = new List<StampDisplayInfo>();
 
         if (goal.ExtraStamps != null)
