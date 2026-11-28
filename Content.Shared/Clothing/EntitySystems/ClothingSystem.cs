@@ -152,6 +152,19 @@ public abstract partial class ClothingSystem : EntitySystem
         Dirty(uid, clothing);
     }
 
+    public void SetEquippedState(EntityUid uid, string? state, ClothingComponent? clothing = null)
+    {
+        if (!Resolve(uid, ref clothing, false))
+            return;
+
+        if (clothing.EquippedState == state)
+            return;
+
+        clothing.EquippedState = state;
+        _itemSys.VisualsChanged(uid);
+        Dirty(uid, clothing);
+    }
+
     public void SetSlots(EntityUid uid, SlotFlags slots, ClothingComponent? clothing = null)
     {
         if (!Resolve(uid, ref clothing))

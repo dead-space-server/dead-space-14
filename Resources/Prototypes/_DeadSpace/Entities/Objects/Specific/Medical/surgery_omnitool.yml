@@ -1,0 +1,139 @@
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsSurgeryOmnitool
+  name: surgical omnitool gloves
+  description: Sterile surgical gloves with a set of retractable micro-tools. They replace every surgical instrument at once, and their outer shell can be recoloured to match the tool you need.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/SurgeryOmnitool/omnitool.rsi
+    state: Omnihand-med_icon
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Specific/Medical/SurgeryOmnitool/omnitool.rsi
+    equippedState: Omnihand-med_empty
+  - type: Tag
+    tags:
+    - ClothMade
+    - WhitelistChameleon
+    - SurgeryTool
+  - type: SurgeryTool
+    precision: 0.97
+    slip: 0.02
+    wobble: 6
+    sawHits: 1
+    verbs:
+    - Incise
+    - Retract
+    - Clamp
+    - SawBone
+    - Amputate
+    - Cauterize
+    - SetBone
+    - MendBone
+    - Extract
+    - Insert
+    - PullEmbedded
+    - Inspect
+    - Seat
+    - Drill
+    - Graft
+    - Bandage
+    - Stanch
+    - Inject
+    - Append
+    - Shock
+    - Chop
+    - SealSap
+    machineVerbs:
+    - Incise
+    - Retract
+    - Clamp
+    - SawBone
+    - Amputate
+    - Cauterize
+    - SetBone
+    - MendBone
+    - Extract
+    - Insert
+    - PullEmbedded
+    - Inspect
+    - Seat
+    - Drill
+    - Graft
+    - Bandage
+    - Stanch
+    - Inject
+    - Append
+    - Shock
+    - Chop
+    plantVerbs:
+    - Incise
+    - Retract
+    - Clamp
+    - SawBone
+    - Amputate
+    - Cauterize
+    - SetBone
+    - MendBone
+    - Extract
+    - Insert
+    - PullEmbedded
+    - Inspect
+    - Seat
+    - Drill
+    - Graft
+    - Bandage
+    - Stanch
+    - Inject
+    - Append
+    - Shock
+    - Chop
+    - SealSap
+    softVerbs:
+    - Incise
+    - Retract
+    - Clamp
+    - SawBone
+    - Amputate
+    - Cauterize
+    - SetBone
+    - MendBone
+    - Extract
+    - Insert
+    - PullEmbedded
+    - Inspect
+    - Seat
+    - Drill
+    - Graft
+    - Bandage
+    - Stanch
+    - Inject
+    - Append
+    - Shock
+    - Chop
+    - SealSap
+  - type: SurgeryBoneGel
+    uses: 500
+  - type: SurgerySlimeGel
+    uses: 500
+  - type: SurgeryDionaSap
+    uses: 500
+  - type: SurgeryOmnitool
+    modes:
+    - name: surgery-omnitool-mode-empty
+      equippedState: Omnihand-med_empty
+    - name: surgery-omnitool-mode-scalpel
+      equippedState: Omnihand-med_scalpel
+    - name: surgery-omnitool-mode-saw
+      equippedState: Omnihand-med_saw
+    - name: surgery-omnitool-mode-cautery
+      equippedState: Omnihand-med_cautery
+    - name: surgery-omnitool-mode-hemostat
+      equippedState: Omnihand-med_hemostat
+    - name: surgery-omnitool-mode-retractor
+      equippedState: Omnihand-med_retractor
+    - name: surgery-omnitool-mode-bone-gel
+      equippedState: Omnihand-med_bone-gel
+    - name: surgery-omnitool-mode-dion-gel
+      equippedState: Omnihand-med_dion-gel
+    - name: surgery-omnitool-mode-slime-gel
+      equippedState: Omnihand-med_slime-gel

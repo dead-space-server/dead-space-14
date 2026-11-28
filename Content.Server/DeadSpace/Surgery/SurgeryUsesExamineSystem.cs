@@ -10,14 +10,17 @@ public sealed class SurgeryUsesExamineSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<SurgerySkinRollComponent, ExaminedEvent>((_, comp, args) => Show(args, comp.Uses));
-        SubscribeLocalEvent<SurgerySlimeGelComponent, ExaminedEvent>((_, comp, args) => Show(args, comp.Uses));
-        SubscribeLocalEvent<SurgeryDionaSapComponent, ExaminedEvent>((_, comp, args) => Show(args, comp.Uses));
-        SubscribeLocalEvent<SurgeryBoneGelComponent, ExaminedEvent>((_, comp, args) => Show(args, comp.Uses));
+        SubscribeLocalEvent<SurgerySkinRollComponent, ExaminedEvent>((uid, comp, args) => Show(uid, args, comp.Uses));
+        SubscribeLocalEvent<SurgerySlimeGelComponent, ExaminedEvent>((uid, comp, args) => Show(uid, args, comp.Uses));
+        SubscribeLocalEvent<SurgeryDionaSapComponent, ExaminedEvent>((uid, comp, args) => Show(uid, args, comp.Uses));
+        SubscribeLocalEvent<SurgeryBoneGelComponent, ExaminedEvent>((uid, comp, args) => Show(uid, args, comp.Uses));
     }
 
-    private void Show(ExaminedEvent args, int uses)
+    private void Show(EntityUid uid, ExaminedEvent args, int uses)
     {
+        if (HasComp<SurgeryOmnitoolComponent>(uid))
+            return;
+
         if (args.IsInDetailsRange)
             args.PushMarkup(Loc.GetString("surgery-uses-left", ("count", uses)));
     }
